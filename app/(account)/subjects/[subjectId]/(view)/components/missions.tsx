@@ -19,7 +19,7 @@ const Missions = async ({ subjectId }: MissionProps) => {
 
         const activeSessionNumber =
           (routines.find((routine) => !routine.events.length)?.session ??
-            routines.pop().session ??
+            routines.pop()?.session ??
             0) + 1;
 
         return (

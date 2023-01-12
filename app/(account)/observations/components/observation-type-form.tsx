@@ -4,7 +4,6 @@ import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
 import Select from 'components/select';
-import Textarea from 'components/textarea';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
@@ -41,7 +40,6 @@ const ObservationTypeForm = ({
       globalValueCache.has('observation_type_form_values')
         ? globalValueCache.get('observation_type_form_values')
         : {
-            description: observation?.description ?? '',
             inputs: forceArray(observation?.inputs).map(({ input }) => input),
             name: observation?.name ?? '',
           },
@@ -49,11 +47,11 @@ const ObservationTypeForm = ({
 
   return (
     <form
-      onSubmit={form.handleSubmit(async ({ description, inputs, name }) => {
+      onSubmit={form.handleSubmit(async ({ inputs, name }) => {
         const { data: observationData, error: observationError } =
           await supabase.rpc('upsert_observations_with_inputs', {
             input_ids: inputs.map(({ id }) => id),
-            observation: { description, id: observation?.id, name },
+            observation: { id: observation?.id, name },
           });
 
         if (observationError) {
@@ -83,14 +81,6 @@ const ObservationTypeForm = ({
           control={form.control}
           name="name"
           render={({ field }) => <Input {...field} />}
-        />
-      </Label>
-      <Label className="mt-6">
-        Description
-        <Controller
-          control={form.control}
-          name="description"
-          render={({ field }) => <Textarea {...field} />}
         />
       </Label>
       <Label className="mt-6">

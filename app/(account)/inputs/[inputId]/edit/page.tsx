@@ -1,4 +1,7 @@
+import BackButton from 'components/back-button';
+import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
+import Header from 'components/header';
 import { notFound } from 'next/navigation';
 import getInput from 'utilities/get-input';
 import listInputTypes from 'utilities/list-input-types';
@@ -16,9 +19,15 @@ const Page = async ({ params: { inputId } }: PageProps) => {
   const { data: inputTypes } = await listInputTypes();
 
   return (
-    <Card breakpoint="sm">
-      <InputForm input={input} inputTypes={inputTypes} />
-    </Card>
+    <>
+      <Header>
+        <BackButton href="/inputs" />
+        <Breadcrumbs items={[[input.label], ['Edit']]} />
+      </Header>
+      <Card as="main" breakpoint="sm">
+        <InputForm input={input} inputTypes={inputTypes} />
+      </Card>
+    </>
   );
 };
 

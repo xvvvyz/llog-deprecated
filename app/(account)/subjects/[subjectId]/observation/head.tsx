@@ -14,7 +14,7 @@ const Head = async ({ params: { subjectId } }: HeadProps) => {
 
   return (
     <>
-      <title>{formatTitle([subject.name, 'Add mission'])}</title>
+      <title>{formatTitle([subject.name, 'Observation'])}</title>
       <MetaTags />
     </>
   );

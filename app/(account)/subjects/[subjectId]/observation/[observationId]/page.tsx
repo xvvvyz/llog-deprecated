@@ -3,41 +3,41 @@ import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
-import getMissionWithRoutines from 'utilities/get-mission-with-routines';
+import getObservation from 'utilities/get-observation';
 import getSubject from 'utilities/get-subject';
-import MissionForm from '../../components/mission-form';
+import ObservationForm from './components/observation-form';
 
 interface PageProps {
   params: {
-    missionId: string;
+    observationId: string;
     subjectId: string;
   };
 }
 
-const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
+const Page = async ({ params: { observationId, subjectId } }: PageProps) => {
+  const [{ data: subject }, { data: observation }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithRoutines(missionId),
+    getObservation(observationId),
   ]);
 
-  if (!subject || !mission) return notFound();
+  if (!subject || !observation) return notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
     <>
       <Header>
-        <BackButton href={subjectHref} />
+        <BackButton href={`${subjectHref}/observation`} />
         <Breadcrumbs
           items={[
             [subject.name, subjectHref],
-            [mission.name, `${subjectHref}/missions/${missionId}/sessions/1`],
-            ['Edit'],
+            ['Observation', `${subjectHref}/observation`],
+            [observation.name],
           ]}
         />
       </Header>
       <main>
         <Card breakpoint="sm">
-          <MissionForm mission={mission} subjectId={subjectId} />
+          <ObservationForm observation={observation} subjectId={subjectId} />
         </Card>
       </main>
     </>

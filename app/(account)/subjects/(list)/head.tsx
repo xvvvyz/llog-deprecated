@@ -1,8 +1,9 @@
 import MetaTags from 'components/meta-tags';
+import formatTitle from 'utilities/format-title';
 
 const Head = () => (
   <>
-    <title>Subjects - llog</title>
+    <title>{formatTitle('Subjects')}</title>
     <MetaTags />
   </>
 );

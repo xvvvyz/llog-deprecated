@@ -1,5 +1,10 @@
-import MissionForm from '(account)/subjects/[subjectId]/missions/components/mission-form';
+import BackButton from 'components/back-button';
+import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
+import Header from 'components/header';
+import { notFound } from 'next/navigation';
+import getSubject from 'utilities/get-subject';
+import MissionForm from '../components/mission-form';
 
 interface PageProps {
   params: {
@@ -7,10 +12,22 @@ interface PageProps {
   };
 }
 
-const Page = ({ params: { subjectId } }: PageProps) => (
-  <Card breakpoint="sm">
-    <MissionForm subjectId={subjectId} />
-  </Card>
-);
+const Page = async ({ params: { subjectId } }: PageProps) => {
+  const { data: subject } = await getSubject(subjectId);
+  if (!subject) return notFound();
+  const subjectHref = `/subjects/${subjectId}`;
+
+  return (
+    <>
+      <Header>
+        <BackButton href={subjectHref} />
+        <Breadcrumbs items={[[subject.name, subjectHref], ['Add mission']]} />
+      </Header>
+      <Card as="main" breakpoint="sm">
+        <MissionForm subjectId={subjectId} />
+      </Card>
+    </>
+  );
+};
 
 export default Page;

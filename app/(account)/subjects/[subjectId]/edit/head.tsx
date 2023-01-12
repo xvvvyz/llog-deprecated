@@ -1,10 +1,23 @@
 import MetaTags from 'components/meta-tags';
+import formatTitle from 'utilities/format-title';
+import getSubject from 'utilities/get-subject';
 
-const Head = () => (
-  <>
-    <title>Edit subject - llog</title>
-    <MetaTags />
-  </>
-);
+interface HeadProps {
+  params: {
+    subjectId: string;
+  };
+}
+
+const Head = async ({ params: { subjectId } }: HeadProps) => {
+  const { data: subject } = await getSubject(subjectId);
+  if (!subject) return null;
+
+  return (
+    <>
+      <title>{formatTitle([subject.name, 'Edit'])}</title>
+      <MetaTags />
+    </>
+  );
+};
 
 export default Head;

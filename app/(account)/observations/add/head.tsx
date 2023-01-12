@@ -1,8 +1,9 @@
 import MetaTags from 'components/meta-tags';
+import formatTitle from 'utilities/format-title';
 
 const Head = () => (
   <>
-    <title>Add observation type - llog</title>
+    <title>{formatTitle('Add observation type')}</title>
     <MetaTags />
   </>
 );

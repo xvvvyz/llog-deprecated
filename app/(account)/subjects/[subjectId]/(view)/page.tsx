@@ -1,10 +1,10 @@
-import Missions from '(account)/subjects/[subjectId]/(view)/components/missions';
 import Avatar from 'components/avatar';
 import BackButton from 'components/back-button';
 import Button from 'components/button';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
 import getSubject from 'utilities/get-subject';
+import Missions from './components/missions';
 import Timeline from './components/timeline';
 
 interface PageProps {
@@ -27,7 +27,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       <main>
         <section>
           <Header>
-            <h2 className="text-2xl">Missions</h2>
+            <h2 className="text-2xl text-fg-2">Missions</h2>
             <Button href={`/subjects/${subject.id}/missions/add`} size="sm">
               Add mission
             </Button>
@@ -37,8 +37,8 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         </section>
         <section>
           <Header>
-            <h2 className="text-2xl">Timeline</h2>
-            <Button href={`/subjects/${subject.id}/observations/add`} size="sm">
+            <h2 className="text-2xl text-fg-2">Timeline</h2>
+            <Button href={`/subjects/${subject.id}/observation`} size="sm">
               Add observation
             </Button>
           </Header>

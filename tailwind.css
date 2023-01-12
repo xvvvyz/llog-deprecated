@@ -21,7 +21,7 @@
 
 @layer components {
   .input {
-    @apply w-full rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 placeholder:text-alpha-3 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3;
+    @apply w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 transition-colors placeholder:text-alpha-3 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3;
   }
 }
 

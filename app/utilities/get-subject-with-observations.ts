@@ -3,7 +3,7 @@ import createServerSupabaseClient from './create-server-supabase-client';
 const getSubjectWithObservations = (subjectId: string) =>
   createServerSupabaseClient()
     .from('subjects')
-    .select('id, image_uri, name, observations(description, id, name)')
+    .select('id, image_uri, name, observations(id, name)')
     .eq('id', subjectId)
     .single();
 

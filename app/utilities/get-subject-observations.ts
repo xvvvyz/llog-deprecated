@@ -3,7 +3,7 @@ import createServerSupabaseClient from './create-server-supabase-client';
 const getSubjectObservations = (subjectId: string) =>
   createServerSupabaseClient()
     .from('subject_observations')
-    .select('observation:observations(description, id, name)')
+    .select('observation:observations(id, name)')
     .eq('subject_id', subjectId)
     .order('order');
 

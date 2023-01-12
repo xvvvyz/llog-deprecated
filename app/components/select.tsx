@@ -43,7 +43,10 @@ const Input = <TOption extends IOption>({
   children,
   ...props
 }: InputProps<TOption>) => (
-  <components.Input className="m-1 px-2" {...props}>
+  <components.Input
+    className={props.value ? 'caret-initial m-1 px-2' : 'caret-transparent'}
+    {...props}
+  >
     {children}
   </components.Input>
 );
@@ -53,7 +56,7 @@ const MultiValueContainer = ({
   ...props
 }: MultiValueGenericProps) => (
   <components.MultiValueContainer {...props}>
-    <div className="m-1 inline-flex items-center gap-2 rounded-[0.15rem] bg-alpha-2 pl-2 text-sm leading-6">
+    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-[0.15rem] bg-alpha-2 pl-2 text-sm leading-6">
       {children}
     </div>
   </components.MultiValueContainer>
@@ -71,7 +74,7 @@ const NoOptionsMessage = <TOption extends IOption>({
   children,
   ...props
 }: NoticeProps<TOption>) => (
-  <components.NoOptionsMessage {...props}>
+  <components.NoOptionsMessage className="p-3 text-fg-2" {...props}>
     {children}
   </components.NoOptionsMessage>
 );
@@ -83,7 +86,7 @@ const Option = <TOption extends IOption>({
   <components.Option {...props}>
     <div
       className={twMerge(
-        'flex w-full items-center justify-between px-4 py-2 transition-colors hover:cursor-pointer',
+        'flex w-full items-center justify-between px-4 py-3 transition-colors hover:cursor-pointer',
         props.isFocused && 'bg-bg-2'
       )}
     >
@@ -91,7 +94,7 @@ const Option = <TOption extends IOption>({
       {props.isMulti && (
         <PlusIcon
           className={twMerge(
-            'w-5 text-fg-2 transition-colors',
+            '-mr-2 w-5 text-fg-2 transition-colors',
             props.isFocused && 'text-fg-1'
           )}
         />
@@ -158,7 +161,6 @@ const Select = forwardRef(
       },
       instanceId: props.name,
       isClearable: false,
-      noOptionsMessage: () => '',
       placeholder: <>&nbsp;</>,
       ref: () => ref,
       unstyled: true,

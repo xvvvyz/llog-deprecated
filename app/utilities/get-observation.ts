@@ -4,7 +4,7 @@ const getObservation = (observationId: string) =>
   createServerSupabaseClient()
     .from('observations')
     .select(
-      'description, id, name, inputs:observation_inputs(input:inputs(id, label), order)'
+      'id, name, inputs:observation_inputs(order, input:inputs(id, label, options:input_options(id, label), type(id, label)))'
     )
     .eq('id', observationId)
     .order('order', { ascending: true, foreignTable: 'observation_inputs' })

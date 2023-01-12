@@ -12,7 +12,7 @@ alter table "public"."comments" enable row level security;
 
 create table "public"."event_inputs" (
   "event_id" uuid not null,
-  "input_option_id" uuid not null,
+  "input_option_id" uuid,
   "id" uuid not null default uuid_generate_v4 (),
   "input_id" uuid not null,
   "value" jsonb
@@ -79,7 +79,6 @@ alter table "public"."observation_inputs" enable row level security;
 create table "public"."observations" (
   "id" uuid not null default uuid_generate_v4 (),
   "name" text not null,
-  "description" text not null default ''::text,
   "team_id" uuid not null default auth.uid (),
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
@@ -340,11 +339,6 @@ alter table "public"."observation_inputs"
   add constraint "observation_inputs_observation_id_order_unique_constraint" unique using index "observation_inputs_observation_id_order_unique_index";
 
 alter table "public"."observations"
-  add constraint "observations_description_length" check ((length(description) < 500)) not valid;
-
-alter table "public"."observations" validate constraint "observations_description_length";
-
-alter table "public"."observations"
   add constraint "observations_name_length" check (((length(name) > 0) and (length(name) < 50))) not valid;
 
 alter table "public"."observations" validate constraint "observations_name_length";
@@ -516,40 +510,21 @@ begin
 end;
 $$;
 
-create or replace function public.upsert_observation_event (event events, event_input_option_ids uuid[], OUT id uuid)
-  returns uuid
-  language plpgsql
-  as $$
-begin
-  if event.id is null then
-    insert into events as e (subject_id, observation_id)
-      values (event.subject_id, event.observation_id)
-    returning e.id into event.id;
-  else
-    delete from event_inputs as ei
-    where ei.event_id = event.id;
-  end if;
-  insert into event_inputs (event_id, input_option_id)
-    values (event.id, unnest(event_input_option_ids));
-  id = event.id;
-end
-$$;
-
 create or replace function public.upsert_observations_with_inputs (input_ids uuid[], observation observations, OUT id uuid)
   returns uuid
   language plpgsql
   as $$
 begin
   if observation.id is null then
-    insert into observations as o (description, name, team_id)
-      values (observation.description, observation.name, auth.uid ())
+    insert into observations as o (name, team_id)
+      values (observation.name, auth.uid ())
     returning o.id into observation.id;
   else
     update observations as o
-    set description = observation.description, name = observation.name
-    where o.id = observation.id;
+      set name = observation.name
+      where o.id = observation.id;
     delete from observation_inputs as oi
-    where oi.observation_id = observation.id;
+      where oi.observation_id = observation.id;
   end if;
   insert into observation_inputs (observation_id, input_id, "order")
     values (observation.id, unnest(input_ids), generate_series(0, array_length(input_ids, 1) - 1));
@@ -982,7 +957,7 @@ insert into storage.buckets (id, name, public)
 
 insert into "public"."input_types" ("id", "label")
   values ('checkbox', 'Checkbox'),
-  ('date', 'Date'),
+  ('time', 'Time'),
   ('duration', 'Duration'),
   ('multi_select', 'Multi-select'),
   ('number', 'Number'),
