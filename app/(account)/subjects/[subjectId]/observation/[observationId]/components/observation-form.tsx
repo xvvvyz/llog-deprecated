@@ -23,11 +23,11 @@ interface ObservationFormValues {
   inputs: any[]; // 😱
 }
 
-const INPUT_DEFAULTS_MAP = {
+const DEFAULT_INPUT_VALUES = {
   checkbox: false,
-  duration: '0',
+  duration: '',
   multi_select: [],
-  number: '0',
+  number: '',
   select: null,
   time: formatTimeForInput(new Date()),
 };
@@ -40,7 +40,9 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
     defaultValues: {
       inputs: observationInputs.map(
         ({ input }) =>
-          INPUT_DEFAULTS_MAP[input.type.id as keyof typeof INPUT_DEFAULTS_MAP]
+          DEFAULT_INPUT_VALUES[
+            input.type.id as keyof typeof DEFAULT_INPUT_VALUES
+          ]
       ),
     },
   });
@@ -143,7 +145,9 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
                   }
 
                   case 'duration': {
-                    return <Input className="" type="number" {...field} />;
+                    return (
+                      <Input className="" min={0} type="number" {...field} />
+                    );
                   }
 
                   case 'multi_select': {
@@ -153,7 +157,7 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
                   }
 
                   case 'number': {
-                    return <Input type="number" {...field} />;
+                    return <Input min={0} type="number" {...field} />;
                   }
 
                   case 'select': {

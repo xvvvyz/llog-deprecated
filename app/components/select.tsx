@@ -56,7 +56,7 @@ const MultiValueContainer = ({
   ...props
 }: MultiValueGenericProps) => (
   <components.MultiValueContainer {...props}>
-    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-[0.15rem] bg-alpha-2 pl-2 text-sm leading-6">
+    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-[0.15rem] bg-alpha-2 pl-2 text-xs leading-6">
       {children}
     </div>
   </components.MultiValueContainer>
@@ -65,7 +65,7 @@ const MultiValueContainer = ({
 const MultiValueRemove = ({ children, ...props }: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
     <div className="group -m-1 p-1 pr-2">
-      <XMarkIcon className="w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
+      <XMarkIcon className="w-4 text-fg-2 transition-colors group-hover:text-fg-1" />
     </div>
   </components.MultiValueRemove>
 );
@@ -141,7 +141,7 @@ const Select = forwardRef(
         Input,
         Menu: ({ children, ...props }: MenuProps<TOption>) => (
           <components.Menu
-            className="mt-2 overflow-hidden rounded border border-alpha-2 bg-bg-1 text-fg-1 shadow-2xl"
+            className="z-10 mt-3 overflow-hidden rounded border border-alpha-2 bg-bg-1 text-fg-1 shadow-xl"
             {...props}
           >
             {children}

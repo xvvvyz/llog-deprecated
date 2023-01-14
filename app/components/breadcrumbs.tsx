@@ -11,7 +11,7 @@ const Breadcrumbs = ({ items }: BreadcrumbProps) => {
   const pathname = usePathname();
 
   return (
-    <h1 className="ml-9">
+    <h1 className="ml-6">
       {items.length === 1 ? (
         <span className="text-2xl">{items[0]}</span>
       ) : (

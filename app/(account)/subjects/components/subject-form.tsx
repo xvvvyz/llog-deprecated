@@ -93,6 +93,19 @@ const SubjectForm = ({ availableObservations, subject }: SubjectFormProps) => {
         />
       </Label>
       <Label className="mt-6">
+        Profile image
+        <div
+          className="flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 ring-accent-2 hover:border-alpha-3 focus:outline-none focus:ring-1"
+          {...dropzone.getRootProps()}
+        >
+          <Avatar file={coverImage} name={form.watch('name')} />
+          <p>
+            Drag image here or <span className="text-fg-1">browse</span>
+          </p>
+          <input {...dropzone.getInputProps()} />
+        </div>
+      </Label>
+      <Label className="mt-6">
         Enabled observations
         <Controller
           control={form.control}
@@ -120,19 +133,6 @@ const SubjectForm = ({ availableObservations, subject }: SubjectFormProps) => {
             />
           )}
         />
-      </Label>
-      <Label className="mt-6">
-        Profile image
-        <div
-          className="flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 ring-accent-2 hover:border-alpha-3 focus:outline-none focus:ring-1"
-          {...dropzone.getRootProps()}
-        >
-          <Avatar file={coverImage} name={form.watch('name')} />
-          <p>
-            Drag image here or <span className="text-fg-1">browse</span>
-          </p>
-          <input {...dropzone.getInputProps()} />
-        </div>
       </Label>
       <Button
         className="mt-12 w-full"

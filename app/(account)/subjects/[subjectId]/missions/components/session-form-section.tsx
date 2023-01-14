@@ -21,7 +21,7 @@ const SessionFormSection = ({
 
   return (
     <fieldset>
-      <legend className="mt-6 text-fg-2">Session {sessionIndex + 1}</legend>
+      <legend className="pt-6 text-fg-2">Session {sessionIndex + 1}</legend>
       <ul className="flex flex-col gap-3 pt-2">
         {routinesArray.fields.map((item, index) => (
           <li key={item.id}>

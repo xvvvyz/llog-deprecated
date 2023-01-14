@@ -1,6 +1,8 @@
 import Card from 'components/card';
 import Empty from 'components/empty';
 import firstIfArray from 'utilities/first-if-array';
+import forceArray from 'utilities/force-array';
+import formatInputValue from 'utilities/format-input-value';
 import listEvents from 'utilities/list-events';
 
 interface TimelineProps {
@@ -15,9 +17,10 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
     <ul className="-mt-6 flex flex-col gap-3">
       {Object.entries(
         events.reduce((acc, event) => {
-          const date = new Date(event.created_at).toLocaleDateString('en-US', {
-            dateStyle: 'long',
-          });
+          const date = new Date(event.created_at).toLocaleDateString(
+            undefined,
+            { day: 'numeric', month: 'long', weekday: 'long' }
+          );
 
           acc[date] = acc[date] ?? [];
           acc[date].push(event);
@@ -25,33 +28,64 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
         }, {} as Record<string, typeof events>)
       ).map(([date, events]) => (
         <li className="flex flex-col gap-3" key={date}>
-          <div className="ml-6 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 text-fg-2">
+          <time className="ml-6 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 text-fg-2">
             {date}
-          </div>
+          </time>
           {events.map((event) => {
             const observation = firstIfArray(event.observation);
             const routine = firstIfArray(event.routine);
 
             const time = new Date(event.created_at).toLocaleTimeString(
-              'en-US',
+              undefined,
               { timeStyle: 'short' }
             );
 
-            if (observation) {
-              return (
-                <Card key={event.id} size="sm">
-                  Observation - {observation.name} - {time}
-                </Card>
-              );
-            }
+            const inputs: [
+              string,
+              {
+                label: string;
+                type: keyof typeof formatInputValue;
+                values: string[];
+              }
+            ][] = Object.entries(
+              forceArray(event.event_inputs).reduce(
+                (acc, { input, input_option, value }) => {
+                  acc[input.id] = acc[input.id] ?? { values: [] };
+                  acc[input.id].label = input.label;
+                  acc[input.id].type = input.type;
+                  acc[input.id].values.push(value ?? input_option.label);
+                  return acc;
+                },
+                {}
+              )
+            );
 
-            if (routine) {
-              return (
-                <Card key={event.id} size="sm">
-                  Routine - {routine.name} - {time}
-                </Card>
-              );
-            }
+            return (
+              <Card
+                as="article"
+                className="overflow-hidden"
+                key={event.id}
+                size="0"
+              >
+                <header className="flex justify-between p-6">
+                  <h3>{observation?.name ?? routine?.name}</h3>
+                  <time className="text-fg-2">{time}</time>
+                </header>
+                {!!inputs.length && (
+                  <ul className="flex flex-col bg-bg-1">
+                    {inputs.map(([id, { label, type, values }]) => (
+                      <li
+                        className="grid grid-cols-2 border-t border-alpha-1 bg-alpha-1 py-3 px-6 text-xs"
+                        key={id}
+                      >
+                        <span className="pr-3 text-fg-2">{label}</span>
+                        <span>{formatInputValue[type](values)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Card>
+            );
           })}
         </li>
       ))}
