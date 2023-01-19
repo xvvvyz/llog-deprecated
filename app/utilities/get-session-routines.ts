@@ -5,13 +5,13 @@ const getSessionRoutines = (
   sessionNumber: number | string
 ) =>
   createServerSupabaseClient()
-    .from('routines')
+    .from('event_types')
     .select('content, id, name, event:events(id)')
     .eq('mission_id', missionId)
     .eq('session', Number(sessionNumber) - 1)
-    .order('order', { ascending: true });
+    .order('order');
 
-export type GetSessionRoutinesData = Awaited<
+export type GetSessionEventTypesData = Awaited<
   ReturnType<typeof getSessionRoutines>
 >['data'];
 

@@ -3,9 +3,9 @@ import createServerSupabaseClient from './create-server-supabase-client';
 const getInput = (inputId: string) =>
   createServerSupabaseClient()
     .from('inputs')
-    .select('id, label, options:input_options(id, label), type:input_types(*)')
+    .select('id, label, options:input_options(id, label), type')
     .eq('id', inputId)
-    .order('order', { ascending: true, foreignTable: 'input_options' })
+    .order('order', { foreignTable: 'input_options' })
     .single();
 
 export type GetInputData = Awaited<ReturnType<typeof getInput>>['data'];

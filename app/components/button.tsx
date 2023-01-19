@@ -29,8 +29,8 @@ const variants = {
 };
 
 const disabledVariants = {
-  link: 'pointer-events-none opacity-60',
-  primary: 'pointer-events-none opacity-60 ring-transparent',
+  link: 'pointer-events-none opacity-50',
+  primary: 'pointer-events-none opacity-50 ring-transparent',
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -59,7 +59,7 @@ const Button = ({
   const pathname = usePathname();
 
   const cn = twMerge(
-    'focus:outline-none border border-transparent inline-flex items-center gap-3 rounded transition-colors',
+    'focus:outline-none border border-transparent inline-flex items-center gap-2 rounded transition-colors',
     variant !== 'link' && sizes[size],
     variant !== 'link' && colorSchemes[colorScheme],
     variants[variant],

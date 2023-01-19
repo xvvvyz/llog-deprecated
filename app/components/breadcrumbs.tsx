@@ -15,10 +15,11 @@ const Breadcrumbs = ({ items }: BreadcrumbProps) => {
       {items.length === 1 ? (
         <span className="text-2xl">{items[0]}</span>
       ) : (
-        items.map(([label, href]) => (
+        items.map(([label, href], i) => (
           <Button
             className="ml-1 text-fg-2 after:ml-1 after:text-fg-2 after:content-['/'] last:after:hidden last-of-type:text-fg-1"
-            href={href ?? pathname ?? '#'}
+            disabled={!href && i < items.length - 1}
+            href={href ?? pathname ?? undefined}
             key={label}
             variant="link"
           >

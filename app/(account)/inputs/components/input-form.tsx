@@ -14,22 +14,20 @@ import firstIfArray from 'utilities/first-if-array';
 import forceArray from 'utilities/force-array';
 import { GetInputData } from 'utilities/get-input';
 import globalValueCache from 'utilities/global-value-cache';
-import { ListInputTypesData } from 'utilities/list-input-types';
 import sleep from 'utilities/sleep';
 
 const DEFAULT_OPTION_VALUES = { input_id: '', label: '', order: 0 };
 
 interface InputFormProps {
   input?: GetInputData;
-  inputTypes?: ListInputTypesData;
 }
 
 type InputFormValues = Database['public']['Tables']['inputs']['Insert'] & {
   options: Database['public']['Tables']['input_options']['Insert'][];
-  type: Database['public']['Tables']['input_types']['Insert'];
+  type: { id: Database['public']['Enums']['input_type']; value: string };
 };
 
-const InputForm = ({ input, inputTypes }: InputFormProps) => {
+const InputForm = ({ input }: InputFormProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -57,10 +55,10 @@ const InputForm = ({ input, inputTypes }: InputFormProps) => {
 
   return (
     <form
-      onSubmit={form.handleSubmit(async ({ id, label, options, type }) => {
+      onSubmit={form.handleSubmit(async ({ id, label, options }) => {
         const { data: inputData, error: inputError } = await supabase
           .from('inputs')
-          .upsert({ id, label, type: type.id })
+          .upsert({ id, label, type })
           .select('id, label')
           .single();
 
@@ -72,17 +70,29 @@ const InputForm = ({ input, inputTypes }: InputFormProps) => {
         form.setValue('id', inputData.id);
 
         if (hasOptions) {
-          const { newOptions, updatedOptions } = options.reduce(
+          const { insertedOptions, updatedOptions } = options.reduce(
             (acc, option, order) => {
-              option.input_id = inputData.id;
-              option.order = order;
-              if (option.id) acc.updatedOptions.push(option);
-              else acc.newOptions.push(option);
+              const payload: Database['public']['Tables']['input_options']['Insert'] =
+                {
+                  input_id: inputData.id,
+                  label: option.label,
+                  order,
+                };
+
+              if (option.id) {
+                payload.id = option.id;
+                acc.updatedOptions.push(payload);
+              } else {
+                acc.insertedOptions.push(payload);
+              }
+
               return acc;
             },
             {
-              newOptions: [] as InputFormValues['options'],
-              updatedOptions: [] as InputFormValues['options'],
+              insertedOptions:
+                [] as Database['public']['Tables']['input_options']['Insert'][],
+              updatedOptions:
+                [] as Database['public']['Tables']['input_options']['Insert'][],
             }
           );
 
@@ -97,10 +107,10 @@ const InputForm = ({ input, inputTypes }: InputFormProps) => {
             }
           }
 
-          if (newOptions.length) {
+          if (insertedOptions.length) {
             const { error: inputOptionsError } = await supabase
               .from('input_options')
-              .insert(newOptions);
+              .insert(insertedOptions);
 
             if (inputOptionsError) {
               alert(inputOptionsError.message);
@@ -109,10 +119,10 @@ const InputForm = ({ input, inputTypes }: InputFormProps) => {
           }
         }
 
-        if (globalValueCache.has('observation_type_form_values')) {
-          const cache = globalValueCache.get('observation_type_form_values');
+        if (globalValueCache.has('template_form_values')) {
+          const cache = globalValueCache.get('template_form_values');
           cache.inputs.push(inputData);
-          globalValueCache.set('observation_type_form_values', cache);
+          globalValueCache.set('template_form_values', cache);
         }
 
         await router.push(searchParams.get('back') ?? '/inputs');
@@ -134,7 +144,17 @@ const InputForm = ({ input, inputTypes }: InputFormProps) => {
           control={form.control}
           name="type"
           render={({ field }) => (
-            <Select options={forceArray(inputTypes)} {...field} />
+            <Select
+              options={[
+                { id: 'checkbox', label: 'Checkbox' },
+                { id: 'duration', label: 'Duration' },
+                { id: 'multi_select', label: 'Multi-select' },
+                { id: 'number', label: 'Number' },
+                { id: 'select', label: 'Select' },
+                { id: 'time', label: 'Time' },
+              ]}
+              {...field}
+            />
           )}
         />
       </Label>

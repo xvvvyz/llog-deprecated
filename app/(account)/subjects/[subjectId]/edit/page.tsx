@@ -3,8 +3,9 @@ import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
-import getSubjectWithObservations from 'utilities/get-subject-with-observations';
-import listObservations from 'utilities/list-observations';
+import getSubjectWithEventTypes from 'utilities/get-subject-with-event-types';
+import listInputs from 'utilities/list-inputs';
+import listTemplates from 'utilities/list-templates';
 import SubjectForm from '../../components/subject-form';
 
 interface PageProps {
@@ -14,9 +15,17 @@ interface PageProps {
 }
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
-  const { data: subject } = await getSubjectWithObservations(subjectId);
+  const [
+    { data: subject },
+    { data: availableInputs },
+    { data: availableTemplates },
+  ] = await Promise.all([
+    getSubjectWithEventTypes(subjectId),
+    listInputs(),
+    listTemplates(),
+  ]);
+
   if (!subject) return notFound();
-  const { data: availableObservations } = await listObservations();
 
   return (
     <>
@@ -28,7 +37,8 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       </Header>
       <Card as="main" breakpoint="sm">
         <SubjectForm
-          availableObservations={availableObservations}
+          availableInputs={availableInputs}
+          availableTemplates={availableTemplates}
           subject={subject}
         />
       </Card>
@@ -36,4 +46,5 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

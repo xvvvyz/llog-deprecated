@@ -3,7 +3,7 @@ import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
 import listInputs from 'utilities/list-inputs';
-import ObservationTypeForm from '../components/observation-type-form';
+import TemplateForm from '../components/template-form';
 
 const Page = async () => {
   const { data: availableInputs } = await listInputs();
@@ -11,14 +11,15 @@ const Page = async () => {
   return (
     <>
       <Header>
-        <BackButton href="/observations" />
-        <Breadcrumbs items={[['Add observation type']]} />
+        <BackButton href="/templates" />
+        <Breadcrumbs items={[['Add template']]} />
       </Header>
       <Card as="main" breakpoint="sm">
-        <ObservationTypeForm availableInputs={availableInputs} />
+        <TemplateForm availableInputs={availableInputs} />
       </Card>
     </>
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

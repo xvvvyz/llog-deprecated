@@ -32,8 +32,7 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
             {date}
           </time>
           {events.map((event) => {
-            const observation = firstIfArray(event.observation);
-            const routine = firstIfArray(event.routine);
+            const eventType = firstIfArray(event.type);
 
             const time = new Date(event.created_at).toLocaleTimeString(
               undefined,
@@ -48,7 +47,7 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
                 values: string[];
               }
             ][] = Object.entries(
-              forceArray(event.event_inputs).reduce(
+              forceArray(event.inputs).reduce(
                 (acc, { input, input_option, value }) => {
                   acc[input.id] = acc[input.id] ?? { values: [] };
                   acc[input.id].label = input.label;
@@ -68,14 +67,14 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
                 size="0"
               >
                 <header className="flex justify-between p-6">
-                  <h3>{observation?.name ?? routine?.name}</h3>
+                  <h3 className="font-bold">{eventType?.name}</h3>
                   <time className="text-fg-2">{time}</time>
                 </header>
                 {!!inputs.length && (
-                  <ul className="flex flex-col bg-bg-1">
+                  <ul className="flex flex-col">
                     {inputs.map(([id, { label, type, values }]) => (
                       <li
-                        className="grid grid-cols-2 border-t border-alpha-1 bg-alpha-1 py-3 px-6 text-xs"
+                        className="grid grid-cols-2 border-t border-alpha-1 py-3 px-6"
                         key={id}
                       >
                         <span className="pr-3 text-fg-2">{label}</span>

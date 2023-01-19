@@ -5,37 +5,40 @@ import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
+import { EventTemplate } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
 import forceArray from 'utilities/force-array';
-import { GetMissionWithRoutinesData } from 'utilities/get-mission-with-routines';
-import sanitizeHtml from 'utilities/sanitize-html';
+import { GetMissionWithEventTypesData } from 'utilities/get-mission-with-routines';
+import { ListInputsData } from 'utilities/list-inputs';
+import { ListTemplatesData } from 'utilities/list-templates';
 import sleep from 'utilities/sleep';
 import SessionFormSection from './session-form-section';
 
-const DEFAULT_ROUTINE_VALUES = {
-  content: '<ol><li></li><li></li><li></li></ol>',
-  mission_id: '',
-  name: '',
-  order: 0,
-  session: 0,
-};
-
 interface MissionFormProps {
-  mission?: GetMissionWithRoutinesData;
+  availableInputs: ListInputsData;
+  availableTemplates: ListTemplatesData;
+  mission?: GetMissionWithEventTypesData;
   subjectId: string;
 }
 
-type Routine = Database['public']['Tables']['routines']['Insert'];
-
 type MissionFormValues = Database['public']['Tables']['missions']['Insert'] & {
-  routines: Routine[][];
+  routines: (Database['public']['Tables']['event_types']['Insert'] & {
+    inputs: Database['public']['Tables']['inputs']['Row'][];
+  })[][];
 };
 
-const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
+const MissionForm = ({
+  availableInputs,
+  availableTemplates,
+  mission,
+  subjectId,
+}: MissionFormProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [template, setTemplate] = useState<EventTemplate | null>(null);
 
   const form = useForm<MissionFormValues>({
     defaultValues: {
@@ -49,13 +52,14 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
     },
   });
 
-  const routinesArray = useFieldArray({
+  const sessionsArray = useFieldArray({
     control: form.control,
     name: 'routines',
   });
 
   return (
     <form
+      className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(async ({ id, name, routines }) => {
         const { data: missionData, error: missionError } = await supabase
           .from('missions')
@@ -70,50 +74,123 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
 
         form.setValue('id', missionData.id);
 
-        const { newRoutines, updatedRoutines } = routines.reduce(
+        const { insertedEventTypes, updatedEventTypes } = routines.reduce(
           (acc, sessionRoutines, session) => {
             sessionRoutines.forEach((routine) => {
               const payload = {
-                content: sanitizeHtml(routine.content),
+                content: routine.content,
                 id: routine.id,
                 mission_id: missionData.id,
                 name: routine.name,
                 order: acc.order,
                 session,
+                subject_id: subjectId,
               };
 
-              if (routine.id) acc.updatedRoutines.push(payload);
-              else acc.newRoutines.push(payload);
+              if (routine.id) acc.updatedEventTypes.push(payload);
+              else acc.insertedEventTypes.push(payload);
               acc.order++;
             });
 
             return acc;
           },
           {
-            newRoutines: [] as Routine[],
+            insertedEventTypes:
+              [] as Database['public']['Tables']['event_types']['Insert'][],
             order: 0,
-            updatedRoutines: [] as Routine[],
+            updatedEventTypes:
+              [] as Database['public']['Tables']['event_types']['Insert'][],
           }
         );
 
-        if (updatedRoutines.length) {
-          const { error: routinesError } = await supabase
-            .from('routines')
-            .upsert(updatedRoutines.sort((a, b) => b.order - a.order));
+        if (updatedEventTypes.length) {
+          const { error: updateEventTypesError } = await supabase
+            .from('event_types')
+            .upsert(updatedEventTypes);
 
-          if (routinesError) {
-            alert(routinesError.message);
+          if (updateEventTypesError) {
+            alert(updateEventTypesError.message);
             return;
           }
         }
 
-        if (newRoutines.length) {
-          const { error: routinesError } = await supabase
-            .from('routines')
-            .upsert(newRoutines);
+        if (insertedEventTypes.length) {
+          const { data: insertEventTypesData, error: insertEventTypesError } =
+            await supabase
+              .from('event_types')
+              .upsert(insertedEventTypes)
+              .select('id');
 
-          if (routinesError) {
-            alert(routinesError.message);
+          if (insertEventTypesError) {
+            alert(insertEventTypesError.message);
+            return;
+          }
+
+          const insertEventTypesDataReverse = insertEventTypesData.reverse();
+
+          form.setValue(
+            'routines',
+            form.getValues().routines.map((session) =>
+              session.map((routine) => {
+                if (routine.id) return routine;
+
+                return {
+                  ...routine,
+                  id: insertEventTypesDataReverse.pop()?.id,
+                };
+              })
+            )
+          );
+        }
+
+        const { deleteEventTypeInputs, insertEventTypeInputs } = form
+          .getValues()
+          .routines.reduce(
+            (acc, session) => {
+              session.forEach((routine) => {
+                if (routine.id) {
+                  acc.deleteEventTypeInputs.push(routine.id);
+                }
+
+                routine.inputs.forEach((input, order) => {
+                  if (!routine.id) return;
+
+                  acc.insertEventTypeInputs.push({
+                    event_type_id: routine.id,
+                    input_id: input.id,
+                    order,
+                  });
+                });
+              });
+
+              return acc;
+            },
+            {
+              deleteEventTypeInputs: [] as string[],
+              insertEventTypeInputs:
+                [] as Database['public']['Tables']['event_type_inputs']['Insert'][],
+            }
+          );
+
+        if (deleteEventTypeInputs.length) {
+          const { error: deleteEventTypeInputsError } = await supabase
+            .from('event_type_inputs')
+            .delete()
+            .in('event_type_id', deleteEventTypeInputs);
+
+          if (deleteEventTypeInputsError) {
+            alert(deleteEventTypeInputsError.message);
+            return;
+          }
+        }
+
+        if (insertEventTypeInputs.length) {
+          const { error: insertEventTypeInputsError } = await supabase
+            .from('event_type_inputs')
+            .insert(insertEventTypeInputs);
+
+          if (insertEventTypeInputsError) {
+            alert(insertEventTypeInputsError.message);
             return;
           }
         }
@@ -131,36 +208,43 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
           render={({ field }) => <Input {...field} />}
         />
       </Label>
-      <ul>
-        {routinesArray.fields.map((item, index) => (
-          <li key={item.id}>
-            <SessionFormSection form={form} index={index} />
-          </li>
-        ))}
-      </ul>
+      {!!sessionsArray.fields.length && (
+        <ul className="flex flex-col gap-6">
+          {sessionsArray.fields.map((item, index) => (
+            <li key={item.id}>
+              <SessionFormSection
+                availableInputs={availableInputs}
+                availableTemplates={availableTemplates}
+                form={form}
+                index={index}
+                setTemplate={setTemplate}
+                subjectId={subjectId}
+                template={template}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
       <Button
-        className="mt-12 w-full"
+        className="mt-6 w-full"
         colorScheme="transparent"
-        onClick={() => routinesArray.append([[DEFAULT_ROUTINE_VALUES]])}
+        onClick={() => sessionsArray.append([[]])}
         type="button"
       >
         <PlusIcon className="w-5" />
         Add session
       </Button>
-      <div className="mt-12">
-        <Button
-          className="w-full"
-          loading={form.formState.isSubmitting}
-          loadingText="Saving…"
-          type="submit"
-        >
-          Save
-        </Button>
-      </div>
+      <Button
+        className="mt-6 w-full"
+        loading={form.formState.isSubmitting}
+        loadingText="Saving…"
+        type="submit"
+      >
+        Save
+      </Button>
     </form>
   );
 };
 
 export type { MissionFormValues };
-export { DEFAULT_ROUTINE_VALUES };
 export default MissionForm;

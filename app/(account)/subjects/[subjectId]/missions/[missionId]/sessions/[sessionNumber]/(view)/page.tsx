@@ -24,7 +24,7 @@ interface PageProps {
 const Page = async ({
   params: { missionId, sessionNumber, subjectId },
 }: PageProps) => {
-  const [{ data: subject }, { data: mission }, { data: routines }] =
+  const [{ data: subject }, { data: mission }, { data: eventTypes }] =
     await Promise.all([
       getSubject(subjectId),
       getMission(missionId),
@@ -49,24 +49,24 @@ const Page = async ({
         />
       </header>
       <main>
-        {routines?.length ? (
-          routines.map((routine) => (
+        {eventTypes?.length ? (
+          eventTypes.map((eventType) => (
             <Card
               as="section"
               breakpoint="sm"
               className="mt-16 sm:mt-3"
-              key={routine.id}
+              key={eventType.id}
             >
-              <h2 className="text-2xl">{routine.name}</h2>
+              <h2 className="text-2xl">{eventType.name}</h2>
               <article
                 className="prose mt-9 flex flex-col gap-3"
                 dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(routine.content),
+                  __html: sanitizeHtml(eventType.content),
                 }}
               />
               <RoutineForm
-                eventId={firstIfArray(routine.event)?.id}
-                routineId={routine.id}
+                eventId={firstIfArray(eventType.event)?.id}
+                eventTypeId={eventType.id}
                 subjectId={subjectId}
               />
             </Card>
@@ -82,4 +82,5 @@ const Page = async ({
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

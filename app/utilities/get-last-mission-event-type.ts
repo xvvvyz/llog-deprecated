@@ -1,15 +1,15 @@
 import createServerSupabaseClient from './create-server-supabase-client';
 
-const getLastMissionRoutine = (missionId: string) =>
+const getLastMissionEventType = (missionId: string) =>
   createServerSupabaseClient()
-    .from('routines')
+    .from('event_types')
     .select('session')
     .eq('mission_id', missionId)
     .order('order', { ascending: false })
     .limit(1);
 
-export type GetLastMissionRoutineData = Awaited<
-  ReturnType<typeof getLastMissionRoutine>
+export type GetLastMissionEventTypeData = Awaited<
+  ReturnType<typeof getLastMissionEventType>
 >['data'];
 
-export default getLastMissionRoutine;
+export default getLastMissionEventType;

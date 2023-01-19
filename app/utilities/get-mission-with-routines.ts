@@ -3,12 +3,14 @@ import createServerSupabaseClient from './create-server-supabase-client';
 const getMissionWithRoutines = (missionId: string) =>
   createServerSupabaseClient()
     .from('missions')
-    .select('id, name, routines(content, id, name, order, session)')
+    .select(
+      'id, name, routines:event_types(content, id, name, order, session, inputs(id, label))'
+    )
     .eq('id', missionId)
-    .order('order', { ascending: true, foreignTable: 'routines' })
+    .order('order', { foreignTable: 'event_types' })
     .single();
 
-export type GetMissionWithRoutinesData = Awaited<
+export type GetMissionWithEventTypesData = Awaited<
   ReturnType<typeof getMissionWithRoutines>
 >['data'];
 

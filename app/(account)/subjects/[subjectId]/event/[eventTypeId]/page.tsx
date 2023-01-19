@@ -3,45 +3,46 @@ import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
-import getObservation from 'utilities/get-observation';
+import getEventType from 'utilities/get-event-type';
 import getSubject from 'utilities/get-subject';
-import ObservationForm from './components/observation-form';
+import EventForm from './components/event-form';
 
 interface PageProps {
   params: {
-    observationId: string;
+    eventTypeId: string;
     subjectId: string;
   };
 }
 
-const Page = async ({ params: { observationId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: observation }] = await Promise.all([
+const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
+  const [{ data: subject }, { data: eventType }] = await Promise.all([
     getSubject(subjectId),
-    getObservation(observationId),
+    getEventType(eventTypeId),
   ]);
 
-  if (!subject || !observation) return notFound();
+  if (!subject || !eventType) return notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
     <>
       <Header>
-        <BackButton href={`${subjectHref}/observation`} />
+        <BackButton href={`${subjectHref}/event`} />
         <Breadcrumbs
           items={[
             [subject.name, subjectHref],
-            ['Observation', `${subjectHref}/observation`],
-            [observation.name],
+            ['Event', `${subjectHref}/event`],
+            [eventType.name],
           ]}
         />
       </Header>
       <main>
         <Card breakpoint="sm">
-          <ObservationForm observation={observation} subjectId={subjectId} />
+          <EventForm eventType={eventType} subjectId={subjectId} />
         </Card>
       </main>
     </>
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

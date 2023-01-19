@@ -13,6 +13,7 @@ const Page = async () => {
         <ListItem key={input.id}>
           <Button
             className="flex h-full w-3/4 items-center gap-6"
+            disabled
             variant="link"
           >
             <span className="truncate">{input.label}</span>
@@ -30,4 +31,5 @@ const Page = async () => {
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

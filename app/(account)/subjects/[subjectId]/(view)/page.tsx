@@ -3,6 +3,7 @@ import BackButton from 'components/back-button';
 import Button from 'components/button';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import getSubject from 'utilities/get-subject';
 import Missions from './components/missions';
 import Timeline from './components/timeline';
@@ -32,22 +33,27 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
               Add mission
             </Button>
           </Header>
-          {/* @ts-expect-error Server Component */}
-          <Missions subjectId={subjectId} />
+          <Suspense>
+            {/* @ts-expect-error Server Component */}
+            <Missions subjectId={subjectId} />
+          </Suspense>
         </section>
         <section>
           <Header>
             <h2 className="text-2xl text-fg-2">Timeline</h2>
-            <Button href={`/subjects/${subject.id}/observation`} size="sm">
-              Add observation
+            <Button href={`/subjects/${subject.id}/event`} size="sm">
+              Add event
             </Button>
           </Header>
-          {/* @ts-expect-error Server Component */}
-          <Timeline subjectId={subjectId} />
+          <Suspense>
+            {/* @ts-expect-error Server Component */}
+            <Timeline subjectId={subjectId} />
+          </Suspense>
         </section>
       </main>
     </>
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

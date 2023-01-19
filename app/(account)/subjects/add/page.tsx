@@ -2,11 +2,13 @@ import BackButton from 'components/back-button';
 import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
-import listObservations from 'utilities/list-observations';
+import listInputs from 'utilities/list-inputs';
+import listTemplates from 'utilities/list-templates';
 import SubjectForm from '../components/subject-form';
 
 const Page = async () => {
-  const { data: availableObservations } = await listObservations();
+  const [{ data: availableInputs }, { data: availableTemplates }] =
+    await Promise.all([listInputs(), listTemplates()]);
 
   return (
     <>
@@ -15,10 +17,14 @@ const Page = async () => {
         <Breadcrumbs items={[['Add subject']]} />
       </Header>
       <Card as="main" breakpoint="sm">
-        <SubjectForm availableObservations={availableObservations} />
+        <SubjectForm
+          availableInputs={availableInputs}
+          availableTemplates={availableTemplates}
+        />
       </Card>
     </>
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

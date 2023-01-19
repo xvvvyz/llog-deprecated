@@ -9,9 +9,9 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => (
   <>
     <Header>
-      <h1 className="text-2xl">Observations</h1>
-      <Button href="/observations/add" size="sm">
-        Add type
+      <h1 className="text-2xl">Templates</h1>
+      <Button href="/templates/add" size="sm">
+        Add template
       </Button>
     </Header>
     <main>{children}</main>

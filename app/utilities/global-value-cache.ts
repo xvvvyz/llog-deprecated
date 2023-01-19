@@ -1,9 +1,6 @@
 const map = new Map();
 
-type GlobalCacheKeys =
-  | 'observation_type_form_values'
-  | 'sign_in_form_values'
-  | 'subject_form_values';
+type GlobalCacheKeys = 'sign_in_form_values' | 'template_form_values';
 
 const globalValueCache = {
   get: (key: GlobalCacheKeys) => map.get(key) ?? '',

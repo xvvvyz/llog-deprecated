@@ -5,22 +5,19 @@ const Nav = () => (
   <nav className="flex items-start justify-between gap-3 leading-none text-fg-2">
     <div className="flex flex-wrap gap-6">
       <div className="flex gap-6">
-        <Button activeClassName="text-fg-1" variant="link">
-          Insights
+        <Button activeClassName="text-fg-1" href="/subjects" variant="link">
+          Subjects
         </Button>
-        <Button activeClassName="text-fg-1" variant="link">
+        <Button activeClassName="text-fg-1" href="/templates" variant="link">
           Templates
-        </Button>
-        <Button activeClassName="text-fg-1" href="/inputs" variant="link">
-          Inputs
         </Button>
       </div>
       <div className="flex gap-6">
-        <Button activeClassName="text-fg-1" href="/observations" variant="link">
-          Observations
+        <Button activeClassName="text-fg-1" href="/inputs" variant="link">
+          Inputs
         </Button>
-        <Button activeClassName="text-fg-1" href="/subjects" variant="link">
-          Subjects
+        <Button activeClassName="text-fg-1" disabled variant="link">
+          Insights
         </Button>
       </div>
     </div>

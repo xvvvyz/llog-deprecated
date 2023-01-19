@@ -3,7 +3,7 @@ import formatTitle from 'utilities/format-title';
 
 const Head = () => (
   <>
-    <title>{formatTitle('Add observation type')}</title>
+    <title>{formatTitle('Templates')}</title>
     <MetaTags />
   </>
 );

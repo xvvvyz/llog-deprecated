@@ -11,15 +11,15 @@ import { twMerge } from 'tailwind-merge';
 import supabase from 'utilities/browser-supabase-client';
 import forceArray from 'utilities/force-array';
 import formatTimeForInput from 'utilities/format-time-for-input';
-import { GetObservationData } from 'utilities/get-observation';
+import { GetEventTypeData } from 'utilities/get-event-type';
 import sleep from 'utilities/sleep';
 
-interface ObservationFormProps {
-  observation: GetObservationData;
+interface EventTypeFormProps {
+  eventType: GetEventTypeData;
   subjectId: string;
 }
 
-interface ObservationFormValues {
+interface EventTypeFormValues {
   inputs: any[]; // 😱
 }
 
@@ -32,13 +32,13 @@ const DEFAULT_INPUT_VALUES = {
   time: formatTimeForInput(new Date()),
 };
 
-const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
+const EventForm = ({ eventType, subjectId }: EventTypeFormProps) => {
   const router = useRouter();
-  const observationInputs = forceArray(observation?.inputs);
+  const eventTypeInputs = forceArray(eventType?.inputs);
 
-  const form = useForm<ObservationFormValues>({
+  const form = useForm<EventTypeFormValues>({
     defaultValues: {
-      inputs: observationInputs.map(
+      inputs: eventTypeInputs.map(
         ({ input }) =>
           DEFAULT_INPUT_VALUES[
             input.type.id as keyof typeof DEFAULT_INPUT_VALUES
@@ -47,14 +47,14 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
     },
   });
 
-  if (!observation) return null;
+  if (!eventType) return null;
 
   return (
     <form
       onSubmit={form.handleSubmit(async ({ inputs }) => {
         const { data: eventData, error: eventError } = await supabase
           .from('events')
-          .insert({ observation_id: observation.id, subject_id: subjectId })
+          .insert({ event_type_id: eventType.id, subject_id: subjectId })
           .select('id')
           .single();
 
@@ -65,16 +65,16 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
 
         const eventInputItems = inputs.reduce((acc, input, i) => {
           if (input === '' || input === null) return acc;
-          const observationInput = observationInputs[i].input;
+          const eventTypeInput = eventTypeInputs[i].input;
 
           const payload = {
             event_id: eventData.id,
-            input_id: observationInput.id,
+            input_id: eventTypeInput.id,
             input_option_id: null,
             value: null as string | null | boolean,
           };
 
-          switch (observationInput.type.id) {
+          switch (eventTypeInput.type.id) {
             case 'checkbox': {
               payload.value = String(input);
               acc.push(payload);
@@ -125,7 +125,7 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
       })}
     >
       <fieldset className="flex flex-col gap-6">
-        {observationInputs.map(({ input }, i) => (
+        {eventTypeInputs.map(({ input }, i) => (
           <Label
             className={
               input.type.id === 'checkbox'
@@ -178,7 +178,7 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
         ))}
       </fieldset>
       <Button
-        className={twMerge('w-full', observationInputs.length && 'mt-12')}
+        className={twMerge('w-full', eventTypeInputs.length && 'mt-12')}
         loading={form.formState.isSubmitting}
         loadingText="Saving…"
         type="submit"
@@ -189,5 +189,5 @@ const ObservationForm = ({ observation, subjectId }: ObservationFormProps) => {
   );
 };
 
-export type { ObservationFormValues };
-export default ObservationForm;
+export type { EventTypeFormValues };
+export default EventForm;

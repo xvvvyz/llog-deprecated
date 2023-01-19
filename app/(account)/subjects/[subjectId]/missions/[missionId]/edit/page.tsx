@@ -5,6 +5,8 @@ import Header from 'components/header';
 import { notFound } from 'next/navigation';
 import getMissionWithRoutines from 'utilities/get-mission-with-routines';
 import getSubject from 'utilities/get-subject';
+import listInputs from 'utilities/list-inputs';
+import listTemplates from 'utilities/list-templates';
 import MissionForm from '../../components/mission-form';
 
 interface PageProps {
@@ -15,9 +17,16 @@ interface PageProps {
 }
 
 const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
+  const [
+    { data: subject },
+    { data: mission },
+    { data: availableInputs },
+    { data: availableTemplates },
+  ] = await Promise.all([
     getSubject(subjectId),
     getMissionWithRoutines(missionId),
+    listInputs(),
+    listTemplates(),
   ]);
 
   if (!subject || !mission) return notFound();
@@ -37,11 +46,17 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
       </Header>
       <main>
         <Card breakpoint="sm">
-          <MissionForm mission={mission} subjectId={subjectId} />
+          <MissionForm
+            availableInputs={availableInputs}
+            availableTemplates={availableTemplates}
+            mission={mission}
+            subjectId={subjectId}
+          />
         </Card>
       </main>
     </>
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;

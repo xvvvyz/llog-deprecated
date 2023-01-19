@@ -4,7 +4,21 @@ const listEvents = (subjectId: string) =>
   createServerSupabaseClient()
     .from('events')
     .select(
-      'created_at, id, event_inputs(id, value, input:inputs(id, label, type), input_option:input_options(id, label)), observation:observations(id, name), routine:routines(id, mission_id, name, session)'
+      `
+      created_at,
+      id,
+      inputs:event_inputs(
+        id,
+        input:inputs(id, label, type),
+        options:input_options(id, label),
+        value
+      ),
+      type:event_types(
+        id,
+        mission:missions(id, name),
+        name,
+        session
+      )`
     )
     .order('created_at', { ascending: false })
     .eq('subject_id', subjectId);

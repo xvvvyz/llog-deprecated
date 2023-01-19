@@ -1,25 +1,26 @@
 import Button from 'components/button';
 import Empty from 'components/empty';
 import { List, ListItem } from 'components/list';
-import listObservations from 'utilities/list-observations';
+import listTemplates from 'utilities/list-templates';
 
 const Page = async () => {
-  const { data: observations } = await listObservations();
-  if (!observations?.length) return <Empty>No observation types</Empty>;
+  const { data: templates } = await listTemplates();
+  if (!templates?.length) return <Empty>No templates</Empty>;
 
   return (
     <List>
-      {observations.map((observation) => (
-        <ListItem key={observation.id}>
+      {templates.map((template) => (
+        <ListItem key={template.id}>
           <Button
             className="flex h-full w-3/4 items-center gap-6"
+            disabled
             variant="link"
           >
-            <span className="truncate">{observation.name}</span>
+            <span className="truncate">{template.name}</span>
           </Button>
           <Button
             colorScheme="transparent"
-            href={`/observations/${observation.id}/edit`}
+            href={`/templates/${template.id}/edit`}
             size="sm"
           >
             Edit
@@ -30,4 +31,5 @@ const Page = async () => {
   );
 };
 
+export const dynamic = 'force-dynamic';
 export default Page;
