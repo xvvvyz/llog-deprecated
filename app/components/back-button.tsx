@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Button, { ButtonProps } from 'components/button';
 import { useSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';

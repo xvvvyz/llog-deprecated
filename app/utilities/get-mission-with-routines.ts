@@ -4,10 +4,26 @@ const getMissionWithRoutines = (missionId: string) =>
   createServerSupabaseClient()
     .from('missions')
     .select(
-      'id, name, routines:event_types(content, id, name, order, session, inputs(id, label))'
+      `
+        id,
+        name,
+        routines:event_types(
+          content,
+          id,
+          inputs:event_type_inputs(
+            input:inputs(id, label)
+          ),
+          name,
+          order,
+          session,
+          template_id,
+          type
+        )`
     )
     .eq('id', missionId)
+    .not('routines.session', 'is', null)
     .order('order', { foreignTable: 'event_types' })
+    .order('order', { foreignTable: 'event_types.event_type_inputs' })
     .single();
 
 export type GetMissionWithEventTypesData = Awaited<

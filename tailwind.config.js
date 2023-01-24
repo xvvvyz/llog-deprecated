@@ -9,6 +9,8 @@ module.exports = {
       DEFAULT: 'var(--radius-default)',
       full: '50%',
       none: '0',
+      sm: 'var(--radius-sm)',
+      xs: 'var(--radius-xs)',
     },
     colors: {
       'accent-1': 'var(--color-accent-1)',

@@ -2,14 +2,14 @@ import Button from 'components/button';
 import Empty from 'components/empty';
 import { List, ListItem } from 'components/list';
 import forceArray from 'utilities/force-array';
-import listMissionsWithRoutinesAndEvents from 'utilities/list-missions-with-routines-and-events';
+import listMissionsWithRoutines from 'utilities/list-missions-with-routines';
 
 interface MissionProps {
   subjectId: string;
 }
 
 const Missions = async ({ subjectId }: MissionProps) => {
-  const { data: missions } = await listMissionsWithRoutinesAndEvents(subjectId);
+  const { data: missions } = await listMissionsWithRoutines(subjectId);
   if (!missions?.length) return <Empty>No missions</Empty>;
 
   return (

@@ -26,14 +26,13 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   ]);
 
   if (!subject) return notFound();
+  const subjectHref = `/subjects/${subject.id}`;
 
   return (
     <>
       <Header>
-        <BackButton href="/subjects" />
-        <Breadcrumbs
-          items={[[subject.name, `/subjects/${subjectId}`], ['Edit']]}
-        />
+        <BackButton href={subjectHref} />
+        <Breadcrumbs items={[[subject.name, subjectHref], ['Edit']]} />
       </Header>
       <Card as="main" breakpoint="sm">
         <SubjectForm

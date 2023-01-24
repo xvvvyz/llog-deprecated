@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
 import Empty from 'components/empty';
 import { List, ListItem } from 'components/list';
@@ -12,18 +13,12 @@ const Page = async () => {
       {inputs.map((input) => (
         <ListItem key={input.id}>
           <Button
-            className="flex h-full w-3/4 items-center gap-6"
-            disabled
+            className="m-0 h-full w-full p-0"
+            href={`/inputs/${input.id}/edit`}
             variant="link"
           >
-            <span className="truncate">{input.label}</span>
-          </Button>
-          <Button
-            colorScheme="transparent"
-            href={`/inputs/${input.id}/edit`}
-            size="sm"
-          >
-            Edit
+            <span className="w-3/4 truncate">{input.label}</span>
+            <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6 shrink-0" />
           </Button>
         </ListItem>
       ))}

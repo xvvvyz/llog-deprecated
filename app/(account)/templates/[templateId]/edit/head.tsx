@@ -14,7 +14,7 @@ const Head = async ({ params: { templateId } }: HeadProps) => {
 
   return (
     <>
-      <title>{formatTitle([template.name, 'Edit'])}</title>
+      <title>{formatTitle(['Templates', template.name])}</title>
       <MetaTags />
     </>
   );

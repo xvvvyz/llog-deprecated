@@ -8,9 +8,8 @@ const listEvents = (subjectId: string) =>
       created_at,
       id,
       inputs:event_inputs(
-        id,
         input:inputs(id, label, type),
-        options:input_options(id, label),
+        option:input_options(id, label),
         value
       ),
       type:event_types(

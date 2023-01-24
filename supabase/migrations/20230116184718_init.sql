@@ -1,6 +1,8 @@
+create type event_type as enum ('observation', 'routine');
+
 create type input_type as enum ('checkbox', 'duration', 'multi_select', 'number', 'select', 'time');
 
-create type template_type as enum ('event');
+create type template_type as enum ('observation', 'routine');
 
 create table "public"."comments" (
   "id" uuid not null default uuid_generate_v4 (),
@@ -29,7 +31,9 @@ create table "public"."event_types" (
   "name" text not null,
   "order" smallint not null,
   "session" smallint,
-  "subject_id" uuid not null
+  "subject_id" uuid not null,
+  "template_id" uuid,
+  "type" event_type not null
 );
 
 alter table "public"."event_types" enable row level security;
@@ -37,7 +41,6 @@ alter table "public"."event_types" enable row level security;
 create table "public"."event_inputs" (
   "event_id" uuid not null,
   "input_option_id" uuid,
-  "id" uuid not null default uuid_generate_v4 (),
   "input_id" uuid not null,
   "value" jsonb
 );
@@ -150,17 +153,19 @@ create index event_type_inputs_input_id_index on public.event_type_inputs using 
 
 create unique index event_types_pkey on public.event_types using btree (id);
 
-create unique index event_types_subject_id_mission_id_order_index on public.event_types using btree (subject_id, mission_id, "order");
+create index event_types_mission_id_session_order_index on public.event_types using btree (mission_id, session, "order");
 
-create index event_types_mission_id_session_index on public.event_types using btree (mission_id, session);
+create unique index event_types_subject_id_mission_id_type_order_index on public.event_types using btree (subject_id, mission_id, type, "order");
+
+create index event_types_template_id_index on public.event_types using btree (template_id);
+
+create unique index event_inputs_pkey on public.event_inputs using btree (event_id, input_id);
 
 create index event_inputs_event_id_index on public.event_inputs using btree (event_id);
 
 create index event_inputs_input_id_index on public.event_inputs using btree (input_id);
 
 create index event_inputs_input_option_id_index on public.event_inputs using btree (input_option_id);
-
-create unique index event_inputs_pkey on public.event_inputs using btree (id);
 
 create unique index events_pkey on public.events using btree (id);
 
@@ -202,6 +207,8 @@ create unique index templates_pkey on public.templates using btree (id);
 
 create unique index templates_team_id_name_index on public.templates using btree (team_id, name);
 
+create index templates_team_id_type_index on public.templates using btree (team_id, type);
+
 create index templates_team_id_type_updated_at_index on public.templates using btree (team_id, type, updated_at);
 
 alter table "public"."comments"
@@ -241,10 +248,13 @@ alter table "public"."event_type_inputs"
 alter table "public"."event_types"
   add constraint "event_types_subject_id_fkey" foreign key (subject_id) references subjects (id) not valid;
 
+alter table "public"."event_types"
+  add constraint "event_types_template_id_fkey" foreign key (template_id) references templates (id) not valid;
+
 alter table "public"."event_types" validate constraint "event_types_subject_id_fkey";
 
 alter table "public"."event_types"
-  add constraint "event_types_subject_id_mission_id_order_unique_constraint" unique using index "event_types_subject_id_mission_id_order_index";
+  add constraint "event_types_subject_id_mission_id_type_order_unique_constraint" unique using index "event_types_subject_id_mission_id_type_order_index";
 
 alter table "public"."event_types"
   add constraint "event_types_name_length" check (((length(name) > 0) and (length(name) < 50))) not valid;
@@ -591,6 +601,10 @@ create policy "Team members & subject managers can insert." on "public"."event_i
   for insert to authenticated
     with check (true);
 
+create policy "Team members & subject managers can update." on "public"."event_inputs" as permissive
+  for update to authenticated using (true)
+    with check (true);
+
 create policy "Team members & subject managers can select." on "public"."event_inputs" as permissive
   for select to authenticated
     using ((exists (
@@ -600,6 +614,10 @@ create policy "Team members & subject managers can select." on "public"."event_i
 
 create policy "Team members & subject managers can insert." on "public"."events" as permissive
   for insert to authenticated
+    with check (true);
+
+create policy "Team members & subject managers can update." on "public"."events" as permissive
+  for update to authenticated using (true)
     with check (true);
 
 create policy "Team members & subject managers can select." on "public"."events" as permissive

@@ -1,16 +1,14 @@
+import EventCard from '(account)/subjects/[subjectId]/components/event-card';
 import BackButton from 'components/back-button';
 import Breadcrumbs from 'components/breadcrumbs';
-import Card from 'components/card';
 import Empty from 'components/empty';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
 import firstIfArray from 'utilities/first-if-array';
 import getMission from 'utilities/get-mission';
-import getSessionRoutines from 'utilities/get-session-routines';
 import getSubject from 'utilities/get-subject';
-import sanitizeHtml from 'utilities/sanitize-html';
+import listSessionRoutines from 'utilities/list-session-routines';
 import EditMissionLink from './components/edit-mission-link';
-import RoutineForm from './components/routine-form';
 import SessionPaginator from './components/session-paginator';
 
 interface PageProps {
@@ -28,7 +26,7 @@ const Page = async ({
     await Promise.all([
       getSubject(subjectId),
       getMission(missionId),
-      getSessionRoutines(missionId, sessionNumber),
+      listSessionRoutines(missionId, sessionNumber),
     ]);
 
   if (!subject || !mission) return notFound();
@@ -41,35 +39,24 @@ const Page = async ({
           <BackButton href={subjectHref} />
           <Breadcrumbs items={[[subject.name, subjectHref], [mission.name]]} />
         </Header>
-        {/* @ts-expect-error Server Component */}
-        <SessionPaginator
-          missionId={missionId}
-          sessionNumber={Number(sessionNumber)}
-          subjectId={subjectId}
-        />
+        <Header as="div" className="m-0">
+          {/* @ts-expect-error Server Component */}
+          <SessionPaginator
+            missionId={missionId}
+            sessionNumber={Number(sessionNumber)}
+            subjectId={subjectId}
+          />
+        </Header>
       </header>
-      <main>
+      <main className="mt-12 flex flex-col gap-12 sm:gap-3">
         {eventTypes?.length ? (
           eventTypes.map((eventType) => (
-            <Card
-              as="section"
-              breakpoint="sm"
-              className="mt-16 sm:mt-3"
+            <EventCard
+              event={firstIfArray(eventType.event)}
+              eventType={eventType}
               key={eventType.id}
-            >
-              <h2 className="text-2xl">{eventType.name}</h2>
-              <article
-                className="prose mt-9 flex flex-col gap-3"
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(eventType.content),
-                }}
-              />
-              <RoutineForm
-                eventId={firstIfArray(eventType.event)?.id}
-                eventTypeId={eventType.id}
-                subjectId={subjectId}
-              />
-            </Card>
+              subjectId={subjectId}
+            />
           ))
         ) : (
           <Empty>

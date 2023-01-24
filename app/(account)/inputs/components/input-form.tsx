@@ -1,6 +1,6 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
@@ -10,13 +10,20 @@ import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import supabase from 'utilities/browser-supabase-client';
-import firstIfArray from 'utilities/first-if-array';
+import InputTypes from 'utilities/enum-input-types';
 import forceArray from 'utilities/force-array';
 import { GetInputData } from 'utilities/get-input';
 import globalValueCache from 'utilities/global-value-cache';
 import sleep from 'utilities/sleep';
 
-const DEFAULT_OPTION_VALUES = { input_id: '', label: '', order: 0 };
+const INPUT_TYPE_OPTIONS = [
+  { id: InputTypes.Checkbox, label: 'Checkbox' },
+  { id: InputTypes.Duration, label: 'Duration (seconds)' },
+  { id: InputTypes.MultiSelect, label: 'Multi-select' },
+  { id: InputTypes.Number, label: 'Number' },
+  { id: InputTypes.Select, label: 'Select' },
+  { id: InputTypes.Time, label: 'Time' },
+];
 
 interface InputFormProps {
   input?: GetInputData;
@@ -24,7 +31,7 @@ interface InputFormProps {
 
 type InputFormValues = Database['public']['Tables']['inputs']['Insert'] & {
   options: Database['public']['Tables']['input_options']['Insert'][];
-  type: { id: Database['public']['Enums']['input_type']; value: string };
+  type: { id: Database['public']['Enums']['input_type'] };
 };
 
 const InputForm = ({ input }: InputFormProps) => {
@@ -36,7 +43,7 @@ const InputForm = ({ input }: InputFormProps) => {
       id: input?.id,
       label: input?.label ?? '',
       options: forceArray(input?.options),
-      type: firstIfArray(input?.type),
+      type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
     },
   });
 
@@ -45,90 +52,98 @@ const InputForm = ({ input }: InputFormProps) => {
     name: 'options',
   });
 
+  const id = form.watch('id');
   const type = form.watch('type')?.id;
-  const hasOptions = type === 'select' || type === 'multi_select';
 
   useEffect(() => {
-    if (!hasOptions || optionsArray.fields.length > 0) return;
-    optionsArray.append(DEFAULT_OPTION_VALUES);
-  }, [hasOptions]);
+    if (
+      optionsArray.fields.length > 0 ||
+      (type !== InputTypes.Select && type !== InputTypes.MultiSelect)
+    ) {
+      return;
+    }
+
+    optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
+  }, [type]);
 
   return (
     <form
-      onSubmit={form.handleSubmit(async ({ id, label, options }) => {
-        const { data: inputData, error: inputError } = await supabase
-          .from('inputs')
-          .upsert({ id, label, type })
-          .select('id, label')
-          .single();
+      onSubmit={form.handleSubmit(
+        async ({ id, label, options, type: { id: type } }) => {
+          const { data: inputData, error: inputError } = await supabase
+            .from('inputs')
+            .upsert({ id, label, type })
+            .select('id, label')
+            .single();
 
-        if (inputError) {
-          alert(inputError?.message);
-          return;
-        }
+          if (inputError) {
+            alert(inputError?.message);
+            return;
+          }
 
-        form.setValue('id', inputData.id);
+          form.setValue('id', inputData.id);
 
-        if (hasOptions) {
-          const { insertedOptions, updatedOptions } = options.reduce(
-            (acc, option, order) => {
-              const payload: Database['public']['Tables']['input_options']['Insert'] =
-                {
-                  input_id: inputData.id,
-                  label: option.label,
-                  order,
-                };
+          if (type === InputTypes.Select || type === InputTypes.MultiSelect) {
+            const { insertedOptions, updatedOptions } = options.reduce(
+              (acc, option, order) => {
+                const payload: Database['public']['Tables']['input_options']['Insert'] =
+                  {
+                    input_id: inputData.id,
+                    label: option.label,
+                    order,
+                  };
 
-              if (option.id) {
-                payload.id = option.id;
-                acc.updatedOptions.push(payload);
-              } else {
-                acc.insertedOptions.push(payload);
+                if (option.id) {
+                  payload.id = option.id;
+                  acc.updatedOptions.push(payload);
+                } else {
+                  acc.insertedOptions.push(payload);
+                }
+
+                return acc;
+              },
+              {
+                insertedOptions:
+                  [] as Database['public']['Tables']['input_options']['Insert'][],
+                updatedOptions:
+                  [] as Database['public']['Tables']['input_options']['Insert'][],
               }
+            );
 
-              return acc;
-            },
-            {
-              insertedOptions:
-                [] as Database['public']['Tables']['input_options']['Insert'][],
-              updatedOptions:
-                [] as Database['public']['Tables']['input_options']['Insert'][],
+            if (updatedOptions.length) {
+              const { error: inputOptionsError } = await supabase
+                .from('input_options')
+                .upsert(updatedOptions.sort((a, b) => b.order - a.order));
+
+              if (inputOptionsError) {
+                alert(inputOptionsError.message);
+                return;
+              }
             }
-          );
 
-          if (updatedOptions.length) {
-            const { error: inputOptionsError } = await supabase
-              .from('input_options')
-              .upsert(updatedOptions.sort((a, b) => b.order - a.order));
+            if (insertedOptions.length) {
+              const { error: inputOptionsError } = await supabase
+                .from('input_options')
+                .insert(insertedOptions);
 
-            if (inputOptionsError) {
-              alert(inputOptionsError.message);
-              return;
-            }
-          }
-
-          if (insertedOptions.length) {
-            const { error: inputOptionsError } = await supabase
-              .from('input_options')
-              .insert(insertedOptions);
-
-            if (inputOptionsError) {
-              alert(inputOptionsError.message);
-              return;
+              if (inputOptionsError) {
+                alert(inputOptionsError.message);
+                return;
+              }
             }
           }
-        }
 
-        if (globalValueCache.has('template_form_values')) {
-          const cache = globalValueCache.get('template_form_values');
-          cache.inputs.push(inputData);
-          globalValueCache.set('template_form_values', cache);
-        }
+          if (globalValueCache.has('template_form_values')) {
+            const cache = globalValueCache.get('template_form_values');
+            cache.inputs.push(inputData);
+            globalValueCache.set('template_form_values', cache);
+          }
 
-        await router.push(searchParams.get('back') ?? '/inputs');
-        await router.refresh();
-        await sleep();
-      })}
+          await router.push(searchParams.get('back') ?? '/inputs');
+          await router.refresh();
+          await sleep();
+        }
+      )}
     >
       <Label>
         Label
@@ -145,20 +160,14 @@ const InputForm = ({ input }: InputFormProps) => {
           name="type"
           render={({ field }) => (
             <Select
-              options={[
-                { id: 'checkbox', label: 'Checkbox' },
-                { id: 'duration', label: 'Duration' },
-                { id: 'multi_select', label: 'Multi-select' },
-                { id: 'number', label: 'Number' },
-                { id: 'select', label: 'Select' },
-                { id: 'time', label: 'Time' },
-              ]}
+              isClearable={false}
+              options={INPUT_TYPE_OPTIONS}
               {...field}
             />
           )}
         />
       </Label>
-      {hasOptions && (
+      {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
         <fieldset className="mt-6">
           <legend className="text-fg-2">Options</legend>
           <ul className="flex flex-col gap-3 pt-2">
@@ -168,7 +177,7 @@ const InputForm = ({ input }: InputFormProps) => {
                   control={form.control}
                   name={`options.${optionIndex}.label`}
                   render={({ field }) => (
-                    <Input placeholder="Option label…" {...field} />
+                    <Input placeholder="Label" {...field} />
                   )}
                 />
               </li>
@@ -177,8 +186,13 @@ const InputForm = ({ input }: InputFormProps) => {
           <Button
             className="mt-3 w-full"
             colorScheme="transparent"
-            onClick={() => optionsArray.append(DEFAULT_OPTION_VALUES)}
-            size="sm"
+            onClick={() =>
+              optionsArray.append({
+                input_id: id ?? '',
+                label: '',
+                order: optionsArray.fields.length,
+              })
+            }
             type="button"
           >
             <PlusIcon className="w-5" />

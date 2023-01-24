@@ -5,6 +5,7 @@ const getLastMissionEventType = (missionId: string) =>
     .from('event_types')
     .select('session')
     .eq('mission_id', missionId)
+    .not('session', 'is', null)
     .order('order', { ascending: false })
     .limit(1);
 

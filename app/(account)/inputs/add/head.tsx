@@ -3,7 +3,7 @@ import formatTitle from 'utilities/format-title';
 
 const Head = () => (
   <>
-    <title>{formatTitle('Add input')}</title>
+    <title>{formatTitle(['Inputs', 'Add'])}</title>
     <MetaTags />
   </>
 );

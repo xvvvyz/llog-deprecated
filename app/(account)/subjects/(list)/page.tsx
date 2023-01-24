@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Avatar from 'components/avatar';
 import Button from 'components/button';
 import Empty from 'components/empty';
@@ -13,19 +14,13 @@ const Page = async () => {
       {subjects.map((subject) => (
         <ListItem key={subject.id}>
           <Button
-            className="flex h-full w-3/4 items-center gap-6"
+            className="m-0 h-full w-full gap-6 p-0"
             href={`/subjects/${subject.id}`}
             variant="link"
           >
             <Avatar file={subject.image_uri} name={subject.name} />
-            <span className="truncate">{subject.name}</span>
-          </Button>
-          <Button
-            colorScheme="transparent"
-            href={`/subjects/${subject.id}/edit`}
-            size="sm"
-          >
-            Edit
+            <span className="w-3/4 truncate">{subject.name}</span>
+            <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6 shrink-0" />
           </Button>
         </ListItem>
       ))}

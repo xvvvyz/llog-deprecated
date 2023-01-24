@@ -3,6 +3,7 @@ import Breadcrumbs from 'components/breadcrumbs';
 import Card from 'components/card';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
+import TemplateTypes from 'utilities/enum-template-types';
 import getMissionWithRoutines from 'utilities/get-mission-with-routines';
 import getSubject from 'utilities/get-subject';
 import listInputs from 'utilities/list-inputs';
@@ -26,7 +27,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     getSubject(subjectId),
     getMissionWithRoutines(missionId),
     listInputs(),
-    listTemplates(),
+    listTemplates(TemplateTypes.Routine),
   ]);
 
   if (!subject || !mission) return notFound();

@@ -61,5 +61,4 @@ const RichTextarea = forwardRef<
 ));
 
 RichTextarea.displayName = 'RichTextarea';
-
 export default RichTextarea;

@@ -14,7 +14,7 @@ const Page = async () => {
     <>
       <Header>
         <BackButton href="/subjects" />
-        <Breadcrumbs items={[['Add subject']]} />
+        <Breadcrumbs items={[['Subjects', '/subjects'], ['Add']]} />
       </Header>
       <Card as="main" breakpoint="sm">
         <SubjectForm

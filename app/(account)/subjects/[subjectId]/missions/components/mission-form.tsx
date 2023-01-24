@@ -1,21 +1,21 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/solid';
+import EventTypesFormSection from '(account)/components/event-types-form-section';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
-import { EventTemplate } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
+import EventTypes from 'utilities/enum-event-types';
+import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
 import { GetMissionWithEventTypesData } from 'utilities/get-mission-with-routines';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
 import sleep from 'utilities/sleep';
-import SessionFormSection from './session-form-section';
 
 interface MissionFormProps {
   availableInputs: ListInputsData;
@@ -38,15 +38,23 @@ const MissionForm = ({
 }: MissionFormProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [template, setTemplate] = useState<EventTemplate | null>(null);
 
   const form = useForm<MissionFormValues>({
     defaultValues: {
       id: mission?.id,
       name: mission?.name ?? '',
       routines: forceArray(mission?.routines).reduce((acc, routine) => {
-        if (acc[routine.session]) acc[routine.session].push(routine);
-        else acc[routine.session] = [routine];
+        const inputs = routine.inputs.map(
+          ({
+            input,
+          }: {
+            input: Database['public']['Tables']['inputs']['Row'];
+          }) => input
+        );
+
+        const formattedRoutine = { ...routine, inputs };
+        if (acc[routine.session]) acc[routine.session].push(formattedRoutine);
+        else acc[routine.session] = [formattedRoutine];
         return acc;
       }, []),
     },
@@ -85,6 +93,8 @@ const MissionForm = ({
                 order: acc.order,
                 session,
                 subject_id: subjectId,
+                template_id: routine.template_id,
+                type: routine.type,
               };
 
               if (routine.id) acc.updatedEventTypes.push(payload);
@@ -212,14 +222,14 @@ const MissionForm = ({
         <ul className="flex flex-col gap-6">
           {sessionsArray.fields.map((item, index) => (
             <li key={item.id}>
-              <SessionFormSection
-                availableInputs={availableInputs}
-                availableTemplates={availableTemplates}
+              <EventTypesFormSection<MissionFormValues>
                 form={form}
-                index={index}
-                setTemplate={setTemplate}
-                subjectId={subjectId}
-                template={template}
+                inputOptions={availableInputs}
+                label={`Session ${index + 1}`}
+                name={`routines.${index}`}
+                templateOptions={availableTemplates}
+                templateType={TemplateTypes.Routine}
+                type={EventTypes.Routine}
               />
             </li>
           ))}

@@ -29,7 +29,7 @@ const variants = {
 };
 
 const disabledVariants = {
-  link: 'pointer-events-none opacity-50',
+  link: 'pointer-events-none text-alpha-3',
   primary: 'pointer-events-none opacity-50 ring-transparent',
 };
 

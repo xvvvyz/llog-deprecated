@@ -4,10 +4,21 @@ const getSubjectWithEventTypes = (subjectId: string) =>
   createServerSupabaseClient()
     .from('subjects')
     .select(
-      'id, image_uri, name, event_types(content, id, name, inputs(id, label))'
+      `
+      event_types(
+        content,
+        id,
+        inputs(id, label),
+        name,
+        type
+      ),
+      id,
+      image_uri,
+      name`
     )
     .eq('id', subjectId)
     .is('event_types.mission_id', null)
+    .order('type', { foreignTable: 'event_types' })
     .order('order', { foreignTable: 'event_types' })
     .single();
 

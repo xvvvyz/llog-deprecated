@@ -1,3 +1,4 @@
+import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import Avatar from 'components/avatar';
 import BackButton from 'components/back-button';
 import Button from 'components/button';
@@ -22,8 +23,14 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     <>
       <Header>
         <BackButton href="/subjects" />
-        <h1 className="w-1/2 truncate text-center text-2xl">{subject.name}</h1>
-        <Avatar file={subject.image_uri} name={subject.name} />
+        <div className="flex items-center justify-center gap-6">
+          <Avatar file={subject.image_uri} name={subject.name} />
+          <h1 className="truncate">{subject.name}</h1>
+        </div>
+        <Button href={`/subjects/${subject.id}/edit`} variant="link">
+          <Cog6ToothIcon className="relative -right-1 w-9" />
+          <span className="sr-only">Edit</span>
+        </Button>
       </Header>
       <main>
         <section>

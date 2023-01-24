@@ -12,7 +12,7 @@ const Page = async () => {
     <>
       <Header>
         <BackButton href="/templates" />
-        <Breadcrumbs items={[['Add template']]} />
+        <Breadcrumbs items={[['Templates', '/templates'], ['Add']]} />
       </Header>
       <Card as="main" breakpoint="sm">
         <TemplateForm availableInputs={availableInputs} />

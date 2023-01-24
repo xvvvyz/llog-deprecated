@@ -25,7 +25,7 @@ const Page = async ({ params: { templateId } }: PageProps) => {
     <>
       <Header>
         <BackButton href="/templates" />
-        <Breadcrumbs items={[[template.name], ['Edit']]} />
+        <Breadcrumbs items={[['Templates', '/templates'], [template.name]]} />
       </Header>
       <Card as="main" breakpoint="sm">
         <TemplateForm availableInputs={availableInputs} template={template} />

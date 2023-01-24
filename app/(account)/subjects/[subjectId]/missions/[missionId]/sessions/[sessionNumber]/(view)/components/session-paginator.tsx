@@ -1,6 +1,5 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
-import Card from 'components/card';
 import getLastMissionEventType from 'utilities/get-last-mission-event-type';
 
 interface SessionPaginatorProps {
@@ -20,29 +19,27 @@ const SessionPaginator = async ({
   const nextSessionNumber = Math.min(lastSessionNumber, sessionNumber + 1);
 
   return (
-    <Card as="nav" className="flex items-center justify-between py-2" size="0">
+    <nav className="flex w-full items-center justify-between py-2">
       <Button
-        className="px-9"
         disabled={sessionNumber === 1}
         href={`/subjects/${subjectId}/missions/${missionId}/sessions/${previousSessionNumber}`}
         variant="link"
       >
-        <ChevronLeftIcon className="w-6" />
+        <ChevronLeftIcon className="relative -left-[0.5em] w-6" />
         <span className="sr-only">Previous session</span>
       </Button>
       <span className="text-fg-2">
         Session {sessionNumber} of {lastSessionNumber}
       </span>
       <Button
-        className="px-9"
         disabled={sessionNumber === lastSessionNumber}
         href={`/subjects/${subjectId}/missions/${missionId}/sessions/${nextSessionNumber}`}
         variant="link"
       >
-        <ChevronRightIcon className="w-6" />
+        <ChevronRightIcon className="relative -right-[0.5em] w-6" />
         <span className="sr-only">Next session</span>
       </Button>
-    </Card>
+    </nav>
   );
 };
 

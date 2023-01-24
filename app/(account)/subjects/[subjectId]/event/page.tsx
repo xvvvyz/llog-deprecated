@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import BackButton from 'components/back-button';
 import Breadcrumbs from 'components/breadcrumbs';
 import Button from 'components/button';
@@ -7,7 +7,7 @@ import Header from 'components/header';
 import { List, ListItem } from 'components/list';
 import { notFound } from 'next/navigation';
 import getSubject from 'utilities/get-subject';
-import getSubjectEventTypes from 'utilities/get-subject-event-types';
+import listSubjectEventTypes from 'utilities/list-subject-event-types';
 import EditSubjectLink from './components/edit-subject-link';
 
 interface PageProps {
@@ -19,7 +19,7 @@ interface PageProps {
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const [{ data: subject }, { data: eventTypes }] = await Promise.all([
     getSubject(subjectId),
-    getSubjectEventTypes(subjectId),
+    listSubjectEventTypes(subjectId),
   ]);
 
   if (!subject) return notFound();
@@ -37,7 +37,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             {eventTypes.map((eventType) => (
               <ListItem key={eventType.id}>
                 <Button
-                  className="mx-0 flex h-full w-full items-center gap-6 px-0"
+                  className="m-0 h-full w-full p-0"
                   href={`${subjectHref}/event/${eventType.id}`}
                   variant="link"
                 >

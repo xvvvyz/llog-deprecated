@@ -1,11 +1,10 @@
 import BackButton from 'components/back-button';
 import Breadcrumbs from 'components/breadcrumbs';
-import Card from 'components/card';
 import Header from 'components/header';
 import { notFound } from 'next/navigation';
 import getEventType from 'utilities/get-event-type';
 import getSubject from 'utilities/get-subject';
-import EventForm from './components/event-form';
+import EventCard from '../../components/event-card';
 
 interface PageProps {
   params: {
@@ -36,9 +35,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
         />
       </Header>
       <main>
-        <Card breakpoint="sm">
-          <EventForm eventType={eventType} subjectId={subjectId} />
-        </Card>
+        <EventCard eventType={eventType} subjectId={subjectId} />
       </main>
     </>
   );

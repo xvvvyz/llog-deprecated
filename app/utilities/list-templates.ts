@@ -1,12 +1,23 @@
+import { Database } from 'types/database';
 import createServerSupabaseClient from './create-server-supabase-client';
 import getCurrentTeamId from './get-current-team-id';
 
-const listTemplates = async () =>
-  createServerSupabaseClient()
+const listTemplates = async (
+  type?: Database['public']['Enums']['template_type']
+) => {
+  const match: Database['public']['Tables']['templates']['Update'] = {
+    team_id: await getCurrentTeamId(),
+  };
+
+  if (type) match.type = type;
+
+  return createServerSupabaseClient()
     .from('templates')
     .select('data, id, name, public, type')
-    .match({ team_id: await getCurrentTeamId(), type: ['event'] })
+    .match(match)
+    .order('type')
     .order('updated_at', { ascending: false });
+};
 
 export type ListTemplatesData = Awaited<
   ReturnType<typeof listTemplates>

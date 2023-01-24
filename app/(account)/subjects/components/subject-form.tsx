@@ -1,24 +1,23 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/solid';
 import Avatar from 'components/avatar';
 import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
-import RichTextarea from 'components/rich-textarea';
-import Select from 'components/select';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import { EventTemplate } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
+import EventTypes from 'utilities/enum-event-types';
+import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
 import { GetSubjectWithEventTypesData } from 'utilities/get-subject-with-event-types';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
 import sleep from 'utilities/sleep';
+import EventTypesFormSection from '../../components/event-types-form-section';
 
 interface SubjectFormProps {
   availableInputs: ListInputsData;
@@ -26,10 +25,15 @@ interface SubjectFormProps {
   subject?: GetSubjectWithEventTypesData;
 }
 
+type EventType = Database['public']['Tables']['event_types']['Insert'] & {
+  inputs: Database['public']['Tables']['inputs']['Row'][];
+};
+
 type SubjectFormValues = Database['public']['Tables']['subjects']['Insert'] & {
-  eventTypes: (Database['public']['Tables']['event_types']['Insert'] & {
-    inputs: Database['public']['Tables']['inputs']['Row'][];
-  })[];
+  observationTemplate: EventTemplate | null;
+  observations: EventType[];
+  routineTemplate: EventTemplate | null;
+  routines: EventType[];
 };
 
 const SubjectForm = ({
@@ -39,19 +43,19 @@ const SubjectForm = ({
 }: SubjectFormProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [template, setTemplate] = useState<EventTemplate | null>(null);
+  const eventTypes = forceArray(subject?.event_types);
 
   const form = useForm<SubjectFormValues>({
     defaultValues: {
-      eventTypes: forceArray(subject?.event_types),
       id: subject?.id,
       name: subject?.name ?? '',
+      observationTemplate: null,
+      observations: eventTypes.filter(
+        ({ type }) => type === EventTypes.Observation
+      ),
+      routineTemplate: null,
+      routines: eventTypes.filter(({ type }) => type === EventTypes.Routine),
     },
-  });
-
-  const eventTypesArray = useFieldArray({
-    control: form.control,
-    name: 'eventTypes',
   });
 
   const dropzone = useDropzone({
@@ -66,153 +70,168 @@ const SubjectForm = ({
   return (
     <form
       className="flex flex-col gap-6"
-      onSubmit={form.handleSubmit(async ({ id, name, eventTypes }) => {
-        const { data: subjectData, error: subjectError } = await supabase
-          .from('subjects')
-          .upsert({ id, name })
-          .select('id')
-          .single();
+      onSubmit={form.handleSubmit(
+        async ({ id, name, observations, routines }) => {
+          const { data: subjectData, error: subjectError } = await supabase
+            .from('subjects')
+            .upsert({ id, name })
+            .select('id')
+            .single();
 
-        if (subjectError) {
-          alert(subjectError.message);
-          return;
-        }
+          if (subjectError) {
+            alert(subjectError.message);
+            return;
+          }
 
-        form.setValue('id', subjectData.id);
+          form.setValue('id', subjectData.id);
 
-        const { insertedEventTypes, updateEventTypes } = eventTypes.reduce(
-          (acc, eventType, order) => {
+          const reduceEventTypes = (
+            acc: {
+              insertedEventTypes: Database['public']['Tables']['event_types']['Insert'][];
+              updatedEventTypes: Database['public']['Tables']['event_types']['Insert'][];
+            },
+            eventType: Database['public']['Tables']['event_types']['Insert'],
+            order: number
+          ) => {
             const eventTypePayload: Database['public']['Tables']['event_types']['Insert'] =
               {
                 content: eventType.content,
                 name: eventType.name,
                 order,
                 subject_id: subjectData.id,
+                template_id: eventType.template_id,
+                type: eventType.type,
               };
 
             if (eventType.id) {
               eventTypePayload.id = eventType.id;
-              acc.updateEventTypes.push(eventTypePayload);
+              acc.updatedEventTypes.push(eventTypePayload);
             } else {
               acc.insertedEventTypes.push(eventTypePayload);
             }
 
             return acc;
-          },
-          {
-            insertedEventTypes:
-              [] as Database['public']['Tables']['event_types']['Insert'][],
-            updateEventTypes:
-              [] as Database['public']['Tables']['event_types']['Insert'][],
-          }
-        );
+          };
 
-        if (updateEventTypes.length) {
-          const { error: updateEventTypesError } = await supabase
-            .from('event_types')
-            .upsert(updateEventTypes);
-
-          if (updateEventTypesError) {
-            alert(updateEventTypesError.message);
-            return;
-          }
-        }
-
-        if (insertedEventTypes.length) {
-          const { data: insertEventTypesData, error: insertEventTypesError } =
-            await supabase
-              .from('event_types')
-              .insert(insertedEventTypes)
-              .select('id');
-
-          if (insertEventTypesError) {
-            alert(insertEventTypesError.message);
-            return;
-          }
-
-          const insertEventTypesDataReverse = insertEventTypesData.reverse();
-
-          form.setValue(
-            'eventTypes',
-            form.getValues().eventTypes.map((eventType) => {
-              if (eventType.id) return eventType;
-
-              return {
-                ...eventType,
-                id: insertEventTypesDataReverse.pop()?.id,
-              };
+          const { insertedEventTypes, updatedEventTypes } = routines.reduce(
+            reduceEventTypes,
+            observations.reduce(reduceEventTypes, {
+              insertedEventTypes:
+                [] as Database['public']['Tables']['event_types']['Insert'][],
+              updatedEventTypes:
+                [] as Database['public']['Tables']['event_types']['Insert'][],
             })
           );
-        }
 
-        const { deleteEventTypeInputs, insertEventTypeInputs } = form
-          .getValues()
-          .eventTypes.reduce(
-            (acc, eventType) => {
-              if (eventType.id) {
-                acc.deleteEventTypeInputs.push(eventType.id);
-              }
+          if (updatedEventTypes.length) {
+            const { error: updateEventTypesError } = await supabase
+              .from('event_types')
+              .upsert(updatedEventTypes);
 
-              eventType.inputs.forEach((input, order) => {
-                if (!eventType.id) return;
-
-                acc.insertEventTypeInputs.push({
-                  event_type_id: eventType.id,
-                  input_id: input.id,
-                  order,
-                });
-              });
-
-              return acc;
-            },
-            {
-              deleteEventTypeInputs: [] as string[],
-              insertEventTypeInputs:
-                [] as Database['public']['Tables']['event_type_inputs']['Insert'][],
+            if (updateEventTypesError) {
+              alert(updateEventTypesError.message);
+              return;
             }
-          );
-
-        if (deleteEventTypeInputs.length) {
-          const { error: deleteEventTypeInputsError } = await supabase
-            .from('event_type_inputs')
-            .delete()
-            .in('event_type_id', deleteEventTypeInputs);
-
-          if (deleteEventTypeInputsError) {
-            alert(deleteEventTypeInputsError.message);
-            return;
           }
-        }
 
-        if (insertEventTypeInputs.length) {
-          const { error: insertEventTypeInputsError } = await supabase
-            .from('event_type_inputs')
-            .insert(insertEventTypeInputs);
+          if (insertedEventTypes.length) {
+            const { data: insertEventTypesData, error: insertEventTypesError } =
+              await supabase
+                .from('event_types')
+                .insert(insertedEventTypes)
+                .select('id');
 
-          if (insertEventTypeInputsError) {
-            alert(insertEventTypeInputsError.message);
-            return;
+            if (insertEventTypesError) {
+              alert(insertEventTypesError.message);
+              return;
+            }
+
+            const insertEventTypesDataReverse = insertEventTypesData.reverse();
+
+            const attachEventTypeIds = (
+              eventType: SubjectFormValues['observations' | 'routines'][number]
+            ) => {
+              if (eventType.id) return eventType;
+              eventType.id = insertEventTypesDataReverse.pop()?.id;
+              return eventType;
+            };
+
+            form.setValue('observations', observations.map(attachEventTypeIds));
+            form.setValue('routines', routines.map(attachEventTypeIds));
           }
-        }
 
-        if (dropzone.acceptedFiles.length) {
-          const ext = dropzone.acceptedFiles[0].name.split('.').pop();
+          const { deleteEventTypeInputs, insertEventTypeInputs } = observations
+            .concat(routines)
+            .reduce(
+              (acc, eventType) => {
+                if (eventType.id) {
+                  acc.deleteEventTypeInputs.push(eventType.id);
+                }
 
-          await supabase.storage
-            .from('subjects')
-            .upload(
-              `${subjectData.id}/image.${ext}`,
-              dropzone.acceptedFiles[0],
+                eventType.inputs.forEach((input, order) => {
+                  if (!eventType.id) return;
+
+                  acc.insertEventTypeInputs.push({
+                    event_type_id: eventType.id,
+                    input_id: input.id,
+                    order,
+                  });
+                });
+
+                return acc;
+              },
               {
-                upsert: true,
+                deleteEventTypeInputs: [] as string[],
+                insertEventTypeInputs:
+                  [] as Database['public']['Tables']['event_type_inputs']['Insert'][],
               }
             );
-        }
 
-        await router.push(searchParams.get('back') ?? '/subjects');
-        await router.refresh();
-        await sleep();
-      })}
+          if (deleteEventTypeInputs.length) {
+            const { error: deleteEventTypeInputsError } = await supabase
+              .from('event_type_inputs')
+              .delete()
+              .in('event_type_id', deleteEventTypeInputs);
+
+            if (deleteEventTypeInputsError) {
+              alert(deleteEventTypeInputsError.message);
+              return;
+            }
+          }
+
+          if (insertEventTypeInputs.length) {
+            const { error: insertEventTypeInputsError } = await supabase
+              .from('event_type_inputs')
+              .insert(insertEventTypeInputs);
+
+            if (insertEventTypeInputsError) {
+              alert(insertEventTypeInputsError.message);
+              return;
+            }
+          }
+
+          if (dropzone.acceptedFiles.length) {
+            const ext = dropzone.acceptedFiles[0].name.split('.').pop();
+
+            await supabase.storage
+              .from('subjects')
+              .upload(
+                `${subjectData.id}/image.${ext}`,
+                dropzone.acceptedFiles[0],
+                {
+                  upsert: true,
+                }
+              );
+          }
+
+          await router.push(
+            searchParams.get('back') ?? `/subjects/${subjectData.id}`
+          );
+
+          await router.refresh();
+          await sleep();
+        }
+      )}
     >
       <Label>
         Name
@@ -235,83 +254,24 @@ const SubjectForm = ({
           <input {...dropzone.getInputProps()} />
         </div>
       </Label>
-      <fieldset>
-        <legend className="mb-2 text-fg-2">Event types</legend>
-        <ul>
-          {eventTypesArray.fields.map((eventType, index) => (
-            <li className="mb-3" key={eventType.id}>
-              <Controller
-                control={form.control}
-                name={`eventTypes.${index}.name`}
-                render={({ field }) => (
-                  <Input
-                    aria-label="EventType name"
-                    className="rounded-b-none"
-                    placeholder="Name"
-                    {...field}
-                  />
-                )}
-              />
-              <Controller
-                control={form.control}
-                name={`eventTypes.${index}.content`}
-                render={({ field }) => (
-                  <RichTextarea
-                    className="rounded-none border-t-0"
-                    placeholder="Content"
-                    {...field}
-                  />
-                )}
-              />
-              <Controller
-                control={form.control}
-                name={`eventTypes.${index}.inputs`}
-                render={({ field }) => (
-                  <Select
-                    className="rounded-t-none border-t-0"
-                    isMulti
-                    options={availableInputs ?? []}
-                    placeholder="Inputs"
-                    {...field}
-                  />
-                )}
-              />
-            </li>
-          ))}
-        </ul>
-        <div className="flex">
-          <Select
-            className="w-full rounded-r-none"
-            name="template"
-            onChange={(template) => setTemplate(template as EventTemplate)}
-            options={availableTemplates ?? []}
-            placeholder="No template"
-            value={template}
-          />
-          <Button
-            className="shrink-0 rounded-l-none border-l-0 pl-6"
-            colorScheme="transparent"
-            onClick={() => {
-              eventTypesArray.append({
-                content: template?.data?.content ?? '',
-                inputs: forceArray(availableInputs).filter((input) =>
-                  template?.data?.inputIds?.includes(input.id)
-                ),
-                name: template?.name ?? '',
-                order: eventTypesArray.fields.length,
-                subject_id: form.getValues().id ?? '',
-              });
-
-              setTemplate(null);
-            }}
-            size="sm"
-            type="button"
-          >
-            Add
-            <PlusIcon className="w-5" />
-          </Button>
-        </div>
-      </fieldset>
+      <EventTypesFormSection<SubjectFormValues>
+        form={form}
+        inputOptions={availableInputs}
+        label="Observations"
+        name="observations"
+        templateOptions={availableTemplates}
+        templateType={TemplateTypes.Observation}
+        type={EventTypes.Observation}
+      />
+      <EventTypesFormSection<SubjectFormValues>
+        form={form}
+        inputOptions={availableInputs}
+        label="Routines"
+        name="routines"
+        templateOptions={availableTemplates}
+        templateType={TemplateTypes.Routine}
+        type={EventTypes.Routine}
+      />
       <Button
         className="mt-6 w-full"
         loading={form.formState.isSubmitting}

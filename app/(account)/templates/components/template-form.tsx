@@ -3,6 +3,7 @@
 import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
+import RadioGroup from 'components/radio-group';
 import RichTextarea from 'components/rich-textarea';
 import Select from 'components/select';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -10,6 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import { EventTemplateData } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
+import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
 import { GetTemplateData } from 'utilities/get-template';
 import globalValueCache from 'utilities/global-value-cache';
@@ -42,12 +44,12 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         : {
             content: templateData?.content ?? '',
             id: template?.id,
-            inputs: forceArray(templateData?.inputIds).map((id) =>
-              availableInputs?.find((input) => input.id === id)
+            inputs: forceArray(templateData?.inputIds).map((inputId) =>
+              availableInputs?.find(({ id }) => id === inputId)
             ),
             name: template?.name ?? '',
             public: template?.public ?? false,
-            type: template?.type ?? 'event',
+            type: template?.type ?? TemplateTypes.Observation,
           },
   });
 
@@ -78,6 +80,22 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         }
       )}
     >
+      <Label>
+        Type
+        <Controller
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <RadioGroup
+              options={[
+                { label: 'Observation', value: TemplateTypes.Observation },
+                { label: 'Routine', value: TemplateTypes.Routine },
+              ]}
+              {...field}
+            />
+          )}
+        />
+      </Label>
       <Label>
         Name
         <Controller

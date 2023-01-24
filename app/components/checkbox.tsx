@@ -1,16 +1,18 @@
-import { CheckIcon } from '@heroicons/react/24/solid';
+import { CheckIcon } from '@heroicons/react/24/outline';
 import { forwardRef, InputHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Checkbox = forwardRef<
   HTMLInputElement,
   Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
->(({ className, ...rest }, ref) => (
+>(({ className, value, ...rest }, ref) => (
   <>
     <input
       className="peer absolute h-6 w-6 opacity-0"
+      defaultChecked={Boolean(value)}
       ref={ref}
       type="checkbox"
+      value={value}
       {...rest}
     />
     <span

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import ReactSelect, {
   ClearIndicatorProps,
@@ -10,7 +10,6 @@ import ReactSelect, {
   MenuProps,
   MultiValueGenericProps,
   MultiValueRemoveProps,
-  NoticeProps,
   OptionProps,
   PlaceholderProps,
   Props as ReactSelectProps,
@@ -18,18 +17,16 @@ import ReactSelect, {
 } from 'react-select';
 
 import { PlusIcon } from '@heroicons/react/20/solid';
-import { forwardRef, Ref } from 'react';
+import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable from 'react-select/creatable';
 import ReactSelectDeclaration from 'react-select/dist/declarations/src/Select';
 import { twMerge } from 'tailwind-merge';
 
-type IOption =
-  | {
-      id: string;
-      label?: string;
-      name?: string;
-    }
-  | string;
+type IOption = {
+  id: string;
+  label?: string;
+  name?: string;
+};
 
 const ClearIndicator = <TOption extends IOption>({
   children,
@@ -53,6 +50,7 @@ const Control = <TOption extends IOption>({
       className={twMerge(
         'input p-1',
         menuIsOpen && 'rounded-b-none focus-within:ring-0',
+        selectProps.isDisabled && 'opacity-50',
         selectProps.className
       )}
       menuIsOpen={menuIsOpen}
@@ -71,7 +69,7 @@ const Input = <TOption extends IOption>({
   ...props
 }: InputProps<TOption>) => (
   <components.Input
-    className={props.value ? 'caret-initial m-1 px-2' : 'caret-transparent'}
+    className="w-0 focus-within:m-1 focus-within:w-auto focus-within:px-2"
     {...props}
   >
     {children}
@@ -86,7 +84,7 @@ const Menu = <TOption extends IOption>({
     className="overflow-hidden rounded-b bg-bg-1 shadow-md sm:bg-bg-2"
     {...props}
   >
-    <div className="rounded-b border border-t-0 border-alpha-3 bg-alpha-1">
+    <div className="rounded-b border border-t-0 border-alpha-2 bg-alpha-1">
       {children}
     </div>
   </components.Menu>
@@ -97,7 +95,7 @@ const MultiValueContainer = ({
   ...props
 }: MultiValueGenericProps) => (
   <components.MultiValueContainer {...props}>
-    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-[0.15rem] bg-alpha-2 pl-2 text-sm leading-6">
+    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-sm bg-alpha-2 pl-2 text-sm leading-6">
       {children}
     </div>
   </components.MultiValueContainer>
@@ -111,13 +109,8 @@ const MultiValueRemove = ({ children, ...props }: MultiValueRemoveProps) => (
   </components.MultiValueRemove>
 );
 
-const NoOptionsMessage = <TOption extends IOption>({
-  children,
-  ...props
-}: NoticeProps<TOption>) => (
-  <components.NoOptionsMessage className="p-2 text-fg-2" {...props}>
-    {children}
-  </components.NoOptionsMessage>
+const NoOptionsMessage = ({ children }: { children: ReactNode }) => (
+  <div className="p-2 text-center text-fg-2">{children}</div>
 );
 
 const Option = <TOption extends IOption>({
@@ -193,14 +186,8 @@ const Select = forwardRef(
 
     return (
       <ReactSelect
-        getOptionLabel={(option) =>
-          typeof option === 'string'
-            ? option
-            : option.label ?? option.name ?? ''
-        }
-        getOptionValue={(option) =>
-          typeof option === 'string' ? option : option.id
-        }
+        getOptionLabel={(option) => option.label ?? option.name ?? ''}
+        getOptionValue={(option) => option.id}
         {...commonProps}
       />
     );
@@ -208,4 +195,5 @@ const Select = forwardRef(
 );
 
 Select.displayName = 'Select';
+export type { IOption };
 export default Select;

@@ -17,17 +17,19 @@
     --color-red-1: hsl(0, 80%, 65%);
     --color-red-2: hsl(0, 75%, 60%);
     --radius-default: 0.4rem;
+    --radius-sm: 0.15rem;
+    --radius-xs: 0.025rem;
   }
 }
 
 @layer components {
   .input {
-    @apply w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 transition-colors placeholder:text-alpha-4 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3;
+    @apply w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 transition-colors placeholder:text-alpha-4 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3 disabled:opacity-50;
   }
 }
 
 @layer utilities {
   .prose {
-    @apply leading-relaxed prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-ol:list-decimal prose-ol:pl-4 prose-ul:list-disc prose-ul:pl-4 prose-li:marker:text-fg-2;
+    @apply text-fg-2 prose-a:-m-1 prose-a:p-1 prose-a:text-fg-1 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-ol:list-decimal prose-ol:pl-4 prose-ul:list-disc prose-ul:pl-4 prose-li:marker:text-fg-1;
   }
 }

@@ -20,7 +20,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
     <>
       <Header>
         <BackButton href="/inputs" />
-        <Breadcrumbs items={[[input.label], ['Edit']]} />
+        <Breadcrumbs items={[['Inputs', '/inputs'], [input.label]]} />
       </Header>
       <Card as="main" breakpoint="sm">
         <InputForm input={input} />

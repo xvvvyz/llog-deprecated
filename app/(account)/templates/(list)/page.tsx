@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
 import Empty from 'components/empty';
 import { List, ListItem } from 'components/list';
@@ -12,18 +13,12 @@ const Page = async () => {
       {templates.map((template) => (
         <ListItem key={template.id}>
           <Button
-            className="flex h-full w-3/4 items-center gap-6"
-            disabled
+            className="m-0 h-full w-full p-0"
+            href={`/templates/${template.id}/edit`}
             variant="link"
           >
-            <span className="truncate">{template.name}</span>
-          </Button>
-          <Button
-            colorScheme="transparent"
-            href={`/templates/${template.id}/edit`}
-            size="sm"
-          >
-            Edit
+            <span className="w-3/4 truncate">{template.name}</span>
+            <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6 shrink-0" />
           </Button>
         </ListItem>
       ))}

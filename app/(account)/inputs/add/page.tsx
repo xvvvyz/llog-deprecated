@@ -8,7 +8,7 @@ const Page = () => (
   <>
     <Header>
       <BackButton href="/inputs" />
-      <Breadcrumbs items={[['Add input']]} />
+      <Breadcrumbs items={[['Inputs', '/inputs'], ['Add']]} />
     </Header>
     <Card as="main" breakpoint="sm">
       <InputForm />

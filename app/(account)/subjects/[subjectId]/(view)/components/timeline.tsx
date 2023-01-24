@@ -48,11 +48,11 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
               }
             ][] = Object.entries(
               forceArray(event.inputs).reduce(
-                (acc, { input, input_option, value }) => {
+                (acc, { input, option, value }) => {
                   acc[input.id] = acc[input.id] ?? { values: [] };
                   acc[input.id].label = input.label;
                   acc[input.id].type = input.type;
-                  acc[input.id].values.push(value ?? input_option.label);
+                  acc[input.id].values.push(value ?? option.label);
                   return acc;
                 },
                 {}
@@ -66,7 +66,7 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
                 key={event.id}
                 size="0"
               >
-                <header className="flex justify-between p-6">
+                <header className="flex h-16 items-center justify-between px-6">
                   <h3 className="font-bold">{eventType?.name}</h3>
                   <time className="text-fg-2">{time}</time>
                 </header>

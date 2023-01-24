@@ -14,7 +14,7 @@ const Head = async ({ params: { inputId } }: HeadProps) => {
 
   return (
     <>
-      <title>{formatTitle([input.label, 'Edit'])}</title>
+      <title>{formatTitle(['Inputs', input.label])}</title>
       <MetaTags />
     </>
   );
