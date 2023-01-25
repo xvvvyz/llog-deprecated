@@ -35,7 +35,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       <main>
         <section>
           <Header>
-            <h2 className="text-2xl text-fg-2">Missions</h2>
+            <h2 className="text-2xl">Missions</h2>
             <Button href={`/subjects/${subject.id}/missions/add`} size="sm">
               Add mission
             </Button>
@@ -46,11 +46,16 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           </Suspense>
         </section>
         <section>
-          <Header>
-            <h2 className="text-2xl text-fg-2">Timeline</h2>
-            <Button href={`/subjects/${subject.id}/event`} size="sm">
-              Add event
-            </Button>
+          <Header className="mb-0 h-auto flex-col items-start gap-9">
+            <h2 className="text-2xl">Timeline</h2>
+            <div className="flex w-full gap-3">
+              <Button className="w-full" colorScheme="transparent">
+                Add note
+              </Button>
+              <Button className="w-full" href={`/subjects/${subject.id}/event`}>
+                Add event
+              </Button>
+            </div>
           </Header>
           <Suspense>
             {/* @ts-expect-error Server Component */}

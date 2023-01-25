@@ -10,7 +10,6 @@ module.exports = {
       full: '50%',
       none: '0',
       sm: 'var(--radius-sm)',
-      xs: 'var(--radius-xs)',
     },
     colors: {
       'accent-1': 'var(--color-accent-1)',
@@ -26,6 +25,7 @@ module.exports = {
       'red-1': 'var(--color-red-1)',
       'red-2': 'var(--color-red-2)',
       transparent: 'transparent',
+      white: 'var(--color-white)',
     },
     screens: {
       sm: '32rem',

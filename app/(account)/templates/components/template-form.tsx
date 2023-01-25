@@ -16,6 +16,7 @@ import forceArray from 'utilities/force-array';
 import { GetTemplateData } from 'utilities/get-template';
 import globalValueCache from 'utilities/global-value-cache';
 import { ListInputsData } from 'utilities/list-inputs';
+import sanitizeHtml from 'utilities/sanitize-html';
 import sleep from 'utilities/sleep';
 import useBackLink from 'utilities/use-back-link';
 
@@ -61,7 +62,10 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
           const { error: templateError } = await supabase
             .from('templates')
             .upsert({
-              data: { content, inputIds: inputs.map((input) => input.id) },
+              data: {
+                content: sanitizeHtml(content),
+                inputIds: inputs.map((input) => input.id),
+              },
               id,
               name,
               public: p,

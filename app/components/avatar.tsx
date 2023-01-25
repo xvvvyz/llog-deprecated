@@ -4,26 +4,37 @@ import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 import formatImageUrl from 'utilities/format-image-url';
 import generateImageLoader from 'utilities/generate-image-loader';
+import { BoxProps } from './box';
 
 const sizes = {
-  md: '36px',
+  md: { className: 'h-9 w-9', imgSizes: '36px' },
+  sm: { className: 'h-7 w-7 text-sm', imgSizes: '28px' },
 };
 
-interface AvatarProps {
+interface AvatarProps extends BoxProps {
   file?: string | File | null;
   name: string;
   size?: keyof typeof sizes;
 }
 
-const Avatar = ({ file, name, size = 'md' }: AvatarProps) => {
+const Avatar = ({
+  className,
+  file,
+  name,
+  size = 'md',
+  ...rest
+}: AvatarProps) => {
   const src = formatImageUrl(file);
 
   return (
     <div
       className={twMerge(
-        'relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase text-alpha-3',
-        !src && 'border border-alpha-2'
+        'relative flex items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase text-alpha-3',
+        sizes[size].className,
+        !src && 'border border-alpha-2',
+        className
       )}
+      {...rest}
     >
       {src ? (
         <Image
@@ -31,7 +42,7 @@ const Avatar = ({ file, name, size = 'md' }: AvatarProps) => {
           className="object-cover object-center"
           fill
           loader={generateImageLoader({ aspectRatio: '1:1' })}
-          sizes={sizes[size]}
+          sizes={sizes[size].imgSizes}
           src={src}
         />
       ) : (

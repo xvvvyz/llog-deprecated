@@ -34,3 +34,9 @@ If you modify the database schema:
 npm run db:types
 npm run db:diff -- migration_description
 ```
+
+## Production Setup Notes
+
+- Update auth settings
+- Update email templates
+- Enable realtime

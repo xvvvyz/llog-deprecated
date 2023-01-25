@@ -12,13 +12,13 @@
     --color-alpha-4: hsla(0, 0%, 100%, 27%);
     --color-bg-1: hsl(0, 0%, 6%);
     --color-bg-2: hsl(0, 0%, 9%);
-    --color-fg-1: hsl(0, 0%, 90%);
+    --color-fg-1: hsl(0, 0%, 87.5%);
     --color-fg-2: hsl(0, 0%, 60%);
     --color-red-1: hsl(0, 80%, 65%);
     --color-red-2: hsl(0, 75%, 60%);
+    --color-white: #fff;
     --radius-default: 0.4rem;
     --radius-sm: 0.15rem;
-    --radius-xs: 0.025rem;
   }
 }
 
@@ -30,6 +30,6 @@
 
 @layer utilities {
   .prose {
-    @apply text-fg-2 prose-a:-m-1 prose-a:p-1 prose-a:text-fg-1 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-ol:list-decimal prose-ol:pl-4 prose-ul:list-disc prose-ul:pl-4 prose-li:marker:text-fg-1;
+    @apply break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-semibold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-2 prose-ul:list-disc prose-ul:pl-4 prose-li:marker:text-fg-2;
   }
 }

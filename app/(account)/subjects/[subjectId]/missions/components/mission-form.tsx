@@ -15,6 +15,7 @@ import forceArray from 'utilities/force-array';
 import { GetMissionWithEventTypesData } from 'utilities/get-mission-with-routines';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
+import sanitizeHtml from 'utilities/sanitize-html';
 import sleep from 'utilities/sleep';
 
 interface MissionFormProps {
@@ -86,7 +87,7 @@ const MissionForm = ({
           (acc, sessionRoutines, session) => {
             sessionRoutines.forEach((routine) => {
               const payload = {
-                content: routine.content,
+                content: sanitizeHtml(routine.content),
                 id: routine.id,
                 mission_id: missionData.id,
                 name: routine.name,

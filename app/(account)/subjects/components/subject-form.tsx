@@ -16,6 +16,7 @@ import forceArray from 'utilities/force-array';
 import { GetSubjectWithEventTypesData } from 'utilities/get-subject-with-event-types';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
+import sanitizeHtml from 'utilities/sanitize-html';
 import sleep from 'utilities/sleep';
 import EventTypesFormSection from '../../components/event-types-form-section';
 
@@ -95,7 +96,7 @@ const SubjectForm = ({
           ) => {
             const eventTypePayload: Database['public']['Tables']['event_types']['Insert'] =
               {
-                content: eventType.content,
+                content: sanitizeHtml(eventType.content),
                 name: eventType.name,
                 order,
                 subject_id: subjectData.id,

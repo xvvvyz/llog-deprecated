@@ -7,10 +7,10 @@ create type template_type as enum ('observation', 'routine');
 create table "public"."comments" (
   "id" uuid not null default uuid_generate_v4 (),
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
-  "text" text not null default ''::text,
+  "content" text not null default ''::text,
   "files" text[],
   "event_id" uuid not null,
-  "profile_id" uuid not null,
+  "profile_id" uuid not null default auth.uid (),
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
 );
 
@@ -52,6 +52,7 @@ create table "public"."events" (
   "created_at" timestamp with time zone not null default now(),
   "event_type_id" uuid not null,
   "subject_id" uuid not null,
+  "profile_id" uuid not null default auth.uid (),
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
 );
 
@@ -225,9 +226,9 @@ alter table "public"."comments"
 alter table "public"."comments" validate constraint "comments_profile_id_fkey";
 
 alter table "public"."comments"
-  add constraint "comments_text_length" check ((length(text) < 5000)) not valid;
+  add constraint "comments_content_length" check (((length(content) > 0) and (length(content) < 5000))) not valid;
 
-alter table "public"."comments" validate constraint "comments_text_length";
+alter table "public"."comments" validate constraint "comments_content_length";
 
 alter table "public"."event_type_inputs"
   add constraint "event_type_inputs_pkey" primary key using index "event_type_inputs_pkey";
@@ -517,7 +518,7 @@ create trigger on_update_user
 
 create policy "Team members & subject managers can insert." on "public"."comments" as permissive
   for insert to public
-    with check (true);
+    with check (profile_id = auth.uid ());
 
 create policy "Team members & subject managers can select." on "public"."comments" as permissive
   for select to authenticated
@@ -614,11 +615,11 @@ create policy "Team members & subject managers can select." on "public"."event_i
 
 create policy "Team members & subject managers can insert." on "public"."events" as permissive
   for insert to authenticated
-    with check (true);
+    with check (profile_id = auth.uid ());
 
 create policy "Team members & subject managers can update." on "public"."events" as permissive
-  for update to authenticated using (true)
-    with check (true);
+  for update to authenticated using (profile_id = auth.uid ())
+    with check (profile_id = auth.uid ());
 
 create policy "Team members & subject managers can select." on "public"."events" as permissive
   for select to authenticated
@@ -728,6 +729,10 @@ create policy "Team members can update." on "public"."missions" as permissive
           select s.team_id
           from subjects s
           where (s.id = missions.subject_id))))));
+
+create policy "Authenticated users can select." on "public"."profiles" as permissive
+ for select to authenticated
+   using (true);
 
 create policy "Subject managers can select." on "public"."subject_managers" as permissive
   for select to authenticated

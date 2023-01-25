@@ -49,7 +49,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           </List>
         ) : (
           <Empty>
-            No events types
+            No observations or routines
             <EditSubjectLink subjectId={subjectId} />
           </Empty>
         )}

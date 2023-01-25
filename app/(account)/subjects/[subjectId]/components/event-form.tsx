@@ -25,17 +25,17 @@ interface EventFormProps {
   subjectId: string;
 }
 
-interface EventTypeFormValues {
+interface EventFormValues {
   id?: string;
   inputs: any[]; // 😱
 }
 
-const EventCard = ({ event, eventType, subjectId }: EventFormProps) => {
+const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
   const router = useRouter();
 
-  const form = useForm<EventTypeFormValues>({
+  const form = useForm<EventFormValues>({
     defaultValues: {
       id: event?.id,
       inputs: eventTypeInputs.map(({ input }) => {
@@ -219,5 +219,5 @@ const EventCard = ({ event, eventType, subjectId }: EventFormProps) => {
   );
 };
 
-export type { EventTypeFormValues };
-export default EventCard;
+export type { EventFormValues };
+export default EventForm;

@@ -5,6 +5,12 @@ const listEvents = (subjectId: string) =>
     .from('events')
     .select(
       `
+      comments(
+        content,
+        created_at,
+        id,
+        profile:profiles(first_name, id, last_name)
+      ),
       created_at,
       id,
       inputs:event_inputs(
@@ -20,6 +26,7 @@ const listEvents = (subjectId: string) =>
       )`
     )
     .order('created_at', { ascending: false })
+    .order('created_at', { foreignTable: 'comments' })
     .eq('subject_id', subjectId);
 
 export type ListEvents = Awaited<ReturnType<typeof listEvents>>['data'];
