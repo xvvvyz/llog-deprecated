@@ -17,7 +17,7 @@ const EventCard = ({ event, eventType, subjectId }: EventCardProps) => (
   <Card breakpoint="sm">
     <h2 className="text-2xl">{eventType.name}</h2>
     <article
-      className="prose mt-3 flex flex-col gap-2"
+      className="prose mt-3"
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(eventType.content) }}
     />
     <EventForm event={event} eventType={eventType} subjectId={subjectId} />

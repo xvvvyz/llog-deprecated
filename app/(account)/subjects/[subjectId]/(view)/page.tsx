@@ -49,7 +49,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           <Header className="mb-0 h-auto flex-col items-start gap-9">
             <h2 className="text-2xl">Timeline</h2>
             <div className="flex w-full gap-3">
-              <Button className="w-full" colorScheme="transparent">
+              <Button className="w-full" colorScheme="transparent" disabled>
                 Add note
               </Button>
               <Button className="w-full" href={`/subjects/${subject.id}/event`}>

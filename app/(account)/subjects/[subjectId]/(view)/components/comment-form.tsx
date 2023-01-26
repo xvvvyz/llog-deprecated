@@ -46,7 +46,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
           />
         )}
       />
-      <div className="absolute right-3 bottom-[0.65rem] flex flex h-5 w-5 items-center justify-center">
+      <div className="absolute right-[0.95rem] bottom-[0.65rem] flex flex h-5 w-5 items-center justify-center">
         <IconButton
           icon={<PaperAirplaneIcon className="w-5" />}
           label="Add comment"

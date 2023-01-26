@@ -3,7 +3,6 @@
 import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
-import HardBreak from '@tiptap/extension-hard-break';
 import History from '@tiptap/extension-history';
 import Italic from '@tiptap/extension-italic';
 import Link from '@tiptap/extension-link';
@@ -13,7 +12,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import Typography from '@tiptap/extension-typography';
-import { Content, EditorContent, useEditor } from '@tiptap/react';
+import { Content, EditorContent, Extension, useEditor } from '@tiptap/react';
 
 import {
   ChangeEvent,
@@ -38,11 +37,9 @@ const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
           class: twMerge('prose input', className),
         },
         handleKeyDown: (view, e) => {
-          /* override the default behavior for enter. by returning true, it
-          stops ProseMirror from calling any other handlers for the given input.
-          read: https://prosemirror.net/docs/ref/#view.EditorProps */
           if (
             onEnter &&
+            e.target &&
             e.key === 'Enter' &&
             !e.shiftKey &&
             !e.altKey &&
@@ -58,14 +55,6 @@ const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
         Bold,
         BulletList,
         Document,
-        HardBreak.extend({
-          addKeyboardShortcuts() {
-            return {
-              'Mod-Enter': () => this.editor.commands.setHardBreak(),
-              'Shift-Enter': () => this.editor.commands.setHardBreak(),
-            };
-          },
-        }),
         History,
         Italic,
         Link.configure({ HTMLAttributes: { target: '_blank' } }),
@@ -79,6 +68,16 @@ const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
         }),
         Text,
         Typography,
+        Extension.create({
+          addKeyboardShortcuts() {
+            return {
+              'Shift-Enter': ({ editor }) => {
+                editor.commands.enter();
+                return true;
+              },
+            };
+          },
+        }),
       ],
       injectCSS: false,
       onUpdate: ({ editor }) => {

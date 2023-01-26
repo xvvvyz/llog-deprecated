@@ -92,7 +92,7 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
                         {profile.first_name} {profile.last_name}
                       </span>
                       <div
-                        className="prose space-y-1 text-fg-1"
+                        className="prose text-fg-1"
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(content),
                         }}
