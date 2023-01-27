@@ -11,13 +11,12 @@
     --color-alpha-3: hsla(0, 0%, 100%, 12%);
     --color-bg-1: hsl(0, 0%, 6%);
     --color-bg-2: hsl(0, 0%, 9%);
-    --color-fg-1: hsl(0, 0%, 85%);
-    --color-fg-2: hsl(0, 0%, 55%);
+    --color-fg-1: hsl(0, 0%, 100%, 85%);
+    --color-fg-2: hsl(0, 0%, 100%, 65%);
+    --color-fg-3: hsla(0, 0%, 100%, 45%);
     --color-red-1: hsl(0, 80%, 65%);
     --color-red-2: hsl(0, 75%, 60%);
-    --color-fg-3: hsla(0, 0%, 100%, 30%);
-    --color-white: #fff;
-    --font-weight-bold: 600;
+    --font-weight-bold: 700;
     --font-weight-normal: 400;
     --radius-default: 0.4rem;
     --radius-sm: 0.15rem;
@@ -37,6 +36,6 @@
 
 @layer utilities {
   .prose {
-    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2;
+    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2;
   }
 }

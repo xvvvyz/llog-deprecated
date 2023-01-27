@@ -25,7 +25,6 @@ module.exports = {
       'red-1': 'var(--color-red-1)',
       'red-2': 'var(--color-red-2)',
       transparent: 'transparent',
-      white: 'var(--color-white)',
     },
     fontWeight: {
       bold: 'var(--font-weight-bold)',

@@ -8,6 +8,7 @@ import { List, ListItem } from 'components/list';
 import { notFound } from 'next/navigation';
 import getSubject from 'utilities/get-subject';
 import listSubjectEventTypes from 'utilities/list-subject-event-types';
+import Pill from '../../../../../components/pill';
 import EditSubjectLink from '../components/edit-subject-link';
 
 interface PageProps {
@@ -37,12 +38,15 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             {eventTypes.map((eventType) => (
               <ListItem key={eventType.id}>
                 <Button
-                  className="m-0 h-full w-full p-0"
+                  className="m-0 h-full w-full justify-between gap-6 p-0"
                   href={`${subjectHref}/event/${eventType.id}`}
                   variant="link"
                 >
-                  <span className="w-3/4 truncate">{eventType.name}</span>
-                  <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6 shrink-0" />
+                  <span className="truncate">{eventType.name}</span>
+                  <div className="flex shrink-0 gap-6">
+                    <Pill>{eventType.type}</Pill>
+                    <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6" />
+                  </div>
                 </Button>
               </ListItem>
             ))}
