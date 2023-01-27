@@ -12,6 +12,7 @@ const listSessionRoutines = (
       event:events(
         id,
         inputs:event_inputs(
+          id,
           input_id,
           input_option_id,
           value

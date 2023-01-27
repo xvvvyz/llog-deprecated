@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import supabase from 'utilities/browser-supabase-client';
 import sleep from 'utilities/sleep';
+import uploadSubjectAvatar from 'utilities/upload-subject-avatar';
 import useAvatarDropzone from 'utilities/use-avatar-dropzone';
-import uploadSubjectAvatar from '../../../../utilities/upload-subject-avatar';
 import SubjectDetailsFormSection from '../../components/subject-details-form-section';
 
 type AddSubjectFormValues = Database['public']['Tables']['subjects']['Insert'];

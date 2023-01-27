@@ -17,12 +17,12 @@ import globalValueCache from 'utilities/global-value-cache';
 import sleep from 'utilities/sleep';
 
 const INPUT_TYPE_OPTIONS = [
-  { id: InputTypes.Checkbox, label: 'Checkbox' },
-  { id: InputTypes.Duration, label: 'Duration (seconds)' },
+  // { id: InputTypes.Duration, label: 'Duration' },
+  { id: InputTypes.Select, label: 'Select' },
   { id: InputTypes.MultiSelect, label: 'Multi-select' },
   { id: InputTypes.Number, label: 'Number' },
-  { id: InputTypes.Select, label: 'Select' },
-  { id: InputTypes.Time, label: 'Time' },
+  { id: InputTypes.Checkbox, label: 'Checkbox' },
+  // { id: InputTypes.Time, label: 'Time' },
 ];
 
 interface InputFormProps {

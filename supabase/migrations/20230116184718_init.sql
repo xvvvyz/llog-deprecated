@@ -39,6 +39,7 @@ create table "public"."event_types" (
 alter table "public"."event_types" enable row level security;
 
 create table "public"."event_inputs" (
+  "id" uuid not null default uuid_generate_v4 (),
   "event_id" uuid not null,
   "input_option_id" uuid,
   "input_id" uuid not null,
@@ -160,9 +161,9 @@ create unique index event_types_subject_id_mission_id_type_order_index on public
 
 create index event_types_template_id_index on public.event_types using btree (template_id);
 
-create unique index event_inputs_pkey on public.event_inputs using btree (event_id, input_id);
+create unique index event_inputs_pkey on public.event_inputs using btree (id);
 
-create index event_inputs_event_id_index on public.event_inputs using btree (event_id);
+create unique index event_inputs_event_id_input_id_input_option_id_index on public.event_inputs using btree (event_id, input_id, input_option_id);
 
 create index event_inputs_input_id_index on public.event_inputs using btree (input_id);
 
@@ -277,6 +278,9 @@ alter table "public"."event_types" validate constraint "event_types_mission_id_f
 
 alter table "public"."event_inputs"
   add constraint "event_inputs_pkey" primary key using index "event_inputs_pkey";
+
+alter table "public"."event_inputs"
+  add constraint "event_inputs_event_id_input_id_input_option_id_unique_constraint" unique using index "event_inputs_event_id_input_id_input_option_id_index";
 
 alter table "public"."event_inputs"
   add constraint "event_inputs_event_id_fkey" foreign key (event_id) references events (id) not valid;

@@ -39,9 +39,11 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
     defaultValues: {
       id: event?.id,
       inputs: eventTypeInputs.map(({ input }) => {
-        const eventInput = eventInputs.find(
-          (eventInput) => eventInput.input_id === input.id
+        const inputInputs = eventInputs.filter(
+          ({ input_id }) => input_id === input.id
         );
+
+        const eventInput = inputInputs[0];
 
         switch (input.type) {
           case 'checkbox': {
@@ -56,7 +58,9 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
           case 'multi_select': {
             return input.options.filter(
               ({ id }: Database['public']['Tables']['input_options']['Row']) =>
-                id === eventInput?.input_option_id
+                inputInputs.some(
+                  ({ input_option_id }) => input_option_id === id
+                )
             );
           }
 
@@ -96,60 +100,84 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
 
         form.setValue('id', eventData.id);
 
-        const eventInputItems = inputs.reduce((acc, input, i) => {
-          if (input === '' || input === null) return acc;
-          const eventTypeInput = eventTypeInputs[i].input;
+        const { insertedEventInputs, updatedEventInputs } = inputs.reduce(
+          (acc, input, i) => {
+            if (input === '' || input === null) return acc;
+            const eventTypeInput = eventTypeInputs[i].input;
 
-          const payload: Database['public']['Tables']['event_inputs']['Insert'] =
-            {
-              event_id: eventData.id,
-              input_id: eventTypeInput.id,
-              input_option_id: null,
-              value: null,
-            };
+            const payload: Database['public']['Tables']['event_inputs']['Insert'] =
+              {
+                event_id: eventData.id,
+                input_id: eventTypeInput.id,
+                input_option_id: null,
+                value: null,
+              };
 
-          switch (eventTypeInput.type) {
-            case 'checkbox':
-            case 'duration':
-            case 'number': {
-              payload.value = input;
-              acc.push(payload);
-              return acc;
+            if (input.id) payload.id = input.id;
+
+            switch (eventTypeInput.type) {
+              case 'checkbox':
+              case 'duration':
+              case 'number': {
+                payload.value = input;
+                if (payload.id) acc.updatedEventInputs.push(payload);
+                else acc.insertedEventInputs.push(payload);
+                return acc;
+              }
+
+              case 'multi_select': {
+                const payloadInputs: Database['public']['Tables']['event_inputs']['Insert'][] =
+                  input.map(({ id }: { id: string }) => ({
+                    ...payload,
+                    input_option_id: id,
+                  }));
+
+                if (payload.id) {
+                  payloadInputs.forEach((p) => acc.updatedEventInputs.push(p));
+                } else {
+                  payloadInputs.forEach((p) => acc.insertedEventInputs.push(p));
+                }
+
+                return acc;
+              }
+
+              case 'select': {
+                payload.input_option_id = input.id;
+                if (payload.id) acc.updatedEventInputs.push(payload);
+                else acc.insertedEventInputs.push(payload);
+                return acc;
+              }
+
+              case 'time': {
+                payload.value = new Date(input).toISOString();
+                if (payload.id) acc.updatedEventInputs.push(payload);
+                else acc.insertedEventInputs.push(payload);
+                return acc;
+              }
+
+              default: {
+                return acc;
+              }
             }
+          },
+          { insertedEventInputs: [], updatedEventInputs: [] }
+        );
 
-            case 'multi_select': {
-              return acc.concat(
-                input.map(({ id }: { id: string }) => ({
-                  ...payload,
-                  input_option_id: id,
-                }))
-              );
-            }
-
-            case 'select': {
-              payload.input_option_id = input.id;
-              acc.push(payload);
-              return acc;
-            }
-
-            case 'time': {
-              payload.value = new Date(input).toISOString();
-              acc.push(payload);
-              return acc;
-            }
-
-            default: {
-              return acc;
-            }
-          }
-        }, []);
-
-        const { error: eventInputsError } = await supabase
+        const { error: updatedEventInputsError } = await supabase
           .from('event_inputs')
-          .upsert(eventInputItems);
+          .upsert(updatedEventInputs);
 
-        if (eventInputsError) {
-          alert(eventInputsError.message);
+        if (updatedEventInputsError) {
+          alert(updatedEventInputsError.message);
+          return;
+        }
+
+        const { error: insertedEventInputsError } = await supabase
+          .from('event_inputs')
+          .insert(insertedEventInputs);
+
+        if (insertedEventInputsError) {
+          alert(insertedEventInputsError.message);
           return;
         }
 

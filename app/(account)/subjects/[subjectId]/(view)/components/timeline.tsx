@@ -79,7 +79,11 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
                         role="figure"
                       >
                         <figcaption className="pr-3">{label}</figcaption>
-                        <span>{formatInputValue[type](values)}</span>
+                        {type === 'time' ? (
+                          <DateTime date={values[0]} formatter="date-time" />
+                        ) : (
+                          <span>{formatInputValue[type](values)}</span>
+                        )}
                       </li>
                     ))}
                   </ul>
