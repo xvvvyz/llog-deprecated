@@ -29,5 +29,5 @@ const listEvents = (subjectId: string) =>
     .order('created_at', { foreignTable: 'comments' })
     .eq('subject_id', subjectId);
 
-export type ListEvents = Awaited<ReturnType<typeof listEvents>>['data'];
+export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];
 export default listEvents;
