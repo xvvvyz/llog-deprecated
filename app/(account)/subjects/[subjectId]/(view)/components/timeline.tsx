@@ -1,12 +1,12 @@
 import Avatar from 'components/avatar';
 import Card from 'components/card';
+import DateTime from 'components/date-time';
 import Empty from 'components/empty';
 import { twMerge } from 'tailwind-merge';
 import firstIfArray from 'utilities/first-if-array';
 import forceArray from 'utilities/force-array';
 import formatDate from 'utilities/format-date';
 import formatInputValue from 'utilities/format-input-value';
-import formatTime from 'utilities/format-time';
 import listEvents from 'utilities/list-events';
 import sanitizeHtml from 'utilities/sanitize-html';
 import CommentForm from './comment-form';
@@ -21,18 +21,20 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
 
   return (
     <section aria-label="Timeline" className="mt-6 space-y-6 text-fg-2">
-      {Object.entries(
+      {Object.values(
         events.reduce((acc, event) => {
           const date = formatDate(event.created_at);
           acc[date] = acc[date] ?? [];
           acc[date].push(event);
           return acc;
         }, {} as Record<string, typeof events>)
-      ).map(([date, events]) => (
-        <div className="space-y-6" key={date}>
-          <time className="ml-6 flex h-10 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3">
-            {date}
-          </time>
+      ).map((events) => (
+        <div className="space-y-6" key={events[0].created_at}>
+          <DateTime
+            className="ml-6 flex h-10 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
+            date={events[0].created_at}
+            formatter="date"
+          />
           {events.map((event) => {
             const eventType = firstIfArray(event.type);
             const comments = forceArray(event.comments);
@@ -61,9 +63,7 @@ const Timeline = async ({ subjectId }: TimelineProps) => {
               <Card as="article" key={event.id} size="0">
                 <header className="flex justify-between p-4">
                   <h1 className="text-fg-1">{eventType.name}</h1>
-                  <time dateTime={event.created_at}>
-                    {formatTime(event.created_at)}
-                  </time>
+                  <DateTime date={event.created_at} formatter="time" />
                 </header>
                 {!!inputs.length && (
                   <ul
