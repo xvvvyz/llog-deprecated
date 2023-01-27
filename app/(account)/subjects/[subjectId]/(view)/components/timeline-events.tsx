@@ -61,7 +61,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                     <>
                       <span>{eventType.mission.name}</span>
                       <span className="ml-4 text-fg-2">
-                        {eventType.session + 1}.{eventType.order + 1}
+                        {eventType.session + 1}.{eventType.order}
                       </span>
                     </>
                   ) : (
