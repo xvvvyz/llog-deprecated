@@ -22,6 +22,7 @@ interface EventFormProps {
   eventType:
     | NonNullable<GetEventTypeData>
     | NonNullable<ListSessionRoutinesData>[0];
+  isMission: boolean;
   subjectId: string;
 }
 
@@ -30,7 +31,12 @@ interface EventFormValues {
   inputs: any[]; // 😱
 }
 
-const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
+const EventForm = ({
+  event,
+  eventType,
+  isMission,
+  subjectId,
+}: EventFormProps) => {
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
   const router = useRouter();
@@ -85,7 +91,7 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
 
   return (
     <form
-      className="mt-12 flex flex-col gap-6"
+      className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(async ({ id, inputs }) => {
         const { data: eventData, error: eventError } = await supabase
           .from('events')
@@ -254,7 +260,7 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        {isMission && !event ? 'Complete' : 'Save'}
       </Button>
     </form>
   );

@@ -23,6 +23,7 @@ interface EventTypesFormSectionProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   inputOptions: ListInputsData;
   label: string;
+  isMission?: boolean;
   name: ArrayPath<T>;
   templateOptions: ListTemplatesData;
   templateType: Database['public']['Enums']['template_type'];
@@ -33,6 +34,7 @@ const EventTypesFormSection = <T extends FieldValues>({
   form,
   inputOptions,
   label,
+  isMission = false,
   name,
   templateOptions,
   templateType,
@@ -47,17 +49,19 @@ const EventTypesFormSection = <T extends FieldValues>({
       <ul>
         {eventTypesArray.fields.map((eventType, index) => (
           <li className="mb-3" key={eventType.id}>
-            <Controller
-              control={form.control}
-              name={`${name}.${index}.name` as T[typeof name][number]['name']}
-              render={({ field }) => (
-                <Input
-                  className="rounded-b-none"
-                  placeholder="Name"
-                  {...field}
-                />
-              )}
-            />
+            {!isMission && (
+              <Controller
+                control={form.control}
+                name={`${name}.${index}.name` as T[typeof name][number]['name']}
+                render={({ field }) => (
+                  <Input
+                    className="rounded-b-none"
+                    placeholder="Name"
+                    {...field}
+                  />
+                )}
+              />
+            )}
             <Controller
               control={form.control}
               name={
@@ -65,7 +69,9 @@ const EventTypesFormSection = <T extends FieldValues>({
               }
               render={({ field }) => (
                 <RichTextarea
-                  className="rounded-none border-t-0"
+                  className={
+                    isMission ? 'rounded-b-none' : 'rounded-none border-t-0'
+                  }
                   placeholder="Description"
                   {...field}
                 />

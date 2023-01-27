@@ -28,7 +28,7 @@ create table "public"."event_types" (
   "content" text not null default ''::text,
   "id" uuid not null default uuid_generate_v4 (),
   "mission_id" uuid,
-  "name" text not null,
+  "name" text,
   "order" smallint not null,
   "session" smallint,
   "subject_id" uuid not null,

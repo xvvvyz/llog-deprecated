@@ -21,6 +21,7 @@ const listEvents = (subjectId: string) =>
         id,
         mission:missions(id, name),
         name,
+        order,
         session
       )`
     )

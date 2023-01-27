@@ -51,6 +51,7 @@ const Page = async ({
               <EventCard
                 event={firstIfArray(eventType.event)}
                 eventType={eventType}
+                isMission
                 key={eventType.id}
                 subjectId={subjectId}
               />

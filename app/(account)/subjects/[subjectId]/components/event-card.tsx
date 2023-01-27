@@ -11,24 +11,39 @@ interface EventCardProps extends BoxProps {
   eventType:
     | NonNullable<GetEventTypeData>
     | NonNullable<ListSessionRoutinesData>[0];
+  isMission?: boolean;
   subjectId: string;
 }
 
 const EventCard = ({
   event,
   eventType,
+  isMission = false,
   subjectId,
   ...rest
 }: EventCardProps) => (
   <Card breakpoint="sm" {...rest}>
-    <h2 className="text-2xl">{eventType.name}</h2>
-    {eventType.content && (
-      <article
-        className="prose mt-3"
-        dangerouslySetInnerHTML={{ __html: sanitizeHtml(eventType.content) }}
+    <div className="space-y-10">
+      {(!isMission || eventType.content) && (
+        <div className="space-y-3">
+          {!isMission && <h2 className="text-2xl">{eventType.name}</h2>}
+          {eventType.content && (
+            <article
+              className="prose"
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(eventType.content),
+              }}
+            />
+          )}
+        </div>
+      )}
+      <EventForm
+        event={event}
+        eventType={eventType}
+        isMission={isMission}
+        subjectId={subjectId}
       />
-    )}
-    <EventForm event={event} eventType={eventType} subjectId={subjectId} />
+    </div>
   </Card>
 );
 

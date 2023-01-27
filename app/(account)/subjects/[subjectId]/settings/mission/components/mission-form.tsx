@@ -90,7 +90,6 @@ const MissionForm = ({
                 content: sanitizeHtml(routine.content),
                 id: routine.id,
                 mission_id: missionData.id,
-                name: routine.name.trim(),
                 order: acc.order,
                 session,
                 subject_id: subjectId,
@@ -226,6 +225,7 @@ const MissionForm = ({
               <EventTypesFormSection<MissionFormValues>
                 form={form}
                 inputOptions={availableInputs}
+                isMission
                 label={`Session ${index + 1}`}
                 name={`routines.${index}`}
                 templateOptions={availableTemplates}
