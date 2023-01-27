@@ -79,7 +79,7 @@ const SubjectSettingsForm = ({
         async ({ id, name, observations, routines }) => {
           const { data: subjectData, error: subjectError } = await supabase
             .from('subjects')
-            .upsert({ id, name })
+            .upsert({ id, name: name.trim() })
             .select('id')
             .single();
 
@@ -99,7 +99,7 @@ const SubjectSettingsForm = ({
             const eventTypePayload: Database['public']['Tables']['event_types']['Insert'] =
               {
                 content: sanitizeHtml(eventType.content),
-                name: eventType.name,
+                name: eventType.name.trim(),
                 order,
                 subject_id: subjectData.id,
                 template_id: eventType.template_id,

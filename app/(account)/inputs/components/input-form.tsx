@@ -72,7 +72,7 @@ const InputForm = ({ input }: InputFormProps) => {
         async ({ id, label, options, type: { id: type } }) => {
           const { data: inputData, error: inputError } = await supabase
             .from('inputs')
-            .upsert({ id, label, type })
+            .upsert({ id, label: label.trim(), type })
             .select('id, label')
             .single();
 
@@ -89,7 +89,7 @@ const InputForm = ({ input }: InputFormProps) => {
                 const payload: Database['public']['Tables']['input_options']['Insert'] =
                   {
                     input_id: inputData.id,
-                    label: option.label,
+                    label: option.label.trim(),
                     order,
                   };
 

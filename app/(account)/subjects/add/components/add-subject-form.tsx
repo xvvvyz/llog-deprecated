@@ -23,7 +23,7 @@ const AddSubjectForm = () => {
       onSubmit={form.handleSubmit(async ({ name }) => {
         const { data: subjectData, error: subjectError } = await supabase
           .from('subjects')
-          .insert({ name })
+          .insert({ name: name.trim() })
           .select('id')
           .single();
 

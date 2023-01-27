@@ -1,6 +1,6 @@
 module.exports = {
   eslint: {
-    dirs: ['app']
+    dirs: ['app'],
   },
   experimental: { appDir: true },
   images: {

@@ -72,7 +72,7 @@ const MissionForm = ({
       onSubmit={form.handleSubmit(async ({ id, name, routines }) => {
         const { data: missionData, error: missionError } = await supabase
           .from('missions')
-          .upsert({ id, name, subject_id: subjectId })
+          .upsert({ id, name: name.trim(), subject_id: subjectId })
           .select('id, name')
           .single();
 
@@ -90,7 +90,7 @@ const MissionForm = ({
                 content: sanitizeHtml(routine.content),
                 id: routine.id,
                 mission_id: missionData.id,
-                name: routine.name,
+                name: routine.name.trim(),
                 order: acc.order,
                 session,
                 subject_id: subjectId,

@@ -67,7 +67,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
                 inputIds: inputs.map((input) => input.id),
               },
               id,
-              name,
+              name: name.trim(),
               public: p,
               type,
             })
