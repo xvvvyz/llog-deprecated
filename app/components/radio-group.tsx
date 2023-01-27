@@ -9,17 +9,13 @@ interface Option {
 }
 
 interface RadioGroupProps extends HTMLElement {
-  name: string;
   onChange: (value: string) => void;
   options: Option[];
   value: string;
 }
 
 const RadioGroup = forwardRef(
-  (
-    { name, onChange, options, value }: RadioGroupProps,
-    ref: Ref<HTMLDivElement>
-  ) => (
+  ({ onChange, options, value }: RadioGroupProps, ref: Ref<HTMLDivElement>) => (
     <RG
       className="input flex p-0 focus-within:ring-0"
       onChange={onChange}

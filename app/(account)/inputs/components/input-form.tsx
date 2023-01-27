@@ -64,7 +64,7 @@ const InputForm = ({ input }: InputFormProps) => {
     }
 
     optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
-  }, [type]);
+  }, [id, optionsArray, type]);
 
   return (
     <form

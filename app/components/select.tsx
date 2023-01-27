@@ -28,10 +28,9 @@ type IOption = {
   name?: string;
 };
 
-const ClearIndicator = <TOption extends IOption>({
-  children,
-  ...props
-}: ClearIndicatorProps<TOption>) => (
+const ClearIndicator = <TOption extends IOption>(
+  props: ClearIndicatorProps<TOption>
+) => (
   <components.ClearIndicator {...props}>
     <div className="group cursor-pointer p-1">
       <XMarkIcon className="w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
@@ -101,7 +100,7 @@ const MultiValueContainer = ({
   </components.MultiValueContainer>
 );
 
-const MultiValueRemove = ({ children, ...props }: MultiValueRemoveProps) => (
+const MultiValueRemove = (props: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
     <div className="group -m-1 p-1 pr-2">
       <XMarkIcon className="w-5 text-fg-2 transition-colors group-hover:text-fg-1" />

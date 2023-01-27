@@ -1,4 +1,7 @@
 module.exports = {
+  eslint: {
+    dirs: ['app']
+  },
   experimental: { appDir: true },
   images: {
     remotePatterns: [
