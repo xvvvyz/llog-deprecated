@@ -49,7 +49,7 @@ alter table "public"."event_inputs" enable row level security;
 
 create table "public"."events" (
   "id" uuid not null default uuid_generate_v4 (),
-  "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
+  "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "event_type_id" uuid not null,
   "subject_id" uuid not null,
   "profile_id" uuid not null default auth.uid (),
