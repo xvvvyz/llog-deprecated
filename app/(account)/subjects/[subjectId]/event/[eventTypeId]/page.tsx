@@ -30,7 +30,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
           items={[
             [subject.name, subjectHref],
             ['Event', `${subjectHref}/event`],
-            [eventType.name],
+            [eventType.name ?? ''],
           ]}
         />
       </Header>

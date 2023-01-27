@@ -20,7 +20,9 @@ const Head = async ({ params: { eventTypeId, subjectId } }: HeadProps) => {
 
   return (
     <>
-      <title>{formatTitle([subject.name, 'Event', eventType.name])}</title>
+      <title>
+        {formatTitle([subject.name, 'Event', eventType.name ?? ''])}
+      </title>
       <MetaTags />
     </>
   );

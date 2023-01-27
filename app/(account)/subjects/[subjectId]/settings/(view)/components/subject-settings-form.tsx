@@ -99,7 +99,7 @@ const SubjectSettingsForm = ({
             const eventTypePayload: Database['public']['Tables']['event_types']['Insert'] =
               {
                 content: sanitizeHtml(eventType.content),
-                name: eventType.name.trim(),
+                name: (eventType.name ?? '').trim(),
                 order,
                 subject_id: subjectData.id,
                 template_id: eventType.template_id,
