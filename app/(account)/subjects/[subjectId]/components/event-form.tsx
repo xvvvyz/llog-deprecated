@@ -183,7 +183,14 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
                 }
 
                 case 'multi_select': {
-                  return <Select isMulti options={input.options} {...field} />;
+                  return (
+                    <Select
+                      isMulti
+                      isSearchable={false}
+                      options={input.options}
+                      {...field}
+                    />
+                  );
                 }
 
                 case 'number': {
@@ -191,7 +198,13 @@ const EventForm = ({ event, eventType, subjectId }: EventFormProps) => {
                 }
 
                 case 'select': {
-                  return <Select options={input.options} {...field} />;
+                  return (
+                    <Select
+                      isSearchable={false}
+                      options={input.options}
+                      {...field}
+                    />
+                  );
                 }
 
                 case 'time': {
