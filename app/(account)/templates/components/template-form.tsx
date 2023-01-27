@@ -109,7 +109,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         />
       </Label>
       <Label>
-        Content
+        Description
         <Controller
           control={form.control}
           name="content"
