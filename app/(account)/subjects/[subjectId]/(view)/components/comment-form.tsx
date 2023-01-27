@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import supabase from 'utilities/browser-supabase-client';
 import sanitizeHtml from 'utilities/sanitize-html';
-import sleep from 'utilities/sleep';
 
 interface CommentFormProps {
   eventId: string;
@@ -29,7 +28,6 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
 
     form.setValue('content', '');
     await router.refresh();
-    await sleep(500);
   });
 
   return (
@@ -39,6 +37,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
         name="content"
         render={({ field }) => (
           <RichTextarea
+            aria-label="Comment"
             className="rounded-t-none border-x-0 border-b-0 pr-12"
             onEnter={onSubmit}
             placeholder="Add comment"
@@ -51,6 +50,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
           icon={<PaperAirplaneIcon className="w-5" />}
           label="Add comment"
           loading={form.formState.isSubmitting}
+          loadingText="Adding comment…"
         />
       </div>
     </form>

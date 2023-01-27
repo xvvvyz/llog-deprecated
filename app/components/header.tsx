@@ -5,7 +5,7 @@ const Header = ({ className, ...rest }: BoxProps) => (
   <Box
     as="header"
     className={twMerge(
-      'mt-16 mb-9 flex h-10 items-center justify-between',
+      'mt-16 mb-12 flex h-10 items-center justify-between',
       className
     )}
     {...rest}

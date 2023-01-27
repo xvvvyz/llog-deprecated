@@ -7,9 +7,15 @@ interface IconButtonProps extends ButtonProps {
   label: string;
 }
 
-const IconButton = ({ icon, label, loading, ...props }: IconButtonProps) =>
+const IconButton = ({
+  icon,
+  label,
+  loading,
+  loadingText,
+  ...props
+}: IconButtonProps) =>
   loading ? (
-    <Spinner />
+    <Spinner loadingText={loadingText} />
   ) : (
     <Button type="submit" variant="link" {...props}>
       {icon}

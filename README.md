@@ -37,6 +37,8 @@ npm run db:diff -- migration_description
 
 ## Production Setup Notes
 
-- Update auth settings
+- Update next.config.js remotePatterns
+- Update auth providers
 - Update email templates
+- Update url config
 - Enable realtime

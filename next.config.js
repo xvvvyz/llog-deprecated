@@ -6,7 +6,7 @@ module.exports = {
         hostname: 'localhost',
       },
       {
-        hostname: 'vbhrtetvnskirfdjhinz.supabase.co',
+        hostname: 'mcowansajznuesbdswdo.supabase.co',
         pathname: '/storage/v1/object/public/**',
         protocol: 'https',
       },

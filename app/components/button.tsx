@@ -10,7 +10,7 @@ const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-fg-2 border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
+    'ring-accent-2 border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
 };
 
 const spinnerColorSchemes = {
@@ -71,7 +71,8 @@ const Button = ({
   if (href) {
     return (
       <Link
-        aria-disabled={disabled || loading}
+        aria-busy={loading}
+        aria-disabled={disabled}
         className={cn}
         href={href}
         {...(rest as Omit<LinkProps, 'href'>)}
@@ -82,7 +83,12 @@ const Button = ({
   }
 
   return (
-    <button className={cn} disabled={disabled || loading} {...rest}>
+    <button
+      aria-disabled={disabled || loading}
+      className={cn}
+      disabled={disabled || loading}
+      {...rest}
+    >
       {loading ? (
         <>
           {variant !== 'link' && (

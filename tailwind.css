@@ -4,36 +4,39 @@
 
 @layer base {
   :root {
-    --color-accent-1: hsl(42, 80%, 65%);
-    --color-accent-2: hsl(42, 75%, 60%);
+    --color-accent-1: hsl(45, 96%, 60%);
+    --color-accent-2: hsl(45, 96%, 70%);
     --color-alpha-1: hsla(0, 0%, 100%, 6%);
     --color-alpha-2: hsla(0, 0%, 100%, 9%);
     --color-alpha-3: hsla(0, 0%, 100%, 12%);
-    --color-alpha-4: hsla(0, 0%, 100%, 27%);
     --color-bg-1: hsl(0, 0%, 6%);
     --color-bg-2: hsl(0, 0%, 9%);
-    --color-fg-1: hsl(0, 0%, 87.5%);
-    --color-fg-2: hsl(0, 0%, 60%);
+    --color-fg-1: hsl(0, 0%, 85%);
+    --color-fg-2: hsl(0, 0%, 55%);
     --color-red-1: hsl(0, 80%, 65%);
     --color-red-2: hsl(0, 75%, 60%);
+    --color-fg-3: hsla(0, 0%, 100%, 30%);
     --color-white: #fff;
+    --font-weight-bold: 600;
+    --font-weight-normal: 400;
     --radius-default: 0.4rem;
     --radius-sm: 0.15rem;
   }
 
+  /* hack because list-inside with nest p tag forces marker to have its own line */
   li > p:first-child {
-    display: inline;
+    @apply inline;
   }
 }
 
 @layer components {
   .input {
-    @apply w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 transition-colors placeholder:text-alpha-4 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3 disabled:opacity-50;
+    @apply w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 transition-colors placeholder:text-fg-3 focus-within:outline-none focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3 disabled:opacity-50;
   }
 }
 
 @layer utilities {
   .prose {
-    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-semibold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2;
+    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2;
   }
 }

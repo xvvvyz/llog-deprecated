@@ -10,7 +10,7 @@ interface EditSubjectLinkProps {
 const EditSubjectLink = ({ subjectId }: EditSubjectLinkProps) => (
   <Button
     className="underline"
-    href={`/subjects/${subjectId}/edit?back=${useBackLink()}`}
+    href={`/subjects/${subjectId}/settings?back=${useBackLink()}`}
     variant="link"
   >
     Edit subject

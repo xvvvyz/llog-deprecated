@@ -29,12 +29,17 @@ interface RichTextareaProps
 }
 
 const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
-  ({ className, name, onChange, onEnter, placeholder, value }, ref) => {
+  (
+    { className, name, onChange, onEnter, placeholder, value, ...rest },
+    ref
+  ) => {
     const editor = useEditor({
       content: value as Content,
       editorProps: {
         attributes: {
+          'aria-label': rest['aria-label'] ?? '',
           class: twMerge('prose input', className),
+          role: 'textbox',
         },
         handleKeyDown: (view, e) => {
           if (
@@ -63,7 +68,7 @@ const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
         Paragraph,
         Placeholder.configure({
           emptyNodeClass:
-            'first:before:text-alpha-4 first:before:absolute first:before:content-[attr(data-placeholder)]',
+            'first:before:text-fg-3 first:before:absolute first:before:content-[attr(data-placeholder)]',
           placeholder,
         }),
         Text,
