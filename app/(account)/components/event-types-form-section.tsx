@@ -114,7 +114,7 @@ const EventTypesFormSection = <T extends FieldValues>({
               name: template?.name ?? '',
               order: eventTypesArray.fields.length,
               subject_id: values.id ?? '',
-              template_id: template?.id,
+              template_id: template?.id ?? null,
               type,
             } as T[typeof name][number]);
 
