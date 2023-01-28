@@ -32,7 +32,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
           date={events[0].created_at}
           formatter="date"
         />
-        {events.map((event) => {
+        {events.map((event, i) => {
           const eventType = firstIfArray(event.type);
           const comments = forceArray(event.comments);
 
@@ -61,7 +61,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                     <>
                       <span>{eventType.mission.name}</span>
                       <span className="ml-4 text-fg-2">
-                        {eventType.session + 1}.{eventType.order}
+                        {eventType.session + 1}.{i}
                       </span>
                     </>
                   ) : (
