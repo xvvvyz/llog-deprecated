@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import IconButton from 'components/icon-button';
+import firstIfArray from 'utilities/first-if-array';
 import getLastMissionEventType from 'utilities/get-last-mission-event-type';
 
 interface SessionPaginatorProps {
@@ -14,7 +15,7 @@ const SessionPaginator = async ({
   subjectId,
 }: SessionPaginatorProps) => {
   const { data: lastRoutine } = await getLastMissionEventType(missionId);
-  const lastSessionNumber = (lastRoutine?.[0]?.session ?? 0) + 1;
+  const lastSessionNumber = (firstIfArray(lastRoutine)?.session ?? 0) + 1;
   const previousSessionNumber = Math.max(1, sessionNumber - 1);
   const nextSessionNumber = Math.min(lastSessionNumber, sessionNumber + 1);
 

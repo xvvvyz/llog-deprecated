@@ -7,7 +7,7 @@ create type template_type as enum ('observation', 'routine');
 create table "public"."comments" (
   "id" uuid not null default uuid_generate_v4 (),
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
-  "content" text not null default ''::text,
+  "content" text not null,
   "files" text[],
   "event_id" uuid not null,
   "profile_id" uuid not null default auth.uid (),
@@ -25,12 +25,12 @@ create table "public"."event_type_inputs" (
 alter table "public"."event_type_inputs" enable row level security;
 
 create table "public"."event_types" (
-  "content" text not null default ''::text,
+  "content" text,
   "id" uuid not null default uuid_generate_v4 (),
   "mission_id" uuid,
   "name" text,
-  "order" smallint not null,
-  "session" smallint,
+  "order" real not null,
+  "session" smallint generated always as (floor("order")) stored,
   "subject_id" uuid not null,
   "template_id" uuid,
   "type" event_type not null
@@ -264,7 +264,7 @@ alter table "public"."event_types"
 alter table "public"."event_types" validate constraint "event_types_name_length";
 
 alter table "public"."event_types"
-  add constraint "event_types_content_length" check ((length(content) < 5000)) not valid;
+  add constraint "event_types_content_length" check (((length(content) > 0) and (length(content) < 5000))) not valid;
 
 alter table "public"."event_types" validate constraint "event_types_content_length";
 

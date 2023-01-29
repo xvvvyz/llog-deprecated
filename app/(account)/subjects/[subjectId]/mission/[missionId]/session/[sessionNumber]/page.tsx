@@ -32,6 +32,14 @@ const Page = async ({
   if (!subject || !mission) return notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
+  const completedRoutinesCount = eventTypes?.reduce(
+    (count, { event }) => count + (firstIfArray(event) ? 1 : 0),
+    0
+  );
+
+  const oneRoutineLeft =
+    completedRoutinesCount === (eventTypes?.length ?? 0) - 1;
+
   return (
     <>
       <Header>
@@ -47,15 +55,20 @@ const Page = async ({
               sessionNumber={Number(sessionNumber)}
               subjectId={subjectId}
             />
-            {eventTypes.map((eventType) => (
-              <EventCard
-                event={firstIfArray(eventType.event)}
-                eventType={eventType}
-                isMission
-                key={eventType.id}
-                subjectId={subjectId}
-              />
-            ))}
+            {eventTypes.map((eventType) => {
+              const event = firstIfArray(eventType.event);
+
+              return (
+                <EventCard
+                  event={event}
+                  eventType={eventType}
+                  isMission
+                  key={eventType.id}
+                  redirectOnSubmit={oneRoutineLeft && !event}
+                  subjectId={subjectId}
+                />
+              );
+            })}
           </div>
         ) : (
           <Empty>

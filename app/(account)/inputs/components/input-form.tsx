@@ -72,7 +72,9 @@ const InputForm = ({ input }: InputFormProps) => {
   return (
     <form
       onSubmit={form.handleSubmit(
-        async ({ id, label, options, type: { id: type } }) => {
+        async ({ id, label, options, type: typeObject }) => {
+          const type = typeObject?.id;
+
           const { data: inputData, error: inputError } = await supabase
             .from('inputs')
             .upsert({ id, label: label.trim(), type })

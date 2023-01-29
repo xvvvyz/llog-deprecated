@@ -22,6 +22,7 @@ interface EventFormProps {
     | NonNullable<GetEventTypeData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission: boolean;
+  redirectOnSubmit: boolean;
   subjectId: string;
 }
 
@@ -34,6 +35,7 @@ const EventForm = ({
   event,
   eventType,
   isMission,
+  redirectOnSubmit,
   subjectId,
 }: EventFormProps) => {
   const eventInputs = forceArray(event?.inputs);
@@ -186,7 +188,9 @@ const EventForm = ({
           return;
         }
 
-        await submitRedirect(`/subjects/${subjectId}`);
+        await submitRedirect(`/subjects/${subjectId}`, {
+          redirect: redirectOnSubmit,
+        });
       })}
     >
       {eventTypeInputs.map(({ input }, i) => (

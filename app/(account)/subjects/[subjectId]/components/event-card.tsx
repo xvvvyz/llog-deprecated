@@ -12,6 +12,7 @@ interface EventCardProps extends BoxProps {
     | NonNullable<GetEventTypeData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission?: boolean;
+  redirectOnSubmit?: boolean;
   subjectId: string;
 }
 
@@ -19,6 +20,7 @@ const EventCard = ({
   event,
   eventType,
   isMission = false,
+  redirectOnSubmit = true,
   subjectId,
   ...rest
 }: EventCardProps) => (
@@ -41,6 +43,7 @@ const EventCard = ({
         event={event}
         eventType={eventType}
         isMission={isMission}
+        redirectOnSubmit={redirectOnSubmit}
         subjectId={subjectId}
       />
     </div>

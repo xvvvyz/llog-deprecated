@@ -87,13 +87,12 @@ const MissionForm = ({
 
         const { insertedEventTypes, updatedEventTypes } = routines.reduce(
           (acc, sessionRoutines, session) => {
-            sessionRoutines.forEach((routine) => {
+            sessionRoutines.forEach((routine, i) => {
               const payload = {
                 content: sanitizeHtml(routine.content),
                 id: routine.id,
                 mission_id: missionData.id,
-                order: acc.order,
-                session,
+                order: Number(`${session}.${i}`),
                 subject_id: subjectId,
                 template_id: routine.template_id,
                 type: routine.type,
@@ -101,7 +100,6 @@ const MissionForm = ({
 
               if (routine.id) acc.updatedEventTypes.push(payload);
               else acc.insertedEventTypes.push(payload);
-              acc.order++;
             });
 
             return acc;
@@ -109,7 +107,6 @@ const MissionForm = ({
           {
             insertedEventTypes:
               [] as Database['public']['Tables']['event_types']['Insert'][],
-            order: 0,
             updatedEventTypes:
               [] as Database['public']['Tables']['event_types']['Insert'][],
           }

@@ -8,6 +8,7 @@ import firstIfArray from 'utilities/first-if-array';
 import forceArray from 'utilities/force-array';
 import formatDate from 'utilities/format-date';
 import formatInputValue from 'utilities/format-input-value';
+import formatMinFractionDigits from 'utilities/format-min-fraction-digits';
 import { ListEventsData } from 'utilities/list-events';
 import sanitizeHtml from 'utilities/sanitize-html';
 import CommentForm from './comment-form';
@@ -28,11 +29,11 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
     ).map((events) => (
       <div className="space-y-6" key={events[0].created_at}>
         <DateTime
-          className="ml-4 flex h-10 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
+          className="ml-4 flex h-10 items-end justify-end border-l-2 border-dashed border-alpha-3 leading-none text-fg-3"
           date={events[0].created_at}
           formatter="date"
         />
-        {events.map((event, i) => {
+        {events.map((event) => {
           const eventType = firstIfArray(event.type);
           const comments = forceArray(event.comments);
 
@@ -61,7 +62,9 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                     <>
                       <span>{eventType.mission.name}</span>
                       <span className="ml-4 text-fg-2">
-                        {eventType.session + 1}.{i}
+                        {formatMinFractionDigits({
+                          value: eventType.order + 1,
+                        })}
                       </span>
                     </>
                   ) : (

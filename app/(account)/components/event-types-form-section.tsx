@@ -136,11 +136,11 @@ const EventTypesFormSection = <T extends FieldValues>({
             const values = form.getValues();
 
             eventTypesArray.append({
-              content: template?.data?.content ?? '',
+              content: template?.data?.content ?? (isMission ? '' : null),
               inputs: forceArray(inputOptions).filter((input) =>
                 template?.data?.inputIds?.includes(input.id)
               ),
-              name: template?.name ?? '',
+              name: template?.name ?? (isMission ? null : ''),
               order: eventTypesArray.fields.length,
               subject_id: values.id ?? '',
               template_id: template?.id ?? null,
