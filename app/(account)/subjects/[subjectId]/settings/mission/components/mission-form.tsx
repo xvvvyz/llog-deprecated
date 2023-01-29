@@ -5,18 +5,18 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import supabase from 'utilities/browser-supabase-client';
 import EventTypes from 'utilities/enum-event-types';
 import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
+import useDefaultValues from 'utilities/get-default-values';
 import { GetMissionWithEventTypesData } from 'utilities/get-mission-with-routines';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
 import sanitizeHtml from 'utilities/sanitize-html';
-import sleep from 'utilities/sleep';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
 
 interface MissionFormProps {
   availableInputs: ListInputsData;
@@ -37,10 +37,10 @@ const MissionForm = ({
   mission,
   subjectId,
 }: MissionFormProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const submitRedirect = useSubmitRedirect();
 
-  const form = useForm<MissionFormValues>({
+  const defaultValues = useDefaultValues({
+    cacheKey: 'mission_form_values',
     defaultValues: {
       id: mission?.id,
       name: mission?.name ?? '',
@@ -60,6 +60,8 @@ const MissionForm = ({
       }, []),
     },
   });
+
+  const form = useForm<MissionFormValues>({ defaultValues });
 
   const sessionsArray = useFieldArray({
     control: form.control,
@@ -205,9 +207,7 @@ const MissionForm = ({
           }
         }
 
-        await router.push(searchParams.get('back') ?? `/subjects/${subjectId}`);
-        await router.refresh();
-        await sleep();
+        await submitRedirect(`/subjects/${subjectId}`);
       })}
     >
       <Label>
@@ -223,6 +223,7 @@ const MissionForm = ({
           {sessionsArray.fields.map((item, index) => (
             <li key={item.id}>
               <EventTypesFormSection<MissionFormValues>
+                cacheKey="mission_form_values"
                 form={form}
                 inputOptions={availableInputs}
                 isMission

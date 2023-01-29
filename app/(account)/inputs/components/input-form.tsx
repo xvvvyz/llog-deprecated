@@ -5,16 +5,16 @@ import Button from 'components/button';
 import Input from 'components/input';
 import Label from 'components/label';
 import Select from 'components/select';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import supabase from 'utilities/browser-supabase-client';
 import InputTypes from 'utilities/enum-input-types';
 import forceArray from 'utilities/force-array';
+import useDefaultValues from 'utilities/get-default-values';
 import { GetInputData } from 'utilities/get-input';
-import globalValueCache from 'utilities/global-value-cache';
-import sleep from 'utilities/sleep';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
+import useUpdateGlobalValueCache from 'utilities/use-update-global-value-cache';
 
 const INPUT_TYPE_OPTIONS = [
   // { id: InputTypes.Duration, label: 'Duration' },
@@ -35,10 +35,11 @@ type InputFormValues = Database['public']['Tables']['inputs']['Insert'] & {
 };
 
 const InputForm = ({ input }: InputFormProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const submitRedirect = useSubmitRedirect();
+  const updateGlobalValueCache = useUpdateGlobalValueCache();
 
-  const form = useForm<InputFormValues>({
+  const defaultValues = useDefaultValues({
+    cacheKey: 'input_form_values',
     defaultValues: {
       id: input?.id,
       label: input?.label ?? '',
@@ -46,6 +47,8 @@ const InputForm = ({ input }: InputFormProps) => {
       type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
     },
   });
+
+  const form = useForm<InputFormValues>({ defaultValues });
 
   const optionsArray = useFieldArray({
     control: form.control,
@@ -133,15 +136,8 @@ const InputForm = ({ input }: InputFormProps) => {
             }
           }
 
-          if (globalValueCache.has('template_form_values')) {
-            const cache = globalValueCache.get('template_form_values');
-            cache.inputs.push(inputData);
-            globalValueCache.set('template_form_values', cache);
-          }
-
-          await router.push(searchParams.get('back') ?? '/inputs');
-          await router.refresh();
-          await sleep();
+          updateGlobalValueCache(inputData);
+          await submitRedirect('/inputs');
         }
       )}
     >

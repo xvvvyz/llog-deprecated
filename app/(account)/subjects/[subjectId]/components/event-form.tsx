@@ -5,7 +5,6 @@ import Checkbox from 'components/checkbox';
 import Input from 'components/input';
 import Label from 'components/label';
 import Select from 'components/select';
-import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import { Database } from 'types/database';
@@ -15,7 +14,7 @@ import formatTimeForInput from 'utilities/format-time-for-input';
 import { GetEventData } from 'utilities/get-event';
 import { GetEventTypeData } from 'utilities/get-event-type';
 import { ListSessionRoutinesData } from 'utilities/list-session-routines';
-import sleep from 'utilities/sleep';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
 
 interface EventFormProps {
   event?: GetEventData;
@@ -39,7 +38,7 @@ const EventForm = ({
 }: EventFormProps) => {
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
-  const router = useRouter();
+  const submitRedirect = useSubmitRedirect();
 
   const form = useForm<EventFormValues>({
     defaultValues: {
@@ -187,9 +186,7 @@ const EventForm = ({
           return;
         }
 
-        await router.push(`/subjects/${subjectId}`);
-        await router.refresh();
-        await sleep();
+        await submitRedirect(`/subjects/${subjectId}`);
       })}
     >
       {eventTypeInputs.map(({ input }, i) => (

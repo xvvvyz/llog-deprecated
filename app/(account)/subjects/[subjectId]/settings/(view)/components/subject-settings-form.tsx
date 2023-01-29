@@ -2,7 +2,6 @@
 
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/button';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import { EventTemplate } from 'types/event-template';
@@ -10,15 +9,16 @@ import supabase from 'utilities/browser-supabase-client';
 import EventTypes from 'utilities/enum-event-types';
 import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
+import useDefaultValues from 'utilities/get-default-values';
 import { GetSubjectWithEventTypesData } from 'utilities/get-subject-with-event-types-and-missions';
 import globalValueCache from 'utilities/global-value-cache';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
 import sanitizeHtml from 'utilities/sanitize-html';
-import sleep from 'utilities/sleep';
 import uploadSubjectAvatar from 'utilities/upload-subject-avatar';
 import useAvatarDropzone from 'utilities/use-avatar-dropzone';
 import useBackLink from 'utilities/use-back-link';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
 import EventTypesFormSection from '../../../../../components/event-types-form-section';
 import SubjectDetailsFormSection from '../../../../components/subject-details-form-section';
 
@@ -49,28 +49,21 @@ const SubjectSettingsForm = ({
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
   const missions = forceArray(subject.missions);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const submitRedirect = useSubmitRedirect();
 
-  const form = useForm<SubjectSettingsFormValues>({
-    defaultValues:
-      searchParams.has('useCache') &&
-      globalValueCache.has('subject_settings_form_values')
-        ? globalValueCache.get('subject_settings_form_values')
-        : {
-            id: subject.id,
-            name: subject.name,
-            observationTemplate: null,
-            observations: eventTypes.filter(
-              (e) => e.type === EventTypes.Observation
-            ),
-            routineTemplate: null,
-            routines: eventTypes.filter((e) => e.type === EventTypes.Routine),
-          },
+  const defaultValues = useDefaultValues({
+    cacheKey: 'subject_settings_form_values',
+    defaultValues: {
+      id: subject.id,
+      name: subject.name,
+      observationTemplate: null,
+      observations: eventTypes.filter((e) => e.type === EventTypes.Observation),
+      routineTemplate: null,
+      routines: eventTypes.filter((e) => e.type === EventTypes.Routine),
+    },
   });
 
-  const cacheFormValues = () =>
-    globalValueCache.set('subject_settings_form_values', form.getValues());
+  const form = useForm<SubjectSettingsFormValues>({ defaultValues });
 
   return (
     <form
@@ -216,9 +209,7 @@ const SubjectSettingsForm = ({
           }
 
           await uploadSubjectAvatar({ dropzone, subjectId: id });
-          await router.push(`/subjects/${id}`);
-          await router.refresh();
-          await sleep();
+          await submitRedirect(`/subjects/${id}`);
         }
       )}
     >
@@ -237,7 +228,12 @@ const SubjectSettingsForm = ({
                   className="w-full justify-between"
                   colorScheme="transparent"
                   href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
-                  onClick={cacheFormValues}
+                  onClick={() =>
+                    globalValueCache.set(
+                      'subject_settings_form_values',
+                      form.getValues()
+                    )
+                  }
                 >
                   <span className="text-fg-1">{mission.name}</span>
                   <PencilIcon className="w-5" />
@@ -250,7 +246,12 @@ const SubjectSettingsForm = ({
           className="w-full"
           colorScheme="transparent"
           href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
-          onClick={cacheFormValues}
+          onClick={() =>
+            globalValueCache.set(
+              'subject_settings_form_values',
+              form.getValues()
+            )
+          }
           type="button"
         >
           <PlusIcon className="w-5" />
@@ -258,6 +259,7 @@ const SubjectSettingsForm = ({
         </Button>
       </section>
       <EventTypesFormSection<SubjectSettingsFormValues>
+        cacheKey="subject_settings_form_values"
         form={form}
         inputOptions={availableInputs}
         label="Observations"
@@ -267,6 +269,7 @@ const SubjectSettingsForm = ({
         type={EventTypes.Observation}
       />
       <EventTypesFormSection<SubjectSettingsFormValues>
+        cacheKey="subject_settings_form_values"
         form={form}
         inputOptions={availableInputs}
         label="Routines"

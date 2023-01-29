@@ -12,14 +12,19 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Database } from 'types/database';
 import { EventTemplate } from 'types/event-template';
 import forceArray from 'utilities/force-array';
+import formatCacheLink from 'utilities/format-cache-link';
+import globalValueCache, { GlobalCacheKey } from 'utilities/global-value-cache';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
+import useBackLink from 'utilities/use-back-link';
 
 interface EventTypesFormSectionProps<T extends FieldValues> {
+  cacheKey: GlobalCacheKey;
   form: UseFormReturn<T>;
   inputOptions: ListInputsData;
   label: string;
@@ -31,6 +36,7 @@ interface EventTypesFormSectionProps<T extends FieldValues> {
 }
 
 const EventTypesFormSection = <T extends FieldValues>({
+  cacheKey,
   form,
   inputOptions,
   label,
@@ -41,7 +47,9 @@ const EventTypesFormSection = <T extends FieldValues>({
   type,
 }: EventTypesFormSectionProps<T>) => {
   const [template, setTemplate] = useState<EventTemplate | null>(null);
+  const backLink = useBackLink({ useCache: 'true' });
   const eventTypesArray = useFieldArray({ control: form.control, name });
+  const router = useRouter();
 
   return (
     <fieldset>
@@ -85,7 +93,22 @@ const EventTypesFormSection = <T extends FieldValues>({
               render={({ field }) => (
                 <Select
                   className="rounded-t-none border-t-0"
+                  creatable
                   isMulti
+                  onCreateOption={async (value: unknown) => {
+                    globalValueCache.set('input_form_values', { label: value });
+                    globalValueCache.set(cacheKey, form.getValues());
+
+                    await router.push(
+                      formatCacheLink({
+                        backLink,
+                        path: '/inputs/add',
+                        updateCacheKey: cacheKey,
+                        updateCachePath: `${name}.${index}.inputs`,
+                        useCache: true,
+                      })
+                    );
+                  }}
                   options={forceArray(inputOptions)}
                   placeholder="Inputs"
                   {...field}

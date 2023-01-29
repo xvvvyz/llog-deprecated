@@ -1,13 +1,12 @@
 'use client';
 
 import Button from 'components/button';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import supabase from 'utilities/browser-supabase-client';
-import sleep from 'utilities/sleep';
 import uploadSubjectAvatar from 'utilities/upload-subject-avatar';
 import useAvatarDropzone from 'utilities/use-avatar-dropzone';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
 import SubjectDetailsFormSection from '../../components/subject-details-form-section';
 
 type AddSubjectFormValues = Database['public']['Tables']['subjects']['Insert'];
@@ -15,7 +14,7 @@ type AddSubjectFormValues = Database['public']['Tables']['subjects']['Insert'];
 const AddSubjectForm = () => {
   const dropzone = useAvatarDropzone();
   const form = useForm<AddSubjectFormValues>({ defaultValues: { name: '' } });
-  const router = useRouter();
+  const submitRedirect = useSubmitRedirect();
 
   return (
     <form
@@ -33,9 +32,7 @@ const AddSubjectForm = () => {
         }
 
         await uploadSubjectAvatar({ dropzone, subjectId: subjectData.id });
-        await router.push(`/subjects/${subjectData.id}/settings`);
-        await router.refresh();
-        await sleep();
+        await submitRedirect(`/subjects/${subjectData.id}/settings`);
       })}
     >
       <SubjectDetailsFormSection<AddSubjectFormValues>

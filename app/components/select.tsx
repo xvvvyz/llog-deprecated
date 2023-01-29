@@ -6,6 +6,7 @@ import ReactSelect, {
   ClearIndicatorProps,
   components,
   ControlProps,
+  GroupBase,
   InputProps,
   MenuProps,
   MultiValueGenericProps,
@@ -18,7 +19,7 @@ import ReactSelect, {
 
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { forwardRef, ReactNode, Ref } from 'react';
-import Creatable from 'react-select/creatable';
+import Creatable, { CreatableProps } from 'react-select/creatable';
 import ReactSelectDeclaration from 'react-select/dist/declarations/src/Select';
 import { twMerge } from 'tailwind-merge';
 
@@ -153,7 +154,10 @@ const Select = forwardRef(
       creatable,
       placeholder,
       ...props
-    }: ReactSelectProps<TOption> & { creatable?: boolean },
+    }: ReactSelectProps<TOption> &
+      CreatableProps<IOption, boolean, GroupBase<IOption>> & {
+        creatable?: boolean;
+      },
     ref: Ref<ReactSelectDeclaration<TOption>>
   ) => {
     const commonProps = {
@@ -171,6 +175,8 @@ const Select = forwardRef(
         Placeholder,
         SingleValue,
       },
+      getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
+      getOptionValue: (option: IOption) => option.id,
       instanceId: props.name,
       isClearable: true,
       placeholder: placeholder ?? <>&nbsp;</>,
@@ -179,16 +185,10 @@ const Select = forwardRef(
       ...props,
     };
 
-    if (creatable) {
-      return <Creatable {...commonProps} />;
-    }
-
-    return (
-      <ReactSelect
-        getOptionLabel={(option) => option.label ?? option.name ?? ''}
-        getOptionValue={(option) => option.id}
-        {...commonProps}
-      />
+    return creatable ? (
+      <Creatable {...commonProps} />
+    ) : (
+      <ReactSelect {...commonProps} />
     );
   }
 );

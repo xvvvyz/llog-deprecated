@@ -6,19 +6,21 @@ import Label from 'components/label';
 import RadioGroup from 'components/radio-group';
 import RichTextarea from 'components/rich-textarea';
 import Select from 'components/select';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { Database } from 'types/database';
 import { EventTemplateData } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
 import TemplateTypes from 'utilities/enum-template-types';
 import forceArray from 'utilities/force-array';
+import formatCacheLink from 'utilities/format-cache-link';
+import useDefaultValues from 'utilities/get-default-values';
 import { GetTemplateData } from 'utilities/get-template';
 import globalValueCache from 'utilities/global-value-cache';
 import { ListInputsData } from 'utilities/list-inputs';
 import sanitizeHtml from 'utilities/sanitize-html';
-import sleep from 'utilities/sleep';
 import useBackLink from 'utilities/use-back-link';
+import useSubmitRedirect from 'utilities/use-submit-redirect';
 
 interface TemplateFormProps {
   availableInputs: ListInputsData;
@@ -34,25 +36,24 @@ type TemplateFormValues =
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   const backLink = useBackLink({ useCache: 'true' });
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const submitRedirect = useSubmitRedirect();
   const templateData = template?.data as unknown as EventTemplateData;
 
-  const form = useForm<TemplateFormValues>({
-    defaultValues:
-      searchParams.has('useCache') &&
-      globalValueCache.has('template_form_values')
-        ? globalValueCache.get('template_form_values')
-        : {
-            content: templateData?.content ?? '',
-            id: template?.id,
-            inputs: forceArray(templateData?.inputIds).map((inputId) =>
-              availableInputs?.find(({ id }) => id === inputId)
-            ),
-            name: template?.name ?? '',
-            public: template?.public ?? false,
-            type: template?.type ?? TemplateTypes.Observation,
-          },
+  const defaultValues = useDefaultValues({
+    cacheKey: 'template_form_values',
+    defaultValues: {
+      content: templateData?.content ?? '',
+      id: template?.id,
+      inputs: forceArray(templateData?.inputIds).map((inputId) =>
+        availableInputs?.find(({ id }) => id === inputId)
+      ),
+      name: template?.name ?? '',
+      public: template?.public ?? false,
+      type: template?.type ?? TemplateTypes.Observation,
+    },
   });
+
+  const form = useForm<TemplateFormValues>({ defaultValues });
 
   return (
     <form
@@ -78,9 +79,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
             return;
           }
 
-          await router.push(searchParams.get('back') ?? '/templates');
-          await router.refresh();
-          await sleep();
+          await submitRedirect('/templates');
         }
       )}
     >
@@ -117,24 +116,31 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         />
       </Label>
       <Label>
-        <div className="flex justify-between">
-          Inputs
-          <Button
-            className="underline"
-            href={`/inputs/add?back=${backLink}`}
-            onClick={() =>
-              globalValueCache.set('template_form_values', form.getValues())
-            }
-            variant="link"
-          >
-            Create new input
-          </Button>
-        </div>
+        Inputs
         <Controller
           control={form.control}
           name="inputs"
           render={({ field }) => (
-            <Select isMulti options={availableInputs ?? []} {...field} />
+            <Select
+              creatable
+              isMulti
+              onCreateOption={async (value: unknown) => {
+                globalValueCache.set('input_form_values', { label: value });
+                globalValueCache.set('template_form_values', form.getValues());
+
+                await router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: '/inputs/add',
+                    updateCacheKey: 'template_form_values',
+                    updateCachePath: 'inputs',
+                    useCache: true,
+                  })
+                );
+              }}
+              options={availableInputs ?? []}
+              {...field}
+            />
           )}
         />
       </Label>
