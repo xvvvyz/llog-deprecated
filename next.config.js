@@ -1,7 +1,6 @@
-module.exports = {
-  eslint: {
-    dirs: ['app'],
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: { dirs: ['app'] },
   experimental: { appDir: true },
   images: {
     remotePatterns: [
@@ -17,3 +16,5 @@ module.exports = {
   },
   reactStrictMode: true,
 };
+
+module.exports = nextConfig;
