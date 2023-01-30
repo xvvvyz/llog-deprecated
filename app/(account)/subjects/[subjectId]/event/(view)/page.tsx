@@ -5,10 +5,10 @@ import Button from 'components/button';
 import Empty from 'components/empty';
 import Header from 'components/header';
 import { List, ListItem } from 'components/list';
+import Pill from 'components/pill';
 import { notFound } from 'next/navigation';
 import getSubject from 'utilities/get-subject';
 import listSubjectEventTypes from 'utilities/list-subject-event-types';
-import Pill from '../../../../../components/pill';
 import EditSubjectLink from '../components/edit-subject-link';
 
 interface PageProps {

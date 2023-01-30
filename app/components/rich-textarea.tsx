@@ -14,12 +14,7 @@ import Text from '@tiptap/extension-text';
 import Typography from '@tiptap/extension-typography';
 import { Content, EditorContent, Extension, useEditor } from '@tiptap/react';
 
-import {
-  ChangeEvent,
-  forwardRef,
-  TextareaHTMLAttributes,
-  useEffect,
-} from 'react';
+import { ChangeEvent, TextareaHTMLAttributes, useEffect } from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
@@ -28,80 +23,84 @@ interface RichTextareaProps
   onEnter?: () => void;
 }
 
-const RichTextarea = forwardRef<HTMLTextAreaElement, RichTextareaProps>(
-  (
-    { className, name, onChange, onEnter, placeholder, value, ...rest },
-    ref
-  ) => {
-    const editor = useEditor({
-      content: value as Content,
-      editorProps: {
-        attributes: {
-          'aria-label': rest['aria-label'] ?? '',
-          class: twMerge('prose input', className),
-          role: 'textbox',
-        },
-        handleKeyDown: (view, e) => {
-          if (
-            onEnter &&
-            e.target &&
-            e.key === 'Enter' &&
-            !e.shiftKey &&
-            !e.altKey &&
-            !e.ctrlKey &&
-            !e.metaKey
-          ) {
-            onEnter();
-            return true;
-          }
-        },
+const RichTextarea = ({
+  autoFocus,
+  className,
+  name,
+  onChange,
+  onEnter,
+  placeholder,
+  value,
+  ...rest
+}: RichTextareaProps) => {
+  const editor = useEditor({
+    ...(autoFocus ? { autofocus: 'end' } : {}),
+    content: value as Content,
+    editorProps: {
+      attributes: {
+        'aria-label': rest['aria-label'] ?? '',
+        class: twMerge('prose input', className),
+        role: 'textbox',
       },
-      extensions: [
-        Bold,
-        BulletList,
-        Document,
-        History,
-        Italic,
-        Link.configure({ HTMLAttributes: { target: '_blank' } }),
-        ListItem,
-        OrderedList,
-        Paragraph,
-        Placeholder.configure({
-          emptyNodeClass:
-            'first:before:text-fg-3 first:before:absolute first:before:content-[attr(data-placeholder)]',
-          placeholder,
-        }),
-        Text,
-        Typography,
-        Extension.create({
-          addKeyboardShortcuts() {
-            return {
-              'Shift-Enter': ({ editor }) => {
-                editor.commands.enter();
-                return true;
-              },
-            };
-          },
-        }),
-      ],
-      injectCSS: false,
-      onUpdate: ({ editor }) => {
-        if (!onChange) return;
-
-        onChange({
-          target: { name, value: editor.getHTML() },
-        } as ChangeEvent<HTMLTextAreaElement>);
+      handleKeyDown: (view, e) => {
+        if (
+          onEnter &&
+          e.target &&
+          e.key === 'Enter' &&
+          !e.shiftKey &&
+          !e.altKey &&
+          !e.ctrlKey &&
+          !e.metaKey
+        ) {
+          onEnter();
+          return true;
+        }
       },
-    });
+    },
+    extensions: [
+      Bold,
+      BulletList,
+      Document,
+      History,
+      Italic,
+      Link.configure({ HTMLAttributes: { target: '_blank' } }),
+      ListItem,
+      OrderedList,
+      Paragraph,
+      Placeholder.configure({
+        emptyNodeClass:
+          'first:before:text-fg-3 first:before:absolute first:before:content-[attr(data-placeholder)]',
+        placeholder,
+      }),
+      Text,
+      Typography,
+      Extension.create({
+        addKeyboardShortcuts() {
+          return {
+            'Shift-Enter': ({ editor }) => {
+              editor.commands.enter();
+              return true;
+            },
+          };
+        },
+      }),
+    ],
+    injectCSS: false,
+    onUpdate: ({ editor }) => {
+      if (!onChange) return;
 
-    useEffect(() => {
-      if (!editor || value) return;
-      editor.commands.setContent('');
-    });
+      onChange({
+        target: { name, value: editor.getHTML() },
+      } as ChangeEvent<HTMLTextAreaElement>);
+    },
+  });
 
-    return <EditorContent editor={editor} name={name} ref={() => ref} />;
-  }
-);
+  useEffect(() => {
+    if (!editor || value) return;
+    editor.commands.setContent('');
+  });
 
-RichTextarea.displayName = 'RichTextarea';
+  return <EditorContent editor={editor} name={name} />;
+};
+
 export default RichTextarea;

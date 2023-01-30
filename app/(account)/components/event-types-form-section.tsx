@@ -1,5 +1,3 @@
-import { PlusIcon } from '@heroicons/react/24/outline';
-import Button from 'components/button';
 import Input from 'components/input';
 import RichTextarea from 'components/rich-textarea';
 import Select from 'components/select';
@@ -13,7 +11,6 @@ import {
 } from 'react-hook-form';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { Database } from 'types/database';
 import { EventTemplate } from 'types/event-template';
 import forceArray from 'utilities/force-array';
@@ -46,7 +43,6 @@ const EventTypesFormSection = <T extends FieldValues>({
   templateType,
   type,
 }: EventTypesFormSectionProps<T>) => {
-  const [template, setTemplate] = useState<EventTemplate | null>(null);
   const backLink = useBackLink({ useCache: 'true' });
   const eventTypesArray = useFieldArray({ control: form.control, name });
   const router = useRouter();
@@ -77,11 +73,16 @@ const EventTypesFormSection = <T extends FieldValues>({
               }
               render={({ field }) => (
                 <RichTextarea
+                  autoFocus={
+                    (eventType as unknown as { autoFocus: boolean }).autoFocus
+                  }
                   className={
                     isMission ? 'rounded-b-none' : 'rounded-none border-t-0'
                   }
+                  name={field.name}
+                  onChange={field.onChange}
                   placeholder="Description"
-                  {...field}
+                  value={field.value}
                 />
               )}
             />
@@ -95,6 +96,7 @@ const EventTypesFormSection = <T extends FieldValues>({
                   className="rounded-t-none border-t-0"
                   creatable
                   isMulti
+                  noOptionsMessage={() => `Type to create new input`}
                   onCreateOption={async (value: unknown) => {
                     globalValueCache.set('input_form_values', { label: value });
                     globalValueCache.set(cacheKey, form.getValues());
@@ -118,43 +120,46 @@ const EventTypesFormSection = <T extends FieldValues>({
           </li>
         ))}
       </ul>
-      <div className="flex">
-        <Select
-          className="w-full rounded-r-none"
-          name={`${name}Template`}
-          onChange={(template) => setTemplate(template as EventTemplate)}
-          options={forceArray(templateOptions).filter(
-            (template) => template.type === templateType
-          )}
-          placeholder="No template"
-          value={template}
-        />
-        <Button
-          className="shrink-0 rounded-l-none border-l-0 pl-6"
-          colorScheme="transparent"
-          onClick={() => {
-            const values = form.getValues();
+      <Select
+        creatable
+        name={`${name}Template`}
+        noOptionsMessage={() => `Type to create new ${type}`}
+        onChange={(e) => {
+          const template = e as EventTemplate;
+          const values = form.getValues();
 
-            eventTypesArray.append({
-              content: template?.data?.content ?? (isMission ? '' : null),
-              inputs: forceArray(inputOptions).filter((input) =>
-                template?.data?.inputIds?.includes(input.id)
-              ),
-              name: template?.name ?? (isMission ? null : ''),
-              order: eventTypesArray.fields.length,
-              subject_id: values.id ?? '',
-              template_id: template?.id ?? null,
-              type,
-            } as T[typeof name][number]);
+          eventTypesArray.append({
+            content: template?.data?.content || (isMission ? '' : null),
+            inputs: forceArray(inputOptions).filter((input) =>
+              template?.data?.inputIds?.includes(input.id)
+            ),
+            name: template?.name || (isMission ? null : ''),
+            order: eventTypesArray.fields.length,
+            subject_id: values.id ?? '',
+            template_id: template?.id ?? null,
+            type,
+          } as T[typeof name][number]);
+        }}
+        onCreateOption={async (value: unknown) => {
+          const values = form.getValues();
 
-            setTemplate(null);
-          }}
-          type="button"
-        >
-          Add
-          <PlusIcon className="w-5" />
-        </Button>
-      </div>
+          eventTypesArray.append({
+            autoFocus: true,
+            content: isMission ? value : null,
+            inputs: [],
+            name: isMission ? null : value,
+            order: eventTypesArray.fields.length,
+            subject_id: values.id ?? '',
+            template_id: null,
+            type,
+          } as T[typeof name][number]);
+        }}
+        options={forceArray(templateOptions).filter(
+          (template) => template.type === templateType
+        )}
+        placeholder={`Add ${type}`}
+        value={null}
+      />
     </fieldset>
   );
 };

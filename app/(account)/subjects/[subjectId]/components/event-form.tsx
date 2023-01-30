@@ -106,8 +106,21 @@ const EventForm = ({
         }
 
         form.setValue('id', eventData.id);
+        const deletedEventInputs = eventInputs.map(({ id }) => id);
 
-        const { insertedEventInputs, updatedEventInputs } = inputs.reduce(
+        if (deletedEventInputs.length) {
+          const { error: deletedEventInputsError } = await supabase
+            .from('event_inputs')
+            .delete()
+            .in('id', deletedEventInputs);
+
+          if (deletedEventInputsError) {
+            alert(deletedEventInputsError.message);
+            return;
+          }
+        }
+
+        const { insertedEventInputs } = inputs.reduce(
           (acc, input, i) => {
             if (input === '' || input === null) return acc;
             const eventTypeInput = eventTypeInputs[i].input;
@@ -120,45 +133,35 @@ const EventForm = ({
                 value: null,
               };
 
-            if (input.id) payload.id = input.id;
-
             switch (eventTypeInput.type) {
               case 'checkbox':
               case 'duration':
               case 'number': {
                 payload.value = input;
-                if (payload.id) acc.updatedEventInputs.push(payload);
-                else acc.insertedEventInputs.push(payload);
+                acc.insertedEventInputs.push(payload);
                 return acc;
               }
 
               case 'multi_select': {
-                const payloadInputs: Database['public']['Tables']['event_inputs']['Insert'][] =
-                  input.map(({ id }: { id: string }) => ({
+                input.forEach(({ id }: { id: string }) =>
+                  acc.insertedEventInputs.push({
                     ...payload,
                     input_option_id: id,
-                  }));
-
-                if (payload.id) {
-                  payloadInputs.forEach((p) => acc.updatedEventInputs.push(p));
-                } else {
-                  payloadInputs.forEach((p) => acc.insertedEventInputs.push(p));
-                }
+                  })
+                );
 
                 return acc;
               }
 
               case 'select': {
                 payload.input_option_id = input.id;
-                if (payload.id) acc.updatedEventInputs.push(payload);
-                else acc.insertedEventInputs.push(payload);
+                acc.insertedEventInputs.push(payload);
                 return acc;
               }
 
               case 'time': {
                 payload.value = new Date(input).toISOString();
-                if (payload.id) acc.updatedEventInputs.push(payload);
-                else acc.insertedEventInputs.push(payload);
+                acc.insertedEventInputs.push(payload);
                 return acc;
               }
 
@@ -167,25 +170,18 @@ const EventForm = ({
               }
             }
           },
-          { insertedEventInputs: [], updatedEventInputs: [] }
+          { insertedEventInputs: [] }
         );
 
-        const { error: updatedEventInputsError } = await supabase
-          .from('event_inputs')
-          .upsert(updatedEventInputs);
+        if (insertedEventInputs.length) {
+          const { error: insertedEventInputsError } = await supabase
+            .from('event_inputs')
+            .insert(insertedEventInputs);
 
-        if (updatedEventInputsError) {
-          alert(updatedEventInputsError.message);
-          return;
-        }
-
-        const { error: insertedEventInputsError } = await supabase
-          .from('event_inputs')
-          .insert(insertedEventInputs);
-
-        if (insertedEventInputsError) {
-          alert(insertedEventInputsError.message);
-          return;
+          if (insertedEventInputsError) {
+            alert(insertedEventInputsError.message);
+            return;
+          }
         }
 
         await submitRedirect(`/subjects/${subjectId}`, {

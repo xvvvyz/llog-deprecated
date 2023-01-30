@@ -8,7 +8,7 @@ import RichTextarea from 'components/rich-textarea';
 import Select from 'components/select';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
-import { Database } from 'types/database';
+import { Database, Json } from 'types/database';
 import { EventTemplateData } from 'types/event-template';
 import supabase from 'utilities/browser-supabase-client';
 import TemplateTypes from 'utilities/enum-template-types';
@@ -27,11 +27,10 @@ interface TemplateFormProps {
   template?: GetTemplateData;
 }
 
-type TemplateFormValues =
-  Database['public']['Tables']['templates']['Insert'] & {
-    content: string;
-    inputs: Database['public']['Tables']['inputs']['Row'][];
-  };
+type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
+  content: string;
+  inputs: Database['public']['Tables']['inputs']['Row'][];
+};
 
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   const backLink = useBackLink({ useCache: 'true' });
@@ -66,7 +65,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
               data: {
                 content: sanitizeHtml(content),
                 inputIds: inputs.map((input) => input.id),
-              },
+              } as Json,
               id,
               name: name.trim(),
               public: p,
@@ -112,7 +111,13 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         <Controller
           control={form.control}
           name="content"
-          render={({ field }) => <RichTextarea {...field} />}
+          render={({ field }) => (
+            <RichTextarea
+              name={field.name}
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
         />
       </Label>
       <Label>
@@ -124,6 +129,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
             <Select
               creatable
               isMulti
+              noOptionsMessage={() => `Type to create new input`}
               onCreateOption={async (value: unknown) => {
                 globalValueCache.set('input_form_values', { label: value });
                 globalValueCache.set('template_form_values', form.getValues());

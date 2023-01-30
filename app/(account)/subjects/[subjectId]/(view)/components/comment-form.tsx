@@ -19,7 +19,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
   const onSubmit = form.handleSubmit(async ({ content }) => {
     const { error: commentError } = await supabase
       .from('comments')
-      .upsert({ content: sanitizeHtml(content), event_id: eventId });
+      .upsert({ content: sanitizeHtml(content) ?? '', event_id: eventId });
 
     if (commentError) {
       alert(commentError.message);
@@ -39,9 +39,11 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
           <RichTextarea
             aria-label="Comment"
             className="rounded-t-none border-x-0 border-b-0 pr-12"
+            name={field.name}
+            onChange={field.onChange}
             onEnter={onSubmit}
             placeholder="Add comment"
-            {...field}
+            value={field.value}
           />
         )}
       />
