@@ -117,7 +117,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                         <div
                           className="prose text-fg-1"
                           dangerouslySetInnerHTML={{
-                            __html: sanitizeHtml(content),
+                            __html: sanitizeHtml(content) ?? '',
                           }}
                         />
                       </div>

@@ -33,7 +33,7 @@ const EventCard = ({
             <article
               className="prose"
               dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(eventType.content),
+                __html: sanitizeHtml(eventType.content) ?? '',
               }}
             />
           )}
