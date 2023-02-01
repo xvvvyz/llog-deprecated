@@ -45,11 +45,11 @@ const SubjectSettingsForm = ({
   availableTemplates,
   subject,
 }: SubjectSettingsFormProps) => {
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: 'true' });
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
   const missions = forceArray(subject.missions);
-  const submitRedirect = useSubmitRedirect();
 
   const defaultValues = useDefaultValues({
     cacheKey: 'subject_settings_form_values',
@@ -228,7 +228,7 @@ const SubjectSettingsForm = ({
           }
 
           await uploadSubjectAvatar({ dropzone, subjectId: id });
-          await submitRedirect(`/subjects/${id}`);
+          await redirect(`/subjects/${id}`);
         }
       )}
     >
@@ -299,7 +299,7 @@ const SubjectSettingsForm = ({
       />
       <Button
         className="mt-6 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

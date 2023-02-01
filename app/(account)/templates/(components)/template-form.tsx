@@ -33,9 +33,9 @@ type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
 };
 
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: 'true' });
   const router = useRouter();
-  const submitRedirect = useSubmitRedirect();
   const templateData = template?.data as unknown as EventTemplateData;
 
   const defaultValues = useDefaultValues({
@@ -78,7 +78,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
             return;
           }
 
-          await submitRedirect('/templates');
+          await redirect('/templates');
         }
       )}
     >
@@ -146,7 +146,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       </Label>
       <Button
         className="mt-6 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

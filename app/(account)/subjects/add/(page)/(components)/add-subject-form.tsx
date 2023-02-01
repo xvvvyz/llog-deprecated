@@ -12,9 +12,9 @@ import SubjectDetailsFormSection from '../../../(components)/subject-details-for
 type AddSubjectFormValues = Database['public']['Tables']['subjects']['Insert'];
 
 const AddSubjectForm = () => {
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const dropzone = useAvatarDropzone();
   const form = useForm<AddSubjectFormValues>({ defaultValues: { name: '' } });
-  const submitRedirect = useSubmitRedirect();
 
   return (
     <form
@@ -32,7 +32,7 @@ const AddSubjectForm = () => {
         }
 
         await uploadSubjectAvatar({ dropzone, subjectId: subjectData.id });
-        await submitRedirect(`/subjects/${subjectData.id}/settings`);
+        await redirect(`/subjects/${subjectData.id}/settings`);
       })}
     >
       <SubjectDetailsFormSection<AddSubjectFormValues>
@@ -42,7 +42,7 @@ const AddSubjectForm = () => {
       />
       <Button
         className="mt-6 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

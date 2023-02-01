@@ -38,9 +38,9 @@ const EventForm = ({
   redirectOnSubmit,
   subjectId,
 }: EventFormProps) => {
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
-  const submitRedirect = useSubmitRedirect();
 
   const form = useForm<EventFormValues>({
     defaultValues: {
@@ -184,7 +184,7 @@ const EventForm = ({
           }
         }
 
-        await submitRedirect(`/subjects/${subjectId}`, {
+        await redirect(`/subjects/${subjectId}`, {
           redirect: redirectOnSubmit,
         });
       })}
@@ -253,7 +253,7 @@ const EventForm = ({
       <Button
         className={twMerge('w-full', eventTypeInputs.length && 'mt-6')}
         colorScheme={event ? 'transparent' : 'accent'}
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

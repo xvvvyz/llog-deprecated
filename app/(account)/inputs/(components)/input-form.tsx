@@ -35,7 +35,7 @@ type InputFormValues = Database['public']['Tables']['inputs']['Insert'] & {
 };
 
 const InputForm = ({ input }: InputFormProps) => {
-  const submitRedirect = useSubmitRedirect();
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const updateGlobalValueCache = useUpdateGlobalValueCache();
 
   const defaultValues = useDefaultValues({
@@ -139,7 +139,7 @@ const InputForm = ({ input }: InputFormProps) => {
           }
 
           updateGlobalValueCache(inputData);
-          await submitRedirect('/inputs');
+          await redirect('/inputs');
         }
       )}
     >
@@ -200,7 +200,7 @@ const InputForm = ({ input }: InputFormProps) => {
       )}
       <Button
         className="mt-12 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

@@ -4,11 +4,12 @@ import Button from '(components)/button';
 import Input from '(components)/input';
 import Label from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
-import sleep from '(utilities)/sleep';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 const ChangePasswordForm = () => {
+  const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm({ defaultValues: { password: '' } });
 
@@ -20,8 +21,7 @@ const ChangePasswordForm = () => {
         if (error) {
           alert(error.message);
         } else {
-          await router.push('/subjects');
-          await sleep();
+          startTransition(() => router.push('/subjects'));
         }
       })}
     >
@@ -31,7 +31,7 @@ const ChangePasswordForm = () => {
       </Label>
       <Button
         className="mt-12 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Changing password…"
         type="submit"
       >

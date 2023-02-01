@@ -37,7 +37,7 @@ const MissionForm = ({
   mission,
   subjectId,
 }: MissionFormProps) => {
-  const submitRedirect = useSubmitRedirect();
+  const [redirect, isRedirecting] = useSubmitRedirect();
 
   const defaultValues = useDefaultValues({
     cacheKey: 'mission_form_values',
@@ -228,7 +228,7 @@ const MissionForm = ({
           }
         }
 
-        await submitRedirect(`/subjects/${subjectId}`);
+        await redirect(`/subjects/${subjectId}`);
       })}
     >
       <Label>
@@ -269,7 +269,7 @@ const MissionForm = ({
       </Button>
       <Button
         className="mt-6 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

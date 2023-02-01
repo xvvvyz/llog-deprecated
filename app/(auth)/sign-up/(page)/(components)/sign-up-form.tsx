@@ -4,11 +4,12 @@ import Button from '(components)/button';
 import Input from '(components)/input';
 import Label from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
-import sleep from '(utilities)/sleep';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 const SignUpForm = () => {
+  const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
 
   const form = useForm({
@@ -28,8 +29,7 @@ const SignUpForm = () => {
           if (error) {
             alert(error.message);
           } else {
-            await router.push('/subjects');
-            await sleep();
+            startTransition(() => router.push('/subjects'));
           }
         }
       )}
@@ -54,7 +54,7 @@ const SignUpForm = () => {
       </Label>
       <Button
         className="mt-12 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Creating account…"
         type="submit"
       >

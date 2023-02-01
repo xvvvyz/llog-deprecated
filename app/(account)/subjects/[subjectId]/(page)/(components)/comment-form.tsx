@@ -6,6 +6,7 @@ import supabase from '(utilities)/browser-supabase-client';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface CommentFormProps {
@@ -13,8 +14,9 @@ interface CommentFormProps {
 }
 
 const CommentForm = ({ eventId }: CommentFormProps) => {
-  const router = useRouter();
+  const [isTransitioning, startTransition] = useTransition();
   const form = useForm({ defaultValues: { content: '' } });
+  const router = useRouter();
 
   const onSubmit = form.handleSubmit(async ({ content }) => {
     const { error: commentError } = await supabase
@@ -27,7 +29,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
     }
 
     form.setValue('content', '');
-    await router.refresh();
+    startTransition(() => router.refresh());
   });
 
   return (
@@ -49,7 +51,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
         <IconButton
           icon={<PaperAirplaneIcon className="w-5" />}
           label="Add comment"
-          loading={form.formState.isSubmitting}
+          loading={form.formState.isSubmitting || isTransitioning}
           loadingText="Adding comment…"
         />
       </div>

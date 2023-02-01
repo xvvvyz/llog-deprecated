@@ -5,13 +5,14 @@ import Input from '(components)/input';
 import Label from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
-import sleep from '(utilities)/sleep';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 const SignInForm = () => {
-  const searchParams = useSearchParams();
+  const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm({
     defaultValues: globalValueCache.get('sign_in_form_values') ?? {
@@ -32,8 +33,7 @@ const SignInForm = () => {
           alert(error.message);
         } else {
           const redirect = searchParams.get('redirect') ?? '/subjects';
-          await router.push(decodeURIComponent(redirect));
-          await sleep();
+          startTransition(() => router.push(decodeURIComponent(redirect)));
         }
       })}
     >
@@ -59,7 +59,7 @@ const SignInForm = () => {
       </Label>
       <Button
         className="mt-12 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Signing in…"
         type="submit"
       >

@@ -1,19 +1,22 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import sleep from './sleep';
+import { useTransition } from 'react';
 
 const useSubmitRedirect = () => {
+  const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  return async (
-    path: string,
-    { redirect }: { redirect?: boolean } = { redirect: true }
-  ) => {
-    await router.refresh();
-    if (!redirect) return;
-    await router.push(searchParams.get('back') ?? path);
-    await sleep();
-  };
+  return [
+    async (
+      path: string,
+      { redirect }: { redirect?: boolean } = { redirect: true }
+    ) => {
+      await router.refresh();
+      if (!redirect) return;
+      startTransition(() => router.push(searchParams.get('back') ?? path));
+    },
+    isTransitioning,
+  ] as const;
 };
 
 export default useSubmitRedirect;
