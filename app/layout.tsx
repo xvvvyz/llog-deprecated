@@ -1,7 +1,7 @@
 import { Figtree } from '@next/font/google';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import '../tailwind.css';
+import 'tailwind.css';
 
 const figtree = Figtree({ subsets: ['latin'] });
 

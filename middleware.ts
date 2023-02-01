@@ -1,7 +1,7 @@
+import PRIVATE_ROUTES from '(utilities)/constant-private-routes';
+import PUBLIC_ROUTES from '(utilities)/constant-public-routes';
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
-import PRIVATE_ROUTES from 'utilities/constant-private-routes';
-import PUBLIC_ROUTES from 'utilities/constant-public-routes';
 
 export const config = {
   matcher: ['/((?!api|_next/static|favicon.ico).*)'],
