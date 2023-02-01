@@ -3,7 +3,7 @@
 import Spinner from 'components/spinner';
 import Link, { LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const colorSchemes = {
@@ -43,70 +43,79 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof variants;
 }
 
-const Button = ({
-  activeClassName,
-  children,
-  className,
-  colorScheme = 'accent',
-  disabled = false,
-  href,
-  loading = false,
-  loadingText,
-  size = 'md',
-  variant = 'primary',
-  ...rest
-}: ButtonProps) => {
-  const pathname = usePathname();
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      activeClassName,
+      children,
+      className,
+      colorScheme = 'accent',
+      disabled = false,
+      href,
+      loading = false,
+      loadingText,
+      size = 'md',
+      variant = 'primary',
+      ...rest
+    },
+    ref
+  ) => {
+    const pathname = usePathname();
 
-  const cn = twMerge(
-    'focus:outline-none border border-transparent inline-flex items-center gap-2 rounded transition-colors',
-    variant !== 'link' && sizes[size],
-    variant !== 'link' && colorSchemes[colorScheme],
-    variants[variant],
-    (disabled || loading) && disabledVariants[variant],
-    href && pathname?.startsWith(href) && activeClassName,
-    className
-  );
+    const cn = twMerge(
+      'focus:outline-none border border-transparent inline-flex items-center gap-2 rounded transition-colors',
+      variant !== 'link' && sizes[size],
+      variant !== 'link' && colorSchemes[colorScheme],
+      variants[variant],
+      (disabled || loading) && disabledVariants[variant],
+      href && pathname?.startsWith(href) && activeClassName,
+      className
+    );
 
-  if (href) {
+    if (href) {
+      return (
+        <Link
+          aria-busy={loading}
+          aria-disabled={disabled}
+          className={cn}
+          href={href}
+          ref={ref as ForwardedRef<HTMLAnchorElement>}
+          {...(rest as Omit<LinkProps, 'href'>)}
+        >
+          {children}
+        </Link>
+      );
+    }
+
     return (
-      <Link
-        aria-busy={loading}
-        aria-disabled={disabled}
+      <button
+        aria-disabled={disabled || loading}
         className={cn}
-        href={href}
-        {...(rest as Omit<LinkProps, 'href'>)}
+        disabled={disabled || loading}
+        ref={ref}
+        type="button"
+        {...rest}
       >
-        {children}
-      </Link>
+        {loading ? (
+          <>
+            {variant !== 'link' && (
+              <Spinner
+                className={twMerge(
+                  spinnerColorSchemes[colorScheme],
+                  'border-l-transparent'
+                )}
+              />
+            )}
+            {loadingText}
+          </>
+        ) : (
+          children
+        )}
+      </button>
     );
   }
+);
 
-  return (
-    <button
-      aria-disabled={disabled || loading}
-      className={cn}
-      disabled={disabled || loading}
-      {...rest}
-    >
-      {loading ? (
-        <>
-          {variant !== 'link' && (
-            <Spinner
-              className={twMerge(
-                spinnerColorSchemes[colorScheme],
-                'border-l-transparent'
-              )}
-            />
-          )}
-          {loadingText}
-        </>
-      ) : (
-        children
-      )}
-    </button>
-  );
-};
-
+Button.displayName = 'Button';
 export type { ButtonProps };
 export default Button;

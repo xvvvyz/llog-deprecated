@@ -6,6 +6,7 @@ const listInputs = async () =>
     .from('inputs')
     .select('id, label, type')
     .eq('team_id', await getCurrentTeamId())
+    .eq('deleted', false)
     .order('updated_at', { ascending: false });
 
 export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];

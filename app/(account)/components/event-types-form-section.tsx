@@ -1,15 +1,8 @@
+import { TrashIcon } from '@heroicons/react/24/outline';
 import Input from 'components/input';
+import Menu from 'components/menu';
 import RichTextarea from 'components/rich-textarea';
 import Select from 'components/select';
-
-import {
-  ArrayPath,
-  Controller,
-  FieldValues,
-  useFieldArray,
-  UseFormReturn,
-} from 'react-hook-form';
-
 import { useRouter } from 'next/navigation';
 import { Database } from 'types/database';
 import { EventTemplate } from 'types/event-template';
@@ -19,6 +12,14 @@ import globalValueCache, { GlobalCacheKey } from 'utilities/global-value-cache';
 import { ListInputsData } from 'utilities/list-inputs';
 import { ListTemplatesData } from 'utilities/list-templates';
 import useBackLink from 'utilities/use-back-link';
+
+import {
+  ArrayPath,
+  Controller,
+  FieldValues,
+  useFieldArray,
+  UseFormReturn,
+} from 'react-hook-form';
 
 interface EventTypesFormSectionProps<T extends FieldValues> {
   cacheKey: GlobalCacheKey;
@@ -51,74 +52,90 @@ const EventTypesFormSection = <T extends FieldValues>({
     <fieldset>
       <legend className="mb-2 text-fg-2">{label}</legend>
       <ul>
-        {eventTypesArray.fields.map((eventType, index) => (
-          <li className="mb-3" key={eventType.id}>
-            {!isMission && (
+        {eventTypesArray.fields.map((eventType, index) => {
+          const menu = (
+            <Menu
+              items={[
+                {
+                  icon: <TrashIcon className="w-5" />,
+                  onClick: () => eventTypesArray.remove(index),
+                  text: `Delete ${type}`,
+                },
+              ]}
+            />
+          );
+
+          return (
+            <li className="mb-3" key={eventType.id}>
+              {!isMission && (
+                <Controller
+                  control={form.control}
+                  name={
+                    `${name}.${index}.name` as T[typeof name][number]['name']
+                  }
+                  render={({ field }) => (
+                    <Input
+                      className="rounded-b-none"
+                      placeholder="Name"
+                      right={menu}
+                      {...field}
+                    />
+                  )}
+                />
+              )}
               <Controller
                 control={form.control}
-                name={`${name}.${index}.name` as T[typeof name][number]['name']}
+                name={
+                  `${name}.${index}.content` as T[typeof name][number]['content']
+                }
                 render={({ field }) => (
-                  <Input
-                    className="rounded-b-none"
-                    placeholder="Name"
+                  <RichTextarea
+                    className={
+                      isMission ? 'rounded-b-none' : 'rounded-none border-t-0'
+                    }
+                    placeholder="Description"
+                    right={isMission && menu}
                     {...field}
                   />
                 )}
               />
-            )}
-            <Controller
-              control={form.control}
-              name={
-                `${name}.${index}.content` as T[typeof name][number]['content']
-              }
-              render={({ field }) => (
-                <RichTextarea
-                  autoFocus={
-                    (eventType as unknown as { autoFocus: boolean }).autoFocus
-                  }
-                  className={
-                    isMission ? 'rounded-b-none' : 'rounded-none border-t-0'
-                  }
-                  name={field.name}
-                  onChange={field.onChange}
-                  placeholder="Description"
-                  value={field.value}
-                />
-              )}
-            />
-            <Controller
-              control={form.control}
-              name={
-                `${name}.${index}.inputs` as T[typeof name][number]['inputs']
-              }
-              render={({ field }) => (
-                <Select
-                  className="rounded-t-none border-t-0"
-                  creatable
-                  isMulti
-                  noOptionsMessage={() => `Type to create new input`}
-                  onCreateOption={async (value: unknown) => {
-                    globalValueCache.set('input_form_values', { label: value });
-                    globalValueCache.set(cacheKey, form.getValues());
+              <Controller
+                control={form.control}
+                name={
+                  `${name}.${index}.inputs` as T[typeof name][number]['inputs']
+                }
+                render={({ field }) => (
+                  <Select
+                    className="rounded-t-none border-t-0"
+                    creatable
+                    isMulti
+                    noOptionsMessage={() => `Type to create new input`}
+                    onCreateOption={async (value: unknown) => {
+                      globalValueCache.set('input_form_values', {
+                        label: value,
+                      });
 
-                    await router.push(
-                      formatCacheLink({
-                        backLink,
-                        path: '/inputs/add',
-                        updateCacheKey: cacheKey,
-                        updateCachePath: `${name}.${index}.inputs`,
-                        useCache: true,
-                      })
-                    );
-                  }}
-                  options={forceArray(inputOptions)}
-                  placeholder="Inputs"
-                  {...field}
-                />
-              )}
-            />
-          </li>
-        ))}
+                      globalValueCache.set(cacheKey, form.getValues());
+
+                      await router.push(
+                        formatCacheLink({
+                          backLink,
+                          path: '/inputs/add',
+                          updateCacheKey: cacheKey,
+                          updateCachePath: `${name}.${index}.inputs`,
+                          useCache: true,
+                        })
+                      );
+                    }}
+                    options={forceArray(inputOptions)}
+                    placeholder="Inputs"
+                    {...field}
+                  />
+                )}
+              />
+            </li>
+          );
+        })}
       </ul>
       <Select
         creatable
@@ -136,7 +153,6 @@ const EventTypesFormSection = <T extends FieldValues>({
             name: template?.name || (isMission ? null : ''),
             order: eventTypesArray.fields.length,
             subject_id: values.id ?? '',
-            template_id: template?.id ?? null,
             type,
           } as T[typeof name][number]);
         }}
@@ -144,13 +160,11 @@ const EventTypesFormSection = <T extends FieldValues>({
           const values = form.getValues();
 
           eventTypesArray.append({
-            autoFocus: true,
             content: isMission ? value : null,
             inputs: [],
             name: isMission ? null : value,
             order: eventTypesArray.fields.length,
             subject_id: values.id ?? '',
-            template_id: null,
             type,
           } as T[typeof name][number]);
         }}

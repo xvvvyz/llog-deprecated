@@ -1,6 +1,10 @@
 'use client';
 
+import { PlusIcon } from '@heroicons/react/20/solid';
 import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import Creatable, { CreatableProps } from 'react-select/creatable';
+import { twMerge } from 'tailwind-merge';
 
 import ReactSelect, {
   ClearIndicatorProps,
@@ -14,14 +18,9 @@ import ReactSelect, {
   OptionProps,
   PlaceholderProps,
   Props as ReactSelectProps,
+  SelectInstance,
   SingleValueProps,
 } from 'react-select';
-
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { forwardRef, ReactNode, Ref } from 'react';
-import Creatable, { CreatableProps } from 'react-select/creatable';
-import ReactSelectDeclaration from 'react-select/dist/declarations/src/Select';
-import { twMerge } from 'tailwind-merge';
 
 type IOption = {
   id: string;
@@ -158,7 +157,7 @@ const Select = forwardRef(
       CreatableProps<IOption, boolean, GroupBase<IOption>> & {
         creatable?: boolean;
       },
-    ref: Ref<ReactSelectDeclaration<TOption>>
+    ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
   ) => {
     const commonProps = {
       closeMenuOnSelect: !props.isMulti,
@@ -180,15 +179,14 @@ const Select = forwardRef(
       instanceId: props.name,
       isClearable: true,
       placeholder: placeholder ?? <>&nbsp;</>,
-      ref: () => ref,
       unstyled: true,
       ...props,
     };
 
     return creatable ? (
-      <Creatable {...commonProps} />
+      <Creatable ref={ref} {...commonProps} />
     ) : (
-      <ReactSelect {...commonProps} />
+      <ReactSelect ref={ref} {...commonProps} />
     );
   }
 );

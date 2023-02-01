@@ -18,7 +18,9 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
       name`
     )
     .eq('id', subjectId)
+    .eq('missions.deleted', false)
     .is('event_types.mission_id', null)
+    .eq('event_types.deleted', false)
     .order('type', { foreignTable: 'event_types' })
     .order('order', { foreignTable: 'event_types' })
     .single();

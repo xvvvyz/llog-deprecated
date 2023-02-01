@@ -9,11 +9,10 @@ const uploadSubjectAvatar = async ({
   subjectId: string;
 }) => {
   if (!dropzone.acceptedFiles.length) return;
-  const ext = dropzone.acceptedFiles[0].name.split('.').pop();
 
   await supabase.storage
     .from('subjects')
-    .upload(`${subjectId}/image.${ext}`, dropzone.acceptedFiles[0], {
+    .upload(`${subjectId}/avatar`, dropzone.acceptedFiles[0], {
       upsert: true,
     });
 };

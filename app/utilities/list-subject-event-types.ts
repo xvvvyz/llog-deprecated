@@ -6,6 +6,7 @@ const listSubjectEventTypes = (subjectId: string) =>
     .select('id, name, type')
     .eq('subject_id', subjectId)
     .is('mission_id', null)
+    .eq('deleted', false)
     .order('type')
     .order('order');
 

@@ -1,9 +1,9 @@
 import { BoxProps } from 'components/box';
 import Card from 'components/card';
+import DirtyHtml from 'components/dirty-html';
 import { GetEventData } from 'utilities/get-event';
 import { GetEventTypeData } from 'utilities/get-event-type';
 import { ListSessionRoutinesData } from 'utilities/list-session-routines';
-import sanitizeHtml from 'utilities/sanitize-html';
 import EventForm from './event-form';
 
 interface EventCardProps extends BoxProps {
@@ -30,12 +30,7 @@ const EventCard = ({
         <div className="space-y-3">
           {!isMission && <h2 className="text-2xl">{eventType.name}</h2>}
           {eventType.content && (
-            <article
-              className="prose"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(eventType.content) ?? '',
-              }}
-            />
+            <DirtyHtml as="article">{eventType.content}</DirtyHtml>
           )}
         </div>
       )}

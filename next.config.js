@@ -8,7 +8,7 @@ const nextConfig = {
         hostname: 'localhost',
       },
       {
-        hostname: 'owestxwaqsmqfjobeuqe.supabase.co',
+        hostname: 'wclvpnzwnnxesdichytr.supabase.co',
         pathname: '/storage/v1/object/public/**',
         protocol: 'https',
       },

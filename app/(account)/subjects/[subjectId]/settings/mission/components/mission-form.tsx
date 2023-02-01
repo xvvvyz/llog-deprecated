@@ -85,32 +85,56 @@ const MissionForm = ({
 
         form.setValue('id', missionData.id);
 
-        const { insertedEventTypes, updatedEventTypes } = routines.reduce(
-          (acc, sessionRoutines, session) => {
-            sessionRoutines.forEach((routine, i) => {
-              const payload = {
-                content: sanitizeHtml(routine.content),
-                id: routine.id,
-                mission_id: missionData.id,
-                order: Number(`${session}.${i}`),
-                subject_id: subjectId,
-                template_id: routine.template_id,
-                type: routine.type,
-              };
+        const { insertedEventTypes, updatedEventTypes } = routines
+          .filter((session) => session.length)
+          .reduce(
+            (acc, sessionRoutines, session) => {
+              sessionRoutines.forEach((routine, i) => {
+                const payload = {
+                  content: sanitizeHtml(routine.content),
+                  id: routine.id,
+                  mission_id: missionData.id,
+                  order: Number(`${session}.${i}`),
+                  subject_id: subjectId,
+                  type: routine.type,
+                };
 
-              if (routine.id) acc.updatedEventTypes.push(payload);
-              else acc.insertedEventTypes.push(payload);
-            });
+                if (routine.id) acc.updatedEventTypes.push(payload);
+                else acc.insertedEventTypes.push(payload);
+              });
+
+              return acc;
+            },
+            {
+              insertedEventTypes:
+                [] as Database['public']['Tables']['event_types']['Insert'][],
+              updatedEventTypes:
+                [] as Database['public']['Tables']['event_types']['Insert'][],
+            }
+          );
+
+        const deletedEventTypeIds = forceArray(mission?.routines).reduce(
+          (acc, eventType) => {
+            if (!updatedEventTypes.some(({ id }) => id === eventType.id)) {
+              acc.push(eventType.id);
+            }
 
             return acc;
           },
-          {
-            insertedEventTypes:
-              [] as Database['public']['Tables']['event_types']['Insert'][],
-            updatedEventTypes:
-              [] as Database['public']['Tables']['event_types']['Insert'][],
-          }
+          [] as string[]
         );
+
+        if (deletedEventTypeIds.length) {
+          const { error: deletedEventTypesError } = await supabase
+            .from('event_types')
+            .update({ deleted: true })
+            .in('id', deletedEventTypeIds);
+
+          if (deletedEventTypesError) {
+            alert(deletedEventTypesError.message);
+            return;
+          }
+        }
 
         if (updatedEventTypes.length) {
           const { error: updateEventTypesError } = await supabase

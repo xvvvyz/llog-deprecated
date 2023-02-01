@@ -16,12 +16,12 @@ const getMissionWithRoutines = (missionId: string) =>
           name,
           order,
           session,
-          template_id,
           type
         )`
     )
     .eq('id', missionId)
     .not('routines.session', 'is', null)
+    .eq('routines.deleted', false)
     .order('order', { foreignTable: 'event_types' })
     .order('order', { foreignTable: 'event_types.event_type_inputs' })
     .single();

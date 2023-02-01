@@ -3,6 +3,7 @@
 import Avatar from 'components/avatar';
 import Card from 'components/card';
 import DateTime from 'components/date-time';
+import DirtyHtml from 'components/dirty-html';
 import { twMerge } from 'tailwind-merge';
 import firstIfArray from 'utilities/first-if-array';
 import forceArray from 'utilities/force-array';
@@ -10,7 +11,6 @@ import formatDate from 'utilities/format-date';
 import formatInputValue from 'utilities/format-input-value';
 import formatMinFractionDigits from 'utilities/format-min-fraction-digits';
 import { ListEventsData } from 'utilities/list-events';
-import sanitizeHtml from 'utilities/sanitize-html';
 import CommentForm from './comment-form';
 
 interface TimelineEventsProps {
@@ -114,12 +114,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                           {profile.first_name} {profile.last_name}
                           <span className="sr-only">&nbsp;said</span>
                         </h1>
-                        <div
-                          className="prose text-fg-1"
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeHtml(content) ?? '',
-                          }}
-                        />
+                        <DirtyHtml className="text-fg-1">{content}</DirtyHtml>
                       </div>
                     </article>
                   ))}

@@ -32,6 +32,7 @@ const listSessionRoutines = (
     )
     .eq('mission_id', missionId)
     .eq('session', Number(sessionNumber) - 1)
+    .eq('deleted', false)
     .order('order')
     .order('order', { foreignTable: 'event_type_inputs' });
 

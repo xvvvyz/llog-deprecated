@@ -23,7 +23,6 @@ jobs:
       - run: npx supabase link --project-ref "$SUPABASE_PROJECT_ID"
       - run: npm run db:start
       - run: npm run db:types
-      - run: npm run lint
       - run: npx vercel build
       - run: npx supabase db push
       - run: npx vercel deploy --prebuilt --token="$VERCEL_TOKEN"

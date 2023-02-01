@@ -5,6 +5,8 @@ const listMissionsWithRoutines = (subjectId: string) =>
     .from('missions')
     .select('id, name, routines:event_types(session, events(id))')
     .eq('subject_id', subjectId)
+    .eq('deleted', false)
+    .eq('routines.deleted', false)
     .not('routines.session', 'is', null)
     .order('updated_at', { ascending: false })
     .order('order', { foreignTable: 'event_types' });

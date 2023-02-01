@@ -95,7 +95,6 @@ const SubjectSettingsForm = ({
                 name: (eventType.name ?? '').trim(),
                 order,
                 subject_id: subjectData.id,
-                template_id: eventType.template_id,
                 type: eventType.type,
               };
 
@@ -118,6 +117,26 @@ const SubjectSettingsForm = ({
                 [] as Database['public']['Tables']['event_types']['Insert'][],
             })
           );
+
+          const deletedEventTypeIds = eventTypes.reduce((acc, eventType) => {
+            if (!updatedEventTypes.some(({ id }) => id === eventType.id)) {
+              acc.push(eventType.id);
+            }
+
+            return acc;
+          }, [] as string[]);
+
+          if (deletedEventTypeIds.length) {
+            const { error: deletedEventTypesError } = await supabase
+              .from('event_types')
+              .update({ deleted: true })
+              .in('id', deletedEventTypeIds);
+
+            if (deletedEventTypesError) {
+              alert(deletedEventTypesError.message);
+              return;
+            }
+          }
 
           if (updatedEventTypes.length) {
             const { error: updateEventTypesError } = await supabase
@@ -235,7 +254,7 @@ const SubjectSettingsForm = ({
                     )
                   }
                 >
-                  <span className="text-fg-1">{mission.name}</span>
+                  {mission.name}
                   <PencilIcon className="w-5" />
                 </Button>
               </li>
