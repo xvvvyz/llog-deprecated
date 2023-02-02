@@ -9,7 +9,7 @@ const LinkList = ({ className, ...rest }: BoxProps) => (
   <Box
     as="ul"
     className={twMerge(
-      'divide-y divide-alpha-1 rounded border border-alpha-1 empty:border-none',
+      'divide-y divide-alpha-1 rounded border border-alpha-1 empty:border-0',
       className
     )}
     {...rest}

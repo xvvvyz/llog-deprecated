@@ -11,7 +11,7 @@ const Empty = ({ children, className }: EmptyProps) => (
   <Box
     as="p"
     className={twMerge(
-      'mt-12 flex flex-wrap items-center justify-center gap-4 text-fg-2',
+      'mt-16 flex flex-wrap items-center justify-center gap-4 text-fg-2',
       className
     )}
   >

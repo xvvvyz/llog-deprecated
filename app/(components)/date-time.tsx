@@ -1,8 +1,8 @@
 'use client';
 
 import formatDate from '(utilities)/format-date';
-import formatDateTime from '../(utilities)/format-date-time';
-import formatTime from '../(utilities)/format-time';
+import formatDateTime from '(utilities)/format-date-time';
+import formatTime from '(utilities)/format-time';
 import { BoxProps } from './box';
 
 const formatters = {

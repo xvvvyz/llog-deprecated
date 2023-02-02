@@ -137,7 +137,7 @@ const RichTextarea = forwardRef(
         <DirtyHtml
           className={twMerge('input', !value && 'text-fg-3', className)}
         >
-          {value || `<p>${placeholder}</p>`}
+          {value || `<p>${placeholder ?? ''}</p>`}
         </DirtyHtml>
       );
     }

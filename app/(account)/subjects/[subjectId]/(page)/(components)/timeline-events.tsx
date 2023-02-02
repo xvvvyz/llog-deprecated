@@ -19,7 +19,7 @@ interface TimelineEventsProps {
 }
 
 const TimelineEvents = ({ events }: TimelineEventsProps) => (
-  <div className="mt-4 space-y-4 text-fg-2">
+  <div className="mt-4 space-y-4 text-fg-2" suppressHydrationWarning>
     {Object.values(
       events.reduce((acc, event) => {
         const date = formatDate(event.created_at);
