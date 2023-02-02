@@ -3,11 +3,9 @@ import { twMerge } from 'tailwind-merge';
 
 const sizes = {
   'base:0': 'p-0',
-  'base:md': 'p-9',
-  'base:sm': 'p-6',
+  'base:md': 'p-8',
   'sm:0': 'p-0',
-  'sm:md': 'sm:p-9',
-  'sm:sm': 'sm:p-6',
+  'sm:md': 'sm:p-8',
 };
 
 const variants = {
@@ -17,7 +15,7 @@ const variants = {
 
 interface CardProps extends BoxProps {
   breakpoint?: 'base' | 'sm';
-  size?: 'md' | 'sm' | '0';
+  size?: 'md' | '0';
   variant?: 'default';
 }
 

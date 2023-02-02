@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import RadioGroup from '(components)/radio-group';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
@@ -83,7 +83,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       )}
     >
       <Label>
-        Type
+        <LabelSpan>Type</LabelSpan>
         <Controller
           control={form.control}
           name="type"
@@ -99,7 +99,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         />
       </Label>
       <Label>
-        Name
+        <LabelSpan>Name</LabelSpan>
         <Controller
           control={form.control}
           name="name"
@@ -107,7 +107,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         />
       </Label>
       <Label>
-        Description
+        <LabelSpan>Description</LabelSpan>
         <Controller
           control={form.control}
           name="content"
@@ -115,7 +115,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         />
       </Label>
       <Label>
-        Inputs
+        <LabelSpan>Inputs</LabelSpan>
         <Controller
           control={form.control}
           name="inputs"

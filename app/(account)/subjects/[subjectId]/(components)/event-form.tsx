@@ -3,7 +3,7 @@
 import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
@@ -197,7 +197,7 @@ const EventForm = ({
           )}
           key={input.id}
         >
-          {input.label}
+          <LabelSpan>{input.label}</LabelSpan>
           <Controller
             control={form.control}
             name={`inputs.${i}`}

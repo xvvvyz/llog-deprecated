@@ -1,28 +1,23 @@
-import Button from '(components)/button';
 import Empty from '(components)/empty';
-import { List, ListItem } from '(components)/list';
+import { LinkList, ListItem } from '(components)/link-list';
+import INPUT_LABELS from '(utilities)/constant-input-labels';
 import listInputs from '(utilities)/list-inputs';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Page = async () => {
   const { data: inputs } = await listInputs();
   if (!inputs?.length) return <Empty>No inputs</Empty>;
 
   return (
-    <List>
+    <LinkList>
       {inputs.map((input) => (
-        <ListItem key={input.id}>
-          <Button
-            className="m-0 h-full w-full p-0"
-            href={`/inputs/${input.id}`}
-            variant="link"
-          >
-            <span className="w-3/4 truncate">{input.label}</span>
-            <ArrowRightIcon className="relative -right-[0.1em] ml-auto w-6 shrink-0" />
-          </Button>
-        </ListItem>
+        <ListItem
+          href={`/inputs/${input.id}`}
+          key={input.id}
+          pill={INPUT_LABELS[input.type]}
+          text={input.label}
+        />
       ))}
-    </List>
+    </LinkList>
   );
 };
 

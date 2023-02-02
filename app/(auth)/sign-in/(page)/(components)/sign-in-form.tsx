@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -38,12 +38,12 @@ const SignInForm = () => {
       })}
     >
       <Label className="mt-9">
-        Email address
+        <LabelSpan>Email address</LabelSpan>
         <Input type="email" {...form.register('email')} />
       </Label>
       <Label className="mt-6">
         <div className="flex justify-between">
-          Password
+          <LabelSpan>Password</LabelSpan>
           <Button
             className="underline"
             href="/forgot-password"

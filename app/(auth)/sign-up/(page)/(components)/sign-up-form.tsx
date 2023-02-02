@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -36,20 +36,20 @@ const SignUpForm = () => {
     >
       <div className="mt-9 flex gap-6">
         <Label>
-          First name
+          <LabelSpan>First name</LabelSpan>
           <Input {...form.register('firstName')} />
         </Label>
         <Label>
-          Last name
+          <LabelSpan>Last name</LabelSpan>
           <Input {...form.register('lastName')} />
         </Label>
       </div>
       <Label className="mt-6">
-        Email address
+        <LabelSpan>Email address</LabelSpan>
         <Input type="email" {...form.register('email')} />
       </Label>
       <Label className="mt-6">
-        Password
+        <LabelSpan>Password</LabelSpan>
         <Input type="password" {...form.register('password')} />
       </Label>
       <Button

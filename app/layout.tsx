@@ -11,10 +11,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => (
   <html
-    className={twMerge(
-      'h-full text-[4.29vw] xs:text-[16px]',
-      figtree.className
-    )}
+    className={twMerge('h-full text-[4vw] xs:text-[16px]', figtree.className)}
     lang="en"
   >
     <body className="h-full bg-bg-1 text-fg-1">{children}</body>

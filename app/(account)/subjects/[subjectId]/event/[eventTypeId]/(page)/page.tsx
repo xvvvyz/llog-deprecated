@@ -25,13 +25,9 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   return (
     <>
       <Header>
-        <BackButton href={`${subjectHref}/event`} />
+        <BackButton href={subjectHref} />
         <Breadcrumbs
-          items={[
-            [subject.name, subjectHref],
-            ['Event', `${subjectHref}/event`],
-            [eventType.name ?? ''],
-          ]}
+          items={[[subject.name, subjectHref], [eventType.name ?? '']]}
         />
       </Header>
       <main>

@@ -1,6 +1,6 @@
 import AvatarDropzone from '(components)/avatar-dropzone';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import { DropzoneState } from 'react-dropzone';
 import { Controller, FieldValues, UseFormReturn } from 'react-hook-form';
 
@@ -17,7 +17,7 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
 }: SubjectDetailsFormSectionProps<T>) => (
   <>
     <Label>
-      Name
+      <LabelSpan>Name</LabelSpan>
       <Controller
         control={form.control}
         name={'name' as T['name']}
@@ -25,7 +25,7 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
       />
     </Label>
     <Label>
-      Profile image
+      <LabelSpan>Profile image</LabelSpan>
       <AvatarDropzone
         dropzone={dropzone}
         file={file}

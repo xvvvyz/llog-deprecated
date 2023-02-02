@@ -7,8 +7,8 @@ import { twMerge } from 'tailwind-merge';
 import { BoxProps } from './box';
 
 const sizes = {
-  md: { className: 'h-9 w-9', imgSizes: '36px' },
-  sm: { className: 'h-7 w-7 text-sm', imgSizes: '28px' },
+  md: { className: 'h-8 w-8', imgSizes: '32px' },
+  sm: { className: 'h-6 w-6 text-sm', imgSizes: '24px' },
 };
 
 interface AvatarProps extends BoxProps {

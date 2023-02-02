@@ -2,10 +2,11 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
+import INPUT_LABELS from '(utilities)/constant-input-labels';
 import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
@@ -17,12 +18,12 @@ import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
 const INPUT_TYPE_OPTIONS = [
-  // { id: InputTypes.Duration, label: 'Duration' },
-  { id: InputTypes.Select, label: 'Select' },
-  { id: InputTypes.MultiSelect, label: 'Multi-select' },
-  { id: InputTypes.Number, label: 'Number' },
-  { id: InputTypes.Checkbox, label: 'Checkbox' },
-  // { id: InputTypes.Time, label: 'Time' },
+  // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
+  { id: InputTypes.Select, label: INPUT_LABELS[InputTypes.Select] },
+  { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
+  { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
+  { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
+  // { id: InputTypes.Time, label: INPUT_LABELS[InputTypes.Time] },
 ];
 
 interface InputFormProps {
@@ -144,7 +145,7 @@ const InputForm = ({ input }: InputFormProps) => {
       )}
     >
       <Label>
-        Label
+        <LabelSpan>Label</LabelSpan>
         <Controller
           control={form.control}
           name="label"
@@ -152,13 +153,14 @@ const InputForm = ({ input }: InputFormProps) => {
         />
       </Label>
       <Label className="mt-6">
-        Type
+        <LabelSpan>Type</LabelSpan>
         <Controller
           control={form.control}
           name="type"
           render={({ field }) => (
             <Select
               isClearable={false}
+              isSearchable={false}
               options={INPUT_TYPE_OPTIONS}
               {...field}
             />
@@ -167,7 +169,7 @@ const InputForm = ({ input }: InputFormProps) => {
       </Label>
       {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
         <fieldset className="mt-6">
-          <legend className="text-fg-2">Options</legend>
+          <LabelSpan as="legend">Options</LabelSpan>
           <ul className="flex flex-col gap-3 pt-2">
             {optionsArray.fields.map((option, optionIndex) => (
               <li key={option.id}>

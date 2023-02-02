@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -26,7 +26,7 @@ const ChangePasswordForm = () => {
       })}
     >
       <Label className="mt-9">
-        New password
+        <LabelSpan>New password</LabelSpan>
         <Input type="password" {...form.register('password')} />
       </Label>
       <Button

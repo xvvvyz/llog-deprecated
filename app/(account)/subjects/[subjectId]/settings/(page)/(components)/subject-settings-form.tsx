@@ -21,6 +21,7 @@ import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import SubjectDetailsFormSection from '../../../../(components)/subject-details-form-section';
 import EventTypesFormSection from '../../../../../(components)/event-types-form-section';
+import { LabelSpan } from '../../../../../../(components)/label';
 
 interface SubjectSettingsFormProps {
   availableInputs: ListInputsData;
@@ -238,7 +239,7 @@ const SubjectSettingsForm = ({
         form={form}
       />
       <section>
-        <h1 className="mb-2 text-fg-2">Missions</h1>
+        <LabelSpan className="pb-2">Missions</LabelSpan>
         {!!missions.length && (
           <ul className="mb-3 space-y-3">
             {missions.map((mission) => (

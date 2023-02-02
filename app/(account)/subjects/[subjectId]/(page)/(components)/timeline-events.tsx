@@ -11,6 +11,7 @@ import formatInputValue from '(utilities)/format-input-value';
 import formatMinFractionDigits from '(utilities)/format-min-fraction-digits';
 import { ListEventsData } from '(utilities)/list-events';
 import { twMerge } from 'tailwind-merge';
+import Pill from '../../../../../(components)/pill';
 import CommentForm from './comment-form';
 
 interface TimelineEventsProps {
@@ -18,7 +19,7 @@ interface TimelineEventsProps {
 }
 
 const TimelineEvents = ({ events }: TimelineEventsProps) => (
-  <>
+  <div className="mt-4 space-y-4 text-fg-2">
     {Object.values(
       events.reduce((acc, event) => {
         const date = formatDate(event.created_at);
@@ -27,9 +28,9 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
         return acc;
       }, {} as Record<string, typeof events>)
     ).map((events) => (
-      <div className="space-y-6" key={events[0].created_at}>
+      <div className="space-y-4" key={events[0].created_at}>
         <DateTime
-          className="ml-4 flex h-10 items-end justify-end border-l-2 border-dashed border-alpha-3 leading-none text-fg-3"
+          className="ml-4 mr-2 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
           date={events[0].created_at}
           formatter="date"
         />
@@ -56,23 +57,19 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
 
           return (
             <Card as="article" key={event.id} size="0">
-              <header className="flex justify-between gap-4 p-4">
-                <h1 className="text-fg-1">
-                  {eventType.mission ? (
-                    <>
-                      <span>{eventType.mission.name}</span>
-                      <span className="ml-4 text-fg-2">
-                        {formatMinFractionDigits({
-                          value: eventType.order + 1,
-                        })}
-                      </span>
-                    </>
-                  ) : (
-                    eventType.name
-                  )}
+              <header className="flex items-baseline gap-4 p-4">
+                <h1 className="truncate text-fg-1">
+                  {eventType.mission ? eventType.mission.name : eventType.name}
                 </h1>
+                {eventType.mission && (
+                  <Pill className="-mb-1">
+                    {formatMinFractionDigits({
+                      value: eventType.order + 1,
+                    })}
+                  </Pill>
+                )}
                 <DateTime
-                  className="shrink-0"
+                  className="ml-auto shrink-0"
                   date={event.created_at}
                   formatter="time"
                 />
@@ -86,7 +83,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                 >
                   {inputs.map(([id, { label, type, values }]) => (
                     <li
-                      className="grid grid-cols-2 py-2 px-4"
+                      className="grid grid-cols-2 px-4 py-2"
                       key={id}
                       role="figure"
                     >
@@ -108,7 +105,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                       key={id}
                       role="comment"
                     >
-                      <Avatar name={profile.first_name} size="sm" />
+                      <Avatar name={profile.first_name} />
                       <div className="-mt-1 w-full">
                         <h1>
                           {profile.first_name} {profile.last_name}
@@ -126,7 +123,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
         })}
       </div>
     ))}
-  </>
+  </div>
 );
 
 export default TimelineEvents;

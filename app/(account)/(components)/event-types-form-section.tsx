@@ -23,6 +23,7 @@ import {
   useFieldArray,
   UseFormReturn,
 } from 'react-hook-form';
+import { LabelSpan } from '../../(components)/label';
 
 interface EventTypesFormSectionProps<T extends FieldValues> {
   cacheKey: GlobalCacheKey;
@@ -53,7 +54,9 @@ const EventTypesFormSection = <T extends FieldValues>({
 
   return (
     <fieldset>
-      <legend className="mb-2 text-fg-2">{label}</legend>
+      <LabelSpan as="legend" className="pb-2">
+        {label}
+      </LabelSpan>
       <ul>
         {eventTypesArray.fields.map((eventType, index) => {
           const menu = (

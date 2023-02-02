@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label from '(components)/label';
+import Label, { LabelSpan } from '(components)/label';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import EventTypes from '(utilities)/enum-event-types';
@@ -232,7 +232,7 @@ const MissionForm = ({
       })}
     >
       <Label>
-        Name
+        <LabelSpan>Name</LabelSpan>
         <Controller
           control={form.control}
           name="name"

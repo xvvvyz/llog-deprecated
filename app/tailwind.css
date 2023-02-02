@@ -6,20 +6,17 @@
   :root {
     --color-accent-1: hsl(45, 96%, 60%);
     --color-accent-2: hsl(45, 96%, 70%);
-    --color-alpha-1: hsla(0, 0%, 100%, 6%);
-    --color-alpha-2: hsla(0, 0%, 100%, 9%);
-    --color-alpha-3: hsla(0, 0%, 100%, 12%);
-    --color-bg-1: hsl(0, 0%, 6%);
-    --color-bg-2: hsl(0, 0%, 9%);
-    --color-fg-1: hsl(0, 0%, 100%, 85%);
-    --color-fg-2: hsl(0, 0%, 100%, 65%);
-    --color-fg-3: hsla(0, 0%, 100%, 45%);
-    --color-red-1: hsl(0, 80%, 65%);
-    --color-red-2: hsl(0, 75%, 60%);
+    --color-alpha-1: hsla(45, 6%, 100%, 5%);
+    --color-alpha-2: hsla(45, 6%, 100%, 8%);
+    --color-alpha-3: hsla(45, 6%, 100%, 14%);
+    --color-bg-1: hsl(45, 6%, 8%);
+    --color-bg-2: hsl(45, 6%, 12%);
+    --color-fg-1: hsl(45, 6%, 95%, 95%);
+    --color-fg-2: hsl(45, 6%, 95%, 75%);
+    --color-fg-3: hsla(45, 6%, 95%, 55%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
-    --radius-default: 0.4rem;
-    --radius-sm: 0.15rem;
+    --radius-default: 0.75rem;
   }
 
   /* hack because list-inside with nest p tag forces marker to have its own line */

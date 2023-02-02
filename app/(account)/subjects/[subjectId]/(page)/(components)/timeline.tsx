@@ -9,12 +9,7 @@ interface TimelineProps {
 const Timeline = async ({ subjectId }: TimelineProps) => {
   const { data: events } = await listEvents(subjectId);
   if (!events?.length) return <Empty>No events</Empty>;
-
-  return (
-    <section aria-label="Timeline" className="mt-6 space-y-6 text-fg-2">
-      <TimelineEvents events={events} />
-    </section>
-  );
+  return <TimelineEvents events={events} />;
 };
 
 export default Timeline;

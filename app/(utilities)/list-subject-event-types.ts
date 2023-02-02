@@ -1,16 +1,23 @@
 import createServerSupabaseClient from './create-server-supabase-client';
+import EventTypes from './enum-event-types';
 
-const listSubjectEventTypes = (subjectId: string) =>
+const listSubjectEventTypes = ({
+  subjectId,
+  type,
+}: {
+  subjectId: string;
+  type: EventTypes;
+}) =>
   createServerSupabaseClient()
     .from('event_types')
     .select('id, name, type')
     .eq('subject_id', subjectId)
     .is('mission_id', null)
+    .eq('type', type)
     .eq('deleted', false)
-    .order('type')
     .order('order');
 
-export type GetSubjectEventTypesData = Awaited<
+export type ListSubjectEventTypesData = Awaited<
   ReturnType<typeof listSubjectEventTypes>
 >['data'];
 
