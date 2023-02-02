@@ -23,7 +23,6 @@ const INPUT_TYPE_OPTIONS = [
   { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
   { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
   { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
-  // { id: InputTypes.Time, label: INPUT_LABELS[InputTypes.Time] },
 ];
 
 interface InputFormProps {

@@ -1,5 +1,5 @@
 create type event_type as enum ('observation', 'routine');
-create type input_type as enum ('checkbox', 'duration', 'multi_select', 'number', 'select', 'time');
+create type input_type as enum ('checkbox', 'duration', 'multi_select', 'number', 'select');
 create type template_type as enum ('observation', 'routine');
 
 create table "public"."comments" (

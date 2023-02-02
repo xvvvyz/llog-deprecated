@@ -94,7 +94,7 @@ const MultiValueContainer = ({
   ...props
 }: MultiValueGenericProps) => (
   <components.MultiValueContainer {...props}>
-    <div className="rounded-[0.25rem] m-1 inline-flex max-w-[10rem] items-center gap-2 bg-alpha-2 pl-2 text-sm leading-6">
+    <div className="m-1 inline-flex max-w-[10rem] items-center gap-2 rounded-[0.25rem] bg-alpha-2 pl-2 text-sm leading-6">
       {children}
     </div>
   </components.MultiValueContainer>

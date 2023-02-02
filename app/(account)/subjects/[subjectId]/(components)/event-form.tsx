@@ -8,7 +8,6 @@ import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import forceArray from '(utilities)/force-array';
-import formatTimeForInput from '(utilities)/format-time-for-input';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeData } from '(utilities)/get-event-type';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
@@ -80,10 +79,6 @@ const EventForm = ({
                   id === eventInput?.input_option_id
               ) ?? null
             );
-          }
-
-          case 'time': {
-            return formatTimeForInput(eventInput?.value ?? new Date());
           }
         }
       }),
@@ -159,12 +154,6 @@ const EventForm = ({
                 return acc;
               }
 
-              case 'time': {
-                payload.value = new Date(input).toISOString();
-                acc.insertedEventInputs.push(payload);
-                return acc;
-              }
-
               default: {
                 return acc;
               }
@@ -236,10 +225,6 @@ const EventForm = ({
                       {...field}
                     />
                   );
-                }
-
-                case 'time': {
-                  return <Input type="datetime-local" {...field} />;
                 }
 
                 default: {

@@ -88,11 +88,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
                       role="figure"
                     >
                       <figcaption className="pr-3">{label}</figcaption>
-                      {type === 'time' ? (
-                        <DateTime date={values[0]} formatter="date-time" />
-                      ) : (
-                        <span>{formatInputValue[type](values)}</span>
-                      )}
+                      <span>{formatInputValue[type](values)}</span>
                     </li>
                   ))}
                 </ul>
