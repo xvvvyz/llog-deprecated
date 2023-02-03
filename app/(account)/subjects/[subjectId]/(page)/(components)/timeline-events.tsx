@@ -57,7 +57,7 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
 
           return (
             <Card as="article" key={event.id} size="0">
-              <header className="flex items-baseline gap-4 p-4">
+              <header className="flex items-baseline gap-4 px-4 py-3">
                 <h1 className="truncate text-fg-1">
                   {eventType.mission ? eventType.mission.name : eventType.name}
                 </h1>

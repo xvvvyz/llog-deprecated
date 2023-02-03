@@ -15,6 +15,7 @@ import { ListTemplatesData } from '(utilities)/list-templates';
 import useBackLink from '(utilities)/use-back-link';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 import {
   Controller,
@@ -36,9 +37,10 @@ const RoutinesFormSection = <T extends FieldValues>({
   sessionIndex,
   templateOptions,
 }: RoutinesFormSection<T>) => {
+  const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });
-  const router = useRouter();
   const name = `routines.${sessionIndex}`;
+  const router = useRouter();
 
   const eventTypesArray = useFieldArray({
     control: form.control,
@@ -86,6 +88,7 @@ const RoutinesFormSection = <T extends FieldValues>({
                     <Select
                       className="rounded-t-none border-t-0"
                       creatable
+                      isLoading={isTransitioning}
                       isMulti
                       noOptionsMessage={() => null}
                       onCreateOption={async (value: unknown) => {
@@ -98,14 +101,16 @@ const RoutinesFormSection = <T extends FieldValues>({
                           form.getValues()
                         );
 
-                        await router.push(
-                          formatCacheLink({
-                            backLink,
-                            path: '/inputs/add',
-                            updateCacheKey: CacheKeys.MissionForm,
-                            updateCachePath: `${name}.${routineIndex}.inputs`,
-                            useCache: true,
-                          })
+                        startTransition(() =>
+                          router.push(
+                            formatCacheLink({
+                              backLink,
+                              path: '/inputs/add',
+                              updateCacheKey: CacheKeys.MissionForm,
+                              updateCachePath: `${name}.${routineIndex}.inputs`,
+                              useCache: true,
+                            })
+                          )
                         );
                       }}
                       options={inputOptions}

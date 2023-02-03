@@ -1,4 +1,5 @@
 import { ListItem } from '(components)/link-list';
+import CODES from '(utilities)/constant-codes';
 import forceArray from '(utilities)/force-array';
 import listMissionsWithRoutines from '(utilities)/list-missions-with-routines';
 
@@ -25,7 +26,7 @@ const Missions = async ({ subjectId }: MissionProps) => {
       <ListItem
         href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
         key={mission.id}
-        pill="mission"
+        pill={CODES.mission}
         text={mission.name}
       />
     );

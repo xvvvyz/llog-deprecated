@@ -6,6 +6,7 @@ import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ForwardedRef, forwardRef, ReactNode } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
+import Spinner from './spinner';
 
 import ReactSelect, {
   ClearIndicatorProps,
@@ -85,6 +86,10 @@ const Input = <TOption extends IOption>({
   </components.Input>
 );
 
+const LoadingIndicator = () => <Spinner className="mr-2" />;
+
+const LoadingMessage = () => null;
+
 const Menu = <TOption extends IOption>({
   children,
   ...props
@@ -162,6 +167,8 @@ const Select = forwardRef(
     {
       creatable,
       instanceId,
+      isDisabled,
+      isLoading,
       placeholder,
       ...props
     }: ReactSelectProps<TOption> &
@@ -177,6 +184,8 @@ const Select = forwardRef(
         Control,
         DropdownIndicator,
         Input,
+        LoadingIndicator,
+        LoadingMessage,
         Menu,
         MultiValueContainer,
         MultiValueRemove,
@@ -189,6 +198,8 @@ const Select = forwardRef(
       getOptionValue: (option: IOption) => option.id,
       instanceId: instanceId ?? props.name,
       isClearable: true,
+      isDisabled: isDisabled || isLoading,
+      isLoading,
       placeholder: placeholder ?? <>&nbsp;</>,
       unstyled: true,
       ...props,

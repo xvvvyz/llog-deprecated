@@ -21,6 +21,7 @@ import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface TemplateFormProps {
@@ -34,6 +35,7 @@ type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
 };
 
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
+  const [isTransitioning, startTransition] = useTransition();
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
@@ -42,7 +44,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.TemplateForm,
     defaultValues: {
-      content: templateData?.content ?? '',
+      content: templateData?.content,
       id: template?.id,
       inputs: forceArray(templateData?.inputIds).map((inputId) =>
         availableInputs?.find(({ id }) => id === inputId)
@@ -123,20 +125,23 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
           render={({ field }) => (
             <Select
               creatable
+              isLoading={isTransitioning}
               isMulti
               noOptionsMessage={() => null}
               onCreateOption={async (value: unknown) => {
                 globalValueCache.set(CacheKeys.InputForm, { label: value });
                 globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
 
-                await router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: '/inputs/add',
-                    updateCacheKey: CacheKeys.TemplateForm,
-                    updateCachePath: 'inputs',
-                    useCache: true,
-                  })
+                startTransition(() =>
+                  router.push(
+                    formatCacheLink({
+                      backLink,
+                      path: '/inputs/add',
+                      updateCacheKey: CacheKeys.TemplateForm,
+                      updateCachePath: 'inputs',
+                      useCache: true,
+                    })
+                  )
                 );
               }}
               options={availableInputs ?? []}

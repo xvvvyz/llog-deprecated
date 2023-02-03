@@ -1,24 +1,32 @@
 import Box, { BoxProps } from '(components)/box';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 import Button from './button';
+import Card from './card';
 import Pill from './pill';
 
 const LinkList = ({ className, ...rest }: BoxProps) => (
-  <Box
+  <Card
     as="ul"
     className={twMerge(
-      'divide-y divide-alpha-1 rounded border border-alpha-1 empty:border-0',
+      'divide-y divide-alpha-1 bg-transparent empty:border-0',
       className
     )}
+    size="0"
     {...rest}
   />
 );
 
+const icons = {
+  arrow: <ArrowRightIcon className="relative -right-[0.25em] w-5" />,
+  edit: <PencilIcon className="relative -right-[0.25em] w-5" />,
+};
+
 interface ListItemProps extends BoxProps {
-  avatar?: string | File | null;
+  avatar?: string | null;
   href: string;
+  icon?: keyof typeof icons;
   pill?: string;
   text: string;
 }
@@ -27,19 +35,24 @@ const ListItem = ({
   avatar,
   className,
   href,
+  icon = 'arrow',
   pill,
   text,
   ...rest
 }: ListItemProps) => (
-  <Box as="li" className={className} {...rest}>
-    <Button className="m-0 w-full gap-4 p-0 p-4" href={href} variant="link">
-      {avatar && (
+  <Box as="li" {...rest}>
+    <Button
+      className={twMerge('m-0 w-full gap-4 py-3 px-4', className)}
+      href={href}
+      variant="link"
+    >
+      {typeof avatar !== 'undefined' && (
         <Avatar className="-my-2" file={avatar} name={text} size="sm" />
       )}
       <span className="truncate">{text}</span>
-      <div className="ml-auto flex shrink-0 items-center gap-4">
+      <div className="ml-auto flex shrink-0 items-center gap-3">
         {pill && <Pill>{pill}</Pill>}
-        <ArrowRightIcon className="relative -right-[0.25em] w-5" />
+        {icons[icon]}
       </div>
     </Button>
   </Box>

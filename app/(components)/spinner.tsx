@@ -10,7 +10,7 @@ const Spinner = ({ className, loadingText }: SpinnerProps) => (
     aria-busy
     aria-label={loadingText}
     className={twMerge(
-      'h-4 w-4 animate-spin rounded-full border-2 border-fg-2 border-l-transparent',
+      'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-2 border-fg-2 border-l-transparent',
       className
     )}
     role="alert"

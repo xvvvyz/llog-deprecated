@@ -20,6 +20,7 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface EventTypeFormProps {
@@ -42,6 +43,7 @@ const EventTypeForm = ({
   template,
   type,
 }: EventTypeFormProps) => {
+  const [isTransitioning, startTransition] = useTransition();
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
@@ -138,20 +140,23 @@ const EventTypeForm = ({
           render={({ field }) => (
             <Select
               creatable
+              isLoading={isTransitioning}
               isMulti
               noOptionsMessage={() => null}
               onCreateOption={async (value: unknown) => {
                 globalValueCache.set(CacheKeys.InputForm, { label: value });
                 globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
 
-                await router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: '/inputs/add',
-                    updateCacheKey: CacheKeys.EventTypeForm,
-                    updateCachePath: 'inputs',
-                    useCache: true,
-                  })
+                startTransition(() =>
+                  router.push(
+                    formatCacheLink({
+                      backLink,
+                      path: '/inputs/add',
+                      updateCacheKey: CacheKeys.EventTypeForm,
+                      updateCachePath: 'inputs',
+                      useCache: true,
+                    })
+                  )
                 );
               }}
               options={availableInputs ?? []}

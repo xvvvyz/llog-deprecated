@@ -2,6 +2,7 @@
 
 import Button from '(components)/button';
 import { LabelSpan } from '(components)/label';
+import { LinkList, ListItem } from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { EventTemplate } from '(types)/event-template';
@@ -19,9 +20,11 @@ import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
 import SubjectDetailsFormSection from '../../../../(components)/subject-details-form-section';
 
 interface SubjectSettingsFormProps {
@@ -41,6 +44,8 @@ const SubjectSettingsForm = ({
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
   const missions = forceArray(subject.missions);
+  const newObservationTransition = useTransition();
+  const newRoutineTransition = useTransition();
   const router = useRouter();
   const routines = eventTypes.filter((e) => e.type === EventTypes.Routine);
 
@@ -81,26 +86,24 @@ const SubjectSettingsForm = ({
         form={form}
       />
       <section>
-        <LabelSpan className="pb-2">Missions</LabelSpan>
+        <LabelSpan as="h1" className="pb-2">
+          Missions
+        </LabelSpan>
         {!!missions.length && (
-          <ul className="mb-3 space-y-3">
+          <LinkList className="rounded-b-none border-b-0">
             {missions.map((mission) => (
-              <li key={mission.id}>
-                <Button
-                  className="w-full justify-between"
-                  colorScheme="transparent"
-                  href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
-                  onClick={saveToCache}
-                >
-                  {mission.name}
-                  <PencilIcon className="w-5" />
-                </Button>
-              </li>
+              <ListItem
+                href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
+                icon="edit"
+                key={mission.id}
+                onClick={saveToCache}
+                text={mission.name}
+              />
             ))}
-          </ul>
+          </LinkList>
         )}
         <Button
-          className="w-full"
+          className={twMerge('w-full', missions.length && 'rounded-t-none')}
           colorScheme="transparent"
           href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
           onClick={saveToCache}
@@ -111,27 +114,27 @@ const SubjectSettingsForm = ({
         </Button>
       </section>
       <section>
-        <LabelSpan className="pb-2">Routines</LabelSpan>
+        <LabelSpan as="h1" className="pb-2">
+          Routines
+        </LabelSpan>
         {!!routines.length && (
-          <ul className="mb-3 space-y-3">
+          <LinkList className="rounded-b-none border-b-0">
             {routines.map((routine) => (
-              <li key={routine.id}>
-                <Button
-                  className="w-full justify-between"
-                  colorScheme="transparent"
-                  href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
-                  onClick={saveToCache}
-                >
-                  {routine.name}
-                  <PencilIcon className="w-5" />
-                </Button>
-              </li>
+              <ListItem
+                href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
+                icon="edit"
+                key={routine.id}
+                onClick={saveToCache}
+                text={routine.name}
+              />
             ))}
-          </ul>
+          </LinkList>
         )}
         <Select
+          className={twMerge(routines.length && 'rounded-t-none')}
           creatable
           instanceId="routineTemplate"
+          isLoading={newRoutineTransition[0]}
           noOptionsMessage={() => null}
           onChange={(e) => {
             saveToCache();
@@ -142,11 +145,13 @@ const SubjectSettingsForm = ({
 
             const template = e as EventTemplate;
 
-            router.push(
-              formatCacheLink({
-                backLink,
-                path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
-              })
+            newRoutineTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
+                })
+              )
             );
           }}
           onCreateOption={async (value: unknown) => {
@@ -157,12 +162,14 @@ const SubjectSettingsForm = ({
               order: routines.length,
             });
 
-            router.push(
-              formatCacheLink({
-                backLink,
-                path: `/subjects/${subject.id}/settings/routine`,
-                useCache: true,
-              })
+            newRoutineTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/routine`,
+                  useCache: true,
+                })
+              )
             );
           }}
           options={forceArray(availableTemplates).filter(
@@ -173,27 +180,27 @@ const SubjectSettingsForm = ({
         />
       </section>
       <section>
-        <LabelSpan className="pb-2">Observations</LabelSpan>
+        <LabelSpan as="h1" className="pb-2">
+          Observations
+        </LabelSpan>
         {!!observations.length && (
-          <ul className="mb-3 space-y-3">
+          <LinkList className="rounded-b-none border-b-0">
             {observations.map((observation) => (
-              <li key={observation.id}>
-                <Button
-                  className="w-full justify-between"
-                  colorScheme="transparent"
-                  href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
-                  onClick={saveToCache}
-                >
-                  {observation.name}
-                  <PencilIcon className="w-5" />
-                </Button>
-              </li>
+              <ListItem
+                href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
+                icon="edit"
+                key={observation.id}
+                onClick={saveToCache}
+                text={observation.name}
+              />
             ))}
-          </ul>
+          </LinkList>
         )}
         <Select
+          className={twMerge(observations.length && 'rounded-t-none')}
           creatable
           instanceId="observationTemplate"
+          isLoading={newObservationTransition[0]}
           noOptionsMessage={() => null}
           onChange={(e) => {
             saveToCache();
@@ -204,11 +211,13 @@ const SubjectSettingsForm = ({
 
             const template = e as EventTemplate;
 
-            router.push(
-              formatCacheLink({
-                backLink,
-                path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
-              })
+            newObservationTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
+                })
+              )
             );
           }}
           onCreateOption={async (value: unknown) => {
@@ -219,12 +228,14 @@ const SubjectSettingsForm = ({
               order: observations.length,
             });
 
-            router.push(
-              formatCacheLink({
-                backLink,
-                path: `/subjects/${subject.id}/settings/observation`,
-                useCache: true,
-              })
+            newObservationTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/observation`,
+                  useCache: true,
+                })
+              )
             );
           }}
           options={forceArray(availableTemplates).filter(
