@@ -13,7 +13,7 @@ const listTemplates = async (
 
   return createServerSupabaseClient()
     .from('templates')
-    .select('data, id, name, public, type')
+    .select('id, name, type')
     .match(match)
     .order('type')
     .order('updated_at', { ascending: false });

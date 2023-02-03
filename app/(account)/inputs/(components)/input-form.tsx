@@ -7,6 +7,7 @@ import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
+import CacheKeys from '(utilities)/enum-cache-keys';
 import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
@@ -39,7 +40,7 @@ const InputForm = ({ input }: InputFormProps) => {
   const updateGlobalValueCache = useUpdateGlobalValueCache();
 
   const defaultValues = useDefaultValues({
-    cacheKey: 'input_form_values',
+    cacheKey: CacheKeys.InputForm,
     defaultValues: {
       id: input?.id,
       label: input?.label ?? '',

@@ -1,6 +1,6 @@
 import createServerSupabaseClient from './create-server-supabase-client';
 
-const getEventType = (eventTypeId: string) =>
+const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
   createServerSupabaseClient()
     .from('event_types')
     .select(
@@ -16,12 +16,15 @@ const getEventType = (eventTypeId: string) =>
         )
       ),
       name,
+      order,
       type`
     )
     .eq('id', eventTypeId)
     .order('order', { foreignTable: 'event_type_inputs' })
     .single();
 
-export type GetEventTypeData = Awaited<ReturnType<typeof getEventType>>['data'];
+export type GetEventTypeWithInputsAndOptionsData = Awaited<
+  ReturnType<typeof getEventTypeWithInputsAndOptions>
+>['data'];
 
-export default getEventType;
+export default getEventTypeWithInputsAndOptions;

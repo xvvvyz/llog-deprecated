@@ -4,6 +4,7 @@ import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
+import CacheKeys from '(utilities)/enum-cache-keys';
 import globalValueCache from '(utilities)/global-value-cache';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
@@ -15,7 +16,7 @@ const SignInForm = () => {
   const searchParams = useSearchParams();
 
   const form = useForm({
-    defaultValues: globalValueCache.get('sign_in_form_values') ?? {
+    defaultValues: globalValueCache.get(CacheKeys.SignInForm) ?? {
       email: '',
       password: '',
     },
@@ -48,7 +49,7 @@ const SignInForm = () => {
             className="underline"
             href="/forgot-password"
             onClick={() =>
-              globalValueCache.set('sign_in_form_values', form.getValues())
+              globalValueCache.set(CacheKeys.SignInForm, form.getValues())
             }
             variant="link"
           >

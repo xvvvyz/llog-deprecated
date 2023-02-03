@@ -1,17 +1,11 @@
+import CacheKeys from './enum-cache-keys';
+
 const map = new Map();
 
-type GlobalCacheKey =
-  | 'input_form_values'
-  | 'mission_form_values'
-  | 'sign_in_form_values'
-  | 'subject_settings_form_values'
-  | 'template_form_values';
-
 const globalValueCache = {
-  get: (key: GlobalCacheKey) => map.get(key) ?? '',
-  has: (key: GlobalCacheKey) => map.has(key),
-  set: (key: GlobalCacheKey, value: unknown) => map.set(key, value),
+  get: (key: CacheKeys) => map.get(key) ?? '',
+  has: (key: CacheKeys) => map.has(key),
+  set: (key: CacheKeys, value: unknown) => map.set(key, value),
 };
 
-export type { GlobalCacheKey };
 export default globalValueCache;

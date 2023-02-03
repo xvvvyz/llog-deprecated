@@ -9,7 +9,7 @@ import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import forceArray from '(utilities)/force-array';
 import { GetEventData } from '(utilities)/get-event';
-import { GetEventTypeData } from '(utilities)/get-event-type';
+import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
@@ -18,7 +18,7 @@ import { twMerge } from 'tailwind-merge';
 interface EventFormProps {
   event?: GetEventData;
   eventType:
-    | NonNullable<GetEventTypeData>
+    | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission: boolean;
   redirectOnSubmit: boolean;

@@ -46,7 +46,7 @@ const RichTextarea = forwardRef(
       placeholder,
       right,
       value,
-    }: TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
       onEnter?: () => void;
       right?: ReactNode;
       value?: string | null;
@@ -67,7 +67,11 @@ const RichTextarea = forwardRef(
       editorProps: {
         attributes: {
           'aria-label': ariaLabel ?? '',
-          class: twMerge('prose input', right && 'pr-[2.4rem]', className),
+          class: twMerge(
+            'prose input cursor-text min-h-[5rem]',
+            right && 'pr-[2.4rem]',
+            className
+          ),
           role: 'textbox',
         },
         handleKeyDown: (view, e) => {
@@ -132,21 +136,23 @@ const RichTextarea = forwardRef(
       editorRef.current = editor;
     }, [editor]);
 
-    if (!editor) {
-      return (
-        <DirtyHtml
-          className={twMerge('input', !value && 'text-fg-3', className)}
-        >
-          {value || `<p>${placeholder ?? ''}</p>`}
-        </DirtyHtml>
-      );
-    }
-
     return (
-      <div className="relative">
-        <EditorContent editor={editor} name={name} />
+      <div className="relative" suppressHydrationWarning>
+        {editor ? (
+          <EditorContent editor={editor} name={name} />
+        ) : (
+          <DirtyHtml
+            className={twMerge(
+              'input min-h-[5rem]',
+              !value && 'text-fg-3',
+              className
+            )}
+          >
+            {value || `<p>${placeholder ?? '‎'}</p>`}
+          </DirtyHtml>
+        )}
         {right && (
-          <div className="absolute right-0 top-0 flex h-full w-[2.4rem] items-center justify-center">
+          <div className="absolute right-0 top-[0.65rem] flex flex h-5 w-[2.4rem] w-5 items-center justify-center">
             {right}
           </div>
         )}

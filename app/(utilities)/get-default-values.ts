@@ -1,17 +1,18 @@
 import { useSearchParams } from 'next/navigation';
-import globalValueCache, { GlobalCacheKey } from './global-value-cache';
+import CacheKeys from './enum-cache-keys';
+import globalValueCache from './global-value-cache';
 
 const useDefaultValues = ({
   cacheKey,
   defaultValues,
 }: {
-  cacheKey: GlobalCacheKey;
-  defaultValues: unknown;
+  cacheKey: CacheKeys;
+  defaultValues: object;
 }) => {
   const searchParams = useSearchParams();
 
   return searchParams.has('useCache') && globalValueCache.has(cacheKey)
-    ? globalValueCache.get(cacheKey)
+    ? { ...defaultValues, ...globalValueCache.get(cacheKey) }
     : defaultValues;
 };
 

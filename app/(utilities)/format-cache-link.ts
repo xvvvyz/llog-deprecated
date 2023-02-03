@@ -1,4 +1,4 @@
-import { GlobalCacheKey } from './global-value-cache';
+import CacheKeys from './enum-cache-keys';
 
 const formatCacheLink = ({
   backLink,
@@ -9,11 +9,12 @@ const formatCacheLink = ({
 }: {
   backLink: string;
   path: string;
-  updateCacheKey?: GlobalCacheKey;
+  updateCacheKey?: CacheKeys;
   updateCachePath?: string;
   useCache?: boolean;
 }) => {
-  return `${path}?back=${backLink}&useCache=${useCache}&updateCacheKey=${updateCacheKey}&updateCachePath=${updateCachePath}`;
+  const delimiter = path.includes('?') ? '&' : '?';
+  return `${path}${delimiter}back=${backLink}&useCache=${useCache}&updateCacheKey=${updateCacheKey}&updateCachePath=${updateCachePath}`;
 };
 
 export default formatCacheLink;

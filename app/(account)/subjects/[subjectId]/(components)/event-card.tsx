@@ -2,14 +2,14 @@ import { BoxProps } from '(components)/box';
 import Card from '(components)/card';
 import DirtyHtml from '(components)/dirty-html';
 import { GetEventData } from '(utilities)/get-event';
-import { GetEventTypeData } from '(utilities)/get-event-type';
+import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
 import EventForm from './event-form';
 
 interface EventCardProps extends BoxProps {
   event?: GetEventData;
   eventType:
-    | NonNullable<GetEventTypeData>
+    | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission?: boolean;
   redirectOnSubmit?: boolean;

@@ -5,8 +5,7 @@ import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
-import EventTypes from '(utilities)/enum-event-types';
-import TemplateTypes from '(utilities)/enum-template-types';
+import CacheKeys from '(utilities)/enum-cache-keys';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
@@ -16,7 +15,7 @@ import sanitizeHtml from '(utilities)/sanitize-html';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import EventTypesFormSection from '../../../../../(components)/event-types-form-section';
+import RoutinesFormSection from './routines-form-section';
 
 interface MissionFormProps {
   availableInputs: ListInputsData;
@@ -40,7 +39,7 @@ const MissionForm = ({
   const [redirect, isRedirecting] = useSubmitRedirect();
 
   const defaultValues = useDefaultValues({
-    cacheKey: 'mission_form_values',
+    cacheKey: CacheKeys.MissionForm,
     defaultValues: {
       id: mission?.id,
       name: mission?.name ?? '',
@@ -241,20 +240,14 @@ const MissionForm = ({
       </Label>
       {!!sessionsArray.fields.length && (
         <ul className="flex flex-col gap-6">
-          {sessionsArray.fields.map((item, index) => (
-            <li key={item.id}>
-              <EventTypesFormSection<MissionFormValues>
-                cacheKey="mission_form_values"
-                form={form}
-                inputOptions={availableInputs}
-                isMission
-                label={`Session ${index + 1}`}
-                name={`routines.${index}`}
-                templateOptions={availableTemplates}
-                templateType={TemplateTypes.Routine}
-                type={EventTypes.Routine}
-              />
-            </li>
+          {sessionsArray.fields.map((item, sessionIndex) => (
+            <RoutinesFormSection<MissionFormValues>
+              form={form}
+              inputOptions={forceArray(availableInputs)}
+              key={item.id}
+              sessionIndex={sessionIndex}
+              templateOptions={forceArray(availableTemplates)}
+            />
           ))}
         </ul>
       )}

@@ -39,7 +39,7 @@ const ListItem = ({
       <span className="truncate">{text}</span>
       <div className="ml-auto flex shrink-0 items-center gap-4">
         {pill && <Pill>{pill}</Pill>}
-        <ArrowRightIcon className="relative -right-[0.1em] w-5" />
+        <ArrowRightIcon className="relative -right-[0.25em] w-5" />
       </div>
     </Button>
   </Box>

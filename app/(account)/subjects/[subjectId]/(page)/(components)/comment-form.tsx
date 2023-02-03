@@ -33,28 +33,28 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
   });
 
   return (
-    <form className="relative" onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       <Controller
         control={form.control}
         name="content"
         render={({ field }) => (
           <RichTextarea
             aria-label="Comment"
-            className="rounded-t-none border-x-0 border-b-0 border-alpha-1 pr-12 hover:border-alpha-1"
+            className="min-h-full rounded-t-none border-x-0 border-b-0 border-alpha-1 pr-12 hover:border-alpha-1"
             onEnter={onSubmit}
             placeholder="Add comment"
+            right={
+              <IconButton
+                icon={<PaperAirplaneIcon className="mr-2 w-5" />}
+                label="Add comment"
+                loading={form.formState.isSubmitting || isTransitioning}
+                loadingText="Adding comment…"
+              />
+            }
             {...field}
           />
         )}
       />
-      <div className="absolute right-[0.95rem] bottom-[0.65rem] flex flex h-5 w-5 items-center justify-center">
-        <IconButton
-          icon={<PaperAirplaneIcon className="w-5" />}
-          label="Add comment"
-          loading={form.formState.isSubmitting || isTransitioning}
-          loadingText="Adding comment…"
-        />
-      </div>
     </form>
   );
 };

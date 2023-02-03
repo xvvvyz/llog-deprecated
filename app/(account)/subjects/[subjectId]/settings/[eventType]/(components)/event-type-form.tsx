@@ -3,102 +3,117 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
-import RadioGroup from '(components)/radio-group';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
-import { Database, Json } from '(types)/database';
+import { Database } from '(types)/database';
 import { EventTemplateData } from '(types)/event-template';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
-import TemplateTypes from '(utilities)/enum-template-types';
+import EventTypes from '(utilities)/enum-event-types';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
 import useDefaultValues from '(utilities)/get-default-values';
+import { GetEventTypeWithInputsData } from '(utilities)/get-event-type-with-inputs';
 import { GetTemplateData } from '(utilities)/get-template';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
-import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 
-interface TemplateFormProps {
+interface EventTypeFormProps {
   availableInputs: ListInputsData;
+  eventType?: GetEventTypeWithInputsData;
+  subjectId: string;
   template?: GetTemplateData;
+  type?: EventTypes;
 }
 
-type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
-  content: string;
-  inputs: Database['public']['Tables']['inputs']['Row'][];
-};
+type EventTypeFormValues =
+  Database['public']['Tables']['event_types']['Insert'] & {
+    inputs: Database['public']['Tables']['inputs']['Row'][];
+  };
 
-const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
+const EventTypeForm = ({
+  availableInputs,
+  eventType,
+  subjectId,
+  template,
+  type,
+}: EventTypeFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
   const templateData = template?.data as unknown as EventTemplateData;
 
   const defaultValues = useDefaultValues({
-    cacheKey: CacheKeys.TemplateForm,
+    cacheKey: CacheKeys.EventTypeForm,
     defaultValues: {
-      content: templateData?.content ?? '',
-      id: template?.id,
-      inputs: forceArray(templateData?.inputIds).map((inputId) =>
-        availableInputs?.find(({ id }) => id === inputId)
-      ),
-      name: template?.name ?? '',
-      public: template?.public ?? false,
-      type: template?.type ?? TemplateTypes.Observation,
+      content: eventType?.content ?? templateData?.content,
+      id: eventType?.id,
+      inputs: eventType
+        ? forceArray(eventType?.inputs).map(({ input }) => input)
+        : forceArray(templateData?.inputIds).map((inputId) =>
+            availableInputs?.find(({ id }) => id === inputId)
+          ),
+      name: eventType?.name ?? template?.name ?? '',
+      order: eventType?.order,
+      type: eventType?.type ?? type,
     },
   });
 
-  const form = useForm<TemplateFormValues>({ defaultValues });
+  const form = useForm<EventTypeFormValues>({ defaultValues });
 
   return (
     <form
       className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(
-        async ({ content, id, inputs, name, public: p, type }) => {
-          const { error: templateError } = await supabase
-            .from('templates')
-            .upsert({
-              data: {
-                content: sanitizeHtml(content),
-                inputIds: inputs.map((input) => input.id),
-              } as Json,
-              id,
-              name: name.trim(),
-              public: p,
-              type,
-            })
+        async ({ content, id, inputs, name, order, type }) => {
+          const { data: eventTypeData, error: eventTypeError } = await supabase
+            .from('event_types')
+            .upsert({ content, id, name, order, subject_id: subjectId, type })
+            .select('id')
             .single();
 
-          if (templateError) {
-            alert(templateError?.message);
+          if (eventTypeError) {
+            alert(eventTypeError.message);
             return;
           }
 
-          await redirect('/templates');
+          form.setValue('id', eventTypeData.id);
+
+          const { error: deleteEventTypeInputsError } = await supabase
+            .from('event_type_inputs')
+            .delete()
+            .eq('event_type_id', eventTypeData.id);
+
+          if (deleteEventTypeInputsError) {
+            alert(deleteEventTypeInputsError.message);
+            return;
+          }
+
+          if (inputs.length) {
+            const { error: insertEventTypeInputsError } = await supabase
+              .from('event_type_inputs')
+              .insert(
+                inputs.map((input, order) => ({
+                  event_type_id: eventTypeData.id,
+                  input_id: input.id,
+                  order,
+                }))
+              );
+
+            if (insertEventTypeInputsError) {
+              alert(insertEventTypeInputsError.message);
+              return;
+            }
+          }
+
+          await redirect(`/subjects/${subjectId}/settings`);
         }
       )}
     >
-      <Label>
-        <LabelSpan>Type</LabelSpan>
-        <Controller
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <RadioGroup
-              options={[
-                { label: 'Observation', value: TemplateTypes.Observation },
-                { label: 'Routine', value: TemplateTypes.Routine },
-              ]}
-              {...field}
-            />
-          )}
-        />
-      </Label>
       <Label>
         <LabelSpan>Name</LabelSpan>
         <Controller
@@ -127,13 +142,13 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
               noOptionsMessage={() => null}
               onCreateOption={async (value: unknown) => {
                 globalValueCache.set(CacheKeys.InputForm, { label: value });
-                globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
+                globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
 
                 await router.push(
                   formatCacheLink({
                     backLink,
                     path: '/inputs/add',
-                    updateCacheKey: CacheKeys.TemplateForm,
+                    updateCacheKey: CacheKeys.EventTypeForm,
                     updateCachePath: 'inputs',
                     useCache: true,
                   })
@@ -157,4 +172,5 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   );
 };
 
-export default TemplateForm;
+export type { EventTypeFormValues };
+export default EventTypeForm;

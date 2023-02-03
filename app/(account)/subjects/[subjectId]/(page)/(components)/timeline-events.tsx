@@ -4,6 +4,7 @@ import Avatar from '(components)/avatar';
 import Card from '(components)/card';
 import DateTime from '(components)/date-time';
 import DirtyHtml from '(components)/dirty-html';
+import Pill from '(components)/pill';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatDate from '(utilities)/format-date';
@@ -11,7 +12,6 @@ import formatInputValue from '(utilities)/format-input-value';
 import formatMinFractionDigits from '(utilities)/format-min-fraction-digits';
 import { ListEventsData } from '(utilities)/list-events';
 import { twMerge } from 'tailwind-merge';
-import Pill from '../../../../../(components)/pill';
 import CommentForm from './comment-form';
 
 interface TimelineEventsProps {

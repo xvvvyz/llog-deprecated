@@ -1,5 +1,6 @@
 'use client';
 
+import forceArray from '(utilities)/force-array';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ForwardedRef, forwardRef, ReactNode } from 'react';
@@ -44,11 +45,20 @@ const Control = <TOption extends IOption>({
   selectProps,
   ...props
 }: ControlProps<TOption>) => {
+  const hasNoOptionsMessage = !!selectProps.noOptionsMessage({
+    inputValue: selectProps.inputValue,
+  });
+
+  const hasOptions =
+    selectProps.options.length > forceArray(selectProps.value)?.length;
+
   return (
     <components.Control
       className={twMerge(
         'input p-1',
-        menuIsOpen && 'rounded-b-none focus-within:ring-0',
+        menuIsOpen &&
+          !(!hasNoOptionsMessage && !hasOptions) &&
+          'rounded-b-none focus-within:ring-0',
         selectProps.isDisabled && 'opacity-50',
         selectProps.className
       )}
@@ -151,6 +161,7 @@ const Select = forwardRef(
   <TOption extends IOption>(
     {
       creatable,
+      instanceId,
       placeholder,
       ...props
     }: ReactSelectProps<TOption> &
@@ -176,7 +187,7 @@ const Select = forwardRef(
       },
       getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
       getOptionValue: (option: IOption) => option.id,
-      instanceId: props.name,
+      instanceId: instanceId ?? props.name,
       isClearable: true,
       placeholder: placeholder ?? <>&nbsp;</>,
       unstyled: true,

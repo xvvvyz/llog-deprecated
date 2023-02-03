@@ -1,25 +1,20 @@
-import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
+import { forwardRef, InputHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  right?: ReactNode;
+interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
+  value?: string | null;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, right, type, ...rest }, ref) => (
-    <div className="relative">
-      <input
-        className={twMerge('input', right && 'pr-[2.4rem]', className)}
-        ref={ref}
-        type={type ?? 'text'}
-        {...rest}
-      />
-      {right && (
-        <div className="absolute right-0 top-0 flex h-full w-[2.4rem] items-center justify-center">
-          {right}
-        </div>
-      )}
-    </div>
+  ({ className, type, value, ...rest }, ref) => (
+    <input
+      className={twMerge('input', className)}
+      ref={ref}
+      type={type ?? 'text'}
+      value={value ?? undefined}
+      {...rest}
+    />
   )
 );
 

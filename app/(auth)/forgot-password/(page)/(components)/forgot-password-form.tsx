@@ -4,6 +4,7 @@ import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
+import CacheKeys from '(utilities)/enum-cache-keys';
 import globalValueCache from '(utilities)/global-value-cache';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,7 +14,7 @@ const ForgotPasswordForm = () => {
 
   const form = useForm({
     defaultValues: {
-      email: globalValueCache.get('sign_in_form_values')?.email,
+      email: globalValueCache.get(CacheKeys.SignInForm)?.email,
     },
   });
 
