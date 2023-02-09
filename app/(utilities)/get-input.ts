@@ -5,7 +5,7 @@ const getInput = (inputId: string) =>
     .from('inputs')
     .select('id, label, options:input_options(id, label), type')
     .eq('id', inputId)
-    .order('order', { foreignTable: 'input_options' })
+    .order('order', { foreignTable: 'options' })
     .single();
 
 export type GetInputData = Awaited<ReturnType<typeof getInput>>['data'];

@@ -21,7 +21,8 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
       type`
     )
     .eq('id', eventTypeId)
-    .order('order', { foreignTable: 'event_type_inputs' })
+    .order('order', { foreignTable: 'inputs' })
+    .order('order', { foreignTable: 'inputs.input.options' })
     .single();
 
 export type GetEventTypeWithInputsAndOptionsData = Awaited<
