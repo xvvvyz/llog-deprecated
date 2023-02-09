@@ -23,6 +23,9 @@ module.exports = {
       'fg-3': 'var(--color-fg-3)',
       transparent: 'transparent',
     },
+    fontFamily: {
+      body: 'var(--font-body)',
+    },
     fontWeight: {
       bold: 'var(--font-weight-bold)',
       normal: 'var(--font-weight-normal)',

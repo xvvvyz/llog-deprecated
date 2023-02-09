@@ -19,6 +19,15 @@
     --radius-default: 0.75rem;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+    @apply h-full font-body text-[4vw] xs:text-[16px];
+  }
+
+  body {
+    @apply h-full bg-bg-1 text-fg-1;
+  }
+
   /* hack because list-inside with nest p tag forces marker to have its own line */
   li > p:first-child {
     @apply inline;
