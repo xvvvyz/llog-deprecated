@@ -49,115 +49,111 @@ const RoutinesFormSection = <T extends FieldValues>({
 
   return (
     <li>
-      <fieldset>
-        <LabelSpan as="legend" className="pb-2">
-          Session {sessionIndex + 1}
-        </LabelSpan>
-        <ul>
-          {eventTypesArray.fields.map((eventType, routineIndex) => {
-            const menu = (
-              <Menu
-                items={[
-                  {
-                    icon: <TrashIcon className="w-5" />,
-                    onClick: () => eventTypesArray.remove(routineIndex),
-                    text: 'Delete routine',
-                  },
-                ]}
+      <LabelSpan className="pb-2">Session {sessionIndex + 1}</LabelSpan>
+      <ul>
+        {eventTypesArray.fields.map((eventType, routineIndex) => {
+          const menu = (
+            <Menu
+              items={[
+                {
+                  icon: <TrashIcon className="w-5" />,
+                  onClick: () => eventTypesArray.remove(routineIndex),
+                  text: 'Delete routine',
+                },
+              ]}
+            />
+          );
+
+          return (
+            <li className="mb-3" key={eventType.id}>
+              <Controller
+                control={form.control}
+                name={`${name}.${routineIndex}.content` as T[string]}
+                render={({ field }) => (
+                  <RichTextarea
+                    className="rounded-b-none"
+                    placeholder="Description"
+                    right={menu}
+                    {...field}
+                  />
+                )}
               />
-            );
+              <Controller
+                control={form.control}
+                name={`${name}.${routineIndex}.inputs` as T[string]}
+                render={({ field }) => (
+                  <Select
+                    className="rounded-t-none border-t-0"
+                    creatable
+                    isLoading={isTransitioning}
+                    isMulti
+                    noOptionsMessage={() => null}
+                    onCreateOption={async (value: unknown) => {
+                      globalValueCache.set(CacheKeys.InputForm, {
+                        label: value,
+                      });
 
-            return (
-              <li className="mb-3" key={eventType.id}>
-                <Controller
-                  control={form.control}
-                  name={`${name}.${routineIndex}.content` as T[string]}
-                  render={({ field }) => (
-                    <RichTextarea
-                      className="rounded-b-none"
-                      placeholder="Description"
-                      right={menu}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name={`${name}.${routineIndex}.inputs` as T[string]}
-                  render={({ field }) => (
-                    <Select
-                      className="rounded-t-none border-t-0"
-                      creatable
-                      isLoading={isTransitioning}
-                      isMulti
-                      noOptionsMessage={() => null}
-                      onCreateOption={async (value: unknown) => {
-                        globalValueCache.set(CacheKeys.InputForm, {
-                          label: value,
-                        });
+                      globalValueCache.set(
+                        CacheKeys.MissionForm,
+                        form.getValues()
+                      );
 
-                        globalValueCache.set(
-                          CacheKeys.MissionForm,
-                          form.getValues()
-                        );
+                      startTransition(() =>
+                        router.push(
+                          formatCacheLink({
+                            backLink,
+                            path: '/inputs/add',
+                            updateCacheKey: CacheKeys.MissionForm,
+                            updateCachePath: `${name}.${routineIndex}.inputs`,
+                            useCache: true,
+                          })
+                        )
+                      );
+                    }}
+                    options={inputOptions}
+                    placeholder="Inputs"
+                    {...field}
+                  />
+                )}
+              />
+            </li>
+          );
+        })}
+      </ul>
+      <Select
+        creatable
+        instanceId={`${name}Template`}
+        noOptionsMessage={() => null}
+        onChange={(e) => {
+          const template = e as EventTemplate;
+          const values = form.getValues();
 
-                        startTransition(() =>
-                          router.push(
-                            formatCacheLink({
-                              backLink,
-                              path: '/inputs/add',
-                              updateCacheKey: CacheKeys.MissionForm,
-                              updateCachePath: `${name}.${routineIndex}.inputs`,
-                              useCache: true,
-                            })
-                          )
-                        );
-                      }}
-                      options={inputOptions}
-                      placeholder="Inputs"
-                      {...field}
-                    />
-                  )}
-                />
-              </li>
-            );
-          })}
-        </ul>
-        <Select
-          creatable
-          instanceId={`${name}Template`}
-          noOptionsMessage={() => null}
-          onChange={(e) => {
-            const template = e as EventTemplate;
-            const values = form.getValues();
-
-            eventTypesArray.append({
-              content: template?.data?.content || '',
-              inputs: inputOptions.filter((input) =>
-                template?.data?.inputIds?.includes(input.id)
-              ),
-              name: template?.name,
-              order: eventTypesArray.fields.length,
-              subject_id: values.id ?? '',
-              type: EventTypes.Routine,
-            } as T[string]);
-          }}
-          onCreateOption={async (value: unknown) =>
-            eventTypesArray.append({
-              content: value,
-              inputs: [],
-              order: eventTypesArray.fields.length,
-              subject_id: form.getValues().id ?? '',
-              type: EventTypes.Routine,
-            } as T[string])
-          }
-          options={templateOptions.filter(
-            (template) => template.type === TemplateTypes.Routine
-          )}
-          placeholder="Add routine"
-          value={null}
-        />
-      </fieldset>
+          eventTypesArray.append({
+            content: template?.data?.content || '',
+            inputs: inputOptions.filter((input) =>
+              template?.data?.inputIds?.includes(input.id)
+            ),
+            name: template?.name,
+            order: eventTypesArray.fields.length,
+            subject_id: values.id ?? '',
+            type: EventTypes.Routine,
+          } as T[string]);
+        }}
+        onCreateOption={async (value: unknown) =>
+          eventTypesArray.append({
+            content: value,
+            inputs: [],
+            order: eventTypesArray.fields.length,
+            subject_id: form.getValues().id ?? '',
+            type: EventTypes.Routine,
+          } as T[string])
+        }
+        options={templateOptions.filter(
+          (template) => template.type === TemplateTypes.Routine
+        )}
+        placeholder="Add routine"
+        value={null}
+      />
     </li>
   );
 };

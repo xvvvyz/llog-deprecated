@@ -60,7 +60,7 @@ const Control = <TOption extends IOption>({
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
-        selectProps.isDisabled && 'opacity-50',
+        selectProps.isDisabled && 'disabled',
         selectProps.className
       )}
       menuIsOpen={menuIsOpen}
@@ -72,7 +72,7 @@ const Control = <TOption extends IOption>({
   );
 };
 
-const DropdownIndicator = () => <ChevronUpDownIcon className="mr-1 w-5" />;
+const DropdownIndicator = () => <ChevronUpDownIcon className="mx-1 w-5" />;
 
 const Input = <TOption extends IOption>({
   children,

@@ -2,10 +2,9 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Card from '(components)/card';
 import Header from '(components)/header';
-import TemplateTypes from '(utilities)/enum-template-types';
 import getSubject from '(utilities)/get-subject';
 import listInputs from '(utilities)/list-inputs';
-import listTemplates from '(utilities)/list-templates';
+import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
 import { notFound } from 'next/navigation';
 import MissionForm from '../(components)/mission-form';
 
@@ -23,7 +22,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   ] = await Promise.all([
     getSubject(subjectId),
     listInputs(),
-    listTemplates(TemplateTypes.Routine),
+    listRoutineTemplatesWithData(),
   ]);
 
   if (!subject) return notFound();

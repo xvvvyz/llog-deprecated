@@ -14,7 +14,7 @@ const EventTypes = async ({ subjectId, type }: PageProps) => {
 
   return eventTypes.map((eventType) => (
     <ListItem
-      href={`/subjects/${subjectId}/event/${eventType.id}`}
+      href={`/subjects/${subjectId}/${type}/${eventType.id}`}
       key={eventType.id}
       pill={CODES[type]}
       text={eventType.name as string}

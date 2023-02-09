@@ -13,10 +13,10 @@ interface MenuProps {
 
 const Menu = ({ items }: MenuProps) => (
   <M as="div" className="relative h-[2.4rem] w-full">
-    <M.Button className="flex h-full w-full items-center justify-center text-fg-2 transition-colors focus-within:outline-none hover:text-fg-1">
+    <M.Button className="flex h-full w-full items-center justify-center text-fg-2 outline-none transition-colors hover:text-fg-1">
       <EllipsisVerticalIcon className="w-5" />
     </M.Button>
-    <M.Items className="absolute -right-2 -bottom-6 z-10 w-56 origin-top-right rounded bg-bg-1 shadow-md focus:outline-none sm:bg-bg-2">
+    <M.Items className="absolute -right-2 -bottom-6 z-10 w-56 origin-top-right rounded bg-bg-1 shadow-md outline-none sm:bg-bg-2">
       <div className="divide-y divide-alpha-1 rounded border border-alpha-2 bg-alpha-2">
         {items.map(({ icon, text, ...rest }) => (
           <M.Item key={text}>

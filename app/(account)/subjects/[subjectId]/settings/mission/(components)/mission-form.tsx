@@ -252,7 +252,7 @@ const MissionForm = ({
         </ul>
       )}
       <Button
-        className="mt-6 w-full"
+        className="mt-4 w-full"
         colorScheme="transparent"
         onClick={() => sessionsArray.append([[]])}
         type="button"
@@ -261,7 +261,7 @@ const MissionForm = ({
         Add session
       </Button>
       <Button
-        className="mt-6 w-full"
+        className="mt-4 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

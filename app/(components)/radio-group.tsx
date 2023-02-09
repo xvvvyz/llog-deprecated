@@ -24,7 +24,7 @@ const RadioGroup = forwardRef(
     >
       {options.map((option) => (
         <RG.Option
-          className="-m-[1px] w-full cursor-pointer rounded text-center focus:outline-none focus:ring-1 focus:ring-accent-2"
+          className="-m-[1px] w-full cursor-pointer rounded text-center outline-none focus:ring-1 focus:ring-accent-2"
           key={option.label}
           value={option.value}
         >

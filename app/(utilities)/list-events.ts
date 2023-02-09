@@ -22,12 +22,13 @@ const listEvents = (subjectId: string) =>
         mission:missions(id, name),
         name,
         order,
-        session
+        session,
+        type
       )`
     )
+    .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
-    .order('created_at', { foreignTable: 'comments' })
-    .eq('subject_id', subjectId);
+    .order('created_at', { foreignTable: 'comments' });
 
 export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];
 export default listEvents;

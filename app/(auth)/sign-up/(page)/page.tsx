@@ -5,7 +5,7 @@ import SignUpForm from './(components)/sign-up-form';
 const Page = () => (
   <>
     <Card breakpoint="sm">
-      <h1 className="text-2xl">Create an account</h1>
+      <h1 className="mb-8 text-2xl">Create an account</h1>
       <SignUpForm />
     </Card>
     <p className="flex gap-4">

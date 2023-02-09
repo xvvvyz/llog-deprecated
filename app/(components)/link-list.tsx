@@ -9,25 +9,22 @@ import Pill from './pill';
 const LinkList = ({ className, ...rest }: BoxProps) => (
   <Card
     as="ul"
-    className={twMerge(
-      'divide-y divide-alpha-1 bg-transparent empty:border-0',
-      className
-    )}
+    className={twMerge('divide-y divide-alpha-1 empty:border-0', className)}
     size="0"
     {...rest}
   />
 );
 
 const icons = {
-  arrow: <ArrowRightIcon className="relative -right-[0.25em] w-5" />,
-  edit: <PencilIcon className="relative -right-[0.25em] w-5" />,
+  arrow: <ArrowRightIcon className="relative -right-[0.2em] w-5" />,
+  edit: <PencilIcon className="relative -right-[0.2em] w-5" />,
 };
 
 interface ListItemProps extends BoxProps {
   avatar?: string | null;
   href: string;
   icon?: keyof typeof icons;
-  pill?: string;
+  pill?: string | { k: string; v: string };
   text: string;
 }
 
@@ -51,7 +48,7 @@ const ListItem = ({
       )}
       <span className="truncate">{text}</span>
       <div className="ml-auto flex shrink-0 items-center gap-3">
-        {pill && <Pill>{pill}</Pill>}
+        {pill && <Pill {...(typeof pill === 'string' ? { k: pill } : pill)} />}
         {icons[icon]}
       </div>
     </Button>

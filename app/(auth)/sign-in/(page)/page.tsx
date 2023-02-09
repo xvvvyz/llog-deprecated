@@ -5,7 +5,7 @@ import SignInForm from './(components)/sign-in-form';
 const Page = () => (
   <>
     <Card breakpoint="sm">
-      <h1 className="text-2xl">Welcome back</h1>
+      <h1 className="mb-8 text-2xl">Welcome back</h1>
       <SignInForm />
     </Card>
     <p className="flex gap-6">

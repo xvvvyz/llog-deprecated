@@ -89,164 +89,170 @@ const SubjectSettingsForm = ({
         <LabelSpan as="h1" className="pb-2">
           Missions
         </LabelSpan>
-        {!!missions.length && (
-          <LinkList className="rounded-b-none border-b-0">
-            {missions.map((mission) => (
-              <ListItem
-                href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
-                icon="edit"
-                key={mission.id}
-                onClick={saveToCache}
-                text={mission.name}
-              />
-            ))}
-          </LinkList>
-        )}
-        <Button
-          className={twMerge('w-full', missions.length && 'rounded-t-none')}
-          colorScheme="transparent"
-          href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
-          onClick={saveToCache}
-          type="button"
-        >
-          <PlusIcon className="w-5" />
-          Add mission
-        </Button>
+        <div className="rounded bg-bg-2">
+          {!!missions.length && (
+            <LinkList className="rounded-b-none border-b-0">
+              {missions.map((mission) => (
+                <ListItem
+                  href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
+                  icon="edit"
+                  key={mission.id}
+                  onClick={saveToCache}
+                  text={mission.name}
+                />
+              ))}
+            </LinkList>
+          )}
+          <Button
+            className={twMerge('w-full', missions.length && 'rounded-t-none')}
+            colorScheme="transparent"
+            href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
+            onClick={saveToCache}
+            type="button"
+          >
+            <PlusIcon className="w-5" />
+            Add mission
+          </Button>
+        </div>
       </section>
       <section>
         <LabelSpan as="h1" className="pb-2">
           Routines
         </LabelSpan>
-        {!!routines.length && (
-          <LinkList className="rounded-b-none border-b-0">
-            {routines.map((routine) => (
-              <ListItem
-                href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
-                icon="edit"
-                key={routine.id}
-                onClick={saveToCache}
-                text={routine.name}
-              />
-            ))}
-          </LinkList>
-        )}
-        <Select
-          className={twMerge(routines.length && 'rounded-t-none')}
-          creatable
-          instanceId="routineTemplate"
-          isLoading={newRoutineTransition[0]}
-          noOptionsMessage={() => null}
-          onChange={(e) => {
-            saveToCache();
-
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              order: routines.length,
-            });
-
-            const template = e as EventTemplate;
-
-            newRoutineTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
-                })
-              )
-            );
-          }}
-          onCreateOption={async (value: unknown) => {
-            saveToCache();
-
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              name: value,
-              order: routines.length,
-            });
-
-            newRoutineTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/routine`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          options={forceArray(availableTemplates).filter(
-            (template) => template.type === TemplateTypes.Routine
+        <div className="rounded bg-bg-2">
+          {!!routines.length && (
+            <LinkList className="rounded-b-none border-b-0">
+              {routines.map((routine) => (
+                <ListItem
+                  href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
+                  icon="edit"
+                  key={routine.id}
+                  onClick={saveToCache}
+                  text={routine.name}
+                />
+              ))}
+            </LinkList>
           )}
-          placeholder="Add routine"
-          value={null}
-        />
+          <Select
+            className={twMerge(routines.length && 'rounded-t-none')}
+            creatable
+            instanceId="routineTemplate"
+            isLoading={newRoutineTransition[0]}
+            noOptionsMessage={() => null}
+            onChange={(e) => {
+              saveToCache();
+
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                order: routines.length,
+              });
+
+              const template = e as EventTemplate;
+
+              newRoutineTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
+                  })
+                )
+              );
+            }}
+            onCreateOption={async (value: unknown) => {
+              saveToCache();
+
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                name: value,
+                order: routines.length,
+              });
+
+              newRoutineTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/routine`,
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            options={forceArray(availableTemplates).filter(
+              (template) => template.type === TemplateTypes.Routine
+            )}
+            placeholder="Add routine"
+            value={null}
+          />
+        </div>
       </section>
       <section>
         <LabelSpan as="h1" className="pb-2">
           Observations
         </LabelSpan>
-        {!!observations.length && (
-          <LinkList className="rounded-b-none border-b-0">
-            {observations.map((observation) => (
-              <ListItem
-                href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
-                icon="edit"
-                key={observation.id}
-                onClick={saveToCache}
-                text={observation.name}
-              />
-            ))}
-          </LinkList>
-        )}
-        <Select
-          className={twMerge(observations.length && 'rounded-t-none')}
-          creatable
-          instanceId="observationTemplate"
-          isLoading={newObservationTransition[0]}
-          noOptionsMessage={() => null}
-          onChange={(e) => {
-            saveToCache();
-
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              order: observations.length,
-            });
-
-            const template = e as EventTemplate;
-
-            newObservationTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
-                })
-              )
-            );
-          }}
-          onCreateOption={async (value: unknown) => {
-            saveToCache();
-
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              name: value,
-              order: observations.length,
-            });
-
-            newObservationTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/observation`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          options={forceArray(availableTemplates).filter(
-            (template) => template.type === TemplateTypes.Observation
+        <div className="rounded bg-bg-2">
+          {!!observations.length && (
+            <LinkList className="rounded-b-none border-b-0">
+              {observations.map((observation) => (
+                <ListItem
+                  href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
+                  icon="edit"
+                  key={observation.id}
+                  onClick={saveToCache}
+                  text={observation.name}
+                />
+              ))}
+            </LinkList>
           )}
-          placeholder="Add observation"
-          value={null}
-        />
+          <Select
+            className={twMerge(observations.length && 'rounded-t-none')}
+            creatable
+            instanceId="observationTemplate"
+            isLoading={newObservationTransition[0]}
+            noOptionsMessage={() => null}
+            onChange={(e) => {
+              saveToCache();
+
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                order: observations.length,
+              });
+
+              const template = e as EventTemplate;
+
+              newObservationTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
+                  })
+                )
+              );
+            }}
+            onCreateOption={async (value: unknown) => {
+              saveToCache();
+
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                name: value,
+                order: observations.length,
+              });
+
+              newObservationTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/observation`,
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            options={forceArray(availableTemplates).filter(
+              (template) => template.type === TemplateTypes.Observation
+            )}
+            placeholder="Add observation"
+            value={null}
+          />
+        </div>
       </section>
       <Button
-        className="mt-6 w-full"
+        className="mt-4 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

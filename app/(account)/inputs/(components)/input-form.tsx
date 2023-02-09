@@ -177,7 +177,21 @@ const InputForm = ({ input }: InputFormProps) => {
                   control={form.control}
                   name={`options.${optionIndex}.label`}
                   render={({ field }) => (
-                    <Input placeholder="Label" {...field} />
+                    <Input
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+
+                        optionsArray.insert(optionIndex + 1, {
+                          input_id: id ?? '',
+                          label: '',
+                          order: optionIndex + 1,
+                        });
+
+                        e.preventDefault();
+                      }}
+                      placeholder="Label"
+                      {...field}
+                    />
                   )}
                 />
               </li>

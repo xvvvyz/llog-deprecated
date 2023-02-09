@@ -1,24 +1,29 @@
 'use client';
 
 import Avatar from '(components)/avatar';
+import Button from '(components)/button';
 import Card from '(components)/card';
 import DateTime from '(components)/date-time';
 import DirtyHtml from '(components)/dirty-html';
 import Pill from '(components)/pill';
+import CODES from '(utilities)/constant-codes';
+import EventTypes from '(utilities)/enum-event-types';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatDate from '(utilities)/format-date';
 import formatInputValue from '(utilities)/format-input-value';
 import formatMinFractionDigits from '(utilities)/format-min-fraction-digits';
 import { ListEventsData } from '(utilities)/list-events';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
 import CommentForm from './comment-form';
 
 interface TimelineEventsProps {
   events: NonNullable<ListEventsData>;
+  subjectId: string;
 }
 
-const TimelineEvents = ({ events }: TimelineEventsProps) => (
+const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
   <div className="mt-4 space-y-4 text-fg-2" suppressHydrationWarning>
     {Object.values(
       events.reduce((acc, event) => {
@@ -38,76 +43,93 @@ const TimelineEvents = ({ events }: TimelineEventsProps) => (
           const eventType = firstIfArray(event.type);
           const comments = forceArray(event.comments);
 
-          const inputs: [
-            string,
-            {
-              label: string;
-              type: keyof typeof formatInputValue;
-              values: string[];
-            }
-          ][] = Object.entries(
-            forceArray(event.inputs).reduce((acc, { input, option, value }) => {
-              acc[input.id] = acc[input.id] ?? { values: [] };
-              acc[input.id].label = input.label;
-              acc[input.id].type = input.type;
-              acc[input.id].values.push(value ?? option.label);
-              return acc;
-            }, {})
-          );
+          const session = formatMinFractionDigits({
+            value: eventType.order + 1,
+          });
 
           return (
             <Card as="article" key={event.id} size="0">
-              <header className="flex items-baseline gap-4 px-4 py-3">
-                <h1 className="truncate text-fg-1">
-                  {eventType.mission ? eventType.mission.name : eventType.name}
-                </h1>
-                {eventType.mission && (
-                  <Pill className="-mb-1">
-                    {formatMinFractionDigits({
-                      value: eventType.order + 1,
-                    })}
-                  </Pill>
-                )}
-                <DateTime
-                  className="ml-auto shrink-0"
-                  date={event.created_at}
-                  formatter="time"
-                />
-              </header>
-              {!!inputs.length && (
-                <ul
-                  className={twMerge(
-                    'mb-2 flex flex-col divide-y divide-alpha-1 border-t border-alpha-1',
-                    !!comments.length && 'border-b'
-                  )}
+              <header>
+                <Button
+                  className={twMerge('m-0 w-full gap-4 py-3 px-4')}
+                  href={`/subjects/${subjectId}/event/${event.id}`}
+                  variant="link"
                 >
-                  {inputs.map(([id, { label, type, values }]) => (
-                    <li
-                      className="grid grid-cols-2 px-4 py-2"
-                      key={id}
-                      role="figure"
-                    >
-                      <figcaption className="pr-3">{label}</figcaption>
-                      <span>{formatInputValue[type](values)}</span>
-                    </li>
+                  <span className="truncate">
+                    {eventType.mission
+                      ? eventType.mission.name
+                      : eventType.name}
+                  </span>
+                  <div className="ml-auto flex shrink-0 items-center gap-3">
+                    <Pill
+                      k={CODES[eventType.type as EventTypes]}
+                      v={eventType.mission ? session : undefined}
+                    />
+                    <ArrowRightIcon className="relative -right-[0.2em] w-5" />
+                  </div>
+                </Button>
+              </header>
+              <table
+                className={twMerge(
+                  'mb-2 w-full table-fixed border-alpha-1 px-4 py-2',
+                  comments.length && 'border-b'
+                )}
+              >
+                <tbody>
+                  <tr>
+                    <td className="border-t border-alpha-1 py-2 pl-4 align-top text-fg-3">
+                      Time
+                    </td>
+                    <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                      <DateTime date={event.created_at} formatter="time" />
+                    </td>
+                  </tr>
+                  {(
+                    Object.entries(
+                      forceArray(event.inputs).reduce(
+                        (acc, { input, option, value }) => {
+                          acc[input.id] = acc[input.id] ?? { values: [] };
+                          acc[input.id].label = input.label;
+                          acc[input.id].type = input.type;
+                          acc[input.id].values.push(value ?? option.label);
+                          return acc;
+                        },
+                        {}
+                      )
+                    ) as [
+                      string,
+                      {
+                        label: string;
+                        type: keyof typeof formatInputValue;
+                        values: string[];
+                      }
+                    ][]
+                  ).map(([id, { label, type, values }]) => (
+                    <tr key={id}>
+                      <td className="border-t border-alpha-1 py-2 pl-4 align-top text-fg-3">
+                        {label}
+                      </td>
+                      <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                        {formatInputValue[type](values)}
+                      </td>
+                    </tr>
                   ))}
-                </ul>
-              )}
+                </tbody>
+              </table>
               {!!comments.length && (
                 <ul className="mb-2" role="section">
                   {comments.map(({ content, id, profile }) => (
                     <article
-                      className="flex items-start gap-4 px-4 py-2"
+                      className="flex gap-4 px-4 py-2"
                       key={id}
                       role="comment"
                     >
-                      <Avatar name={profile.first_name} />
-                      <div className="-mt-1 w-full">
-                        <h1>
+                      <Avatar name={profile.first_name} size="sm" />
+                      <div className="-mt-[0.325rem] w-full">
+                        <span className="text-fg-3">
                           {profile.first_name} {profile.last_name}
-                          <span className="sr-only">&nbsp;said</span>
-                        </h1>
-                        <DirtyHtml className="text-fg-1">{content}</DirtyHtml>
+                        </span>
+                        <DirtyHtml>{content}</DirtyHtml>
                       </div>
                     </article>
                   ))}

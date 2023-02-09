@@ -11,7 +11,7 @@ import EventTypeForm from '../(components)/event-type-form';
 
 interface PageProps {
   params: {
-    eventType: EventTypes;
+    eventTypeType: EventTypes;
     subjectId: string;
   };
   searchParams?: {
@@ -20,10 +20,10 @@ interface PageProps {
 }
 
 const Page = async ({
-  params: { eventType, subjectId },
+  params: { eventTypeType, subjectId },
   searchParams,
 }: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventType)) return notFound();
+  if (!Object.values(EventTypes).includes(eventTypeType)) return notFound();
 
   const [{ data: subject }, { data: availableInputs }, { data: template }] =
     await Promise.all([
@@ -45,7 +45,7 @@ const Page = async ({
           items={[
             [subject.name, subjectHref],
             ['Settings', `${subjectHref}/settings`],
-            [`Add ${eventType}`],
+            [`Add ${eventTypeType}`],
           ]}
         />
       </Header>
@@ -54,7 +54,7 @@ const Page = async ({
           availableInputs={availableInputs}
           subjectId={subjectId}
           template={template}
-          type={eventType as EventTypes}
+          type={eventTypeType as EventTypes}
         />
       </Card>
     </>

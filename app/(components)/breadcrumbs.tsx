@@ -1,6 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 import Button from './button';
 
 interface BreadcrumbProps {
@@ -9,9 +10,15 @@ interface BreadcrumbProps {
 
 const Breadcrumbs = ({ items }: BreadcrumbProps) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   return (
-    <h1 className="ml-4 text-right">
+    <h1
+      className={twMerge(
+        'ml-4 text-right',
+        searchParams.has('back') && 'disabled'
+      )}
+    >
       {items.length === 1 ? (
         <span className="text-2xl">{items[0]}</span>
       ) : (

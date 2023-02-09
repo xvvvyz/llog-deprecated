@@ -1,3 +1,4 @@
+import { Database } from '(types)/database';
 import createServerSupabaseClient from '(utilities)/create-server-supabase-client';
 
 const listSessionRoutines = (
@@ -11,12 +12,7 @@ const listSessionRoutines = (
       content,
       event:events(
         id,
-        inputs:event_inputs(
-          id,
-          input_id,
-          input_option_id,
-          value
-        )
+        inputs:event_inputs(id, input_id, input_option_id, value)
       ),
       id,
       inputs:event_type_inputs(
@@ -28,6 +24,8 @@ const listSessionRoutines = (
         )
       ),
       name,
+      order,
+      session,
       type`
     )
     .eq('mission_id', missionId)
@@ -38,6 +36,28 @@ const listSessionRoutines = (
 
 export type ListSessionRoutinesData = Awaited<
   ReturnType<typeof listSessionRoutines>
->['data'];
+>['data'] & {
+  event: Pick<Database['public']['Tables']['events']['Row'], 'id'> & {
+    inputs: Array<
+      Pick<
+        Database['public']['Tables']['event_inputs']['Row'],
+        'id' | 'input_id' | 'input_option_id' | 'value'
+      >
+    >;
+  };
+  inputs: Array<
+    Pick<
+      Database['public']['Tables']['inputs']['Row'],
+      'id' | 'label' | 'type'
+    > & {
+      options: Array<
+        Pick<
+          Database['public']['Tables']['input_options']['Row'],
+          'id' | 'label'
+        >
+      >;
+    }
+  >;
+};
 
 export default listSessionRoutines;

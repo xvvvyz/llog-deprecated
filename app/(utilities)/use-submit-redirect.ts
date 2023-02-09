@@ -10,11 +10,12 @@ const useSubmitRedirect = () => {
     async (
       path: string,
       { redirect }: { redirect?: boolean } = { redirect: true }
-    ) => {
-      await router.refresh();
-      if (!redirect) return;
-      startTransition(() => router.push(searchParams.get('back') ?? path));
-    },
+    ) =>
+      startTransition(() => {
+        router.refresh();
+        if (!redirect) return;
+        router.push(searchParams.get('back') ?? path);
+      }),
     isTransitioning,
   ] as const;
 };

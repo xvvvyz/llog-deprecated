@@ -20,6 +20,7 @@ import {
   Editor,
   EditorContent,
   Extension,
+  KeyboardShortcutCommand,
   useEditor,
 } from '@tiptap/react';
 
@@ -68,7 +69,7 @@ const RichTextarea = forwardRef(
         attributes: {
           'aria-label': ariaLabel ?? '',
           class: twMerge(
-            'prose input cursor-text min-h-[5rem]',
+            'prose input cursor-text min-h-[4.2rem]',
             right && 'pr-[2.4rem]',
             className
           ),
@@ -108,12 +109,12 @@ const RichTextarea = forwardRef(
         Typography,
         Extension.create({
           addKeyboardShortcuts() {
-            return {
-              'Shift-Enter': ({ editor }) => {
-                editor.commands.enter();
-                return true;
-              },
+            const handleEnter: KeyboardShortcutCommand = ({ editor }) => {
+              editor.commands.enter();
+              return true;
             };
+
+            return { 'Mod-Enter': handleEnter, 'Shift-Enter': handleEnter };
           },
         }),
       ],
@@ -143,7 +144,7 @@ const RichTextarea = forwardRef(
         ) : (
           <DirtyHtml
             className={twMerge(
-              'input min-h-[5rem]',
+              'input min-h-[4.2rem]',
               !value && 'text-fg-3',
               className
             )}

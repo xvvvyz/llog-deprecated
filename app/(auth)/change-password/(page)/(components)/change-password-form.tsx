@@ -15,6 +15,7 @@ const ChangePasswordForm = () => {
 
   return (
     <form
+      className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(async ({ password }) => {
         const { error } = await supabase.auth.updateUser({ password });
 
@@ -25,12 +26,12 @@ const ChangePasswordForm = () => {
         }
       })}
     >
-      <Label className="mt-9">
+      <Label>
         <LabelSpan>New password</LabelSpan>
         <Input type="password" {...form.register('password')} />
       </Label>
       <Button
-        className="mt-12 w-full"
+        className="mt-4 w-full"
         loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Changing password…"
         type="submit"

@@ -20,6 +20,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <form
+      className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(async ({ email }) => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${location.origin}/change-password`,
@@ -29,12 +30,12 @@ const ForgotPasswordForm = () => {
         else setLinkSent(true);
       })}
     >
-      <Label className="mt-9">
+      <Label>
         <LabelSpan>Email address</LabelSpan>
         <Input disabled={linkSent} type="email" {...form.register('email')} />
       </Label>
       <Button
-        className="mt-12 w-full"
+        className="mt-4 w-full"
         disabled={linkSent}
         loading={form.formState.isSubmitting}
         loadingText="Sending link…"

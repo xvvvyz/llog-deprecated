@@ -16,8 +16,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 interface EventFormProps {
-  event?: GetEventData;
+  event?: GetEventData | ListSessionRoutinesData['event'];
   eventType:
+    | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission: boolean;
@@ -236,7 +237,7 @@ const EventForm = ({
         </Label>
       ))}
       <Button
-        className={twMerge('w-full', eventTypeInputs.length && 'mt-6')}
+        className={twMerge('w-full', eventTypeInputs.length && 'mt-4')}
         colorScheme={event ? 'transparent' : 'accent'}
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"

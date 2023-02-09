@@ -9,7 +9,7 @@ interface TimelineProps {
 const Timeline = async ({ subjectId }: TimelineProps) => {
   const { data: events } = await listEvents(subjectId);
   if (!events?.length) return <Empty>No events</Empty>;
-  return <TimelineEvents events={events} />;
+  return <TimelineEvents events={events} subjectId={subjectId} />;
 };
 
 export default Timeline;
