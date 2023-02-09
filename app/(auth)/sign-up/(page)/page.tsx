@@ -17,4 +17,5 @@ const Page = () => (
   </>
 );
 
+export const metadata = { title: 'Sign up' };
 export default Page;

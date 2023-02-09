@@ -22,4 +22,5 @@ const Page = async () => {
 };
 
 export const dynamic = 'force-dynamic';
+export const metadata = { title: 'Templates' };
 export default Page;

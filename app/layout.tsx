@@ -18,4 +18,14 @@ const Layout = ({ children }: LayoutProps) => (
   </html>
 );
 
+export const metadata = {
+  description: '',
+  title: {
+    default: 'llog — collaborative behavior modification',
+    template: '%s - llog',
+  },
+  viewport:
+    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
+};
+
 export default Layout;

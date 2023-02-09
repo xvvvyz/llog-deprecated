@@ -2,6 +2,7 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Card from '(components)/card';
 import Header from '(components)/header';
+import formatTitle from '(utilities)/format-title';
 import getEventTypeWithInputs from '(utilities)/get-event-type-with-inputs';
 import getSubject from '(utilities)/get-subject';
 import listInputs from '(utilities)/list-inputs';
@@ -52,4 +53,17 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({
+  params: { eventTypeId, subjectId },
+}: PageProps) => {
+  const [{ data: subject }, { data: eventType }] = await Promise.all([
+    getSubject(subjectId),
+    getEventTypeWithInputs(eventTypeId),
+  ]);
+
+  if (!subject || !eventType) return;
+  return { title: formatTitle([subject.name, 'Settings', eventType.name]) };
+};
+
 export default Page;

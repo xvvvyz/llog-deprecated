@@ -8,4 +8,5 @@ const Page = () => (
   </Card>
 );
 
+export const metadata = { title: 'Change password' };
 export default Page;

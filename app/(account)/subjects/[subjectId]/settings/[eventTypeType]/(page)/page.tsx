@@ -3,6 +3,7 @@ import Breadcrumbs from '(components)/breadcrumbs';
 import Card from '(components)/card';
 import Header from '(components)/header';
 import EventTypes from '(utilities)/enum-event-types';
+import formatTitle from '(utilities)/format-title';
 import getSubject from '(utilities)/get-subject';
 import getTemplate from '(utilities)/get-template';
 import listInputs from '(utilities)/list-inputs';
@@ -11,6 +12,7 @@ import EventTypeForm from '../(components)/event-type-form';
 
 interface PageProps {
   params: {
+    eventType: EventTypes;
     eventTypeType: EventTypes;
     subjectId: string;
   };
@@ -62,4 +64,13 @@ const Page = async ({
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({
+  params: { eventType, subjectId },
+}: PageProps) => {
+  const { data: subject } = await getSubject(subjectId);
+  if (!subject) return;
+  return { title: formatTitle([subject.name, 'Settings', `Add ${eventType}`]) };
+};
+
 export default Page;

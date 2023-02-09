@@ -2,6 +2,7 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Card from '(components)/card';
 import Header from '(components)/header';
+import formatTitle from '(utilities)/format-title';
 import getSubject from '(utilities)/get-subject';
 import listInputs from '(utilities)/list-inputs';
 import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
@@ -52,4 +53,13 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({
+  params: { subjectId },
+}: PageProps) => {
+  const { data: subject } = await getSubject(subjectId);
+  if (!subject) return;
+  return { title: formatTitle([subject.name, 'Settings', 'Add mission']) };
+};
+
 export default Page;

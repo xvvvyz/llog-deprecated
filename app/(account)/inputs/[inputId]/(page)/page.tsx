@@ -2,6 +2,7 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Card from '(components)/card';
 import Header from '(components)/header';
+import formatTitle from '(utilities)/format-title';
 import getInput from '(utilities)/get-input';
 import { notFound } from 'next/navigation';
 import InputForm from '../../(components)/input-form';
@@ -30,4 +31,11 @@ const Page = async ({ params: { inputId } }: PageProps) => {
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
+  const { data: input } = await getInput(inputId);
+  if (!input) return;
+  return { title: formatTitle(['Inputs', input.label]) };
+};
+
 export default Page;

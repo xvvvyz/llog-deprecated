@@ -18,4 +18,5 @@ const Page = () => (
   </>
 );
 
+export const metadata = { title: 'Forgot password' };
 export default Page;

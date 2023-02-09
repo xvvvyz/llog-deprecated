@@ -3,6 +3,7 @@ import Breadcrumbs from '(components)/breadcrumbs';
 import Empty from '(components)/empty';
 import Header from '(components)/header';
 import firstIfArray from '(utilities)/first-if-array';
+import formatTitle from '(utilities)/format-title';
 import getMission from '(utilities)/get-mission';
 import getSubject from '(utilities)/get-subject';
 import listSessionRoutines from '(utilities)/list-session-routines';
@@ -82,4 +83,17 @@ const Page = async ({
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({
+  params: { missionId, subjectId },
+}: PageProps) => {
+  const [{ data: subject }, { data: mission }] = await Promise.all([
+    getSubject(subjectId),
+    getMission(missionId),
+  ]);
+
+  if (!subject || !mission) return;
+  return { title: formatTitle([subject.name, mission.name]) };
+};
+
 export default Page;

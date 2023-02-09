@@ -59,4 +59,13 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 };
 
 export const dynamic = 'force-dynamic';
+
+export const generateMetadata = async ({
+  params: { subjectId },
+}: PageProps) => {
+  const { data: subject } = await getSubject(subjectId);
+  if (!subject) return;
+  return { title: subject.name };
+};
+
 export default Page;
