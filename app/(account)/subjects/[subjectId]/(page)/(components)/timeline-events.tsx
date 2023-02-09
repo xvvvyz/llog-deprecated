@@ -12,7 +12,7 @@ import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatDate from '(utilities)/format-date';
 import formatInputValue from '(utilities)/format-input-value';
-import formatMinFractionDigits from '(utilities)/format-min-fraction-digits';
+import formatRoutineNumber from '(utilities)/format-routine-number';
 import { ListEventsData } from '(utilities)/list-events';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
@@ -43,10 +43,6 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
           const eventType = firstIfArray(event.type);
           const comments = forceArray(event.comments);
 
-          const session = formatMinFractionDigits({
-            value: eventType.order + 1,
-          });
-
           return (
             <Card as="article" key={event.id} size="0">
               <header>
@@ -61,9 +57,13 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                       : eventType.name}
                   </span>
                   <div className="ml-auto flex shrink-0 items-center gap-3">
+                    {eventType.mission && <Pill k={CODES.mission} />}
                     <Pill
                       k={CODES[eventType.type as EventTypes]}
-                      v={eventType.mission ? session : undefined}
+                      v={
+                        eventType.mission &&
+                        formatRoutineNumber(eventType.order)
+                      }
                     />
                     <ArrowRightIcon className="relative -right-[0.2em] w-5" />
                   </div>

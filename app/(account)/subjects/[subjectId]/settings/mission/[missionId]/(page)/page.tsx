@@ -70,7 +70,10 @@ export const generateMetadata = async ({
   ]);
 
   if (!subject || !mission) return;
-  return { title: formatTitle([subject.name, 'Settings', mission.name]) };
+
+  return {
+    title: formatTitle([subject.name, 'Settings', 'Mission', mission.name]),
+  };
 };
 
 export default Page;

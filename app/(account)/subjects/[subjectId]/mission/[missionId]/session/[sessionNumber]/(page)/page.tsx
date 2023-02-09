@@ -65,6 +65,7 @@ const Page = async ({
                   eventType={eventType}
                   isMission
                   key={eventType.id}
+                  mission={mission}
                   redirectOnSubmit={oneRoutineLeft && !event}
                   subjectId={subjectId}
                 />
@@ -85,15 +86,24 @@ const Page = async ({
 export const dynamic = 'force-dynamic';
 
 export const generateMetadata = async ({
-  params: { missionId, subjectId },
+  params: { missionId, sessionNumber, subjectId },
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
     getMission(missionId),
   ]);
 
-  if (!subject || !mission) return;
-  return { title: formatTitle([subject.name, mission.name]) };
+  if (!subject || !mission || !sessionNumber) return;
+
+  return {
+    title: formatTitle([
+      subject.name,
+      'Mission',
+      mission.name,
+      'Session',
+      sessionNumber,
+    ]),
+  };
 };
 
 export default Page;

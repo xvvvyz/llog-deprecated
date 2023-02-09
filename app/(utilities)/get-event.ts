@@ -49,6 +49,10 @@ export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
         >;
       }
     >;
+    mission: Pick<
+      Database['public']['Tables']['missions']['Row'],
+      'id' | 'name'
+    >;
   };
 };
 

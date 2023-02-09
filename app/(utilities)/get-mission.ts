@@ -3,7 +3,7 @@ import createServerSupabaseClient from '(utilities)/create-server-supabase-clien
 const getMission = (missionId: string) =>
   createServerSupabaseClient()
     .from('missions')
-    .select('name')
+    .select('id, name')
     .eq('id', missionId)
     .single();
 

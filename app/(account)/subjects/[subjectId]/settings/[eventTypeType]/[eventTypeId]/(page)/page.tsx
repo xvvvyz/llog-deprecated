@@ -6,6 +6,7 @@ import formatTitle from '(utilities)/format-title';
 import getEventTypeWithInputs from '(utilities)/get-event-type-with-inputs';
 import getSubject from '(utilities)/get-subject';
 import listInputs from '(utilities)/list-inputs';
+import capitalize from 'lodash/capitalize';
 import { notFound } from 'next/navigation';
 import EventTypeForm from '../../(components)/event-type-form';
 
@@ -63,7 +64,15 @@ export const generateMetadata = async ({
   ]);
 
   if (!subject || !eventType) return;
-  return { title: formatTitle([subject.name, 'Settings', eventType.name]) };
+
+  return {
+    title: formatTitle([
+      subject.name,
+      'Settings',
+      capitalize(eventType.type),
+      eventType.name,
+    ]),
+  };
 };
 
 export default Page;
