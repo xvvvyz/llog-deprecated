@@ -1,3 +1,7 @@
+# llog
+
+A collaborative behavior modification platform for mere mortals.
+
 ## Development Setup
 
 Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git),
@@ -35,7 +39,7 @@ npm run db:types
 npm run db:diff -- migration_description
 ```
 
-## Production Setup Notes
+## Production Notes
 
 - Update next.config.js remotePatterns
 - Update auth providers
