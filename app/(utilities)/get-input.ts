@@ -5,6 +5,7 @@ const getInput = (inputId: string) =>
     .from('inputs')
     .select('id, label, options:input_options(id, label), type')
     .eq('id', inputId)
+    .eq('options.deleted', false)
     .order('order', { foreignTable: 'options' })
     .single();
 

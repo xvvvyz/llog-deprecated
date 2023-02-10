@@ -41,8 +41,8 @@ create table "public"."event_types" (
 
 alter table "public"."event_types" enable row level security;
 create index event_types_mission_id_session_deleted_order_index on public.event_types using btree (mission_id, session, deleted, "order");
+create index event_types_subject_id_mission_id_type_deleted_order_index on public.event_types using btree (subject_id, mission_id, type, deleted, "order") where deleted = false;
 create unique index event_types_pkey on public.event_types using btree (id);
-create unique index event_types_subject_id_mission_id_type_deleted_order_index on public.event_types using btree (subject_id, mission_id, type, deleted, "order") where deleted is false;
 
 create table "public"."event_inputs" (
   "event_id" uuid not null,
@@ -80,7 +80,7 @@ create table "public"."input_options" (
 );
 
 alter table "public"."input_options" enable row level security;
-create unique index input_options_input_id_deleted_order_index on public.input_options using btree (input_id, deleted, "order");
+create index input_options_input_id_deleted_order_index on public.input_options using btree (input_id, deleted, "order") where deleted = false;
 create unique index input_options_pkey on public.input_options using btree (id);
 
 create table "public"."inputs" (

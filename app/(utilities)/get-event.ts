@@ -28,6 +28,7 @@ const getEvent = (eventId: string) =>
     )
     .eq('id', eventId)
     .order('order', { foreignTable: 'type.inputs' })
+    .eq('type.inputs.input.options.deleted', false)
     .order('order', { foreignTable: 'type.inputs.input.options' })
     .single();
 

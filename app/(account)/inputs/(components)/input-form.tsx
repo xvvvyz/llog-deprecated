@@ -3,6 +3,7 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
+import Menu from '(components)/menu';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
@@ -14,7 +15,7 @@ import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
@@ -116,10 +117,33 @@ const InputForm = ({ input }: InputFormProps) => {
               }
             );
 
+            const deletedOptionIds = forceArray(input?.options).reduce(
+              (acc, option) => {
+                if (!updatedOptions.some(({ id }) => id === option.id)) {
+                  acc.push(option.id);
+                }
+
+                return acc;
+              },
+              []
+            );
+
+            if (deletedOptionIds.length) {
+              const { error: deletedOptionsError } = await supabase
+                .from('input_options')
+                .update({ deleted: true })
+                .in('id', deletedOptionIds);
+
+              if (deletedOptionsError) {
+                alert(deletedOptionsError.message);
+                return;
+              }
+            }
+
             if (updatedOptions.length) {
               const { error: inputOptionsError } = await supabase
                 .from('input_options')
-                .upsert(updatedOptions.sort((a, b) => b.order - a.order));
+                .upsert(updatedOptions);
 
               if (inputOptionsError) {
                 alert(inputOptionsError.message);
@@ -179,17 +203,37 @@ const InputForm = ({ input }: InputFormProps) => {
                   render={({ field }) => (
                     <Input
                       onKeyDown={(e) => {
-                        if (e.key !== 'Enter') return;
+                        if (e.key === 'Backspace' && !field.value) {
+                          e.preventDefault();
+                          optionsArray.remove(optionIndex);
 
-                        optionsArray.insert(optionIndex + 1, {
-                          input_id: id ?? '',
-                          label: '',
-                          order: optionIndex + 1,
-                        });
+                          form.setFocus(`options.${optionIndex - 1}.label`, {
+                            shouldSelect: true,
+                          });
+                        }
 
-                        e.preventDefault();
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+
+                          optionsArray.insert(optionIndex + 1, {
+                            input_id: id ?? '',
+                            label: '',
+                            order: optionIndex + 1,
+                          });
+                        }
                       }}
                       placeholder="Label"
+                      right={
+                        <Menu
+                          items={[
+                            {
+                              icon: <TrashIcon className="w-5" />,
+                              onClick: () => optionsArray.remove(optionIndex),
+                              text: 'Delete option',
+                            },
+                          ]}
+                        />
+                      }
                       {...field}
                     />
                   )}

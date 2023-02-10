@@ -120,7 +120,7 @@ const MissionForm = ({
 
             return acc;
           },
-          [] as string[]
+          []
         );
 
         if (deletedEventTypeIds.length) {
