@@ -153,6 +153,7 @@ const SubjectSettingsForm = ({
                   formatCacheLink({
                     backLink,
                     path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
+                    useCache: true,
                   })
                 )
               );
@@ -221,6 +222,7 @@ const SubjectSettingsForm = ({
                   formatCacheLink({
                     backLink,
                     path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
+                    useCache: true,
                   })
                 )
               );

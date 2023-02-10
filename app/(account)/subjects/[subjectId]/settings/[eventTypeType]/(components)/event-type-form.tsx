@@ -19,7 +19,7 @@ import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -47,6 +47,12 @@ const EventTypeForm = ({
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // hack to force template to be empty when no templateId is present
+  // client components seem to cache previous values passed?
+  template = searchParams.has('templateId') ? template : null;
+
   const templateData = template?.data as unknown as EventTemplateData;
 
   const defaultValues = useDefaultValues({

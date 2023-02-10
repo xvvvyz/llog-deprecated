@@ -3,13 +3,13 @@ import CacheKeys from './enum-cache-keys';
 const formatCacheLink = ({
   backLink,
   path,
-  updateCacheKey,
-  updateCachePath,
+  updateCacheKey = '',
+  updateCachePath = '',
   useCache = false,
 }: {
   backLink: string;
   path: string;
-  updateCacheKey?: CacheKeys;
+  updateCacheKey?: CacheKeys | '';
   updateCachePath?: string;
   useCache?: boolean;
 }) => {
