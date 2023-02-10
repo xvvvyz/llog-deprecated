@@ -15,7 +15,6 @@ import formatInputValue from '(utilities)/format-input-value';
 import formatRoutineNumber from '(utilities)/format-routine-number';
 import { ListEventsData } from '(utilities)/list-events';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { twMerge } from 'tailwind-merge';
 import CommentForm from './comment-form';
 
 interface TimelineEventsProps {
@@ -47,40 +46,32 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
             <Card as="article" key={event.id} size="0">
               <header>
                 <Button
-                  className={twMerge('m-0 w-full gap-4 py-3 px-4')}
+                  className="m-0 w-full gap-4 py-3 px-4"
                   href={`/subjects/${subjectId}/event/${event.id}`}
                   variant="link"
                 >
-                  <span className="truncate">
-                    {eventType.mission
-                      ? eventType.mission.name
-                      : eventType.name}
-                  </span>
+                  <Pill
+                    values={
+                      eventType.mission
+                        ? [
+                            CODES.mission,
+                            eventType.mission.name,
+                            CODES.routine,
+                            formatRoutineNumber(eventType.order),
+                          ]
+                        : [CODES[eventType.type as EventTypes], eventType.name]
+                    }
+                  />
                   <div className="ml-auto flex shrink-0 items-center gap-3">
-                    {eventType.mission && <Pill k={CODES.mission} />}
-                    <Pill
-                      k={CODES[eventType.type as EventTypes]}
-                      v={
-                        eventType.mission &&
-                        formatRoutineNumber(eventType.order)
-                      }
-                    />
                     <ArrowRightIcon className="relative -right-[0.2em] w-5" />
                   </div>
                 </Button>
               </header>
-              <table
-                className={twMerge(
-                  'mb-2 w-full table-fixed border-alpha-1 px-4 py-2',
-                  comments.length && 'border-b'
-                )}
-              >
+              <table className="mb-2 w-full table-fixed px-4 py-2">
                 <tbody>
                   <tr>
-                    <td className="border-t border-alpha-1 py-2 pl-4 align-top text-fg-3">
-                      Time
-                    </td>
-                    <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                    <td className="pb-2 pl-4 align-top text-fg-3">Time</td>
+                    <td className="pb-2 pl-4 align-top">
                       <DateTime date={event.created_at} formatter="time" />
                     </td>
                   </tr>

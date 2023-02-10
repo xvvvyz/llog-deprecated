@@ -15,9 +15,14 @@ import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
+
+import {
+  EllipsisVerticalIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 
 const INPUT_TYPE_OPTIONS = [
   // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
@@ -224,15 +229,19 @@ const InputForm = ({ input }: InputFormProps) => {
                       }}
                       placeholder="Label"
                       right={
-                        <Menu
-                          items={[
-                            {
-                              icon: <TrashIcon className="w-5" />,
-                              onClick: () => optionsArray.remove(optionIndex),
-                              text: 'Delete option',
-                            },
-                          ]}
-                        />
+                        <Menu className="h-full w-full">
+                          <Menu.Button className="h-full w-full">
+                            <EllipsisVerticalIcon className="w-5" />
+                          </Menu.Button>
+                          <Menu.Items>
+                            <Menu.Item
+                              onClick={() => optionsArray.remove(optionIndex)}
+                            >
+                              <TrashIcon className="w-5" />
+                              Delete option
+                            </Menu.Item>
+                          </Menu.Items>
+                        </Menu>
                       }
                       {...field}
                     />

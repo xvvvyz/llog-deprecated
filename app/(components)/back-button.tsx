@@ -14,7 +14,7 @@ const BackButton = ({ className, href }: ButtonProps) => {
       href={searchParams.get('back') ?? href}
       icon={
         <ArrowLeftIcon
-          className={twMerge('relative -left-[0.2em] w-7', className)}
+          className={twMerge('relative -left-[0.18em] w-7', className)}
         />
       }
       label="Back"

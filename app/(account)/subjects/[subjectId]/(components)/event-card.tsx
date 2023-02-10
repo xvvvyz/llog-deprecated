@@ -1,5 +1,4 @@
 import { BoxProps } from '(components)/box';
-import Button from '(components)/button';
 import Card from '(components)/card';
 import DirtyHtml from '(components)/dirty-html';
 import Pill from '(components)/pill';
@@ -10,7 +9,7 @@ import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { GetMissionData } from '(utilities)/get-mission';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import EventCardMenu from './event-card-menu';
 import EventForm from './event-form';
 
 interface EventCardProps extends BoxProps {
@@ -34,32 +33,30 @@ const EventCard = ({
   subjectId,
   ...rest
 }: EventCardProps) => {
-  const sessionNumber = formatSessionNumber(eventType.session);
+  const commonPill = [
+    CODES[eventType.type],
+    mission ? formatRoutineNumber(eventType.order) : eventType.name,
+  ];
 
   return (
     <Card breakpoint="sm" {...rest}>
       <div className="space-y-8">
-        <div className="flex shrink-0 items-center gap-3 sm:-ml-2">
-          {!isMission && mission && (
-            <Button
-              href={`/subjects/${subjectId}/mission/${mission.id}/session/${sessionNumber}`}
-              variant="link"
-            >
-              <Pill
-                k={CODES.mission}
-                v={
-                  <span className="flex gap-1">
-                    {mission.name}
-                    <ArrowTopRightOnSquareIcon className="w-3" />
-                  </span>
-                }
-              />
-            </Button>
-          )}
+        <div className="flex h-4 shrink-0 items-center justify-between gap-3">
           <Pill
-            k={CODES[eventType.type]}
-            v={mission ? formatRoutineNumber(eventType.order) : eventType.name}
+            className="text-fg-2"
+            values={
+              !isMission && mission
+                ? [CODES.mission, mission.name, ...commonPill]
+                : commonPill
+            }
           />
+          {!isMission && mission && (
+            <EventCardMenu
+              missionId={mission.id}
+              sessionNumber={formatSessionNumber(eventType.session)}
+              subjectId={subjectId}
+            />
+          )}
         </div>
         {eventType.content && (
           <DirtyHtml as="article">{eventType.content}</DirtyHtml>

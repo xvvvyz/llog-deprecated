@@ -32,7 +32,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         </div>
         <IconButton
           href={`/subjects/${subject.id}/settings`}
-          icon={<Cog6ToothIcon className="relative -right-[0.2em] w-7" />}
+          icon={<Cog6ToothIcon className="relative -right-[0.18em] w-7" />}
           label="Edit"
         />
       </Header>

@@ -18,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {...rest}
       />
       {right && (
-        <div className="absolute right-0 top-[0.65rem] flex flex h-5 w-[2.4rem] w-5 items-center justify-center">
+        <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
           {right}
         </div>
       )}

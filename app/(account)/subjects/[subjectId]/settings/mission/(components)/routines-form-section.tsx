@@ -14,6 +14,7 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import useBackLink from '(utilities)/use-back-link';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
@@ -51,74 +52,74 @@ const RoutinesFormSection = <T extends FieldValues>({
     <li>
       <LabelSpan className="pb-2">Session {sessionIndex + 1}</LabelSpan>
       <ul>
-        {eventTypesArray.fields.map((eventType, routineIndex) => {
-          const menu = (
-            <Menu
-              items={[
-                {
-                  icon: <TrashIcon className="w-5" />,
-                  onClick: () => eventTypesArray.remove(routineIndex),
-                  text: 'Delete routine',
-                },
-              ]}
+        {eventTypesArray.fields.map((eventType, routineIndex) => (
+          <li className="mb-3" key={eventType.id}>
+            <Controller
+              control={form.control}
+              name={`${name}.${routineIndex}.content` as T[string]}
+              render={({ field }) => (
+                <RichTextarea
+                  className="rounded-b-none"
+                  placeholder="Description"
+                  right={
+                    <Menu className="h-full w-full">
+                      <Menu.Button className="h-full w-full">
+                        <EllipsisVerticalIcon className="w-5" />
+                      </Menu.Button>
+                      <Menu.Items>
+                        <Menu.Item
+                          onClick={() => eventTypesArray.remove(routineIndex)}
+                        >
+                          <TrashIcon className="w-5" />
+                          Delete routine
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Menu>
+                  }
+                  {...field}
+                />
+              )}
             />
-          );
+            <Controller
+              control={form.control}
+              name={`${name}.${routineIndex}.inputs` as T[string]}
+              render={({ field }) => (
+                <Select
+                  className="rounded-t-none border-t-0"
+                  creatable
+                  isLoading={isTransitioning}
+                  isMulti
+                  noOptionsMessage={() => null}
+                  onCreateOption={async (value: unknown) => {
+                    globalValueCache.set(CacheKeys.InputForm, {
+                      label: value,
+                    });
 
-          return (
-            <li className="mb-3" key={eventType.id}>
-              <Controller
-                control={form.control}
-                name={`${name}.${routineIndex}.content` as T[string]}
-                render={({ field }) => (
-                  <RichTextarea
-                    className="rounded-b-none"
-                    placeholder="Description"
-                    right={menu}
-                    {...field}
-                  />
-                )}
-              />
-              <Controller
-                control={form.control}
-                name={`${name}.${routineIndex}.inputs` as T[string]}
-                render={({ field }) => (
-                  <Select
-                    className="rounded-t-none border-t-0"
-                    creatable
-                    isLoading={isTransitioning}
-                    isMulti
-                    noOptionsMessage={() => null}
-                    onCreateOption={async (value: unknown) => {
-                      globalValueCache.set(CacheKeys.InputForm, {
-                        label: value,
-                      });
+                    globalValueCache.set(
+                      CacheKeys.MissionForm,
+                      form.getValues()
+                    );
 
-                      globalValueCache.set(
-                        CacheKeys.MissionForm,
-                        form.getValues()
-                      );
-
-                      startTransition(() =>
-                        router.push(
-                          formatCacheLink({
-                            backLink,
-                            path: '/inputs/add',
-                            updateCacheKey: CacheKeys.MissionForm,
-                            updateCachePath: `${name}.${routineIndex}.inputs`,
-                            useCache: true,
-                          })
-                        )
-                      );
-                    }}
-                    options={inputOptions}
-                    placeholder="Inputs"
-                    {...field}
-                  />
-                )}
-              />
-            </li>
-          );
-        })}
+                    startTransition(() =>
+                      router.push(
+                        formatCacheLink({
+                          backLink,
+                          path: '/inputs/add',
+                          updateCacheKey: CacheKeys.MissionForm,
+                          updateCachePath: `${name}.${routineIndex}.inputs`,
+                          useCache: true,
+                        })
+                      )
+                    );
+                  }}
+                  options={inputOptions}
+                  placeholder="Inputs"
+                  {...field}
+                />
+              )}
+            />
+          </li>
+        ))}
       </ul>
       <Select
         creatable

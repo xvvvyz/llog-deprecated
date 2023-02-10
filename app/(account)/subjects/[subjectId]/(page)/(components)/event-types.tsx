@@ -16,7 +16,7 @@ const EventTypes = async ({ subjectId, type }: PageProps) => {
     <ListItem
       href={`/subjects/${subjectId}/${type}/${eventType.id}`}
       key={eventType.id}
-      pill={CODES[type]}
+      pill={[CODES[type]]}
       text={eventType.name as string}
     />
   ));

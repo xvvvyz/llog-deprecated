@@ -26,7 +26,7 @@ const Missions = async ({ subjectId }: MissionProps) => {
       <ListItem
         href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
         key={mission.id}
-        pill={CODES.mission}
+        pill={[CODES.mission]}
         text={mission.name}
       />
     );

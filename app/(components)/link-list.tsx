@@ -1,5 +1,6 @@
 import Box, { BoxProps } from '(components)/box';
 import { ArrowRightIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 import Button from './button';
@@ -24,7 +25,7 @@ interface ListItemProps extends BoxProps {
   avatar?: string | null;
   href: string;
   icon?: keyof typeof icons;
-  pill?: string | { k: string; v: string };
+  pill?: ReactNode[];
   text: string;
 }
 
@@ -48,7 +49,7 @@ const ListItem = ({
       )}
       <span className="truncate">{text}</span>
       <div className="ml-auto flex shrink-0 items-center gap-3">
-        {pill && <Pill {...(typeof pill === 'string' ? { k: pill } : pill)} />}
+        {pill && <Pill values={pill} />}
         {icons[icon]}
       </div>
     </Button>
