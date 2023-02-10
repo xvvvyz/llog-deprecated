@@ -70,7 +70,7 @@ const RoutinesFormSection = <T extends FieldValues>({
                         <Menu.Item
                           onClick={() => eventTypesArray.remove(routineIndex)}
                         >
-                          <TrashIcon className="w-5" />
+                          <TrashIcon className="w-5 text-fg-3" />
                           Delete routine
                         </Menu.Item>
                       </Menu.Items>

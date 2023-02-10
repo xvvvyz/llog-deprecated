@@ -237,7 +237,7 @@ const InputForm = ({ input }: InputFormProps) => {
                             <Menu.Item
                               onClick={() => optionsArray.remove(optionIndex)}
                             >
-                              <TrashIcon className="w-5" />
+                              <TrashIcon className="w-5 text-fg-3" />
                               Delete option
                             </Menu.Item>
                           </Menu.Items>
