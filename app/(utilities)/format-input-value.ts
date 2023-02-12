@@ -1,5 +1,5 @@
 const formatInputValue = {
-  checkbox: ([value]: string[]) => (value === 'true' ? 'Yes' : 'No'),
+  checkbox: ([value]: (boolean | string)[]) => (value == true ? 'Yes' : 'No'),
   duration: ([value]: string[]) => `${value}s`,
   multi_select: (values: string[]) =>
     values.join(', ').replace(/, ([^,]+$)/, ', $1'),

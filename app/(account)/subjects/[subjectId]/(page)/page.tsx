@@ -2,11 +2,12 @@ import Avatar from '(components)/avatar';
 import BackButton from '(components)/back-button';
 import Header from '(components)/header';
 import IconButton from '(components)/icon-button';
-import { LinkList } from '(components)/link-list';
+import LinkList from '(components)/link-list';
+import createServerSupabaseClient from '(utilities)/create-server-supabase-client';
 import EventTypesEnum from '(utilities)/enum-event-types';
 import getSubject from '(utilities)/get-subject';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import EventTypes from './(components)/event-types';
 import Missions from './(components)/missions';
@@ -16,11 +17,23 @@ interface PageProps {
   params: {
     subjectId: string;
   };
+  searchParams?: {
+    share?: string;
+  };
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
+const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
-  if (!subject) return notFound();
+
+  if (!subject) {
+    if (!searchParams?.share) return notFound();
+
+    await createServerSupabaseClient().rpc('join_subject_as_manager', {
+      share_code: searchParams.share,
+    });
+
+    redirect(`/subjects/${subjectId}`);
+  }
 
   return (
     <>

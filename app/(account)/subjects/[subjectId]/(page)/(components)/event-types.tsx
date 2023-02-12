@@ -1,4 +1,4 @@
-import { ListItem } from '(components)/link-list';
+import LinkList from '(components)/link-list';
 import CODES from '(utilities)/constant-codes';
 import EventTypesEnum from '(utilities)/enum-event-types';
 import listSubjectEventTypes from '(utilities)/list-subject-event-types';
@@ -13,7 +13,7 @@ const EventTypes = async ({ subjectId, type }: PageProps) => {
   if (!eventTypes?.length) return null;
 
   return eventTypes.map((eventType) => (
-    <ListItem
+    <LinkList.Item
       href={`/subjects/${subjectId}/${type}/${eventType.id}`}
       key={eventType.id}
       pill={[CODES[type]]}

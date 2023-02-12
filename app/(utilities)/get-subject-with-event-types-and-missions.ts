@@ -8,8 +8,10 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
       event_types(id, name, type),
       id,
       image_uri,
+      managers:profiles(first_name, id, last_name),
       missions(id, name),
-      name`
+      name,
+      share_code`
     )
     .eq('id', subjectId)
     .eq('missions.deleted', false)

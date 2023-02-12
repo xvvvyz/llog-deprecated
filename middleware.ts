@@ -23,11 +23,14 @@ export const middleware = async (req: NextRequest) => {
     PRIVATE_ROUTES.some((p) => req.nextUrl.pathname.startsWith(p)) &&
     !session.data.session
   ) {
+    const inOrUp = req.nextUrl.searchParams.has('share') ? 'up' : 'in';
+
+    const redirect = encodeURIComponent(
+      `${req.nextUrl.pathname}${req.nextUrl.search}`
+    );
+
     return NextResponse.redirect(
-      new URL(
-        `/sign-in?redirect=${encodeURIComponent(req.nextUrl.pathname)}`,
-        req.url
-      )
+      new URL(`/sign-${inOrUp}?redirect=${redirect}`, req.url)
     );
   }
 

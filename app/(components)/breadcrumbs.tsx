@@ -25,7 +25,7 @@ const Breadcrumbs = ({ items }: BreadcrumbProps) => {
       ) : (
         filteredItems.map(([label, href], i) => (
           <Button
-            className="after:pl-[0.4rem] after:pr-[0.75rem] after:text-fg-3 after:content-['/'] last:after:hidden last-of-type:text-fg-1"
+            className="after:pl-1.5 after:pr-3 after:text-fg-3 after:content-['/'] last:after:hidden last-of-type:text-fg-1"
             disabled={!href && i < items.length - 1}
             href={href ?? pathname ?? undefined}
             key={label}

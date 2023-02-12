@@ -48,6 +48,7 @@ const SignInForm = () => {
           <LabelSpan>Password</LabelSpan>
           <Button
             className="underline"
+            forwardSearchParams
             href="/forgot-password"
             onClick={() =>
               globalValueCache.set(CacheKeys.SignInForm, form.getValues())

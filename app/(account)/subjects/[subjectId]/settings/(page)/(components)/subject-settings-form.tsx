@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import { LabelSpan } from '(components)/label';
-import { LinkList, ListItem } from '(components)/link-list';
+import LinkList from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { EventTemplate } from '(types)/event-template';
@@ -20,12 +20,19 @@ import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { useCopyToClipboard, useToggle } from 'usehooks-ts';
 import SubjectDetailsFormSection from '../../../../(components)/subject-details-form-section';
+
+import {
+  CheckIcon,
+  ClipboardDocumentIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
 
 interface SubjectSettingsFormProps {
   availableTemplates: ListTemplatesData;
@@ -39,10 +46,13 @@ const SubjectSettingsForm = ({
   availableTemplates,
   subject,
 }: SubjectSettingsFormProps) => {
+  const [copiedText, copyToClipboard] = useCopyToClipboard();
+  const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle();
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
+  const managers = forceArray(subject.managers);
   const missions = forceArray(subject.missions);
   const newObservationTransition = useTransition();
   const newRoutineTransition = useTransition();
@@ -55,7 +65,11 @@ const SubjectSettingsForm = ({
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.SubjectSettingsForm,
-    defaultValues: { id: subject.id, name: subject.name },
+    defaultValues: {
+      id: subject.id,
+      name: subject.name,
+      share_code: subject.share_code,
+    },
   });
 
   const form = useForm<SubjectSettingsFormValues>({ defaultValues });
@@ -93,7 +107,7 @@ const SubjectSettingsForm = ({
           {!!missions.length && (
             <LinkList className="rounded-b-none border-b-0">
               {missions.map((mission) => (
-                <ListItem
+                <LinkList.Item
                   href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
                   icon="edit"
                   key={mission.id}
@@ -123,7 +137,7 @@ const SubjectSettingsForm = ({
           {!!routines.length && (
             <LinkList className="rounded-b-none border-b-0">
               {routines.map((routine) => (
-                <ListItem
+                <LinkList.Item
                   href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
                   icon="edit"
                   key={routine.id}
@@ -192,7 +206,7 @@ const SubjectSettingsForm = ({
           {!!observations.length && (
             <LinkList className="rounded-b-none border-b-0">
               {observations.map((observation) => (
-                <ListItem
+                <LinkList.Item
                   href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
                   icon="edit"
                   key={observation.id}
@@ -252,6 +266,75 @@ const SubjectSettingsForm = ({
             value={null}
           />
         </div>
+      </section>
+      <section>
+        <LabelSpan as="h1" className="pb-2">
+          Clients
+        </LabelSpan>
+        <div className="rounded bg-bg-2">
+          {!!managers.length && (
+            <LinkList className="rounded-b-none border-b-0">
+              {managers.map((manager) => (
+                <LinkList.Item
+                  icon="trash"
+                  key={manager.id}
+                  onClick={() => null}
+                  text={`${manager.first_name} ${manager.last_name}`}
+                />
+              ))}
+            </LinkList>
+          )}
+          <Button
+            className={twMerge('w-full', managers.length && 'rounded-t-none')}
+            colorScheme="transparent"
+            loading={isCopyingToClipboard}
+            loadingText="Generating link…"
+            onClick={async () => {
+              toggleCopyingToClipboard();
+              let { share_code } = form.getValues();
+
+              if (!share_code) {
+                share_code = nanoid(8);
+
+                const { error: subjectError } = await supabase
+                  .from('subjects')
+                  .update({ share_code })
+                  .eq('id', subject.id);
+
+                if (subjectError) {
+                  alert(subjectError.message);
+                  toggleCopyingToClipboard();
+                  return;
+                }
+
+                form.setValue('share_code', share_code);
+              }
+
+              await copyToClipboard(
+                `${location.origin}/subjects/${subject.id}?share=${share_code}`
+              );
+
+              toggleCopyingToClipboard();
+            }}
+            type="button"
+          >
+            {copiedText ? (
+              <>
+                <CheckIcon className="w-5" />
+                Link copied&hellip; Share it!
+              </>
+            ) : (
+              <>
+                <ClipboardDocumentIcon className="w-5" />
+                Copy client link
+              </>
+            )}
+          </Button>
+        </div>
+        <p className="mx-auto mt-2 max-w-sm text-center leading-tight text-fg-3">
+          Clients can complete missions and routines, make observations and add
+          comments.
+        </p>
       </section>
       <Button
         className="mt-4 w-full"

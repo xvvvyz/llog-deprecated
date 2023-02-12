@@ -1,5 +1,5 @@
 import Empty from '(components)/empty';
-import { LinkList, ListItem } from '(components)/link-list';
+import LinkList from '(components)/link-list';
 import listSubjects from '(utilities)/list-subjects';
 
 const Page = async () => {
@@ -9,7 +9,7 @@ const Page = async () => {
   return (
     <LinkList>
       {subjects.map((subject) => (
-        <ListItem
+        <LinkList.Item
           avatar={subject.image_uri}
           href={`/subjects/${subject.id}`}
           key={subject.id}

@@ -4,13 +4,14 @@ import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 const SignUpForm = () => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm({
     defaultValues: { email: '', firstName: '', lastName: '', password: '' },
@@ -30,7 +31,8 @@ const SignUpForm = () => {
           if (error) {
             alert(error.message);
           } else {
-            startTransition(() => router.push('/subjects'));
+            const redirect = searchParams.get('redirect') ?? '/subjects';
+            startTransition(() => router.push(decodeURIComponent(redirect)));
           }
         }
       )}

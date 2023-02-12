@@ -10,7 +10,7 @@ const Pill = ({ className, values, ...rest }: PillProps) => (
   <Box
     as="span"
     className={twMerge(
-      'smallcaps -mx-[1px] inline-flex gap-1 truncate bg-alpha-1',
+      'smallcaps -mx-px inline-flex gap-1 truncate bg-alpha-1',
       className
     )}
     {...rest}

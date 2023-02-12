@@ -1,5 +1,5 @@
 import Empty from '(components)/empty';
-import { LinkList, ListItem } from '(components)/link-list';
+import LinkList from '(components)/link-list';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
 import listInputs from '(utilities)/list-inputs';
 
@@ -10,7 +10,7 @@ const Page = async () => {
   return (
     <LinkList>
       {inputs.map((input) => (
-        <ListItem
+        <LinkList.Item
           href={`/inputs/${input.id}`}
           key={input.id}
           pill={[INPUT_LABELS[input.type]]}

@@ -10,7 +10,12 @@ const Page = () => (
     </Card>
     <p className="flex gap-4">
       <span className="text-fg-2">Have an account?</span>
-      <Button className="underline" href="/sign-in" variant="link">
+      <Button
+        className="underline"
+        forwardSearchParams
+        href="/sign-in"
+        variant="link"
+      >
         Sign in
       </Button>
     </p>

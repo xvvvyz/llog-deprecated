@@ -125,7 +125,6 @@ create table "public"."subject_managers" (
 );
 
 alter table "public"."subject_managers" enable row level security;
-create index subject_managers_profile_id_index on public.subject_managers using btree (profile_id);
 create index subject_managers_subject_id_index on public.subject_managers using btree (subject_id);
 create unique index subject_managers_pkey on public.subject_managers using btree (profile_id, subject_id);
 

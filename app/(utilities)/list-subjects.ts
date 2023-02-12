@@ -1,11 +1,10 @@
 import createServerSupabaseClient from './create-server-supabase-client';
-import getCurrentTeamId from './get-current-team-id';
 
 const listSubjects = async () =>
   createServerSupabaseClient()
     .from('subjects')
     .select('id, image_uri, name')
-    .eq('team_id', await getCurrentTeamId())
+    .not('team_id', 'is', null)
     .eq('deleted', false)
     .order('updated_at', { ascending: false });
 

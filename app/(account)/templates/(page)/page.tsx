@@ -1,5 +1,5 @@
 import Empty from '(components)/empty';
-import { LinkList, ListItem } from '(components)/link-list';
+import LinkList from '(components)/link-list';
 import CODES from '(utilities)/constant-codes';
 import listTemplates from '(utilities)/list-templates';
 
@@ -10,7 +10,7 @@ const Page = async () => {
   return (
     <LinkList>
       {templates.map((template) => (
-        <ListItem
+        <LinkList.Item
           href={`/templates/${template.id}`}
           key={template.id}
           pill={[CODES[template.type]]}

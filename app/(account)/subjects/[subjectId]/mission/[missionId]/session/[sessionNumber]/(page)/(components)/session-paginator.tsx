@@ -24,7 +24,7 @@ const SessionPaginator = async ({
       <IconButton
         disabled={sessionNumber === 1}
         href={`/subjects/${subjectId}/mission/${missionId}/session/${previousSessionNumber}`}
-        icon={<ChevronLeftIcon className="relative -left-[0.5em] w-7" />}
+        icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
         label="Previous session"
       />
       <span className="text-fg-2">
@@ -33,7 +33,7 @@ const SessionPaginator = async ({
       <IconButton
         disabled={sessionNumber === lastSessionNumber}
         href={`/subjects/${subjectId}/mission/${missionId}/session/${nextSessionNumber}`}
-        icon={<ChevronRightIcon className="relative -right-[0.5em] w-7" />}
+        icon={<ChevronRightIcon className="relative -right-2 w-7" />}
         label="Next session"
       />
     </nav>
