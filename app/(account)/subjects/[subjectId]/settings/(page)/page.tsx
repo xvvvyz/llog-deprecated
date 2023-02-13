@@ -20,7 +20,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     listTemplates(),
   ]);
 
-  if (!subject) return notFound();
+  if (!subject) notFound();
   const subjectHref = `/subjects/${subject.id}`;
 
   return (

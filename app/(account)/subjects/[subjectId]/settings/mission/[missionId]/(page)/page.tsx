@@ -30,7 +30,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     listRoutineTemplatesWithData(),
   ]);
 
-  if (!subject || !mission) return notFound();
+  if (!subject || !mission) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (

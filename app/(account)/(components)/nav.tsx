@@ -5,7 +5,11 @@ import { useSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import SignOutButton from './sign-out-button';
 
-const Nav = () => {
+interface NavProps {
+  isClient: boolean;
+}
+
+const Nav = ({ isClient }: NavProps) => {
   const searchParams = useSearchParams();
 
   return (
@@ -20,17 +24,22 @@ const Nav = () => {
           <Button activeClassName="text-fg-1" href="/subjects" variant="link">
             Subjects
           </Button>
-          <Button activeClassName="text-fg-1" href="/templates" variant="link">
-            Templates
-          </Button>
+          {!isClient && (
+            <Button
+              activeClassName="text-fg-1"
+              href="/templates"
+              variant="link"
+            >
+              Templates
+            </Button>
+          )}
         </div>
         <div className="flex gap-4">
-          <Button activeClassName="text-fg-1" href="/inputs" variant="link">
-            Inputs
-          </Button>
-          {/*<Button activeClassName="text-fg-1" variant="link">*/}
-          {/*  Insights*/}
-          {/*</Button>*/}
+          {!isClient && (
+            <Button activeClassName="text-fg-1" href="/inputs" variant="link">
+              Inputs
+            </Button>
+          )}
         </div>
       </div>
       <SignOutButton />

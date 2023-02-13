@@ -15,7 +15,7 @@ interface PageProps {
 
 const Page = async ({ params: { inputId } }: PageProps) => {
   const { data: input } = await getInput(inputId);
-  if (!input) return notFound();
+  if (!input) notFound();
 
   return (
     <>

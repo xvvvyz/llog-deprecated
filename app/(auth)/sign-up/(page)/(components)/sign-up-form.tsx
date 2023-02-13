@@ -13,26 +13,41 @@ const SignUpForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const redirect = decodeURIComponent(
+    searchParams.get('redirect') ?? '/subjects'
+  );
+
   const form = useForm({
-    defaultValues: { email: '', firstName: '', lastName: '', password: '' },
+    defaultValues: {
+      email: '',
+      firstName: '',
+      isClient: redirect.includes('?share='),
+      lastName: '',
+      password: '',
+    },
   });
 
   return (
     <form
       className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(
-        async ({ email, firstName, lastName, password }) => {
+        async ({ email, firstName, isClient, lastName, password }) => {
           const { error } = await supabase.auth.signUp({
             email,
-            options: { data: { first_name: firstName, last_name: lastName } },
+            options: {
+              data: {
+                first_name: firstName,
+                is_client: isClient,
+                last_name: lastName,
+              },
+            },
             password,
           });
 
           if (error) {
             alert(error.message);
           } else {
-            const redirect = searchParams.get('redirect') ?? '/subjects';
-            startTransition(() => router.push(decodeURIComponent(redirect)));
+            startTransition(() => router.push(redirect));
           }
         }
       )}

@@ -3,8 +3,10 @@ import BackButton from '(components)/back-button';
 import Header from '(components)/header';
 import IconButton from '(components)/icon-button';
 import LinkList from '(components)/link-list';
+import PollingRefresh from '(components)/polling-refresh';
 import createServerSupabaseClient from '(utilities)/create-server-supabase-client';
 import EventTypesEnum from '(utilities)/enum-event-types';
+import getCurrentTeamId from '(utilities)/get-current-team-id';
 import getSubject from '(utilities)/get-subject';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { notFound, redirect } from 'next/navigation';
@@ -26,28 +28,36 @@ const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
 
   if (!subject) {
-    if (!searchParams?.share) return notFound();
+    if (!searchParams?.share) notFound();
 
     await createServerSupabaseClient().rpc('join_subject_as_manager', {
       share_code: searchParams.share,
     });
 
-    redirect(`/subjects/${subjectId}`);
+    // todo: when redirecting to the subject page works, do it
+    redirect('/subjects');
   }
+
+  const currentTeamId = await getCurrentTeamId();
+  const isTeamMember = subject.team_id === currentTeamId;
 
   return (
     <>
+      <PollingRefresh />
       <Header className="flex justify-between">
         <BackButton href="/subjects" />
+        {!isTeamMember && <h1 className="truncate text-2xl">{subject.name}</h1>}
         <div className="flex items-center justify-center gap-4">
           <Avatar file={subject.image_uri} name={subject.name} />
-          <h1 className="truncate">{subject.name}</h1>
+          {isTeamMember && <h1 className="truncate">{subject.name}</h1>}
         </div>
-        <IconButton
-          href={`/subjects/${subject.id}/settings`}
-          icon={<Cog6ToothIcon className="relative -right-[0.18em] w-7" />}
-          label="Edit"
-        />
+        {isTeamMember && (
+          <IconButton
+            href={`/subjects/${subject.id}/settings`}
+            icon={<Cog6ToothIcon className="relative -right-[0.18em] w-7" />}
+            label="Edit"
+          />
+        )}
       </Header>
       <LinkList>
         <Suspense>

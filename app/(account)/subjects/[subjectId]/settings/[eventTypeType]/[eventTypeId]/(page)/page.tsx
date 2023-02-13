@@ -25,7 +25,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
       listInputs(),
     ]);
 
-  if (!subject || !eventType) return notFound();
+  if (!subject || !eventType) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (

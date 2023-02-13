@@ -22,7 +22,7 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
     getEvent(eventId),
   ]);
 
-  if (!subject || !event) return notFound();
+  if (!subject || !event) notFound();
   const eventType = firstIfArray(event.type);
   const subjectHref = `/subjects/${subjectId}`;
   const sessionNumber = formatSessionNumber(eventType.session);

@@ -1,6 +1,5 @@
-import createServerSupabaseClient from './create-server-supabase-client';
+import getCurrentUser from './get-current-user';
 
-const getCurrentTeamId = async () =>
-  (await createServerSupabaseClient().auth.getUser())?.data?.user?.id;
+const getCurrentTeamId = async () => (await getCurrentUser())?.id;
 
 export default getCurrentTeamId;

@@ -20,7 +20,7 @@ const Page = async ({ params: { templateId } }: PageProps) => {
     listInputs(),
   ]);
 
-  if (!template) return notFound();
+  if (!template) notFound();
 
   return (
     <>

@@ -9,7 +9,6 @@ import getSubject from '(utilities)/get-subject';
 import listSessionRoutines from '(utilities)/list-session-routines';
 import { notFound } from 'next/navigation';
 import EventCard from '../../../../../(components)/event-card';
-import EditMissionLink from './(components)/edit-mission-link';
 import SessionPaginator from './(components)/session-paginator';
 
 interface PageProps {
@@ -30,7 +29,7 @@ const Page = async ({
       listSessionRoutines(missionId, sessionNumber),
     ]);
 
-  if (!subject || !mission) return notFound();
+  if (!subject || !mission) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   const completedRoutinesCount = eventTypes?.reduce(
@@ -73,10 +72,7 @@ const Page = async ({
             })}
           </div>
         ) : (
-          <Empty>
-            No routines
-            <EditMissionLink missionId={missionId} subjectId={subjectId} />
-          </Empty>
+          <Empty>No routines</Empty>
         )}
       </main>
     </>

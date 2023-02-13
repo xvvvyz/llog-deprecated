@@ -25,7 +25,7 @@ const Page = async ({
   params: { eventTypeType, subjectId },
   searchParams,
 }: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventTypeType)) return notFound();
+  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
 
   const [{ data: subject }, { data: availableInputs }, { data: template }] =
     await Promise.all([
@@ -36,7 +36,7 @@ const Page = async ({
         : Promise.resolve({ data: null }),
     ]);
 
-  if (!subject) return notFound();
+  if (!subject) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (

@@ -20,6 +20,15 @@ const AddSubjectForm = () => {
     <form
       className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(async ({ name }) => {
+        const { error: updateUserError } = await supabase.auth.updateUser({
+          data: { is_client: false },
+        });
+
+        if (updateUserError) {
+          alert(updateUserError.message);
+          return;
+        }
+
         const { data: subjectData, error: subjectError } = await supabase
           .from('subjects')
           .insert({ name: name.trim() })

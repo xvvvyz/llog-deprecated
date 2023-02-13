@@ -20,14 +20,14 @@ interface PageProps {
 const Page = async ({
   params: { eventTypeId, eventTypeType, subjectId },
 }: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventTypeType)) return notFound();
+  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
 
   const [{ data: subject }, { data: eventType }] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputsAndOptions(eventTypeId),
   ]);
 
-  if (!subject || !eventType) return notFound();
+  if (!subject || !eventType) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
