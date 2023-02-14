@@ -33,6 +33,12 @@ const getEvent = (eventId: string) =>
     .single();
 
 export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
+  inputs: Array<
+    Pick<
+      Database['public']['Tables']['event_inputs']['Row'],
+      'id' | 'input_id' | 'input_option_id' | 'value'
+    >
+  >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
     'content' | 'id' | 'name' | 'order' | 'session' | 'type'

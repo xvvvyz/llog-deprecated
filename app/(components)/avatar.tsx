@@ -38,7 +38,7 @@ const Avatar = ({
     >
       {src ? (
         <Image
-          alt={`${name} avatar`}
+          alt=""
           className="object-cover object-center"
           fill
           loader={generateImageLoader({ aspectRatio: '1:1' })}
