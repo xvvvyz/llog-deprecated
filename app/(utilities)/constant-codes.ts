@@ -1,7 +1,7 @@
 const CODES = {
-  mission: 'MIS',
-  observation: 'OBS',
-  routine: 'RTN',
+  mission: 'M',
+  observation: 'O',
+  routine: 'R',
 };
 
 export default CODES;

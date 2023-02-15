@@ -56,7 +56,7 @@ const Control = <TOption extends IOption>({
   return (
     <components.Control
       className={twMerge(
-        'input p-1',
+        'input group p-1',
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
@@ -72,7 +72,9 @@ const Control = <TOption extends IOption>({
   );
 };
 
-const DropdownIndicator = () => <ChevronUpDownIcon className="mx-1 w-5" />;
+const DropdownIndicator = () => (
+  <ChevronUpDownIcon className="mx-1 w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
+);
 
 const Input = <TOption extends IOption>({
   children,
@@ -98,7 +100,7 @@ const Menu = <TOption extends IOption>({
     className="overflow-hidden rounded-b bg-bg-1 shadow-md sm:bg-bg-2"
     {...props}
   >
-    <div className="rounded-b border border-t-0 border-alpha-2 bg-alpha-1">
+    <div className="rounded-b border border-t-0 border-alpha-2 bg-alpha-1 [&>*]:py-2">
       {children}
     </div>
   </components.Menu>

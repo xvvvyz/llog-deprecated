@@ -32,45 +32,42 @@ const EventCard = ({
   redirectOnSubmit = true,
   subjectId,
   ...rest
-}: EventCardProps) => {
-  const commonPill = [
-    CODES[eventType.type],
-    mission ? formatRoutineNumber(eventType.order) : eventType.name,
-  ];
-
-  return (
-    <Card breakpoint="sm" {...rest}>
-      <div className="space-y-8">
-        <div className="flex h-4 shrink-0 items-center justify-between gap-3">
-          <Pill
-            className="text-fg-2"
-            values={
-              !isMission && mission
-                ? [CODES.mission, mission.name, ...commonPill]
-                : commonPill
-            }
+}: EventCardProps) => (
+  <Card breakpoint="sm" className="space-y-8" {...rest}>
+    <div className="flex h-4 shrink-0 items-center gap-4">
+      {mission ? (
+        <>
+          {mission.name}
+          <Pill>{CODES.routine}</Pill>
+          {formatRoutineNumber(eventType.order)}
+        </>
+      ) : (
+        eventType.name
+      )}
+      <div className="ml-auto flex items-center sm:gap-3">
+        <Pill>{CODES[mission ? 'mission' : eventType.type]}</Pill>
+        {!isMission && mission && (
+          <EventCardMenu
+            missionId={mission.id}
+            sessionNumber={formatSessionNumber(eventType.session)}
+            subjectId={subjectId}
           />
-          {!isMission && mission && (
-            <EventCardMenu
-              missionId={mission.id}
-              sessionNumber={formatSessionNumber(eventType.session)}
-              subjectId={subjectId}
-            />
-          )}
-        </div>
-        {eventType.content && (
-          <DirtyHtml as="article">{eventType.content}</DirtyHtml>
         )}
-        <EventForm
-          event={event}
-          eventType={eventType}
-          isMission={isMission}
-          redirectOnSubmit={redirectOnSubmit}
-          subjectId={subjectId}
-        />
       </div>
-    </Card>
-  );
-};
+    </div>
+    {!!eventType.content && (
+      <DirtyHtml as="article" className="text-fg-2">
+        {eventType.content}
+      </DirtyHtml>
+    )}
+    <EventForm
+      event={event}
+      eventType={eventType}
+      isMission={isMission}
+      redirectOnSubmit={redirectOnSubmit}
+      subjectId={subjectId}
+    />
+  </Card>
+);
 
 export default EventCard;

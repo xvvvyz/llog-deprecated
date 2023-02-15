@@ -49,8 +49,4 @@
   .prose {
     @apply space-y-3 whitespace-pre-wrap break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2;
   }
-
-  .smallcaps {
-    @apply text-xs uppercase tracking-widest;
-  }
 }

@@ -23,7 +23,7 @@ interface ListItemProps extends BoxProps {
   href?: string;
   icon?: keyof typeof icons;
   onClick?: () => void;
-  pill?: ReactNode[];
+  pill?: ReactNode;
   text: string;
 }
 
@@ -59,7 +59,7 @@ const LinkList = Object.assign(
           )}
           <span className="truncate">{text}</span>
           <div className="ml-auto flex shrink-0 items-center gap-3">
-            {pill && <Pill values={pill} />}
+            {pill && <Pill>{pill}</Pill>}
             {icons[icon]}
           </div>
         </Button>

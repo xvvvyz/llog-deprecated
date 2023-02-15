@@ -99,11 +99,15 @@ const SubjectSettingsForm = ({
         file={dropzone.acceptedFiles[0] ?? subject?.image_uri}
         form={form}
       />
-      <section>
-        <LabelSpan as="h1" className="pb-2">
+      <section className="mt-2">
+        <LabelSpan as="h1" className="text-xl text-fg-1">
           Missions
         </LabelSpan>
-        <div className="rounded bg-bg-2">
+        <LabelSpan as="p" className="mt-2 leading-tight text-fg-3">
+          Missions are a sequence of routines that form a long-term
+          modification&nbsp;plan.
+        </LabelSpan>
+        <div className="mt-4 rounded bg-bg-2">
           {!!missions.length && (
             <LinkList className="rounded-b-none border-b-0">
               {missions.map((mission) => (
@@ -129,11 +133,15 @@ const SubjectSettingsForm = ({
           </Button>
         </div>
       </section>
-      <section>
-        <LabelSpan as="h1" className="pb-2">
+      <section className="mt-2">
+        <LabelSpan as="h1" className="text-xl text-fg-1">
           Routines
         </LabelSpan>
-        <div className="rounded bg-bg-2">
+        <LabelSpan as="p" className="mt-2 leading-tight text-fg-3">
+          Routines are a sequence of actions that can be performed
+          at&nbsp;any&nbsp;time.
+        </LabelSpan>
+        <div className="mt-4 rounded bg-bg-2">
           {!!routines.length && (
             <LinkList className="rounded-b-none border-b-0">
               {routines.map((routine) => (
@@ -198,11 +206,15 @@ const SubjectSettingsForm = ({
           />
         </div>
       </section>
-      <section>
-        <LabelSpan as="h1" className="pb-2">
+      <section className="mt-2">
+        <LabelSpan as="h1" className="text-xl text-fg-1">
           Observations
         </LabelSpan>
-        <div className="rounded bg-bg-2">
+        <LabelSpan as="p" className="mt-2 leading-tight text-fg-3">
+          Observations allow you to track events or behaviors that occur
+          over&nbsp;time.
+        </LabelSpan>
+        <div className="mt-4 rounded bg-bg-2">
           {!!observations.length && (
             <LinkList className="rounded-b-none border-b-0">
               {observations.map((observation) => (
@@ -267,11 +279,15 @@ const SubjectSettingsForm = ({
           />
         </div>
       </section>
-      <section>
-        <LabelSpan as="h1" className="pb-2">
+      <section className="mt-2">
+        <LabelSpan as="h1" className="text-xl text-fg-1">
           Clients
         </LabelSpan>
-        <div className="rounded bg-bg-2">
+        <LabelSpan as="p" className="mt-2 leading-tight text-fg-3">
+          Clients can complete routines, make observations and
+          add&nbsp;comments.
+        </LabelSpan>
+        <div className="mt-4 rounded bg-bg-2">
           {!!managers.length && (
             <LinkList className="rounded-b-none border-b-0">
               {managers.map((manager) => (
@@ -331,10 +347,6 @@ const SubjectSettingsForm = ({
             )}
           </Button>
         </div>
-        <p className="mx-auto mt-2 max-w-sm text-center leading-tight text-fg-3">
-          Clients can complete missions and routines, make observations and add
-          comments.
-        </p>
       </section>
       <Button
         className="mt-4 w-full"

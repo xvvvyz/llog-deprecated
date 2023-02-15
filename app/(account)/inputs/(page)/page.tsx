@@ -13,7 +13,7 @@ const Page = async () => {
         <LinkList.Item
           href={`/inputs/${input.id}`}
           key={input.id}
-          pill={[INPUT_LABELS[input.type]]}
+          pill={INPUT_LABELS[input.type]}
           text={input.label}
         />
       ))}

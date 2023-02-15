@@ -146,6 +146,7 @@ const RichTextarea = forwardRef(
             className={twMerge(
               'input min-h-[4.2rem]',
               !value && 'text-fg-3',
+              right && 'pr-[2.4rem]',
               className
             )}
           >

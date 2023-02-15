@@ -29,9 +29,8 @@ const Avatar = ({
   return (
     <div
       className={twMerge(
-        'relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase text-alpha-3',
+        'relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase text-fg-3',
         sizes[size].className,
-        !src && 'border border-alpha-2',
         className
       )}
       {...rest}

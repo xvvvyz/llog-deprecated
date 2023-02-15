@@ -23,7 +23,7 @@ interface TimelineEventsProps {
 }
 
 const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
-  <div className="mt-4 space-y-4 text-fg-2" suppressHydrationWarning>
+  <div className="mt-4 space-y-4" suppressHydrationWarning>
     {Object.values(
       events.reduce((acc, event) => {
         const date = formatDate(event.created_at);
@@ -46,32 +46,38 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
             <Card as="article" key={event.id} size="0">
               <header>
                 <Button
-                  className="m-0 w-full gap-4 py-3 px-4"
+                  className="m-0 w-full gap-4 px-4 py-3"
                   href={`/subjects/${subjectId}/event/${event.id}`}
                   variant="link"
                 >
-                  <Pill
-                    values={
-                      eventType.mission
-                        ? [
-                            CODES.mission,
-                            eventType.mission.name,
-                            CODES.routine,
-                            formatRoutineNumber(eventType.order),
-                          ]
-                        : [CODES[eventType.type as EventTypes], eventType.name]
-                    }
-                  />
+                  {eventType.mission ? (
+                    <>
+                      <span className="truncate">{eventType.mission.name}</span>
+                      <Pill>{CODES.routine}</Pill>
+                      {formatRoutineNumber(eventType.order)}
+                    </>
+                  ) : (
+                    <span className="truncate">{eventType.name}</span>
+                  )}
                   <div className="ml-auto flex shrink-0 items-center gap-3">
+                    <Pill>
+                      {
+                        CODES[
+                          eventType.mission
+                            ? 'mission'
+                            : (eventType.type as EventTypes)
+                        ]
+                      }
+                    </Pill>
                     <ArrowRightIcon className="relative -right-[0.2em] w-5" />
                   </div>
                 </Button>
               </header>
-              <table className="mb-2 w-full table-fixed px-4 py-2">
+              <table className="w-full border-t border-alpha-1 text-fg-3">
                 <tbody>
                   <tr>
-                    <td className="pb-2 pl-4 align-top text-fg-3">Time</td>
-                    <td className="pb-2 pl-4 align-top">
+                    <td className="py-2 pl-4 align-top">Time</td>
+                    <td className="min-w-[50%] border-l border-alpha-1 py-2 pl-4 align-top">
                       <DateTime date={event.created_at} formatter="time" />
                     </td>
                   </tr>
@@ -97,10 +103,10 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                     ][]
                   ).map(([id, { label, type, values }]) => (
                     <tr key={id}>
-                      <td className="border-t border-alpha-1 py-2 pl-4 align-top text-fg-3">
+                      <td className="border-t border-alpha-1 py-2 pl-4 align-top">
                         {label}
                       </td>
-                      <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                      <td className="min-w-[50%] border-t border-l border-alpha-1 border-alpha-1 py-2 pl-4 align-top">
                         {formatInputValue[type](values)}
                       </td>
                     </tr>
@@ -108,19 +114,21 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                 </tbody>
               </table>
               {!!comments.length && (
-                <ul className="mb-2" role="section">
+                <ul
+                  className="space-y-2 border-t border-alpha-1 px-4 pt-3 pb-4"
+                  role="section"
+                >
                   {comments.map(({ content, id, profile }) => (
-                    <article
-                      className="flex gap-4 px-4 py-2"
-                      key={id}
-                      role="comment"
-                    >
-                      <Avatar name={profile.first_name} size="sm" />
-                      <div className="-mt-[0.325rem] w-full">
+                    <article className="flex gap-4" key={id} role="comment">
+                      <Avatar
+                        className="mt-[0.325rem]"
+                        name={profile.first_name}
+                      />
+                      <div className="w-full">
                         <span className="text-fg-3">
                           {profile.first_name} {profile.last_name}
                         </span>
-                        <DirtyHtml>{content}</DirtyHtml>
+                        <DirtyHtml className="text-fg-2">{content}</DirtyHtml>
                       </div>
                     </article>
                   ))}

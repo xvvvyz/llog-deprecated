@@ -6,20 +6,16 @@ interface PillProps extends BoxProps {
   values?: ReactNode[];
 }
 
-const Pill = ({ className, values, ...rest }: PillProps) => (
+const Pill = ({ children, className, ...rest }: PillProps) => (
   <Box
     as="span"
     className={twMerge(
-      'smallcaps -mx-px inline-flex gap-1 truncate bg-alpha-1',
+      'min-w-[2rem] rounded-sm bg-alpha-1 px-2 text-center text-fg-3',
       className
     )}
     {...rest}
   >
-    {values?.map((value, i) => (
-      <span className="odd:text-fg-3" key={i}>
-        {value}
-      </span>
-    ))}
+    {children}
   </Box>
 );
 

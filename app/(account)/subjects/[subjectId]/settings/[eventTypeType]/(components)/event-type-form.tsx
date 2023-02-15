@@ -17,6 +17,7 @@ import { GetEventTypeWithInputsData } from '(utilities)/get-event-type-with-inpu
 import { GetTemplateData } from '(utilities)/get-template';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
+import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -80,7 +81,14 @@ const EventTypeForm = ({
         async ({ content, id, inputs, name, order, type }) => {
           const { data: eventTypeData, error: eventTypeError } = await supabase
             .from('event_types')
-            .upsert({ content, id, name, order, subject_id: subjectId, type })
+            .upsert({
+              content: sanitizeHtml(content) || null,
+              id,
+              name,
+              order,
+              subject_id: subjectId,
+              type,
+            })
             .select('id')
             .single();
 

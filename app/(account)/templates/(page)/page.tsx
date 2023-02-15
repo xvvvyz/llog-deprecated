@@ -13,7 +13,7 @@ const Page = async () => {
         <LinkList.Item
           href={`/templates/${template.id}`}
           key={template.id}
-          pill={[CODES[template.type]]}
+          pill={CODES[template.type]}
           text={template.name}
         />
       ))}
