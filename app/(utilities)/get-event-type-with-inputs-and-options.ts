@@ -12,6 +12,7 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
           id,
           label,
           options:input_options(id, label),
+          settings,
           type
         )
       ),

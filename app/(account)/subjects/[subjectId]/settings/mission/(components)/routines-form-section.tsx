@@ -4,7 +4,7 @@ import { LabelSpan } from '(components)/label';
 import Menu from '(components)/menu';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
-import { EventTemplate } from '(types)/event-template';
+import { TemplateType } from '(types)/template';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
@@ -86,7 +86,7 @@ const RoutinesFormSection = <T extends FieldValues>({
               render={({ field }) => (
                 <Select
                   className="rounded-t-none border-t-0"
-                  creatable
+                  isCreatable
                   isLoading={isTransitioning}
                   isMulti
                   noOptionsMessage={() => null}
@@ -122,11 +122,11 @@ const RoutinesFormSection = <T extends FieldValues>({
         ))}
       </ul>
       <Select
-        creatable
         instanceId={`${name}Template`}
+        isCreatable
         noOptionsMessage={() => null}
         onChange={(e) => {
-          const template = e as EventTemplate;
+          const template = e as TemplateType;
           const values = form.getValues();
 
           eventTypesArray.append({

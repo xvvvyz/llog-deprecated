@@ -165,15 +165,15 @@ const SingleValue = <TOption extends IOption>({
 const Select = forwardRef(
   <TOption extends IOption>(
     {
-      creatable,
       instanceId,
+      isCreatable,
       isDisabled,
       isLoading,
       placeholder,
       ...props
     }: ReactSelectProps<TOption> &
       CreatableProps<IOption, boolean, GroupBase<IOption>> & {
-        creatable?: boolean;
+        isCreatable?: boolean;
       },
     ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
   ) => {
@@ -205,7 +205,7 @@ const Select = forwardRef(
       ...props,
     };
 
-    return creatable ? (
+    return isCreatable ? (
       <Creatable ref={ref} {...commonProps} />
     ) : (
       <ReactSelect ref={ref} {...commonProps} />

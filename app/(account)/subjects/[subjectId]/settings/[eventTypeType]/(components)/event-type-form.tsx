@@ -6,7 +6,7 @@ import Label, { LabelSpan } from '(components)/label';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
-import { EventTemplateData } from '(types)/event-template';
+import { TemplateDataType } from '(types)/template';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
@@ -53,7 +53,7 @@ const EventTypeForm = ({
   // client components seem to cache previous values passed?
   template = searchParams.has('templateId') ? template : null;
 
-  const templateData = template?.data as unknown as EventTemplateData;
+  const templateData = template?.data as unknown as TemplateDataType;
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.EventTypeForm,
@@ -145,7 +145,7 @@ const EventTypeForm = ({
           name="inputs"
           render={({ field }) => (
             <Select
-              creatable
+              isCreatable
               isLoading={isTransitioning}
               isMulti
               noOptionsMessage={() => null}

@@ -7,7 +7,7 @@ import RadioGroup from '(components)/radio-group';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database, Json } from '(types)/database';
-import { EventTemplateData } from '(types)/event-template';
+import { TemplateDataType } from '(types)/template';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import TemplateTypes from '(utilities)/enum-template-types';
@@ -39,7 +39,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
-  const templateData = template?.data as unknown as EventTemplateData;
+  const templateData = template?.data as unknown as TemplateDataType;
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.TemplateForm,
@@ -124,7 +124,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
           name="inputs"
           render={({ field }) => (
             <Select
-              creatable
+              isCreatable
               isLoading={isTransitioning}
               isMulti
               noOptionsMessage={() => null}

@@ -5,7 +5,7 @@ import { LabelSpan } from '(components)/label';
 import LinkList from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
-import { EventTemplate } from '(types)/event-template';
+import { TemplateType } from '(types)/template';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
@@ -149,8 +149,8 @@ const SubjectSettingsForm = ({
           )}
           <Select
             className={twMerge(routines.length && 'rounded-t-none')}
-            creatable
             instanceId="routineTemplate"
+            isCreatable
             isLoading={newRoutineTransition[0]}
             noOptionsMessage={() => null}
             onChange={(e) => {
@@ -160,7 +160,7 @@ const SubjectSettingsForm = ({
                 order: routines.length,
               });
 
-              const template = e as EventTemplate;
+              const template = e as TemplateType;
 
               newRoutineTransition[1](() =>
                 router.push(
@@ -218,8 +218,8 @@ const SubjectSettingsForm = ({
           )}
           <Select
             className={twMerge(observations.length && 'rounded-t-none')}
-            creatable
             instanceId="observationTemplate"
+            isCreatable
             isLoading={newObservationTransition[0]}
             noOptionsMessage={() => null}
             onChange={(e) => {
@@ -229,7 +229,7 @@ const SubjectSettingsForm = ({
                 order: observations.length,
               });
 
-              const template = e as EventTemplate;
+              const template = e as TemplateType;
 
               newObservationTransition[1](() =>
                 router.push(

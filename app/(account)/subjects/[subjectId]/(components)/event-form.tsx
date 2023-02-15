@@ -4,7 +4,6 @@ import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
-import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import forceArray from '(utilities)/force-array';
@@ -14,6 +13,7 @@ import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import EventSelect from './event-select';
 
 interface EventFormProps {
   event?: GetEventData | ListSessionRoutinesData['event'];
@@ -28,7 +28,7 @@ interface EventFormProps {
 
 interface EventFormValues {
   id?: string;
-  inputs: any[]; // 😱
+  inputs: any[]; // todo: type this
 }
 
 const EventForm = ({
@@ -183,7 +183,7 @@ const EventForm = ({
         <Label
           className={twMerge(
             input.type === 'checkbox' &&
-              'mt-1 flex-row-reverse items-start justify-end gap-4 text-fg-1 first-of-type:mt-0'
+              'mt-2 flex-row-reverse items-start justify-end gap-2 text-fg-1 first-of-type:mt-0'
           )}
           key={input.id}
         >
@@ -203,29 +203,13 @@ const EventForm = ({
                   );
                 }
 
-                case 'multi_select': {
-                  return (
-                    <Select
-                      isMulti
-                      isSearchable={false}
-                      options={input.options}
-                      {...field}
-                    />
-                  );
+                case 'multi_select':
+                case 'select': {
+                  return <EventSelect field={field} input={input} />;
                 }
 
                 case 'number': {
                   return <Input min={0} type="number" {...field} />;
-                }
-
-                case 'select': {
-                  return (
-                    <Select
-                      isSearchable={false}
-                      options={input.options}
-                      {...field}
-                    />
-                  );
                 }
 
                 default: {

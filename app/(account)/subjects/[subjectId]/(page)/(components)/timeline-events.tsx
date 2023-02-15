@@ -82,7 +82,7 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                           acc[input.id] = acc[input.id] ?? { values: [] };
                           acc[input.id].label = input.label;
                           acc[input.id].type = input.type;
-                          acc[input.id].values.push(value ?? option.label);
+                          acc[input.id].values.push(value ?? option?.label);
                           return acc;
                         },
                         {}

@@ -1,4 +1,5 @@
 import { Database } from '(types)/database';
+import { InputType } from '(types)/input';
 import createServerSupabaseClient from '(utilities)/create-server-supabase-client';
 
 const listSessionRoutines = (
@@ -20,6 +21,7 @@ const listSessionRoutines = (
           id,
           label,
           options:input_options(id, label),
+          settings,
           type
         )
       ),
@@ -48,10 +50,7 @@ export type ListSessionRoutinesData = Awaited<
     >;
   };
   inputs: Array<
-    Pick<
-      Database['public']['Tables']['inputs']['Row'],
-      'id' | 'label' | 'type'
-    > & {
+    Pick<InputType, 'id' | 'label' | 'settings' | 'type'> & {
       options: Array<
         Pick<
           Database['public']['Tables']['input_options']['Row'],

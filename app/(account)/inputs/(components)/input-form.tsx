@@ -1,11 +1,13 @@
 'use client';
 
 import Button from '(components)/button';
+import Checkbox from '(components)/checkbox';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
 import Menu from '(components)/menu';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
+import { InputType } from '(types)/input';
 import supabase from '(utilities)/browser-supabase-client';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
@@ -36,7 +38,7 @@ interface InputFormProps {
   input?: GetInputData;
 }
 
-type InputFormValues = Database['public']['Tables']['inputs']['Insert'] & {
+type InputFormValues = InputType & {
   options: Database['public']['Tables']['input_options']['Insert'][];
   type: { id: Database['public']['Enums']['input_type'] };
 };
@@ -51,6 +53,7 @@ const InputForm = ({ input }: InputFormProps) => {
       id: input?.id,
       label: input?.label ?? '',
       options: forceArray(input?.options),
+      settings: input?.settings,
       type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
     },
   });
@@ -78,13 +81,14 @@ const InputForm = ({ input }: InputFormProps) => {
 
   return (
     <form
+      className="flex flex-col gap-6"
       onSubmit={form.handleSubmit(
-        async ({ id, label, options, type: typeObject }) => {
+        async ({ id, label, options, settings, type: typeObject }) => {
           const type = typeObject?.id;
 
           const { data: inputData, error: inputError } = await supabase
             .from('inputs')
-            .upsert({ id, label: label.trim(), type })
+            .upsert({ id, label: label.trim(), settings, type })
             .select('id, label')
             .single();
 
@@ -181,7 +185,7 @@ const InputForm = ({ input }: InputFormProps) => {
           render={({ field }) => <Input {...field} />}
         />
       </Label>
-      <Label className="mt-6">
+      <Label>
         <LabelSpan>Type</LabelSpan>
         <Controller
           control={form.control}
@@ -197,78 +201,88 @@ const InputForm = ({ input }: InputFormProps) => {
         />
       </Label>
       {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
-        <fieldset className="mt-6">
-          <LabelSpan as="legend">Options</LabelSpan>
-          <ul className="flex flex-col gap-3 pt-2">
-            {optionsArray.fields.map((option, optionIndex) => (
-              <li key={option.id}>
-                <Controller
-                  control={form.control}
-                  name={`options.${optionIndex}.label`}
-                  render={({ field }) => (
-                    <Input
-                      onKeyDown={(e) => {
-                        if (e.key === 'Backspace' && !field.value) {
-                          e.preventDefault();
-                          optionsArray.remove(optionIndex);
+        <>
+          <fieldset>
+            <LabelSpan as="legend">Options</LabelSpan>
+            <ul className="flex flex-col gap-3 pt-2">
+              {optionsArray.fields.map((option, optionIndex) => (
+                <li key={option.id}>
+                  <Controller
+                    control={form.control}
+                    name={`options.${optionIndex}.label`}
+                    render={({ field }) => (
+                      <Input
+                        onKeyDown={(e) => {
+                          if (e.key === 'Backspace' && !field.value) {
+                            e.preventDefault();
+                            optionsArray.remove(optionIndex);
 
-                          form.setFocus(`options.${optionIndex - 1}.label`, {
-                            shouldSelect: true,
-                          });
+                            form.setFocus(`options.${optionIndex - 1}.label`, {
+                              shouldSelect: true,
+                            });
+                          }
+
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+
+                            optionsArray.insert(optionIndex + 1, {
+                              input_id: id ?? '',
+                              label: '',
+                              order: optionIndex + 1,
+                            });
+                          }
+                        }}
+                        placeholder="Label"
+                        right={
+                          <Menu className="h-full w-full">
+                            <Menu.Button className="h-full w-full">
+                              <EllipsisVerticalIcon className="w-5" />
+                            </Menu.Button>
+                            <Menu.Items>
+                              <Menu.Item
+                                onClick={() => optionsArray.remove(optionIndex)}
+                              >
+                                <TrashIcon className="w-5 text-fg-3" />
+                                Delete option
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Menu>
                         }
-
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-
-                          optionsArray.insert(optionIndex + 1, {
-                            input_id: id ?? '',
-                            label: '',
-                            order: optionIndex + 1,
-                          });
-                        }
-                      }}
-                      placeholder="Label"
-                      right={
-                        <Menu className="h-full w-full">
-                          <Menu.Button className="h-full w-full">
-                            <EllipsisVerticalIcon className="w-5" />
-                          </Menu.Button>
-                          <Menu.Items>
-                            <Menu.Item
-                              onClick={() => optionsArray.remove(optionIndex)}
-                            >
-                              <TrashIcon className="w-5 text-fg-3" />
-                              Delete option
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Menu>
-                      }
-                      {...field}
-                    />
-                  )}
-                />
-              </li>
-            ))}
-          </ul>
-          <Button
-            className="mt-3 w-full"
-            colorScheme="transparent"
-            onClick={() =>
-              optionsArray.append({
-                input_id: id ?? '',
-                label: '',
-                order: optionsArray.fields.length,
-              })
-            }
-            type="button"
-          >
-            <PlusIcon className="w-5" />
-            Add option
-          </Button>
-        </fieldset>
+                        {...field}
+                      />
+                    )}
+                  />
+                </li>
+              ))}
+            </ul>
+            <Button
+              className="mt-3 w-full"
+              colorScheme="transparent"
+              onClick={() =>
+                optionsArray.append({
+                  input_id: id ?? '',
+                  label: '',
+                  order: optionsArray.fields.length,
+                })
+              }
+              type="button"
+            >
+              <PlusIcon className="w-5" />
+              Add option
+            </Button>
+          </fieldset>
+          <Label className="mx-auto mt-4 flex-row-reverse items-start justify-end gap-2 text-fg-1">
+            <LabelSpan>Allow additional options to be created</LabelSpan>
+            <Controller
+              control={form.control}
+              name="settings.isCreatable"
+              render={({ field }) => <Checkbox {...field} />}
+            />
+          </Label>
+        </>
       )}
       <Button
-        className="mt-12 w-full"
+        className="mt-6 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
