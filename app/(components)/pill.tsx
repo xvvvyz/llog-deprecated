@@ -10,7 +10,7 @@ const Pill = ({ children, className, ...rest }: PillProps) => (
   <Box
     as="span"
     className={twMerge(
-      'min-w-[2rem] rounded-sm bg-alpha-1 px-2 text-center text-fg-3',
+      'min-w-[2rem] rounded-sm bg-alpha-1 px-2 text-center leading-snug text-fg-3',
       className
     )}
     {...rest}

@@ -6,9 +6,9 @@
   :root {
     --color-accent-1: hsl(45, 96%, 60%);
     --color-accent-2: hsl(45, 96%, 70%);
-    --color-alpha-1: hsla(45, 6%, 95%, 5%);
-    --color-alpha-2: hsla(45, 6%, 95%, 10%);
-    --color-alpha-3: hsla(45, 6%, 95%, 15%);
+    --color-alpha-1: hsla(45, 6%, 95%, 3%);
+    --color-alpha-2: hsla(45, 6%, 95%, 6%);
+    --color-alpha-3: hsla(45, 6%, 95%, 9%);
     --color-bg-1: hsl(45, 6%, 8%);
     --color-bg-2: hsl(45, 6%, 12%);
     --color-fg-1: hsl(45, 6%, 95%, 95%);
@@ -37,7 +37,10 @@
 
 @layer components {
   .input {
-    @apply disabled:disabled w-full max-w-full appearance-none rounded border border-alpha-2 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:ring-1 focus-within:ring-accent-2 hover:border-alpha-3;
+    @apply disabled:disabled w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
+
+    /* hack to override react-select min-height */
+    min-height: auto !important;
   }
 }
 

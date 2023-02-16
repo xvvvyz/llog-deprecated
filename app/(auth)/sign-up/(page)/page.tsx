@@ -9,13 +9,8 @@ const Page = () => (
       <SignUpForm />
     </Card>
     <p className="flex gap-4">
-      <span className="text-fg-2">Have an account?</span>
-      <Button
-        className="underline"
-        forwardSearchParams
-        href="/sign-in"
-        variant="link"
-      >
+      <span className="text-fg-3">Have an account?</span>
+      <Button forwardSearchParams href="/sign-in" variant="link">
         Sign in
       </Button>
     </p>

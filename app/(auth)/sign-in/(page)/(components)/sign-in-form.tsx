@@ -47,7 +47,6 @@ const SignInForm = () => {
         <div className="flex justify-between">
           <LabelSpan>Password</LabelSpan>
           <Button
-            className="underline"
             forwardSearchParams
             href="/forgot-password"
             onClick={() =>

@@ -24,7 +24,6 @@ import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 import { useCopyToClipboard, useToggle } from 'usehooks-ts';
 import SubjectDetailsFormSection from '../../../../(components)/subject-details-form-section';
 
@@ -107,31 +106,29 @@ const SubjectSettingsForm = ({
           Missions are a sequence of routines that form a long-term
           modification&nbsp;plan.
         </LabelSpan>
-        <div className="mt-4 rounded bg-bg-2">
-          {!!missions.length && (
-            <LinkList className="rounded-b-none border-b-0">
-              {missions.map((mission) => (
-                <LinkList.Item
-                  href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
-                  icon="edit"
-                  key={mission.id}
-                  onClick={saveToCache}
-                  text={mission.name}
-                />
-              ))}
-            </LinkList>
-          )}
-          <Button
-            className={twMerge('w-full', missions.length && 'rounded-t-none')}
-            colorScheme="transparent"
-            href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
-            onClick={saveToCache}
-            type="button"
-          >
-            <PlusIcon className="w-5" />
-            Add mission
-          </Button>
-        </div>
+        {!!missions.length && (
+          <LinkList className="mt-4">
+            {missions.map((mission) => (
+              <LinkList.Item
+                href={`/subjects/${subject.id}/settings/mission/${mission.id}?back=${backLink}`}
+                icon="edit"
+                key={mission.id}
+                onClick={saveToCache}
+                text={mission.name}
+              />
+            ))}
+          </LinkList>
+        )}
+        <Button
+          className="mt-4 w-full"
+          colorScheme="transparent"
+          href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
+          onClick={saveToCache}
+          type="button"
+        >
+          <PlusIcon className="w-5" />
+          Add mission
+        </Button>
       </section>
       <section className="mt-2">
         <LabelSpan as="h1" className="text-xl text-fg-1">
@@ -141,70 +138,68 @@ const SubjectSettingsForm = ({
           Routines are a sequence of actions that can be performed
           at&nbsp;any&nbsp;time.
         </LabelSpan>
-        <div className="mt-4 rounded bg-bg-2">
-          {!!routines.length && (
-            <LinkList className="rounded-b-none border-b-0">
-              {routines.map((routine) => (
-                <LinkList.Item
-                  href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
-                  icon="edit"
-                  key={routine.id}
-                  onClick={saveToCache}
-                  text={routine.name}
-                />
-              ))}
-            </LinkList>
+        {!!routines.length && (
+          <LinkList className="mt-4">
+            {routines.map((routine) => (
+              <LinkList.Item
+                href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
+                icon="edit"
+                key={routine.id}
+                onClick={saveToCache}
+                text={routine.name}
+              />
+            ))}
+          </LinkList>
+        )}
+        <Select
+          className="mt-4"
+          instanceId="routineTemplate"
+          isCreatable
+          isLoading={newRoutineTransition[0]}
+          noOptionsMessage={() => null}
+          onChange={(e) => {
+            saveToCache();
+
+            globalValueCache.set(CacheKeys.EventTypeForm, {
+              order: routines.length,
+            });
+
+            const template = e as TemplateType;
+
+            newRoutineTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
+                  useCache: true,
+                })
+              )
+            );
+          }}
+          onCreateOption={async (value: unknown) => {
+            saveToCache();
+
+            globalValueCache.set(CacheKeys.EventTypeForm, {
+              name: value,
+              order: routines.length,
+            });
+
+            newRoutineTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/routine`,
+                  useCache: true,
+                })
+              )
+            );
+          }}
+          options={forceArray(availableTemplates).filter(
+            (template) => template.type === TemplateTypes.Routine
           )}
-          <Select
-            className={twMerge(routines.length && 'rounded-t-none')}
-            instanceId="routineTemplate"
-            isCreatable
-            isLoading={newRoutineTransition[0]}
-            noOptionsMessage={() => null}
-            onChange={(e) => {
-              saveToCache();
-
-              globalValueCache.set(CacheKeys.EventTypeForm, {
-                order: routines.length,
-              });
-
-              const template = e as TemplateType;
-
-              newRoutineTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
-                    useCache: true,
-                  })
-                )
-              );
-            }}
-            onCreateOption={async (value: unknown) => {
-              saveToCache();
-
-              globalValueCache.set(CacheKeys.EventTypeForm, {
-                name: value,
-                order: routines.length,
-              });
-
-              newRoutineTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/routine`,
-                    useCache: true,
-                  })
-                )
-              );
-            }}
-            options={forceArray(availableTemplates).filter(
-              (template) => template.type === TemplateTypes.Routine
-            )}
-            placeholder="Add routine"
-            value={null}
-          />
-        </div>
+          placeholder="Add routine"
+          value={null}
+        />
       </section>
       <section className="mt-2">
         <LabelSpan as="h1" className="text-xl text-fg-1">
@@ -214,70 +209,68 @@ const SubjectSettingsForm = ({
           Observations allow you to track events or behaviors that occur
           over&nbsp;time.
         </LabelSpan>
-        <div className="mt-4 rounded bg-bg-2">
-          {!!observations.length && (
-            <LinkList className="rounded-b-none border-b-0">
-              {observations.map((observation) => (
-                <LinkList.Item
-                  href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
-                  icon="edit"
-                  key={observation.id}
-                  onClick={saveToCache}
-                  text={observation.name}
-                />
-              ))}
-            </LinkList>
+        {!!observations.length && (
+          <LinkList className="mt-4">
+            {observations.map((observation) => (
+              <LinkList.Item
+                href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
+                icon="edit"
+                key={observation.id}
+                onClick={saveToCache}
+                text={observation.name}
+              />
+            ))}
+          </LinkList>
+        )}
+        <Select
+          className="mt-4"
+          instanceId="observationTemplate"
+          isCreatable
+          isLoading={newObservationTransition[0]}
+          noOptionsMessage={() => null}
+          onChange={(e) => {
+            saveToCache();
+
+            globalValueCache.set(CacheKeys.EventTypeForm, {
+              order: observations.length,
+            });
+
+            const template = e as TemplateType;
+
+            newObservationTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
+                  useCache: true,
+                })
+              )
+            );
+          }}
+          onCreateOption={async (value: unknown) => {
+            saveToCache();
+
+            globalValueCache.set(CacheKeys.EventTypeForm, {
+              name: value,
+              order: observations.length,
+            });
+
+            newObservationTransition[1](() =>
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/observation`,
+                  useCache: true,
+                })
+              )
+            );
+          }}
+          options={forceArray(availableTemplates).filter(
+            (template) => template.type === TemplateTypes.Observation
           )}
-          <Select
-            className={twMerge(observations.length && 'rounded-t-none')}
-            instanceId="observationTemplate"
-            isCreatable
-            isLoading={newObservationTransition[0]}
-            noOptionsMessage={() => null}
-            onChange={(e) => {
-              saveToCache();
-
-              globalValueCache.set(CacheKeys.EventTypeForm, {
-                order: observations.length,
-              });
-
-              const template = e as TemplateType;
-
-              newObservationTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
-                    useCache: true,
-                  })
-                )
-              );
-            }}
-            onCreateOption={async (value: unknown) => {
-              saveToCache();
-
-              globalValueCache.set(CacheKeys.EventTypeForm, {
-                name: value,
-                order: observations.length,
-              });
-
-              newObservationTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/observation`,
-                    useCache: true,
-                  })
-                )
-              );
-            }}
-            options={forceArray(availableTemplates).filter(
-              (template) => template.type === TemplateTypes.Observation
-            )}
-            placeholder="Add observation"
-            value={null}
-          />
-        </div>
+          placeholder="Add observation"
+          value={null}
+        />
       </section>
       <section className="mt-2">
         <LabelSpan as="h1" className="text-xl text-fg-1">
@@ -287,66 +280,64 @@ const SubjectSettingsForm = ({
           Clients can complete routines, make observations and
           add&nbsp;comments.
         </LabelSpan>
-        <div className="mt-4 rounded bg-bg-2">
-          {!!managers.length && (
-            <LinkList className="rounded-b-none border-b-0">
-              {managers.map((manager) => (
-                <LinkList.Item
-                  icon="trash"
-                  key={manager.id}
-                  onClick={() => null}
-                  text={`${manager.first_name} ${manager.last_name}`}
-                />
-              ))}
-            </LinkList>
-          )}
-          <Button
-            className={twMerge('w-full', managers.length && 'rounded-t-none')}
-            colorScheme="transparent"
-            loading={isCopyingToClipboard}
-            loadingText="Generating link…"
-            onClick={async () => {
-              toggleCopyingToClipboard();
-              let { share_code } = form.getValues();
+        {!!managers.length && (
+          <LinkList className="mt-4">
+            {managers.map((manager) => (
+              <LinkList.Item
+                icon="trash"
+                key={manager.id}
+                onClick={() => null}
+                text={`${manager.first_name} ${manager.last_name}`}
+              />
+            ))}
+          </LinkList>
+        )}
+        <Button
+          className="mt-4 w-full"
+          colorScheme="transparent"
+          loading={isCopyingToClipboard}
+          loadingText="Generating link…"
+          onClick={async () => {
+            toggleCopyingToClipboard();
+            let { share_code } = form.getValues();
 
-              if (!share_code) {
-                share_code = nanoid(8);
+            if (!share_code) {
+              share_code = nanoid(8);
 
-                const { error: subjectError } = await supabase
-                  .from('subjects')
-                  .update({ share_code })
-                  .eq('id', subject.id);
+              const { error: subjectError } = await supabase
+                .from('subjects')
+                .update({ share_code })
+                .eq('id', subject.id);
 
-                if (subjectError) {
-                  alert(subjectError.message);
-                  toggleCopyingToClipboard();
-                  return;
-                }
-
-                form.setValue('share_code', share_code);
+              if (subjectError) {
+                alert(subjectError.message);
+                toggleCopyingToClipboard();
+                return;
               }
 
-              await copyToClipboard(
-                `${location.origin}/subjects/${subject.id}?share=${share_code}`
-              );
+              form.setValue('share_code', share_code);
+            }
 
-              toggleCopyingToClipboard();
-            }}
-            type="button"
-          >
-            {copiedText ? (
-              <>
-                <CheckIcon className="w-5" />
-                Link copied&hellip; Share it!
-              </>
-            ) : (
-              <>
-                <ClipboardDocumentIcon className="w-5" />
-                Copy client link
-              </>
-            )}
-          </Button>
-        </div>
+            await copyToClipboard(
+              `${location.origin}/subjects/${subject.id}?share=${share_code}`
+            );
+
+            toggleCopyingToClipboard();
+          }}
+          type="button"
+        >
+          {copiedText ? (
+            <>
+              <CheckIcon className="w-5" />
+              Link copied&hellip; Share it!
+            </>
+          ) : (
+            <>
+              <ClipboardDocumentIcon className="w-5" />
+              Copy client link
+            </>
+          )}
+        </Button>
       </section>
       <Button
         className="mt-4 w-full"

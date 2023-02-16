@@ -6,18 +6,13 @@ const Page = () => (
   <>
     <Card breakpoint="sm">
       <h1 className="text-2xl">Forgot your password?</h1>
-      <p className="mt-3 mb-8 text-fg-2">
+      <p className="mt-3 mb-8 text-fg-3">
         Enter the email address associated with your account and we will send
         you a link to change&nbsp;your&nbsp;password.
       </p>
       <ForgotPasswordForm />
     </Card>
-    <Button
-      className="underline"
-      forwardSearchParams
-      href="/sign-in"
-      variant="link"
-    >
+    <Button forwardSearchParams href="/sign-in" variant="link">
       Return to sign in
     </Button>
   </>
