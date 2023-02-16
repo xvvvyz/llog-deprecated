@@ -34,7 +34,7 @@ const EventCard = ({
   ...rest
 }: EventCardProps) => (
   <Card breakpoint="sm" className="space-y-8" {...rest}>
-    <div className="flex h-4 shrink-0 items-center gap-4">
+    <div className="flex h-4 shrink-0 items-center gap-4 text-fg-3">
       {mission ? (
         <>
           {mission.name}

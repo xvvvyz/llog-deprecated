@@ -27,7 +27,7 @@ const SessionPaginator = async ({
         icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
         label="Previous session"
       />
-      <span className="text-fg-2">
+      <span className="text-fg-3">
         Session {sessionNumber} of {lastSessionNumber}
       </span>
       <IconButton
