@@ -3,6 +3,7 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
+import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
@@ -13,9 +14,15 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { PlusIcon } from '@heroicons/react/24/outline';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import RoutinesFormSection from './routines-form-section';
+
+import {
+  DocumentDuplicateIcon,
+  EllipsisHorizontalIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 
 interface MissionFormProps {
   availableInputs: ListInputsData;
@@ -241,25 +248,51 @@ const MissionForm = ({
       {!!sessionsArray.fields.length && (
         <ul className="flex flex-col gap-6">
           {sessionsArray.fields.map((item, sessionIndex) => (
-            <RoutinesFormSection<MissionFormValues>
-              duplicateSession={() =>
-                sessionsArray.insert(
-                  sessionIndex + 1,
-                  [
-                    form.getValues().routines[sessionIndex].map((routine) => ({
-                      ...routine,
-                      id: undefined,
-                    })),
-                  ],
-                  { focusName: `routines.${sessionIndex + 1}.0.content` }
-                )
-              }
-              form={form}
-              inputOptions={forceArray(availableInputs)}
-              key={item.id}
-              sessionIndex={sessionIndex}
-              templateOptions={forceArray(availableTemplates)}
-            />
+            <li key={item.id}>
+              <LabelSpan className="flex max-w-none items-center justify-between pb-2 text-fg-3">
+                Session {sessionIndex + 1}
+                <Menu className="-m-3 p-3">
+                  <Menu.Button className="-m-3 p-3">
+                    <EllipsisHorizontalIcon className="w-5" />
+                  </Menu.Button>
+                  <Menu.Items>
+                    <Menu.Item
+                      onClick={() =>
+                        sessionsArray.insert(
+                          sessionIndex + 1,
+                          [
+                            form
+                              .getValues()
+                              .routines[sessionIndex].map((routine) => ({
+                                ...routine,
+                                id: undefined,
+                              })),
+                          ],
+                          {
+                            focusName: `routines.${sessionIndex + 1}.0.content`,
+                          }
+                        )
+                      }
+                    >
+                      <DocumentDuplicateIcon className="w-5 text-fg-3" />
+                      Duplicate session
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => sessionsArray.remove(sessionIndex)}
+                    >
+                      <TrashIcon className="w-5 text-fg-3" />
+                      Delete session
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              </LabelSpan>
+              <RoutinesFormSection<MissionFormValues>
+                form={form}
+                inputOptions={forceArray(availableInputs)}
+                sessionIndex={sessionIndex}
+                templateOptions={forceArray(availableTemplates)}
+              />
+            </li>
           ))}
         </ul>
       )}
