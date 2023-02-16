@@ -5,7 +5,6 @@ import EventTypes from '(utilities)/enum-event-types';
 import formatTitle from '(utilities)/format-title';
 import getEventTypeWithInputsAndOptions from '(utilities)/get-event-type-with-inputs-and-options';
 import getSubject from '(utilities)/get-subject';
-import capitalize from 'lodash/capitalize';
 import { notFound } from 'next/navigation';
 import EventCard from '../../../(components)/event-card';
 
@@ -56,14 +55,7 @@ export const generateMetadata = async ({
   ]);
 
   if (!subject || !eventType) return;
-
-  return {
-    title: formatTitle([
-      subject.name,
-      capitalize(eventType.type),
-      eventType.name,
-    ]),
-  };
+  return { title: formatTitle([subject.name, eventType.name]) };
 };
 
 export default Page;

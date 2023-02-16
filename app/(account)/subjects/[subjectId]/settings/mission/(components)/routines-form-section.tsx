@@ -50,7 +50,9 @@ const RoutinesFormSection = <T extends FieldValues>({
 
   return (
     <li>
-      <LabelSpan className="pb-2">Session {sessionIndex + 1}</LabelSpan>
+      <LabelSpan className="pb-2 text-fg-3">
+        Session {sessionIndex + 1}
+      </LabelSpan>
       <ul>
         {eventTypesArray.fields.map((eventType, routineIndex) => (
           <li className="mb-3" key={eventType.id}>

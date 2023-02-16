@@ -34,27 +34,29 @@ const EventCard = ({
   ...rest
 }: EventCardProps) => (
   <Card breakpoint="sm" className="space-y-8" {...rest}>
-    <div className="flex h-4 shrink-0 items-center gap-4 text-fg-3">
-      {mission ? (
-        <>
-          {mission.name}
-          <Pill>{CODES.routine}</Pill>
-          {formatRoutineNumber(eventType.order)}
-        </>
-      ) : (
-        eventType.name
-      )}
-      <div className="ml-auto flex items-center sm:gap-3">
-        <Pill>{CODES[mission ? 'mission' : eventType.type]}</Pill>
-        {!isMission && mission && (
-          <EventCardMenu
-            missionId={mission.id}
-            sessionNumber={formatSessionNumber(eventType.session)}
-            subjectId={subjectId}
-          />
+    {event && !isMission && (
+      <div className="flex h-4 shrink-0 items-center gap-4 text-fg-3">
+        {mission ? (
+          <>
+            {mission.name}
+            <Pill>{CODES.routine}</Pill>
+            {formatRoutineNumber(eventType.order)}
+          </>
+        ) : (
+          eventType.name
         )}
+        <div className="ml-auto flex items-center sm:gap-3">
+          <Pill>{CODES[mission ? 'mission' : eventType.type]}</Pill>
+          {mission && (
+            <EventCardMenu
+              missionId={mission.id}
+              sessionNumber={formatSessionNumber(eventType.session)}
+              subjectId={subjectId}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    )}
     {!!eventType.content && (
       <DirtyHtml as="article">{eventType.content}</DirtyHtml>
     )}

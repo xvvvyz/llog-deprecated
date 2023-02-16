@@ -66,11 +66,11 @@ const Page = async ({
 export const dynamic = 'force-dynamic';
 
 export const generateMetadata = async ({
-  params: { eventType, subjectId },
+  params: { eventTypeType, subjectId },
 }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
   if (!subject) return;
-  return { title: formatTitle([subject.name, 'Settings', `Add ${eventType}`]) };
+  return { title: formatTitle([subject.name, 'Settings', `Add ${eventTypeType}`]) };
 };
 
 export default Page;

@@ -90,16 +90,7 @@ export const generateMetadata = async ({
   ]);
 
   if (!subject || !mission || !sessionNumber) return;
-
-  return {
-    title: formatTitle([
-      subject.name,
-      'Mission',
-      mission.name,
-      'Session',
-      sessionNumber,
-    ]),
-  };
+  return { title: formatTitle([subject.name, mission.name, sessionNumber]) };
 };
 
 export default Page;
