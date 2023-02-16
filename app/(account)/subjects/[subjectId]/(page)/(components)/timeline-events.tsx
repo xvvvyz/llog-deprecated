@@ -76,10 +76,10 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
               <table className="w-full text-fg-3">
                 <tbody>
                   <tr>
-                    <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                    <td className="border-t border-alpha-1 py-2 px-4 align-top">
                       Time
                     </td>
-                    <td className="min-w-[55%] border-t border-l border-alpha-1 py-2 pl-4 align-top">
+                    <td className="border-t border-l border-alpha-1 py-2 px-4 align-top">
                       <DateTime date={event.created_at} formatter="time" />
                     </td>
                   </tr>
@@ -105,10 +105,10 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                     ][]
                   ).map(([id, { label, type, values }]) => (
                     <tr key={id}>
-                      <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                      <td className="border-t border-alpha-1 py-2 px-4 align-top">
                         {label}
                       </td>
-                      <td className="min-w-[55%] border-t border-l border-alpha-1 py-2 pl-4 align-top">
+                      <td className="border-t border-l border-alpha-1 py-2 px-4 align-top">
                         {formatInputValue[type](values)}
                       </td>
                     </tr>

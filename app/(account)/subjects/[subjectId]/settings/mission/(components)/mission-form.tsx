@@ -242,6 +242,18 @@ const MissionForm = ({
         <ul className="flex flex-col gap-6">
           {sessionsArray.fields.map((item, sessionIndex) => (
             <RoutinesFormSection<MissionFormValues>
+              duplicateSession={() =>
+                sessionsArray.insert(
+                  sessionIndex + 1,
+                  [
+                    form.getValues().routines[sessionIndex].map((routine) => ({
+                      ...routine,
+                      id: undefined,
+                    })),
+                  ],
+                  { focusName: `routines.${sessionIndex + 1}.0.content` }
+                )
+              }
               form={form}
               inputOptions={forceArray(availableInputs)}
               key={item.id}

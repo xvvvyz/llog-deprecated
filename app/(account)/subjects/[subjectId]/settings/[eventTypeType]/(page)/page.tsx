@@ -70,7 +70,10 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
   if (!subject) return;
-  return { title: formatTitle([subject.name, 'Settings', `Add ${eventTypeType}`]) };
+
+  return {
+    title: formatTitle([subject.name, 'Settings', `Add ${eventTypeType}`]),
+  };
 };
 
 export default Page;

@@ -13,10 +13,15 @@ import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import useBackLink from '(utilities)/use-back-link';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+
+import {
+  DocumentDuplicateIcon,
+  EllipsisHorizontalIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 
 import {
   Controller,
@@ -26,6 +31,7 @@ import {
 } from 'react-hook-form';
 
 interface RoutinesFormSection<T extends FieldValues> {
+  duplicateSession: () => void;
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
   sessionIndex: number;
@@ -33,6 +39,7 @@ interface RoutinesFormSection<T extends FieldValues> {
 }
 
 const RoutinesFormSection = <T extends FieldValues>({
+  duplicateSession,
   form,
   inputOptions,
   sessionIndex,
@@ -50,8 +57,19 @@ const RoutinesFormSection = <T extends FieldValues>({
 
   return (
     <li>
-      <LabelSpan className="pb-2 text-fg-3">
+      <LabelSpan className="flex max-w-none items-center justify-between pb-2 text-fg-3">
         Session {sessionIndex + 1}
+        <Menu className="-m-3 p-3">
+          <Menu.Button className="-m-3 p-3">
+            <EllipsisHorizontalIcon className="w-5" />
+          </Menu.Button>
+          <Menu.Items>
+            <Menu.Item onClick={duplicateSession}>
+              <DocumentDuplicateIcon className="w-5 text-fg-3" />
+              Duplicate session
+            </Menu.Item>
+          </Menu.Items>
+        </Menu>
       </LabelSpan>
       <ul>
         {eventTypesArray.fields.map((eventType, routineIndex) => (
@@ -129,7 +147,6 @@ const RoutinesFormSection = <T extends FieldValues>({
         noOptionsMessage={() => null}
         onChange={(e) => {
           const template = e as TemplateType;
-          const values = form.getValues();
 
           eventTypesArray.append({
             content: template?.data?.content || '',
@@ -137,8 +154,6 @@ const RoutinesFormSection = <T extends FieldValues>({
               template?.data?.inputIds?.includes(input.id)
             ),
             name: template?.name,
-            order: eventTypesArray.fields.length,
-            subject_id: values.id ?? '',
             type: EventTypes.Routine,
           } as T[string]);
         }}
@@ -146,8 +161,6 @@ const RoutinesFormSection = <T extends FieldValues>({
           eventTypesArray.append({
             content: value,
             inputs: [],
-            order: eventTypesArray.fields.length,
-            subject_id: form.getValues().id ?? '',
             type: EventTypes.Routine,
           } as T[string])
         }
