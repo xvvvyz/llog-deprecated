@@ -46,7 +46,7 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
             <Card as="article" key={event.id} size="0">
               <header>
                 <Button
-                  className="m-0 w-full gap-4 px-4 pt-3 pb-2"
+                  className="m-0 w-full gap-4 px-4 py-3"
                   href={`/subjects/${subjectId}/event/${event.id}`}
                   variant="link"
                 >
@@ -73,11 +73,13 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                   </div>
                 </Button>
               </header>
-              <table className="mb-3 w-full text-fg-3">
+              <table className="w-full text-fg-3">
                 <tbody>
                   <tr>
-                    <td className="py-1 pl-4 align-top">Time</td>
-                    <td className="min-w-[55%] py-1 pl-4 align-top">
+                    <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                      Time
+                    </td>
+                    <td className="min-w-[55%] border-t border-l border-alpha-1 py-2 pl-4 align-top">
                       <DateTime date={event.created_at} formatter="time" />
                     </td>
                   </tr>
@@ -103,8 +105,10 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
                     ][]
                   ).map(([id, { label, type, values }]) => (
                     <tr key={id}>
-                      <td className="py-1 pl-4 align-top">{label}</td>
-                      <td className="min-w-[55%] py-1 pl-4 align-top">
+                      <td className="border-t border-alpha-1 py-2 pl-4 align-top">
+                        {label}
+                      </td>
+                      <td className="min-w-[55%] border-t border-l border-alpha-1 py-2 pl-4 align-top">
                         {formatInputValue[type](values)}
                       </td>
                     </tr>
@@ -113,7 +117,7 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
               </table>
               {!!comments.length && (
                 <ul
-                  className="space-y-2 border-t border-alpha-1 px-4 py-4"
+                  className="space-y-2 border-t border-alpha-1 px-4 pt-3 pb-4"
                   role="section"
                 >
                   {comments.map(({ content, id, profile }) => (

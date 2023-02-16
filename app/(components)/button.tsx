@@ -25,7 +25,7 @@ const sizes = {
 
 const variants = {
   link: 'p-3 -m-3 text-fg-2 hover:text-fg-1',
-  primary: 'focus:ring-1 justify-center',
+  primary: 'focus:ring-1 rounded justify-center',
 };
 
 const disabledVariants = {
@@ -66,7 +66,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const searchParams = useSearchParams();
 
     const cn = twMerge(
-      'outline-none border border-transparent inline-flex items-center gap-2 rounded transition-colors',
+      'outline-none border border-transparent inline-flex items-center gap-2 transition-colors',
       variant !== 'link' && sizes[size],
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],

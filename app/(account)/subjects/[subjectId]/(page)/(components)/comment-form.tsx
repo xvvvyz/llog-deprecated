@@ -40,7 +40,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
         render={({ field }) => (
           <RichTextarea
             aria-label="Comment"
-            className="min-h-full rounded-t-none border-0 pr-12"
+            className="min-h-full rounded-t-none border-0 border-t pr-12"
             onEnter={onSubmit}
             placeholder="Add comment"
             right={

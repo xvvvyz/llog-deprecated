@@ -56,9 +56,7 @@ const EventCard = ({
       </div>
     </div>
     {!!eventType.content && (
-      <DirtyHtml as="article" className="text-fg-2">
-        {eventType.content}
-      </DirtyHtml>
+      <DirtyHtml as="article">{eventType.content}</DirtyHtml>
     )}
     <EventForm
       event={event}
