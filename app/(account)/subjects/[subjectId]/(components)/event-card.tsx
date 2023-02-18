@@ -35,7 +35,7 @@ const EventCard = ({
 }: EventCardProps) => (
   <Card breakpoint="sm" className="space-y-8" {...rest}>
     {event && !isMission && (
-      <div className="flex h-4 shrink-0 items-center gap-4 text-fg-3">
+      <div className="flex h-4 shrink-0 items-center gap-4">
         {mission ? (
           <>
             {mission.name}
@@ -58,7 +58,9 @@ const EventCard = ({
       </div>
     )}
     {!!eventType.content && (
-      <DirtyHtml as="article">{eventType.content}</DirtyHtml>
+      <DirtyHtml as="article" className="text-fg-3">
+        {eventType.content}
+      </DirtyHtml>
     )}
     <EventForm
       event={event}

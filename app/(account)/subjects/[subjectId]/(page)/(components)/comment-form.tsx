@@ -45,7 +45,7 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
             placeholder="Add comment"
             right={
               <IconButton
-                icon={<PaperAirplaneIcon className="mr-2 w-5" />}
+                icon={<PaperAirplaneIcon className="mr-1.5 w-5" />}
                 label="Add comment"
                 loading={form.formState.isSubmitting || isTransitioning}
                 loadingText="Adding comment…"

@@ -9,6 +9,7 @@ import { BoxProps } from './box';
 const sizes = {
   md: { className: 'h-8 w-8', imgSizes: '32px' },
   sm: { className: 'h-6 w-6 text-sm', imgSizes: '24px' },
+  xs: { className: 'h-5 w-5 text-xs', imgSizes: '20px' },
 };
 
 interface AvatarProps extends BoxProps {

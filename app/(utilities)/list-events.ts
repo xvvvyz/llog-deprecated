@@ -17,8 +17,10 @@ const listEvents = (subjectId: string) =>
         option:input_options(id, label),
         value
       ),
+      profile:profiles(first_name, id, last_name),
       type:event_types(
         id,
+        content,
         mission:missions(id, name),
         name,
         order,

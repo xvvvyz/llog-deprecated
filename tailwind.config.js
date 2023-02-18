@@ -3,7 +3,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.tsx'],
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/line-clamp'),
+  ],
   theme: {
     borderRadius: {
       DEFAULT: 'var(--radius-default)',
@@ -17,6 +20,7 @@ module.exports = {
       'alpha-1': 'var(--color-alpha-1)',
       'alpha-2': 'var(--color-alpha-2)',
       'alpha-3': 'var(--color-alpha-3)',
+      'alpha-reverse-1': 'var(--color-alpha-reverse-1)',
       'bg-1': 'var(--color-bg-1)',
       'bg-2': 'var(--color-bg-2)',
       'fg-1': 'var(--color-fg-1)',
