@@ -19,6 +19,5 @@ const Page = async () => {
   );
 };
 
-export const dynamic = 'force-dynamic';
 export const metadata = { title: formatTitle(['Templates', 'Add']) };
 export default Page;

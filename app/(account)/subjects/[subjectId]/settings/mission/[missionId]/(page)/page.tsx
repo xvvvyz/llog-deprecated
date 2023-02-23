@@ -54,8 +54,6 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   );
 };
 
-export const dynamic = 'force-dynamic';
-
 export const generateMetadata = async ({
   params: { missionId, subjectId },
 }: PageProps) => {

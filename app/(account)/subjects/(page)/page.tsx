@@ -20,6 +20,5 @@ const Page = async () => {
   );
 };
 
-export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Subjects' };
 export default Page;

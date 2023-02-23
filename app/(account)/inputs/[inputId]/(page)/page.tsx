@@ -27,8 +27,6 @@ const Page = async ({ params: { inputId } }: PageProps) => {
   );
 };
 
-export const dynamic = 'force-dynamic';
-
 export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
   const { data: input } = await getInput(inputId);
   if (!input) return;

@@ -42,8 +42,6 @@ const Page = async ({
   );
 };
 
-export const dynamic = 'force-dynamic';
-
 export const generateMetadata = async ({
   params: { eventTypeId, subjectId },
 }: PageProps) => {
