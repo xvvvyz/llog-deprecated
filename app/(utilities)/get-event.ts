@@ -7,8 +7,15 @@ const getEvent = (eventId: string) =>
     .from('events')
     .select(
       `
+      comments(
+        content,
+        id,
+        profile:profiles(first_name, id, last_name)
+      ),
+      created_at,
       id,
       inputs:event_inputs(id, input_id, input_option_id, value),
+      profile:profiles(first_name, id, last_name),
       type:event_types(
         content,
         id,
@@ -21,7 +28,6 @@ const getEvent = (eventId: string) =>
             type
           )
         ),
-        mission:missions(id, name),
         name,
         order,
         session,
@@ -35,11 +41,23 @@ const getEvent = (eventId: string) =>
     .single();
 
 export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
+  comments: Array<
+    Pick<Database['public']['Tables']['comments']['Row'], 'content' | 'id'> & {
+      profile: Pick<
+        Database['public']['Tables']['profiles']['Row'],
+        'first_name' | 'id' | 'last_name'
+      >;
+    }
+  >;
   inputs: Array<
     Pick<
       Database['public']['Tables']['event_inputs']['Row'],
       'id' | 'input_id' | 'input_option_id' | 'value'
     >
+  >;
+  profile: Pick<
+    Database['public']['Tables']['profiles']['Row'],
+    'first_name' | 'id' | 'last_name'
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],

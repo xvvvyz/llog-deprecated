@@ -76,7 +76,7 @@ const EventTypeForm = ({
 
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(
         async ({ content, id, inputs, name, order, type }) => {
           const { data: eventTypeData, error: eventTypeError } = await supabase

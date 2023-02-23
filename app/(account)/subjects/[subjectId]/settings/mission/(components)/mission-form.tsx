@@ -7,6 +7,7 @@ import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
+import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
@@ -44,13 +45,16 @@ const MissionForm = ({
   subjectId,
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
+  const routines = forceArray(mission?.routines);
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.MissionForm,
     defaultValues: {
       id: mission?.id,
       name: mission?.name ?? '',
-      routines: forceArray(mission?.routines).reduce((acc, routine) => {
+      routines: routines.reduce((acc, routine) => {
+        const event = firstIfArray(routine.event);
+
         const inputs = routine.inputs.map(
           ({
             input,
@@ -59,7 +63,7 @@ const MissionForm = ({
           }) => input
         );
 
-        const formattedRoutine = { ...routine, inputs };
+        const formattedRoutine = { ...routine, event, inputs };
         if (acc[routine.session]) acc[routine.session].push(formattedRoutine);
         else acc[routine.session] = [formattedRoutine];
         return acc;
@@ -76,7 +80,7 @@ const MissionForm = ({
 
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(async ({ id, name, routines }) => {
         const { data: missionData, error: missionError } = await supabase
           .from('missions')
@@ -249,10 +253,12 @@ const MissionForm = ({
         <ul className="flex flex-col gap-6">
           {sessionsArray.fields.map((item, sessionIndex) => (
             <li key={item.id}>
-              <LabelSpan className="flex max-w-none items-center justify-between pb-2 text-fg-3">
-                Session {sessionIndex + 1}
+              <LabelSpan className="mt-2 flex max-w-none items-end justify-between pb-2">
+                <span className="text-xl text-fg-1">
+                  Session {sessionIndex + 1}
+                </span>
                 <Menu className="-m-3 p-3">
-                  <Menu.Button className="-m-3 p-3">
+                  <Menu.Button className="relative right-0.5 -m-3 p-3">
                     <EllipsisHorizontalIcon className="w-5" />
                   </Menu.Button>
                   <Menu.Items>
@@ -264,8 +270,12 @@ const MissionForm = ({
                             form
                               .getValues()
                               .routines[sessionIndex].map((routine) => ({
-                                ...routine,
+                                content: routine.content,
                                 id: undefined,
+                                inputs: routine.inputs,
+                                order: 0,
+                                subject_id: subjectId,
+                                type: routine.type,
                               })),
                           ],
                           {

@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import listInputs from '(utilities)/list-inputs';
@@ -15,9 +14,7 @@ const Page = async () => {
         <BackButton href="/templates" />
         <Breadcrumbs items={[['Templates', '/templates'], ['Add']]} />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <TemplateForm availableInputs={availableInputs} />
-      </Card>
+      <TemplateForm availableInputs={availableInputs} />
     </>
   );
 };

@@ -1,9 +1,7 @@
-import Box, { BoxProps } from '(components)/box';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 import Button from './button';
-import Card from './card';
 import Pill from './pill';
 
 import {
@@ -13,13 +11,19 @@ import {
 } from '@heroicons/react/24/outline';
 
 const icons = {
-  arrow: <ArrowRightIcon className="relative -right-[0.2em] w-5" />,
-  edit: <PencilIcon className="relative -right-[0.2em] w-5" />,
-  trash: <TrashIcon className="relative -right-[0.2em] w-5" />,
+  arrow: <ArrowRightIcon className="relative -right-[0.15em] w-5" />,
+  edit: <PencilIcon className="relative -right-[0.15em] w-5" />,
+  trash: <TrashIcon className="relative -right-[0.15em] w-5" />,
 };
 
-interface ListItemProps extends BoxProps {
+interface LinkListProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface ListItemProps {
   avatar?: string | null;
+  className?: string;
   href?: string;
   icon?: keyof typeof icons;
   onClick?: () => void;
@@ -28,13 +32,15 @@ interface ListItemProps extends BoxProps {
 }
 
 const LinkList = Object.assign(
-  ({ className, ...rest }: BoxProps) => (
-    <Card
-      as="ul"
-      className={twMerge('divide-y divide-alpha-1 empty:border-0', className)}
-      size="0"
-      {...rest}
-    />
+  ({ children, className }: LinkListProps) => (
+    <ul
+      className={twMerge(
+        'divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2',
+        className
+      )}
+    >
+      {children}
+    </ul>
   ),
   {
     Item: ({
@@ -45,9 +51,8 @@ const LinkList = Object.assign(
       onClick,
       pill,
       text,
-      ...rest
     }: ListItemProps) => (
-      <Box as="li" {...rest}>
+      <li>
         <Button
           className={twMerge('m-0 w-full gap-4 py-3 px-4', className)}
           href={href}
@@ -63,7 +68,7 @@ const LinkList = Object.assign(
             {icons[icon]}
           </div>
         </Button>
-      </Box>
+      </li>
     ),
   }
 );

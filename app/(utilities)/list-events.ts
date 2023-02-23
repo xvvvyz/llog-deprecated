@@ -1,3 +1,4 @@
+import { Database } from '(types)/database';
 import createServerSupabaseClient from './create-server-supabase-client';
 
 const listEvents = (subjectId: string) =>
@@ -19,8 +20,8 @@ const listEvents = (subjectId: string) =>
       ),
       profile:profiles(first_name, id, last_name),
       type:event_types(
-        id,
         content,
+        id,
         mission:missions(id, name),
         name,
         order,
@@ -32,5 +33,40 @@ const listEvents = (subjectId: string) =>
     .order('created_at', { ascending: false })
     .order('created_at', { foreignTable: 'comments' });
 
-export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];
+export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
+  comments: Array<
+    Pick<Database['public']['Tables']['comments']['Row'], 'content' | 'id'> & {
+      profile: Pick<
+        Database['public']['Tables']['profiles']['Row'],
+        'first_name' | 'id' | 'last_name'
+      >;
+    }
+  >;
+  inputs: Array<
+    Pick<Database['public']['Tables']['event_inputs']['Row'], 'value'> & {
+      input: Pick<
+        Database['public']['Tables']['inputs']['Row'],
+        'id' | 'label' | 'type'
+      >;
+      option: Pick<
+        Database['public']['Tables']['input_options']['Row'],
+        'id' | 'label'
+      >;
+    }
+  >;
+  profile: Pick<
+    Database['public']['Tables']['profiles']['Row'],
+    'first_name' | 'id' | 'last_name'
+  >;
+  type: Pick<
+    Database['public']['Tables']['event_types']['Row'],
+    'content' | 'id' | 'name' | 'order' | 'session' | 'type'
+  > & {
+    mission: Pick<
+      Database['public']['Tables']['missions']['Row'],
+      'id' | 'name'
+    >;
+  };
+};
+
 export default listEvents;

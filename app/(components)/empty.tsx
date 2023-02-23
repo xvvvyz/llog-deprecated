@@ -1,4 +1,3 @@
-import Box from '(components)/box';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -8,15 +7,14 @@ interface EmptyProps {
 }
 
 const Empty = ({ children, className }: EmptyProps) => (
-  <Box
-    as="p"
+  <p
     className={twMerge(
       'mt-16 flex flex-wrap items-center justify-center gap-4 text-fg-2',
       className
     )}
   >
     {children}
-  </Box>
+  </p>
 );
 
 export default Empty;

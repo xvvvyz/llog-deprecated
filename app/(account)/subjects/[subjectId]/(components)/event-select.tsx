@@ -7,7 +7,7 @@ import { useTransition } from 'react';
 import { useBoolean } from 'usehooks-ts';
 
 interface EventSelectProps {
-  field: any; // todo: type this;
+  field: any;
   input: InputType & {
     options: Array<
       Pick<Database['public']['Tables']['input_options']['Row'], 'id' | 'label'>

@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import EventTypes from '(utilities)/enum-event-types';
 import formatTitle from '(utilities)/format-title';
@@ -51,14 +50,12 @@ const Page = async ({
           ]}
         />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <EventTypeForm
-          availableInputs={availableInputs}
-          subjectId={subjectId}
-          template={template}
-          type={eventTypeType as EventTypes}
-        />
-      </Card>
+      <EventTypeForm
+        availableInputs={availableInputs}
+        subjectId={subjectId}
+        template={template}
+        type={eventTypeType as EventTypes}
+      />
     </>
   );
 };

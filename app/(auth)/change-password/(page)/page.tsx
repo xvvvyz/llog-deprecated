@@ -1,11 +1,10 @@
-import Card from '(components)/card';
 import ChangePasswordForm from './(components)/change-password-form';
 
 const Page = () => (
-  <Card breakpoint="sm">
+  <div className="w-full sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
     <h1 className="mb-8 text-2xl">Change your password</h1>
     <ChangePasswordForm />
-  </Card>
+  </div>
 );
 
 export const metadata = { title: 'Change password' };

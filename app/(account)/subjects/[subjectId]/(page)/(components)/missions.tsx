@@ -9,20 +9,14 @@ interface MissionProps {
 
 const Missions = async ({ subjectId }: MissionProps) => {
   const { data: missions } = await listMissionsWithRoutines(subjectId);
-  if (!missions?.length) return null;
 
-  return missions.map((mission) => {
+  return forceArray(missions).reduce((acc, mission) => {
     const routines = forceArray(mission.routines);
-    const lastSessionIndex = routines.pop()?.session;
+    const activeRoutine = routines.find(({ events }) => !events.length);
+    if (!activeRoutine) return acc;
+    const activeSessionNumber = activeRoutine.session + 1;
 
-    const activeSessionIndex =
-      routines.find((routine) => !routine.events.length)?.session ??
-      lastSessionIndex ??
-      0;
-
-    const activeSessionNumber = activeSessionIndex + 1;
-
-    return (
+    acc.push(
       <LinkList.Item
         href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
         key={mission.id}
@@ -30,7 +24,7 @@ const Missions = async ({ subjectId }: MissionProps) => {
         text={mission.name}
       />
     );
-  });
+  }, []);
 };
 
 export default Missions;

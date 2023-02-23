@@ -3,12 +3,12 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
-import RadioGroup from '(components)/radio-group';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database, Json } from '(types)/database';
 import { TemplateDataType } from '(types)/template';
 import supabase from '(utilities)/browser-supabase-client';
+import TEMPLATE_TYPE_LABELS from '(utilities)/constant-template-type-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import TemplateTypes from '(utilities)/enum-template-types';
 import forceArray from '(utilities)/force-array';
@@ -32,6 +32,7 @@ interface TemplateFormProps {
 type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
   content: string;
   inputs: Database['public']['Tables']['inputs']['Row'][];
+  type: { id: TemplateTypes };
 };
 
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
@@ -51,7 +52,9 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       ),
       name: template?.name ?? '',
       public: template?.public ?? false,
-      type: template?.type ?? TemplateTypes.Observation,
+      type: template?.type
+        ? { id: template.type, label: TEMPLATE_TYPE_LABELS[template.type] }
+        : null,
     },
   });
 
@@ -59,7 +62,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
 
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(
         async ({ content, id, inputs, name, public: p, type }) => {
           const { error: templateError } = await supabase
@@ -72,7 +75,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
               id,
               name: name.trim(),
               public: p,
-              type,
+              type: type?.id,
             })
             .single();
 
@@ -91,10 +94,18 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
           control={form.control}
           name="type"
           render={({ field }) => (
-            <RadioGroup
+            <Select
+              isClearable={false}
+              isSearchable={false}
               options={[
-                { label: 'Observation', value: TemplateTypes.Observation },
-                { label: 'Routine', value: TemplateTypes.Routine },
+                {
+                  id: TemplateTypes.Observation,
+                  label: TEMPLATE_TYPE_LABELS[TemplateTypes.Observation],
+                },
+                {
+                  id: TemplateTypes.Routine,
+                  label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
+                },
               ]}
               {...field}
             />

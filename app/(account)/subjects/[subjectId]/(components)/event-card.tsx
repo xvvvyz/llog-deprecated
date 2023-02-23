@@ -1,75 +1,63 @@
-import { BoxProps } from '(components)/box';
-import Card from '(components)/card';
 import DirtyHtml from '(components)/dirty-html';
-import Pill from '(components)/pill';
-import CODES from '(utilities)/constant-codes';
-import formatRoutineNumber from '(utilities)/format-routine-number';
-import formatSessionNumber from '(utilities)/format-session-number';
+import forceArray from '(utilities)/force-array';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { GetMissionData } from '(utilities)/get-mission';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
-import EventCardMenu from './event-card-menu';
+import { twMerge } from 'tailwind-merge';
+import EventBanner from './event-banner';
+import EventCommentForm from './event-comment-form';
+import EventComments from './event-comments';
 import EventForm from './event-form';
 
-interface EventCardProps extends BoxProps {
+interface EventCardProps {
   event?: GetEventData | ListSessionRoutinesData['event'];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<ListSessionRoutinesData>[0];
-  isMission?: boolean;
   mission?: GetMissionData | GetEventData['type']['mission'];
-  redirectOnSubmit?: boolean;
   subjectId: string;
 }
 
 const EventCard = ({
   event,
   eventType,
-  isMission = false,
   mission,
-  redirectOnSubmit = true,
   subjectId,
-  ...rest
 }: EventCardProps) => (
-  <Card breakpoint="sm" className="space-y-8" {...rest}>
-    {event && !isMission && (
-      <div className="flex h-4 shrink-0 items-center gap-4">
-        {mission ? (
-          <>
-            {mission.name}
-            <Pill>{CODES.routine}</Pill>
-            {formatRoutineNumber(eventType.order)}
-          </>
-        ) : (
-          eventType.name
-        )}
-        <div className="ml-auto flex items-center sm:gap-3">
-          <Pill>{CODES[mission ? 'mission' : eventType.type]}</Pill>
-          {mission && (
-            <EventCardMenu
-              missionId={mission.id}
-              sessionNumber={formatSessionNumber(eventType.session)}
-              subjectId={subjectId}
-            />
-          )}
-        </div>
-      </div>
+  <div
+    className={twMerge(
+      'relative space-y-8 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:pb-8',
+      !event && 'sm:pt-8'
+    )}
+  >
+    {event && (
+      <EventBanner
+        className="rounded-t sm:border-b sm:border-alpha-1 sm:bg-alpha-reverse-1 sm:py-2 sm:px-8"
+        createdAt={event.created_at}
+        profile={event.profile}
+      />
     )}
     {!!eventType.content && (
-      <DirtyHtml as="article" className="text-fg-3">
-        {eventType.content}
-      </DirtyHtml>
+      <DirtyHtml className="sm:px-8">{eventType.content}</DirtyHtml>
     )}
     <EventForm
       event={event}
       eventType={eventType}
-      isMission={isMission}
-      redirectOnSubmit={redirectOnSubmit}
+      isMission={!!mission}
       subjectId={subjectId}
     />
-  </Card>
+    {event && (
+      <div className="space-y-6 sm:px-8">
+        <EventComments
+          className="space-y-4"
+          comments={forceArray(event.comments)}
+        />
+        <EventCommentForm className="pt-2" eventId={event.id} />
+      </div>
+    )}
+  </div>
 );
 
 export default EventCard;

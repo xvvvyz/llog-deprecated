@@ -1,6 +1,6 @@
+import Nav from '(components)/nav';
 import getCurrentUser from '(utilities)/get-current-user';
 import { ReactNode } from 'react';
-import Nav from './(components)/nav';
 
 interface LayoutProps {
   children: ReactNode;

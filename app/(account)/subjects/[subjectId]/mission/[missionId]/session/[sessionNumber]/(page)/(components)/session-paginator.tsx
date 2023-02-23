@@ -20,7 +20,7 @@ const SessionPaginator = async ({
   const nextSessionNumber = Math.min(lastSessionNumber, sessionNumber + 1);
 
   return (
-    <nav className="flex w-full items-center justify-between">
+    <nav className="mb-16 flex w-full items-center justify-between sm:mb-8">
       <IconButton
         disabled={sessionNumber === 1}
         href={`/subjects/${subjectId}/mission/${missionId}/session/${previousSessionNumber}`}

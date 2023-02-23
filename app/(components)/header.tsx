@@ -1,15 +1,20 @@
-import Box, { BoxProps } from '(components)/box';
+import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const Header = ({ className, ...rest }: BoxProps) => (
-  <Box
-    as="header"
+interface HeaderProps {
+  children: ReactNode;
+  className?: string;
+}
+
+const Header = ({ children, className }: HeaderProps) => (
+  <div
     className={twMerge(
       'my-16 flex h-8 items-center justify-between',
       className
     )}
-    {...rest}
-  />
+  >
+    {children}
+  </div>
 );
 
 export default Header;

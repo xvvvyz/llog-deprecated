@@ -1,22 +1,21 @@
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import Box, { BoxProps } from './box';
 
-interface PillProps extends BoxProps {
+interface PillProps {
+  children?: ReactNode;
+  className?: string;
   values?: ReactNode[];
 }
 
-const Pill = ({ children, className, ...rest }: PillProps) => (
-  <Box
-    as="span"
+const Pill = ({ children, className }: PillProps) => (
+  <span
     className={twMerge(
       'min-w-[2rem] rounded-sm bg-alpha-1 px-2 text-center leading-snug text-fg-3',
       className
     )}
-    {...rest}
   >
     {children}
-  </Box>
+  </span>
 );
 
 export default Pill;

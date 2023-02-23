@@ -9,6 +9,21 @@ const getMissionWithRoutines = (missionId: string) =>
         name,
         routines:event_types(
           content,
+          event:events(
+            comments(
+              content,
+              id,
+              profile:profiles(first_name, id, last_name)
+            ),
+            created_at,
+            id,
+            inputs:event_inputs(
+              input:inputs(id, label, type),
+              option:input_options(id, label),
+              value
+            ),
+            profile:profiles(first_name, id, last_name)
+          ),
           id,
           inputs:event_type_inputs(
             input:inputs(id, label)

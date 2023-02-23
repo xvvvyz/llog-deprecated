@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import getEventTypeWithInputs from '(utilities)/get-event-type-with-inputs';
@@ -39,15 +38,11 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
           ]}
         />
       </Header>
-      <main>
-        <Card breakpoint="sm">
-          <EventTypeForm
-            availableInputs={availableInputs}
-            eventType={eventType}
-            subjectId={subjectId}
-          />
-        </Card>
-      </main>
+      <EventTypeForm
+        availableInputs={availableInputs}
+        eventType={eventType}
+        subjectId={subjectId}
+      />
     </>
   );
 };

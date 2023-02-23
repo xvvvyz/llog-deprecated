@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import getSubjectWithEventTypesAndMissions from '(utilities)/get-subject-with-event-types-and-missions';
@@ -29,12 +28,10 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         <BackButton href={subjectHref} />
         <Breadcrumbs items={[[subject.name, subjectHref], ['Settings']]} />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <SubjectSettingsForm
-          availableTemplates={availableTemplates}
-          subject={subject}
-        />
-      </Card>
+      <SubjectSettingsForm
+        availableTemplates={availableTemplates}
+        subject={subject}
+      />
     </>
   );
 };

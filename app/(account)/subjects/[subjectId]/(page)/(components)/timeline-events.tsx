@@ -2,50 +2,53 @@
 
 import DateTime from '(components)/date-time';
 import firstIfArray from '(utilities)/first-if-array';
-import forceArray from '(utilities)/force-array';
 import formatDate from '(utilities)/format-date';
 import { ListEventsData } from '(utilities)/list-events';
-import TimelineEvent from './timeline-event';
+import TimelineEventCard from './timeline-event-card';
 
 interface TimelineEventsProps {
-  events: NonNullable<ListEventsData>;
+  events: ListEventsData;
   subjectId: string;
 }
 
 const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
-  <div className="mt-4 space-y-4" suppressHydrationWarning>
+  <div className="mt-4 space-y-4">
     {Object.values(
       events.reduce((acc, event) => {
         const date = formatDate(event.created_at);
-        acc[date] = acc[date] ?? [];
-        acc[date].push(event);
-        return acc;
-      }, {} as Record<string, typeof events>)
-    ).map((events) => (
-      <div className="space-y-4" key={events[0].created_at}>
-        <DateTime
-          className="ml-4 mr-2 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
-          date={events[0].created_at}
-          formatter="date"
-        />
-        {events.map((event) => {
-          const eventType = firstIfArray(event.type);
-          const comments = forceArray(event.comments);
-          const profile = firstIfArray(event.profile);
+        acc[date] = acc[date] ?? new Map();
+        const type = firstIfArray(event.type);
 
-          return (
-            <TimelineEvent
-              comments={comments}
-              event={event}
-              key={event.id}
-              profile={profile}
+        const key = type.mission
+          ? `${type.mission.id}${type.session}`
+          : event.id;
+
+        const keyEvents = (acc[date].get(key) ?? []) as ListEventsData;
+        keyEvents.unshift(event);
+        acc[date].set(key, keyEvents);
+        return acc;
+      }, {} as Record<string, Map<string, ListEventsData>>)
+    ).map((groups) => {
+      const dayGroup = Array.from(groups.values());
+      const firstEvent = dayGroup[0][0];
+
+      return (
+        <div className="space-y-4" key={firstEvent.created_at}>
+          <DateTime
+            className="ml-4 mr-2 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
+            date={firstEvent.created_at}
+            formatter="date"
+          />
+          {dayGroup.map((eventGroup) => (
+            <TimelineEventCard
+              group={eventGroup}
+              key={eventGroup[0].id}
               subjectId={subjectId}
-              type={eventType}
             />
-          );
-        })}
-      </div>
-    ))}
+          ))}
+        </div>
+      );
+    })}
   </div>
 );
 

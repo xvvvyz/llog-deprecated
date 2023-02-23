@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import getInput from '(utilities)/get-input';
@@ -23,9 +22,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
         <BackButton href="/inputs" />
         <Breadcrumbs items={[['Inputs', '/inputs'], [input.label]]} />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <InputForm input={input} />
-      </Card>
+      <InputForm input={input} />
     </>
   );
 };

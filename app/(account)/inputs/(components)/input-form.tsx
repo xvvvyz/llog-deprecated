@@ -81,7 +81,7 @@ const InputForm = ({ input }: InputFormProps) => {
 
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(
         async ({ id, label, options, settings, type: typeObject }) => {
           const type = typeObject?.id;
@@ -203,7 +203,7 @@ const InputForm = ({ input }: InputFormProps) => {
       {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
         <>
           <fieldset>
-            <LabelSpan as="legend">Options</LabelSpan>
+            <LabelSpan>Options</LabelSpan>
             <ul className="flex flex-col gap-3 pt-2">
               {optionsArray.fields.map((option, optionIndex) => (
                 <li key={option.id}>

@@ -1,5 +1,4 @@
-import Empty from '(components)/empty';
-import listEvents from '(utilities)/list-events';
+import listEvents, { ListEventsData } from '(utilities)/list-events';
 import TimelineEvents from './timeline-events';
 
 interface TimelineProps {
@@ -8,8 +7,11 @@ interface TimelineProps {
 
 const Timeline = async ({ subjectId }: TimelineProps) => {
   const { data: events } = await listEvents(subjectId);
-  if (!events?.length) return <Empty>No events</Empty>;
-  return <TimelineEvents events={events} subjectId={subjectId} />;
+  if (!events?.length) return null;
+
+  return (
+    <TimelineEvents events={events as ListEventsData} subjectId={subjectId} />
+  );
 };
 
 export default Timeline;

@@ -164,57 +164,55 @@ const SingleValue = <TOption extends IOption>({
   </components.SingleValue>
 );
 
-const Select = forwardRef(
-  <TOption extends IOption>(
-    {
-      instanceId,
-      isCreatable,
-      isDisabled,
-      isLoading,
-      placeholder,
-      ...props
-    }: ReactSelectProps<TOption> &
-      CreatableProps<IOption, boolean, GroupBase<IOption>> & {
-        isCreatable?: boolean;
-      },
-    ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
-  ) => {
-    const commonProps = {
-      closeMenuOnSelect: !props.isMulti,
-      components: {
-        ClearIndicator,
-        Control,
-        DropdownIndicator,
-        Input,
-        LoadingIndicator,
-        LoadingMessage,
-        Menu,
-        MultiValueContainer,
-        MultiValueRemove,
-        NoOptionsMessage,
-        Option,
-        Placeholder,
-        SingleValue,
-      },
-      getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
-      getOptionValue: (option: IOption) => option.id,
-      instanceId: instanceId ?? props.name,
-      isClearable: true,
-      isDisabled: isDisabled || isLoading,
-      isLoading,
-      placeholder: placeholder ?? <>&nbsp;</>,
-      unstyled: true,
-      ...props,
-    };
+const Select = <TOption extends IOption>(
+  {
+    instanceId,
+    isCreatable,
+    isDisabled,
+    isLoading,
+    placeholder,
+    ...props
+  }: ReactSelectProps<TOption> &
+    CreatableProps<IOption, boolean, GroupBase<IOption>> & {
+      isCreatable?: boolean;
+    },
+  ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
+) => {
+  const commonProps = {
+    closeMenuOnSelect: !props.isMulti,
+    components: {
+      ClearIndicator,
+      Control,
+      DropdownIndicator,
+      Input,
+      LoadingIndicator,
+      LoadingMessage,
+      Menu,
+      MultiValueContainer,
+      MultiValueRemove,
+      NoOptionsMessage,
+      Option,
+      Placeholder,
+      SingleValue,
+    },
+    getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
+    getOptionValue: (option: IOption) => option.id,
+    instanceId: instanceId ?? props.name,
+    isClearable: true,
+    isDisabled: isDisabled || isLoading,
+    isLoading,
+    placeholder: placeholder ?? <>&nbsp;</>,
+    unstyled: true,
+    ...props,
+  };
 
-    return isCreatable ? (
-      <Creatable ref={ref} {...commonProps} />
-    ) : (
-      <ReactSelect ref={ref} {...commonProps} />
-    );
-  }
-);
+  return isCreatable ? (
+    <Creatable ref={ref} {...commonProps} />
+  ) : (
+    <ReactSelect ref={ref} {...commonProps} />
+  );
+};
 
 Select.displayName = 'Select';
 export type { IOption };
-export default Select;
+export default forwardRef(Select);

@@ -18,7 +18,7 @@ const AddSubjectForm = () => {
 
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(async ({ name }) => {
         const { error: updateUserError } = await supabase.auth.updateUser({
           data: { is_client: false },

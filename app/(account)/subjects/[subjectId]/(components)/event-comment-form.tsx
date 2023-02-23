@@ -8,12 +8,19 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
 
-interface CommentFormProps {
+interface EventCommentFormProps {
+  className?: string;
   eventId: string;
+  inputClassName?: string;
 }
 
-const CommentForm = ({ eventId }: CommentFormProps) => {
+const EventCommentForm = ({
+  className,
+  eventId,
+  inputClassName,
+}: EventCommentFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const form = useForm({ defaultValues: { content: '' } });
   const router = useRouter();
@@ -33,14 +40,14 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
   });
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className={className} onSubmit={onSubmit}>
       <Controller
         control={form.control}
         name="content"
         render={({ field }) => (
           <RichTextarea
             aria-label="Comment"
-            className="min-h-full rounded-t-none border-0 border-t pr-12"
+            className={twMerge('min-h-full pr-12', inputClassName)}
             onEnter={onSubmit}
             placeholder="Add comment"
             right={
@@ -59,4 +66,4 @@ const CommentForm = ({ eventId }: CommentFormProps) => {
   );
 };
 
-export default CommentForm;
+export default EventCommentForm;

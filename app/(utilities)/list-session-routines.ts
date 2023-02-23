@@ -12,8 +12,15 @@ const listSessionRoutines = (
       `
       content,
       event:events(
+        comments(
+          content,
+          id,
+          profile:profiles(first_name, id, last_name)
+        ),
+        created_at,
         id,
-        inputs:event_inputs(id, input_id, input_option_id, value)
+        inputs:event_inputs(id, input_id, input_option_id, value),
+        profile:profiles(first_name, id, last_name)
       ),
       id,
       inputs:event_type_inputs(
@@ -41,12 +48,30 @@ const listSessionRoutines = (
 export type ListSessionRoutinesData = Awaited<
   ReturnType<typeof listSessionRoutines>
 >['data'] & {
-  event: Pick<Database['public']['Tables']['events']['Row'], 'id'> & {
+  event: Pick<
+    Database['public']['Tables']['events']['Row'],
+    'created_at' | 'id'
+  > & {
+    comments: Array<
+      Pick<
+        Database['public']['Tables']['comments']['Row'],
+        'content' | 'id'
+      > & {
+        profile: Pick<
+          Database['public']['Tables']['profiles']['Row'],
+          'first_name' | 'id' | 'last_name'
+        >;
+      }
+    >;
     inputs: Array<
       Pick<
         Database['public']['Tables']['event_inputs']['Row'],
         'id' | 'input_id' | 'input_option_id' | 'value'
       >
+    >;
+    profile: Pick<
+      Database['public']['Tables']['profiles']['Row'],
+      'first_name' | 'id' | 'last_name'
     >;
   };
   inputs: Array<

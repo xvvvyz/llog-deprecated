@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import getSubject from '(utilities)/get-subject';
@@ -41,13 +40,11 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           ]}
         />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <MissionForm
-          availableInputs={availableInputs}
-          availableTemplates={availableTemplates}
-          subjectId={subjectId}
-        />
-      </Card>
+      <MissionForm
+        availableInputs={availableInputs}
+        availableTemplates={availableTemplates}
+        subjectId={subjectId}
+      />
     </>
   );
 };

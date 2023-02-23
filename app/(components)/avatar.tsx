@@ -4,7 +4,6 @@ import formatImageUrl from '(utilities)/format-image-url';
 import generateImageLoader from '(utilities)/generate-image-loader';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
-import { BoxProps } from './box';
 
 const sizes = {
   md: { className: 'h-8 w-8', imgSizes: '32px' },
@@ -12,19 +11,14 @@ const sizes = {
   xs: { className: 'h-5 w-5 text-xs', imgSizes: '20px' },
 };
 
-interface AvatarProps extends BoxProps {
+interface AvatarProps {
+  className?: string;
   file?: string | File | null;
   name: string;
   size?: keyof typeof sizes;
 }
 
-const Avatar = ({
-  className,
-  file,
-  name,
-  size = 'md',
-  ...rest
-}: AvatarProps) => {
+const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
   const src = formatImageUrl(file);
 
   return (
@@ -34,7 +28,6 @@ const Avatar = ({
         sizes[size].className,
         className
       )}
-      {...rest}
     >
       {src ? (
         <Image

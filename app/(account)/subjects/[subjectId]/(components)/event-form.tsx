@@ -22,20 +22,18 @@ interface EventFormProps {
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<ListSessionRoutinesData>[0];
   isMission: boolean;
-  redirectOnSubmit: boolean;
   subjectId: string;
 }
 
 interface EventFormValues {
   id?: string;
-  inputs: any[]; // todo: type this
+  inputs: any[];
 }
 
 const EventForm = ({
   event,
   eventType,
   isMission,
-  redirectOnSubmit,
   subjectId,
 }: EventFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
@@ -86,9 +84,11 @@ const EventForm = ({
     },
   });
 
+  if (event && !eventTypeInputs.length) return null;
+
   return (
     <form
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 sm:px-8"
       onSubmit={form.handleSubmit(async ({ id, inputs }) => {
         const { data: eventData, error: eventError } = await supabase
           .from('events')
@@ -174,9 +174,10 @@ const EventForm = ({
           }
         }
 
-        await redirect(`/subjects/${subjectId}`, {
-          redirect: redirectOnSubmit,
-        });
+        await redirect(
+          `/subjects/${subjectId}/${eventType.type}/${eventType.id}/event/${eventData.id}`,
+          { redirect: !isMission }
+        );
       })}
     >
       {eventTypeInputs.map(({ input }, i) => (

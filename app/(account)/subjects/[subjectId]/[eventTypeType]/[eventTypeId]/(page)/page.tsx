@@ -37,9 +37,7 @@ const Page = async ({
           items={[[subject.name, subjectHref], [eventType.name ?? '']]}
         />
       </Header>
-      <main>
-        <EventCard eventType={eventType} subjectId={subjectId} />
-      </main>
+      <EventCard eventType={eventType} subjectId={subjectId} />
     </>
   );
 };

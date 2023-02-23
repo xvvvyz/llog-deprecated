@@ -1,6 +1,5 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
-import Card from '(components)/card';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
 import getTemplate from '(utilities)/get-template';
@@ -28,9 +27,7 @@ const Page = async ({ params: { templateId } }: PageProps) => {
         <BackButton href="/templates" />
         <Breadcrumbs items={[['Templates', '/templates'], [template.name]]} />
       </Header>
-      <Card as="main" breakpoint="sm">
-        <TemplateForm availableInputs={availableInputs} template={template} />
-      </Card>
+      <TemplateForm availableInputs={availableInputs} template={template} />
     </>
   );
 };

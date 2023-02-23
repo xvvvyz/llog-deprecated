@@ -1,16 +1,15 @@
 import sanitizeHtml from '(utilities)/sanitize-html';
 import { twMerge } from 'tailwind-merge';
-import Box, { BoxProps } from './box';
 
-interface HtmlProps extends BoxProps {
+interface HtmlProps {
   children?: string | null;
+  className?: string;
 }
 
-const DirtyHtml = ({ children, className, ...rest }: HtmlProps) => (
-  <Box
+const DirtyHtml = ({ children, className }: HtmlProps) => (
+  <div
     className={twMerge('prose', className)}
     dangerouslySetInnerHTML={{ __html: sanitizeHtml(children) ?? '' }}
-    {...rest}
   />
 );
 
