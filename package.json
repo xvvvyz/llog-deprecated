@@ -15,9 +15,9 @@
     "start": "next dev"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.11",
+    "@headlessui/react": "^1.7.12",
     "@heroicons/react": "^2.0.16",
-    "@next/font": "^13.2.0",
+    "@next/font": "^13.2.1",
     "@supabase/auth-helpers-nextjs": "^0.5.4",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.9",
@@ -40,11 +40,11 @@
     "autoprefixer": "^10.4.13",
     "encoding": "^0.1.13",
     "eslint": "^8.34.0",
-    "eslint-config-next": "^13.2.0",
+    "eslint-config-next": "^13.2.1",
     "eslint-config-prettier": "^8.6.0",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.1",
-    "next": "^13.2.0",
+    "next": "^13.2.1",
     "prettier": "^2.8.4",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.2.3",
@@ -58,7 +58,7 @@
     "tailwindcss": "^3.2.7",
     "typescript": "^4.9.5",
     "usehooks-ts": "^2.9.1",
-    "vercel": "^28.16.5",
+    "vercel": "^28.16.7",
     "xss": "^1.0.14"
   }
 }
