@@ -66,7 +66,10 @@ const TimelineEventCard = ({ group, subjectId }: TimelineEventCardProps) => {
       </header>
       <ul>
         {group.map((event) => (
-          <li className="space-y-4 pt-1 first:pt-0" key={event.id}>
+          <li
+            className="space-y-4 pt-1 before:mb-3 before:block before:h-2 before:w-full before:border-y before:border-alpha-1 before:bg-alpha-reverse-1 first:pt-0 first:before:hidden"
+            key={event.id}
+          >
             <EventContentCollapsible
               content={firstIfArray(event.type).content}
             />
