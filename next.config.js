@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: { dirs: ['app'] },
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: [
-      '@supabase/supabase-js',
-      '@supabase/auth-helpers-nextjs',
-    ],
-  },
+  experimental: { appDir: true },
   images: {
     remotePatterns: [
       {

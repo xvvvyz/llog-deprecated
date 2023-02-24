@@ -35,7 +35,7 @@ const LinkList = Object.assign(
   ({ children, className }: LinkListProps) => (
     <ul
       className={twMerge(
-        'divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2',
+        'divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 empty:hidden',
         className
       )}
     >

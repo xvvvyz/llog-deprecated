@@ -24,6 +24,8 @@ const Missions = async ({ subjectId }: MissionProps) => {
         text={mission.name}
       />
     );
+
+    return acc;
   }, []);
 };
 
