@@ -1,4 +1,4 @@
-import { Figtree } from '@next/font/google';
+import { Figtree } from 'next/font/google';
 import { ReactNode } from 'react';
 import '../tailwind.css';
 
