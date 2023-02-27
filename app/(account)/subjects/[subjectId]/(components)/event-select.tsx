@@ -27,13 +27,15 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
       isMulti={input.type === 'multi_select'}
       isSearchable={input.settings?.isCreatable}
       onCreateOption={async (value: string) => {
+        const label = value.trim();
+        if (!label) return;
         toggleIsCreating();
 
         const { data, error } = await supabase
           .from('input_options')
           .insert({
             input_id: input.id,
-            label: value.trim(),
+            label,
             order: input.options.length,
           })
           .select('id, label')
