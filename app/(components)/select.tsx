@@ -78,14 +78,28 @@ const DropdownIndicator = () => (
 
 const Input = <TOption extends IOption>({
   children,
+  getValue,
+  isMulti,
+  value,
   ...props
 }: InputProps<TOption>) => (
-  <components.Input
-    className="w-0 focus-within:m-1 focus-within:w-auto focus-within:px-2"
-    {...props}
+  <div
+    className={twMerge(
+      'absolute',
+      isMulti && getValue().length > 0 && 'caret-transparent',
+      value && 'caret-inherit relative'
+    )}
   >
-    {children}
-  </components.Input>
+    <components.Input
+      className="m-1 px-2"
+      getValue={getValue}
+      isMulti={isMulti}
+      value={value}
+      {...props}
+    >
+      {children}
+    </components.Input>
+  </div>
 );
 
 const LoadingIndicator = () => <Spinner className="mr-2" />;
@@ -111,7 +125,7 @@ const MultiValueContainer = ({
   ...props
 }: MultiValueGenericProps) => (
   <components.MultiValueContainer {...props}>
-    <div className="max-w-40 m-1 inline-flex items-center gap-2 rounded-sm bg-alpha-2 pl-2 text-sm leading-6">
+    <div className="max-w-40 m-1 inline-flex items-center gap-2 truncate rounded-sm bg-alpha-2 pl-2 text-sm leading-6">
       {children}
     </div>
   </components.MultiValueContainer>
@@ -141,7 +155,9 @@ const Option = <TOption extends IOption>({
       )}
     >
       {children}
-      {props.isMulti && <PlusIcon className="-mr-2 w-5 transition-colors" />}
+      {props.isMulti && (
+        <PlusIcon className="-mr-2 w-5 shrink-0 transition-colors" />
+      )}
     </div>
   </components.Option>
 );
@@ -201,6 +217,7 @@ const Select = <TOption extends IOption>(
     isClearable: true,
     isDisabled: isDisabled || isLoading,
     isLoading,
+    noOptionsMessage: () => `No options${isCreatable ? '—type to create' : ''}`,
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,
     ...props,
