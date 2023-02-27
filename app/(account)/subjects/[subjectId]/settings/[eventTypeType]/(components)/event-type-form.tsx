@@ -156,7 +156,6 @@ const EventTypeForm = ({
               isCreatable
               isLoading={isTransitioning}
               isMulti
-              noOptionsMessage={() => null}
               onCreateOption={async (value: unknown) => {
                 globalValueCache.set(CacheKeys.InputForm, { label: value });
                 globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());

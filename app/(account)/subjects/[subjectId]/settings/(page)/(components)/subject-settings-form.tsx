@@ -100,7 +100,7 @@ const SubjectSettingsForm = ({
       />
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Missions</LabelSpan>
-        <LabelSpan className="mt-2 leading-tight text-fg-3">
+        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
           Missions are a sequence of routines that form a long-term
           modification&nbsp;plan.
         </LabelSpan>
@@ -130,7 +130,7 @@ const SubjectSettingsForm = ({
       </section>
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Routines</LabelSpan>
-        <LabelSpan className="mt-2 leading-tight text-fg-3">
+        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
           Routines are a sequence of actions that can be performed
           at&nbsp;any&nbsp;time.
         </LabelSpan>
@@ -152,7 +152,6 @@ const SubjectSettingsForm = ({
           instanceId="routineTemplate"
           isCreatable
           isLoading={newRoutineTransition[0]}
-          noOptionsMessage={() => null}
           onChange={(e) => {
             saveToCache();
 
@@ -199,7 +198,7 @@ const SubjectSettingsForm = ({
       </section>
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Observations</LabelSpan>
-        <LabelSpan className="mt-2 leading-tight text-fg-3">
+        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
           Observations allow you to track events or behaviors that occur
           over&nbsp;time.
         </LabelSpan>
@@ -221,7 +220,6 @@ const SubjectSettingsForm = ({
           instanceId="observationTemplate"
           isCreatable
           isLoading={newObservationTransition[0]}
-          noOptionsMessage={() => null}
           onChange={(e) => {
             saveToCache();
 
@@ -268,7 +266,7 @@ const SubjectSettingsForm = ({
       </section>
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Clients</LabelSpan>
-        <LabelSpan className="mt-2 leading-tight text-fg-3">
+        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
           Clients can complete routines, make observations and
           add&nbsp;comments.
         </LabelSpan>

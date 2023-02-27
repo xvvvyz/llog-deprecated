@@ -13,9 +13,7 @@ const Label = ({ children, className }: LabelProps) => (
 );
 
 const LabelSpan = ({ children, className }: LabelProps) => (
-  <span className={twMerge('block max-w-xs px-2 text-fg-2', className)}>
-    {children}
-  </span>
+  <span className={twMerge('block px-2 text-fg-2', className)}>{children}</span>
 );
 
 export { LabelSpan };

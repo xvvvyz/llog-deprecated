@@ -99,7 +99,6 @@ const RoutinesFormSection = <T extends FieldValues>({
                     isCreatable
                     isLoading={isTransitioning}
                     isMulti
-                    noOptionsMessage={() => null}
                     onCreateOption={async (value: unknown) => {
                       globalValueCache.set(CacheKeys.InputForm, {
                         label: value,
@@ -149,7 +148,6 @@ const RoutinesFormSection = <T extends FieldValues>({
       <Select
         instanceId={`${name}Template`}
         isCreatable
-        noOptionsMessage={() => null}
         onChange={(e) => {
           const template = e as TemplateType;
 
