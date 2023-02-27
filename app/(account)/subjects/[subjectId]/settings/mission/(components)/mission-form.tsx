@@ -7,6 +7,7 @@ import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
+import EventTypes from '(utilities)/enum-event-types';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
@@ -46,6 +47,7 @@ const MissionForm = ({
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const routines = forceArray(mission?.routines);
+  const routineEventsMap: Record<string, any> = {};
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.MissionForm,
@@ -53,7 +55,7 @@ const MissionForm = ({
       id: mission?.id,
       name: mission?.name ?? '',
       routines: routines.reduce((acc, routine) => {
-        const event = firstIfArray(routine.event);
+        routineEventsMap[routine.id] = firstIfArray(routine.event);
 
         const inputs = routine.inputs.map(
           ({
@@ -63,7 +65,12 @@ const MissionForm = ({
           }) => input
         );
 
-        const formattedRoutine = { ...routine, event, inputs };
+        const formattedRoutine = {
+          content: routine.content,
+          id: routine.id,
+          inputs,
+        };
+
         if (acc[routine.session]) acc[routine.session].push(formattedRoutine);
         else acc[routine.session] = [formattedRoutine];
         return acc;
@@ -275,7 +282,7 @@ const MissionForm = ({
                                 inputs: routine.inputs,
                                 order: 0,
                                 subject_id: subjectId,
-                                type: routine.type,
+                                type: EventTypes.Routine,
                               })),
                           ],
                           {
@@ -299,6 +306,7 @@ const MissionForm = ({
               <RoutinesFormSection<MissionFormValues>
                 form={form}
                 inputOptions={forceArray(availableInputs)}
+                routineEventsMap={routineEventsMap}
                 sessionIndex={sessionIndex}
                 templateOptions={forceArray(availableTemplates)}
               />

@@ -40,7 +40,7 @@ const EventCommentForm = ({
   });
 
   return (
-    <form className={className} onSubmit={onSubmit}>
+    <div className={className}>
       <Controller
         control={form.control}
         name="content"
@@ -56,13 +56,14 @@ const EventCommentForm = ({
                 label="Add comment"
                 loading={form.formState.isSubmitting || isTransitioning}
                 loadingText="Adding comment…"
+                onClick={onSubmit}
               />
             }
             {...field}
           />
         )}
       />
-    </form>
+    </div>
   );
 };
 

@@ -7,7 +7,6 @@ import { TemplateType } from '(types)/template';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
-import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
 import globalValueCache from '(utilities)/global-value-cache';
@@ -20,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
 import EventBanner from '../../../(components)/event-banner';
+import EventCommentForm from '../../../(components)/event-comment-form';
 import EventComments from '../../../(components)/event-comments';
 import EventInputs from '../../../(components)/event-inputs';
 
@@ -33,6 +33,7 @@ import {
 interface RoutinesFormSection<T extends FieldValues> {
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
+  routineEventsMap: Record<string, any>;
   sessionIndex: number;
   templateOptions: NonNullable<ListTemplatesData>;
 }
@@ -40,6 +41,7 @@ interface RoutinesFormSection<T extends FieldValues> {
 const RoutinesFormSection = <T extends FieldValues>({
   form,
   inputOptions,
+  routineEventsMap,
   sessionIndex,
   templateOptions,
 }: RoutinesFormSection<T>) => {
@@ -50,6 +52,7 @@ const RoutinesFormSection = <T extends FieldValues>({
 
   const eventTypesArray = useFieldArray({
     control: form.control,
+    keyName: 'key',
     name: name as T[string],
   });
 
@@ -57,10 +60,10 @@ const RoutinesFormSection = <T extends FieldValues>({
     <>
       <ul>
         {eventTypesArray.fields.map((eventType, routineIndex) => {
-          const event = firstIfArray((eventType as any).event);
+          const event = routineEventsMap[(eventType as unknown as any).id];
 
           return (
-            <li className="mb-3" key={eventType.id}>
+            <li className="mb-3" key={eventType.key}>
               <Controller
                 control={form.control}
                 name={`${name}.${routineIndex}.content` as T[string]}
@@ -136,8 +139,13 @@ const RoutinesFormSection = <T extends FieldValues>({
                   />
                   <EventInputs inputs={forceArray(event.inputs)} />
                   <EventComments
-                    className="border-t border-alpha-1 p-4"
+                    className="border-t border-alpha-1 p-4 pb-0"
                     comments={forceArray(event.comments)}
+                  />
+                  <EventCommentForm
+                    className="p-4"
+                    eventId={event.id}
+                    inputClassName="rounded-sm"
                   />
                 </div>
               )}
