@@ -10,12 +10,15 @@ const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-accent-2 border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
+    'ring-transparent border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
+  white:
+    'ring-fg-1 bg-fg-1 text-bg-1 font-bold hover:bg-fg-2 ring-offset-bg-1 ring-offset-4',
 };
 
 const spinnerColorSchemes = {
   accent: 'border-bg-1',
   transparent: 'border-fg-1',
+  white: 'border-bg-1',
 };
 
 const sizes = {

@@ -36,6 +36,8 @@ module.exports = {
       normal: 'var(--font-weight-normal)',
     },
     screens: {
+      lg: '56rem',
+      md: '42rem',
       sm: '32rem',
       xs: '25rem',
     },

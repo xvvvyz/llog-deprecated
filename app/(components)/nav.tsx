@@ -6,7 +6,7 @@ interface NavProps {
 }
 
 const Nav = ({ isClient }: NavProps) => (
-  <nav className="flex items-start justify-between gap-2 pt-8 leading-none text-fg-2">
+  <nav className="flex items-start justify-between gap-4 pt-8 leading-none text-fg-2">
     <div className="flex flex-wrap gap-4">
       <div className="flex gap-4">
         <Button activeClassName="text-fg-1" href="/subjects" variant="link">
@@ -18,13 +18,16 @@ const Nav = ({ isClient }: NavProps) => (
           </Button>
         )}
       </div>
-      <div className="flex gap-4">
-        {!isClient && (
+      {!isClient && (
+        <div className="flex gap-4">
           <Button activeClassName="text-fg-1" href="/inputs" variant="link">
             Inputs
           </Button>
-        )}
-      </div>
+          <Button activeClassName="text-fg-1" disabled variant="link">
+            Insights
+          </Button>
+        </div>
+      )}
     </div>
     <SignOutButton />
   </nav>

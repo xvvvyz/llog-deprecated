@@ -1,6 +1,6 @@
 # llog
 
-A collaborative behavior modification platform for mere mortals.
+A data-driven behavior modification platform.
 
 ## Development Setup
 

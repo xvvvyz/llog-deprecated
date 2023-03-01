@@ -17,7 +17,7 @@ const Layout = ({ children }: LayoutProps) => (
 export const metadata = {
   description: '',
   title: {
-    default: 'llog — collaborative behavior modification',
+    default: 'llog — data-driven behavior modification',
     template: '%s - llog',
   },
   viewport:

@@ -17,7 +17,7 @@ const SignOutButton = () => {
       onClick={async () => {
         setIsSigningOut(true);
         await supabase.auth.signOut();
-        await router.refresh();
+        router.push('/');
       }}
       variant="link"
     >
