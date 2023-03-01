@@ -1,5 +1,8 @@
 import Button from '(components)/button';
 import Image from 'next/image';
+import PlanImage from '../../../public/images/plan.png';
+import ShareImage from '../../../public/images/share.png';
+import TrackImage from '../../../public/images/track.png';
 
 const Page = () => (
   <>
@@ -7,82 +10,64 @@ const Page = () => (
       <h1 className="text-2xl">
         llog<span className="text-fg-3">.app</span>
       </h1>
-      <nav className="flex gap-4">
-        <Button colorScheme="transparent" href="/sign-in" size="sm">
-          Log in
-        </Button>
-        <Button colorScheme="white" href="/sign-up" size="sm">
-          Sign up
-        </Button>
-      </nav>
+      <Button colorScheme="transparent" href="/sign-in" size="sm">
+        Log in
+      </Button>
     </header>
     <main>
-      <div className="mx-auto flex max-w-md flex-col items-center px-6 py-24 lg:max-w-4xl">
-        <h1 className="text-center text-3xl sm:text-4xl">
-          Data-driven behavior modification made easy.{' '}
+      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg lg:max-w-4xl">
+        <h1 className="text-2xl sm:text-3xl">
           <span className="text-fg-3">
-            Plan,&nbsp;track, collaborate and&nbsp;discover.
-          </span>
+            Refine your animal behavior consulting business with
+          </span>{' '}
+          collaborative, data-driven behavior modification.
         </h1>
         <Button className="mt-8" href="/sign-up">
-          Sign up for early access
+          Sign up to get early access
         </Button>
       </div>
-      <div className="mx-auto h-24 w-px bg-alpha-1" />
-      <div className="mx-auto grid max-w-4xl gap-12 px-6 py-24 text-2xl text-fg-3 lg:grid-cols-2">
+      <div className="mx-auto h-24 w-px bg-alpha-2" />
+      <div className="mx-auto grid max-w-md gap-12 px-6 py-24 text-2xl text-fg-3 lg:max-w-4xl lg:grid-cols-2">
         <figure>
-          <Image
-            alt=""
-            className="aspect-video w-full rounded border border-alpha-1 bg-bg-2"
-            src=""
-          />
+          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="400px" src={PlanImage} />
+          </div>
           <figcaption className="mt-4">
-            <span className="text-fg-1">Subjects.</span> Stay organized, invite
-            clients and track progress.
+            <span className="text-fg-1">Plan.</span> Design comprehensive
+            behavior modification missions.
           </figcaption>
         </figure>
         <figure>
-          <Image
-            alt=""
-            className="aspect-video w-full rounded border border-alpha-1 bg-bg-2"
-            src=""
-          />
+          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="400px" src={ShareImage} />
+          </div>
           <figcaption className="mt-4">
-            <span className="text-fg-1">Templates.</span> Reuse and share
-            strategies&nbsp;with the community.
+            <span className="text-fg-1">Share.</span> Delight clients with a
+            streamlined experience.
           </figcaption>
         </figure>
         <figure>
-          <Image
-            alt=""
-            className="aspect-video w-full rounded border border-alpha-1 bg-bg-2"
-            src=""
-          />
+          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="400px" src={TrackImage} />
+          </div>
           <figcaption className="mt-4">
-            <span className="text-fg-1">Inputs.</span> Record detailed data
-            with&nbsp;user-friendly forms.
+            <span className="text-fg-1">Track.</span> Create custom inputs &amp;
+            collaboratively record data.
           </figcaption>
         </figure>
         <figure>
-          <Image
-            alt=""
-            className="aspect-video w-full rounded border border-alpha-1 bg-bg-2"
-            src=""
-          />
+          <div className="flex aspect-video items-center justify-center rounded border border-alpha-2 bg-bg-1 text-base">
+            Coming soon&hellip;
+          </div>
           <figcaption className="mt-4">
-            <span className="text-fg-1">Insights.</span> Uncover patterns with
-            powerful data visualizations.
+            <span className="text-fg-1">Learn.</span> Validate hypotheses with
+            powerful&nbsp;data visualizations.
           </figcaption>
         </figure>
       </div>
-      <div className="mx-auto h-24 w-px bg-alpha-1" />
-      <div className="mx-auto flex max-w-md flex-col items-center px-6 pt-24 pb-48 lg:max-w-4xl">
-        <h2 className="text-center text-2xl">
-          Forget spreadsheets&mdash;your clients deserve the best.
-        </h2>
-        <Button className="mt-8" href="/sign-up">
-          Sign up for early access
-        </Button>
+      <div className="mx-auto h-24 w-px bg-alpha-2" />
+      <div className="flex flex-col px-6 pt-24 pb-48 xs:items-center">
+        <Button href="/sign-up">Sign up to get early access</Button>
       </div>
     </main>
   </>

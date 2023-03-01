@@ -1,6 +1,6 @@
 # llog
 
-A data-driven behavior modification platform.
+> Collaborative, data-driven behavior modification.
 
 ## Development Setup
 
