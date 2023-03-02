@@ -1,3 +1,4 @@
+import AnalyticsWrapper from '(components)/analytics-wrapper';
 import { Figtree } from 'next/font/google';
 import { ReactNode } from 'react';
 import '../tailwind.css';
@@ -10,7 +11,10 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => (
   <html className={figtree.variable} lang="en">
-    <body>{children}</body>
+    <body>
+      {children}
+      <AnalyticsWrapper />
+    </body>
   </html>
 );
 
