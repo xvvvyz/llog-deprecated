@@ -1,25 +1,40 @@
 import { DropzoneState } from 'react-dropzone';
+import { FieldValues, PathValue, UseFormReturn } from 'react-hook-form';
 import Avatar from './avatar';
 
-interface AvatarDropzoneProps {
+interface AvatarDropzoneProps<T extends FieldValues> {
   dropzone: DropzoneState;
-  file?: File;
-  name: string;
+  form: UseFormReturn<T>;
 }
 
-const AvatarDropzone = ({ dropzone, file, name }: AvatarDropzoneProps) => (
+const AvatarDropzone = <T extends FieldValues>({
+  dropzone,
+  form,
+}: AvatarDropzoneProps<T>) => (
   <div
     className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-3 outline-none ring-accent-2 transition-colors hover:border-alpha-3 focus:ring-1"
     {...dropzone.getRootProps()}
   >
-    <Avatar file={file} name={name} />
+    <Avatar
+      file={form.watch('avatar' as T[string])}
+      name={form.watch('name' as T[string])}
+    />
     <p>
       Drag image here or{' '}
       <span className="text-fg-2 transition-colors group-hover:text-fg-1">
         browse
       </span>
     </p>
-    <input {...dropzone.getInputProps()} />
+    <input
+      {...dropzone.getInputProps()}
+      onChange={(e) => {
+        form.setValue(
+          'avatar' as T[string],
+          e.target.files?.[0] as PathValue<T, T[string]>,
+          { shouldDirty: true }
+        );
+      }}
+    />
   </div>
 );
 

@@ -19,7 +19,6 @@ import { ListTemplatesData } from '(utilities)/list-templates';
 import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useBackLink from '(utilities)/use-back-link';
-import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -39,7 +38,9 @@ interface SubjectSettingsFormProps {
 }
 
 type SubjectSettingsFormValues =
-  Database['public']['Tables']['subjects']['Row'];
+  Database['public']['Tables']['subjects']['Row'] & {
+    avatar?: File | string;
+  };
 
 const SubjectSettingsForm = ({
   availableTemplates,
@@ -47,7 +48,6 @@ const SubjectSettingsForm = ({
 }: SubjectSettingsFormProps) => {
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle();
-  const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
@@ -65,6 +65,7 @@ const SubjectSettingsForm = ({
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.SubjectSettingsForm,
     defaultValues: {
+      avatar: subject.image_uri,
       id: subject.id,
       name: subject.name,
       share_code: subject.share_code,
@@ -79,27 +80,32 @@ const SubjectSettingsForm = ({
   return (
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
-      onSubmit={form.handleSubmit(async ({ id, name }) => {
+      onSubmit={form.handleSubmit(async (values) => {
         const { error: subjectError } = await supabase
           .from('subjects')
-          .upsert({ id, name: name.trim() });
+          .upsert({ id: values.id, name: values.name.trim() });
 
         if (subjectError) {
           alert(subjectError.message);
           return;
         }
 
-        await uploadSubjectAvatar({ dropzone, subjectId: id });
+        await uploadSubjectAvatar({
+          avatar: values.avatar,
+          subjectId: values.id,
+        });
+
+        form.reset(values);
       })}
     >
       <SubjectDetailsFormSection<SubjectSettingsFormValues>
         dropzone={dropzone}
-        file={dropzone.acceptedFiles[0] ?? subject?.image_uri}
         form={form}
       />
       <Button
         className="my-4 w-full"
-        loading={form.formState.isSubmitting || isRedirecting}
+        disabled={!form.formState.isDirty}
+        loading={form.formState.isSubmitting}
         loadingText="Saving…"
         type="submit"
       >

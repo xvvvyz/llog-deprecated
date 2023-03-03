@@ -1,20 +1,17 @@
 import supabase from '(utilities)/browser-supabase-client';
-import { DropzoneState } from 'react-dropzone';
 
 const uploadSubjectAvatar = async ({
-  dropzone,
+  avatar,
   subjectId,
 }: {
-  dropzone: DropzoneState;
+  avatar?: File | string;
   subjectId: string;
 }) => {
-  if (!dropzone.acceptedFiles.length) return;
+  if (!(avatar instanceof File)) return;
 
   await supabase.storage
     .from('subjects')
-    .upload(`${subjectId}/avatar`, dropzone.acceptedFiles[0], {
-      upsert: true,
-    });
+    .upload(`${subjectId}/avatar`, avatar, { upsert: true });
 };
 
 export default uploadSubjectAvatar;

@@ -9,7 +9,10 @@ import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useForm } from 'react-hook-form';
 import SubjectDetailsFormSection from '../../../(components)/subject-details-form-section';
 
-type AddSubjectFormValues = Database['public']['Tables']['subjects']['Insert'];
+type AddSubjectFormValues =
+  Database['public']['Tables']['subjects']['Insert'] & {
+    avatar?: File;
+  };
 
 const AddSubjectForm = () => {
   const [redirect, isRedirecting] = useSubmitRedirect();
@@ -19,7 +22,7 @@ const AddSubjectForm = () => {
   return (
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
-      onSubmit={form.handleSubmit(async ({ name }) => {
+      onSubmit={form.handleSubmit(async ({ avatar, name }) => {
         const { error: updateUserError } = await supabase.auth.updateUser({
           data: { is_client: false },
         });
@@ -40,13 +43,12 @@ const AddSubjectForm = () => {
           return;
         }
 
-        await uploadSubjectAvatar({ dropzone, subjectId: subjectData.id });
+        await uploadSubjectAvatar({ avatar, subjectId: subjectData.id });
         await redirect(`/subjects/${subjectData.id}/settings`);
       })}
     >
       <SubjectDetailsFormSection<AddSubjectFormValues>
         dropzone={dropzone}
-        file={dropzone.acceptedFiles[0]}
         form={form}
       />
       <Button

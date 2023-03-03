@@ -6,13 +6,11 @@ import { Controller, FieldValues, UseFormReturn } from 'react-hook-form';
 
 interface SubjectDetailsFormSectionProps<T extends FieldValues> {
   dropzone: DropzoneState;
-  file?: File;
   form: UseFormReturn<T>;
 }
 
 const SubjectDetailsFormSection = <T extends FieldValues>({
   dropzone,
-  file,
   form,
 }: SubjectDetailsFormSectionProps<T>) => (
   <>
@@ -20,17 +18,13 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
       <LabelSpan>Name</LabelSpan>
       <Controller
         control={form.control}
-        name={'name' as T['name']}
+        name={'name' as T[string]}
         render={({ field }) => <Input {...field} />}
       />
     </Label>
     <Label>
       <LabelSpan>Profile image</LabelSpan>
-      <AvatarDropzone
-        dropzone={dropzone}
-        file={file}
-        name={form.watch('name' as T['name'])}
-      />
+      <AvatarDropzone dropzone={dropzone} form={form} />
     </Label>
   </>
 );
