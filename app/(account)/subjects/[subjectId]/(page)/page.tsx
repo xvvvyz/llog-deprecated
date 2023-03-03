@@ -62,15 +62,23 @@ const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
       <LinkList>
         <Suspense>
           {/* @ts-expect-error Server Component */}
-          <Missions subjectId={subjectId} />
+          <Missions isTeamMember={isTeamMember} subjectId={subjectId} />
         </Suspense>
         <Suspense>
           {/* @ts-expect-error Server Component */}
-          <EventTypes subjectId={subjectId} type={EventTypesEnum.Routine} />
+          <EventTypes
+            isTeamMember={isTeamMember}
+            subjectId={subjectId}
+            type={EventTypesEnum.Routine}
+          />
         </Suspense>
         <Suspense>
           {/* @ts-expect-error Server Component */}
-          <EventTypes subjectId={subjectId} type={EventTypesEnum.Observation} />
+          <EventTypes
+            isTeamMember={isTeamMember}
+            subjectId={subjectId}
+            type={EventTypesEnum.Observation}
+          />
         </Suspense>
       </LinkList>
       <Suspense>

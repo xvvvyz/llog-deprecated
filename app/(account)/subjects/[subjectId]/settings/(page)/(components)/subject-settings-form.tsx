@@ -90,7 +90,6 @@ const SubjectSettingsForm = ({
         }
 
         await uploadSubjectAvatar({ dropzone, subjectId: id });
-        await redirect(`/subjects/${id}`);
       })}
     >
       <SubjectDetailsFormSection<SubjectSettingsFormValues>
@@ -98,6 +97,14 @@ const SubjectSettingsForm = ({
         file={dropzone.acceptedFiles[0] ?? subject?.image_uri}
         form={form}
       />
+      <Button
+        className="my-4 w-full"
+        loading={form.formState.isSubmitting || isRedirecting}
+        loadingText="Saving…"
+        type="submit"
+      >
+        Save
+      </Button>
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Missions</LabelSpan>
         <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
@@ -329,14 +336,6 @@ const SubjectSettingsForm = ({
           )}
         </Button>
       </section>
-      <Button
-        className="mt-4 w-full"
-        loading={form.formState.isSubmitting || isRedirecting}
-        loadingText="Saving…"
-        type="submit"
-      >
-        Save
-      </Button>
     </form>
   );
 };

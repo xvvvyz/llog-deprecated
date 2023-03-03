@@ -29,7 +29,7 @@ const EventBanner = ({
       {profile.first_name} {profile.last_name}
     </span>
     <DateTime
-      className="ml-auto -mr-[2px]"
+      className="ml-auto"
       date={createdAt}
       formatter={createdAtFormatter}
     />

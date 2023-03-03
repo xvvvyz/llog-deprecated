@@ -4,10 +4,11 @@ import forceArray from '(utilities)/force-array';
 import listMissionsWithRoutines from '(utilities)/list-missions-with-routines';
 
 interface MissionProps {
+  isTeamMember: boolean;
   subjectId: string;
 }
 
-const Missions = async ({ subjectId }: MissionProps) => {
+const Missions = async ({ isTeamMember, subjectId }: MissionProps) => {
   const { data: missions } = await listMissionsWithRoutines(subjectId);
 
   return forceArray(missions).reduce((acc, mission) => {
@@ -22,6 +23,13 @@ const Missions = async ({ subjectId }: MissionProps) => {
         key={mission.id}
         pill={CODES.mission}
         text={mission.name}
+        {...(isTeamMember
+          ? {
+              rightHref: `/subjects/${subjectId}/settings/mission/${mission.id}?back=/subjects/${subjectId}`,
+              rightIcon: 'edit',
+              rightLabel: 'Edit',
+            }
+          : {})}
       />
     );
 

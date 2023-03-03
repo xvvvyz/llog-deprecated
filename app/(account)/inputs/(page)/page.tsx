@@ -12,6 +12,7 @@ const Page = async () => {
       {inputs.map((input) => (
         <LinkList.Item
           href={`/inputs/${input.id}`}
+          icon="edit"
           key={input.id}
           pill={INPUT_LABELS[input.type]}
           text={input.label}

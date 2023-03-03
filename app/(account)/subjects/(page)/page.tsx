@@ -1,9 +1,11 @@
 import Empty from '(components)/empty';
 import LinkList from '(components)/link-list';
+import getCurrentTeamId from '(utilities)/get-current-team-id';
 import listSubjects from '(utilities)/list-subjects';
 
 const Page = async () => {
   const { data: subjects } = await listSubjects();
+  const currentTeamId = await getCurrentTeamId();
   if (!subjects?.length) return <Empty>No subjects</Empty>;
 
   return (
@@ -14,6 +16,13 @@ const Page = async () => {
           href={`/subjects/${subject.id}`}
           key={subject.id}
           text={subject.name}
+          {...(subject.team_id === currentTeamId
+            ? {
+                rightHref: `/subjects/${subject.id}/settings?back=/subjects`,
+                rightIcon: 'settings',
+                rightLabel: 'Edit',
+              }
+            : {})}
         />
       ))}
     </LinkList>

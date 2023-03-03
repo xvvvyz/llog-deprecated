@@ -12,6 +12,7 @@ const Page = async () => {
       {templates.map((template) => (
         <LinkList.Item
           href={`/templates/${template.id}`}
+          icon="edit"
           key={template.id}
           pill={CODES[template.type]}
           text={template.name}

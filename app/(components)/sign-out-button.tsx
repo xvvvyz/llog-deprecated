@@ -11,7 +11,7 @@ const SignOutButton = () => {
 
   return (
     <Button
-      className="shrink-0 justify-end text-fg-2"
+      className="w-32 shrink-0 justify-end text-fg-2"
       loading={isSigningOut}
       loadingText="Goodbye…"
       onClick={async () => {
