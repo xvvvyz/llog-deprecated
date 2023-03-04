@@ -19,7 +19,7 @@ const Page = async () => {
           {...(subject.team_id === currentTeamId
             ? {
                 rightHref: `/subjects/${subject.id}/settings?back=/subjects`,
-                rightIcon: 'settings',
+                rightIcon: 'edit',
                 rightLabel: 'Edit',
               }
             : {})}

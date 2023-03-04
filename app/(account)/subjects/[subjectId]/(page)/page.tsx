@@ -8,7 +8,7 @@ import createServerSupabaseClient from '(utilities)/create-server-supabase-clien
 import EventTypesEnum from '(utilities)/enum-event-types';
 import getCurrentTeamId from '(utilities)/get-current-team-id';
 import getSubject from '(utilities)/get-subject';
-import { Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { PencilIcon } from '@heroicons/react/24/outline';
 import { notFound, redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import EventTypes from './(components)/event-types';
@@ -54,7 +54,7 @@ const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
         {isTeamMember && (
           <IconButton
             href={`/subjects/${subject.id}/settings`}
-            icon={<Cog6ToothIcon className="relative -right-[0.18em] w-7" />}
+            icon={<PencilIcon className="relative -right-[0.15em] w-7 p-0.5" />}
             label="Edit"
           />
         )}

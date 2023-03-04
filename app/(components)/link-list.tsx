@@ -7,7 +7,6 @@ import Pill from './pill';
 
 import {
   ArrowRightIcon,
-  Cog6ToothIcon,
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
@@ -15,7 +14,6 @@ import {
 const icons = {
   arrow: <ArrowRightIcon className="w-5" />,
   edit: <PencilIcon className="w-5" />,
-  settings: <Cog6ToothIcon className="w-5" />,
   trash: <TrashIcon className="w-5" />,
 };
 
