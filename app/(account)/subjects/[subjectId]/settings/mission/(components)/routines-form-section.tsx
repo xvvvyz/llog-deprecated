@@ -4,6 +4,7 @@ import Menu from '(components)/menu';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { TemplateType } from '(types)/template';
+import TEMPLATE_TYPE_LABELS from '(utilities)/constant-template-type-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
@@ -13,7 +14,7 @@ import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import useBackLink from '(utilities)/use-back-link';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { DocumentCheckIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -77,6 +78,41 @@ const RoutinesFormSection = <T extends FieldValues>({
                           <EllipsisVerticalIcon className="w-5" />
                         </Menu.Button>
                         <Menu.Items>
+                          <Menu.Item
+                            onClick={() => {
+                              const values = form.getValues();
+
+                              globalValueCache.set(CacheKeys.TemplateForm, {
+                                content:
+                                  values.routines[sessionIndex][routineIndex]
+                                    .content,
+                                inputs:
+                                  values.routines[sessionIndex][routineIndex]
+                                    .inputs,
+                                type: {
+                                  id: TemplateTypes.Routine,
+                                  label:
+                                    TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
+                                },
+                              });
+
+                              globalValueCache.set(
+                                CacheKeys.MissionForm,
+                                values
+                              );
+
+                              router.push(
+                                formatCacheLink({
+                                  backLink,
+                                  path: '/templates/add',
+                                  useCache: true,
+                                })
+                              );
+                            }}
+                          >
+                            <DocumentCheckIcon className="w-5 text-fg-3" />
+                            Save as template
+                          </Menu.Item>
                           <Menu.Item
                             onClick={() => eventTypesArray.remove(routineIndex)}
                           >

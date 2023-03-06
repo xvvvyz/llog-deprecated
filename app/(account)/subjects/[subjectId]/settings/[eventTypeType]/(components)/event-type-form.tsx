@@ -8,6 +8,7 @@ import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { TemplateDataType } from '(types)/template';
 import supabase from '(utilities)/browser-supabase-client';
+import TEMPLATE_TYPE_LABELS from '(utilities)/constant-template-type-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import forceArray from '(utilities)/force-array';
@@ -185,6 +186,32 @@ const EventTypeForm = ({
         type="submit"
       >
         Save
+      </Button>
+      <Button
+        className="mx-auto mt-0"
+        onClick={() => {
+          const values = form.getValues();
+
+          globalValueCache.set(CacheKeys.TemplateForm, {
+            content: values.content,
+            inputs: values.inputs,
+            name: values.name,
+            type: { id: values.type, label: TEMPLATE_TYPE_LABELS[values.type] },
+          });
+
+          globalValueCache.set(CacheKeys.EventTypeForm, values);
+
+          router.push(
+            formatCacheLink({
+              backLink,
+              path: '/templates/add',
+              useCache: true,
+            })
+          );
+        }}
+        variant="link"
+      >
+        Save as template
       </Button>
     </form>
   );
