@@ -3,11 +3,9 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
-import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
-import EventTypes from '(utilities)/enum-event-types';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
@@ -16,15 +14,8 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import RoutinesFormSection from './routines-form-section';
-
-import {
-  DocumentDuplicateIcon,
-  EllipsisHorizontalIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+import { Controller, useForm } from 'react-hook-form';
+import SessionsFormSection from './sessions-form-section';
 
 interface MissionFormProps {
   availableInputs: ListInputsData;
@@ -79,11 +70,6 @@ const MissionForm = ({
   });
 
   const form = useForm<MissionFormValues>({ defaultValues });
-
-  const sessionsArray = useFieldArray({
-    control: form.control,
-    name: 'routines',
-  });
 
   return (
     <form
@@ -256,73 +242,13 @@ const MissionForm = ({
           render={({ field }) => <Input {...field} />}
         />
       </Label>
-      {!!sessionsArray.fields.length && (
-        <ul className="flex flex-col gap-6">
-          {sessionsArray.fields.map((item, sessionIndex) => (
-            <li key={item.id}>
-              <LabelSpan className="mt-2 flex max-w-none items-end justify-between pb-2">
-                <span className="text-xl text-fg-1">
-                  Session {sessionIndex + 1}
-                </span>
-                <Menu className="-m-3 p-3">
-                  <Menu.Button className="relative right-0.5 -m-3 p-3">
-                    <EllipsisHorizontalIcon className="w-5" />
-                  </Menu.Button>
-                  <Menu.Items>
-                    <Menu.Item
-                      onClick={() =>
-                        sessionsArray.insert(
-                          sessionIndex + 1,
-                          [
-                            form
-                              .getValues()
-                              .routines[sessionIndex].map((routine) => ({
-                                content: routine.content,
-                                id: undefined,
-                                inputs: routine.inputs,
-                                order: 0,
-                                subject_id: subjectId,
-                                type: EventTypes.Routine,
-                              })),
-                          ],
-                          {
-                            focusName: `routines.${sessionIndex + 1}.0.content`,
-                          }
-                        )
-                      }
-                    >
-                      <DocumentDuplicateIcon className="w-5 text-fg-3" />
-                      Duplicate session
-                    </Menu.Item>
-                    <Menu.Item
-                      onClick={() => sessionsArray.remove(sessionIndex)}
-                    >
-                      <TrashIcon className="w-5 text-fg-3" />
-                      Delete session
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              </LabelSpan>
-              <RoutinesFormSection<MissionFormValues>
-                form={form}
-                inputOptions={forceArray(availableInputs)}
-                routineEventsMap={routineEventsMap}
-                sessionIndex={sessionIndex}
-                templateOptions={forceArray(availableTemplates)}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-      <Button
-        className="mt-4 w-full"
-        colorScheme="transparent"
-        onClick={() => sessionsArray.append([[]])}
-        type="button"
-      >
-        <PlusIcon className="w-5" />
-        Add session
-      </Button>
+      <SessionsFormSection<MissionFormValues>
+        availableInputs={availableInputs}
+        availableTemplates={availableTemplates}
+        form={form}
+        routineEventsMap={routineEventsMap}
+        subjectId={subjectId}
+      />
       <Button
         className="mt-4 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
