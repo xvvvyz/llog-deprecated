@@ -18,6 +18,7 @@ interface EventCardProps {
     | NonNullable<ListSessionRoutinesData>[0];
   mission?: GetMissionData | GetEventData['type']['mission'];
   subjectId: string;
+  userId: string;
 }
 
 const EventCard = ({
@@ -25,6 +26,7 @@ const EventCard = ({
   eventType,
   mission,
   subjectId,
+  userId,
 }: EventCardProps) => (
   <div
     className={twMerge(
@@ -50,10 +52,7 @@ const EventCard = ({
     />
     {event && (
       <div className="space-y-6 sm:px-8">
-        <EventComments
-          className="space-y-4"
-          comments={forceArray(event.comments)}
-        />
+        <EventComments comments={forceArray(event.comments)} userId={userId} />
         <EventCommentForm className="pt-2" eventId={event.id} />
       </div>
     )}

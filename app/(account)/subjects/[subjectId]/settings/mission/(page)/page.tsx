@@ -2,6 +2,7 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
+import getCurrentUser from '(utilities)/get-current-user';
 import getSubject from '(utilities)/get-subject';
 import listInputs from '(utilities)/list-inputs';
 import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
@@ -19,13 +20,15 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     { data: subject },
     { data: availableInputs },
     { data: availableTemplates },
+    user,
   ] = await Promise.all([
     getSubject(subjectId),
     listInputs(),
     listRoutineTemplatesWithData(),
+    getCurrentUser(),
   ]);
 
-  if (!subject) notFound();
+  if (!subject || !user) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
@@ -44,6 +47,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}
         subjectId={subjectId}
+        userId={user.id}
       />
     </>
   );

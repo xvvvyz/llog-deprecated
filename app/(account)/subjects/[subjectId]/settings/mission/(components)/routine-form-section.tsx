@@ -36,6 +36,7 @@ interface RoutineFormSectionProps<T extends FieldValues> {
   name: string;
   routineEventsMap: Record<string, any>;
   sessionIndex: number;
+  userId: string;
 }
 
 const RoutineFormSection = <T extends FieldValues>({
@@ -47,6 +48,7 @@ const RoutineFormSection = <T extends FieldValues>({
   name,
   routineEventsMap,
   sessionIndex,
+  userId,
 }: RoutineFormSectionProps<T>) => {
   const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });
@@ -154,14 +156,18 @@ const RoutineFormSection = <T extends FieldValues>({
       {event && (
         <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-reverse-1">
           <EventBanner
-            className="px-4 py-2"
+            className={twMerge(
+              'px-4 py-2',
+              !event.inputs.length && 'border-b border-alpha-1'
+            )}
             createdAt={event.created_at}
             profile={event.profile}
           />
           <EventInputs inputs={forceArray(event.inputs)} />
           <EventComments
-            className="border-t border-alpha-1 p-4 pb-0"
+            className="p-4 pb-0"
             comments={forceArray(event.comments)}
+            userId={userId}
           />
           <EventCommentForm
             className="p-4"

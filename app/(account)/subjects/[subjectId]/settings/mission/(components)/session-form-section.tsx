@@ -1,3 +1,4 @@
+import Alert from '(components)/alert';
 import { LabelSpan } from '(components)/label';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
@@ -5,6 +6,7 @@ import EventTypes from '(utilities)/enum-event-types';
 import forceArray from '(utilities)/force-array';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
+import { useBoolean } from 'usehooks-ts';
 import RoutinesFormSection from './routines-form-section';
 
 import {
@@ -18,17 +20,16 @@ import {
   UseFieldArrayReturn,
   UseFormReturn,
 } from 'react-hook-form';
-import { useBoolean } from 'usehooks-ts';
-import Alert from '../../../../../../(components)/alert';
 
 interface SessionFormSectionProps<T extends FieldValues> {
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesData;
   form: UseFormReturn<T>;
   routineEventsMap: Record<string, any>;
-  sessionArray: UseFieldArrayReturn<T, T[string], 'id'>;
+  sessionArray: UseFieldArrayReturn<T, T[string]>;
   sessionIndex: number;
   subjectId: string;
+  userId: string;
 }
 
 const SessionFormSection = <T extends FieldValues>({
@@ -39,6 +40,7 @@ const SessionFormSection = <T extends FieldValues>({
   sessionArray,
   sessionIndex,
   subjectId,
+  userId,
 }: SessionFormSectionProps<T>) => {
   const deleteAlert = useBoolean();
 
@@ -98,6 +100,7 @@ const SessionFormSection = <T extends FieldValues>({
         routineEventsMap={routineEventsMap}
         sessionIndex={sessionIndex}
         templateOptions={forceArray(availableTemplates)}
+        userId={userId}
       />
     </li>
   );

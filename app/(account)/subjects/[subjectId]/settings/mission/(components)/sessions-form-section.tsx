@@ -11,6 +11,7 @@ interface SessionsFormSectionProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   routineEventsMap: Record<string, any>;
   subjectId: string;
+  userId: string;
 }
 
 const SessionsFormSection = <T extends FieldValues>({
@@ -19,6 +20,7 @@ const SessionsFormSection = <T extends FieldValues>({
   form,
   routineEventsMap,
   subjectId,
+  userId,
 }: SessionsFormSectionProps<T>) => {
   const sessionArray = useFieldArray({
     control: form.control,
@@ -39,6 +41,7 @@ const SessionsFormSection = <T extends FieldValues>({
               sessionArray={sessionArray}
               sessionIndex={sessionIndex}
               subjectId={subjectId}
+              userId={userId}
             />
           ))}
         </ul>

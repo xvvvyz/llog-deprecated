@@ -41,7 +41,7 @@ const Menu = Object.assign(
     }: Parameters<typeof M.Items>[0] & { children: ReactNode }) => (
       <M.Items
         className={twMerge(
-          'absolute -right-2 top-8 z-10 w-56 origin-top-right rounded bg-bg-1 shadow-md outline-none sm:bg-bg-2',
+          'absolute right-0 top-0 z-10 w-56 origin-top-right rounded bg-bg-1 shadow-md outline-none sm:bg-bg-2',
           className
         )}
         {...rest}

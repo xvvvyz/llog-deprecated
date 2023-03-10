@@ -22,6 +22,7 @@ interface MissionFormProps {
   availableTemplates: ListTemplatesData;
   mission?: GetMissionWithEventTypesData;
   subjectId: string;
+  userId: string;
 }
 
 type MissionFormValues = Database['public']['Tables']['missions']['Insert'] & {
@@ -35,6 +36,7 @@ const MissionForm = ({
   availableTemplates,
   mission,
   subjectId,
+  userId,
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const routines = forceArray(mission?.routines);
@@ -248,6 +250,7 @@ const MissionForm = ({
         form={form}
         routineEventsMap={routineEventsMap}
         subjectId={subjectId}
+        userId={userId}
       />
       <Button
         className="mt-4 w-full"

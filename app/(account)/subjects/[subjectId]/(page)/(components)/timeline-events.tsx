@@ -9,9 +9,10 @@ import TimelineEventCard from './timeline-event-card';
 interface TimelineEventsProps {
   events: ListEventsData;
   subjectId: string;
+  userId: string;
 }
 
-const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
+const TimelineEvents = ({ events, subjectId, userId }: TimelineEventsProps) => (
   <div className="mt-4 space-y-4">
     {Object.values(
       events.reduce((acc, event) => {
@@ -44,6 +45,7 @@ const TimelineEvents = ({ events, subjectId }: TimelineEventsProps) => (
               group={eventGroup}
               key={eventGroup[0].id}
               subjectId={subjectId}
+              userId={userId}
             />
           ))}
         </div>

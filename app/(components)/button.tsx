@@ -9,14 +9,12 @@ import { twMerge } from 'tailwind-merge';
 const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
-  red: 'ring-red-2 bg-red-1 font-bold hover:bg-red-2 ring-offset-bg-2 ring-offset-4',
   transparent:
     'ring-transparent border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
 };
 
 const spinnerColorSchemes = {
   accent: 'border-bg-1',
-  red: 'border-bg-1',
   transparent: 'border-fg-1',
 };
 
@@ -31,7 +29,7 @@ const variants = {
 };
 
 const disabledVariants = {
-  link: 'pointer-events-none text-alpha-3',
+  link: 'disabled',
   primary: 'disabled ring-transparent',
 };
 

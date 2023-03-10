@@ -17,9 +17,14 @@ import EventContentCollapsible from './event-content-collapsible';
 interface TimelineEventCardProps {
   group: ListEventsData;
   subjectId: string;
+  userId: string;
 }
 
-const TimelineEventCard = ({ group, subjectId }: TimelineEventCardProps) => {
+const TimelineEventCard = ({
+  group,
+  subjectId,
+  userId,
+}: TimelineEventCardProps) => {
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
   const sessionNumber = lastEventType.session + 1;
@@ -73,13 +78,11 @@ const TimelineEventCard = ({ group, subjectId }: TimelineEventCardProps) => {
             <EventContentCollapsible
               content={firstIfArray(event.type).content}
             />
-            <EventInputs
-              className="my-1 border-b border-alpha-1"
-              inputs={forceArray(event.inputs)}
-            />
+            <EventInputs className="my-1" inputs={forceArray(event.inputs)} />
             <EventComments
               className="px-4"
               comments={forceArray(event.comments)}
+              userId={userId}
             />
             <EventCommentForm
               className="p-4 pt-1"

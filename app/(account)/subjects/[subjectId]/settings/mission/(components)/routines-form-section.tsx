@@ -15,6 +15,7 @@ interface RoutinesFormSection<T extends FieldValues> {
   routineEventsMap: Record<string, any>;
   sessionIndex: number;
   templateOptions: NonNullable<ListTemplatesData>;
+  userId: string;
 }
 
 const RoutinesFormSection = <T extends FieldValues>({
@@ -23,6 +24,7 @@ const RoutinesFormSection = <T extends FieldValues>({
   routineEventsMap,
   sessionIndex,
   templateOptions,
+  userId,
 }: RoutinesFormSection<T>) => {
   const name = `routines.${sessionIndex}`;
 
@@ -46,6 +48,7 @@ const RoutinesFormSection = <T extends FieldValues>({
             name={name}
             routineEventsMap={routineEventsMap}
             sessionIndex={sessionIndex}
+            userId={userId}
           />
         ))}
       </ul>

@@ -1,11 +1,15 @@
+'use client';
+
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
 import Button from './button';
 
 interface AlertProps {
   cancelText?: string;
-  confirmText?: string;
+  confirmText: string;
   description?: ReactNode;
+  isConfirming?: boolean;
+  isConfirmingText?: string;
   onConfirm?: () => void;
   title?: string;
   toggle: () => void;
@@ -14,8 +18,10 @@ interface AlertProps {
 
 const Alert = ({
   cancelText = 'Cancel',
-  confirmText = 'Yes, I am sure',
+  confirmText,
   description,
+  isConfirming,
+  isConfirmingText,
   onConfirm,
   title = 'Are you sure?',
   toggle,
@@ -32,7 +38,7 @@ const Alert = ({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="fixed inset-0 bg-alpha-1 backdrop-blur-md" />
+        <div className="fixed inset-0 bg-alpha-reverse-2 backdrop-blur-sm" />
       </Transition.Child>
       <div className="fixed inset-0 overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-2">
@@ -45,10 +51,10 @@ const Alert = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel className="w-full max-w-xs transform rounded bg-bg-1 p-8 text-center shadow-lg transition-all">
+            <Dialog.Panel className="w-full max-w-xs transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
               <Dialog.Title className="text-2xl">{title}</Dialog.Title>
               {description && (
-                <Dialog.Description className="mt-2 leading-snug text-fg-3">
+                <Dialog.Description className="mt-2 text-fg-3">
                   {description}
                 </Dialog.Description>
               )}
@@ -62,11 +68,9 @@ const Alert = ({
                 </Button>
                 <Button
                   className="w-full"
-                  colorScheme="red"
-                  onClick={async () => {
-                    if (onConfirm) await onConfirm();
-                    toggle();
-                  }}
+                  loading={isConfirming}
+                  loadingText={isConfirmingText}
+                  onClick={onConfirm}
                 >
                   {confirmText}
                 </Button>

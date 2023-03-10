@@ -35,7 +35,7 @@ const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
     });
 
     // todo: when redirecting to the subject page works, do it
-    redirect('/subjects');
+    redirect(`/subjects`);
   }
 
   const currentTeamId = await getCurrentTeamId();

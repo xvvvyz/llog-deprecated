@@ -4,6 +4,7 @@ import Header from '(components)/header';
 import EventTypes from '(utilities)/enum-event-types';
 import firstIfArray from '(utilities)/first-if-array';
 import formatTitle from '(utilities)/format-title';
+import getCurrentUser from '(utilities)/get-current-user';
 import getEvent, { GetEventData } from '(utilities)/get-event';
 import getSubject from '(utilities)/get-subject';
 import { notFound } from 'next/navigation';
@@ -22,12 +23,13 @@ const Page = async ({
 }: PageProps) => {
   if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
 
-  const [{ data: subject }, { data: event }] = await Promise.all([
+  const [{ data: subject }, { data: event }, user] = await Promise.all([
     getSubject(subjectId),
     getEvent(eventId),
+    getCurrentUser(),
   ]);
 
-  if (!subject || !event) notFound();
+  if (!subject || !event || !user) notFound();
   const eventType = firstIfArray(event.type);
   const subjectHref = `/subjects/${subjectId}`;
 
@@ -41,6 +43,7 @@ const Page = async ({
         event={event as GetEventData}
         eventType={eventType}
         subjectId={subjectId}
+        userId={user.id}
       />
     </>
   );
