@@ -62,6 +62,7 @@ const MissionForm = ({
           content: routine.content,
           id: routine.id,
           inputs,
+          type: routine.type,
         };
 
         if (acc[routine.session]) acc[routine.session].push(formattedRoutine);
