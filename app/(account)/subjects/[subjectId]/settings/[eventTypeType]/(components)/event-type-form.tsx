@@ -185,10 +185,10 @@ const EventTypeForm = ({
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Save {defaultValues.type}
       </Button>
       <Button
-        className="-mt-2 w-full"
+        className="w-full"
         colorScheme="transparent"
         onClick={() => {
           const values = form.getValues();

@@ -259,7 +259,7 @@ const MissionForm = ({
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Save mission
       </Button>
     </form>
   );

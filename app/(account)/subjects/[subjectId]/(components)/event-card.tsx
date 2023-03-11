@@ -51,9 +51,9 @@ const EventCard = ({
       subjectId={subjectId}
     />
     {event && (
-      <div className="space-y-6 sm:px-8">
+      <div className="space-y-6 border-t border-alpha-1 pt-8 sm:px-8">
         <EventComments comments={forceArray(event.comments)} userId={userId} />
-        <EventCommentForm className="pt-2" eventId={event.id} />
+        <EventCommentForm eventId={event.id} />
       </div>
     )}
   </div>

@@ -57,7 +57,7 @@ const AddSubjectForm = () => {
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Add Subject
       </Button>
     </form>
   );

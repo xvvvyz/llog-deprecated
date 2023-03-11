@@ -166,7 +166,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Save template
       </Button>
     </form>
   );

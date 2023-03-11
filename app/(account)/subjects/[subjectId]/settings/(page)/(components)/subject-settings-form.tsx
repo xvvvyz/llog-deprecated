@@ -109,7 +109,7 @@ const SubjectSettingsForm = ({
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Save subject
       </Button>
       <section className="mt-2">
         <LabelSpan className="text-xl text-fg-1">Missions</LabelSpan>

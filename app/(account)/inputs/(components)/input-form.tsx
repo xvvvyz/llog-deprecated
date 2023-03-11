@@ -287,7 +287,7 @@ const InputForm = ({ input }: InputFormProps) => {
         loadingText="Saving…"
         type="submit"
       >
-        Save
+        Save input
       </Button>
     </form>
   );
