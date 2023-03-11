@@ -36,7 +36,7 @@ const EventCommentForm = ({
     }
 
     form.setValue('content', '');
-    startTransition(() => router.refresh());
+    startTransition(router.refresh);
   });
 
   return (

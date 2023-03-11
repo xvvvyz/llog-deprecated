@@ -188,7 +188,8 @@ const EventTypeForm = ({
         Save
       </Button>
       <Button
-        className="mx-auto mt-0"
+        className="-mt-2 w-full"
+        colorScheme="transparent"
         onClick={() => {
           const values = form.getValues();
 
@@ -209,7 +210,6 @@ const EventTypeForm = ({
             })
           );
         }}
-        variant="link"
       >
         Save as template
       </Button>

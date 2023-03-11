@@ -40,4 +40,5 @@ export const generateMetadata = async ({
   return { title: formatTitle(['Templates', template.name]) };
 };
 
+export const revalidate = 0;
 export default Page;

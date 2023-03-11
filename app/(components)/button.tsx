@@ -10,7 +10,7 @@ const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-transparent border-alpha-2 font-normal hover:border-alpha-3 bg-transparent text-fg-2 hover:text-fg-1',
+    'ring-transparent border-alpha-2 hover:bg-alpha-4 font-normal hover:border-alpha-3 bg-alpha-3 text-fg-2 hover:text-fg-1',
 };
 
 const spinnerColorSchemes = {

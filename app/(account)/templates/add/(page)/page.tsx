@@ -20,4 +20,5 @@ const Page = async () => {
 };
 
 export const metadata = { title: formatTitle(['Templates', 'Add']) };
+export const revalidate = 0;
 export default Page;

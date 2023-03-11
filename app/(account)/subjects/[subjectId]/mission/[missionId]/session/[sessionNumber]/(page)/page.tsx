@@ -66,4 +66,5 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject.name, mission.name, sessionNumber]) };
 };
 
+export const revalidate = 0;
 export default Page;

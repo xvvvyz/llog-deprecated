@@ -55,7 +55,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
           field.onChange(data);
         }
 
-        startTransition(() => router.refresh());
+        startTransition(router.refresh);
         toggleIsCreating();
       }}
       options={input.options}

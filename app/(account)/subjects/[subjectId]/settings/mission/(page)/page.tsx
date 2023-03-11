@@ -61,4 +61,5 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject.name, 'Settings', 'Add mission']) };
 };
 
+export const revalidate = 0;
 export default Page;

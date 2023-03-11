@@ -23,4 +23,5 @@ const Page = async () => {
 };
 
 export const metadata = { title: 'Inputs' };
+export const revalidate = 0;
 export default Page;

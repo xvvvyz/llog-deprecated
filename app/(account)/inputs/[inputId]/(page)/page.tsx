@@ -33,4 +33,5 @@ export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
   return { title: formatTitle(['Inputs', input.label]) };
 };
 
+export const revalidate = 0;
 export default Page;

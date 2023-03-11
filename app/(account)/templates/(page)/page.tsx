@@ -23,4 +23,5 @@ const Page = async () => {
 };
 
 export const metadata = { title: 'Templates' };
+export const revalidate = 0;
 export default Page;
