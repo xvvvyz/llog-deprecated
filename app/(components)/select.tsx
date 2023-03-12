@@ -23,19 +23,22 @@ import ReactSelect, {
   SelectInstance,
   SingleValueProps,
 } from 'react-select';
+import Avatar from './avatar';
 
 type IOption = {
   id: string;
+  image_uri?: string;
   label?: string;
   name?: string;
+  subjects?: { id: string; image_uri: string; name: string }[];
 };
 
 const ClearIndicator = <TOption extends IOption>(
   props: ClearIndicatorProps<TOption>
 ) => (
   <components.ClearIndicator {...props}>
-    <div className="group cursor-pointer p-1">
-      <XMarkIcon className="w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
+    <div className="cursor-pointer p-1 text-fg-2 transition-colors hover:text-fg-1">
+      <XMarkIcon className="w-5" />
     </div>
   </components.ClearIndicator>
 );
@@ -78,28 +81,11 @@ const DropdownIndicator = () => (
 
 const Input = <TOption extends IOption>({
   children,
-  getValue,
-  isMulti,
-  value,
   ...props
 }: InputProps<TOption>) => (
-  <div
-    className={twMerge(
-      'absolute',
-      isMulti && getValue().length > 0 && 'caret-transparent',
-      value && 'caret-inherit relative'
-    )}
-  >
-    <components.Input
-      className="m-1 px-2"
-      getValue={getValue}
-      isMulti={isMulti}
-      value={value}
-      {...props}
-    >
-      {children}
-    </components.Input>
-  </div>
+  <components.Input className="m-1 pl-2" {...props}>
+    {children}
+  </components.Input>
 );
 
 const LoadingIndicator = () => <Spinner className="mr-2" />;
@@ -124,17 +110,55 @@ const MultiValueContainer = ({
   children,
   ...props
 }: MultiValueGenericProps) => (
-  <components.MultiValueContainer {...props}>
-    <div className="max-w-40 m-1 inline-flex items-center gap-2 truncate rounded-sm bg-alpha-2 pl-2 text-sm leading-6">
-      {children}
+  <div className="-my-px max-w-[calc(100%-2em)]">
+    <components.MultiValueContainer {...props}>
+      <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded border border-alpha-1 bg-alpha-2 text-sm leading-6">
+        {children}
+      </div>
+    </components.MultiValueContainer>
+  </div>
+);
+
+const MultiValueLabel = ({ children, ...props }: MultiValueGenericProps) => (
+  <components.MultiValueLabel {...props}>
+    <div className="flex items-center gap-2 overflow-visible">
+      {(props.selectProps as any).hasAvatar && (
+        <Avatar
+          className="ml-0.5 mr-0.5"
+          file={props.data.image_uri}
+          name={props.data.label ?? props.data.name ?? ''}
+          size="xs"
+        />
+      )}
+      <span
+        className={twMerge(
+          'truncate',
+          !(props.selectProps as any).hasAvatar && 'pl-2'
+        )}
+      >
+        {children}
+      </span>
+      {props.data.subjects && !!props.data.subjects.length && (
+        <div className="mr-2 flex">
+          {(props.data.subjects as any[]).map(({ id, image_uri, name }) => (
+            <Avatar
+              className="-mr-2 border border-alpha-reverse-2"
+              file={image_uri}
+              key={id}
+              name={name}
+              size="xs"
+            />
+          ))}
+        </div>
+      )}
     </div>
-  </components.MultiValueContainer>
+  </components.MultiValueLabel>
 );
 
 const MultiValueRemove = (props: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
-    <div className="group -m-1 p-1 pr-2">
-      <XMarkIcon className="w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
+    <div className="-m-1 p-1 pr-2 text-fg-2 transition-colors hover:text-fg-1">
+      <XMarkIcon className="w-5" />
     </div>
   </components.MultiValueRemove>
 );
@@ -150,13 +174,33 @@ const Option = <TOption extends IOption>({
   <components.Option {...props}>
     <div
       className={twMerge(
-        'flex items-center justify-between px-4 py-2 text-fg-2 transition-colors hover:cursor-pointer',
+        'flex items-center gap-4 px-4 py-2 text-fg-2 transition-colors hover:cursor-pointer',
         props.isFocused && 'bg-alpha-1 text-fg-1'
       )}
     >
-      {children}
+      {(props.selectProps as any).hasAvatar && (
+        <Avatar
+          file={props.data.image_uri}
+          name={props.data.label ?? props.data.name ?? ''}
+          size="sm"
+        />
+      )}
+      <span className="truncate">{children}</span>
+      {props.data.subjects && !!props.data.subjects.length && (
+        <div className="mr-2 flex">
+          {props.data.subjects.map(({ id, image_uri, name }) => (
+            <Avatar
+              className="-mr-2 border border-alpha-reverse-2"
+              file={image_uri}
+              key={id}
+              name={name}
+              size="sm"
+            />
+          ))}
+        </div>
+      )}
       {props.isMulti && (
-        <PlusIcon className="-mr-2 w-5 shrink-0 transition-colors" />
+        <PlusIcon className="-mr-2 ml-auto w-5 shrink-0 transition-colors" />
       )}
     </div>
   </components.Option>
@@ -190,6 +234,7 @@ const Select = <TOption extends IOption>(
     ...props
   }: ReactSelectProps<TOption> &
     CreatableProps<IOption, boolean, GroupBase<IOption>> & {
+      hasAvatar?: boolean;
       isCreatable?: boolean;
     },
   ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
@@ -205,6 +250,7 @@ const Select = <TOption extends IOption>(
       LoadingMessage,
       Menu,
       MultiValueContainer,
+      MultiValueLabel,
       MultiValueRemove,
       NoOptionsMessage,
       Option,

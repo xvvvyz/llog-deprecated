@@ -2,9 +2,9 @@
 
 import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
+import IconButton from '(components)/icon-button';
 import Input from '(components)/input';
 import Label, { LabelSpan } from '(components)/label';
-import Menu from '(components)/menu';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
@@ -15,16 +15,12 @@ import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
+import { ListSubjectsData } from '(utilities)/list-subjects';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-
-import {
-  EllipsisVerticalIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
 
 const INPUT_TYPE_OPTIONS = [
   // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
@@ -36,14 +32,16 @@ const INPUT_TYPE_OPTIONS = [
 
 interface InputFormProps {
   input?: GetInputData;
+  subjects?: ListSubjectsData;
 }
 
 type InputFormValues = InputType & {
   options: Database['public']['Tables']['input_options']['Insert'][];
+  subjects: { id: string; image_uri: string; name: string }[];
   type: { id: Database['public']['Enums']['input_type'] };
 };
 
-const InputForm = ({ input }: InputFormProps) => {
+const InputForm = ({ input, subjects }: InputFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const updateGlobalValueCache = useUpdateGlobalValueCache();
 
@@ -54,6 +52,11 @@ const InputForm = ({ input }: InputFormProps) => {
       label: input?.label ?? '',
       options: forceArray(input?.options),
       settings: input?.settings,
+      subjects: forceArray(subjects).filter(({ id }) =>
+        forceArray(input?.subjects_for).some(
+          ({ subject_id }) => subject_id === id
+        )
+      ),
       type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
     },
   });
@@ -83,7 +86,14 @@ const InputForm = ({ input }: InputFormProps) => {
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(
-        async ({ id, label, options, settings, type: typeObject }) => {
+        async ({
+          id,
+          label,
+          options,
+          settings,
+          subjects,
+          type: typeObject,
+        }) => {
           const type = typeObject?.id;
 
           const { data: inputData, error: inputError } = await supabase
@@ -172,6 +182,29 @@ const InputForm = ({ input }: InputFormProps) => {
             }
           }
 
+          if (defaultValues.subjects.length) {
+            await supabase
+              .from('input_subjects')
+              .delete()
+              .eq('input_id', inputData.id);
+          }
+
+          if (subjects.length) {
+            const { error: inputSubjectsError } = await supabase
+              .from('input_subjects')
+              .insert(
+                subjects.map(({ id }) => ({
+                  input_id: inputData.id,
+                  subject_id: id,
+                }))
+              );
+
+            if (inputSubjectsError) {
+              alert(inputSubjectsError.message);
+              return;
+            }
+          }
+
           updateGlobalValueCache(inputData);
           await redirect('/inputs');
         }
@@ -183,6 +216,23 @@ const InputForm = ({ input }: InputFormProps) => {
           control={form.control}
           name="label"
           render={({ field }) => <Input {...field} />}
+        />
+      </Label>
+      <Label>
+        <LabelSpan>For</LabelSpan>
+        <Controller
+          control={form.control}
+          name="subjects"
+          render={({ field }) => (
+            <Select
+              hasAvatar
+              isMulti
+              noOptionsMessage={() => 'No subjects'}
+              options={forceArray(subjects)}
+              placeholder="All subjects"
+              {...field}
+            />
+          )}
         />
       </Label>
       <Label>
@@ -234,19 +284,12 @@ const InputForm = ({ input }: InputFormProps) => {
                         }}
                         placeholder="Label"
                         right={
-                          <Menu className="h-full w-full">
-                            <Menu.Button className="h-full w-full">
-                              <EllipsisVerticalIcon className="w-5" />
-                            </Menu.Button>
-                            <Menu.Items>
-                              <Menu.Item
-                                onClick={() => optionsArray.remove(optionIndex)}
-                              >
-                                <TrashIcon className="w-5 text-fg-3" />
-                                Delete option
-                              </Menu.Item>
-                            </Menu.Items>
-                          </Menu>
+                          <IconButton
+                            className="m-0 h-full w-full justify-center p-0"
+                            icon={<XMarkIcon className="w-5" />}
+                            label="Delete options"
+                            onClick={() => optionsArray.remove(optionIndex)}
+                          />
                         }
                         {...field}
                       />
@@ -271,8 +314,8 @@ const InputForm = ({ input }: InputFormProps) => {
               Add option
             </Button>
           </fieldset>
-          <Label className="mx-auto mt-4 flex-row-reverse items-start justify-end gap-2 text-fg-1">
-            <LabelSpan>Allow additional options to be created</LabelSpan>
+          <Label className="mx-auto mt-2 flex-row-reverse items-start justify-end gap-2 text-fg-1">
+            <LabelSpan>Allow clients to add options</LabelSpan>
             <Controller
               control={form.control}
               name="settings.isCreatable"
@@ -282,7 +325,7 @@ const InputForm = ({ input }: InputFormProps) => {
         </>
       )}
       <Button
-        className="mt-6 w-full"
+        className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

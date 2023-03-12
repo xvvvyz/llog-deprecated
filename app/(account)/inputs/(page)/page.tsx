@@ -1,6 +1,7 @@
 import Empty from '(components)/empty';
 import LinkList from '(components)/link-list';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
+import forceArray from '(utilities)/force-array';
 import listInputs from '(utilities)/list-inputs';
 
 const Page = async () => {
@@ -11,6 +12,7 @@ const Page = async () => {
     <LinkList>
       {inputs.map((input) => (
         <LinkList.Item
+          avatars={forceArray(input.subjects)}
           href={`/inputs/${input.id}`}
           icon="edit"
           key={input.id}

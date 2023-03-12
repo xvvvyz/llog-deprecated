@@ -1,11 +1,12 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
+import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
 import formatTitle from '(utilities)/format-title';
 import getCurrentUser from '(utilities)/get-current-user';
 import getMissionWithRoutines from '(utilities)/get-mission-with-routines';
 import getSubject from '(utilities)/get-subject';
-import listInputs from '(utilities)/list-inputs';
+import listInputs, { ListInputsData } from '(utilities)/list-inputs';
 import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
 import { notFound } from 'next/navigation';
 import MissionForm from '../../(components)/mission-form';
@@ -48,7 +49,10 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
         />
       </Header>
       <MissionForm
-        availableInputs={availableInputs}
+        availableInputs={filterListInputsDataBySubjectId(
+          availableInputs as ListInputsData,
+          subjectId
+        )}
         availableTemplates={availableTemplates}
         mission={mission}
         subjectId={subjectId}

@@ -35,7 +35,7 @@ const ForgotPasswordForm = () => {
         <Input disabled={linkSent} type="email" {...form.register('email')} />
       </Label>
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         disabled={linkSent}
         loading={form.formState.isSubmitting}
         loadingText="Sending link…"

@@ -254,7 +254,7 @@ const MissionForm = ({
         userId={userId}
       />
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

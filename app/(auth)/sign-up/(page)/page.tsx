@@ -4,7 +4,7 @@ import SignUpForm from './(components)/sign-up-form';
 const Page = () => (
   <>
     <div className="sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
-      <h1 className="mb-8 text-2xl">Create an account</h1>
+      <h1 className="mb-10 text-2xl">Create an account</h1>
       <SignUpForm />
     </div>
     <p className="flex gap-4">

@@ -60,7 +60,7 @@ const SignInForm = () => {
         <Input type="password" {...form.register('password')} />
       </Label>
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Signing in…"
         type="submit"

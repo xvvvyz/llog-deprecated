@@ -47,7 +47,7 @@ const SessionsFormSection = <T extends FieldValues>({
         </ul>
       )}
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         colorScheme="transparent"
         onClick={() => sessionArray.append([[]] as any)}
         type="button"

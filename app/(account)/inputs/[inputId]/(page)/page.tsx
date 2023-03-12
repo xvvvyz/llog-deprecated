@@ -2,7 +2,8 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
-import getInput from '(utilities)/get-input';
+import getInput, { GetInputData } from '(utilities)/get-input';
+import listSubjectsByTeamId from '(utilities)/list-subjects-by-team-id';
 import { notFound } from 'next/navigation';
 import InputForm from '../../(components)/input-form';
 
@@ -13,7 +14,11 @@ interface PageProps {
 }
 
 const Page = async ({ params: { inputId } }: PageProps) => {
-  const { data: input } = await getInput(inputId);
+  const [{ data: input }, { data: subjects }] = await Promise.all([
+    getInput(inputId),
+    listSubjectsByTeamId(),
+  ]);
+
   if (!input) notFound();
 
   return (
@@ -22,7 +27,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
         <BackButton href="/inputs" />
         <Breadcrumbs items={[['Inputs', '/inputs'], [input.label]]} />
       </Header>
-      <InputForm input={input} />
+      <InputForm input={input as GetInputData} subjects={subjects} />
     </>
   );
 };

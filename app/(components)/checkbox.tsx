@@ -17,7 +17,7 @@ const Checkbox = forwardRef<
     />
     <span
       className={twMerge(
-        'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-1 bg-alpha-1 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-2 peer-hover:bg-alpha-2 peer-checked:peer-hover:bg-accent-2 peer-focus:ring-1 peer-focus:ring-accent-2 peer-focus:ring-offset-4 peer-focus:ring-offset-bg-2 peer-checked:[&>svg]:visible',
+        'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-2 bg-alpha-3 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-3 peer-hover:bg-alpha-4 peer-checked:peer-hover:bg-accent-2 peer-focus:ring-1 peer-focus:ring-accent-2 peer-focus:ring-offset-4 peer-focus:ring-offset-bg-2 peer-checked:[&>svg]:visible',
         className
       )}
     >

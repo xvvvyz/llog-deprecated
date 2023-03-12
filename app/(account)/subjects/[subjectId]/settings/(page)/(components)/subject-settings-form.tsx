@@ -103,7 +103,7 @@ const SubjectSettingsForm = ({
         form={form}
       />
       <Button
-        className="my-4 w-full"
+        className="my-6 w-full"
         disabled={!form.formState.isDirty}
         loading={form.formState.isSubmitting}
         loadingText="Saving…"
@@ -165,6 +165,7 @@ const SubjectSettingsForm = ({
           instanceId="routineTemplate"
           isCreatable
           isLoading={newRoutineTransition[0]}
+          noOptionsMessage={() => 'No templates—type to add a routine'}
           onChange={(e) => {
             saveToCache();
 
@@ -233,6 +234,7 @@ const SubjectSettingsForm = ({
           instanceId="observationTemplate"
           isCreatable
           isLoading={newObservationTransition[0]}
+          noOptionsMessage={() => 'No templates—type to add an observation'}
           onChange={(e) => {
             saveToCache();
 

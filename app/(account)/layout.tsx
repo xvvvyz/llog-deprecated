@@ -10,7 +10,7 @@ const Layout = async ({ children }: LayoutProps) => {
   const user = await getCurrentUser();
 
   return (
-    <div className="mx-auto max-w-lg px-4 pb-16">
+    <div className="mx-auto max-w-lg px-4 pb-20">
       <Nav isClient={!!user?.user_metadata?.is_client} />
       {children}
     </div>

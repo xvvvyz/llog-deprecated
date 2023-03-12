@@ -10,7 +10,7 @@ const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-transparent border-alpha-2 hover:bg-alpha-4 font-normal hover:border-alpha-3 bg-alpha-3 text-fg-2 hover:text-fg-1',
+    'ring-transparent hover:bg-alpha-4 font-normal bg-alpha-3 text-fg-2 hover:text-fg-1',
 };
 
 const spinnerColorSchemes = {
@@ -24,7 +24,7 @@ const sizes = {
 };
 
 const variants = {
-  link: 'p-3 -m-3 text-fg-2 hover:text-fg-1',
+  link: 'p-3 -m-3 border-0 text-fg-2 hover:text-fg-1',
   primary: 'focus:ring-1 rounded justify-center',
 };
 
@@ -66,7 +66,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const searchParams = useSearchParams();
 
     const cn = twMerge(
-      'outline-none border border-transparent inline-flex items-center gap-2 transition-colors',
+      'outline-none border border-alpha-2 hover:border-alpha-3 inline-flex items-center gap-2 transition-colors',
       variant !== 'link' && sizes[size],
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],

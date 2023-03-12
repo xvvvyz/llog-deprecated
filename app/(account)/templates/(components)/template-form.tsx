@@ -47,8 +47,8 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
     defaultValues: {
       content: templateData?.content,
       id: template?.id,
-      inputs: forceArray(templateData?.inputIds).map((inputId) =>
-        availableInputs?.find(({ id }) => id === inputId)
+      inputs: forceArray(availableInputs).filter(({ id }) =>
+        forceArray(templateData?.inputIds).includes(id)
       ),
       name: template?.name ?? '',
       public: template?.public ?? false,
@@ -154,14 +154,14 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
                   )
                 );
               }}
-              options={availableInputs ?? []}
+              options={forceArray(availableInputs)}
               {...field}
             />
           )}
         />
       </Label>
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

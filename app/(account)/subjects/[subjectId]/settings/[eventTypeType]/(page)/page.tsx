@@ -2,10 +2,11 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
 import EventTypes from '(utilities)/enum-event-types';
+import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
 import formatTitle from '(utilities)/format-title';
 import getSubject from '(utilities)/get-subject';
 import getTemplate from '(utilities)/get-template';
-import listInputs from '(utilities)/list-inputs';
+import listInputs, { ListInputsData } from '(utilities)/list-inputs';
 import { notFound } from 'next/navigation';
 import EventTypeForm from '../(components)/event-type-form';
 
@@ -51,7 +52,10 @@ const Page = async ({
         />
       </Header>
       <EventTypeForm
-        availableInputs={availableInputs}
+        availableInputs={filterListInputsDataBySubjectId(
+          availableInputs as ListInputsData,
+          subjectId
+        )}
         subjectId={subjectId}
         template={template}
         type={eventTypeType as EventTypes}

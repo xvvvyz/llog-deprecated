@@ -4,7 +4,7 @@ import SignInForm from './(components)/sign-in-form';
 const Page = () => (
   <>
     <div className="w-full sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
-      <h1 className="mb-8 text-2xl">Welcome back</h1>
+      <h1 className="mb-10 text-2xl">Welcome back</h1>
       <SignInForm />
     </div>
     <p className="flex gap-6">

@@ -55,6 +55,7 @@ const RoutinesFormSection = <T extends FieldValues>({
       <Select
         instanceId={`${name}Template`}
         isCreatable
+        noOptionsMessage={() => 'No templates—type to add a routine'}
         onChange={(e) => {
           const template = e as TemplateType;
 

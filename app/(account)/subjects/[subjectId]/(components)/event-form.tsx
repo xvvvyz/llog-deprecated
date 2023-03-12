@@ -222,7 +222,7 @@ const EventForm = ({
         </Label>
       ))}
       <Button
-        className={twMerge('w-full', eventTypeInputs.length && 'mt-4')}
+        className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
         colorScheme={event ? 'transparent' : 'accent'}
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"

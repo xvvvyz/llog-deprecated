@@ -1,14 +1,16 @@
 import createServerSupabaseClient from './create-server-supabase-client';
 import getCurrentTeamId from './get-current-team-id';
 
-const listInputs = async () =>
+const listSubjectsByTeamId = async () =>
   createServerSupabaseClient()
-    .from('inputs')
-    .select('id, label, subjects(id, image_uri, name), type')
+    .from('subjects')
+    .select('id, image_uri, name, team_id')
     .eq('team_id', await getCurrentTeamId())
     .eq('deleted', false)
     .order('updated_at', { ascending: false });
 
-export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];
+export type ListSubjectsByTeamIdData = Awaited<
+  ReturnType<typeof listSubjectsByTeamId>
+>['data'];
 
-export default listInputs;
+export default listSubjectsByTeamId;

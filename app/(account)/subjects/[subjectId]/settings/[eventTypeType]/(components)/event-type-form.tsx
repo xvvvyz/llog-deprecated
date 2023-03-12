@@ -64,8 +64,8 @@ const EventTypeForm = ({
       id: eventType?.id,
       inputs: eventType
         ? forceArray(eventType?.inputs).map(({ input }) => input)
-        : forceArray(templateData?.inputIds).map((inputId) =>
-            availableInputs?.find(({ id }) => id === inputId)
+        : forceArray(availableInputs).filter(({ id }) =>
+            forceArray(templateData?.inputIds).includes(id)
           ),
       name: eventType?.name ?? template?.name ?? '',
       order: eventType?.order,
@@ -173,14 +173,14 @@ const EventTypeForm = ({
                   )
                 );
               }}
-              options={availableInputs ?? []}
+              options={forceArray(availableInputs)}
               {...field}
             />
           )}
         />
       </Label>
       <Button
-        className="mt-4 w-full"
+        className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

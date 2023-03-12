@@ -24,7 +24,7 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
   return (
     <div
       className={twMerge(
-        'relative flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase tracking-tighter text-fg-3',
+        'relative flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-alpha-1 uppercase tracking-tighter text-fg-3 shadow-sm',
         sizes[size].className,
         className
       )}
@@ -37,6 +37,7 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
           loader={generateImageLoader({ aspectRatio: '1:1' })}
           sizes={sizes[size].imgSizes}
           src={src}
+          title={name}
         />
       ) : (
         <span aria-hidden>{name[0]}</span>
