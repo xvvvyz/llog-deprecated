@@ -15,7 +15,7 @@ const Page = () => (
       </Button>
     </header>
     <main>
-      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg lg:max-w-4xl">
+      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg lg:max-w-3xl">
         <h1 className="text-2xl sm:text-3xl">
           <span className="text-fg-3">
             Refine your animal behavior consulting business with
@@ -27,42 +27,42 @@ const Page = () => (
         </Button>
       </div>
       <div className="mx-auto h-24 w-px bg-alpha-2" />
-      <div className="mx-auto grid max-w-md gap-12 px-6 py-24 text-2xl text-fg-3 lg:max-w-4xl lg:grid-cols-2">
+      <div className="mx-auto max-w-3xl space-y-12 px-6 py-24 text-2xl text-fg-3 xs:text-center">
         <figure>
-          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="400px" src={PlanImage} />
-          </div>
-          <figcaption className="mt-4">
+          <figcaption className="mx-auto max-w-md">
             <span className="text-fg-1">Plan.</span> Design comprehensive
-            behavior modification missions.
+            behavior&nbsp;modification&nbsp;missions.
           </figcaption>
+          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="718px" src={PlanImage} />
+          </div>
         </figure>
         <figure>
-          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="400px" src={ShareImage} />
-          </div>
-          <figcaption className="mt-4">
+          <figcaption className="mx-auto max-w-md">
             <span className="text-fg-1">Share.</span> Delight clients with a
-            streamlined experience.
+            streamlined&nbsp;experience.
           </figcaption>
-        </figure>
-        <figure>
-          <div className="relative aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="400px" src={TrackImage} />
+          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="718px" src={ShareImage} />
           </div>
-          <figcaption className="mt-4">
-            <span className="text-fg-1">Track.</span> Create custom inputs &amp;
-            collaboratively record data.
-          </figcaption>
         </figure>
         <figure>
-          <div className="flex aspect-video items-center justify-center rounded border border-alpha-2 bg-bg-1 text-base">
+          <figcaption className="mx-auto max-w-md">
+            <span className="text-fg-1">Track.</span> Create custom inputs &amp;
+            collaboratively&nbsp;record&nbsp;data.
+          </figcaption>
+          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
+            <Image alt="" quality={100} sizes="718px" src={TrackImage} />
+          </div>
+        </figure>
+        <figure>
+          <figcaption className="mx-auto max-w-md">
+            <span className="text-fg-1">Learn.</span> Validate hypotheses with
+            powerful&nbsp;data&nbsp;visualizations.
+          </figcaption>
+          <div className="mt-4 flex aspect-video items-center justify-center rounded border border-alpha-2 bg-bg-1 text-base">
             Coming soon&hellip;
           </div>
-          <figcaption className="mt-4">
-            <span className="text-fg-1">Learn.</span> Validate hypotheses with
-            powerful&nbsp;data visualizations.
-          </figcaption>
         </figure>
       </div>
       <div className="mx-auto h-24 w-px bg-alpha-2" />
