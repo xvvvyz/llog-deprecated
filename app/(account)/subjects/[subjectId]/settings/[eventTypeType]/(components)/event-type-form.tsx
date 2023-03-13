@@ -21,7 +21,7 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -49,12 +49,6 @@ const EventTypeForm = ({
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // hack to force template to be empty when no templateId is present
-  // client components seem to cache previous values passed?
-  template = searchParams.has('templateId') ? template : null;
-
   const templateData = template?.data as unknown as TemplateDataType;
 
   const defaultValues = useDefaultValues({
@@ -179,40 +173,45 @@ const EventTypeForm = ({
           )}
         />
       </Label>
-      <Button
-        className="mt-8 w-full"
-        loading={form.formState.isSubmitting || isRedirecting}
-        loadingText="Saving…"
-        type="submit"
-      >
-        Save {defaultValues.type}
-      </Button>
-      <Button
-        className="w-full"
-        colorScheme="transparent"
-        onClick={() => {
-          const values = form.getValues();
+      <div className="space-y-4">
+        <Button
+          className="mt-8 w-full"
+          loading={form.formState.isSubmitting || isRedirecting}
+          loadingText="Saving…"
+          type="submit"
+        >
+          Save {defaultValues.type} type
+        </Button>
+        <Button
+          className="w-full"
+          colorScheme="transparent"
+          onClick={() => {
+            const values = form.getValues();
 
-          globalValueCache.set(CacheKeys.TemplateForm, {
-            content: values.content,
-            inputs: values.inputs,
-            name: values.name,
-            type: { id: values.type, label: TEMPLATE_TYPE_LABELS[values.type] },
-          });
+            globalValueCache.set(CacheKeys.TemplateForm, {
+              content: values.content,
+              inputs: values.inputs,
+              name: values.name,
+              type: {
+                id: values.type,
+                label: TEMPLATE_TYPE_LABELS[values.type],
+              },
+            });
 
-          globalValueCache.set(CacheKeys.EventTypeForm, values);
+            globalValueCache.set(CacheKeys.EventTypeForm, values);
 
-          router.push(
-            formatCacheLink({
-              backLink,
-              path: '/templates/add',
-              useCache: true,
-            })
-          );
-        }}
-      >
-        Save as template
-      </Button>
+            router.push(
+              formatCacheLink({
+                backLink,
+                path: '/templates/add',
+                useCache: true,
+              })
+            );
+          }}
+        >
+          Save as template
+        </Button>
+      </div>
     </form>
   );
 };

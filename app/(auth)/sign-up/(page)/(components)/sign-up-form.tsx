@@ -21,7 +21,7 @@ const SignUpForm = () => {
     defaultValues: {
       email: '',
       firstName: '',
-      isClient: redirect.includes('?share='),
+      isClient: redirect.includes('/join/'),
       lastName: '',
       password: '',
     },

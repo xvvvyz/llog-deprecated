@@ -133,7 +133,7 @@ const SubjectSettingsForm = ({
         <Button
           className="mt-4 w-full"
           colorScheme="transparent"
-          href={`/subjects/${subject.id}/settings/mission?back=${backLink}`}
+          href={`/subjects/${subject.id}/settings/mission/add?back=${backLink}`}
           onClick={saveToCache}
           type="button"
         >
@@ -179,7 +179,7 @@ const SubjectSettingsForm = ({
               router.push(
                 formatCacheLink({
                   backLink,
-                  path: `/subjects/${subject.id}/settings/routine?templateId=${template.id}`,
+                  path: `/subjects/${subject.id}/settings/routine/add/from-template/${template.id}`,
                   useCache: true,
                 })
               )
@@ -197,7 +197,7 @@ const SubjectSettingsForm = ({
               router.push(
                 formatCacheLink({
                   backLink,
-                  path: `/subjects/${subject.id}/settings/routine`,
+                  path: `/subjects/${subject.id}/settings/routine/add`,
                   useCache: true,
                 })
               )
@@ -248,7 +248,7 @@ const SubjectSettingsForm = ({
               router.push(
                 formatCacheLink({
                   backLink,
-                  path: `/subjects/${subject.id}/settings/observation?templateId=${template.id}`,
+                  path: `/subjects/${subject.id}/settings/observation/add/from-template/${template.id}`,
                   useCache: true,
                 })
               )
@@ -266,7 +266,7 @@ const SubjectSettingsForm = ({
               router.push(
                 formatCacheLink({
                   backLink,
-                  path: `/subjects/${subject.id}/settings/observation`,
+                  path: `/subjects/${subject.id}/settings/observation/add`,
                   useCache: true,
                 })
               )
@@ -324,7 +324,7 @@ const SubjectSettingsForm = ({
             }
 
             await copyToClipboard(
-              `${location.origin}/subjects/${subject.id}?share=${share_code}`
+              `${location.origin}/subjects/${subject.id}/join/${share_code}`
             );
 
             toggleCopyingToClipboard();

@@ -57,7 +57,7 @@ const RoutineFormSection = <T extends FieldValues>({
   const router = useRouter();
 
   return (
-    <li className="mb-3">
+    <li className="mb-4">
       <Alert
         confirmText="Delete routine"
         onConfirm={() => eventTypeArray.remove(eventTypeIndex)}

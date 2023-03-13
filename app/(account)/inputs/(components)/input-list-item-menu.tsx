@@ -49,7 +49,7 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           <EllipsisVerticalIcon className="w-5" />
         </Menu.Button>
         <Menu.Items>
-          <Menu.Item href={`/inputs/add?inputId=${inputId}`}>
+          <Menu.Item href={`/inputs/add/from-template/${inputId}`}>
             <DocumentDuplicateIcon className="w-5 text-fg-3" />
             Duplicate input
           </Menu.Item>

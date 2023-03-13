@@ -256,7 +256,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         <>
           <fieldset>
             <LabelSpan>Options</LabelSpan>
-            <ul className="flex flex-col gap-3 pt-2">
+            <ul className="flex flex-col gap-4 pt-2">
               {optionsArray.fields.map((option, optionIndex) => (
                 <li key={option.id}>
                   <Controller
@@ -301,7 +301,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               ))}
             </ul>
             <Button
-              className="mt-3 w-full"
+              className="mt-4 w-full"
               colorScheme="transparent"
               onClick={() =>
                 optionsArray.append({

@@ -4,12 +4,11 @@ import Header from '(components)/header';
 import IconButton from '(components)/icon-button';
 import LinkList from '(components)/link-list';
 import PollingRefresh from '(components)/polling-refresh';
-import createServerSupabaseClient from '(utilities)/create-server-supabase-client';
 import EventTypesEnum from '(utilities)/enum-event-types';
 import getCurrentTeamId from '(utilities)/get-current-team-id';
 import getSubject from '(utilities)/get-subject';
 import { PencilIcon } from '@heroicons/react/24/outline';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import EventTypes from './(components)/event-types';
 import Missions from './(components)/missions';
@@ -19,25 +18,11 @@ interface PageProps {
   params: {
     subjectId: string;
   };
-  searchParams?: {
-    share?: string;
-  };
 }
 
-const Page = async ({ params: { subjectId }, searchParams }: PageProps) => {
+const Page = async ({ params: { subjectId } }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
-
-  if (!subject) {
-    if (!searchParams?.share) notFound();
-
-    await createServerSupabaseClient().rpc('join_subject_as_manager', {
-      share_code: searchParams.share,
-    });
-
-    // todo: when redirecting to the subject page works, do it
-    redirect(`/subjects`);
-  }
-
+  if (!subject) notFound();
   const currentTeamId = await getCurrentTeamId();
   const isTeamMember = subject.team_id === currentTeamId;
 
