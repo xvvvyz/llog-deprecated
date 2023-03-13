@@ -3,6 +3,7 @@ import LinkList from '(components)/link-list';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
 import forceArray from '(utilities)/force-array';
 import listInputs from '(utilities)/list-inputs';
+import InputListItemMenu from '../(components)/input-list-item-menu';
 
 const Page = async () => {
   const { data: inputs } = await listInputs();
@@ -16,6 +17,7 @@ const Page = async () => {
           href={`/inputs/${input.id}`}
           icon="edit"
           key={input.id}
+          menu={<InputListItemMenu inputId={input.id} />}
           pill={INPUT_LABELS[input.type]}
           text={input.label}
         />

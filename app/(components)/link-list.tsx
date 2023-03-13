@@ -28,6 +28,7 @@ interface ListItemProps {
   className?: string;
   href?: string;
   icon?: keyof typeof icons;
+  menu?: ReactNode;
   onClick?: () => void;
   pill?: ReactNode;
   rightHref?: string;
@@ -40,7 +41,7 @@ const LinkList = Object.assign(
   ({ children, className }: LinkListProps) => (
     <ul
       className={twMerge(
-        'divide-y divide-alpha-1 overflow-hidden rounded border border-alpha-1 bg-bg-2 empty:hidden',
+        'divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 empty:hidden',
         className
       )}
     >
@@ -54,6 +55,7 @@ const LinkList = Object.assign(
       className,
       href,
       icon = 'arrow',
+      menu,
       onClick,
       pill,
       rightHref,
@@ -61,7 +63,7 @@ const LinkList = Object.assign(
       rightLabel,
       text,
     }: ListItemProps) => (
-      <li className="flex">
+      <li className="group flex">
         <Button
           className={twMerge('m-0 w-full gap-4 py-3 px-4', className)}
           href={href}
@@ -92,12 +94,13 @@ const LinkList = Object.assign(
         </Button>
         {rightIcon && rightLabel && (
           <IconButton
-            className="m-0 shrink-0 border-0 border-l border-alpha-1 bg-alpha-reverse-1 px-4 hover:border-alpha-1"
+            className="m-0 shrink-0 border-0 border-l border-alpha-1 bg-alpha-reverse-1 px-4 hover:border-alpha-1 group-first:rounded-tr group-last:rounded-br"
             href={rightHref}
             icon={icons[rightIcon]}
             label={rightLabel}
           />
         )}
+        {menu && menu}
       </li>
     ),
   }

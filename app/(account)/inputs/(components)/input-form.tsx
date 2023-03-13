@@ -15,6 +15,7 @@ import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
+import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
 import { ListSubjectsData } from '(utilities)/list-subjects';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
@@ -23,7 +24,6 @@ import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
 const INPUT_TYPE_OPTIONS = [
-  // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
   { id: InputTypes.Select, label: INPUT_LABELS[InputTypes.Select] },
   { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
   { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
@@ -31,6 +31,7 @@ const INPUT_TYPE_OPTIONS = [
 ];
 
 interface InputFormProps {
+  duplicateInputData?: GetInputWithoutIdsData;
   input?: GetInputData;
   subjects?: ListSubjectsData;
 }
@@ -41,23 +42,24 @@ type InputFormValues = InputType & {
   type: { id: Database['public']['Enums']['input_type'] };
 };
 
-const InputForm = ({ input, subjects }: InputFormProps) => {
+const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
+  const initialInput = input ?? duplicateInputData;
   const updateGlobalValueCache = useUpdateGlobalValueCache();
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.InputForm,
     defaultValues: {
       id: input?.id,
-      label: input?.label ?? '',
-      options: forceArray(input?.options),
-      settings: input?.settings,
+      label: initialInput?.label ?? '',
+      options: forceArray(initialInput?.options),
+      settings: initialInput?.settings,
       subjects: forceArray(subjects).filter(({ id }) =>
-        forceArray(input?.subjects_for).some(
+        forceArray(initialInput?.subjects_for).some(
           ({ subject_id }) => subject_id === id
         )
       ),
-      type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
+      type: INPUT_TYPE_OPTIONS.find(({ id }) => id === initialInput?.type),
     },
   });
 

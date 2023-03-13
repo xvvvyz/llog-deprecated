@@ -6,11 +6,9 @@ import DirtyHtml from '(components)/dirty-html';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
-import usePrevious from '(utilities)/use-previous';
+import useDeleteAlert from '(utilities)/use-delete-alert';
 import { EllipsisHorizontalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import { useEffect, useTransition } from 'react';
-import { useBoolean } from 'usehooks-ts';
 
 interface EventCommentProps {
   content: string;
@@ -20,18 +18,8 @@ interface EventCommentProps {
 }
 
 const EventComment = ({ content, id, profile, userId }: EventCommentProps) => {
-  const [isTransitioning, startTransition] = useTransition();
-  const deleteAlert = useBoolean();
-  const isConfirming = useBoolean();
-  const isTransitioningPrevious = usePrevious(isTransitioning);
+  const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!isTransitioning && isTransitioningPrevious) {
-      deleteAlert.setFalse();
-      isConfirming.setFalse();
-    }
-  }, [deleteAlert, isConfirming, isTransitioning, isTransitioningPrevious]);
 
   return (
     <article className="flex gap-4" role="comment">

@@ -5,8 +5,23 @@ import formatTitle from '(utilities)/format-title';
 import listSubjectsByTeamId from '(utilities)/list-subjects-by-team-id';
 import InputForm from '../../(components)/input-form';
 
-const Page = async () => {
-  const { data: subjects } = await listSubjectsByTeamId();
+import getInputWithoutIds, {
+  GetInputWithoutIdsData,
+} from '(utilities)/get-input-without-ids';
+
+interface PageProps {
+  searchParams?: {
+    inputId?: string;
+  };
+}
+
+const Page = async ({ searchParams }: PageProps) => {
+  const [{ data: subjects }, { data: input }] = await Promise.all([
+    listSubjectsByTeamId(),
+    searchParams?.inputId
+      ? getInputWithoutIds(searchParams.inputId)
+      : Promise.resolve({ data: null }),
+  ]);
 
   return (
     <>
@@ -14,7 +29,10 @@ const Page = async () => {
         <BackButton href="/inputs" />
         <Breadcrumbs items={[['Inputs', '/inputs'], ['Add']]} />
       </Header>
-      <InputForm subjects={subjects} />
+      <InputForm
+        duplicateInputData={input as GetInputWithoutIdsData}
+        subjects={subjects}
+      />
     </>
   );
 };
