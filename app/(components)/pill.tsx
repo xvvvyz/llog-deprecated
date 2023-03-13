@@ -10,7 +10,7 @@ interface PillProps {
 const Pill = ({ children, className }: PillProps) => (
   <span
     className={twMerge(
-      'min-w-[2rem] rounded-sm bg-alpha-1 px-2 text-center leading-snug text-fg-3',
+      'min-w-[2rem] shrink-0 whitespace-nowrap rounded-sm bg-alpha-1 px-2 text-center leading-snug text-fg-3',
       className
     )}
   >

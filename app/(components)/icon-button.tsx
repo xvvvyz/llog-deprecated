@@ -17,7 +17,7 @@ const IconButton = ({
   loading ? (
     <Spinner loadingText={loadingText} />
   ) : (
-    <Button type="submit" variant="link" {...props}>
+    <Button variant="link" {...props}>
       {icon}
       <span className="sr-only">{label}</span>
     </Button>

@@ -29,19 +29,27 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   return (
     <>
       <PollingRefresh />
-      <Header className="flex justify-between">
+      <Header className="flex justify-between gap-8">
         <BackButton href="/subjects" />
-        {!isTeamMember && <h1 className="truncate text-2xl">{subject.name}</h1>}
-        <div className="flex items-center justify-center gap-4">
-          <Avatar file={subject.image_uri} name={subject.name} />
-          {isTeamMember && <h1 className="truncate">{subject.name}</h1>}
-        </div>
-        {isTeamMember && (
-          <IconButton
-            href={`/subjects/${subject.id}/settings`}
-            icon={<PencilIcon className="relative -right-[0.15em] w-7 p-0.5" />}
-            label="Edit"
-          />
+        {isTeamMember ? (
+          <>
+            <div className="flex items-center justify-center gap-4 overflow-hidden">
+              <Avatar file={subject.image_uri} name={subject.name} />
+              <h1 className="truncate">{subject.name}</h1>
+            </div>
+            <IconButton
+              href={`/subjects/${subject.id}/settings`}
+              icon={
+                <PencilIcon className="relative -right-[0.15em] w-7 p-0.5" />
+              }
+              label="Edit"
+            />
+          </>
+        ) : (
+          <>
+            <h1 className="truncate text-2xl">{subject.name}</h1>
+            <Avatar file={subject.image_uri} name={subject.name} />
+          </>
         )}
       </Header>
       <LinkList>
