@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import globalValueCache from '(utilities)/global-value-cache';
@@ -39,26 +38,25 @@ const SignInForm = () => {
         }
       })}
     >
-      <Label>
-        <LabelSpan>Email address</LabelSpan>
-        <Input type="email" {...form.register('email')} />
-      </Label>
-      <Label>
-        <div className="flex justify-between">
-          <LabelSpan>Password</LabelSpan>
-          <Button
-            forwardSearchParams
-            href="/forgot-password"
-            onClick={() =>
-              globalValueCache.set(CacheKeys.SignInForm, form.getValues())
-            }
-            variant="link"
-          >
-            Forgot your password?
-          </Button>
-        </div>
-        <Input type="password" {...form.register('password')} />
-      </Label>
+      <Input label="Email address" type="email" {...form.register('email')} />
+      <div className="relative">
+        <Input
+          label="Password"
+          type="password"
+          {...form.register('password')}
+        />
+        <Button
+          className="absolute right-2 top-0"
+          forwardSearchParams
+          href="/forgot-password"
+          onClick={() =>
+            globalValueCache.set(CacheKeys.SignInForm, form.getValues())
+          }
+          variant="link"
+        >
+          Forgot your password?
+        </Button>
+      </div>
       <Button
         className="mt-8 w-full"
         loading={form.formState.isSubmitting || isTransitioning}

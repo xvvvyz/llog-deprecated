@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
@@ -14,7 +13,7 @@ import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import SessionsFormSection from './sessions-form-section';
 
 interface MissionFormProps {
@@ -237,14 +236,7 @@ const MissionForm = ({
         await redirect(`/subjects/${subjectId}`);
       })}
     >
-      <Label>
-        <LabelSpan>Name</LabelSpan>
-        <Controller
-          control={form.control}
-          name="name"
-          render={({ field }) => <Input {...field} />}
-        />
-      </Label>
+      <Input label="Name" {...form.register('name')} />
       <SessionsFormSection<MissionFormValues>
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}

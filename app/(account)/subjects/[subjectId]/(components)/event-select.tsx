@@ -26,6 +26,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
       isLoading={isCreating || isTransitioning}
       isMulti={input.type === 'multi_select'}
       isSearchable={input.settings?.isCreatable}
+      label={input.label}
       onCreateOption={async (value: string) => {
         const label = value.trim();
         if (!label) return;

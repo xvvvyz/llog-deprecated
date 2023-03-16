@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
@@ -53,23 +52,11 @@ const SignUpForm = () => {
       )}
     >
       <div className="flex gap-6">
-        <Label>
-          <LabelSpan>First name</LabelSpan>
-          <Input {...form.register('firstName')} />
-        </Label>
-        <Label>
-          <LabelSpan>Last name</LabelSpan>
-          <Input {...form.register('lastName')} />
-        </Label>
+        <Input label="First name" {...form.register('firstName')} />
+        <Input label="Last name" {...form.register('lastName')} />
       </div>
-      <Label>
-        <LabelSpan>Email address</LabelSpan>
-        <Input type="email" {...form.register('email')} />
-      </Label>
-      <Label>
-        <LabelSpan>Password</LabelSpan>
-        <Input type="password" {...form.register('password')} />
-      </Label>
+      <Input label="Email address" type="email" {...form.register('email')} />
+      <Input label="Password" type="password" {...form.register('password')} />
       <Button
         className="mt-8 w-full"
         loading={form.formState.isSubmitting || isTransitioning}

@@ -4,7 +4,6 @@ import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
 import IconButton from '(components)/icon-button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
@@ -27,6 +26,7 @@ const INPUT_TYPE_OPTIONS = [
   { id: InputTypes.Select, label: INPUT_LABELS[InputTypes.Select] },
   { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
   { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
+  // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
   { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
 ];
 
@@ -212,51 +212,44 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         }
       )}
     >
-      <Label>
-        <LabelSpan>Label</LabelSpan>
-        <Controller
-          control={form.control}
-          name="label"
-          render={({ field }) => <Input {...field} />}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>For</LabelSpan>
-        <Controller
-          control={form.control}
-          name="subjects"
-          render={({ field }) => (
-            <Select
-              hasAvatar
-              isMulti
-              noOptionsMessage={() => 'No subjects'}
-              options={forceArray(subjects)}
-              placeholder="All subjects"
-              {...field}
-            />
-          )}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Type</LabelSpan>
-        <Controller
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <Select
-              isClearable={false}
-              isSearchable={false}
-              options={INPUT_TYPE_OPTIONS}
-              {...field}
-            />
-          )}
-        />
-      </Label>
+      <Controller
+        control={form.control}
+        name="label"
+        render={({ field }) => <Input label="Label" {...field} />}
+      />
+      <Controller
+        control={form.control}
+        name="subjects"
+        render={({ field }) => (
+          <Select
+            hasAvatar
+            isMulti
+            label="For"
+            noOptionsMessage={() => 'No subjects'}
+            options={forceArray(subjects)}
+            placeholder="All subjects"
+            {...field}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+          <Select
+            isClearable={false}
+            isSearchable={false}
+            label="Type"
+            options={INPUT_TYPE_OPTIONS}
+            {...field}
+          />
+        )}
+      />
       {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
         <>
-          <fieldset>
-            <LabelSpan>Options</LabelSpan>
-            <ul className="flex flex-col gap-4 pt-2">
+          <fieldset className="group">
+            <span className="label">Options</span>
+            <ul className="flex flex-col gap-2">
               {optionsArray.fields.map((option, optionIndex) => (
                 <li key={option.id}>
                   <Controller
@@ -293,7 +286,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                             onClick={() => optionsArray.remove(optionIndex)}
                           />
                         }
-                        {...field}
+                        {...form.register(`options.${optionIndex}.label`)}
                       />
                     )}
                   />
@@ -301,7 +294,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               ))}
             </ul>
             <Button
-              className="mt-4 w-full"
+              className="mt-2 w-full"
               colorScheme="transparent"
               onClick={() =>
                 optionsArray.append({
@@ -316,14 +309,11 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               Add option
             </Button>
           </fieldset>
-          <Label className="mx-auto mt-2 flex-row-reverse items-start justify-end gap-2 text-fg-1">
-            <LabelSpan>Allow clients to add options</LabelSpan>
-            <Controller
-              control={form.control}
-              name="settings.isCreatable"
-              render={({ field }) => <Checkbox {...field} />}
-            />
-          </Label>
+          <Checkbox
+            className="justify-center"
+            label="Allow clients to add options"
+            {...form.register('settings.isCreatable')}
+          />
         </>
       )}
       <Button

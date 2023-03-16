@@ -6,17 +6,17 @@
   :root {
     --color-accent-1: hsl(45, 96%, 45%);
     --color-accent-2: hsl(45, 96%, 60%);
-    --color-alpha-1: hsla(45, 6%, 95%, 6%);
-    --color-alpha-2: hsla(45, 6%, 95%, 10%);
-    --color-alpha-3: hsla(45, 6%, 95%, 14%);
-    --color-alpha-4: hsla(45, 6%, 95%, 18%);
-    --color-alpha-reverse-1: hsla(45, 6%, 5%, 22%);
+    --color-alpha-1: hsla(45, 6%, 95%, 7%);
+    --color-alpha-2: hsla(45, 6%, 95%, 11%);
+    --color-alpha-3: hsla(45, 6%, 95%, 15%);
+    --color-alpha-4: hsla(45, 6%, 95%, 19%);
+    --color-alpha-reverse-1: hsla(45, 6%, 5%, 25%);
     --color-alpha-reverse-2: hsla(45, 6%, 5%, 50%);
     --color-bg-1: hsl(45, 6%, 8%);
     --color-bg-2: hsl(45, 6%, 12%);
     --color-fg-1: hsl(45, 6%, 95%, 95%);
     --color-fg-2: hsl(45, 6%, 95%, 70%);
-    --color-fg-3: hsla(45, 6%, 95%, 49%);
+    --color-fg-3: hsla(45, 6%, 95%, 50%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
     --radius-default: 0.75rem;
@@ -36,6 +36,14 @@
   li > p:first-child {
     @apply inline;
   }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number'] {
+    @apply m-0;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: none;
+  }
 }
 
 @layer components {
@@ -44,6 +52,10 @@
 
     /* hack to override react-select min-height */
     min-height: auto !important;
+  }
+
+  .label {
+    @apply block px-2 pb-1 text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
   }
 }
 

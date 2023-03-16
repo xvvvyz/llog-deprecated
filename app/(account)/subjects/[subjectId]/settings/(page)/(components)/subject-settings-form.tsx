@@ -1,7 +1,6 @@
 'use client';
 
 import Button from '(components)/button';
-import { LabelSpan } from '(components)/label';
 import LinkList from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
@@ -112,11 +111,11 @@ const SubjectSettingsForm = ({
         Save subject
       </Button>
       <section className="mt-2">
-        <LabelSpan className="text-xl text-fg-1">Missions</LabelSpan>
-        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
+        <h1 className="px-2 text-xl text-fg-1">Missions</h1>
+        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
           Missions are a sequence of routines that form a long-term
           modification&nbsp;plan.
-        </LabelSpan>
+        </p>
         {!!missions.length && (
           <LinkList className="mt-4">
             {missions.map((mission) => (
@@ -142,11 +141,11 @@ const SubjectSettingsForm = ({
         </Button>
       </section>
       <section className="mt-2">
-        <LabelSpan className="text-xl text-fg-1">Routines</LabelSpan>
-        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
+        <h1 className="px-2 text-xl text-fg-1">Routines</h1>
+        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
           Routines are a sequence of actions that can be performed
           at&nbsp;any&nbsp;time.
-        </LabelSpan>
+        </p>
         {!!routines.length && (
           <LinkList className="mt-4">
             {routines.map((routine) => (
@@ -211,11 +210,11 @@ const SubjectSettingsForm = ({
         />
       </section>
       <section className="mt-2">
-        <LabelSpan className="text-xl text-fg-1">Observations</LabelSpan>
-        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
+        <h1 className="px-2 text-xl text-fg-1">Observations</h1>
+        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
           Observations allow you to track events or behaviors that occur
           over&nbsp;time.
-        </LabelSpan>
+        </p>
         {!!observations.length && (
           <LinkList className="mt-4">
             {observations.map((observation) => (
@@ -280,11 +279,11 @@ const SubjectSettingsForm = ({
         />
       </section>
       <section className="mt-2">
-        <LabelSpan className="text-xl text-fg-1">Clients</LabelSpan>
-        <LabelSpan className="mt-2 max-w-xs leading-tight text-fg-3">
+        <h1 className="px-2 text-xl text-fg-1">Clients</h1>
+        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
           Clients can complete routines, make observations and
           add&nbsp;comments.
-        </LabelSpan>
+        </p>
         {!!managers.length && (
           <LinkList className="mt-4">
             {managers.map((manager) => (

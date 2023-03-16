@@ -3,7 +3,7 @@
 import forceArray from '(utilities)/force-array';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
 import Spinner from './spinner';
@@ -59,7 +59,7 @@ const Control = <TOption extends IOption>({
   return (
     <components.Control
       className={twMerge(
-        'input group p-1',
+        'input p-1 group-hover:bg-alpha-2',
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
@@ -230,14 +230,17 @@ const Select = <TOption extends IOption>(
     isCreatable,
     isDisabled,
     isLoading,
+    label,
+    name,
     placeholder,
     ...props
   }: ReactSelectProps<TOption> &
     CreatableProps<IOption, boolean, GroupBase<IOption>> & {
       hasAvatar?: boolean;
       isCreatable?: boolean;
+      label?: string;
     },
-  ref: ForwardedRef<SelectInstance<IOption, boolean, GroupBase<IOption>>>
+  ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>
 ) => {
   const commonProps = {
     closeMenuOnSelect: !props.isMulti,
@@ -259,20 +262,26 @@ const Select = <TOption extends IOption>(
     },
     getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
     getOptionValue: (option: IOption) => option.id,
-    instanceId: instanceId ?? props.name,
+    instanceId: instanceId ?? name,
     isClearable: true,
     isDisabled: isDisabled || isLoading,
     isLoading,
+    name,
     noOptionsMessage: () => `No options${isCreatable ? '—type to create' : ''}`,
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,
     ...props,
   };
 
-  return isCreatable ? (
-    <Creatable ref={ref} {...commonProps} />
-  ) : (
-    <ReactSelect ref={ref} {...commonProps} />
+  return (
+    <label className="group">
+      {label && <span className="label">{label}</span>}
+      {isCreatable ? (
+        <Creatable ref={ref} {...commonProps} />
+      ) : (
+        <ReactSelect ref={ref} {...commonProps} />
+      )}
+    </label>
   );
 };
 

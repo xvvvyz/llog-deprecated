@@ -26,10 +26,10 @@ import {
 
 import {
   ChangeEvent,
-  ForwardedRef,
   forwardRef,
   MutableRefObject,
   ReactNode,
+  Ref,
   TextareaHTMLAttributes,
   useEffect,
   useImperativeHandle,
@@ -41,17 +41,19 @@ const RichTextarea = (
     'aria-label': ariaLabel,
     className,
     name,
+    label,
     onChange,
     onEnter,
     placeholder,
     right,
     value,
   }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
+    label?: string;
     onEnter?: () => void;
     right?: ReactNode;
     value?: string | null;
   },
-  ref: ForwardedRef<{ focus: () => void }>
+  ref: Ref<{ focus: () => void }>
 ) => {
   const editorRef: MutableRefObject<Editor | null> = useRef(null);
 
@@ -137,7 +139,12 @@ const RichTextarea = (
   }, [editor]);
 
   return (
-    <div className="relative">
+    <div className="group relative w-full">
+      {label && (
+        <label className="label" htmlFor={name}>
+          {label}
+        </label>
+      )}
       {editor ? (
         <EditorContent editor={editor} name={name} />
       ) : (

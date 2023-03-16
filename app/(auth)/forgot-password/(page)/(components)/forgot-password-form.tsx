@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import globalValueCache from '(utilities)/global-value-cache';
@@ -30,10 +29,12 @@ const ForgotPasswordForm = () => {
         else setLinkSent(true);
       })}
     >
-      <Label>
-        <LabelSpan>Email address</LabelSpan>
-        <Input disabled={linkSent} type="email" {...form.register('email')} />
-      </Label>
+      <Input
+        disabled={linkSent}
+        label="Email address"
+        type="email"
+        {...form.register('email')}
+      />
       <Button
         className="mt-8 w-full"
         disabled={linkSent}

@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
@@ -34,7 +33,7 @@ interface EventTypeFormProps {
 }
 
 type EventTypeFormValues =
-  Database['public']['Tables']['event_types']['Insert'] & {
+  Database['public']['Tables']['event_types']['Row'] & {
     inputs: Database['public']['Tables']['inputs']['Row'][];
   };
 
@@ -125,54 +124,42 @@ const EventTypeForm = ({
         }
       )}
     >
-      <Label>
-        <LabelSpan>Name</LabelSpan>
-        <Controller
-          control={form.control}
-          name="name"
-          render={({ field }) => <Input {...field} />}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Description</LabelSpan>
-        <Controller
-          control={form.control}
-          name="content"
-          render={({ field }) => <RichTextarea {...field} />}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Inputs</LabelSpan>
-        <Controller
-          control={form.control}
-          name="inputs"
-          render={({ field }) => (
-            <Select
-              isCreatable
-              isLoading={isTransitioning}
-              isMulti
-              onCreateOption={async (value: unknown) => {
-                globalValueCache.set(CacheKeys.InputForm, { label: value });
-                globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
+      <Input label="Name" {...form.register('name')} />
+      <Controller
+        control={form.control}
+        name="content"
+        render={({ field }) => <RichTextarea label="Description" {...field} />}
+      />
+      <Controller
+        control={form.control}
+        name="inputs"
+        render={({ field }) => (
+          <Select
+            isCreatable
+            isLoading={isTransitioning}
+            isMulti
+            label="Inputs"
+            onCreateOption={async (value: unknown) => {
+              globalValueCache.set(CacheKeys.InputForm, { label: value });
+              globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
 
-                startTransition(() =>
-                  router.push(
-                    formatCacheLink({
-                      backLink,
-                      path: '/inputs/add',
-                      updateCacheKey: CacheKeys.EventTypeForm,
-                      updateCachePath: 'inputs',
-                      useCache: true,
-                    })
-                  )
-                );
-              }}
-              options={forceArray(availableInputs)}
-              {...field}
-            />
-          )}
-        />
-      </Label>
+              startTransition(() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: '/inputs/add',
+                    updateCacheKey: CacheKeys.EventTypeForm,
+                    updateCachePath: 'inputs',
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            options={forceArray(availableInputs)}
+            {...field}
+          />
+        )}
+      />
       <div className="space-y-4">
         <Button
           className="mt-8 w-full"

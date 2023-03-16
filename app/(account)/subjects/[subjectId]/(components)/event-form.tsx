@@ -3,7 +3,7 @@
 import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
+import NumberInput from '(components)/input-number';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import forceArray from '(utilities)/force-array';
@@ -181,45 +181,35 @@ const EventForm = ({
       })}
     >
       {eventTypeInputs.map(({ input }, i) => (
-        <Label
-          className={twMerge(
-            input.type === 'checkbox' &&
-              'mt-2 flex-row-reverse items-start justify-end gap-2 text-fg-1 first-of-type:mt-0'
-          )}
+        <Controller
+          control={form.control}
           key={input.id}
-        >
-          <LabelSpan>{input.label}</LabelSpan>
-          <Controller
-            control={form.control}
-            name={`inputs.${i}`}
-            render={({ field }) => {
-              switch (input.type) {
-                case 'checkbox': {
-                  return <Checkbox {...field} />;
-                }
-
-                case 'duration': {
-                  return (
-                    <Input className="" min={0} type="number" {...field} />
-                  );
-                }
-
-                case 'multi_select':
-                case 'select': {
-                  return <EventSelect field={field} input={input} />;
-                }
-
-                case 'number': {
-                  return <Input min={0} type="number" {...field} />;
-                }
-
-                default: {
-                  return <Input {...field} />;
-                }
+          name={`inputs.${i}`}
+          render={({ field }) => {
+            switch (input.type) {
+              case 'checkbox': {
+                return <Checkbox label={input.label} {...field} />;
               }
-            }}
-          />
-        </Label>
+
+              case 'duration': {
+                return <NumberInput label={input.label} {...field} />;
+              }
+
+              case 'multi_select':
+              case 'select': {
+                return <EventSelect field={field} input={input} />;
+              }
+
+              case 'number': {
+                return <NumberInput label={input.label} {...field} />;
+              }
+
+              default: {
+                return <Input label={input.label} {...field} />;
+              }
+            }
+          }}
+        />
       ))}
       <Button
         className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}

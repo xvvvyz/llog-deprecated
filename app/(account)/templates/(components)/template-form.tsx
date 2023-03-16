@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database, Json } from '(types)/database';
@@ -88,78 +87,64 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         }
       )}
     >
-      <Label>
-        <LabelSpan>Type</LabelSpan>
-        <Controller
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <Select
-              isClearable={false}
-              isSearchable={false}
-              options={[
-                {
-                  id: TemplateTypes.Observation,
-                  label: TEMPLATE_TYPE_LABELS[TemplateTypes.Observation],
-                },
-                {
-                  id: TemplateTypes.Routine,
-                  label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
-                },
-              ]}
-              {...field}
-            />
-          )}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Name</LabelSpan>
-        <Controller
-          control={form.control}
-          name="name"
-          render={({ field }) => <Input {...field} />}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Description</LabelSpan>
-        <Controller
-          control={form.control}
-          name="content"
-          render={({ field }) => <RichTextarea {...field} />}
-        />
-      </Label>
-      <Label>
-        <LabelSpan>Inputs</LabelSpan>
-        <Controller
-          control={form.control}
-          name="inputs"
-          render={({ field }) => (
-            <Select
-              isCreatable
-              isLoading={isTransitioning}
-              isMulti
-              onCreateOption={async (value: unknown) => {
-                globalValueCache.set(CacheKeys.InputForm, { label: value });
-                globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
+      <Controller
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+          <Select
+            isClearable={false}
+            isSearchable={false}
+            label="Type"
+            options={[
+              {
+                id: TemplateTypes.Observation,
+                label: TEMPLATE_TYPE_LABELS[TemplateTypes.Observation],
+              },
+              {
+                id: TemplateTypes.Routine,
+                label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
+              },
+            ]}
+            {...field}
+          />
+        )}
+      />
+      <Input label="Name" {...form.register('name')} />
+      <Controller
+        control={form.control}
+        name="content"
+        render={({ field }) => <RichTextarea label="Description" {...field} />}
+      />
+      <Controller
+        control={form.control}
+        name="inputs"
+        render={({ field }) => (
+          <Select
+            isCreatable
+            isLoading={isTransitioning}
+            isMulti
+            label="Inputs"
+            onCreateOption={async (value: unknown) => {
+              globalValueCache.set(CacheKeys.InputForm, { label: value });
+              globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
 
-                startTransition(() =>
-                  router.push(
-                    formatCacheLink({
-                      backLink,
-                      path: '/inputs/add',
-                      updateCacheKey: CacheKeys.TemplateForm,
-                      updateCachePath: 'inputs',
-                      useCache: true,
-                    })
-                  )
-                );
-              }}
-              options={forceArray(availableInputs)}
-              {...field}
-            />
-          )}
-        />
-      </Label>
+              startTransition(() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: '/inputs/add',
+                    updateCacheKey: CacheKeys.TemplateForm,
+                    updateCachePath: 'inputs',
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            options={forceArray(availableInputs)}
+            {...field}
+          />
+        )}
+      />
       <Button
         className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}

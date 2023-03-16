@@ -4,7 +4,7 @@ import Spinner from './spinner';
 
 interface IconButtonProps extends ButtonProps {
   icon: ReactNode;
-  label: string;
+  label?: string;
 }
 
 const IconButton = ({
@@ -19,7 +19,7 @@ const IconButton = ({
   ) : (
     <Button variant="link" {...props}>
       {icon}
-      <span className="sr-only">{label}</span>
+      {label && <span className="sr-only">{label}</span>}
     </Button>
   );
 

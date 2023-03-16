@@ -1,5 +1,4 @@
 import Alert from '(components)/alert';
-import { LabelSpan } from '(components)/label';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import EventTypes from '(utilities)/enum-event-types';
@@ -51,7 +50,7 @@ const SessionFormSection = <T extends FieldValues>({
         onConfirm={() => sessionArray.remove(sessionIndex)}
         {...deleteAlert}
       />
-      <LabelSpan className="mt-2 flex max-w-none items-end justify-between pb-2">
+      <div className="mt-2 flex max-w-none items-end justify-between px-2 pb-2">
         <span className="text-xl text-fg-1">Session {sessionIndex + 1}</span>
         <Menu className="-m-3 p-3">
           <Menu.Button className="relative right-0.5 -m-3 p-3">
@@ -93,7 +92,7 @@ const SessionFormSection = <T extends FieldValues>({
             </Menu.Item>
           </Menu.Items>
         </Menu>
-      </LabelSpan>
+      </div>
       <RoutinesFormSection<T>
         form={form}
         inputOptions={forceArray(availableInputs)}

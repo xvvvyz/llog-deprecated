@@ -1,8 +1,7 @@
 import AvatarDropzone from '(components)/avatar-dropzone';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import { DropzoneState } from 'react-dropzone';
-import { Controller, FieldValues, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 interface SubjectDetailsFormSectionProps<T extends FieldValues> {
   dropzone: DropzoneState;
@@ -14,18 +13,11 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
   form,
 }: SubjectDetailsFormSectionProps<T>) => (
   <>
-    <Label>
-      <LabelSpan>Name</LabelSpan>
-      <Controller
-        control={form.control}
-        name={'name' as T[string]}
-        render={({ field }) => <Input {...field} />}
-      />
-    </Label>
-    <Label>
-      <LabelSpan>Profile image</LabelSpan>
+    <Input label="Name" {...form.register('name' as T[string])} />
+    <label className="group">
+      <span className="label">Profile image</span>
       <AvatarDropzone dropzone={dropzone} form={form} />
-    </Label>
+    </label>
   </>
 );
 

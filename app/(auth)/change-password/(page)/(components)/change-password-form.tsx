@@ -2,7 +2,6 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import Label, { LabelSpan } from '(components)/label';
 import supabase from '(utilities)/browser-supabase-client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -26,10 +25,11 @@ const ChangePasswordForm = () => {
         }
       })}
     >
-      <Label>
-        <LabelSpan>New password</LabelSpan>
-        <Input type="password" {...form.register('password')} />
-      </Label>
+      <Input
+        label="New password"
+        type="password"
+        {...form.register('password')}
+      />
       <Button
         className="mt-8 w-full"
         loading={form.formState.isSubmitting || isTransitioning}
