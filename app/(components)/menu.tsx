@@ -24,7 +24,7 @@ const Menu = Object.assign(
         {({ active }) => (
           <Button
             className={twMerge(
-              'w-full justify-start gap-4 rounded-none border-t-0 first:rounded-t first:border-t last:rounded-b hover:border-alpha-1',
+              'w-full justify-start gap-4 rounded-none border-t-0 ring-transparent ring-offset-0 first:rounded-t first:border-t last:rounded-b hover:border-alpha-1',
               active && 'bg-alpha-4 text-fg-1',
               className
             )}

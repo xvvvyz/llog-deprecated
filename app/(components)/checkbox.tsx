@@ -14,7 +14,7 @@ const Checkbox = forwardRef(
   ) => (
     <label
       className={twMerge(
-        'input group mt-3 flex select-none gap-4 py-4',
+        'input group flex select-none gap-4 border-0 py-4',
         className
       )}
     >

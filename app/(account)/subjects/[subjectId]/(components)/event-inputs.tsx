@@ -21,7 +21,7 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
 
   return (
     <div className={className}>
-      <table className="w-full border-b border-alpha-1 text-fg-3">
+      <table className="w-full table-fixed border-b border-alpha-1 text-fg-3">
         <tbody>
           {Object.entries(
             inputs.reduce((acc, { input, option, value }) => {
@@ -34,10 +34,10 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
             }, {} as Record<string, { label: string; type: InputTypes; values: string[] }>)
           ).map(([id, { label, type, values }]) => (
             <tr key={id}>
-              <td className="border-t border-alpha-1 px-4 py-2 align-top">
+              <td className="truncate border-t border-alpha-1 px-4 py-2 align-top">
                 {label}
               </td>
-              <td className="border-t border-l border-alpha-1 py-2 px-4 align-top">
+              <td className="truncate border-t border-l border-alpha-1 py-2 px-4 align-top text-fg-2">
                 {formatInputValue[type](values)}
               </td>
             </tr>

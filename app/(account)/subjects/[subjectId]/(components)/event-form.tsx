@@ -186,13 +186,15 @@ const EventForm = ({
           key={input.id}
           name={`inputs.${i}`}
           render={({ field }) => {
+            const id = `${eventType.id}-inputs-${i}`;
+
             switch (input.type) {
               case 'checkbox': {
                 return <Checkbox label={input.label} {...field} />;
               }
 
               case 'duration': {
-                return <NumberInput label={input.label} {...field} />;
+                return <NumberInput id={id} label={input.label} {...field} />;
               }
 
               case 'multi_select':
@@ -201,7 +203,7 @@ const EventForm = ({
               }
 
               case 'number': {
-                return <NumberInput label={input.label} {...field} />;
+                return <NumberInput id={id} label={input.label} {...field} />;
               }
 
               default: {

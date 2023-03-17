@@ -42,7 +42,9 @@ const EventCard = ({
       />
     )}
     {!!eventType.content && (
-      <DirtyHtml className="sm:px-8">{eventType.content}</DirtyHtml>
+      <DirtyHtml className="border-b border-alpha-1 pb-8 sm:px-8">
+        {eventType.content}
+      </DirtyHtml>
     )}
     <EventForm
       event={event}
@@ -51,7 +53,7 @@ const EventCard = ({
       subjectId={subjectId}
     />
     {event && (
-      <div className="space-y-6 border-t border-alpha-1 pt-8 sm:px-8">
+      <div className="space-y-8 border-t border-alpha-1 pt-8 sm:px-8">
         <EventComments comments={forceArray(event.comments)} userId={userId} />
         <EventCommentForm eventId={event.id} />
       </div>

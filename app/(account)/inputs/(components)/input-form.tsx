@@ -284,6 +284,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                             icon={<XMarkIcon className="w-5" />}
                             label="Delete options"
                             onClick={() => optionsArray.remove(optionIndex)}
+                            tabIndex={-1}
                           />
                         }
                         {...form.register(`options.${optionIndex}.label`)}

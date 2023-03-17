@@ -5,8 +5,8 @@ import { InputHTMLAttributes, ReactNode, Ref, forwardRef } from 'react';
 import IconButton from './icon-button';
 import Input from './input';
 
-interface NumberInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
+interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  id: string;
   label?: string;
   right?: ReactNode;
   value?: string;
@@ -14,13 +14,10 @@ interface NumberInputProps
 
 const NumberInput = forwardRef(
   (
-    { label, name, value, ...rest }: NumberInputProps,
+    { id, label, value, ...rest }: NumberInputProps,
     ref: Ref<HTMLInputElement>
   ) => {
-    const [state, send] = useMachine(
-      numberInput.machine({ id: name ?? '', value })
-    );
-
+    const [state, send] = useMachine(numberInput.machine({ id, value }));
     const api = numberInput.connect(state, send, normalizeProps);
 
     return (
