@@ -203,7 +203,14 @@ const EventForm = ({
               }
 
               case 'number': {
-                return <NumberInput id={id} label={input.label} {...field} />;
+                return (
+                  <NumberInput
+                    id={id}
+                    label={input.label}
+                    {...input.settings}
+                    {...field}
+                  />
+                );
               }
 
               default: {

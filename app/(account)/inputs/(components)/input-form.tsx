@@ -4,6 +4,7 @@ import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
 import IconButton from '(components)/icon-button';
 import Input from '(components)/input';
+import NumberInput from '(components)/input-number';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
@@ -16,6 +17,7 @@ import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
 import { ListSubjectsData } from '(utilities)/list-subjects';
+import usePrevious from '(utilities)/use-previous';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -71,18 +73,41 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   });
 
   const id = form.watch('id');
+  const maxFractionDigits = form.watch('settings.maxFractionDigits');
+  const minFractionDigits = form.watch('settings.minFractionDigits');
   const type = form.watch('type')?.id;
+  const previousType = usePrevious(type);
 
   useEffect(() => {
     if (
-      optionsArray.fields.length > 0 ||
-      (type !== InputTypes.Select && type !== InputTypes.MultiSelect)
+      optionsArray.fields.length === 0 &&
+      (type === InputTypes.Select || type === InputTypes.MultiSelect)
     ) {
-      return;
+      optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
     }
-
-    optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
   }, [id, optionsArray, type]);
+
+  useEffect(() => {
+    if (!previousType || type === previousType) return;
+    form.setValue('settings', null);
+
+    switch (type) {
+      case InputTypes.Number: {
+        form.setValue('settings', {
+          max: '100',
+          maxFractionDigits: '0',
+          min: '0',
+          minFractionDigits: '0',
+        });
+
+        return;
+      }
+
+      default: {
+        // noop
+      }
+    }
+  }, [form, previousType, type]);
 
   return (
     <form
@@ -212,11 +237,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         }
       )}
     >
-      <Controller
-        control={form.control}
-        name="label"
-        render={({ field }) => <Input label="Label" {...field} />}
-      />
+      <Input label="Label" {...form.register('label')} />
       <Controller
         control={form.control}
         name="subjects"
@@ -311,10 +332,48 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             </Button>
           </fieldset>
           <Checkbox
-            className="justify-center"
+            className="mt-2 justify-center"
             label="Allow clients to add options"
             {...form.register('settings.isCreatable')}
           />
+        </>
+      )}
+      {type === InputTypes.Number && (
+        <>
+          <fieldset className="flex gap-6">
+            <NumberInput
+              id="settings-min-fraction-digits"
+              label="Min fraction digits"
+              max={maxFractionDigits}
+              min={0}
+              {...form.register('settings.minFractionDigits')}
+            />
+            <NumberInput
+              id="settings-max-fraction-digits"
+              label="Max fraction digits"
+              max={6}
+              min={minFractionDigits ?? 0}
+              {...form.register('settings.maxFractionDigits')}
+            />
+          </fieldset>
+          <fieldset className="flex gap-6">
+            <NumberInput
+              id="settings-min"
+              label="Min value"
+              max={form.watch('settings.max')}
+              maxFractionDigits={maxFractionDigits}
+              minFractionDigits={minFractionDigits}
+              {...form.register('settings.min')}
+            />
+            <NumberInput
+              id="settings-max"
+              label="Max value"
+              maxFractionDigits={maxFractionDigits}
+              min={form.watch('settings.min')}
+              minFractionDigits={minFractionDigits}
+              {...form.register('settings.max')}
+            />
+          </fieldset>
         </>
       )}
       <Button

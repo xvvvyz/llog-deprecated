@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import * as numberInput from '@zag-js/number-input';
-import { normalizeProps, useMachine } from '@zag-js/react';
+import { mergeProps, normalizeProps, useMachine } from '@zag-js/react';
 import { InputHTMLAttributes, ReactNode, Ref, forwardRef } from 'react';
 import IconButton from './icon-button';
 import Input from './input';
@@ -8,45 +8,78 @@ import Input from './input';
 interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label?: string;
+  max?: number | string;
+  maxFractionDigits?: number | string;
+  min?: number | string;
+  minFractionDigits?: number | string;
+  name: string;
   right?: ReactNode;
   value?: string;
 }
 
 const NumberInput = forwardRef(
   (
-    { id, label, value, ...rest }: NumberInputProps,
+    {
+      id,
+      label,
+      max = Number.MAX_SAFE_INTEGER,
+      maxFractionDigits = 0,
+      min = Number.MIN_SAFE_INTEGER,
+      minFractionDigits = 0,
+      name,
+      onBlur,
+      onChange,
+      placeholder,
+      value,
+    }: NumberInputProps,
     ref: Ref<HTMLInputElement>
   ) => {
-    const [state, send] = useMachine(numberInput.machine({ id, value }));
+    const [state, send] = useMachine(
+      numberInput.machine({
+        id,
+        name,
+        value,
+      }),
+      {
+        context: {
+          focusInputOnChange: false,
+          max: Number(max),
+          maxFractionDigits: Number(maxFractionDigits),
+          min: Number(min),
+          minFractionDigits: Number(minFractionDigits),
+        },
+      }
+    );
+
     const api = numberInput.connect(state, send, normalizeProps);
 
     return (
-      <div className="group" {...api.rootProps}>
+      <div {...api.rootProps} className="group">
         {label && (
-          <label className="label" {...api.labelProps}>
+          <label {...api.labelProps} className="label">
             {label}
           </label>
         )}
         <div className="flex">
           <IconButton
+            {...api.decrementTriggerProps}
             className="rounded-r-none"
             colorScheme="transparent"
             icon={<MinusIcon className="w-5" />}
             variant="primary"
-            {...api.decrementTriggerProps}
           />
           <Input
+            {...mergeProps(api.inputProps, { onBlur, onChange })}
             className="rounded-none border-x-0 text-center"
-            {...api.inputProps}
-            {...rest}
+            placeholder={placeholder}
             ref={ref}
           />
           <IconButton
+            {...api.incrementTriggerProps}
             className="rounded-l-none"
             colorScheme="transparent"
             icon={<PlusIcon className="w-5" />}
             variant="primary"
-            {...api.incrementTriggerProps}
           />
         </div>
       </div>

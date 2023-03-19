@@ -13,10 +13,7 @@ const Checkbox = forwardRef(
     ref: Ref<HTMLInputElement>
   ) => (
     <label
-      className={twMerge(
-        'input group flex select-none gap-4 border-0 py-4',
-        className
-      )}
+      className={twMerge('input group flex select-none gap-4 py-4', className)}
     >
       <input
         className="peer absolute h-6 w-6 opacity-0"
