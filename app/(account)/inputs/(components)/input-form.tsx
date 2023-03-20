@@ -17,7 +17,6 @@ import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
 import { ListSubjectsData } from '(utilities)/list-subjects';
-import usePrevious from '(utilities)/use-previous';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -28,7 +27,7 @@ const INPUT_TYPE_OPTIONS = [
   { id: InputTypes.Select, label: INPUT_LABELS[InputTypes.Select] },
   { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
   { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
-  // { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
+  { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
   { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
 ];
 
@@ -76,7 +75,6 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const maxFractionDigits = form.watch('settings.maxFractionDigits');
   const minFractionDigits = form.watch('settings.minFractionDigits');
   const type = form.watch('type')?.id;
-  const previousType = usePrevious(type);
 
   useEffect(() => {
     if (
@@ -86,28 +84,6 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
     }
   }, [id, optionsArray, type]);
-
-  useEffect(() => {
-    if (!previousType || type === previousType) return;
-    form.setValue('settings', null);
-
-    switch (type) {
-      case InputTypes.Number: {
-        form.setValue('settings', {
-          max: '100',
-          maxFractionDigits: '0',
-          min: '0',
-          minFractionDigits: '0',
-        });
-
-        return;
-      }
-
-      default: {
-        // noop
-      }
-    }
-  }, [form, previousType, type]);
 
   return (
     <form
@@ -256,11 +232,32 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       <Controller
         control={form.control}
         name="type"
-        render={({ field }) => (
+        render={({ field: { onChange, ...field } }) => (
           <Select
             isClearable={false}
             isSearchable={false}
             label="Type"
+            onChange={(option) => {
+              onChange(option);
+              form.setValue('settings', null);
+
+              switch ((option as any)?.id) {
+                case InputTypes.Number: {
+                  form.setValue('settings', {
+                    max: '100',
+                    maxFractionDigits: '0',
+                    min: '0',
+                    minFractionDigits: '0',
+                  });
+
+                  return;
+                }
+
+                default: {
+                  // noop
+                }
+              }
+            }}
             options={INPUT_TYPE_OPTIONS}
             {...field}
           />

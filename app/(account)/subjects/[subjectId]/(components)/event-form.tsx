@@ -2,14 +2,16 @@
 
 import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
-import Input from '(components)/input';
 import NumberInput from '(components)/input-number';
+import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
+import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
+import parseSeconds from '(utilities)/parse-seconds';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
@@ -51,16 +53,26 @@ const EventForm = ({
         const eventInput = inputInputs[0];
 
         switch (input.type) {
-          case 'checkbox': {
+          case InputTypes.Checkbox: {
             return Boolean(eventInput?.value ?? false);
           }
 
-          case 'duration':
-          case 'number': {
+          case InputTypes.Duration: {
+            if (!eventInput?.value) return [];
+            const [hours, minutes, seconds] = parseSeconds(eventInput.value);
+
+            return [
+              { id: String(hours), label: `${hours}h` },
+              { id: String(minutes), label: `${minutes}m` },
+              { id: String(seconds), label: `${seconds}s` },
+            ];
+          }
+
+          case InputTypes.Number: {
             return eventInput?.value ?? '';
           }
 
-          case 'multi_select': {
+          case InputTypes.MultiSelect: {
             return input.options.filter(
               ({ id }: Database['public']['Tables']['input_options']['Row']) =>
                 inputInputs.some(
@@ -69,7 +81,7 @@ const EventForm = ({
             );
           }
 
-          case 'select': {
+          case InputTypes.Select: {
             return (
               input.options.find(
                 ({
@@ -118,7 +130,14 @@ const EventForm = ({
 
         const { insertedEventInputs } = inputs.reduce(
           (acc, input, i) => {
-            if (input === '' || input === null) return acc;
+            if (
+              input === '' ||
+              input === null ||
+              (Array.isArray(input) && !input.some((v) => v))
+            ) {
+              return acc;
+            }
+
             const eventTypeInput = eventTypeInputs[i].input;
 
             const payload: Database['public']['Tables']['event_inputs']['Insert'] =
@@ -130,15 +149,25 @@ const EventForm = ({
               };
 
             switch (eventTypeInput.type) {
-              case 'checkbox':
-              case 'duration':
-              case 'number': {
+              case InputTypes.Checkbox:
+              case InputTypes.Number: {
                 payload.value = input;
                 acc.insertedEventInputs.push(payload);
                 return acc;
               }
 
-              case 'multi_select': {
+              case InputTypes.Duration: {
+                payload.value = String(
+                  Number(input[0]?.id || 0) * 60 * 60 +
+                    Number(input[1]?.id || 0) * 60 +
+                    Number(input[2]?.id || 0)
+                );
+
+                acc.insertedEventInputs.push(payload);
+                return acc;
+              }
+
+              case InputTypes.MultiSelect: {
                 input.forEach(({ id }: { id: string }) =>
                   acc.insertedEventInputs.push({
                     ...payload,
@@ -149,7 +178,7 @@ const EventForm = ({
                 return acc;
               }
 
-              case 'select': {
+              case InputTypes.Select: {
                 payload.input_option_id = input.id;
                 acc.insertedEventInputs.push(payload);
                 return acc;
@@ -180,46 +209,95 @@ const EventForm = ({
         );
       })}
     >
-      {eventTypeInputs.map(({ input }, i) => (
-        <Controller
-          control={form.control}
-          key={input.id}
-          name={`inputs.${i}`}
-          render={({ field }) => {
-            const id = `${eventType.id}-inputs-${i}`;
+      {eventTypeInputs.map(({ input }, i) => {
+        const id = `${eventType.id}-inputs-${i}`;
 
-            switch (input.type) {
-              case 'checkbox': {
-                return <Checkbox label={input.label} {...field} />;
-              }
-
-              case 'duration': {
-                return <NumberInput id={id} label={input.label} {...field} />;
-              }
-
-              case 'multi_select':
-              case 'select': {
-                return <EventSelect field={field} input={input} />;
-              }
-
-              case 'number': {
-                return (
-                  <NumberInput
-                    id={id}
-                    label={input.label}
-                    {...input.settings}
-                    {...field}
+        return (
+          <div key={id}>
+            {input.type === InputTypes.Checkbox && (
+              <Checkbox label={input.label} {...form.register(`inputs.${i}`)} />
+            )}
+            {input.type === InputTypes.Duration && (
+              <fieldset className="group">
+                <legend
+                  className="label"
+                  onClick={() => form.setFocus(`inputs.${i}.0`)}
+                >
+                  {input.label}
+                </legend>
+                <div className="grid grid-cols-3">
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.0`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-r-none border-r-0"
+                        isClearable={false}
+                        options={Array.from({ length: 24 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}h`,
+                        }))}
+                        placeholder="Hours"
+                        {...field}
+                      />
+                    )}
                   />
-                );
-              }
-
-              default: {
-                return <Input label={input.label} {...field} />;
-              }
-            }
-          }}
-        />
-      ))}
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.1`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-none"
+                        isClearable={false}
+                        options={Array.from({ length: 60 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}m`,
+                        }))}
+                        placeholder="Minutes"
+                        {...field}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.2`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-l-none border-l-0"
+                        isClearable={false}
+                        options={Array.from({ length: 60 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}s`,
+                        }))}
+                        placeholder="Seconds"
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
+              </fieldset>
+            )}
+            {input.type === InputTypes.Number && (
+              <NumberInput
+                id={id}
+                label={input.label}
+                {...input.settings}
+                {...form.register(`inputs.${i}`)}
+              />
+            )}
+            {(input.type === InputTypes.MultiSelect ||
+              input.type === InputTypes.Select) && (
+              <Controller
+                control={form.control}
+                name={`inputs.${i}`}
+                render={({ field }) => (
+                  <EventSelect field={field} input={input} />
+                )}
+              />
+            )}
+          </div>
+        );
+      })}
       <Button
         className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
         colorScheme={event ? 'transparent' : 'accent'}
