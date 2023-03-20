@@ -36,14 +36,6 @@
   li > p:first-child {
     @apply inline;
   }
-
-  input[type='number']::-webkit-outer-spin-button,
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number'] {
-    @apply m-0;
-    -moz-appearance: textfield !important;
-    -webkit-appearance: none;
-  }
 }
 
 @layer components {

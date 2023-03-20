@@ -81,9 +81,18 @@ const DropdownIndicator = () => (
 
 const Input = <TOption extends IOption>({
   children,
+  selectProps,
   ...props
 }: InputProps<TOption>) => (
-  <components.Input className="m-1 pl-2" {...props}>
+  <components.Input
+    {...props}
+    className="m-1 pl-2"
+    formNoValidate={true}
+    inputMode={(selectProps as any).inputType === 'number' ? 'numeric' : 'text'}
+    pattern={(selectProps as any).inputType === 'number' ? '[0-9]*' : undefined}
+    selectProps={selectProps}
+    spellCheck={true}
+  >
     {children}
   </components.Input>
 );
@@ -237,6 +246,7 @@ const Select = <TOption extends IOption>(
   }: ReactSelectProps<TOption> &
     CreatableProps<IOption, boolean, GroupBase<IOption>> & {
       hasAvatar?: boolean;
+      inputType?: 'text' | 'number';
       isCreatable?: boolean;
       label?: string;
     },

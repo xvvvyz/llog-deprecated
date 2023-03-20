@@ -232,6 +232,7 @@ const EventForm = ({
                     render={({ field }) => (
                       <Select
                         className="rounded-r-none border-r-0"
+                        inputType="number"
                         isClearable={false}
                         options={Array.from({ length: 24 }, (_, i) => ({
                           id: String(i),
@@ -248,6 +249,7 @@ const EventForm = ({
                     render={({ field }) => (
                       <Select
                         className="rounded-none"
+                        inputType="number"
                         isClearable={false}
                         options={Array.from({ length: 60 }, (_, i) => ({
                           id: String(i),
@@ -264,6 +266,7 @@ const EventForm = ({
                     render={({ field }) => (
                       <Select
                         className="rounded-l-none border-l-0"
+                        inputType="number"
                         isClearable={false}
                         options={Array.from({ length: 60 }, (_, i) => ({
                           id: String(i),
