@@ -167,7 +167,7 @@ const EventTypeForm = ({
           loadingText="Saving…"
           type="submit"
         >
-          Save {defaultValues.type} type
+          Save {defaultValues.type}
         </Button>
         <Button
           className="w-full"
