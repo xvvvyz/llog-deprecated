@@ -66,7 +66,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const searchParams = useSearchParams();
 
     const cn = twMerge(
-      'outline-none border border-alpha-2 hover:border-alpha-3 inline-flex items-center gap-2 transition-colors',
+      'outline-none border border-alpha-1 inline-flex items-center gap-2 transition-colors',
       variant !== 'link' && sizes[size],
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],

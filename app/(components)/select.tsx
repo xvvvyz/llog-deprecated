@@ -63,7 +63,7 @@ const Control = <TOption extends IOption>({
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
-        selectProps.isDisabled && 'disabled',
+        selectProps.isDisabled && 'disabled group-hover:bg-alpha-1',
         selectProps.className
       )}
       menuIsOpen={menuIsOpen}
@@ -270,6 +270,7 @@ const Select = <TOption extends IOption>(
       Placeholder,
       SingleValue,
     },
+    formatCreateLabel: (value: string) => `Add "${value}"`,
     getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
     getOptionValue: (option: IOption) => option.id,
     instanceId: instanceId ?? name,

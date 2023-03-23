@@ -4,6 +4,7 @@ enum InputTypes {
   MultiSelect = 'multi_select',
   Number = 'number',
   Select = 'select',
+  Stopwatch = 'stopwatch',
 }
 
 export default InputTypes;

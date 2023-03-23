@@ -28,10 +28,13 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
               acc[input.id] = acc[input.id] ?? { values: [] };
               acc[input.id].label = input.label;
               acc[input.id].type = input.type;
-              const s = value ?? option?.label;
-              if (s) acc[input.id].values.push(s);
+
+              if (value || option?.label) {
+                acc[input.id].values.push({ label: option?.label, value });
+              }
+
               return acc;
-            }, {} as Record<string, { label: string; type: InputTypes; values: string[] }>)
+            }, {} as Record<string, { label: string; type: InputTypes; values: { label?: string; value?: string }[] }>)
           ).map(([id, { label, type, values }]) => (
             <tr key={id}>
               <td className="truncate border-t border-alpha-1 px-4 py-2 align-top">

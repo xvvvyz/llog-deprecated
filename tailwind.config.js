@@ -32,6 +32,7 @@ module.exports = {
     },
     fontFamily: {
       body: 'var(--font-body)',
+      mono: 'var(--font-mono)',
     },
     fontWeight: {
       bold: 'var(--font-weight-bold)',

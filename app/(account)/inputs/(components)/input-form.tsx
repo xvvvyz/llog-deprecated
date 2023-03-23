@@ -20,7 +20,6 @@ import { ListSubjectsData } from '(utilities)/list-subjects';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
 const INPUT_TYPE_OPTIONS = [
@@ -29,6 +28,7 @@ const INPUT_TYPE_OPTIONS = [
   { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
   { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
   { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
+  { id: InputTypes.Stopwatch, label: INPUT_LABELS[InputTypes.Stopwatch] },
 ];
 
 interface InputFormProps {
@@ -76,14 +76,10 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const minFractionDigits = form.watch('settings.minFractionDigits');
   const type = form.watch('type')?.id;
 
-  useEffect(() => {
-    if (
-      optionsArray.fields.length === 0 &&
-      (type === InputTypes.Select || type === InputTypes.MultiSelect)
-    ) {
-      optionsArray.append({ input_id: id ?? '', label: '', order: 0 });
-    }
-  }, [id, optionsArray, type]);
+  const hasOptions =
+    type === InputTypes.Select ||
+    type === InputTypes.MultiSelect ||
+    type === InputTypes.Stopwatch;
 
   return (
     <form
@@ -112,7 +108,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
 
           form.setValue('id', inputData.id);
 
-          if (type === InputTypes.Select || type === InputTypes.MultiSelect) {
+          if (hasOptions) {
             const { insertedOptions, updatedOptions } = options.reduce(
               (acc, option, order) => {
                 const payload: Database['public']['Tables']['input_options']['Insert'] =
@@ -263,74 +259,83 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
           />
         )}
       />
-      {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
+      {hasOptions && (
         <>
           <fieldset className="group">
-            <span className="label">Options</span>
-            <ul className="flex flex-col gap-2">
-              {optionsArray.fields.map((option, optionIndex) => (
-                <li key={option.id}>
-                  <Controller
-                    control={form.control}
-                    name={`options.${optionIndex}.label`}
-                    render={({ field }) => (
-                      <Input
-                        onKeyDown={(e) => {
-                          if (e.key === 'Backspace' && !field.value) {
-                            e.preventDefault();
-                            optionsArray.remove(optionIndex);
+            <span className="label">
+              {type === InputTypes.Stopwatch ? 'Timed notes' : 'Options'}
+            </span>
+            <div className="space-y-2">
+              {!!optionsArray.fields.length && (
+                <ul className="flex flex-col gap-2">
+                  {optionsArray.fields.map((option, optionIndex) => (
+                    <li key={option.id}>
+                      <Controller
+                        control={form.control}
+                        name={`options.${optionIndex}.label`}
+                        render={({ field }) => (
+                          <Input
+                            onKeyDown={(e) => {
+                              if (e.key === 'Backspace' && !field.value) {
+                                e.preventDefault();
+                                optionsArray.remove(optionIndex);
 
-                            form.setFocus(`options.${optionIndex - 1}.label`, {
-                              shouldSelect: true,
-                            });
-                          }
+                                form.setFocus(
+                                  `options.${optionIndex - 1}.label`,
+                                  {
+                                    shouldSelect: true,
+                                  }
+                                );
+                              }
 
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
 
-                            optionsArray.insert(optionIndex + 1, {
-                              input_id: id ?? '',
-                              label: '',
-                              order: optionIndex + 1,
-                            });
-                          }
-                        }}
-                        placeholder="Label"
-                        right={
-                          <IconButton
-                            className="m-0 h-full w-full justify-center p-0"
-                            icon={<XMarkIcon className="w-5" />}
-                            label="Delete options"
-                            onClick={() => optionsArray.remove(optionIndex)}
-                            tabIndex={-1}
+                                optionsArray.insert(optionIndex + 1, {
+                                  input_id: id ?? '',
+                                  label: '',
+                                  order: optionIndex + 1,
+                                });
+                              }
+                            }}
+                            placeholder="Label"
+                            right={
+                              <IconButton
+                                className="m-0 h-full w-full justify-center p-0"
+                                icon={<XMarkIcon className="w-5" />}
+                                label="Delete option"
+                                onClick={() => optionsArray.remove(optionIndex)}
+                                tabIndex={-1}
+                              />
+                            }
+                            {...field}
                           />
-                        }
-                        {...form.register(`options.${optionIndex}.label`)}
+                        )}
                       />
-                    )}
-                  />
-                </li>
-              ))}
-            </ul>
-            <Button
-              className="mt-2 w-full"
-              colorScheme="transparent"
-              onClick={() =>
-                optionsArray.append({
-                  input_id: id ?? '',
-                  label: '',
-                  order: optionsArray.fields.length,
-                })
-              }
-              type="button"
-            >
-              <PlusIcon className="w-5" />
-              Add option
-            </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <Button
+                className="w-full"
+                colorScheme="transparent"
+                onClick={() =>
+                  optionsArray.append({
+                    input_id: id ?? '',
+                    label: '',
+                    order: optionsArray.fields.length,
+                  })
+                }
+                type="button"
+              >
+                <PlusIcon className="w-5" />
+                Add option
+              </Button>
+            </div>
           </fieldset>
           <Checkbox
             className="mt-2 justify-center"
-            label="Allow clients to add options"
+            label="Allow options to be created"
             {...form.register('settings.isCreatable')}
           />
         </>

@@ -6,6 +6,7 @@ const INPUT_LABELS = {
   [InputTypes.MultiSelect]: 'Multi-select',
   [InputTypes.Number]: 'Number',
   [InputTypes.Select]: 'Select',
+  [InputTypes.Stopwatch]: 'Stopwatch',
 };
 
 export default INPUT_LABELS;

@@ -16,6 +16,7 @@ import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
+import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   event?: GetEventData | ListSessionRoutinesData['event'];
@@ -50,26 +51,26 @@ const EventForm = ({
           ({ input_id }) => input_id === input.id
         );
 
-        const eventInput = inputInputs[0];
-
         switch (input.type) {
           case InputTypes.Checkbox: {
-            return Boolean(eventInput?.value ?? false);
+            return Boolean(inputInputs[0]?.value ?? false);
           }
 
           case InputTypes.Duration: {
-            if (!eventInput?.value) return [];
-            const [hours, minutes, seconds] = parseSeconds(eventInput.value);
+            if (!inputInputs[0]?.value) return [];
+            const { hours, minutes, seconds } = parseSeconds(
+              inputInputs[0].value
+            );
 
             return [
-              { id: String(hours), label: `${hours}h` },
-              { id: String(minutes), label: `${minutes}m` },
-              { id: String(seconds), label: `${seconds}s` },
+              { id: String(hours), label: `${Number(hours)}h` },
+              { id: String(minutes), label: `${Number(minutes)}m` },
+              { id: String(seconds), label: `${Number(seconds)}s` },
             ];
           }
 
           case InputTypes.Number: {
-            return eventInput?.value ?? '';
+            return inputInputs[0]?.value ?? '';
           }
 
           case InputTypes.MultiSelect: {
@@ -87,9 +88,40 @@ const EventForm = ({
                 ({
                   id,
                 }: Database['public']['Tables']['input_options']['Row']) =>
-                  id === eventInput?.input_option_id
+                  id === inputInputs[0]?.input_option_id
               ) ?? null
             );
+          }
+
+          case InputTypes.Stopwatch: {
+            return {
+              notes: input.options.reduce(
+                (
+                  acc: any,
+                  {
+                    id,
+                    label,
+                  }: Database['public']['Tables']['input_options']['Row']
+                ) => {
+                  inputInputs.forEach(({ input_option_id, value }) => {
+                    if (input_option_id === id) {
+                      acc.push({
+                        id: input_option_id,
+                        label,
+                        time: value,
+                      });
+
+                      return;
+                    }
+                  });
+
+                  return acc;
+                },
+                []
+              ),
+              time: inputInputs.find(({ input_option_id }) => !input_option_id)
+                ?.value,
+            };
           }
         }
       }),
@@ -184,6 +216,26 @@ const EventForm = ({
                 return acc;
               }
 
+              case InputTypes.Stopwatch: {
+                input.notes.forEach(
+                  ({ id, time }: { id: string; time: string }) =>
+                    acc.insertedEventInputs.push({
+                      ...payload,
+                      input_option_id: id,
+                      value: time,
+                    })
+                );
+
+                if (Number(input.time)) {
+                  acc.insertedEventInputs.push({
+                    ...payload,
+                    value: input.time,
+                  });
+                }
+
+                return acc;
+              }
+
               default: {
                 return acc;
               }
@@ -218,13 +270,8 @@ const EventForm = ({
               <Checkbox label={input.label} {...form.register(`inputs.${i}`)} />
             )}
             {input.type === InputTypes.Duration && (
-              <fieldset className="group">
-                <legend
-                  className="label"
-                  onClick={() => form.setFocus(`inputs.${i}.0`)}
-                >
-                  {input.label}
-                </legend>
+              <fieldset>
+                <legend className="label">{input.label}</legend>
                 <div className="grid grid-cols-3">
                   <Controller
                     control={form.control}
@@ -296,6 +343,13 @@ const EventForm = ({
                 render={({ field }) => (
                   <EventSelect field={field} input={input} />
                 )}
+              />
+            )}
+            {input.type === InputTypes.Stopwatch && (
+              <EventStopwatch<EventFormValues>
+                form={form}
+                input={input}
+                inputIndex={i}
               />
             )}
           </div>
