@@ -141,7 +141,7 @@ const MultiValueLabel = ({ children, ...props }: MultiValueGenericProps) => (
       )}
       <span
         className={twMerge(
-          'truncate',
+          'whitespace-normal py-0.5 leading-snug',
           !(props.selectProps as any).hasAvatar && 'pl-2'
         )}
       >
@@ -183,7 +183,7 @@ const Option = <TOption extends IOption>({
   <components.Option {...props}>
     <div
       className={twMerge(
-        'flex items-center gap-4 px-4 py-2 text-fg-2 transition-colors hover:cursor-pointer',
+        'flex items-center gap-4 px-4 py-2 leading-snug text-fg-2 transition-colors hover:cursor-pointer',
         props.isFocused && 'bg-alpha-1 text-fg-1'
       )}
     >
@@ -194,7 +194,7 @@ const Option = <TOption extends IOption>({
           size="sm"
         />
       )}
-      <span className="truncate">{children}</span>
+      <span>{children}</span>
       {props.data.subjects && !!props.data.subjects.length && (
         <div className="mr-2 flex">
           {props.data.subjects.map(({ id, image_uri, name }) => (
