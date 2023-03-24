@@ -1,8 +1,4 @@
 import Button from '(components)/button';
-import Image from 'next/image';
-import PlanImage from '../../../public/images/plan.png';
-import ShareImage from '../../../public/images/share.png';
-import TrackImage from '../../../public/images/track.png';
 
 const Page = () => (
   <>
@@ -27,43 +23,26 @@ const Page = () => (
         </Button>
       </div>
       <div className="mx-auto h-24 w-px bg-alpha-2" />
-      <div className="mx-auto max-w-3xl space-y-12 px-6 py-24 text-2xl text-fg-3 xs:text-center">
-        <figure>
-          <figcaption className="mx-auto max-w-md">
-            <span className="text-fg-1">Plan.</span> Design comprehensive
-            behavior&nbsp;modification&nbsp;missions.
-          </figcaption>
-          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="718px" src={PlanImage} />
-          </div>
-        </figure>
-        <figure>
-          <figcaption className="mx-auto max-w-md">
-            <span className="text-fg-1">Share.</span> Delight clients with a
-            streamlined&nbsp;experience.
-          </figcaption>
-          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="718px" src={ShareImage} />
-          </div>
-        </figure>
-        <figure>
-          <figcaption className="mx-auto max-w-md">
-            <span className="text-fg-1">Track.</span> Create custom inputs &amp;
-            collaboratively&nbsp;record&nbsp;data.
-          </figcaption>
-          <div className="relative mt-4 aspect-video overflow-hidden rounded border border-alpha-1 bg-bg-2">
-            <Image alt="" quality={100} sizes="718px" src={TrackImage} />
-          </div>
-        </figure>
-        <figure>
-          <figcaption className="mx-auto max-w-md">
-            <span className="text-fg-1">Learn.</span> Validate hypotheses with
-            powerful&nbsp;data&nbsp;visualizations.
-          </figcaption>
-          <div className="mt-4 flex aspect-video items-center justify-center rounded border border-alpha-2 bg-bg-1 text-base">
-            Coming soon&hellip;
-          </div>
-        </figure>
+      <div className="mx-auto max-w-lg space-y-32 px-6 py-24 text-2xl text-fg-3 xs:text-center">
+        <p>
+          <span className="text-fg-1">Plan.</span> Design comprehensive
+          behavior&nbsp;modification&nbsp;missions.
+        </p>
+        <div className="mx-auto h-24 w-px bg-alpha-2" />
+        <p>
+          <span className="text-fg-1">Share.</span> Delight clients with a
+          streamlined&nbsp;experience.
+        </p>
+        <div className="mx-auto h-24 w-px bg-alpha-2" />
+        <p>
+          <span className="text-fg-1">Track.</span> Create custom inputs &amp;
+          collaboratively&nbsp;record&nbsp;data.
+        </p>
+        <div className="mx-auto h-24 w-px bg-alpha-2" />
+        <p>
+          <span className="text-fg-1">Learn.</span> Validate hypotheses with
+          visualizations&nbsp;&amp;&nbsp;insights.
+        </p>
       </div>
       <div className="mx-auto h-24 w-px bg-alpha-2" />
       <div className="flex flex-col px-6 pt-24 pb-48 xs:items-center">

@@ -34,7 +34,7 @@
     "@tiptap/extension-typography": "^2.0.0-beta.220",
     "@tiptap/react": "^2.0.0-beta.220",
     "@types/lodash": "^4.14.191",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.29",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@vercel/analytics": "^0.1.11",
     "@zag-js/number-input": "^0.2.14",
@@ -47,7 +47,7 @@
     "lodash": "^4.17.21",
     "nanoid": "^4.0.1",
     "next": "^13.2.4",
-    "prettier": "^2.8.6",
+    "prettier": "^2.8.7",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.2.5",
     "react": "^18.2.0",
@@ -60,7 +60,7 @@
     "tailwindcss": "^3.2.7",
     "typescript": "^5.0.2",
     "usehooks-ts": "^2.9.1",
-    "vercel": "^28.18.0",
+    "vercel": "^28.18.1",
     "xss": "^1.0.14"
   }
 }
