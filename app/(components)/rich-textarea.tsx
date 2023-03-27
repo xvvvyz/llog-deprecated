@@ -71,7 +71,7 @@ const RichTextarea = (
         'aria-label': ariaLabel ?? '',
         class: twMerge(
           'prose input cursor-text min-h-[4.2rem]',
-          right && 'pr-[2.4rem]',
+          right && 'pr-10',
           className
         ),
         role: 'textbox',
@@ -152,7 +152,7 @@ const RichTextarea = (
           className={twMerge(
             'input min-h-[4.2rem]',
             !value && 'text-fg-3',
-            right && 'pr-[2.4rem]',
+            right && 'pr-10',
             className
           )}
         >
@@ -160,7 +160,7 @@ const RichTextarea = (
         </DirtyHtml>
       )}
       {right && (
-        <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
+        <div className="absolute right-0 top-0 flex h-full w-10 flex-col items-center justify-start">
           {right}
         </div>
       )}

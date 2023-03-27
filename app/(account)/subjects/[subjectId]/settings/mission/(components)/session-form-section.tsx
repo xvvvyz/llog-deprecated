@@ -53,7 +53,7 @@ const SessionFormSection = <T extends FieldValues>({
       <div className="mt-2 flex max-w-none items-end justify-between px-2 pb-2">
         <span className="text-xl text-fg-1">Session {sessionIndex + 1}</span>
         <Menu className="-m-3 p-3">
-          <Menu.Button className="relative right-0.5 -m-3 p-3">
+          <Menu.Button className="relative right-px -m-3 p-3">
             <EllipsisHorizontalIcon className="w-5" />
           </Menu.Button>
           <Menu.Items>

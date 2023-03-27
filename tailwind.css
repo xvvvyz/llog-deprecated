@@ -41,9 +41,6 @@
 @layer components {
   .input {
     @apply disabled:disabled w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
-
-    /* hack to override react-select min-height */
-    min-height: auto !important;
   }
 
   .label {

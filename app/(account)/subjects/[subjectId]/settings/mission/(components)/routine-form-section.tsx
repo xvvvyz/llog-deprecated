@@ -1,4 +1,5 @@
 import Alert from '(components)/alert';
+import IconButton from '(components)/icon-button';
 import Menu from '(components)/menu';
 import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
@@ -9,7 +10,8 @@ import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
 import globalValueCache from '(utilities)/global-value-cache';
 import useBackLink from '(utilities)/use-back-link';
-import { DocumentCheckIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -19,6 +21,12 @@ import EventBanner from '../../../(components)/event-banner';
 import EventCommentForm from '../../../(components)/event-comment-form';
 import EventComments from '../../../(components)/event-comments';
 import EventInputs from '../../../(components)/event-inputs';
+
+import {
+  Bars2Icon,
+  DocumentCheckIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 
 import {
   Controller,
@@ -56,8 +64,16 @@ const RoutineFormSection = <T extends FieldValues>({
   const event = routineEventsMap[(eventType as unknown as any).id];
   const router = useRouter();
 
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: eventType.key });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
   return (
-    <li className="mb-4">
+    <li className="mb-4" ref={setNodeRef} style={style}>
       <Alert
         confirmText="Delete routine"
         onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
@@ -71,46 +87,56 @@ const RoutineFormSection = <T extends FieldValues>({
             className="rounded-b-none"
             placeholder="Description"
             right={
-              <Menu className="h-full w-full">
-                <Menu.Button className="h-full w-full">
-                  <EllipsisVerticalIcon className="w-5" />
-                </Menu.Button>
-                <Menu.Items>
-                  <Menu.Item
-                    onClick={() => {
-                      const values = form.getValues();
+              <>
+                <IconButton
+                  className="m-0 -mr-0.5 flex cursor-grab justify-center px-3 pt-2 pb-1"
+                  icon={<Bars2Icon className="w-5" />}
+                  {...attributes}
+                  {...listeners}
+                />
+                <Menu>
+                  <Menu.Button className="-mr-0.5 px-3 pt-1 pb-2">
+                    <EllipsisVerticalIcon className="w-5" />
+                  </Menu.Button>
+                  <Menu.Items>
+                    <Menu.Item
+                      onClick={() => {
+                        const values = form.getValues();
 
-                      globalValueCache.set(CacheKeys.TemplateForm, {
-                        content:
-                          values.routines[sessionIndex][eventTypeIndex].content,
-                        inputs:
-                          values.routines[sessionIndex][eventTypeIndex].inputs,
-                        type: {
-                          id: TemplateTypes.Routine,
-                          label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
-                        },
-                      });
+                        globalValueCache.set(CacheKeys.TemplateForm, {
+                          content:
+                            values.routines[sessionIndex][eventTypeIndex]
+                              .content,
+                          inputs:
+                            values.routines[sessionIndex][eventTypeIndex]
+                              .inputs,
+                          type: {
+                            id: TemplateTypes.Routine,
+                            label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
+                          },
+                        });
 
-                      globalValueCache.set(CacheKeys.MissionForm, values);
+                        globalValueCache.set(CacheKeys.MissionForm, values);
 
-                      router.push(
-                        formatCacheLink({
-                          backLink,
-                          path: '/templates/add',
-                          useCache: true,
-                        })
-                      );
-                    }}
-                  >
-                    <DocumentCheckIcon className="w-5 text-fg-3" />
-                    Save as template
-                  </Menu.Item>
-                  <Menu.Item onClick={deleteAlert.setTrue}>
-                    <TrashIcon className="w-5 text-fg-3" />
-                    Delete routine
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
+                        router.push(
+                          formatCacheLink({
+                            backLink,
+                            path: '/templates/add',
+                            useCache: true,
+                          })
+                        );
+                      }}
+                    >
+                      <DocumentCheckIcon className="w-5 text-fg-3" />
+                      Save as template
+                    </Menu.Item>
+                    <Menu.Item onClick={deleteAlert.setTrue}>
+                      <TrashIcon className="w-5 text-fg-3" />
+                      Delete routine
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              </>
             }
             {...field}
           />

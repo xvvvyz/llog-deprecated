@@ -59,7 +59,7 @@ const Control = <TOption extends IOption>({
   return (
     <components.Control
       className={twMerge(
-        'input p-1 group-hover:bg-alpha-2',
+        'input !min-h-0 p-1 group-hover:bg-alpha-2',
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',

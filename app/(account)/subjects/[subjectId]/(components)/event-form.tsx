@@ -128,8 +128,6 @@ const EventForm = ({
     },
   });
 
-  if (event && !eventTypeInputs.length) return null;
-
   return (
     <form
       className="flex flex-col gap-6 sm:px-8"
@@ -358,6 +356,7 @@ const EventForm = ({
       <Button
         className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
         colorScheme={event ? 'transparent' : 'accent'}
+        disabled={event && !eventTypeInputs.length}
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

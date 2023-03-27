@@ -9,6 +9,22 @@ import { ListTemplatesData } from '(utilities)/list-templates';
 import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import RoutineFormSection from './routine-form-section';
 
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+
 interface RoutinesFormSection<T extends FieldValues> {
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
@@ -34,23 +50,51 @@ const RoutinesFormSection = <T extends FieldValues>({
     name: name as T[string],
   });
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
     <>
       <ul>
-        {eventTypeArray.fields.map((eventType, eventTypeIndex) => (
-          <RoutineFormSection<T>
-            eventType={eventType}
-            eventTypeArray={eventTypeArray}
-            eventTypeIndex={eventTypeIndex}
-            form={form}
-            inputOptions={inputOptions}
-            key={eventType.key}
-            name={name}
-            routineEventsMap={routineEventsMap}
-            sessionIndex={sessionIndex}
-            userId={userId}
-          />
-        ))}
+        <DndContext
+          collisionDetection={closestCenter}
+          id={name}
+          onDragEnd={(event: DragEndEvent) => {
+            const { active, over } = event;
+
+            if (over && active.id !== over.id) {
+              eventTypeArray.move(
+                eventTypeArray.fields.findIndex((f) => f.key === active.id),
+                eventTypeArray.fields.findIndex((f) => f.key === over.id)
+              );
+            }
+          }}
+          sensors={sensors}
+        >
+          <SortableContext
+            items={eventTypeArray.fields.map((eventType) => eventType.key)}
+            strategy={verticalListSortingStrategy}
+          >
+            {eventTypeArray.fields.map((eventType, eventTypeIndex) => (
+              <RoutineFormSection<T>
+                eventType={eventType}
+                eventTypeArray={eventTypeArray}
+                eventTypeIndex={eventTypeIndex}
+                form={form}
+                inputOptions={inputOptions}
+                key={eventType.key}
+                name={name}
+                routineEventsMap={routineEventsMap}
+                sessionIndex={sessionIndex}
+                userId={userId}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </ul>
       <Select
         instanceId={`${name}Template`}

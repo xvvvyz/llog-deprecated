@@ -52,7 +52,8 @@ const EventCommentForm = ({
             placeholder="Add comment"
             right={
               <IconButton
-                icon={<PaperAirplaneIcon className="mr-1.5 w-5" />}
+                className="m-0 px-3 py-2.5"
+                icon={<PaperAirplaneIcon className="w-5" />}
                 label="Add comment"
                 loading={form.formState.isSubmitting || isTransitioning}
                 loadingText="Adding comment…"
