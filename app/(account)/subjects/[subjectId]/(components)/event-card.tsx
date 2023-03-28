@@ -36,7 +36,7 @@ const EventCard = ({
   >
     {event && (
       <EventBanner
-        className="rounded-t sm:border-b sm:border-alpha-1 sm:bg-alpha-reverse-1 sm:py-2 sm:px-8"
+        className="rounded-t sm:border-b sm:border-alpha-1 sm:bg-alpha-reverse-1 sm:px-8 sm:py-2"
         createdAt={event.created_at}
         profile={event.profile}
       />

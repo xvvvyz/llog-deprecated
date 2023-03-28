@@ -21,7 +21,6 @@
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
     "@supabase/auth-helpers-nextjs": "^0.5.6",
-    "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.9",
     "@tiptap/extension-bold": "^2.0.0-beta.220",
     "@tiptap/extension-bullet-list": "^2.0.0-beta.220",

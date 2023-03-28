@@ -149,7 +149,7 @@ const EventStopwatch = <T extends FieldValues>({
 
                 return (
                   <li
-                    className="relative flex items-baseline gap-4 pt-1 pb-1.5 pl-4 pr-2 leading-snug"
+                    className="relative flex items-baseline gap-4 pb-1.5 pl-4 pr-2 pt-1 leading-snug"
                     key={note.id}
                   >
                     <div className="font-mono">

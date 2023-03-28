@@ -45,7 +45,7 @@ const Page = () => (
         </p>
       </div>
       <div className="mx-auto h-24 w-px bg-alpha-2" />
-      <div className="flex flex-col px-6 pt-24 pb-48 xs:items-center">
+      <div className="flex flex-col px-6 pb-48 pt-24 xs:items-center">
         <Button href="/sign-up">Sign up to get early access</Button>
       </div>
     </main>

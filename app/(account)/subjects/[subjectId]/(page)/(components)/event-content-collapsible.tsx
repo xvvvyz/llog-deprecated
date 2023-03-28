@@ -20,7 +20,7 @@ const EventContentCollapsible = ({
   return (
     <div
       className={twMerge(
-        'group relative max-h-12 select-none overflow-hidden px-4 text-fg-3 after:absolute after:left-0 after:right-0 after:bottom-0 after:top-0 after:bg-gradient-to-b after:from-[hsla(45,6%,12%,0.4)] after:via-[hsla(45,6%,12%,0.8)] after:to-bg-2',
+        'group relative max-h-12 select-none overflow-hidden px-4 text-fg-3 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-[hsla(45,6%,12%,0.4)] after:via-[hsla(45,6%,12%,0.8)] after:to-bg-2',
         value && 'max-h-full after:hidden',
         className
       )}
@@ -29,7 +29,7 @@ const EventContentCollapsible = ({
     >
       <DirtyHtml>{content}</DirtyHtml>
       {!value && (
-        <ChevronDownIcon className="absolute left-1/2 bottom-0 z-10 w-5 -translate-x-1/2 text-fg-2 transition-colors group-hover:text-fg-1" />
+        <ChevronDownIcon className="absolute bottom-0 left-1/2 z-10 w-5 -translate-x-1/2 text-fg-2 transition-colors group-hover:text-fg-1" />
       )}
     </div>
   );

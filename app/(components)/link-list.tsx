@@ -66,7 +66,7 @@ const LinkList = Object.assign(
       <li className="group flex">
         <Button
           className={twMerge(
-            'm-0 grow gap-4 overflow-hidden py-3 px-4',
+            'm-0 grow gap-4 overflow-hidden px-4 py-3',
             className
           )}
           href={href}

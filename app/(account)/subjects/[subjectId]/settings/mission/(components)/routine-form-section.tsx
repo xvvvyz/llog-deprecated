@@ -89,13 +89,13 @@ const RoutineFormSection = <T extends FieldValues>({
             right={
               <>
                 <IconButton
-                  className="m-0 -mr-0.5 flex cursor-grab justify-center px-3 pt-2 pb-1"
+                  className="m-0 -mr-0.5 flex cursor-grab touch-none justify-center px-3 pb-1 pt-2"
                   icon={<Bars2Icon className="w-5" />}
                   {...attributes}
                   {...listeners}
                 />
                 <Menu>
-                  <Menu.Button className="-mr-0.5 px-3 pt-1 pb-2">
+                  <Menu.Button className="-mr-0.5 px-3 pb-2 pt-1">
                     <EllipsisVerticalIcon className="w-5" />
                   </Menu.Button>
                   <Menu.Items>
