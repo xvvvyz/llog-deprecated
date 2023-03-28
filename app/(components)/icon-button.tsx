@@ -13,14 +13,11 @@ const IconButton = ({
   loading,
   loadingText,
   ...props
-}: IconButtonProps) =>
-  loading ? (
-    <Spinner loadingText={loadingText} />
-  ) : (
-    <Button variant="link" {...props}>
-      {icon}
-      {label && <span className="sr-only">{label}</span>}
-    </Button>
-  );
+}: IconButtonProps) => (
+  <Button disabled={loading} variant="link" {...props}>
+    {loading ? <Spinner loadingText={loadingText} /> : icon}
+    {label && <span className="sr-only">{label}</span>}
+  </Button>
+);
 
 export default IconButton;
