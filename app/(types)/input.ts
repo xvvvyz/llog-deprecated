@@ -1,7 +1,7 @@
 import { Database } from './database';
 
 export interface InputSettingsType {
-  isCreatable?: string;
+  isCreatable?: boolean;
   max?: string;
   maxFractionDigits?: string;
   min?: string;

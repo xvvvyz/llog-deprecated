@@ -249,6 +249,16 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                   return;
                 }
 
+                case InputTypes.MultiSelect:
+                case InputTypes.Select:
+                case InputTypes.Stopwatch: {
+                  form.setValue('settings', {
+                    isCreatable: false,
+                  });
+
+                  return;
+                }
+
                 default: {
                   // noop
                 }
