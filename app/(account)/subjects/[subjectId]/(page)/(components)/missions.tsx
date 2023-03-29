@@ -11,30 +11,34 @@ interface MissionProps {
 const Missions = async ({ isTeamMember, subjectId }: MissionProps) => {
   const { data: missions } = await listMissionsWithRoutines(subjectId);
 
-  return forceArray(missions).reduce((acc, mission) => {
-    const routines = forceArray(mission.routines);
-    const activeRoutine = routines.find(({ events }) => !events.length);
-    if (!activeRoutine) return acc;
-    const activeSessionNumber = activeRoutine.session + 1;
+  return (
+    <LinkList>
+      {forceArray(missions).reduce((acc, mission) => {
+        const routines = forceArray(mission.routines);
+        const activeRoutine = routines.find(({ events }) => !events.length);
+        if (!activeRoutine) return acc;
+        const activeSessionNumber = activeRoutine.session + 1;
 
-    acc.push(
-      <LinkList.Item
-        href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
-        key={mission.id}
-        pill={CODES.mission}
-        text={mission.name}
-        {...(isTeamMember
-          ? {
-              rightHref: `/subjects/${subjectId}/settings/mission/${mission.id}?back=/subjects/${subjectId}`,
-              rightIcon: 'edit',
-              rightLabel: 'Edit',
-            }
-          : {})}
-      />
-    );
+        acc.push(
+          <LinkList.Item
+            href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
+            key={mission.id}
+            pill={CODES.mission}
+            text={mission.name}
+            {...(isTeamMember
+              ? {
+                  rightHref: `/subjects/${subjectId}/settings/mission/${mission.id}?back=/subjects/${subjectId}`,
+                  rightIcon: 'edit',
+                  rightLabel: 'Edit',
+                }
+              : {})}
+          />
+        );
 
-    return acc;
-  }, []);
+        return acc;
+      }, [])}
+    </LinkList>
+  );
 };
 
 export default Missions;

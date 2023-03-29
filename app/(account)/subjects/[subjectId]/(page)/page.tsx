@@ -2,7 +2,6 @@ import Avatar from '(components)/avatar';
 import BackButton from '(components)/back-button';
 import Header from '(components)/header';
 import IconButton from '(components)/icon-button';
-import LinkList from '(components)/link-list';
 import PollingRefresh from '(components)/polling-refresh';
 import EventTypesEnum from '(utilities)/enum-event-types';
 import getCurrentTeamId from '(utilities)/get-current-team-id';
@@ -52,7 +51,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           </>
         )}
       </Header>
-      <LinkList>
+      <div className="space-y-4">
         <Suspense>
           {/* @ts-expect-error Server Component */}
           <Missions isTeamMember={isTeamMember} subjectId={subjectId} />
@@ -73,7 +72,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             type={EventTypesEnum.Observation}
           />
         </Suspense>
-      </LinkList>
+      </div>
       <Suspense>
         {/* @ts-expect-error Server Component */}
         <Timeline subjectId={subjectId} />

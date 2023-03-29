@@ -44,7 +44,7 @@
   }
 
   .label {
-    @apply block px-2 pb-1 text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
+    @apply block px-2 pb-2 leading-snug text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
   }
 }
 
