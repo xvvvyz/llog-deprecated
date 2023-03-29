@@ -9,8 +9,11 @@ import { useBoolean } from 'usehooks-ts';
 import RoutinesFormSection from './routines-form-section';
 
 import {
+  ArrowDownIcon,
+  ArrowUpIcon,
   DocumentDuplicateIcon,
   EllipsisHorizontalIcon,
+  PlusIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 
@@ -57,6 +60,32 @@ const SessionFormSection = <T extends FieldValues>({
             <EllipsisHorizontalIcon className="w-5" />
           </Menu.Button>
           <Menu.Items>
+            <Menu.Item
+              onClick={() => sessionArray.insert(sessionIndex, [[]] as any)}
+            >
+              <PlusIcon className="w-5 text-fg-3" />
+              Add session above
+            </Menu.Item>
+            {sessionIndex !== 0 && (
+              <Menu.Item
+                onClick={() =>
+                  sessionArray.move(sessionIndex, sessionIndex - 1)
+                }
+              >
+                <ArrowUpIcon className="w-5 text-fg-3" />
+                Move session up
+              </Menu.Item>
+            )}
+            {sessionIndex !== sessionArray.fields.length - 1 && (
+              <Menu.Item
+                onClick={() =>
+                  sessionArray.move(sessionIndex, sessionIndex + 1)
+                }
+              >
+                <ArrowDownIcon className="w-5 text-fg-3" />
+                Move session down
+              </Menu.Item>
+            )}
             <Menu.Item
               onClick={() =>
                 sessionArray.insert(

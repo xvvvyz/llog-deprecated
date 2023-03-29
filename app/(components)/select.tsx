@@ -106,7 +106,7 @@ const Menu = <TOption extends IOption>({
   ...props
 }: MenuProps<TOption>) => (
   <components.Menu
-    className="overflow-hidden rounded-b bg-bg-1 shadow-md sm:bg-bg-2"
+    className="overflow-hidden rounded-b bg-bg-1 shadow-lg sm:bg-bg-2"
     {...props}
   >
     <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-2">

@@ -24,7 +24,7 @@ const Menu = Object.assign(
         {({ active }) => (
           <Button
             className={twMerge(
-              'w-full justify-start gap-4 rounded-none border-t-0 ring-transparent ring-offset-0 first:rounded-t first:border-t last:rounded-b hover:border-alpha-1',
+              'w-full justify-start gap-4 rounded-none border-0 ring-transparent ring-offset-0 first:rounded-t last:rounded-b',
               active && 'bg-alpha-4 text-fg-1',
               className
             )}
@@ -41,7 +41,7 @@ const Menu = Object.assign(
     }: Parameters<typeof M.Items>[0] & { children: ReactNode }) => (
       <M.Items
         className={twMerge(
-          'absolute -right-px -top-px z-10 w-56 origin-top-right rounded bg-bg-2 shadow-md outline-none',
+          'absolute -right-px -top-px z-10 w-56 origin-top-right rounded bg-bg-2 shadow-lg outline-none',
           className
         )}
         {...rest}
