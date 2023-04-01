@@ -60,6 +60,11 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
         toggleIsCreating();
       }}
       options={input.options}
+      placeholder={
+        input.settings?.isCreatable
+          ? 'Select an option or type to create…'
+          : 'Select an option…'
+      }
       {...field}
     />
   );
