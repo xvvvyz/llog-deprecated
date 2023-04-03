@@ -16,7 +16,7 @@ const listTemplates = async (
     .select('id, name, type')
     .match(match)
     .order('type')
-    .order('updated_at', { ascending: false });
+    .order('name');
 };
 
 export type ListTemplatesData = Awaited<
