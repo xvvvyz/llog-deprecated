@@ -7,7 +7,7 @@ create table "public"."comments" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "event_id" uuid not null,
   "files" text[],
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "profile_id" uuid not null default auth.uid (),
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
 );
@@ -30,7 +30,7 @@ create unique index event_type_inputs_pkey on public.event_type_inputs using btr
 create table "public"."event_types" (
   "content" text,
   "deleted" boolean not null default false,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "mission_id" uuid,
   "name" text,
   "order" real not null,
@@ -46,7 +46,7 @@ create unique index event_types_pkey on public.event_types using btree (id);
 
 create table "public"."event_inputs" (
   "event_id" uuid not null,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "input_id" uuid not null,
   "input_option_id" uuid,
   "value" jsonb
@@ -61,7 +61,7 @@ create unique index event_inputs_pkey on public.event_inputs using btree (id);
 create table "public"."events" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "event_type_id" uuid not null,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "profile_id" uuid not null default auth.uid (),
   "subject_id" uuid not null,
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
@@ -73,7 +73,7 @@ create unique index events_pkey on public.events using btree (id);
 
 create table "public"."input_options" (
   "deleted" boolean not null default false,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "input_id" uuid not null,
   "label" text not null,
   "order" smallint not null
@@ -86,7 +86,7 @@ create unique index input_options_pkey on public.input_options using btree (id);
 create table "public"."inputs" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "deleted" boolean not null default false,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "label" text not null,
   "team_id" uuid not null default auth.uid (),
   "type" input_type not null,
@@ -100,7 +100,7 @@ create unique index inputs_pkey on public.inputs using btree (id);
 create table "public"."missions" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "deleted" boolean not null default false,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "name" text not null,
   "subject_id" uuid not null,
   "updated_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text)
@@ -131,7 +131,7 @@ create unique index subject_managers_pkey on public.subject_managers using btree
 create table "public"."subjects" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "deleted" boolean not null default false,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "image_uri" text,
   "name" text not null,
   "team_id" uuid not null default auth.uid (),
@@ -153,7 +153,7 @@ create index team_members_team_id_index on public.team_members using btree (team
 create unique index team_members_pkey on public.team_members using btree (team_id, profile_id);
 
 create table "public"."teams" (
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "name" text not null,
   "owner" uuid not null default auth.uid ()
 );
@@ -164,7 +164,7 @@ create unique index team_pkey on public.teams using btree (id);
 create table "public"."templates" (
   "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
   "data" jsonb,
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "name" text not null,
   "public" boolean not null default false,
   "team_id" uuid not null default auth.uid (),

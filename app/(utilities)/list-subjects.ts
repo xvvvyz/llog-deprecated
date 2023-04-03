@@ -6,7 +6,7 @@ const listSubjects = async () =>
     .select('id, image_uri, name, team_id')
     .not('team_id', 'is', null)
     .eq('deleted', false)
-    .order('updated_at', { ascending: false });
+    .order('name');
 
 export type ListSubjectsData = Awaited<ReturnType<typeof listSubjects>>['data'];
 export default listSubjects;
