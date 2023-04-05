@@ -17,6 +17,7 @@ import { GetTemplateData } from '(utilities)/get-template';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import sanitizeHtml from '(utilities)/sanitize-html';
+import sortInputs from '(utilities)/sort-inputs';
 import useBackLink from '(utilities)/use-back-link';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
@@ -140,7 +141,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
                 )
               );
             }}
-            options={forceArray(availableInputs)}
+            options={forceArray(availableInputs).sort(sortInputs)}
             {...field}
           />
         )}

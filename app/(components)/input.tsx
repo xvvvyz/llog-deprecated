@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -8,7 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef(
   (
-    { className, label, right, type, name, value, ...rest }: InputProps,
+    { className, label, right, type, name, ...rest }: InputProps,
     ref: Ref<HTMLInputElement>
   ) => (
     <div className="group relative w-full">
@@ -24,7 +26,6 @@ const Input = forwardRef(
         name={name}
         ref={ref}
         type={type ?? 'text'}
-        value={value ?? undefined}
         {...rest}
       />
       {right && (
