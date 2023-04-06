@@ -25,9 +25,7 @@ const getMissionWithRoutines = (missionId: string) =>
             profile:profiles(first_name, id, last_name)
           ),
           id,
-          inputs:event_type_inputs(
-            input:inputs(id, label)
-          ),
+          inputs:event_type_inputs(input_id),
           name,
           order,
           session,

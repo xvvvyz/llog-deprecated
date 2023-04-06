@@ -51,10 +51,9 @@ const MissionForm = ({
 
         const inputs = routine.inputs.map(
           ({
-            input,
-          }: {
-            input: Database['public']['Tables']['inputs']['Row'];
-          }) => input
+            input_id,
+          }: Database['public']['Tables']['event_type_inputs']['Row']) =>
+            availableInputs?.find(({ id }) => id === input_id)
         );
 
         const formattedRoutine = {
