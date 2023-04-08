@@ -4,7 +4,7 @@ import formatInputValue from '(utilities)/format-input-value';
 interface EventInputsProps {
   className?: string;
   inputs: Array<{
-    input: {
+    input?: {
       id: string;
       label: string;
       type: InputTypes;
@@ -25,6 +25,7 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
         <tbody>
           {Object.entries(
             inputs.reduce((acc, { input, option, value }) => {
+              if (!input) return acc;
               acc[input.id] = acc[input.id] ?? { values: [] };
               acc[input.id].label = input.label;
               acc[input.id].type = input.type;

@@ -20,6 +20,13 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
 
+  const optionOrOptions =
+    input.type === 'multi_select' ? 'options' : 'an option';
+
+  const placeholder = input.settings?.isCreatable
+    ? `Select ${optionOrOptions} or type to create…`
+    : `Select ${optionOrOptions}…`;
+
   return (
     <Select
       isCreatable={input.settings?.isCreatable}
@@ -60,11 +67,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
         toggleIsCreating();
       }}
       options={input.options}
-      placeholder={
-        input.settings?.isCreatable
-          ? 'Select an option or type to create…'
-          : 'Select an option…'
-      }
+      placeholder={placeholder}
       {...field}
     />
   );
