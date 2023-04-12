@@ -106,12 +106,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {loading ? (
           <>
             {variant !== 'link' && (
-              <Spinner
-                className={twMerge(
-                  spinnerColorSchemes[colorScheme],
-                  'border-l-transparent'
-                )}
-              />
+              <Spinner color={spinnerColorSchemes[colorScheme]} />
             )}
             {loadingText}
           </>

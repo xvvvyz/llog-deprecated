@@ -102,7 +102,7 @@ const SubjectSettingsForm = ({
         form={form}
       />
       <Button
-        className="my-6 w-full"
+        className="mb-4 mt-8 w-full"
         disabled={!form.formState.isDirty}
         loading={form.formState.isSubmitting}
         loadingText="Saving…"

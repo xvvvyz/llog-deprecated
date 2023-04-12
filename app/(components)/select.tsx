@@ -97,7 +97,7 @@ const Input = <TOption extends IOption>({
   </components.Input>
 );
 
-const LoadingIndicator = () => <Spinner className="mr-2" />;
+const LoadingIndicator = () => <Spinner className="mr-1" />;
 
 const LoadingMessage = () => null;
 
