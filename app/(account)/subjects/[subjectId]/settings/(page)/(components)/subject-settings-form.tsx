@@ -65,9 +65,11 @@ const SubjectSettingsForm = ({
     cacheKey: CacheKeys.SubjectSettingsForm,
     defaultValues: {
       avatar: subject.image_uri,
+      birthdate: subject.birthdate,
       id: subject.id,
       name: subject.name,
       share_code: subject.share_code,
+      species: subject.species,
     },
   });
 
@@ -80,9 +82,12 @@ const SubjectSettingsForm = ({
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
       onSubmit={form.handleSubmit(async (values) => {
-        const { error: subjectError } = await supabase
-          .from('subjects')
-          .upsert({ id: values.id, name: values.name.trim() });
+        const { error: subjectError } = await supabase.from('subjects').upsert({
+          birthdate: values.birthdate,
+          id: values.id,
+          name: values.name.trim(),
+          species: values.species?.trim(),
+        });
 
         if (subjectError) {
           alert(subjectError.message);

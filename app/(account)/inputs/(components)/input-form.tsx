@@ -16,7 +16,7 @@ import forceArray from '(utilities)/force-array';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
-import { ListSubjectsData } from '(utilities)/list-subjects';
+import { ListSubjectsByTeamIdData } from '(utilities)/list-subjects-by-team-id';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -34,7 +34,7 @@ const INPUT_TYPE_OPTIONS = [
 interface InputFormProps {
   duplicateInputData?: GetInputWithoutIdsData;
   input?: GetInputData;
-  subjects?: ListSubjectsData;
+  subjects?: ListSubjectsByTeamIdData;
 }
 
 type InputFormValues = InputType & {

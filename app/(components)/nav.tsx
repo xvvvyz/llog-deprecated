@@ -23,7 +23,7 @@ const Nav = ({ isClient }: NavProps) => (
           <Button activeClassName="text-fg-1" href="/inputs" variant="link">
             Inputs
           </Button>
-          <Button activeClassName="text-fg-1" disabled variant="link">
+          <Button activeClassName="text-fg-1" href="/insights" variant="link">
             Insights
           </Button>
         </div>

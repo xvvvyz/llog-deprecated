@@ -20,6 +20,7 @@ Add the following to your `.env` file:
 ```dotenv
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 NEXT_PUBLIC_SUPABASE_URL=<SUPABSE_API_URL>
+OPENAI_API_KEY=<OPENAI_API_KEY>
 
 # optimize images with supabase instead of next
 NEXT_PUBLIC_SUPABASE_PRO=1

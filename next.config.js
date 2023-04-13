@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: { dirs: ['app'] },
-  experimental: { appDir: true },
+  eslint: {
+    dirs: ['app'],
+  },
+  experimental: {
+    appDir: true,
+  },
   images: {
     remotePatterns: [
       {

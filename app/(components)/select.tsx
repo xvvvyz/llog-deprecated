@@ -228,7 +228,17 @@ const SingleValue = <TOption extends IOption>({
   children,
   ...props
 }: SingleValueProps<TOption>) => (
-  <components.SingleValue className="m-1 px-2" {...props}>
+  <components.SingleValue
+    className="m-1 flex items-center gap-4 px-2"
+    {...props}
+  >
+    {(props.selectProps as any).hasAvatar && (
+      <Avatar
+        file={props.data.image_uri}
+        name={props.data.label ?? props.data.name ?? ''}
+        size="sm"
+      />
+    )}
     {children}
   </components.SingleValue>
 );

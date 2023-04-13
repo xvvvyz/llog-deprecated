@@ -22,7 +22,7 @@ const AddSubjectForm = () => {
   return (
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
-      onSubmit={form.handleSubmit(async ({ avatar, name }) => {
+      onSubmit={form.handleSubmit(async (values) => {
         const { error: updateUserError } = await supabase.auth.updateUser({
           data: { is_client: false },
         });
@@ -34,7 +34,11 @@ const AddSubjectForm = () => {
 
         const { data: subjectData, error: subjectError } = await supabase
           .from('subjects')
-          .insert({ name: name.trim() })
+          .insert({
+            birthdate: values.birthdate,
+            name: values.name.trim(),
+            species: values.species?.trim(),
+          })
           .select('id')
           .single();
 
@@ -43,7 +47,11 @@ const AddSubjectForm = () => {
           return;
         }
 
-        await uploadSubjectAvatar({ avatar, subjectId: subjectData.id });
+        await uploadSubjectAvatar({
+          avatar: values.avatar,
+          subjectId: subjectData.id,
+        });
+
         await redirect(`/subjects/${subjectData.id}/settings`);
       })}
     >
