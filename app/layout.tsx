@@ -1,4 +1,3 @@
-import AnalyticsWrapper from '(components)/analytics-wrapper';
 import { Figtree, Inconsolata } from 'next/font/google';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -19,7 +18,6 @@ const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
     <body>
       {children}
-      <AnalyticsWrapper />
     </body>
   </html>
 );
