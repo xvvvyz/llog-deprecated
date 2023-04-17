@@ -6,6 +6,7 @@ import IconButton from './icon-button';
 import Input from './input';
 
 interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  forceValue?: boolean;
   id: string;
   label?: string;
   max?: number | string;
@@ -20,6 +21,7 @@ interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
 const NumberInput = forwardRef(
   (
     {
+      forceValue,
       id,
       label,
       max = Number.MAX_SAFE_INTEGER,
@@ -43,7 +45,7 @@ const NumberInput = forwardRef(
       {
         context: {
           focusInputOnChange: false,
-          format: (value) => (!value ? '0' : value),
+          format: (value) => (forceValue && !value ? '0' : value),
           max: Number(max),
           maxFractionDigits: Number(maxFractionDigits),
           min: Number(min),

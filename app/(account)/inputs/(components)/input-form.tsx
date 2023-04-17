@@ -354,6 +354,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         <>
           <fieldset className="flex gap-6">
             <NumberInput
+              forceValue
               id="settings-min-fraction-digits"
               label="Min fraction digits"
               max={maxFractionDigits}
@@ -361,6 +362,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               {...form.register('settings.minFractionDigits')}
             />
             <NumberInput
+              forceValue
               id="settings-max-fraction-digits"
               label="Max fraction digits"
               max={6}
@@ -370,6 +372,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
           </fieldset>
           <fieldset className="flex gap-6">
             <NumberInput
+              forceValue
               id="settings-min"
               label="Min value"
               max={form.watch('settings.max')}
@@ -378,6 +381,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               {...form.register('settings.min')}
             />
             <NumberInput
+              forceValue
               id="settings-max"
               label="Max value"
               maxFractionDigits={maxFractionDigits}
