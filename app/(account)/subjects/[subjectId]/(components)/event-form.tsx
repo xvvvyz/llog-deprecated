@@ -2,19 +2,20 @@
 
 import Button from '(components)/button';
 import Checkbox from '(components)/checkbox';
+import Input from '(components)/input';
 import NumberInput from '(components)/input-number';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
+import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
 import parseSeconds from '(utilities)/parse-seconds';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
 import EventStopwatch from './event-stopwatch';
 
@@ -29,6 +30,7 @@ interface EventFormProps {
 }
 
 interface EventFormValues {
+  completionTime?: string;
   id?: string;
   inputs: any[];
 }
@@ -45,6 +47,7 @@ const EventForm = ({
 
   const form = useForm<EventFormValues>({
     defaultValues: {
+      completionTime: formatDatetimeLocal(event?.created_at),
       id: event?.id,
       inputs: eventTypeInputs.map(({ input }) => {
         const inputInputs = eventInputs.filter(
@@ -131,11 +134,18 @@ const EventForm = ({
   return (
     <form
       className="flex flex-col gap-6 sm:px-8"
-      onSubmit={form.handleSubmit(async ({ id, inputs }) => {
+      onSubmit={form.handleSubmit(async ({ completionTime, id, inputs }) => {
         const { data: eventData, error: eventError } = await supabase
           .from('events')
-          .upsert({ event_type_id: eventType.id, id, subject_id: subjectId })
-          .select('id')
+          .upsert({
+            created_at: completionTime
+              ? new Date(completionTime).toISOString()
+              : undefined,
+            event_type_id: eventType.id,
+            id,
+            subject_id: subjectId,
+          })
+          .select('created_at, id')
           .single();
 
         if (eventError) {
@@ -144,6 +154,12 @@ const EventForm = ({
         }
 
         form.setValue('id', eventData.id);
+
+        form.setValue(
+          'completionTime',
+          formatDatetimeLocal(eventData.created_at)
+        );
+
         const deletedEventInputs = eventInputs.map(({ id }) => id);
 
         if (deletedEventInputs.length) {
@@ -353,10 +369,17 @@ const EventForm = ({
           </div>
         );
       })}
+      {event && (
+        <Input
+          label="Completion time"
+          step="any"
+          type="datetime-local"
+          {...form.register('completionTime')}
+        />
+      )}
       <Button
-        className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
+        className="mt-8 w-full"
         colorScheme={event ? 'transparent' : 'accent'}
-        disabled={event && !eventTypeInputs.length}
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
