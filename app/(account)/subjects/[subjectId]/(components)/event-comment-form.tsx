@@ -49,7 +49,7 @@ const EventCommentForm = ({
             aria-label="Comment"
             className={twMerge('min-h-full pr-12', inputClassName)}
             onEnter={onSubmit}
-            placeholder="Add comment"
+            placeholder="Add comment…"
             right={
               <IconButton
                 className="m-0 px-3 py-2.5"

@@ -115,7 +115,7 @@ const RoutinesFormSection = <T extends FieldValues>({
         options={templateOptions.filter(
           (template) => template.type === TemplateTypes.Routine
         )}
-        placeholder="Add routine"
+        placeholder="Add routine…"
         value={null}
       />
     </>

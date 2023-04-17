@@ -14,6 +14,7 @@ const listSessionRoutines = (
       event:events(
         comments(
           content,
+          created_at,
           id,
           profile:profiles(first_name, id, last_name)
         ),

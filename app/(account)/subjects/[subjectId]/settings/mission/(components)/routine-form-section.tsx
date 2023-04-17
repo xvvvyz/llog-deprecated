@@ -12,7 +12,6 @@ import globalValueCache from '(utilities)/global-value-cache';
 import useBackLink from '(utilities)/use-back-link';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -25,6 +24,7 @@ import EventInputs from '../../../(components)/event-inputs';
 import {
   Bars2Icon,
   DocumentCheckIcon,
+  EllipsisVerticalIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 

@@ -6,18 +6,26 @@ import DirtyHtml from '(components)/dirty-html';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
+import formatDateTime from '(utilities)/format-date-time';
 import useDeleteAlert from '(utilities)/use-delete-alert';
-import { EllipsisHorizontalIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 
 interface EventCommentProps {
   content: string;
+  createdAt: string;
   id: string;
   profile: Database['public']['Tables']['profiles']['Row'];
   userId: string;
 }
 
-const EventComment = ({ content, id, profile, userId }: EventCommentProps) => {
+const EventComment = ({
+  content,
+  createdAt,
+  id,
+  profile,
+  userId,
+}: EventCommentProps) => {
   const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
   const router = useRouter();
 
@@ -46,14 +54,19 @@ const EventComment = ({ content, id, profile, userId }: EventCommentProps) => {
       />
       <Avatar className="mt-0.5" name={profile.first_name} />
       <div className="w-full">
-        <div className="relative">
-          <span className="flex justify-between text-xs uppercase tracking-widest text-fg-3">
-            {profile.first_name} {profile.last_name}
-          </span>
+        <div className="flex h-5 w-full justify-between">
+          <div className="flex w-full gap-2 text-xs uppercase tracking-widest text-fg-3">
+            <span className="w-0 flex-1 truncate">
+              {profile.first_name} {profile.last_name}
+            </span>
+            <span className="relative -right-px flex-shrink-0 whitespace-nowrap">
+              {formatDateTime(createdAt)}
+            </span>
+          </div>
           {userId === profile.id && (
-            <Menu className="absolute right-0 top-0 -m-3 p-3">
-              <Menu.Button className="-m-3 p-3 text-fg-3">
-                <EllipsisHorizontalIcon className="w-5" />
+            <Menu className="-m-3 p-3">
+              <Menu.Button className="-m-3 p-3">
+                <EllipsisVerticalIcon className="relative -right-2 -top-[0.18rem] w-5" />
               </Menu.Button>
               <Menu.Items>
                 <Menu.Item onClick={deleteAlert.setTrue}>

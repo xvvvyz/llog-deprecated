@@ -1,11 +1,10 @@
 'use client';
 
 import forceArray from '(utilities)/force-array';
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { ChevronUpDownIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
+import Avatar from './avatar';
 import Spinner from './spinner';
 
 import ReactSelect, {
@@ -23,7 +22,12 @@ import ReactSelect, {
   SelectInstance,
   SingleValueProps,
 } from 'react-select';
-import Avatar from './avatar';
+
+import {
+  ChevronUpDownIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 
 type IOption = {
   id: string;

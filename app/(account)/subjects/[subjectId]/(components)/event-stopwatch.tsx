@@ -137,7 +137,7 @@ const EventStopwatch = <T extends FieldValues>({
               toggleIsCreating();
             }}
             options={input.options}
-            placeholder="Add timed note"
+            placeholder="Add timed note…"
             value={null}
           />
           {!!timedNoteArray.fields.length && (

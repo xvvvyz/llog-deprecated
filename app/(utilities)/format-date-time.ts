@@ -5,7 +5,6 @@ const formatDateTime = (input: Date | string) =>
     hour12: true,
     minute: 'numeric',
     month: 'numeric',
-    year: '2-digit',
   });
 
 export default formatDateTime;

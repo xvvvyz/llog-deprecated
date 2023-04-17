@@ -210,7 +210,7 @@ const SubjectSettingsForm = ({
           options={forceArray(availableTemplates).filter(
             (template) => template.type === TemplateTypes.Routine
           )}
-          placeholder="Add routine"
+          placeholder="Add routine…"
           value={null}
         />
       </section>
@@ -279,7 +279,7 @@ const SubjectSettingsForm = ({
           options={forceArray(availableTemplates).filter(
             (template) => template.type === TemplateTypes.Observation
           )}
-          placeholder="Add observation"
+          placeholder="Add observation…"
           value={null}
         />
       </section>
