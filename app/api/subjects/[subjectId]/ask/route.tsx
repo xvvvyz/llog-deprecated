@@ -135,7 +135,6 @@ chart json goes here
 \`\`\`chart
 {"data":{"datasets":[{"label":string,"data":[{"x":timestamp,"y":number}],"backgroundColor":"#FBCA37","borderColor":"#FBCA37"","pointHitRadius":20}]},"type":"line"}
 \`\`\`chart`;
-  console.log(system);
 
   try {
     const completion = await new OpenAIApi(

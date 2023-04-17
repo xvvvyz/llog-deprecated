@@ -16,9 +16,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
-    <body>
-      {children}
-    </body>
+    <body>{children}</body>
   </html>
 );
 
