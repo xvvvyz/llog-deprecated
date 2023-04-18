@@ -204,7 +204,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             }
           }
 
-          updateGlobalValueCache(inputData);
+          updateGlobalValueCache({ ...inputData, subjects });
           await redirect('/inputs');
         }
       )}
