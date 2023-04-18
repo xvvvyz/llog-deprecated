@@ -5,9 +5,18 @@ import LinkList from '(components)/link-list';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
 import forceArray from '(utilities)/force-array';
 import { ListInputsData } from '(utilities)/list-inputs';
+import usePrevious from '(utilities)/use-previous';
 import Fuse from 'fuse.js';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import InputListItemMenu from './input-list-item-menu';
+
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 interface FilterableInputLinkListProps {
   inputs: NonNullable<ListInputsData>;
@@ -15,7 +24,10 @@ interface FilterableInputLinkListProps {
 
 const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
   const ref = useRef<HTMLInputElement>(null);
-  const [filteredInputs, setFilteredInputs] = useState(inputs);
+
+  const [filteredInputs, setFilteredInputs] = useState<
+    NonNullable<ListInputsData>
+  >([]);
 
   const fuse = useMemo(
     () =>
@@ -26,13 +38,28 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
     [inputs]
   );
 
+  const filter = useCallback(
+    (value: string) =>
+      setFilteredInputs(fuse.search(value).map((result) => result.item)),
+    [fuse]
+  );
+
+  const inputsLen = inputs.length;
+  const prevInputsLen = usePrevious(inputsLen);
+
+  useEffect(() => {
+    if (inputsLen !== prevInputsLen) {
+      setFilteredInputs(inputs);
+      if (ref.current?.value) filter(ref.current.value);
+    }
+  }, [filter, inputs, inputsLen, prevInputsLen]);
+
   return (
     <div className="space-y-4">
       <Input
         onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-          setFilteredInputs(
-            value ? fuse.search(value).map((result) => result.item) : inputs
-          );
+          if (value) filter(value);
+          else setFilteredInputs(inputs);
 
           requestAnimationFrame(() => {
             // stupid fucking bullshit
