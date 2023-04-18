@@ -169,7 +169,7 @@ const SubjectSettingsForm = ({
           instanceId="routineTemplate"
           isCreatable
           isLoading={newRoutineTransition[0]}
-          noOptionsMessage={() => 'No templates—type to add a routine'}
+          noOptionsMessage={() => 'No templates—type to create a routine'}
           onChange={(e) => {
             saveToCache();
 
@@ -210,7 +210,7 @@ const SubjectSettingsForm = ({
           options={forceArray(availableTemplates).filter(
             (template) => template.type === TemplateTypes.Routine
           )}
-          placeholder="Add routine…"
+          placeholder="Add routine or type to create…"
           value={null}
         />
       </section>
@@ -238,7 +238,7 @@ const SubjectSettingsForm = ({
           instanceId="observationTemplate"
           isCreatable
           isLoading={newObservationTransition[0]}
-          noOptionsMessage={() => 'No templates—type to add an observation'}
+          noOptionsMessage={() => 'No templates—type to create an observation'}
           onChange={(e) => {
             saveToCache();
 
@@ -279,7 +279,7 @@ const SubjectSettingsForm = ({
           options={forceArray(availableTemplates).filter(
             (template) => template.type === TemplateTypes.Observation
           )}
-          placeholder="Add observation…"
+          placeholder="Add observation or type to create…"
           value={null}
         />
       </section>

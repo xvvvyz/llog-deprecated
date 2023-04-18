@@ -63,6 +63,10 @@ const EventStopwatch = <T extends FieldValues>({
     );
   }, 1000);
 
+  const orTypeToCreate = input.settings?.isCreatable
+    ? ' or type to create'
+    : '';
+
   return (
     <fieldset>
       <legend className="label">{input.label}</legend>
@@ -137,7 +141,7 @@ const EventStopwatch = <T extends FieldValues>({
               toggleIsCreating();
             }}
             options={input.options}
-            placeholder="Add timed note…"
+            placeholder={`Add timed note${orTypeToCreate}…`}
             value={null}
           />
           {!!timedNoteArray.fields.length && (

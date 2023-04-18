@@ -284,7 +284,7 @@ const Select = <TOption extends IOption>(
       Placeholder,
       SingleValue,
     },
-    formatCreateLabel: (value: string) => `Add "${value}"`,
+    formatCreateLabel: (value: string) => `Create "${value}"`,
     getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
     getOptionValue: (option: IOption) => option.id,
     instanceId: instanceId ?? name,
