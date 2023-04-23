@@ -12,7 +12,7 @@ import forceArray from '(utilities)/force-array';
 import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
-import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
+import { GetSessionData } from '(utilities)/get-session';
 import parseSeconds from '(utilities)/parse-seconds';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { Controller, useForm } from 'react-hook-form';
@@ -20,11 +20,11 @@ import EventSelect from './event-select';
 import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
-  event?: GetEventData | ListSessionRoutinesData['event'];
+  event?: GetEventData | GetSessionData['routines'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<ListSessionRoutinesData>[0];
+    | NonNullable<GetSessionData>['routines'][0];
   isMission: boolean;
   subjectId: string;
 }

@@ -1,7 +1,8 @@
 import LinkList from '(components)/link-list';
+import { Database } from '(types)/database';
 import CODES from '(utilities)/constant-codes';
 import forceArray from '(utilities)/force-array';
-import listMissionsWithRoutines from '(utilities)/list-missions-with-routines';
+import listMissions from '(utilities)/list-missions';
 
 interface MissionProps {
   isTeamMember: boolean;
@@ -9,19 +10,25 @@ interface MissionProps {
 }
 
 const Missions = async ({ isTeamMember, subjectId }: MissionProps) => {
-  const { data: missions } = await listMissionsWithRoutines(subjectId);
+  const { data: missions } = await listMissions(subjectId);
 
   return (
     <LinkList>
       {forceArray(missions).reduce((acc, mission) => {
-        const routines = forceArray(mission.routines);
-        const activeRoutine = routines.find(({ events }) => !events.length);
-        if (!activeRoutine) return acc;
-        const activeSessionNumber = activeRoutine.session + 1;
+        const sessions = forceArray(mission.sessions);
+
+        const activeSession = sessions.find(({ routines }) =>
+          routines.find(
+            (et: { events: Database['public']['Tables']['events']['Row'][] }) =>
+              !et.events.length
+          )
+        );
+
+        if (!activeSession) return acc;
 
         acc.push(
           <LinkList.Item
-            href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSessionNumber}`}
+            href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSession.id}`}
             key={mission.id}
             pill={CODES.mission}
             text={mission.name}

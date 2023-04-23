@@ -1,3 +1,4 @@
+import { Database } from '(types)/database';
 import createServerSupabaseClient from './create-server-supabase-client';
 
 const getMissionWithRoutines = (missionId: string) =>
@@ -5,8 +6,11 @@ const getMissionWithRoutines = (missionId: string) =>
     .from('missions')
     .select(
       `
+      id,
+      name,
+      sessions(
         id,
-        name,
+        order,
         routines:event_types(
           content,
           event:events(
@@ -29,19 +33,79 @@ const getMissionWithRoutines = (missionId: string) =>
           inputs:event_type_inputs(input_id),
           name,
           order,
-          session,
           type
-        )`
+        ),
+        scheduled_for
+      )`
     )
     .eq('id', missionId)
-    .not('routines.session', 'is', null)
-    .eq('routines.deleted', false)
-    .order('order', { foreignTable: 'event_types' })
-    .order('order', { foreignTable: 'event_types.event_type_inputs' })
+    .eq('sessions.deleted', false)
+    .order('order', { foreignTable: 'sessions' })
+    .eq('sessions.routines.deleted', false)
+    .order('order', { foreignTable: 'sessions.routines' })
+    .order('order', { foreignTable: 'sessions.routines.inputs' })
     .single();
 
 export type GetMissionWithEventTypesData = Awaited<
   ReturnType<typeof getMissionWithRoutines>
->['data'];
+>['data'] & {
+  sessions: Array<
+    Pick<
+      Database['public']['Tables']['sessions']['Row'],
+      'id' | 'order' | 'scheduled_for'
+    > & {
+      routines: Array<
+        Pick<
+          Database['public']['Tables']['event_types']['Row'],
+          'content' | 'id' | 'name' | 'order' | 'type'
+        > & {
+          event: Array<
+            Pick<
+              Database['public']['Tables']['events']['Row'],
+              'created_at' | 'id'
+            > & {
+              comments: Array<
+                Pick<
+                  Database['public']['Tables']['comments']['Row'],
+                  'content' | 'id'
+                > & {
+                  profile: Pick<
+                    Database['public']['Tables']['profiles']['Row'],
+                    'first_name' | 'id' | 'last_name'
+                  >;
+                }
+              >;
+              inputs: Array<
+                Pick<
+                  Database['public']['Tables']['event_inputs']['Row'],
+                  'value'
+                > & {
+                  input: Pick<
+                    Database['public']['Tables']['inputs']['Row'],
+                    'id' | 'label' | 'type'
+                  >;
+                  option: Pick<
+                    Database['public']['Tables']['input_options']['Row'],
+                    'id' | 'label'
+                  >;
+                }
+              >;
+              profile: Pick<
+                Database['public']['Tables']['profiles']['Row'],
+                'first_name' | 'id' | 'last_name'
+              >;
+            }
+          >;
+          inputs: Array<
+            Pick<
+              Database['public']['Tables']['event_type_inputs']['Row'],
+              'input_id'
+            >
+          >;
+        }
+      >;
+    }
+  >;
+};
 
 export default getMissionWithRoutines;

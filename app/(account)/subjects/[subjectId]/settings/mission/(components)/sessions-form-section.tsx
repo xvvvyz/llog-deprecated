@@ -1,15 +1,25 @@
 import Button from '(components)/button';
+import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import SessionFormSection from './session-form-section';
+
+import {
+  FieldArray,
+  FieldValues,
+  useFieldArray,
+  UseFormReturn,
+} from 'react-hook-form';
 
 interface SessionsFormSectionProps<T extends FieldValues> {
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesData;
   form: UseFormReturn<T>;
-  routineEventsMap: Record<string, any>;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   subjectId: string;
   userId: string;
 }
@@ -24,7 +34,7 @@ const SessionsFormSection = <T extends FieldValues>({
 }: SessionsFormSectionProps<T>) => {
   const sessionArray = useFieldArray({
     control: form.control,
-    name: 'routines' as T[string],
+    name: 'sessions' as T[string],
   });
 
   return (
@@ -49,7 +59,9 @@ const SessionsFormSection = <T extends FieldValues>({
       <Button
         className="mt-8 w-full"
         colorScheme="transparent"
-        onClick={() => sessionArray.append([[]] as any)}
+        onClick={() =>
+          sessionArray.append({ routines: [] } as FieldArray<T, T[string]>)
+        }
         type="button"
       >
         <PlusIcon className="w-5" />

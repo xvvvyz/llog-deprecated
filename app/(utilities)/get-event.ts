@@ -31,12 +31,12 @@ const getEvent = (eventId: string) =>
         ),
         name,
         order,
-        session,
         type
       )`
     )
     .eq('id', eventId)
     .order('order', { foreignTable: 'type.inputs' })
+    .order('created_at', { foreignTable: 'comments' })
     .eq('type.inputs.input.options.deleted', false)
     .order('order', { foreignTable: 'type.inputs.input.options' })
     .single();
@@ -62,7 +62,7 @@ export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
-    'content' | 'id' | 'name' | 'order' | 'session' | 'type'
+    'content' | 'id' | 'name' | 'order' | 'type'
   > & {
     inputs: Array<
       Pick<InputType, 'id' | 'label' | 'settings' | 'type'> & {

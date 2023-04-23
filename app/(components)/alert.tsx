@@ -40,9 +40,9 @@ const Alert = ({
           )}
           <div className="mt-16 flex flex-col-reverse gap-4">
             <Button
-              className="w-full"
-              colorScheme="transparent"
+              className="m-0 -mb-3 w-full justify-center p-0 py-3"
               onClick={toggle}
+              variant="link"
             >
               {cancelText}
             </Button>

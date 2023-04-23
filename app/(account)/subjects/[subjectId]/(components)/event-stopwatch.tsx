@@ -63,9 +63,7 @@ const EventStopwatch = <T extends FieldValues>({
     );
   }, 1000);
 
-  const orTypeToCreate = input.settings?.isCreatable
-    ? ' or type to create'
-    : '';
+  const typeToCreate = input.settings?.isCreatable ? '. Type to create' : '';
 
   return (
     <fieldset>
@@ -141,7 +139,7 @@ const EventStopwatch = <T extends FieldValues>({
               toggleIsCreating();
             }}
             options={input.options}
-            placeholder={`Add timed note${orTypeToCreate}…`}
+            placeholder={`Add timed note${typeToCreate}…`}
             value={null}
           />
           {!!timedNoteArray.fields.length && (

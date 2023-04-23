@@ -24,10 +24,16 @@ interface MissionFormProps {
   userId: string;
 }
 
-type MissionFormValues = Database['public']['Tables']['missions']['Insert'] & {
-  routines: (Database['public']['Tables']['event_types']['Insert'] & {
-    inputs: Database['public']['Tables']['inputs']['Row'][];
-  })[][];
+type MissionFormValues = Database['public']['Tables']['missions']['Row'] & {
+  sessions: Array<
+    Database['public']['Tables']['sessions']['Row'] & {
+      routines: Array<
+        Database['public']['Tables']['event_types']['Row'] & {
+          inputs: Array<Database['public']['Tables']['inputs']['Row']>;
+        }
+      >;
+    }
+  >;
 };
 
 const MissionForm = ({
@@ -38,47 +44,60 @@ const MissionForm = ({
   userId,
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
-  const routines = forceArray(mission?.routines);
-  const routineEventsMap: Record<string, any> = {};
+  const sessions = forceArray(mission?.sessions);
 
-  const defaultValues = useDefaultValues({
-    cacheKey: CacheKeys.MissionForm,
-    defaultValues: {
-      id: mission?.id,
-      name: mission?.name ?? '',
-      routines: routines.reduce((acc, routine) => {
-        routineEventsMap[routine.id] = firstIfArray(routine.event);
+  const routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  > = {};
 
-        const inputs = routine.inputs.map(
-          ({
-            input_id,
-          }: Database['public']['Tables']['event_type_inputs']['Row']) =>
-            availableInputs?.find(({ id }) => id === input_id)
-        );
+  const form = useForm<MissionFormValues>({
+    defaultValues: useDefaultValues({
+      cacheKey: CacheKeys.MissionForm,
+      defaultValues: {
+        id: mission?.id,
+        name: mission?.name ?? '',
+        sessions: sessions.map((s) => {
+          const session = firstIfArray(s);
 
-        const formattedRoutine = {
-          content: routine.content,
-          id: routine.id,
-          inputs,
-          type: routine.type,
-        };
+          return {
+            ...session,
+            routines: forceArray(session?.routines).map((r) => {
+              const routine = firstIfArray(r);
+              routineEventsMap[routine.id] = firstIfArray(routine.event);
 
-        if (acc[routine.session]) acc[routine.session].push(formattedRoutine);
-        else acc[routine.session] = [formattedRoutine];
-        return acc;
-      }, []),
-    },
+              return {
+                ...routine,
+                inputs: forceArray(routine?.inputs).reduce(
+                  (acc, { input_id }) => {
+                    const input = availableInputs?.find(
+                      ({ id }) => id === input_id
+                    );
+
+                    if (input) acc.push(input);
+                    return acc;
+                  },
+                  []
+                ),
+              };
+            }),
+          };
+        }),
+      },
+    }),
   });
-
-  const form = useForm<MissionFormValues>({ defaultValues });
 
   return (
     <form
       className="flex flex-col gap-6 sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8"
-      onSubmit={form.handleSubmit(async ({ id, name, routines }) => {
+      onSubmit={form.handleSubmit(async (values) => {
         const { data: missionData, error: missionError } = await supabase
           .from('missions')
-          .upsert({ id, name: name.trim(), subject_id: subjectId })
+          .upsert({
+            id: values.id,
+            name: values.name.trim(),
+            subject_id: subjectId,
+          })
           .select('id, name')
           .single();
 
@@ -89,44 +108,137 @@ const MissionForm = ({
 
         form.setValue('id', missionData.id);
 
-        const { insertedEventTypes, updatedEventTypes } = routines
-          .filter((session) => session.length)
-          .reduce(
-            (acc, sessionRoutines, session) => {
-              sessionRoutines.forEach((routine, i) => {
-                const payload = {
-                  content: sanitizeHtml(routine.content),
-                  id: routine.id,
-                  mission_id: missionData.id,
-                  order: Number(`${session}.${i}`),
-                  subject_id: subjectId,
-                  type: routine.type,
-                };
+        const { insertedSessions, updatedSessions } = values.sessions.reduce(
+          (acc, session, order) => {
+            const payload: Database['public']['Tables']['sessions']['Insert'] =
+              {
+                mission_id: missionData.id,
+                order,
+                scheduled_for: session.scheduled_for,
+              };
 
-                if (routine.id) acc.updatedEventTypes.push(payload);
-                else acc.insertedEventTypes.push(payload);
+            if (session.id) {
+              payload.id = session.id;
+              acc.updatedSessions.push(payload);
+            } else {
+              acc.insertedSessions.push(payload);
+            }
+
+            return acc;
+          },
+          {
+            insertedSessions: [] as Array<
+              Database['public']['Tables']['sessions']['Insert']
+            >,
+            updatedSessions: [] as Array<
+              Database['public']['Tables']['sessions']['Insert']
+            >,
+          }
+        );
+
+        const deletedSessionIds = sessions.reduce((acc, s) => {
+          const session = firstIfArray(s);
+
+          if (!updatedSessions.some(({ id }) => id === session.id)) {
+            acc.push(session.id);
+          }
+
+          return acc;
+        }, [] as string[]);
+
+        if (deletedSessionIds.length) {
+          const { error: deleteSessionsError } = await supabase
+            .from('sessions')
+            .update({ deleted: true })
+            .in('id', deletedSessionIds);
+
+          if (deleteSessionsError) {
+            alert(deleteSessionsError.message);
+            return;
+          }
+        }
+
+        if (updatedSessions.length) {
+          const { error: updateSessionsError } = await supabase
+            .from('sessions')
+            .upsert(updatedSessions);
+
+          if (updateSessionsError) {
+            alert(updateSessionsError.message);
+            return;
+          }
+        }
+
+        if (insertedSessions.length) {
+          const { data: insertSessionsData, error: insertSessionsError } =
+            await supabase
+              .from('sessions')
+              .upsert(insertedSessions)
+              .select('id');
+
+          if (insertSessionsError) {
+            alert(insertSessionsError.message);
+            return;
+          }
+
+          const insertSessionsDataReverse = insertSessionsData.reverse();
+
+          form.setValue(
+            'sessions',
+            form.getValues().sessions.map((session) => {
+              if (session.id) return session;
+              const id = insertSessionsDataReverse.pop()?.id;
+              if (!id) return session;
+              return { ...session, id };
+            })
+          );
+        }
+
+        const { insertedEventTypes, updatedEventTypes } = form
+          .getValues('sessions')
+          .reduce(
+            (acc, session) => {
+              session.routines.map((routine, order) => {
+                const payload: Database['public']['Tables']['event_types']['Insert'] =
+                  {
+                    content: sanitizeHtml(routine.content),
+                    order,
+                    session_id: session.id,
+                    subject_id: subjectId,
+                    type: routine.type,
+                  };
+
+                if (routine.id) {
+                  payload.id = routine.id;
+                  acc.updatedEventTypes.push(payload);
+                } else {
+                  acc.insertedEventTypes.push(payload);
+                }
               });
 
               return acc;
             },
             {
-              insertedEventTypes:
-                [] as Database['public']['Tables']['event_types']['Insert'][],
-              updatedEventTypes:
-                [] as Database['public']['Tables']['event_types']['Insert'][],
+              insertedEventTypes: [] as Array<
+                Database['public']['Tables']['event_types']['Insert']
+              >,
+              updatedEventTypes: [] as Array<
+                Database['public']['Tables']['event_types']['Insert']
+              >,
             }
           );
 
-        const deletedEventTypeIds = forceArray(mission?.routines).reduce(
-          (acc, eventType) => {
-            if (!updatedEventTypes.some(({ id }) => id === eventType.id)) {
-              acc.push(eventType.id);
-            }
+        const deletedEventTypeIds = sessions.reduce((acc, s) => {
+          const session = firstIfArray(s);
 
-            return acc;
-          },
-          []
-        );
+          forceArray(session?.routines).forEach((routine) => {
+            if (!updatedEventTypes.some(({ id }) => id === routine.id)) {
+              acc.push(routine.id);
+            }
+          });
+
+          return acc;
+        }, []);
 
         if (deletedEventTypeIds.length) {
           const { error: deletedEventTypesError } = await supabase
@@ -166,32 +278,27 @@ const MissionForm = ({
           const insertEventTypesDataReverse = insertEventTypesData.reverse();
 
           form.setValue(
-            'routines',
-            form.getValues().routines.map((session) =>
-              session.map((routine) => {
+            'sessions',
+            form.getValues().sessions.map((session) => ({
+              ...session,
+              routines: session.routines.map((routine) => {
                 if (routine.id) return routine;
-
-                return {
-                  ...routine,
-                  id: insertEventTypesDataReverse.pop()?.id,
-                };
-              })
-            )
+                const id = insertEventTypesDataReverse.pop()?.id;
+                if (!id) return routine;
+                return { ...routine, id };
+              }),
+            }))
           );
         }
 
         const { deleteEventTypeInputs, insertEventTypeInputs } = form
           .getValues()
-          .routines.reduce(
+          .sessions.reduce(
             (acc, session) => {
-              session.forEach((routine) => {
-                if (routine.id) {
-                  acc.deleteEventTypeInputs.push(routine.id);
-                }
+              session.routines.forEach((routine) => {
+                if (routine.id) acc.deleteEventTypeInputs.push(routine.id);
 
                 routine.inputs.forEach((input, order) => {
-                  if (!routine.id) return;
-
                   acc.insertEventTypeInputs.push({
                     event_type_id: routine.id,
                     input_id: input.id,
@@ -204,8 +311,9 @@ const MissionForm = ({
             },
             {
               deleteEventTypeInputs: [] as string[],
-              insertEventTypeInputs:
-                [] as Database['public']['Tables']['event_type_inputs']['Insert'][],
+              insertEventTypeInputs: [] as Array<
+                Database['public']['Tables']['event_type_inputs']['Insert']
+              >,
             }
           );
 

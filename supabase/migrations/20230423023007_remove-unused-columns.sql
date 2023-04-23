@@ -1,0 +1,10 @@
+alter table "public"."comments" drop column "updated_at";
+alter table "public"."events" drop column "updated_at";
+alter table "public"."inputs" drop column "created_at";
+alter table "public"."inputs" drop column "updated_at";
+alter table "public"."missions" drop column "created_at";
+alter table "public"."missions" drop column "updated_at";
+alter table "public"."subjects" drop column "created_at";
+alter table "public"."subjects" drop column "updated_at";
+alter table "public"."templates" drop column "created_at";
+alter table "public"."templates" drop column "updated_at";

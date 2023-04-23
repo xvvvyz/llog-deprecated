@@ -174,7 +174,7 @@ const RoutineFormSection = <T extends FieldValues>({
               );
             }}
             options={inputOptions}
-            placeholder="Add inputs or type to create…"
+            placeholder="Add inputs. Type to create…"
             {...field}
           />
         )}

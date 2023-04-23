@@ -4,12 +4,15 @@ import Header from '(components)/header';
 import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
 import formatTitle from '(utilities)/format-title';
 import getCurrentUser from '(utilities)/get-current-user';
-import getMissionWithRoutines from '(utilities)/get-mission-with-routines';
 import getSubject from '(utilities)/get-subject';
 import listInputs, { ListInputsData } from '(utilities)/list-inputs';
 import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
 import { notFound } from 'next/navigation';
 import MissionForm from '../../(components)/mission-form';
+
+import getMissionWithRoutines, {
+  GetMissionWithEventTypesData,
+} from '(utilities)/get-mission-with-routines';
 
 interface PageProps {
   params: {
@@ -54,7 +57,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
           subjectId
         )}
         availableTemplates={availableTemplates}
-        mission={mission}
+        mission={mission as GetMissionWithEventTypesData}
         subjectId={subjectId}
         userId={user.id}
       />

@@ -11,35 +11,33 @@ import EventCard from '../../../(components)/event-card';
 
 interface PageProps {
   params: {
+    eventType: EventTypes;
     eventTypeId: string;
-    eventTypeType: EventTypes;
     subjectId: string;
   };
 }
 
 const Page = async ({
-  params: { eventTypeId, eventTypeType, subjectId },
+  params: { eventTypeId, eventType, subjectId },
 }: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
+  if (!Object.values(EventTypes).includes(eventType)) notFound();
 
-  const [{ data: subject }, { data: eventType }, user] = await Promise.all([
+  const [{ data: subject }, { data: type }, user] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputsAndOptions(eventTypeId),
     getCurrentUser(),
   ]);
 
-  if (!subject || !eventType || !user) notFound();
+  if (!subject || !type || !user) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
     <>
       <Header>
         <BackButton href={subjectHref} />
-        <Breadcrumbs
-          items={[[subject.name, subjectHref], [eventType.name ?? '']]}
-        />
+        <Breadcrumbs items={[[subject.name, subjectHref], [type.name ?? '']]} />
       </Header>
-      <EventCard eventType={eventType} subjectId={subjectId} userId={user.id} />
+      <EventCard eventType={type} subjectId={subjectId} userId={user.id} />
     </>
   );
 };

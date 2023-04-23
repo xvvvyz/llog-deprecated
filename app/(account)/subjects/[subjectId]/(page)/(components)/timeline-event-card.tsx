@@ -27,7 +27,7 @@ const TimelineEventCard = ({
 }: TimelineEventCardProps) => {
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
-  const sessionNumber = lastEventType.session + 1;
+  const sessionNumber = lastEventType.session?.order + 1;
 
   return (
     <article className="rounded border border-alpha-1 bg-bg-2">
@@ -41,15 +41,17 @@ const TimelineEventCard = ({
         <Button
           className="m-0 w-full gap-4 px-4 py-3"
           href={
-            lastEventType.mission
-              ? `/subjects/${subjectId}/mission/${lastEventType.mission.id}/session/${sessionNumber}`
+            lastEventType.session
+              ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${sessionNumber}`
               : `/subjects/${subjectId}/${lastEventType.type}/${lastEventType.id}/event/${lastEvent.id}`
           }
           variant="link"
         >
-          {lastEventType.mission ? (
+          {lastEventType.session ? (
             <>
-              <span className="truncate">{lastEventType.mission.name}</span>
+              <span className="truncate">
+                {lastEventType.session.mission.name}
+              </span>
               <Pill>Session {sessionNumber}</Pill>
             </>
           ) : (
@@ -59,7 +61,7 @@ const TimelineEventCard = ({
             <Pill>
               {
                 CODES[
-                  lastEventType.mission
+                  lastEventType.session
                     ? 'mission'
                     : (lastEventType.type as EventTypes)
                 ]

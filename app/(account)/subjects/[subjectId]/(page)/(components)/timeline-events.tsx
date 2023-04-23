@@ -19,11 +19,7 @@ const TimelineEvents = ({ events, subjectId, userId }: TimelineEventsProps) => (
         const date = formatDate(event.created_at);
         acc[date] = acc[date] ?? new Map();
         const type = firstIfArray(event.type);
-
-        const key = type.mission
-          ? `${type.mission.id}${type.session}`
-          : event.id;
-
+        const key = type.session?.id ?? event.id;
         const keyEvents = (acc[date].get(key) ?? []) as ListEventsData;
         keyEvents.unshift(event);
         acc[date].set(key, keyEvents);

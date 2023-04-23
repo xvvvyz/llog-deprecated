@@ -4,6 +4,7 @@ import Select from '(components)/select';
 import { TemplateType } from '(types)/template';
 import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
+import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
@@ -26,7 +27,10 @@ import {
 interface RoutinesFormSection<T extends FieldValues> {
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
-  routineEventsMap: Record<string, any>;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   sessionIndex: number;
   templateOptions: NonNullable<ListTemplatesData>;
   userId: string;
@@ -40,9 +44,9 @@ const RoutinesFormSection = <T extends FieldValues>({
   templateOptions,
   userId,
 }: RoutinesFormSection<T>) => {
-  const name = `routines.${sessionIndex}`;
+  const name = `sessions.${sessionIndex}.routines`;
 
-  const eventTypeArray = useFieldArray({
+  const routinesArray = useFieldArray({
     control: form.control,
     keyName: 'key',
     name: name as T[string],
@@ -60,22 +64,22 @@ const RoutinesFormSection = <T extends FieldValues>({
             const { active, over } = event;
 
             if (over && active.id !== over.id) {
-              eventTypeArray.move(
-                eventTypeArray.fields.findIndex((f) => f.key === active.id),
-                eventTypeArray.fields.findIndex((f) => f.key === over.id)
+              routinesArray.move(
+                routinesArray.fields.findIndex((f) => f.key === active.id),
+                routinesArray.fields.findIndex((f) => f.key === over.id)
               );
             }
           }}
           sensors={sensors}
         >
           <SortableContext
-            items={eventTypeArray.fields.map((eventType) => eventType.key)}
+            items={routinesArray.fields.map((eventType) => eventType.key)}
             strategy={verticalListSortingStrategy}
           >
-            {eventTypeArray.fields.map((eventType, eventTypeIndex) => (
+            {routinesArray.fields.map((eventType, eventTypeIndex) => (
               <RoutineFormSection<T>
                 eventType={eventType}
-                eventTypeArray={eventTypeArray}
+                eventTypeArray={routinesArray}
                 eventTypeIndex={eventTypeIndex}
                 form={form}
                 inputOptions={inputOptions}
@@ -96,7 +100,7 @@ const RoutinesFormSection = <T extends FieldValues>({
         onChange={(e) => {
           const template = e as TemplateType;
 
-          eventTypeArray.append({
+          routinesArray.append({
             content: template?.data?.content || '',
             inputs: inputOptions.filter((input) =>
               template?.data?.inputIds?.includes(input.id)
@@ -106,7 +110,7 @@ const RoutinesFormSection = <T extends FieldValues>({
           } as T[string]);
         }}
         onCreateOption={async (value: unknown) =>
-          eventTypeArray.append({
+          routinesArray.append({
             content: value,
             inputs: [],
             type: EventTypes.Routine,
@@ -115,7 +119,7 @@ const RoutinesFormSection = <T extends FieldValues>({
         options={templateOptions.filter(
           (template) => template.type === TemplateTypes.Routine
         )}
-        placeholder="Add routine or type to create…"
+        placeholder="Add routine. Type to create…"
         value={null}
       />
     </>

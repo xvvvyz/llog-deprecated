@@ -11,7 +11,7 @@ const listRoutineTemplatesWithData = async () =>
       type: EventTypes.Routine,
     })
     .order('type')
-    .order('updated_at', { ascending: false });
+    .order('name');
 
 export type ListRoutineTemplatesWithDataData = Awaited<
   ReturnType<typeof listRoutineTemplatesWithData>

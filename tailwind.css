@@ -50,7 +50,7 @@
 
 @layer utilities {
   .disabled {
-    @apply pointer-events-none opacity-60;
+    @apply pointer-events-none opacity-40;
   }
 
   .prose {

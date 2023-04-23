@@ -12,7 +12,7 @@ const listSubjectEventTypes = ({
     .from('event_types')
     .select('id, name, type')
     .eq('subject_id', subjectId)
-    .is('mission_id', null)
+    .is('session_id', null)
     .eq('type', type)
     .eq('deleted', false)
     .order('order');

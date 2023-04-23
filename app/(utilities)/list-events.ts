@@ -23,10 +23,13 @@ const listEvents = (subjectId: string) =>
       type:event_types(
         content,
         id,
-        mission:missions(id, name),
+        session:sessions(
+          id,
+          mission:missions(id, name),
+          order
+        ),
         name,
         order,
-        session,
         type
       )`
     )
@@ -61,12 +64,17 @@ export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
-    'content' | 'id' | 'name' | 'order' | 'session' | 'type'
+    'content' | 'id' | 'name' | 'order' | 'type'
   > & {
-    mission: Pick<
-      Database['public']['Tables']['missions']['Row'],
-      'id' | 'name'
-    >;
+    session: Pick<
+      Database['public']['Tables']['sessions']['Row'],
+      'id' | 'order'
+    > & {
+      mission: Pick<
+        Database['public']['Tables']['missions']['Row'],
+        'id' | 'name'
+      >;
+    };
   };
 };
 

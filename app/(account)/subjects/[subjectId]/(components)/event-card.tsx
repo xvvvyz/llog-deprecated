@@ -3,7 +3,7 @@ import forceArray from '(utilities)/force-array';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { GetMissionData } from '(utilities)/get-mission';
-import { ListSessionRoutinesData } from '(utilities)/list-session-routines';
+import { GetSessionData } from '(utilities)/get-session';
 import { twMerge } from 'tailwind-merge';
 import EventBanner from './event-banner';
 import EventCommentForm from './event-comment-form';
@@ -11,11 +11,11 @@ import EventComments from './event-comments';
 import EventForm from './event-form';
 
 interface EventCardProps {
-  event?: GetEventData | ListSessionRoutinesData['event'];
+  event?: GetEventData | GetSessionData['routines'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<ListSessionRoutinesData>[0];
+    | NonNullable<GetSessionData>['routines'][0];
   mission?: GetMissionData | GetEventData['type']['mission'];
   subjectId: string;
   userId: string;
