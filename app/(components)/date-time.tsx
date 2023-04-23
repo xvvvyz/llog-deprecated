@@ -4,6 +4,7 @@ import formatDate from '(utilities)/format-date';
 import formatDateTime from '(utilities)/format-date-time';
 import formatTime from '(utilities)/format-time';
 import formatTimeSince from '(utilities)/format-time-since';
+import { useEffect, useState } from 'react';
 
 const formatters = {
   date: formatDate,
@@ -18,10 +19,18 @@ interface DateTimeProps {
   formatter: keyof typeof formatters;
 }
 
-const DateTime = ({ className, date, formatter }: DateTimeProps) => (
-  <time className={className} dateTime={date} suppressHydrationWarning>
-    {formatters[formatter](date)}
-  </time>
-);
+const DateTime = ({ className, date, formatter }: DateTimeProps) => {
+  const [dateString, setDateString] = useState<string>();
+
+  useEffect(() => {
+    setDateString(formatters[formatter](date));
+  }, [date, formatter]);
+
+  return (
+    <time className={className} dateTime={date}>
+      {dateString}
+    </time>
+  );
+};
 
 export default DateTime;

@@ -2,11 +2,11 @@
 
 import Alert from '(components)/alert';
 import Avatar from '(components)/avatar';
+import DateTime from '(components)/date-time';
 import DirtyHtml from '(components)/dirty-html';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
-import formatDateTime from '(utilities)/format-date-time';
 import useDeleteAlert from '(utilities)/use-delete-alert';
 import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
@@ -59,9 +59,11 @@ const EventComment = ({
             <span className="w-0 flex-1 truncate">
               {profile.first_name} {profile.last_name}
             </span>
-            <span className="relative -right-px flex-shrink-0 whitespace-nowrap">
-              {formatDateTime(createdAt)}
-            </span>
+            <DateTime
+              className="relative -right-px flex-shrink-0 whitespace-nowrap"
+              date={createdAt}
+              formatter="date-time"
+            />
           </div>
           {userId === profile.id && (
             <Menu className="-m-3 p-3">
