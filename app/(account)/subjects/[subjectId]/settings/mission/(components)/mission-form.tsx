@@ -7,6 +7,7 @@ import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
+import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import useDefaultValues from '(utilities)/get-default-values';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
@@ -81,6 +82,14 @@ const MissionForm = ({
                 ),
               };
             }),
+            scheduled_for:
+              !session.scheduled_for ||
+              (session.scheduled_for &&
+                new Date(session.scheduled_for) < new Date())
+                ? undefined
+                : formatDatetimeLocal(session.scheduled_for, {
+                    seconds: false,
+                  }),
           };
         }),
       },
@@ -114,7 +123,9 @@ const MissionForm = ({
               {
                 mission_id: missionData.id,
                 order,
-                scheduled_for: session.scheduled_for,
+                scheduled_for: session.scheduled_for
+                  ? new Date(session.scheduled_for).toISOString()
+                  : null,
               };
 
             if (session.id) {
@@ -349,7 +360,6 @@ const MissionForm = ({
         availableTemplates={availableTemplates}
         form={form}
         routineEventsMap={routineEventsMap}
-        subjectId={subjectId}
         userId={userId}
       />
       <Button

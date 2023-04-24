@@ -1,4 +1,5 @@
 import Button from '(components)/button';
+import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
@@ -20,7 +21,6 @@ interface SessionsFormSectionProps<T extends FieldValues> {
     string,
     GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
   >;
-  subjectId: string;
   userId: string;
 }
 
@@ -29,7 +29,6 @@ const SessionsFormSection = <T extends FieldValues>({
   availableTemplates,
   form,
   routineEventsMap,
-  subjectId,
   userId,
 }: SessionsFormSectionProps<T>) => {
   const sessionArray = useFieldArray({
@@ -50,7 +49,6 @@ const SessionsFormSection = <T extends FieldValues>({
               routineEventsMap={routineEventsMap}
               sessionArray={sessionArray}
               sessionIndex={sessionIndex}
-              subjectId={subjectId}
               userId={userId}
             />
           ))}
@@ -59,9 +57,25 @@ const SessionsFormSection = <T extends FieldValues>({
       <Button
         className="mt-8 w-full"
         colorScheme="transparent"
-        onClick={() =>
-          sessionArray.append({ routines: [] } as FieldArray<T, T[string]>)
-        }
+        onClick={() => {
+          const sessions = form.watch('sessions' as T[string]);
+          const lastScheduledFor = sessions[sessions.length - 1]?.scheduled_for;
+          let formattedNewScheduledFor = null;
+
+          if (lastScheduledFor) {
+            const newScheduledFor = new Date(lastScheduledFor);
+            newScheduledFor.setDate(newScheduledFor.getDate() + 1);
+
+            formattedNewScheduledFor = formatDatetimeLocal(newScheduledFor, {
+              seconds: false,
+            });
+          }
+
+          sessionArray.append({
+            routines: [],
+            scheduled_for: formattedNewScheduledFor,
+          } as FieldArray<T, T[string]>);
+        }}
         type="button"
       >
         <PlusIcon className="w-5" />
