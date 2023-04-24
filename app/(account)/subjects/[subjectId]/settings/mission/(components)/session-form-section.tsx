@@ -61,12 +61,11 @@ const SessionFormSection = <T extends FieldValues>({
   const scheduledForField =
     `sessions.${sessionIndex}.scheduled_for` as T[string];
 
-  const unscheduledSessions = form
-    .watch(sessionsField)
-    .filter(
-      (s: Database['public']['Tables']['sessions']['Insert']) =>
-        !s.scheduled_for
-    );
+  const sessions = form.watch(sessionsField);
+
+  const unscheduledSessions = sessions.filter(
+    (s: Database['public']['Tables']['sessions']['Insert']) => !s.scheduled_for
+  );
 
   const scheduledFor = form.watch(scheduledForField);
 
@@ -74,19 +73,21 @@ const SessionFormSection = <T extends FieldValues>({
     useState(scheduledFor);
 
   const reorderSession = () => {
-    const sessions = form.watch(sessionsField);
-    const scheduledFor = form.watch(scheduledForField);
+    const scheduledFor = form.getValues(scheduledForField);
 
     const toIndex = sessions.findIndex(
       (session: Database['public']['Tables']['sessions']['Insert']) =>
         session.scheduled_for &&
-        (!scheduledFor ||
-          new Date(session.scheduled_for) > new Date(scheduledFor))
+        (!scheduledFor || session.scheduled_for > (scheduledFor as string))
     );
 
     sessionArray.move(
       sessionIndex,
-      toIndex === -1 ? sessions.length - 1 : toIndex
+      toIndex === -1
+        ? sessions.length - 1
+        : toIndex < sessionIndex
+        ? toIndex
+        : toIndex - 1
     );
   };
 
@@ -214,7 +215,7 @@ const SessionFormSection = <T extends FieldValues>({
               </Menu.Item>
               <Menu.Item
                 onClick={() => {
-                  const from = form.watch(sessionsField)[sessionIndex];
+                  const from = sessions[sessionIndex];
 
                   const to = {
                     routines: from.routines.map(

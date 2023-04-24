@@ -42,7 +42,7 @@ const TimelineEventCard = ({
           className="m-0 w-full gap-4 px-4 py-3"
           href={
             lastEventType.session
-              ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${sessionNumber}`
+              ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${lastEventType.session.id}`
               : `/subjects/${subjectId}/${lastEventType.type}/${lastEventType.id}/event/${lastEvent.id}`
           }
           variant="link"

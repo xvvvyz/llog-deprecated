@@ -5,6 +5,7 @@ import Input from '(components)/input';
 import { Database } from '(types)/database';
 import supabase from '(utilities)/browser-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
+import EventTypes from '(utilities)/enum-event-types';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatDatetimeLocal from '(utilities)/format-datetime-local';
@@ -216,7 +217,7 @@ const MissionForm = ({
                     order,
                     session_id: session.id,
                     subject_id: subjectId,
-                    type: routine.type,
+                    type: EventTypes.Routine,
                   };
 
                 if (routine.id) {

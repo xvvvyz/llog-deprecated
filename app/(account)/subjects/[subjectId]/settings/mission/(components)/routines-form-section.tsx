@@ -2,7 +2,6 @@
 
 import Select from '(components)/select';
 import { TemplateType } from '(types)/template';
-import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
@@ -105,15 +104,12 @@ const RoutinesFormSection = <T extends FieldValues>({
             inputs: inputOptions.filter((input) =>
               template?.data?.inputIds?.includes(input.id)
             ),
-            name: template?.name,
-            type: EventTypes.Routine,
           } as T[string]);
         }}
         onCreateOption={async (value: unknown) =>
           routinesArray.append({
             content: value,
             inputs: [],
-            type: EventTypes.Routine,
           } as T[string])
         }
         options={templateOptions.filter(
