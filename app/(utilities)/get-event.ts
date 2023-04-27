@@ -35,9 +35,10 @@ const getEvent = (eventId: string) =>
       )`
     )
     .eq('id', eventId)
-    .order('order', { foreignTable: 'type.inputs' })
-    .order('created_at', { foreignTable: 'comments' })
     .eq('type.inputs.input.options.deleted', false)
+    .order('created_at', { foreignTable: 'comments' })
+    .order('order', { foreignTable: 'inputs' })
+    .order('order', { foreignTable: 'type.inputs' })
     .order('order', { foreignTable: 'type.inputs.input.options' })
     .single();
 

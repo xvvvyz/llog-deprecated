@@ -40,9 +40,10 @@ const getMissionWithRoutines = (missionId: string) =>
     )
     .eq('id', missionId)
     .eq('sessions.deleted', false)
-    .order('order', { foreignTable: 'sessions' })
     .eq('sessions.routines.deleted', false)
+    .order('order', { foreignTable: 'sessions' })
     .order('order', { foreignTable: 'sessions.routines' })
+    .order('order', { foreignTable: 'sessions.routines.event.inputs' })
     .order('order', { foreignTable: 'sessions.routines.inputs' })
     .single();
 

@@ -110,11 +110,13 @@ const EventForm = ({
           }
 
           case InputTypes.MultiSelect: {
-            return input.options.filter(
-              ({ id }: Database['public']['Tables']['input_options']['Row']) =>
-                inputInputs.some(
-                  ({ input_option_id }) => input_option_id === id
-                )
+            return inputInputs.map(({ input_option_id }) =>
+              input.options.find(
+                ({
+                  id,
+                }: Database['public']['Tables']['input_options']['Row']) =>
+                  input_option_id === id
+              )
             );
           }
 
@@ -131,18 +133,20 @@ const EventForm = ({
 
           case InputTypes.Stopwatch: {
             return {
-              notes: input.options.reduce(
+              notes: inputInputs.reduce(
                 (
                   acc: StopwatchInputType['notes'],
-                  {
-                    id,
-                    label,
-                  }: Database['public']['Tables']['input_options']['Row']
+                  { input_option_id, value }
                 ) => {
-                  inputInputs.forEach(({ input_option_id, value }) => {
-                    if (input_option_id !== id) return;
-                    acc.push({ id: input_option_id, label, time: value });
-                  });
+                  input.options.forEach(
+                    ({
+                      id,
+                      label,
+                    }: Database['public']['Tables']['input_options']['Row']) => {
+                      if (input_option_id !== id) return;
+                      acc.push({ id, label, time: value });
+                    }
+                  );
 
                   return acc;
                 },
@@ -240,10 +244,11 @@ const EventForm = ({
               }
 
               case InputTypes.MultiSelect: {
-                (input as MultiSelectInputType).forEach(({ id }) =>
+                (input as MultiSelectInputType).forEach(({ id }, order) =>
                   acc.insertedEventInputs.push({
                     ...payload,
                     input_option_id: id,
+                    order,
                   })
                 );
 
@@ -258,10 +263,11 @@ const EventForm = ({
 
               case InputTypes.Stopwatch: {
                 (input as StopwatchInputType).notes.forEach(
-                  ({ id, time }: { id: string; time: string }) =>
+                  ({ id, time }: { id: string; time: string }, order) =>
                     acc.insertedEventInputs.push({
                       ...payload,
                       input_option_id: id,
+                      order,
                       value: time,
                     })
                 );

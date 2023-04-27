@@ -38,9 +38,10 @@ const getSession = (sessionId: string) =>
     )
     .eq('id', sessionId)
     .eq('routines.deleted', false)
-    .order('order', { foreignTable: 'routines' })
-    .order('order', { foreignTable: 'routines.inputs' })
     .eq('routines.inputs.input.options.deleted', false)
+    .order('order', { foreignTable: 'routines' })
+    .order('order', { foreignTable: 'routines.event.inputs' })
+    .order('order', { foreignTable: 'routines.inputs' })
     .order('order', { foreignTable: 'routines.inputs.input.options' })
     .single();
 
