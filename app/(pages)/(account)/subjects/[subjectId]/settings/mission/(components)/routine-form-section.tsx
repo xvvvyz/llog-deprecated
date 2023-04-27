@@ -105,11 +105,13 @@ const RoutineFormSection = <T extends FieldValues>({
 
                         globalValueCache.set(CacheKeys.TemplateForm, {
                           content:
-                            values.routines[sessionIndex][eventTypeIndex]
-                              .content,
+                            values.sessions[sessionIndex].routines[
+                              eventTypeIndex
+                            ].content,
                           inputs:
-                            values.routines[sessionIndex][eventTypeIndex]
-                              .inputs,
+                            values.sessions[sessionIndex].routines[
+                              eventTypeIndex
+                            ].inputs,
                           type: {
                             id: TemplateTypes.Routine,
                             label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
