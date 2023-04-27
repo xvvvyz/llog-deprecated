@@ -12,7 +12,6 @@ const getInput = (inputId: string) =>
       settings,
       subjects_for:input_subjects(subject_id),
       type`
-      // subjects_using:event_types(subject_id),
     )
     .eq('id', inputId)
     .eq('options.deleted', false)
@@ -28,10 +27,6 @@ export type GetInputData = Awaited<ReturnType<typeof getInput>>['data'] & {
     Database['public']['Tables']['input_subjects']['Row'],
     'subject_id'
   >;
-  // subjects_using: Pick<
-  //   Database['public']['Tables']['event_types']['Row'],
-  //   'subject_id'
-  // >;
 };
 
 export default getInput;

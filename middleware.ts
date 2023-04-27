@@ -2,6 +2,7 @@ import PRIVATE_ROUTES from '(utilities)/constant-private-routes';
 import PUBLIC_ROUTES from '(utilities)/constant-public-routes';
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
+import { Database } from './app/(types)/database';
 
 export const config = {
   matcher: ['/((?!api|_next/static|favicon.ico).*)'],
@@ -10,7 +11,7 @@ export const config = {
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next();
 
-  const session = await createMiddlewareSupabaseClient({
+  const session = await createMiddlewareSupabaseClient<Database>({
     req,
     res,
   }).auth.getSession();

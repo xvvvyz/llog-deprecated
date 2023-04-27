@@ -15,5 +15,4 @@ const listMissions = (subjectId: string) =>
     .order('name');
 
 export type ListMissionsData = Awaited<ReturnType<typeof listMissions>>['data'];
-
 export default listMissions;

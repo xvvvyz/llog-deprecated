@@ -1,3 +1,5 @@
+import 'client-only';
+
 import CacheKeys from './enum-cache-keys';
 
 const map = new Map();

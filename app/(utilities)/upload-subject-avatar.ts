@@ -1,4 +1,4 @@
-import supabase from '(utilities)/browser-supabase-client';
+import supabase from '(utilities)/global-supabase-client';
 
 const uploadSubjectAvatar = async ({
   avatar,

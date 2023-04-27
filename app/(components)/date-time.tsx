@@ -3,14 +3,12 @@
 import formatDate from '(utilities)/format-date';
 import formatDateTime from '(utilities)/format-date-time';
 import formatTime from '(utilities)/format-time';
-import formatTimeSince from '(utilities)/format-time-since';
 import { useEffect, useState } from 'react';
 
 const formatters = {
   date: formatDate,
   'date-time': formatDateTime,
   time: formatTime,
-  'time-since': formatTimeSince,
 };
 
 interface DateTimeProps {

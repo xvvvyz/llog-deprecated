@@ -11,5 +11,4 @@ const listInputs = async () =>
     .order('label');
 
 export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];
-
 export default listInputs;
