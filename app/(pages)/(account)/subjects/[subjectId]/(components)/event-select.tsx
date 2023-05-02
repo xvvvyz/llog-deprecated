@@ -24,7 +24,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
     input.type === 'multi_select' ? 'options' : 'an option';
 
   const placeholder = input.settings?.isCreatable
-    ? `Select ${optionOrOptions}. Type to create…`
+    ? `Select ${optionOrOptions} or create your own…`
     : `Select ${optionOrOptions}…`;
 
   return (

@@ -6,19 +6,19 @@ import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { TemplateDataType } from '(types)/template';
-import supabase from '(utilities)/global-supabase-client';
 import TEMPLATE_TYPE_LABELS from '(utilities)/constant-template-type-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
-import useDefaultValues from '(utilities)/use-default-values';
 import { GetEventTypeWithInputsData } from '(utilities)/get-event-type-with-inputs';
 import { GetTemplateData } from '(utilities)/get-template';
+import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
+import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -135,10 +135,12 @@ const EventTypeForm = ({
         name="inputs"
         render={({ field }) => (
           <Select
+            formatCreateLabel={(value: string) => `Create "${value}" input`}
             isCreatable
             isLoading={isTransitioning}
             isMulti
             label="Inputs"
+            noOptionsMessage={() => 'Type to create a new input'}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, { label: value });
               globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
@@ -147,7 +149,7 @@ const EventTypeForm = ({
                 router.push(
                   formatCacheLink({
                     backLink,
-                    path: '/inputs/add',
+                    path: '/inputs/create',
                     updateCacheKey: CacheKeys.EventTypeForm,
                     updateCachePath: 'inputs',
                     useCache: true,
@@ -156,6 +158,7 @@ const EventTypeForm = ({
               );
             }}
             options={forceArray(availableInputs)}
+            placeholder="Select inputs or type to create…"
             {...field}
           />
         )}
@@ -167,7 +170,7 @@ const EventTypeForm = ({
           loadingText="Saving…"
           type="submit"
         >
-          Save {defaultValues.type} type
+          Save {defaultValues.type}
         </Button>
         <Button
           className="w-full"
@@ -190,7 +193,7 @@ const EventTypeForm = ({
             router.push(
               formatCacheLink({
                 backLink,
-                path: '/templates/add',
+                path: '/templates/create',
                 useCache: true,
               })
             );

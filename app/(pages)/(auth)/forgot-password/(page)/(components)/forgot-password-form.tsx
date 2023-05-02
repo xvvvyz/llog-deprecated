@@ -2,8 +2,8 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import supabase from '(utilities)/global-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
+import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

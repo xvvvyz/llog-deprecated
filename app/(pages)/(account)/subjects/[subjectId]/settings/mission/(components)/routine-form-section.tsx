@@ -85,7 +85,7 @@ const RoutineFormSection = <T extends FieldValues>({
         render={({ field }) => (
           <RichTextarea
             className="rounded-b-none"
-            placeholder="Description"
+            placeholder="Description…"
             right={
               <>
                 <IconButton
@@ -123,7 +123,7 @@ const RoutineFormSection = <T extends FieldValues>({
                         router.push(
                           formatCacheLink({
                             backLink,
-                            path: '/templates/add',
+                            path: '/templates/create',
                             useCache: true,
                           })
                         );
@@ -153,9 +153,11 @@ const RoutineFormSection = <T extends FieldValues>({
               'rounded-t-none border-t-0',
               event && 'rounded-b-none'
             )}
+            formatCreateLabel={(value: string) => `Create "${value}" input`}
             isCreatable
             isLoading={isTransitioning}
             isMulti
+            noOptionsMessage={() => 'Type to create a new input'}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, {
                 label: value,
@@ -167,7 +169,7 @@ const RoutineFormSection = <T extends FieldValues>({
                 router.push(
                   formatCacheLink({
                     backLink,
-                    path: '/inputs/add',
+                    path: '/inputs/create',
                     updateCacheKey: CacheKeys.MissionForm,
                     updateCachePath: `${name}.${eventTypeIndex}.inputs`,
                     useCache: true,
@@ -176,7 +178,7 @@ const RoutineFormSection = <T extends FieldValues>({
               );
             }}
             options={inputOptions}
-            placeholder="Add inputs. Type to create…"
+            placeholder="Select inputs or type to create…"
             {...field}
           />
         )}

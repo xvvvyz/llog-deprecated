@@ -5,30 +5,24 @@ import EventTypes from '(utilities)/enum-event-types';
 import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
 import formatTitle from '(utilities)/format-title';
 import getSubject from '(utilities)/get-subject';
-import getTemplate from '(utilities)/get-template';
 import listInputs, { ListInputsData } from '(utilities)/list-inputs';
 import { notFound } from 'next/navigation';
-import EventTypeForm from '../../../../(components)/event-type-form';
+import EventTypeForm from '../../(components)/event-type-form';
 
 interface PageProps {
   params: {
     eventTypeType: EventTypes;
     subjectId: string;
-    templateId: string;
   };
 }
 
-const Page = async ({
-  params: { eventTypeType, subjectId, templateId },
-}: PageProps) => {
+const Page = async ({ params: { eventTypeType, subjectId } }: PageProps) => {
   if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
 
-  const [{ data: subject }, { data: availableInputs }, { data: template }] =
-    await Promise.all([
-      getSubject(subjectId),
-      listInputs(),
-      getTemplate(templateId),
-    ]);
+  const [{ data: subject }, { data: availableInputs }] = await Promise.all([
+    getSubject(subjectId),
+    listInputs(),
+  ]);
 
   if (!subject) notFound();
   const subjectHref = `/subjects/${subjectId}`;
@@ -41,7 +35,7 @@ const Page = async ({
           items={[
             [subject.name, subjectHref],
             ['Settings', `${subjectHref}/settings`],
-            [`Add ${eventTypeType}`],
+            [`Create ${eventTypeType}`],
           ]}
         />
       </Header>
@@ -51,7 +45,6 @@ const Page = async ({
           subjectId
         )}
         subjectId={subjectId}
-        template={template}
         type={eventTypeType as EventTypes}
       />
     </>
@@ -65,7 +58,7 @@ export const generateMetadata = async ({
   if (!subject) return;
 
   return {
-    title: formatTitle([subject.name, 'Settings', `Add ${eventTypeType}`]),
+    title: formatTitle([subject.name, 'Settings', `Create ${eventTypeType}`]),
   };
 };
 

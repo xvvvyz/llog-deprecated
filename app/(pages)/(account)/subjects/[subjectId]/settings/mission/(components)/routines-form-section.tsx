@@ -6,6 +6,7 @@ import TemplateTypes from '(utilities)/enum-template-types';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import RoutineFormSection from './routine-form-section';
 
@@ -22,6 +23,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import IconButton from '../../../../../../../(components)/icon-button';
 
 interface RoutinesFormSection<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -92,32 +94,45 @@ const RoutinesFormSection = <T extends FieldValues>({
           </SortableContext>
         </DndContext>
       </ul>
-      <Select
-        instanceId={`${name}Template`}
-        isCreatable
-        noOptionsMessage={() => 'No templates—type to create a routine'}
-        onChange={(e) => {
-          const template = e as TemplateType;
+      <div className="flex items-center gap-4">
+        <div className="flex-grow">
+          <Select
+            instanceId={`${name}Template`}
+            noOptionsMessage={() => 'No templates'}
+            onChange={(e) => {
+              const template = e as TemplateType;
+              if (!template) return;
 
-          routinesArray.append({
-            content: template?.data?.content || '',
-            inputs: inputOptions.filter((input) =>
-              template?.data?.inputIds?.includes(input.id)
-            ),
-          } as T[string]);
-        }}
-        onCreateOption={async (value: unknown) =>
-          routinesArray.append({
-            content: value,
-            inputs: [],
-          } as T[string])
-        }
-        options={templateOptions.filter(
-          (template) => template.type === TemplateTypes.Routine
-        )}
-        placeholder="Add routine. Type to create…"
-        value={null}
-      />
+              routinesArray.append({
+                content: template?.data?.content || '',
+                inputs: inputOptions.filter((input) =>
+                  template?.data?.inputIds?.includes(input.id)
+                ),
+              } as T[string]);
+            }}
+            options={templateOptions.filter(
+              (template) => template.type === TemplateTypes.Routine
+            )}
+            placeholder="Add routine from template…"
+            value={null}
+          />
+        </div>
+        <span className="text-fg-3">or</span>
+        <IconButton
+          className="p-2"
+          colorScheme="transparent"
+          icon={<PlusIcon className="m-0.5 w-5" />}
+          label="Add routine"
+          onClick={() =>
+            routinesArray.append({
+              content: '',
+              inputs: [],
+            } as T[string])
+          }
+          type="button"
+          variant="primary"
+        />
+      </div>
     </>
   );
 };

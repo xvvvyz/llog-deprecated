@@ -284,7 +284,7 @@ const Select = <TOption extends IOption>(
       Placeholder,
       SingleValue,
     },
-    formatCreateLabel: (value: string) => `Create "${value}"`,
+    formatCreateLabel: (value: string) => `Save "${value}" option`,
     getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
     getOptionValue: (option: IOption) => option.id,
     instanceId: instanceId ?? name,
@@ -292,7 +292,8 @@ const Select = <TOption extends IOption>(
     isDisabled: isDisabled || isLoading,
     isLoading,
     name,
-    noOptionsMessage: () => `No options${isCreatable ? '—type to create' : ''}`,
+    noOptionsMessage: () =>
+      isCreatable ? 'Type to create an option' : 'No options',
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,
     ...props,

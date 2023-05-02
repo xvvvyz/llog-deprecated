@@ -12,13 +12,13 @@ const Page = async () => {
     <>
       <Header>
         <BackButton href="/inputs" />
-        <Breadcrumbs items={[['Inputs', '/inputs'], ['Add']]} />
+        <Breadcrumbs items={[['Inputs', '/inputs'], ['Create']]} />
       </Header>
       <InputForm subjects={subjects} />
     </>
   );
 };
 
-export const metadata = { title: formatTitle(['Inputs', 'Add']) };
+export const metadata = { title: formatTitle(['Inputs', 'Create']) };
 export const revalidate = 0;
 export default Page;

@@ -9,15 +9,18 @@ import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useForm } from 'react-hook-form';
 import SubjectDetailsFormSection from '../../../(components)/subject-details-form-section';
 
-type AddSubjectFormValues =
+type CreateSubjectFormValues =
   Database['public']['Tables']['subjects']['Insert'] & {
     avatar?: File;
   };
 
-const AddSubjectForm = () => {
+const CreateSubjectForm = () => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const dropzone = useAvatarDropzone();
-  const form = useForm<AddSubjectFormValues>({ defaultValues: { name: '' } });
+
+  const form = useForm<CreateSubjectFormValues>({
+    defaultValues: { name: '' },
+  });
 
   return (
     <form
@@ -55,7 +58,7 @@ const AddSubjectForm = () => {
         await redirect(`/subjects/${subjectData.id}/settings`);
       })}
     >
-      <SubjectDetailsFormSection<AddSubjectFormValues>
+      <SubjectDetailsFormSection<CreateSubjectFormValues>
         dropzone={dropzone}
         form={form}
       />
@@ -65,10 +68,10 @@ const AddSubjectForm = () => {
         loadingText="Saving…"
         type="submit"
       >
-        Add Subject
+        Create subject
       </Button>
     </form>
   );
 };
 
-export default AddSubjectForm;
+export default CreateSubjectForm;

@@ -6,19 +6,19 @@ import RichTextarea from '(components)/rich-textarea';
 import Select from '(components)/select';
 import { Database, Json } from '(types)/database';
 import { TemplateDataType } from '(types)/template';
-import supabase from '(utilities)/global-supabase-client';
 import TEMPLATE_TYPE_LABELS from '(utilities)/constant-template-type-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import TemplateTypes from '(utilities)/enum-template-types';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
-import useDefaultValues from '(utilities)/use-default-values';
 import { GetTemplateData } from '(utilities)/get-template';
+import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import sortInputs from '(utilities)/sort-inputs';
 import useBackLink from '(utilities)/use-back-link';
+import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -121,10 +121,12 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         name="inputs"
         render={({ field }) => (
           <Select
+            formatCreateLabel={(value: string) => `Create "${value}" input`}
             isCreatable
             isLoading={isTransitioning}
             isMulti
             label="Inputs"
+            noOptionsMessage={() => 'Type to create a new input'}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, { label: value });
               globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
@@ -133,7 +135,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
                 router.push(
                   formatCacheLink({
                     backLink,
-                    path: '/inputs/add',
+                    path: '/inputs/create',
                     updateCacheKey: CacheKeys.TemplateForm,
                     updateCachePath: 'inputs',
                     useCache: true,
@@ -142,6 +144,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
               );
             }}
             options={forceArray(availableInputs).sort(sortInputs)}
+            placeholder="Select inputs or type to create…"
             {...field}
           />
         )}

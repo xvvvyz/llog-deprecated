@@ -10,8 +10,8 @@ const Layout = ({ children }: LayoutProps) => (
   <>
     <Header>
       <h1 className="text-2xl">Inputs</h1>
-      <Button href="/inputs/add" size="sm">
-        Add input
+      <Button href="/inputs/create" size="sm">
+        Create input
       </Button>
     </Header>
     <main>{children}</main>

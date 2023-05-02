@@ -5,19 +5,19 @@ import LinkList from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { TemplateType } from '(types)/template';
-import supabase from '(utilities)/global-supabase-client';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import EventTypes from '(utilities)/enum-event-types';
 import TemplateTypes from '(utilities)/enum-template-types';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
-import useDefaultValues from '(utilities)/use-default-values';
 import { GetSubjectWithEventTypesData } from '(utilities)/get-subject-with-event-types-and-missions';
+import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useBackLink from '(utilities)/use-back-link';
+import useDefaultValues from '(utilities)/use-default-values';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -30,6 +30,7 @@ import {
   ClipboardDocumentIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
+import IconButton from '../../../../../../../(components)/icon-button';
 
 interface SubjectSettingsFormProps {
   availableTemplates: ListTemplatesData;
@@ -137,12 +138,12 @@ const SubjectSettingsForm = ({
         <Button
           className="mt-4 w-full"
           colorScheme="transparent"
-          href={`/subjects/${subject.id}/settings/mission/add?back=${backLink}`}
+          href={`/subjects/${subject.id}/settings/mission/create?back=${backLink}`}
           onClick={saveToCache}
           type="button"
         >
           <PlusIcon className="w-5" />
-          Add mission
+          Create mission
         </Button>
       </section>
       <section className="mt-2">
@@ -164,55 +165,64 @@ const SubjectSettingsForm = ({
             ))}
           </LinkList>
         )}
-        <Select
-          className="mt-4"
-          instanceId="routineTemplate"
-          isCreatable
-          isLoading={newRoutineTransition[0]}
-          noOptionsMessage={() => 'No templates—type to create a routine'}
-          onChange={(e) => {
-            saveToCache();
+        <div className="mt-4 flex items-center gap-4">
+          <div className="flex-grow">
+            <Select
+              instanceId="routineTemplate"
+              noOptionsMessage={() => 'No templates'}
+              onChange={(e) => {
+                saveToCache();
 
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              order: routines.length,
-            });
+                globalValueCache.set(CacheKeys.EventTypeForm, {
+                  order: routines.length,
+                });
 
-            const template = e as TemplateType;
+                const template = e as TemplateType;
 
-            newRoutineTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/routine/add/from-template/${template.id}`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          onCreateOption={async (value: unknown) => {
-            saveToCache();
+                newRoutineTransition[1](() =>
+                  router.push(
+                    formatCacheLink({
+                      backLink,
+                      path: `/subjects/${subject.id}/settings/routine/create/from-template/${template.id}`,
+                      useCache: true,
+                    })
+                  )
+                );
+              }}
+              options={forceArray(availableTemplates).filter(
+                (template) => template.type === TemplateTypes.Routine
+              )}
+              placeholder="Create from template…"
+              value={null}
+            />
+          </div>
+          <span className="text-fg-3">or</span>
+          <IconButton
+            className="p-2"
+            colorScheme="transparent"
+            icon={<PlusIcon className="m-0.5 w-5" />}
+            label="Create routine"
+            onClick={() => {
+              saveToCache();
 
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              name: value,
-              order: routines.length,
-            });
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                order: routines.length,
+              });
 
-            newRoutineTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/routine/add`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          options={forceArray(availableTemplates).filter(
-            (template) => template.type === TemplateTypes.Routine
-          )}
-          placeholder="Add routine. Type to create…"
-          value={null}
-        />
+              newRoutineTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/routine/create`,
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            type="button"
+            variant="primary"
+          />
+        </div>
       </section>
       <section className="mt-2">
         <h1 className="px-2 text-xl text-fg-1">Observations</h1>
@@ -233,55 +243,64 @@ const SubjectSettingsForm = ({
             ))}
           </LinkList>
         )}
-        <Select
-          className="mt-4"
-          instanceId="observationTemplate"
-          isCreatable
-          isLoading={newObservationTransition[0]}
-          noOptionsMessage={() => 'No templates—type to create an observation'}
-          onChange={(e) => {
-            saveToCache();
+        <div className="mt-4 flex items-center gap-4">
+          <div className="flex-grow">
+            <Select
+              instanceId="observationTemplate"
+              noOptionsMessage={() => 'No templates'}
+              onChange={(e) => {
+                saveToCache();
 
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              order: observations.length,
-            });
+                globalValueCache.set(CacheKeys.EventTypeForm, {
+                  order: observations.length,
+                });
 
-            const template = e as TemplateType;
+                const template = e as TemplateType;
 
-            newObservationTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/observation/add/from-template/${template.id}`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          onCreateOption={async (value: unknown) => {
-            saveToCache();
+                newObservationTransition[1](() =>
+                  router.push(
+                    formatCacheLink({
+                      backLink,
+                      path: `/subjects/${subject.id}/settings/observation/create/from-template/${template.id}`,
+                      useCache: true,
+                    })
+                  )
+                );
+              }}
+              options={forceArray(availableTemplates).filter(
+                (template) => template.type === TemplateTypes.Observation
+              )}
+              placeholder="Create from template…"
+              value={null}
+            />
+          </div>
+          <span className="text-fg-3">or</span>
+          <IconButton
+            className="p-2"
+            colorScheme="transparent"
+            icon={<PlusIcon className="m-0.5 w-5" />}
+            label="Create observation"
+            onClick={() => {
+              saveToCache();
 
-            globalValueCache.set(CacheKeys.EventTypeForm, {
-              name: value,
-              order: observations.length,
-            });
+              globalValueCache.set(CacheKeys.EventTypeForm, {
+                order: observations.length,
+              });
 
-            newObservationTransition[1](() =>
-              router.push(
-                formatCacheLink({
-                  backLink,
-                  path: `/subjects/${subject.id}/settings/observation/add`,
-                  useCache: true,
-                })
-              )
-            );
-          }}
-          options={forceArray(availableTemplates).filter(
-            (template) => template.type === TemplateTypes.Observation
-          )}
-          placeholder="Add observation. Type to create…"
-          value={null}
-        />
+              newObservationTransition[1](() =>
+                router.push(
+                  formatCacheLink({
+                    backLink,
+                    path: `/subjects/${subject.id}/settings/observation/create`,
+                    useCache: true,
+                  })
+                )
+              );
+            }}
+            type="button"
+            variant="primary"
+          />
+        </div>
       </section>
       <section className="mt-2">
         <h1 className="px-2 text-xl text-fg-1">Clients</h1>

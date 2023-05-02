@@ -2,17 +2,17 @@ import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
 import formatTitle from '(utilities)/format-title';
-import AddSubjectForm from './(components)/add-subject-form';
+import CreateSubjectForm from './(components)/create-subject-form';
 
 const Page = async () => (
   <>
     <Header>
       <BackButton href="/subjects" />
-      <Breadcrumbs items={[['Subjects', '/subjects'], ['Add']]} />
+      <Breadcrumbs items={[['Subjects', '/subjects'], ['Create']]} />
     </Header>
-    <AddSubjectForm />
+    <CreateSubjectForm />
   </>
 );
 
-export const metadata = { title: formatTitle(['Subjects', 'Add']) };
+export const metadata = { title: formatTitle(['Subjects', 'Create']) };
 export default Page;

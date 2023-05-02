@@ -1,35 +1,36 @@
 import BackButton from '(components)/back-button';
 import Breadcrumbs from '(components)/breadcrumbs';
 import Header from '(components)/header';
+import EventTypes from '(utilities)/enum-event-types';
 import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
 import formatTitle from '(utilities)/format-title';
-import getCurrentUser from '(utilities)/get-current-user';
 import getSubject from '(utilities)/get-subject';
+import getTemplate from '(utilities)/get-template';
 import listInputs, { ListInputsData } from '(utilities)/list-inputs';
-import listRoutineTemplatesWithData from '(utilities)/list-routine-templates-with-data';
 import { notFound } from 'next/navigation';
-import MissionForm from '../../(components)/mission-form';
+import EventTypeForm from '../../../../(components)/event-type-form';
 
 interface PageProps {
   params: {
+    eventTypeType: EventTypes;
     subjectId: string;
+    templateId: string;
   };
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
-  const [
-    { data: subject },
-    { data: availableInputs },
-    { data: availableTemplates },
-    user,
-  ] = await Promise.all([
-    getSubject(subjectId),
-    listInputs(),
-    listRoutineTemplatesWithData(),
-    getCurrentUser(),
-  ]);
+const Page = async ({
+  params: { eventTypeType, subjectId, templateId },
+}: PageProps) => {
+  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
 
-  if (!subject || !user) notFound();
+  const [{ data: subject }, { data: availableInputs }, { data: template }] =
+    await Promise.all([
+      getSubject(subjectId),
+      listInputs(),
+      getTemplate(templateId),
+    ]);
+
+  if (!subject) notFound();
   const subjectHref = `/subjects/${subjectId}`;
 
   return (
@@ -40,29 +41,32 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           items={[
             [subject.name, subjectHref],
             ['Settings', `${subjectHref}/settings`],
-            ['Add mission'],
+            [`Create ${eventTypeType}`],
           ]}
         />
       </Header>
-      <MissionForm
+      <EventTypeForm
         availableInputs={filterListInputsDataBySubjectId(
           availableInputs as ListInputsData,
           subjectId
         )}
-        availableTemplates={availableTemplates}
         subjectId={subjectId}
-        userId={user.id}
+        template={template}
+        type={eventTypeType as EventTypes}
       />
     </>
   );
 };
 
 export const generateMetadata = async ({
-  params: { subjectId },
+  params: { eventTypeType, subjectId },
 }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
   if (!subject) return;
-  return { title: formatTitle([subject.name, 'Settings', 'Add mission']) };
+
+  return {
+    title: formatTitle([subject.name, 'Settings', `Create ${eventTypeType}`]),
+  };
 };
 
 export const revalidate = 0;

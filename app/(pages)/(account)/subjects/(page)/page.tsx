@@ -6,7 +6,7 @@ import listSubjects, { ListSubjectsData } from '(utilities)/list-subjects';
 const Page = async () => {
   const { data: subjects } = await listSubjects();
   const currentTeamId = await getCurrentTeamId();
-  if (!subjects?.length) return <Empty>Add a subject to get started</Empty>;
+  if (!subjects?.length) return <Empty>No subjects</Empty>;
 
   const { clientSubjects, teamSubjects } = subjects.reduce(
     (acc, subject) => {

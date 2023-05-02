@@ -8,15 +8,15 @@ import NumberInput from '(components)/input-number';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
-import supabase from '(utilities)/global-supabase-client';
 import INPUT_LABELS from '(utilities)/constant-input-labels';
 import CacheKeys from '(utilities)/enum-cache-keys';
 import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
-import useDefaultValues from '(utilities)/use-default-values';
 import { GetInputData } from '(utilities)/get-input';
 import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
+import supabase from '(utilities)/global-supabase-client';
 import { ListSubjectsByTeamIdData } from '(utilities)/list-subjects-by-team-id';
+import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -220,7 +220,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             label="For"
             noOptionsMessage={() => 'No subjects'}
             options={forceArray(subjects)}
-            placeholder="All subjects"
+            placeholder="All subjects…"
             {...field}
           />
         )}
@@ -265,6 +265,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               }
             }}
             options={INPUT_TYPE_OPTIONS}
+            placeholder="Select type…"
             {...field}
           />
         )}
@@ -308,7 +309,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                                 });
                               }
                             }}
-                            placeholder="Label"
+                            placeholder="Label…"
                             right={
                               <IconButton
                                 className="m-0 h-full w-full justify-center p-0"
