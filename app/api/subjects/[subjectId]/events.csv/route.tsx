@@ -27,7 +27,16 @@ export const GET = async (req: Request, ctx: GetContext) => {
   }
 
   const headerMap: Record<string, number> = {};
-  const csvHeader = ['Name', 'Type', 'Session', 'Routine', 'Timestamp'];
+
+  const csvHeader = [
+    'Timestamp',
+    'Event',
+    'Type',
+    'Session',
+    'Routine',
+    'Author',
+  ];
+
   const csvRows: string[][] = [];
 
   const searchParams = new URL(req.url).searchParams;
@@ -37,20 +46,20 @@ export const GET = async (req: Request, ctx: GetContext) => {
 
   eventsData.forEach((eventData, i) => {
     const event = firstIfArray(eventData);
-    csvRows[i] = [];
+    const profile = firstIfArray(event.profile);
 
-    csvRows[i].push(event.type.name ?? event.type.session.mission.name);
-    csvRows[i].push(event.type.session ? 'mission' : event.type.type);
-    csvRows[i].push(event.type.session ? event.type.session?.order + 1 : '');
-    csvRows[i].push(event.type.session ? event.type.order + 1 : '');
-
-    csvRows[i].push(
+    csvRows[i] = [
       formatInTimeZone(
         new Date(event.created_at),
         tz,
         'yyyy-MM-dd HH:mm:ss zzz'
-      )
-    );
+      ),
+      event.type.name ?? event.type.session.mission.name,
+      event.type.session ? 'mission' : event.type.type,
+      event.type.session ? event.type.session?.order + 1 : '',
+      event.type.session ? event.type.order + 1 : '',
+      `${profile.first_name} ${profile.last_name}`,
+    ];
 
     const inputs = forceArray(event.inputs).reduce(
       (
@@ -62,8 +71,8 @@ export const GET = async (req: Request, ctx: GetContext) => {
         acc[input.id].label = input.label;
 
         if (input.type === InputTypes.Stopwatch) {
-          if (option) acc[input.id].values.push(`${value} ${option.label}`);
-          else acc[input.id].values.push(`Total time: ${value}`);
+          if (option) acc[input.id].values.unshift(`${value} ${option.label}`);
+          else acc[input.id].values.unshift(`Total time: ${value}`);
         } else if (value || option?.label) {
           acc[input.id].values.push(option?.label ?? value);
         }
@@ -76,10 +85,11 @@ export const GET = async (req: Request, ctx: GetContext) => {
     Object.entries(inputs).forEach(([key, value]) => {
       if (!headerMap[key]) {
         headerMap[key] = csvHeader.length;
-        csvHeader.push(value.label.replace(',', ''));
+        csvHeader.push(`"${value.label.replaceAll('"', '""')}"`);
       }
 
-      csvRows[i][headerMap[key]] = value.values.join('; ').replace(',', '');
+      const cell = value.values.join(' | ').replaceAll('"', '""');
+      csvRows[i][headerMap[key]] = `"${cell}"`;
     });
   });
 
@@ -96,7 +106,17 @@ export const GET = async (req: Request, ctx: GetContext) => {
         csvHeader.push(columnName);
       }
 
-      csvRows[i][headerMap[columnName]] = text.replace(',', '');
+      const profile = firstIfArray(comment.profile);
+
+      const who = `${profile.first_name} ${profile.last_name}`.replaceAll(
+        '""',
+        '"'
+      );
+
+      csvRows[i][headerMap[columnName]] = `"${who}: ${text.replaceAll(
+        '""',
+        '"'
+      )}"`;
     });
   });
 
