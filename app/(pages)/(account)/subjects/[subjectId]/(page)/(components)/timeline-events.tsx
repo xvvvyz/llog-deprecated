@@ -36,7 +36,7 @@ const TimelineEvents = ({ events, subjectId, userId }: TimelineEventsProps) => {
   }, [events]);
 
   return (
-    <div className="mt-4 space-y-4">
+    <div className="space-y-4">
       {formattedEvents.map((groups) => {
         const dayGroup = Array.from(groups.values());
         const firstEvent = dayGroup[0][0];
