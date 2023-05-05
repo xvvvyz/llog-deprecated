@@ -1,7 +1,7 @@
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
-import supabase from '(utilities)/global-supabase-client';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useBoolean } from 'usehooks-ts';
@@ -19,6 +19,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
   const { value: isCreating, toggle: toggleIsCreating } = useBoolean();
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
+  const supabase = useSupabase();
 
   const optionOrOptions =
     input.type === 'multi_select' ? 'options' : 'an option';

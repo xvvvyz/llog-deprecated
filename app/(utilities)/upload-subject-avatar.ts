@@ -1,11 +1,13 @@
-import supabase from '(utilities)/global-supabase-client';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 const uploadSubjectAvatar = async ({
   avatar,
   subjectId,
+  supabase,
 }: {
   avatar?: File | string;
   subjectId: string;
+  supabase: SupabaseClient;
 }) => {
   if (!(avatar instanceof File)) return;
 

@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '(components)/button';
+import IconButton from '(components)/icon-button';
 import LinkList from '(components)/link-list';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
@@ -11,13 +12,13 @@ import TemplateTypes from '(utilities)/enum-template-types';
 import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
 import { GetSubjectWithEventTypesData } from '(utilities)/get-subject-with-event-types-and-missions';
-import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useBackLink from '(utilities)/use-back-link';
 import useDefaultValues from '(utilities)/use-default-values';
+import useSupabase from '(utilities)/use-supabase';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -30,7 +31,6 @@ import {
   ClipboardDocumentIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
-import IconButton from '../../../../../../../(components)/icon-button';
 
 interface SubjectSettingsFormProps {
   availableTemplates: ListTemplatesData;
@@ -57,6 +57,7 @@ const SubjectSettingsForm = ({
   const newRoutineTransition = useTransition();
   const router = useRouter();
   const routines = eventTypes.filter((e) => e.type === EventTypes.Routine);
+  const supabase = useSupabase();
 
   const observations = eventTypes.filter(
     (e) => e.type === EventTypes.Observation
@@ -98,6 +99,7 @@ const SubjectSettingsForm = ({
         await uploadSubjectAvatar({
           avatar: values.avatar,
           subjectId: values.id,
+          supabase,
         });
 
         form.reset(values);

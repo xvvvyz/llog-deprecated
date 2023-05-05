@@ -6,8 +6,8 @@ import DateTime from '(components)/date-time';
 import DirtyHtml from '(components)/dirty-html';
 import Menu from '(components)/menu';
 import { Database } from '(types)/database';
-import supabase from '(utilities)/global-supabase-client';
 import useDeleteAlert from '(utilities)/use-delete-alert';
+import useSupabase from '(utilities)/use-supabase';
 import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 
@@ -28,6 +28,7 @@ const EventComment = ({
 }: EventCommentProps) => {
   const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
   const router = useRouter();
+  const supabase = useSupabase();
 
   return (
     <article className="flex gap-4" role="comment">

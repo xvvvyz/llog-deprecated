@@ -2,7 +2,7 @@
 
 import Button from '(components)/button';
 import Input from '(components)/input';
-import supabase from '(utilities)/global-supabase-client';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ const SignUpForm = () => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const supabase = useSupabase();
 
   const redirect = decodeURIComponent(
     searchParams.get('redirect') ?? '/subjects'

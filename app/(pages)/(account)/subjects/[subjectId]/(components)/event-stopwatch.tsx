@@ -5,9 +5,9 @@ import IconButton from '(components)/icon-button';
 import Select from '(components)/select';
 import { Database } from '(types)/database';
 import { InputType } from '(types)/input';
-import supabase from '(utilities)/global-supabase-client';
 import parseSeconds from '(utilities)/parse-seconds';
 import useStopwatch from '(utilities)/use-stopwatch';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -48,6 +48,7 @@ const EventStopwatch = <T extends FieldValues>({
   const [isTransitioning, startTransition] = useTransition();
   const name = `inputs.${inputIndex}`;
   const router = useRouter();
+  const supabase = useSupabase();
   const stopwatch = useStopwatch(form.getValues(`${name}.time` as T[string]));
   const { value: isCreating, toggle: toggleIsCreating } = useBoolean();
 

@@ -1,5 +1,3 @@
-import PRIVATE_ROUTES from '(utilities)/constant-private-routes';
-import PUBLIC_ROUTES from '(utilities)/constant-public-routes';
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from './app/(types)/database';
@@ -16,12 +14,17 @@ export const middleware = async (req: NextRequest) => {
     res,
   }).auth.getSession();
 
-  if (PUBLIC_ROUTES.includes(req.nextUrl.pathname) && session.data.session) {
+  if (
+    ['/', '/sign-in', '/sign-up'].includes(req.nextUrl.pathname) &&
+    session.data.session
+  ) {
     return NextResponse.redirect(new URL('/subjects', req.url));
   }
 
   if (
-    PRIVATE_ROUTES.some((p) => req.nextUrl.pathname.startsWith(p)) &&
+    ['/inputs', '/insights', '/subjects', '/templates'].some((p) =>
+      req.nextUrl.pathname.startsWith(p)
+    ) &&
     !session.data.session
   ) {
     const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';

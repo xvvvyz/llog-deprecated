@@ -3,8 +3,8 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import CacheKeys from '(utilities)/enum-cache-keys';
-import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ const SignInForm = () => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const supabase = useSupabase();
 
   const form = useForm({
     defaultValues: globalValueCache.get(CacheKeys.SignInForm) ?? {

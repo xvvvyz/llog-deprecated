@@ -13,13 +13,13 @@ import forceArray from '(utilities)/force-array';
 import formatCacheLink from '(utilities)/format-cache-link';
 import { GetEventTypeWithInputsData } from '(utilities)/get-event-type-with-inputs';
 import { GetTemplateData } from '(utilities)/get-template';
-import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
 import { ListInputsData } from '(utilities)/list-inputs';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useBackLink from '(utilities)/use-back-link';
 import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -48,6 +48,7 @@ const EventTypeForm = ({
   const [redirect, isRedirecting] = useSubmitRedirect();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
+  const supabase = useSupabase();
   const templateData = template?.data as unknown as TemplateDataType;
 
   const defaultValues = useDefaultValues({

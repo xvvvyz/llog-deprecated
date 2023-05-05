@@ -9,12 +9,12 @@ import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
 import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import { GetMissionWithEventTypesData } from '(utilities)/get-mission-with-routines';
-import supabase from '(utilities)/global-supabase-client';
 import { ListInputsData } from '(utilities)/list-inputs';
 import { ListTemplatesData } from '(utilities)/list-templates';
 import sanitizeHtml from '(utilities)/sanitize-html';
 import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
+import useSupabase from '(utilities)/use-supabase';
 import { useForm } from 'react-hook-form';
 import SessionsFormSection from './sessions-form-section';
 
@@ -47,6 +47,7 @@ const MissionForm = ({
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const sessions = forceArray(mission?.sessions);
+  const supabase = useSupabase();
 
   const routineEventsMap: Record<
     string,

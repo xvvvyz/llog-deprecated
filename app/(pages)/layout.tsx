@@ -1,3 +1,4 @@
+import SupabaseProvider from '(components)/supabase-provider';
 import { Figtree, Inconsolata } from 'next/font/google';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -16,7 +17,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
-    <body>{children}</body>
+    <body>
+      <SupabaseProvider>{children}</SupabaseProvider>
+    </body>
   </html>
 );
 

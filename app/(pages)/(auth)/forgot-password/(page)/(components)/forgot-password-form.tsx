@@ -3,13 +3,14 @@
 import Button from '(components)/button';
 import Input from '(components)/input';
 import CacheKeys from '(utilities)/enum-cache-keys';
-import supabase from '(utilities)/global-supabase-client';
 import globalValueCache from '(utilities)/global-value-cache';
+import useSupabase from '(utilities)/use-supabase';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const ForgotPasswordForm = () => {
   const [linkSent, setLinkSent] = useState(false);
+  const supabase = useSupabase();
 
   const form = useForm({
     defaultValues: {

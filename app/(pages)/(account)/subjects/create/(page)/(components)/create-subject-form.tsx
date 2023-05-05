@@ -2,10 +2,10 @@
 
 import Button from '(components)/button';
 import { Database } from '(types)/database';
-import supabase from '(utilities)/global-supabase-client';
 import uploadSubjectAvatar from '(utilities)/upload-subject-avatar';
 import useAvatarDropzone from '(utilities)/use-avatar-dropzone';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
+import useSupabase from '(utilities)/use-supabase';
 import { useForm } from 'react-hook-form';
 import SubjectDetailsFormSection from '../../../(components)/subject-details-form-section';
 
@@ -17,6 +17,7 @@ type CreateSubjectFormValues =
 const CreateSubjectForm = () => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const dropzone = useAvatarDropzone();
+  const supabase = useSupabase();
 
   const form = useForm<CreateSubjectFormValues>({
     defaultValues: { name: '' },
@@ -53,6 +54,7 @@ const CreateSubjectForm = () => {
         await uploadSubjectAvatar({
           avatar: values.avatar,
           subjectId: subjectData.id,
+          supabase,
         });
 
         await redirect(`/subjects/${subjectData.id}/settings`);

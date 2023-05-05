@@ -12,9 +12,9 @@ import formatDatetimeLocal from '(utilities)/format-datetime-local';
 import { GetEventData } from '(utilities)/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '(utilities)/get-event-type-with-inputs-and-options';
 import { GetSessionData } from '(utilities)/get-session';
-import supabase from '(utilities)/global-supabase-client';
 import parseSeconds from '(utilities)/parse-seconds';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
+import useSupabase from '(utilities)/use-supabase';
 import { Controller, useForm } from 'react-hook-form';
 import EventSelect from './event-select';
 import EventStopwatch from './event-stopwatch';
@@ -77,6 +77,7 @@ const EventForm = ({
   const [redirect, isRedirecting] = useSubmitRedirect();
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
+  const supabase = useSupabase();
 
   const form = useForm<EventFormValues>({
     defaultValues: {

@@ -2,8 +2,8 @@
 
 import Alert from '(components)/alert';
 import Menu from '(components)/menu';
-import supabase from '(utilities)/global-supabase-client';
 import useDeleteAlert from '(utilities)/use-delete-alert';
+import useSupabase from '(utilities)/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -18,6 +18,7 @@ interface InputListItemMenuProps {
 
 const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   const router = useRouter();
+  const supabase = useSupabase();
   const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
 
   return (

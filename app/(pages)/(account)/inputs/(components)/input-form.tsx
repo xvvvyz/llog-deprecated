@@ -14,10 +14,10 @@ import InputTypes from '(utilities)/enum-input-types';
 import forceArray from '(utilities)/force-array';
 import { GetInputData } from '(utilities)/get-input';
 import { GetInputWithoutIdsData } from '(utilities)/get-input-without-ids';
-import supabase from '(utilities)/global-supabase-client';
 import { ListSubjectsByTeamIdData } from '(utilities)/list-subjects-by-team-id';
 import useDefaultValues from '(utilities)/use-default-values';
 import useSubmitRedirect from '(utilities)/use-submit-redirect';
+import useSupabase from '(utilities)/use-supabase';
 import useUpdateGlobalValueCache from '(utilities)/use-update-global-value-cache';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -46,6 +46,7 @@ type InputFormValues = InputType & {
 const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const initialInput = input ?? duplicateInputData;
+  const supabase = useSupabase();
   const updateGlobalValueCache = useUpdateGlobalValueCache();
 
   const defaultValues = useDefaultValues({
