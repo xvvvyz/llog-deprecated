@@ -1,26 +1,56 @@
-import { useEffect, useState } from 'react';
-import { useBoolean } from 'usehooks-ts';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useBoolean, useDebounce } from 'usehooks-ts';
 import parseSeconds from './parse-seconds';
 
-const useStopwatch = (initialTime = '0') => {
-  const [time, setTime] = useState(initialTime);
+const useStopwatch = (initialTime: string | number) => {
+  const [time, setTime] = useState(+initialTime || 0);
+  const frameId = useRef<number | undefined>();
   const isRunning = useBoolean();
+  const startTime = useRef<number>(0);
 
-  useEffect(() => {
+  const update = useCallback(() => {
     if (isRunning.value) {
-      const interval = setInterval(() => {
-        setTime((time) => (Number(time) + 0.01).toFixed(2));
-      }, 10);
-
-      return () => clearInterval(interval);
+      setTime((performance.now() - startTime.current) / 1000);
+      frameId.current = requestAnimationFrame(update);
     }
   }, [isRunning.value]);
 
+  useEffect(() => {
+    if (isRunning.value) {
+      startTime.current = performance.now() - time * 1000;
+      frameId.current = requestAnimationFrame(update);
+    } else if (frameId.current) {
+      cancelAnimationFrame(frameId.current);
+      frameId.current = undefined;
+    }
+
+    return () => {
+      if (frameId.current) cancelAnimationFrame(frameId.current);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning.value]);
+
+  const reset = useCallback(() => {
+    setTime(0);
+    startTime.current = 0;
+
+    if (frameId.current) {
+      cancelAnimationFrame(frameId.current);
+      frameId.current = undefined;
+    }
+
+    isRunning.setFalse();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     ...parseSeconds(time),
-    hasTime: time !== '0',
+    debouncedTime: useDebounce(time, 1000),
+    hasTime: time !== 0,
     isRunning: isRunning.value,
-    reset: () => setTime('0'),
+    reset,
     start: isRunning.setTrue,
     stop: isRunning.setFalse,
     time,

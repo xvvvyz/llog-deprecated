@@ -1,0 +1,67 @@
+import BackButton from '(components)/back-button';
+import Breadcrumbs from '(components)/breadcrumbs';
+import Header from '(components)/header';
+import filterListInputsDataBySubjectId from '(utilities)/filter-list-inputs-data-by-subject-id';
+import formatTitle from '(utilities)/format-title';
+import getEventTypeWithInputs from '(utilities)/get-event-type-with-inputs';
+import getSubject from '(utilities)/get-subject';
+import listInputs, { ListInputsData } from '(utilities)/list-inputs';
+import { notFound } from 'next/navigation';
+import EventTypeForm from '../event-type-form';
+
+interface PageProps {
+  params: {
+    eventTypeId: string;
+    subjectId: string;
+  };
+}
+
+const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
+  const [{ data: subject }, { data: eventType }, { data: availableInputs }] =
+    await Promise.all([
+      getSubject(subjectId),
+      getEventTypeWithInputs(eventTypeId),
+      listInputs(),
+    ]);
+
+  if (!subject || !eventType) notFound();
+  const subjectHref = `/subjects/${subjectId}`;
+
+  return (
+    <>
+      <Header>
+        <BackButton href={`${subjectHref}/settings`} />
+        <Breadcrumbs
+          items={[
+            [subject.name, subjectHref],
+            ['Settings', `${subjectHref}/settings`],
+            [eventType.name ?? ''],
+          ]}
+        />
+      </Header>
+      <EventTypeForm
+        availableInputs={filterListInputsDataBySubjectId(
+          availableInputs as ListInputsData,
+          subjectId
+        )}
+        eventType={eventType}
+        subjectId={subjectId}
+      />
+    </>
+  );
+};
+
+export const generateMetadata = async ({
+  params: { eventTypeId, subjectId },
+}: PageProps) => {
+  const [{ data: subject }, { data: eventType }] = await Promise.all([
+    getSubject(subjectId),
+    getEventTypeWithInputs(eventTypeId),
+  ]);
+
+  if (!subject || !eventType) return;
+  return { title: formatTitle([subject.name, 'Settings', eventType.name]) };
+};
+
+export const revalidate = 0;
+export default Page;
