@@ -15,11 +15,6 @@ interface GetContext {
 
 export const GET = async (req: Request, ctx: GetContext) => {
   const user = await getCurrentUser();
-
-  if (!user?.id) {
-    return new NextResponse(null, { status: 401 });
-  }
-
   const searchParams = new URL(req.url).searchParams;
   const q = searchParams.get('q');
 
@@ -146,7 +141,7 @@ chart json goes here
       ],
       model: 'gpt-3.5-turbo',
       temperature: 0,
-      user: user.id,
+      user: user?.id,
     });
 
     return NextResponse.json(completion.data.choices[0]);

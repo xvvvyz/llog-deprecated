@@ -34,8 +34,16 @@ type IOption = {
   image_uri?: string;
   label?: string;
   name?: string;
-  subjects?: { id: string; image_uri: string; name: string }[];
+  subjects?: { id: string; image_uri: string; name: string }[] | null;
 };
+
+type SelectProps<TOption> = ReactSelectProps<TOption> &
+  CreatableProps<IOption, boolean, GroupBase<IOption>> & {
+    hasAvatar?: boolean;
+    inputType?: 'text' | 'number';
+    isCreatable?: boolean;
+    label?: string;
+  };
 
 const ClearIndicator = <TOption extends IOption>(
   props: ClearIndicatorProps<TOption>
@@ -92,8 +100,16 @@ const Input = <TOption extends IOption>({
     {...props}
     className="m-1 pl-2"
     formNoValidate={true}
-    inputMode={(selectProps as any).inputType === 'number' ? 'numeric' : 'text'}
-    pattern={(selectProps as any).inputType === 'number' ? '[0-9]*' : undefined}
+    inputMode={
+      (selectProps as SelectProps<TOption>).inputType === 'number'
+        ? 'numeric'
+        : 'text'
+    }
+    pattern={
+      (selectProps as SelectProps<TOption>).inputType === 'number'
+        ? '[0-9]*'
+        : undefined
+    }
     selectProps={selectProps}
     spellCheck={true}
   >
@@ -110,7 +126,7 @@ const Menu = <TOption extends IOption>({
   ...props
 }: MenuProps<TOption>) => (
   <components.Menu
-    className="overflow-hidden rounded-b bg-bg-1 shadow-lg sm:bg-bg-2"
+    className="overflow-hidden rounded-b bg-bg-2 shadow-lg"
     {...props}
   >
     <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-2">
@@ -132,10 +148,13 @@ const MultiValueContainer = ({
   </div>
 );
 
-const MultiValueLabel = ({ children, ...props }: MultiValueGenericProps) => (
+const MultiValueLabel = <TOption extends IOption>({
+  children,
+  ...props
+}: MultiValueGenericProps) => (
   <components.MultiValueLabel {...props}>
     <div className="flex items-center gap-2 overflow-visible">
-      {(props.selectProps as any).hasAvatar && (
+      {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
           className="ml-0.5 mr-0.5"
           file={props.data.image_uri}
@@ -146,22 +165,24 @@ const MultiValueLabel = ({ children, ...props }: MultiValueGenericProps) => (
       <span
         className={twMerge(
           'whitespace-normal py-0.5 leading-snug',
-          !(props.selectProps as any).hasAvatar && 'pl-2'
+          !(props.selectProps as SelectProps<TOption>).hasAvatar && 'pl-2'
         )}
       >
         {children}
       </span>
       {props.data.subjects && !!props.data.subjects.length && (
         <div className="mr-2 flex">
-          {(props.data.subjects as any[]).map(({ id, image_uri, name }) => (
-            <Avatar
-              className="-mr-2 border border-alpha-reverse-2"
-              file={image_uri}
-              key={id}
-              name={name}
-              size="xs"
-            />
-          ))}
+          {(props.data.subjects as NonNullable<IOption['subjects']>).map(
+            ({ id, image_uri, name }) => (
+              <Avatar
+                className="-mr-2 border border-alpha-reverse-2"
+                file={image_uri}
+                key={id}
+                name={name}
+                size="xs"
+              />
+            )
+          )}
         </div>
       )}
     </div>
@@ -191,7 +212,7 @@ const Option = <TOption extends IOption>({
         props.isFocused && 'bg-alpha-1 text-fg-1'
       )}
     >
-      {(props.selectProps as any).hasAvatar && (
+      {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
           file={props.data.image_uri}
           name={props.data.label ?? props.data.name ?? ''}
@@ -236,7 +257,7 @@ const SingleValue = <TOption extends IOption>({
     className="m-1 flex items-center gap-4 px-2"
     {...props}
   >
-    {(props.selectProps as any).hasAvatar && (
+    {(props.selectProps as SelectProps<TOption>).hasAvatar && (
       <Avatar
         file={props.data.image_uri}
         name={props.data.label ?? props.data.name ?? ''}
@@ -257,13 +278,7 @@ const Select = <TOption extends IOption>(
     name,
     placeholder,
     ...props
-  }: ReactSelectProps<TOption> &
-    CreatableProps<IOption, boolean, GroupBase<IOption>> & {
-      hasAvatar?: boolean;
-      inputType?: 'text' | 'number';
-      isCreatable?: boolean;
-      label?: string;
-    },
+  }: SelectProps<TOption>,
   ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>
 ) => {
   const commonProps = {

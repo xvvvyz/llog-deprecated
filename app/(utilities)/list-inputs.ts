@@ -1,3 +1,4 @@
+import { Database } from '(types)/database';
 import createServerSupabaseClient from './create-server-supabase-client';
 import getCurrentTeamId from './get-current-team-id';
 
@@ -10,5 +11,12 @@ const listInputs = async () =>
     .order('name', { foreignTable: 'subjects' })
     .order('label');
 
-export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];
+export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'] & {
+  subjects?: Array<
+    Pick<
+      Database['public']['Tables']['subjects']['Row'],
+      'id' | 'image_uri' | 'name'
+    >
+  >;
+};
 export default listInputs;

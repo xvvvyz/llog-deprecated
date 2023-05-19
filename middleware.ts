@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Database } from './app/(types)/database';
 
 export const config = {
-  matcher: ['/((?!api|_next/static|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|favicon.ico).*)'],
 };
 
 export const middleware = async (req: NextRequest) => {
@@ -22,7 +22,7 @@ export const middleware = async (req: NextRequest) => {
   }
 
   if (
-    ['/inputs', '/insights', '/subjects', '/templates'].some((p) =>
+    ['/api', '/inputs', '/insights', '/subjects', '/templates'].some((p) =>
       req.nextUrl.pathname.startsWith(p)
     ) &&
     !session.data.session

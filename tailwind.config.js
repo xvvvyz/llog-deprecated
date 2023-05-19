@@ -26,6 +26,7 @@ module.exports = {
       'fg-2': 'var(--color-fg-2)',
       'fg-3': 'var(--color-fg-3)',
       transparent: 'transparent',
+      white: 'var(--color-white)',
     },
     fontFamily: {
       body: 'var(--font-body)',

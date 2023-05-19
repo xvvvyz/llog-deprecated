@@ -6,7 +6,7 @@ interface NavProps {
 }
 
 const Nav = ({ isClient }: NavProps) => (
-  <nav className="flex items-start justify-between gap-4 pt-8 leading-none text-fg-2">
+  <nav className="flex items-start justify-between gap-4 px-4 pt-8 leading-none text-fg-2">
     <div className="flex flex-wrap gap-4">
       <div className="flex gap-4">
         <Button activeClassName="text-fg-1" href="/subjects" variant="link">

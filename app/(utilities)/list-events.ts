@@ -21,7 +21,6 @@ const listEvents = (subjectId: string) =>
       ),
       profile:profiles(first_name, id, last_name),
       type:event_types(
-        content,
         id,
         session:sessions(
           id,
@@ -65,7 +64,7 @@ export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
-    'content' | 'id' | 'name' | 'order' | 'type'
+    'id' | 'name' | 'order' | 'type'
   > & {
     session: Pick<
       Database['public']['Tables']['sessions']['Row'],

@@ -32,6 +32,7 @@ const getSession = (sessionId: string) =>
           )
         ),
         name,
+        order,
         type
       ),
       scheduled_for`
@@ -49,7 +50,7 @@ export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'] & {
   routines: Array<
     Pick<
       Database['public']['Tables']['event_types']['Row'],
-      'content' | 'id' | 'name' | 'type'
+      'content' | 'id' | 'name' | 'order' | 'type'
     > & {
       event: Array<
         Pick<

@@ -17,6 +17,7 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
         )
       ),
       name,
+      order,
       type`
     )
     .eq('id', eventTypeId)

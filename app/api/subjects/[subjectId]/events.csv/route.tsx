@@ -1,7 +1,6 @@
 import InputTypes from '(utilities)/enum-input-types';
 import firstIfArray from '(utilities)/first-if-array';
 import forceArray from '(utilities)/force-array';
-import getCurrentUser from '(utilities)/get-current-user';
 import listEvents from '(utilities)/list-events';
 import { formatInTimeZone } from 'date-fns-tz';
 import { JSDOM } from 'jsdom';
@@ -14,12 +13,6 @@ interface GetContext {
 }
 
 export const GET = async (req: Request, ctx: GetContext) => {
-  const user = await getCurrentUser();
-
-  if (!user?.id) {
-    return new NextResponse(null, { status: 401 });
-  }
-
   const { data: eventsData } = await listEvents(ctx.params.subjectId);
 
   if (!eventsData) {

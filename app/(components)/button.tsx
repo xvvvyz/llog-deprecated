@@ -40,6 +40,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   loading?: boolean;
   loadingText?: string;
+  replace?: LinkProps['replace'];
   size?: keyof typeof sizes;
   variant?: keyof typeof variants;
 }

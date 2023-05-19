@@ -1,4 +1,5 @@
 import SupabaseProvider from '(components)/supabase-provider';
+import { Analytics } from '@vercel/analytics/react';
 import { Figtree, Inconsolata } from 'next/font/google';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -19,6 +20,7 @@ const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
     <body>
       <SupabaseProvider>{children}</SupabaseProvider>
+      <Analytics />
     </body>
   </html>
 );

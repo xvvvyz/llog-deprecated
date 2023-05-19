@@ -4,7 +4,7 @@ import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: ReactNode;
   right?: ReactNode;
 }
 

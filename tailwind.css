@@ -6,10 +6,10 @@
   :root {
     --color-accent-1: hsl(45, 96%, 45%);
     --color-accent-2: hsl(45, 96%, 60%);
-    --color-alpha-1: hsla(45, 6%, 95%, 7%);
-    --color-alpha-2: hsla(45, 6%, 95%, 11%);
-    --color-alpha-3: hsla(45, 6%, 95%, 15%);
-    --color-alpha-4: hsla(45, 6%, 95%, 19%);
+    --color-alpha-1: hsla(45, 6%, 95%, 5%);
+    --color-alpha-2: hsla(45, 6%, 95%, 9%);
+    --color-alpha-3: hsla(45, 6%, 95%, 13%);
+    --color-alpha-4: hsla(45, 6%, 95%, 17%);
     --color-alpha-reverse-1: hsla(45, 6%, 5%, 25%);
     --color-alpha-reverse-2: hsla(45, 6%, 5%, 50%);
     --color-bg-1: hsl(45, 6%, 8%);
@@ -17,10 +17,11 @@
     --color-fg-1: hsl(45, 6%, 95%, 85%);
     --color-fg-2: hsl(45, 6%, 95%, 65%);
     --color-fg-3: hsla(45, 6%, 95%, 45%);
+    --color-white: hsla(45, 6%, 95%, 95%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
-    --radius-default: 0.75rem;
-    --radius-sm: 0.25rem;
+    --radius-default: 0.9rem;
+    --radius-sm: 0.4rem;
   }
 
   html {
@@ -44,16 +45,16 @@
   }
 
   .label {
-    @apply block px-2 pb-2 leading-snug text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
+    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
   }
 }
 
 @layer utilities {
   .disabled {
-    @apply pointer-events-none opacity-40;
+    @apply pointer-events-none opacity-50;
   }
 
   .prose {
-    @apply space-y-3 whitespace-pre-wrap break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-3 prose-td:px-3 prose-td:py-1;
+    @apply space-y-3 whitespace-pre-wrap break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-3 prose-td:px-3 prose-td:py-1;
   }
 }

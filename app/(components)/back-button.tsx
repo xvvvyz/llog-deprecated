@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import IconButton from './icon-button';
 
-const BackButton = ({ className, href }: ButtonProps) => {
+const BackButton = ({ className, href, ...rest }: ButtonProps) => {
   const searchParams = useSearchParams();
 
   return (
@@ -18,6 +18,7 @@ const BackButton = ({ className, href }: ButtonProps) => {
         />
       }
       label="Back"
+      {...rest}
     />
   );
 };
