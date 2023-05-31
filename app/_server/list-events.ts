@@ -35,7 +35,8 @@ const listEvents = (subjectId: string) =>
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
     .order('created_at', { foreignTable: 'comments' })
-    .order('order', { foreignTable: 'inputs' });
+    .order('order', { foreignTable: 'inputs' })
+    .limit(50);
 
 export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
   comments: Array<
