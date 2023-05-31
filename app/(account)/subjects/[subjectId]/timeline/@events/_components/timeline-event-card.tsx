@@ -11,7 +11,6 @@ import { ListEventsData } from '@/_server/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
 
 interface TimelineEventCardProps {
   group: ListEventsData;
@@ -24,7 +23,6 @@ const TimelineEventCard = ({
   subjectId,
   userId,
 }: TimelineEventCardProps) => {
-  const router = useRouter();
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
   const sessionNumber = lastEventType.session?.order + 1;
