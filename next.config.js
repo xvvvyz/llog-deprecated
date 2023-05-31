@@ -4,7 +4,7 @@ const nextConfig = {
     dirs: ['app'],
   },
   experimental: {
-    appDir: true,
+    serverActions: true,
   },
   images: {
     remotePatterns: [

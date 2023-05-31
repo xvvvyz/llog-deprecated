@@ -7,9 +7,9 @@
     --color-accent-1: hsl(45, 96%, 45%);
     --color-accent-2: hsl(45, 96%, 60%);
     --color-alpha-1: hsla(45, 6%, 95%, 5%);
-    --color-alpha-2: hsla(45, 6%, 95%, 9%);
-    --color-alpha-3: hsla(45, 6%, 95%, 13%);
-    --color-alpha-4: hsla(45, 6%, 95%, 17%);
+    --color-alpha-2: hsla(45, 6%, 95%, 10%);
+    --color-alpha-3: hsla(45, 6%, 95%, 15%);
+    --color-alpha-4: hsla(45, 6%, 95%, 20%);
     --color-alpha-reverse-1: hsla(45, 6%, 5%, 25%);
     --color-alpha-reverse-2: hsla(45, 6%, 5%, 50%);
     --color-bg-1: hsl(45, 6%, 8%);

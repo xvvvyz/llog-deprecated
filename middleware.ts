@@ -1,6 +1,6 @@
-import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { Database } from '@/_types/database';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { NextRequest, NextResponse } from 'next/server';
-import { Database } from './app/(types)/database';
 
 export const config = {
   matcher: ['/((?!_next/static|favicon.ico).*)'],
@@ -9,7 +9,7 @@ export const config = {
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next();
 
-  const session = await createMiddlewareSupabaseClient<Database>({
+  const session = await createMiddlewareClient<Database>({
     req,
     res,
   }).auth.getSession();

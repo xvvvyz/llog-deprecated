@@ -4,4 +4,4 @@ next-env.d.ts
 node_modules/
 supabase/.branches/
 supabase/.temp/
-app/(types)/database.ts
+app/_types/database.ts
