@@ -10,7 +10,7 @@ import Pill from '@/_components/pill';
 import { ListEventsData } from '@/_server/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
-import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
 
 interface TimelineEventCardProps {
   group: ListEventsData;
@@ -23,6 +23,7 @@ const TimelineEventCard = ({
   subjectId,
   userId,
 }: TimelineEventCardProps) => {
+  const router = useRouter();
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
   const sessionNumber = lastEventType.session?.order + 1;
@@ -34,14 +35,13 @@ const TimelineEventCard = ({
   return (
     <article
       className="group cursor-pointer select-none overflow-hidden rounded border border-alpha-1 bg-bg-2 transition-colors hover:border-alpha-4"
-      onClick={() => window.open(link, '_blank')}
+      onClick={() => router.push(link)}
       role="link"
     >
       <Button
         className="m-0 block w-full p-0"
         href={link}
         onClick={(e) => e.stopPropagation()}
-        target="_blank"
         variant="link"
       >
         <header className="flex w-full items-center gap-4 rounded-t bg-alpha-reverse-1 px-4 py-3">
@@ -67,7 +67,6 @@ const TimelineEventCard = ({
               />
             </div>
           )}
-          <ArrowUpRightIcon className="w-5" />
         </header>
       </Button>
       <ul>
