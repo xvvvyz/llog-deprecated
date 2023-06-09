@@ -1,13 +1,13 @@
-import Avatar from '@/_components/avatar';
-import DateTime from '@/_components/date-time';
-import DirtyHtml from '@/_components/dirty-html';
-import Empty from '@/_components/empty';
-import Header from '@/_components/header';
-import IconButton from '@/_components/icon-button';
-import NotificationTypes from '@/_constants/enum-notification-types';
+import Avatar from '@/(account)/_components/avatar';
+import DateTime from '@/(account)/_components/date-time';
+import DirtyHtml from '@/(account)/_components/dirty-html';
+import Empty from '@/(account)/_components/empty';
+import Header from '@/(account)/_components/header';
+import IconButton from '@/(account)/_components/icon-button';
+import NotificationTypes from '@/(account)/_constants/enum-notification-types';
+import listNotifications from '@/(account)/_server/list-notifications';
+import forceArray from '@/(account)/_utilities/force-array';
 import createServerActionClient from '@/_server/create-server-action-client';
-import listNotifications from '@/_server/list-notifications';
-import forceArray from '@/_utilities/force-array';
 import { revalidatePath } from 'next/cache';
 import ViewEventButton from './_components/view-event-button';
 

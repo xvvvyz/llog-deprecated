@@ -1,10 +1,10 @@
+import BackButton from '@/(account)/_components/back-button';
+import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import Header from '@/(account)/_components/header';
+import getSubjectWithEventTypesAndMissions from '@/(account)/_server/get-subject-with-event-types-and-missions';
+import listTemplates from '@/(account)/_server/list-templates';
+import formatTitle from '@/(account)/_utilities/format-title';
 import SubjectSettingsForm from '@/(account)/subjects/[subjectId]/settings/_components/subject-settings-form';
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
-import getSubjectWithEventTypesAndMissions from '@/_server/get-subject-with-event-types-and-missions';
-import listTemplates from '@/_server/list-templates';
-import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

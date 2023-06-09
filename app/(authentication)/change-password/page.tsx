@@ -1,4 +1,5 @@
 import createServerActionClient from '@/_server/create-server-action-client';
+import { redirect } from 'next/navigation';
 import ChangePasswordForm from './_components/change-password-form';
 
 const Page = () => {
@@ -9,13 +10,14 @@ const Page = () => {
       password: values.get('password') as string,
     });
 
-    return { error: error?.message };
+    if (error) return { error: error?.message };
+    redirect('/subjects');
   };
 
   return (
     <div className="w-full sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
       <h1 className="mb-10 text-2xl">Change your password</h1>
-      <ChangePasswordForm action={action} actionRedirect="/subjects" />
+      <ChangePasswordForm action={action} />
     </div>
   );
 };

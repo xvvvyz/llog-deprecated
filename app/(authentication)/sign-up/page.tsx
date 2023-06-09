@@ -1,6 +1,7 @@
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import SignUpForm from './_components/sign-up-form';
 
 interface PageProps {
@@ -10,8 +11,8 @@ interface PageProps {
 }
 
 const Page = ({ searchParams }: PageProps) => {
-  const redirect = searchParams.redirect ?? '/subjects';
-  const isClient = redirect.includes('/join/');
+  const actionRedirect = searchParams.redirect ?? '/subjects';
+  const isClient = actionRedirect.includes('/join/');
 
   const action = async (values: FormData) => {
     'use server';
@@ -27,12 +28,13 @@ const Page = ({ searchParams }: PageProps) => {
           is_client: isClient,
           last_name: values.get('lastName') as string,
         },
-        emailRedirectTo: `${proto}://${host}/sign-up/exchange-code-for-session?redirect=${redirect}`,
+        emailRedirectTo: `${proto}://${host}/sign-up/exchange-code-for-session?redirect=${actionRedirect}`,
       },
       password: values.get('password') as string,
     });
 
-    return { error: error?.message };
+    if (error) return { error: error?.message };
+    redirect('/sign-up/email-sent');
   };
 
   return (

@@ -1,10 +1,12 @@
+import Empty from '@/(account)/_components/empty';
+import Header from '@/(account)/_components/header';
+import LinkList from '@/(account)/_components/link-list';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
+import listSubjects, {
+  ListSubjectsData,
+} from '@/(account)/_server/list-subjects';
+import forceArray from '@/(account)/_utilities/force-array';
 import Button from '@/_components/button';
-import Empty from '@/_components/empty';
-import Header from '@/_components/header';
-import LinkList from '@/_components/link-list';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import listSubjects, { ListSubjectsData } from '@/_server/list-subjects';
-import forceArray from '@/_utilities/force-array';
 
 const Page = async () => {
   const { data: subjects } = await listSubjects();

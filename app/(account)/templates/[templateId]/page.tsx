@@ -1,10 +1,10 @@
+import BackButton from '@/(account)/_components/back-button';
+import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import Header from '@/(account)/_components/header';
+import getTemplate from '@/(account)/_server/get-template';
+import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
+import formatTitle from '@/(account)/_utilities/format-title';
 import TemplateForm from '@/(account)/templates/_components/template-form';
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
-import getTemplate from '@/_server/get-template';
-import listInputs, { ListInputsData } from '@/_server/list-inputs';
-import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

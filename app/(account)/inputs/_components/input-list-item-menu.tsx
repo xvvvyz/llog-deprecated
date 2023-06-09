@@ -1,9 +1,9 @@
 'use client';
 
-import Alert from '@/_components/alert';
-import Menu from '@/_components/menu';
-import useDeleteAlert from '@/_hooks/use-delete-alert';
-import useSupabase from '@/_hooks/use-supabase';
+import Alert from '@/(account)/_components/alert';
+import Menu from '@/(account)/_components/menu';
+import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
+import useSupabase from '@/(account)/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {

@@ -1,7 +1,7 @@
+import getMission from '@/(account)/_server/get-mission';
+import getSubject from '@/(account)/_server/get-subject';
 import SessionNav from '@/(account)/subjects/[subjectId]/_components/session-nav';
 import SessionModal from '@/(account)/subjects/[subjectId]/timeline/_@missionModal/(..)mission/[missionId]/session/[sessionId]/_components/session-modal';
-import getMission from '@/_server/get-mission';
-import getSubject from '@/_server/get-subject';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 

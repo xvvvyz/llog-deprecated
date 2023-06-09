@@ -1,5 +1,5 @@
-import InputTypes from '@/_constants/enum-input-types';
-import formatInputValue from '@/_utilities/format-input-value';
+import InputTypes from '@/(account)/_constants/enum-input-types';
+import formatInputValue from '@/(account)/_utilities/format-input-value';
 
 interface EventInputsProps {
   className?: string;

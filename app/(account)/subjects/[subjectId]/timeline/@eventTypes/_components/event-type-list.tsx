@@ -1,5 +1,5 @@
-import LinkList from '@/_components/link-list';
-import { ListSubjectEventTypesData } from '@/_server/list-subject-event-types';
+import LinkList from '@/(account)/_components/link-list';
+import { ListSubjectEventTypesData } from '@/(account)/_server/list-subject-event-types';
 
 interface EventTypeListProps {
   eventTypes: NonNullable<ListSubjectEventTypesData>;

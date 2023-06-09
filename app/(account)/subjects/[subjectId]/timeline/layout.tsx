@@ -1,9 +1,9 @@
-import Avatar from '@/_components/avatar';
-import BackButton from '@/_components/back-button';
-import Header from '@/_components/header';
-import IconButton from '@/_components/icon-button';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import getSubject from '@/_server/get-subject';
+import Avatar from '@/(account)/_components/avatar';
+import BackButton from '@/(account)/_components/back-button';
+import Header from '@/(account)/_components/header';
+import IconButton from '@/(account)/_components/icon-button';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
+import getSubject from '@/(account)/_server/get-subject';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';

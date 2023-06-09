@@ -1,8 +1,8 @@
+import Empty from '@/(account)/_components/empty';
+import Header from '@/(account)/_components/header';
+import LinkList from '@/(account)/_components/link-list';
+import listTemplates from '@/(account)/_server/list-templates';
 import Button from '@/_components/button';
-import Empty from '@/_components/empty';
-import Header from '@/_components/header';
-import LinkList from '@/_components/link-list';
-import listTemplates from '@/_server/list-templates';
 
 const Page = async () => {
   const { data: templates } = await listTemplates();

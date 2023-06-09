@@ -1,9 +1,9 @@
 'use client';
 
-import DateTime from '@/_components/date-time';
-import { ListEventsData } from '@/_server/list-events';
-import firstIfArray from '@/_utilities/first-if-array';
-import formatDate from '@/_utilities/format-date';
+import DateTime from '@/(account)/_components/date-time';
+import { ListEventsData } from '@/(account)/_server/list-events';
+import firstIfArray from '@/(account)/_utilities/first-if-array';
+import formatDate from '@/(account)/_utilities/format-date';
 import { useEffect, useState } from 'react';
 import TimelineEventCard from './timeline-event-card';
 

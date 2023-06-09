@@ -1,4 +1,4 @@
-import AvatarDropzone from '@/_components/avatar-dropzone';
+import AvatarDropzone from '@/(account)/_components/avatar-dropzone';
 import Input from '@/_components/input';
 import { DropzoneState } from 'react-dropzone';
 import { FieldValues, UseFormReturn } from 'react-hook-form';

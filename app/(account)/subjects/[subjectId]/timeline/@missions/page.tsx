@@ -1,9 +1,9 @@
-import LinkList from '@/_components/link-list';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import getSubject from '@/_server/get-subject';
-import listMissions from '@/_server/list-missions';
+import LinkList from '@/(account)/_components/link-list';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
+import getSubject from '@/(account)/_server/get-subject';
+import listMissions from '@/(account)/_server/list-missions';
+import forceArray from '@/(account)/_utilities/force-array';
 import { Database } from '@/_types/database';
-import forceArray from '@/_utilities/force-array';
 
 interface PageProps {
   params: {

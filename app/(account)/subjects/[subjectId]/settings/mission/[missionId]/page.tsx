@@ -1,17 +1,17 @@
+import BackButton from '@/(account)/_components/back-button';
+import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import Header from '@/(account)/_components/header';
+import getSubject from '@/(account)/_server/get-subject';
+import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
+import listRoutineTemplatesWithData from '@/(account)/_server/list-routine-templates-with-data';
+import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
+import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/settings/mission/_components/mission-form';
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
-import getSubject from '@/_server/get-subject';
-import listInputs, { ListInputsData } from '@/_server/list-inputs';
-import listRoutineTemplatesWithData from '@/_server/list-routine-templates-with-data';
-import filterListInputsDataBySubjectId from '@/_utilities/filter-list-inputs-data-by-subject-id';
-import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 import getMissionWithRoutines, {
   GetMissionWithEventTypesData,
-} from '@/_server/get-mission-with-routines';
+} from '@/(account)/_server/get-mission-with-routines';
 
 interface PageProps {
   params: {

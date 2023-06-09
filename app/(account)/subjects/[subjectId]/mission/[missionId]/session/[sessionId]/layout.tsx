@@ -1,9 +1,9 @@
+import BackButton from '@/(account)/_components/back-button';
+import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import Header from '@/(account)/_components/header';
+import getMission from '@/(account)/_server/get-mission';
+import getSubject from '@/(account)/_server/get-subject';
 import SessionNav from '@/(account)/subjects/[subjectId]/_components/session-nav';
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
-import getMission from '@/_server/get-mission';
-import getSubject from '@/_server/get-subject';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 

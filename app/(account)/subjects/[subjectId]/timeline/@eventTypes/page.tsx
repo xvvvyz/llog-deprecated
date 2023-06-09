@@ -1,12 +1,12 @@
+import EventTypes from '@/(account)/_constants/enum-event-types';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
+import getSubject from '@/(account)/_server/get-subject';
+import forceArray from '@/(account)/_utilities/force-array';
 import EventTypeList from '@/(account)/subjects/[subjectId]/timeline/@eventTypes/_components/event-type-list';
-import EventTypes from '@/_constants/enum-event-types';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import getSubject from '@/_server/get-subject';
-import forceArray from '@/_utilities/force-array';
 
 import listSubjectEventTypes, {
   ListSubjectEventTypesData,
-} from '@/_server/list-subject-event-types';
+} from '@/(account)/_server/list-subject-event-types';
 
 interface PageProps {
   params: {

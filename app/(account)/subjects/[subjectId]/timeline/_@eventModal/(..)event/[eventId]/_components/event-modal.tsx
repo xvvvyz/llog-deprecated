@@ -1,7 +1,7 @@
 'use client';
 
+import IconButton from '@/(account)/_components/icon-button';
 import Disclosure from '@/(account)/subjects/[subjectId]/_components/disclosure';
-import IconButton from '@/_components/icon-button';
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';

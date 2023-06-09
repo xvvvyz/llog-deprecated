@@ -1,6 +1,6 @@
-import IconButton from '@/_components/icon-button';
-import { GetMissionData } from '@/_server/get-mission';
-import forceArray from '@/_utilities/force-array';
+import IconButton from '@/(account)/_components/icon-button';
+import { GetMissionData } from '@/(account)/_server/get-mission';
+import forceArray from '@/(account)/_utilities/force-array';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';

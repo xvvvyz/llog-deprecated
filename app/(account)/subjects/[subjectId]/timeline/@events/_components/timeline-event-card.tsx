@@ -1,15 +1,15 @@
 'use client';
 
+import Avatar from '@/(account)/_components/avatar';
+import DateTime from '@/(account)/_components/date-time';
+import Pill from '@/(account)/_components/pill';
+import { ListEventsData } from '@/(account)/_server/list-events';
+import firstIfArray from '@/(account)/_utilities/first-if-array';
+import forceArray from '@/(account)/_utilities/force-array';
 import EventCommentForm from '@/(account)/subjects/[subjectId]/_components/event-comment-form';
 import EventComments from '@/(account)/subjects/[subjectId]/_components/event-comments';
 import EventInputs from '@/(account)/subjects/[subjectId]/_components/event-inputs';
-import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
-import DateTime from '@/_components/date-time';
-import Pill from '@/_components/pill';
-import { ListEventsData } from '@/_server/list-events';
-import firstIfArray from '@/_utilities/first-if-array';
-import forceArray from '@/_utilities/force-array';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 interface TimelineEventCardProps {

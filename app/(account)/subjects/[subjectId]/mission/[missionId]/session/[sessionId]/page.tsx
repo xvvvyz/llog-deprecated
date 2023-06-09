@@ -1,11 +1,11 @@
+import getCurrentUser from '@/(account)/_server/get-current-user';
+import getMission from '@/(account)/_server/get-mission';
+import getSession from '@/(account)/_server/get-session';
+import getSubject from '@/(account)/_server/get-subject';
+import firstIfArray from '@/(account)/_utilities/first-if-array';
+import forceArray from '@/(account)/_utilities/force-array';
+import formatTitle from '@/(account)/_utilities/format-title';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
-import getCurrentUser from '@/_server/get-current-user';
-import getMission from '@/_server/get-mission';
-import getSession from '@/_server/get-session';
-import getSubject from '@/_server/get-subject';
-import firstIfArray from '@/_utilities/first-if-array';
-import forceArray from '@/_utilities/force-array';
-import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

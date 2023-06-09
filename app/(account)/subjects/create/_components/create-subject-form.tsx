@@ -1,12 +1,12 @@
 'use client';
 
+import useAvatarDropzone from '@/(account)/_hooks/use-avatar-dropzone';
+import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
+import useSupabase from '@/(account)/_hooks/use-supabase';
+import uploadSubjectAvatar from '@/(account)/_utilities/upload-subject-avatar';
 import SubjectDetailsFormSection from '@/(account)/subjects/_components/subject-details-form-section';
 import Button from '@/_components/button';
-import useAvatarDropzone from '@/_hooks/use-avatar-dropzone';
-import useSubmitRedirect from '@/_hooks/use-submit-redirect';
-import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
-import uploadSubjectAvatar from '@/_utilities/upload-subject-avatar';
 import { useForm } from 'react-hook-form';
 
 type CreateSubjectFormValues =

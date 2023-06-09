@@ -1,7 +1,7 @@
-import Empty from '@/_components/empty';
-import Header from '@/_components/header';
-import getCurrentUser from '@/_server/get-current-user';
-import listEvents, { ListEventsData } from '@/_server/list-events';
+import Empty from '@/(account)/_components/empty';
+import Header from '@/(account)/_components/header';
+import getCurrentUser from '@/(account)/_server/get-current-user';
+import listEvents, { ListEventsData } from '@/(account)/_server/list-events';
 import DownloadEventsButton from './_components/download-events-button';
 import TimelineEvents from './_components/timeline-events';
 

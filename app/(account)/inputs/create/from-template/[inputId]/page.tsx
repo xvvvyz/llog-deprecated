@@ -1,14 +1,14 @@
+import BackButton from '@/(account)/_components/back-button';
+import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import Header from '@/(account)/_components/header';
+import listSubjectsByTeamId from '@/(account)/_server/list-subjects-by-team-id';
+import formatTitle from '@/(account)/_utilities/format-title';
 import InputForm from '@/(account)/inputs/_components/input-form';
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
-import listSubjectsByTeamId from '@/_server/list-subjects-by-team-id';
-import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 import getInputWithoutIds, {
   GetInputWithoutIdsData,
-} from '@/_server/get-input-without-ids';
+} from '@/(account)/_server/get-input-without-ids';
 
 interface PageProps {
   params: {

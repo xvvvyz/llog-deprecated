@@ -1,11 +1,11 @@
 'use client';
 
-import IconButton from '@/_components/icon-button';
-import Select from '@/_components/select';
-import TemplateTypes from '@/_constants/enum-template-types';
-import { ListInputsData } from '@/_server/list-inputs';
-import { ListTemplatesData } from '@/_server/list-templates';
-import { TemplateType } from '@/_types/template';
+import IconButton from '@/(account)/_components/icon-button';
+import Select from '@/(account)/_components/select';
+import TemplateTypes from '@/(account)/_constants/enum-template-types';
+import { ListInputsData } from '@/(account)/_server/list-inputs';
+import { ListTemplatesData } from '@/(account)/_server/list-templates';
+import { TemplateType } from '@/(account)/_types/template';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
 import RoutineFormSection from './routine-form-section';

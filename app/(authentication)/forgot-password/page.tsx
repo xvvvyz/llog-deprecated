@@ -1,6 +1,7 @@
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import ForgotPasswordForm from './_components/forgot-password-form';
 
 const Page = () => {
@@ -16,7 +17,8 @@ const Page = () => {
         { redirectTo: `${proto}://${host}/change-password` }
       );
 
-    return { error: error?.message };
+    if (error) return { error: error?.message };
+    redirect('/forgot-password/email-sent');
   };
 
   return (

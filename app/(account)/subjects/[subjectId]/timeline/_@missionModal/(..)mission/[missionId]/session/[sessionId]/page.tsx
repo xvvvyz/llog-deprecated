@@ -1,9 +1,9 @@
+import getCurrentUser from '@/(account)/_server/get-current-user';
+import getMission from '@/(account)/_server/get-mission';
+import getSession from '@/(account)/_server/get-session';
+import firstIfArray from '@/(account)/_utilities/first-if-array';
+import forceArray from '@/(account)/_utilities/force-array';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
-import getCurrentUser from '@/_server/get-current-user';
-import getMission from '@/_server/get-mission';
-import getSession from '@/_server/get-session';
-import firstIfArray from '@/_utilities/first-if-array';
-import forceArray from '@/_utilities/force-array';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
