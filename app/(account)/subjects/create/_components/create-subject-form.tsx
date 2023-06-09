@@ -38,11 +38,7 @@ const CreateSubjectForm = () => {
 
         const { data: subjectData, error: subjectError } = await supabase
           .from('subjects')
-          .insert({
-            birthdate: values.birthdate,
-            name: values.name.trim(),
-            species: values.species?.trim(),
-          })
+          .insert({ name: values.name.trim() })
           .select('id')
           .single();
 

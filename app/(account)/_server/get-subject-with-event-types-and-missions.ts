@@ -5,15 +5,13 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
     .from('subjects')
     .select(
       `
-      birthdate,
       event_types(id, name, type),
       id,
       image_uri,
       managers:profiles(first_name, id, last_name),
       missions(id, name),
       name,
-      share_code,
-      species`
+      share_code`
     )
     .eq('id', subjectId)
     .eq('missions.deleted', false)

@@ -14,19 +14,6 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
 }: SubjectDetailsFormSectionProps<T>) => (
   <>
     <Input label="Name" {...form.register('name' as T[string])} />
-    <div className="flex gap-6">
-      <Input
-        className="max-w-xs"
-        label="Species"
-        {...form.register('species' as T[string])}
-      />
-      <Input
-        className="max-w-xs"
-        label="Birthdate"
-        type="date"
-        {...form.register('birthdate' as T[string])}
-      />
-    </div>
     <label className="group">
       <span className="label">Profile image</span>
       <AvatarDropzone dropzone={dropzone} form={form} />
