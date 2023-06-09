@@ -2,12 +2,14 @@
 
 import formatDate from '@/_utilities/format-date';
 import formatDateTime from '@/_utilities/format-date-time';
+import formatRelativeTime from '@/_utilities/format-relative-time';
 import formatTime from '@/_utilities/format-time';
 import { useEffect, useState } from 'react';
 
 const formatters = {
   date: formatDate,
   'date-time': formatDateTime,
+  relative: formatRelativeTime,
   time: formatTime,
 };
 

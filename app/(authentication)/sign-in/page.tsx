@@ -14,10 +14,12 @@ const Page = ({ searchParams }: PageProps) => {
   const action = async (values: FormData) => {
     'use server';
 
-    return createServerActionClient().auth.signInWithPassword({
+    const { error } = await createServerActionClient().auth.signInWithPassword({
       email: values.get('email') as string,
       password: values.get('password') as string,
     });
+
+    return { error: error?.message };
   };
 
   return (

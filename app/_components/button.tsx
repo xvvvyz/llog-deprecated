@@ -112,7 +112,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
             {variant !== 'link' && (
               <Spinner color={spinnerColorSchemes[colorScheme]} />
             )}
-            {loadingText}
+            {loadingText ?? children}
           </>
         ) : (
           children

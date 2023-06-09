@@ -10,10 +10,13 @@ const Page = () => {
     const proto = headers().get('x-forwarded-proto');
     const host = headers().get('host');
 
-    return createServerActionClient().auth.resetPasswordForEmail(
-      values.get('email') as string,
-      { redirectTo: `${proto}://${host}/change-password` }
-    );
+    const { error } =
+      await createServerActionClient().auth.resetPasswordForEmail(
+        values.get('email') as string,
+        { redirectTo: `${proto}://${host}/change-password` }
+      );
+
+    return { error: error?.message };
   };
 
   return (

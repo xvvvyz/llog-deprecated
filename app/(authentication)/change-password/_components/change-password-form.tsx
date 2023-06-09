@@ -2,11 +2,10 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
-import { UserResponse } from '@supabase/gotrue-js';
 import { useRouter } from 'next/navigation';
 
 interface SignInFormProps {
-  action: (values: FormData) => Promise<UserResponse>;
+  action: (values: FormData) => Promise<{ error?: string }>;
   actionRedirect: string;
 }
 
@@ -17,7 +16,7 @@ const ChangePasswordForm = ({ action, actionRedirect }: SignInFormProps) => {
     <form
       action={async (values: FormData) => {
         const { error } = await action(values);
-        if (error) alert(error.message);
+        if (error) alert(error);
         else router.push(actionRedirect);
       }}
       className="flex flex-col gap-6"

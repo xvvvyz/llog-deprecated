@@ -2,7 +2,6 @@ import Avatar from '@/_components/avatar';
 import BackButton from '@/_components/back-button';
 import Header from '@/_components/header';
 import IconButton from '@/_components/icon-button';
-import PollingRefresh from '@/_components/polling-refresh';
 import getCurrentTeamId from '@/_server/get-current-team-id';
 import getSubject from '@/_server/get-subject';
 import { PencilIcon } from '@heroicons/react/24/outline';
@@ -33,7 +32,6 @@ const Layout = async ({
 
   return (
     <>
-      <PollingRefresh />
       <Header className="flex justify-between gap-8">
         <BackButton href="/subjects" />
         {isTeamMember ? (

@@ -5,9 +5,11 @@ const Page = () => {
   const action = async (values: FormData) => {
     'use server';
 
-    return createServerActionClient().auth.updateUser({
+    const { error } = await createServerActionClient().auth.updateUser({
       password: values.get('password') as string,
     });
+
+    return { error: error?.message };
   };
 
   return (

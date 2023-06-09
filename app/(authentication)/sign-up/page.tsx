@@ -15,10 +15,14 @@ const Page = ({ searchParams }: PageProps) => {
   const action = async (values: FormData) => {
     'use server';
 
-    return createServerActionClient().auth.signUp({
+    const date = new Date().toISOString();
+
+    const { error } = await createServerActionClient().auth.signUp({
       email: values.get('email') as string,
       options: {
         data: {
+          confirmation_sent_at: date,
+          email_confirmed_at: date,
           first_name: values.get('firstName') as string,
           is_client: isClient,
           last_name: values.get('lastName') as string,
@@ -26,6 +30,8 @@ const Page = ({ searchParams }: PageProps) => {
       },
       password: values.get('password') as string,
     });
+
+    return { error: error?.message };
   };
 
   return (

@@ -2,16 +2,10 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
-import { AuthError } from '@supabase/gotrue-js';
 import { useBoolean } from 'usehooks-ts';
 
 interface ForgotPasswordFormProps {
-  action: (
-    values: FormData
-  ) => Promise<
-    | { data: NonNullable<unknown>; error: null }
-    | { data: null; error: AuthError }
-  >;
+  action: (values: FormData) => Promise<{ error?: string }>;
 }
 
 const ForgotPasswordForm = ({ action }: ForgotPasswordFormProps) => {
@@ -21,7 +15,7 @@ const ForgotPasswordForm = ({ action }: ForgotPasswordFormProps) => {
     <form
       action={async (values: FormData) => {
         const { error } = await action(values);
-        if (error) alert(error.message);
+        if (error) alert(error);
         else linkSent.setTrue();
       }}
       className="flex flex-col gap-6"

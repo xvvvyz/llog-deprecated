@@ -1,5 +1,3 @@
-// reference: https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.tsx'],
@@ -25,6 +23,7 @@ module.exports = {
       'fg-1': 'var(--color-fg-1)',
       'fg-2': 'var(--color-fg-2)',
       'fg-3': 'var(--color-fg-3)',
+      'red-1': 'var(--color-red-1)',
       transparent: 'transparent',
       white: 'var(--color-white)',
     },

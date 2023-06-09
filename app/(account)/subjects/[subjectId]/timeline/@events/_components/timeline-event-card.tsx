@@ -45,7 +45,7 @@ const TimelineEventCard = ({
         variant="link"
       >
         <header className="flex w-full items-center gap-4 rounded-t bg-alpha-reverse-1 px-4 py-3">
-          <div className="flex w-0 flex-1">
+          <div className="flex w-0 flex-1 text-fg-1">
             <span className="truncate">
               {lastEventType.session
                 ? lastEventType.session.mission.name

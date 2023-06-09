@@ -41,7 +41,7 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
               <td className="truncate border-t border-alpha-1 px-4 py-2 align-top text-fg-3">
                 {label}
               </td>
-              <td className="truncate border-l border-t border-alpha-1 px-4 py-2 align-top text-fg-2">
+              <td className="truncate border-l border-t border-alpha-1 px-4 py-2 align-top">
                 {formatInputValue[type](values)}
               </td>
             </tr>

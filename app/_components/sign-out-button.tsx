@@ -1,7 +1,8 @@
 'use client';
 
-import Button from '@/_components/button';
+import IconButton from '@/_components/icon-button';
 import useSupabase from '@/_hooks/use-supabase';
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useBoolean } from 'usehooks-ts';
 
 const SignOutButton = () => {
@@ -9,18 +10,18 @@ const SignOutButton = () => {
   const supabase = useSupabase();
 
   return (
-    <Button
-      className="w-32 shrink-0 justify-end text-fg-2"
+    <IconButton
+      icon={<ArrowLeftOnRectangleIcon className="w-7" />}
       loading={isSigningOut.value}
-      loadingText="Goodbye…"
       onClick={async () => {
         isSigningOut.setTrue();
         await supabase.auth.signOut();
       }}
+      spinnerClassName="w-7 h-7"
       variant="link"
     >
       Sign out
-    </Button>
+    </IconButton>
   );
 };
 

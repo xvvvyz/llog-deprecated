@@ -2,7 +2,8 @@
 
 import IconButton from '@/_components/icon-button';
 import RichTextarea from '@/_components/rich-textarea';
-import createComment from '@/_server/create-comment';
+import useSupabase from '@/_hooks/use-supabase';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -21,13 +22,18 @@ const EventCommentForm = ({
   inputClassName,
 }: EventCommentFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
+  const supabase = useSupabase();
   const form = useForm({ defaultValues: { content: '' } });
   const router = useRouter();
 
   const onSubmit = form.handleSubmit(async ({ content }) => {
-    startTransition(() => {
-      createComment({ content, eventId });
-      router.refresh();
+    startTransition(async () => {
+      const { error } = await supabase
+        .from('comments')
+        .upsert({ content: sanitizeHtml(content) ?? '', event_id: eventId });
+
+      if (error) alert(error.message);
+      else router.refresh();
     });
 
     form.setValue('content', '');
