@@ -25,7 +25,6 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
     <div
       className={twMerge(
         'relative flex shrink-0 select-none items-center justify-center overflow-hidden rounded-sm bg-alpha-1 uppercase tracking-tighter text-fg-3 shadow-sm',
-        !file && 'border border-alpha-1',
         sizes[size].className,
         className
       )}

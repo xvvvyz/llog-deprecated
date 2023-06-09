@@ -10,7 +10,7 @@ import Pill from '@/_components/pill';
 import { ListEventsData } from '@/_server/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
-import { useRouter } from 'next/navigation';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 interface TimelineEventCardProps {
   group: ListEventsData;
@@ -23,51 +23,42 @@ const TimelineEventCard = ({
   subjectId,
   userId,
 }: TimelineEventCardProps) => {
-  const router = useRouter();
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
+  const lastEventProfile = firstIfArray(lastEvent.profile);
   const sessionNumber = lastEventType.session?.order + 1;
 
-  const link = lastEventType.session
-    ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${lastEventType.session.id}`
-    : `/subjects/${subjectId}/event/${lastEvent.id}`;
-
   return (
-    <article
-      className="group cursor-pointer select-none overflow-hidden rounded border border-alpha-1 bg-bg-2 transition-colors hover:border-alpha-4"
-      onClick={() => router.push(link)}
-      role="link"
-    >
+    <article className="overflow-hidden rounded border border-alpha-1 bg-bg-2">
       <Button
-        className="m-0 block w-full p-0"
-        href={link}
-        onClick={(e) => e.stopPropagation()}
+        className="m-0 block w-full items-start rounded-t bg-alpha-reverse-1 p-0 px-4 py-3"
+        href={
+          lastEventType.session
+            ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${lastEventType.session.id}`
+            : `/subjects/${subjectId}/event/${lastEvent.id}`
+        }
         variant="link"
       >
-        <header className="flex w-full items-center gap-4 rounded-t bg-alpha-reverse-1 px-4 py-3">
-          <div className="flex w-0 flex-1 text-fg-1">
-            <span className="truncate">
-              {lastEventType.session
-                ? lastEventType.session.mission.name
-                : lastEventType.name}
-            </span>
+        <div className="flex items-center gap-4">
+          <div>
+            {lastEventType.session
+              ? lastEventType.session.mission.name
+              : lastEventType.name}
           </div>
-          {lastEventType.session ? (
-            <Pill>Session {sessionNumber}</Pill>
-          ) : (
-            <div className="flex items-center gap-4 whitespace-nowrap">
-              <Avatar
-                name={firstIfArray(lastEvent.profile).first_name}
-                size="xs"
-              />
-              <DateTime
-                className="text-xs uppercase tracking-widest text-fg-3"
-                date={lastEvent.created_at}
-                formatter="time"
-              />
-            </div>
-          )}
-        </header>
+          {lastEventType.session && <Pill>Session {sessionNumber}</Pill>}
+          <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+        </div>
+        {!lastEventType.session && (
+          <div className="mt-3 flex items-center gap-4 whitespace-nowrap text-xs uppercase tracking-widest text-fg-3">
+            <Avatar name={lastEventProfile.first_name} size="xs" />
+            {lastEventProfile.first_name} {lastEventProfile.last_name}
+            <DateTime
+              className="ml-auto"
+              date={lastEvent.created_at}
+              formatter="time"
+            />
+          </div>
+        )}
       </Button>
       <ul>
         {group.map((event) => {
@@ -78,14 +69,14 @@ const TimelineEventCard = ({
             <li key={event.id}>
               {lastEventType.session && (
                 <div className="flex items-center justify-between border-t border-alpha-1 bg-alpha-reverse-1 px-4 pb-2 pt-3 text-xs uppercase tracking-widest text-fg-3">
-                  <span>Routine {routineNumber}</span>
                   <div className="flex items-center gap-4">
                     <Avatar
                       name={firstIfArray(event.profile).first_name}
                       size="xs"
                     />
-                    <DateTime date={event.created_at} formatter="time" />
+                    Completed routine {routineNumber}
                   </div>
+                  <DateTime date={event.created_at} formatter="time" />
                 </div>
               )}
               <EventInputs inputs={forceArray(event.inputs)} />

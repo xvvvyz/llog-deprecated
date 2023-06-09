@@ -40,7 +40,7 @@ const EventCommentForm = ({
   });
 
   return (
-    <div className={className} onClick={(e) => e.stopPropagation()}>
+    <div className={className}>
       <Controller
         control={form.control}
         name="content"

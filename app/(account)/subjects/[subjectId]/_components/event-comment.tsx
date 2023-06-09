@@ -54,7 +54,7 @@ const EventComment = ({
         {...deleteAlert}
       />
       <Avatar className="mt-0.5" name={profile.first_name} />
-      <div className="w-full">
+      <div className="flex-1">
         <div className="flex h-5 w-full justify-between">
           <div className="flex w-full gap-2 text-xs uppercase tracking-widest text-fg-3">
             <span className="w-0 flex-1 truncate">
@@ -68,19 +68,11 @@ const EventComment = ({
           </div>
           {userId === profile.id && (
             <Menu className="-m-3 p-3">
-              <Menu.Button
-                className="-m-3 p-3"
-                onClick={(e: Event) => e.stopPropagation()}
-              >
+              <Menu.Button className="-m-3 p-3">
                 <EllipsisVerticalIcon className="relative -right-2 -top-[0.18rem] w-5" />
               </Menu.Button>
               <Menu.Items>
-                <Menu.Item
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteAlert.setTrue();
-                  }}
-                >
+                <Menu.Item onClick={deleteAlert.setTrue}>
                   <TrashIcon className="w-5 text-fg-3" />
                   Delete comment
                 </Menu.Item>
@@ -88,7 +80,9 @@ const EventComment = ({
             </Menu>
           )}
         </div>
-        <DirtyHtml className="mt-1 text-fg-2">{content}</DirtyHtml>
+        <DirtyHtml className="mt-1 text-fg-2 [overflow-wrap:anywhere]">
+          {content}
+        </DirtyHtml>
       </div>
     </article>
   );
