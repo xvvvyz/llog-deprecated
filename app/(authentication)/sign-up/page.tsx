@@ -1,5 +1,6 @@
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
+import { headers } from 'next/headers';
 import SignUpForm from './_components/sign-up-form';
 
 interface PageProps {
@@ -9,24 +10,24 @@ interface PageProps {
 }
 
 const Page = ({ searchParams }: PageProps) => {
-  const actionRedirect = searchParams.redirect ?? '/subjects';
-  const isClient = actionRedirect.includes('/join/');
+  const redirect = searchParams.redirect ?? '/subjects';
+  const isClient = redirect.includes('/join/');
 
   const action = async (values: FormData) => {
     'use server';
 
-    const date = new Date().toISOString();
+    const proto = headers().get('x-forwarded-proto');
+    const host = headers().get('host');
 
     const { error } = await createServerActionClient().auth.signUp({
       email: values.get('email') as string,
       options: {
         data: {
-          confirmation_sent_at: date,
-          email_confirmed_at: date,
           first_name: values.get('firstName') as string,
           is_client: isClient,
           last_name: values.get('lastName') as string,
         },
+        emailRedirectTo: `${proto}://${host}/sign-up/exchange-code-for-session?redirect=${redirect}`,
       },
       password: values.get('password') as string,
     });
@@ -38,7 +39,7 @@ const Page = ({ searchParams }: PageProps) => {
     <>
       <div className="sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
         <h1 className="mb-10 text-2xl">Create an account</h1>
-        <SignUpForm action={action} actionRedirect={actionRedirect} />
+        <SignUpForm action={action} />
       </div>
       <p className="flex gap-4">
         <span className="text-fg-3">Have an account?</span>

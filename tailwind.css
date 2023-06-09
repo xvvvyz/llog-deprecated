@@ -42,7 +42,7 @@
 
 @layer components {
   .input {
-    @apply disabled:disabled w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
+    @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
   }
 
   .label {
@@ -52,7 +52,7 @@
 
 @layer utilities {
   .disabled {
-    @apply pointer-events-none opacity-50;
+    @apply pointer-events-none opacity-60;
   }
 
   .prose {

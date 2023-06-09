@@ -9,30 +9,30 @@ interface ForgotPasswordFormProps {
 }
 
 const ForgotPasswordForm = ({ action }: ForgotPasswordFormProps) => {
-  const linkSent = useBoolean();
+  const emailSent = useBoolean();
 
   return (
     <form
       action={async (values: FormData) => {
         const { error } = await action(values);
         if (error) alert(error);
-        else linkSent.setTrue();
+        else emailSent.setTrue();
       }}
       className="flex flex-col gap-6"
     >
       <Input
-        disabled={linkSent.value}
+        disabled={emailSent.value}
         label="Email address"
         name="email"
         type="email"
       />
       <Button
         className="mt-8 w-full"
-        disabled={linkSent.value}
+        disabled={emailSent.value}
         loadingText="Sending link…"
         type="submit"
       >
-        {linkSent.value ? (
+        {emailSent.value ? (
           <>Link sent&mdash;check your email</>
         ) : (
           <>Send link</>
