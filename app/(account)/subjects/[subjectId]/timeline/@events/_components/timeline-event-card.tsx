@@ -31,7 +31,7 @@ const TimelineEventCard = ({
   return (
     <article className="overflow-hidden rounded border border-alpha-1 bg-bg-2">
       <Button
-        className="m-0 block w-full items-start rounded-t bg-alpha-reverse-1 p-0 px-4 py-3"
+        className="m-0 w-full gap-4 rounded-t border-b border-alpha-1 p-0 px-4 py-3"
         href={
           lastEventType.session
             ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${lastEventType.session.id}`
@@ -39,28 +39,30 @@ const TimelineEventCard = ({
         }
         variant="link"
       >
-        <div className="flex items-center gap-4">
-          <div>
-            {lastEventType.session
-              ? lastEventType.session.mission.name
-              : lastEventType.name}
-          </div>
+        {lastEventType.session
+          ? lastEventType.session.mission.name
+          : lastEventType.name}
+        <div className="ml-auto flex shrink-0 items-center gap-4">
           {lastEventType.session && <Pill>Session {sessionNumber}</Pill>}
-          <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+          <ArrowRightIcon className="w-5" />
         </div>
-        {!lastEventType.session && (
-          <div className="mt-3 flex items-center gap-4 whitespace-nowrap text-xs uppercase tracking-widest text-fg-3">
-            <Avatar name={lastEventProfile.first_name} size="xs" />
-            {lastEventProfile.first_name} {lastEventProfile.last_name}
-            <DateTime
-              className="ml-auto"
-              date={lastEvent.created_at}
-              formatter="time"
-            />
-          </div>
-        )}
       </Button>
-      <ul>
+      {!lastEventType.session && (
+        <div className="flex items-center gap-4 whitespace-nowrap bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
+          <Avatar
+            className="-my-[0.15rem]"
+            name={lastEventProfile.first_name}
+            size="xs"
+          />
+          {lastEventProfile.first_name} {lastEventProfile.last_name}
+          <DateTime
+            className="ml-auto"
+            date={lastEvent.created_at}
+            formatter="time"
+          />
+        </div>
+      )}
+      <ul className="divide-y divide-alpha-1">
         {group.map((event) => {
           const routineNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
@@ -68,13 +70,14 @@ const TimelineEventCard = ({
           return (
             <li key={event.id}>
               {lastEventType.session && (
-                <div className="flex items-center justify-between border-t border-alpha-1 bg-alpha-reverse-1 px-4 pb-2 pt-3 text-xs uppercase tracking-widest text-fg-3">
+                <div className="flex items-center justify-between bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
                   <div className="flex items-center gap-4">
                     <Avatar
+                      className="-my-[0.15rem]"
                       name={firstIfArray(event.profile).first_name}
                       size="xs"
                     />
-                    Completed routine {routineNumber}
+                    Routine {routineNumber}
                   </div>
                   <DateTime date={event.created_at} formatter="time" />
                 </div>

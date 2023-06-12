@@ -33,26 +33,26 @@ const EventCard = ({
 }: EventCardProps) => (
   <div className={twMerge('rounded border border-alpha-1 bg-bg-2', className)}>
     {mission && typeof eventType.order === 'number' && (
-      <div className="bg-alpha-reverse-1 px-4 pt-8 text-xs uppercase tracking-widest text-fg-3 sm:px-8">
+      <div className="px-4 pt-8 text-xs uppercase tracking-widest text-fg-3 sm:px-8">
         Routine {eventType.order + 1}
       </div>
     )}
     {!hideContent && !!eventType.content && (
-      <div className="border-b border-alpha-1 bg-alpha-reverse-1 pt-4">
+      <div className="border-b border-alpha-1 pt-4">
         <Disclosure className="px-4 sm:px-8" disabled={!event}>
           {eventType.content}
         </Disclosure>
       </div>
     )}
     <EventForm
-      className="px-4 py-8 sm:px-8"
+      className="bg-alpha-reverse-1 px-4 py-8 sm:px-8"
       event={event}
       eventType={eventType}
       isMission={!!mission}
       subjectId={subjectId}
     />
     {event && (
-      <div className="space-y-8 border-t border-alpha-1 bg-alpha-reverse-1 px-4 py-8 sm:px-8">
+      <div className="space-y-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
         <EventComments comments={forceArray(event.comments)} userId={userId} />
         <EventCommentForm eventId={event.id} />
       </div>

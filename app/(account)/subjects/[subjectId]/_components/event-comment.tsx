@@ -80,7 +80,7 @@ const EventComment = ({
             </Menu>
           )}
         </div>
-        <DirtyHtml className="mt-1 text-fg-2 [overflow-wrap:anywhere]">
+        <DirtyHtml className="mt-1 [overflow-wrap:anywhere]">
           {content}
         </DirtyHtml>
       </div>
