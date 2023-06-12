@@ -66,20 +66,20 @@ const NumberInput = forwardRef(
         <div className="flex">
           <IconButton
             {...api.decrementTriggerProps}
-            className="rounded-r-none"
+            className="rounded-r-none px-3"
             colorScheme="transparent"
             icon={<MinusIcon className="w-5" />}
             variant="primary"
           />
           <Input
             {...mergeProps(api.inputProps, { onBlur, onChange })}
-            className="rounded-none border-x-0 text-center"
+            className="rounded-none border-x-0 px-0 text-center"
             placeholder={placeholder}
             ref={ref}
           />
           <IconButton
             {...api.incrementTriggerProps}
-            className="rounded-l-none"
+            className="rounded-l-none px-3"
             colorScheme="transparent"
             icon={<PlusIcon className="w-5" />}
             variant="primary"

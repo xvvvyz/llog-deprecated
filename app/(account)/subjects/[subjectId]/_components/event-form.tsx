@@ -431,17 +431,15 @@ const EventForm = ({
           </div>
         );
       })}
-      {(!event || form.formState.isDirty) && (
-        <Button
-          className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
-          colorScheme={event ? 'transparent' : 'accent'}
-          loading={form.formState.isSubmitting || isTransitioning}
-          loadingText="Saving…"
-          type="submit"
-        >
-          {isMission && !event ? 'Complete' : 'Save'}
-        </Button>
-      )}
+      <Button
+        className={twMerge('w-full', eventTypeInputs.length && 'mt-8')}
+        colorScheme={event ? 'transparent' : 'accent'}
+        loading={form.formState.isSubmitting || isTransitioning}
+        loadingText="Saving…"
+        type="submit"
+      >
+        {event ? 'Save inputs' : isMission ? 'Complete' : 'Save event'}
+      </Button>
     </form>
   );
 };

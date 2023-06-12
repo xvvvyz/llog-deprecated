@@ -31,7 +31,7 @@ const EventCard = ({
   subjectId,
   userId,
 }: EventCardProps) => (
-  <div className={twMerge('rounded border border-alpha-1 bg-bg-2', className)}>
+  <div className={twMerge('form gap-0 p-0', className)}>
     {mission && typeof eventType.order === 'number' && (
       <div className="px-4 pt-8 text-xs uppercase tracking-widest text-fg-3 sm:px-8">
         Routine {eventType.order + 1}
@@ -45,7 +45,11 @@ const EventCard = ({
       </div>
     )}
     <EventForm
-      className="bg-alpha-reverse-1 px-4 py-8 sm:px-8"
+      className={twMerge(
+        'bg-alpha-reverse-1 px-4 py-8 sm:px-8',
+        !mission && (hideContent || !eventType.content) && 'sm:rounded-t',
+        !event && 'sm:rounded-b'
+      )}
       event={event}
       eventType={eventType}
       isMission={!!mission}

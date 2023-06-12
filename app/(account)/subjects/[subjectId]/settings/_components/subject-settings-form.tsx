@@ -80,7 +80,7 @@ const SubjectSettingsForm = ({
 
   return (
     <form
-      className="flex flex-col gap-6 rounded border border-alpha-1 bg-bg-2 px-4 py-8 sm:px-8"
+      className="form"
       onSubmit={form.handleSubmit(async (values) => {
         const { error: subjectError } = await supabase.from('subjects').upsert({
           id: values.id,
