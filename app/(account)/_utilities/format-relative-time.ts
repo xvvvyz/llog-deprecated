@@ -18,12 +18,15 @@ const formatRelativeTime = (input?: Date | string) => {
   for (const [key, value] of Object.entries(ranges)) {
     if (value < Math.abs(secondsElapsed)) {
       const delta = secondsElapsed / value;
+
       return formatter.format(
         Math.round(delta),
         key as Intl.RelativeTimeFormatUnit
       );
     }
   }
+
+  return 'just now';
 };
 
 export default formatRelativeTime;

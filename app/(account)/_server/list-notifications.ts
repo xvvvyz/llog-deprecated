@@ -9,7 +9,6 @@ const listNotifications = async () =>
         content,
         event:events(
           id,
-          subject:subjects(id, image_uri, name),
           type:event_types(
             name,
             session:sessions(
@@ -18,14 +17,11 @@ const listNotifications = async () =>
               order
             )
           )
-        ),
-        profile:profiles(first_name, last_name)
+        )
       ),
       created_at,
       event:events(
         id,
-        profile:profiles(first_name, last_name),
-        subject:subjects(id, image_uri, name),
         type:event_types(
           name,
           session:sessions(
@@ -36,7 +32,9 @@ const listNotifications = async () =>
         )
       ),
       id,
+      profile:source_profile_id(first_name, last_name),
       read,
+      subject:subjects(id, image_uri, name),
       type`
     )
     .order('created_at', { ascending: false })

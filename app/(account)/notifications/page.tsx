@@ -17,6 +17,7 @@ import {
   EnvelopeIcon,
   EnvelopeOpenIcon,
   TrashIcon,
+  UserPlusIcon,
 } from '@heroicons/react/24/outline';
 
 const Page = async () => {
@@ -25,9 +26,12 @@ const Page = async () => {
 
   const eventOrSessionIdNotificationIdMap = notifications.reduce((acc, n) => {
     const event = n.comment?.event ?? n.event;
-    const eventOrSessionId = event.type.session?.id ?? event.id;
-    if (!acc[eventOrSessionId]) acc[eventOrSessionId] = [];
-    acc[eventOrSessionId].push(n.id);
+
+    const subjectOrEventOrSessionId =
+      event?.type?.session?.id ?? event?.id ?? n.subject.id;
+
+    if (!acc[subjectOrEventOrSessionId]) acc[subjectOrEventOrSessionId] = [];
+    acc[subjectOrEventOrSessionId].push(n.id);
     return acc;
   }, {});
 
@@ -39,8 +43,7 @@ const Page = async () => {
       <div className="space-y-4 px-4">
         {notifications.length ? (
           notifications.map((n) => {
-            const profile = n.comment?.profile ?? n.event?.profile;
-            const event = n.comment?.event ?? n.event;
+            const sourceEvent = n.comment?.event ?? n.event;
 
             return (
               <div
@@ -50,13 +53,10 @@ const Page = async () => {
                 <div className="relative">
                   <Button
                     className="m-0 block p-0"
-                    href={`/subjects/${event.subject.id}`}
+                    href={`/subjects/${n.subject.id}/timeline?back=/notifications`}
                     variant="link"
                   >
-                    <Avatar
-                      file={event.subject.image_uri}
-                      name={event.subject.name}
-                    />
+                    <Avatar file={n.subject.image_uri} name={n.subject.name} />
                   </Button>
                   <div className="absolute -bottom-4 -right-4 rounded-full bg-bg-2">
                     <div className="rounded-full border border-alpha-1 bg-alpha-1 p-1">
@@ -66,34 +66,51 @@ const Page = async () => {
                       {n.type === NotificationTypes.Event && (
                         <CheckBadgeIcon className="w-5" />
                       )}
+                      {n.type === NotificationTypes.JoinSubject && (
+                        <UserPlusIcon className="w-5" />
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="-my-1 w-full leading-snug">
                   <ViewEventButton
                     href={
-                      event.type.session
-                        ? `/subjects/${event.subject.id}/mission/${event.type.session.mission.id}/session/${event.type.session.id}?back=/notifications`
-                        : `/subjects/${event.subject.id}/event/${event.id}?back=/notifications`
+                      sourceEvent
+                        ? sourceEvent.type.session
+                          ? `/subjects/${n.subject.id}/mission/${sourceEvent.type.session.mission.id}/session/${sourceEvent.type.session.id}?back=/notifications`
+                          : `/subjects/${n.subject.id}/event/${sourceEvent.id}?back=/notifications`
+                        : `/subjects/${n.subject.id}/timeline?back=/notifications`
                     }
                     notificationIds={
                       eventOrSessionIdNotificationIdMap[
-                        event.type.session?.id ?? event.id
+                        sourceEvent?.type?.session?.id ??
+                          sourceEvent?.id ??
+                          n.subject.id
                       ]
                     }
                     notificationRead={n.read}
                   >
-                    {profile.first_name} {profile.last_name}{' '}
-                    {n.type === NotificationTypes.Comment && 'commented on'}
-                    {n.type === NotificationTypes.Event &&
-                      (event.type.session
-                        ? 'completed a routine on'
-                        : 'recorded')}{' '}
-                    &ldquo;
-                    {event.type.session?.mission?.name ?? event.type.name}
-                    &rdquo;
-                    {event.type.session && (
-                      <> session&nbsp;{event.type.session.order + 1}</>
+                    {n.profile?.first_name} {n.profile?.last_name}{' '}
+                    {n.type === NotificationTypes.JoinSubject ? (
+                      <>joined &ldquo;{n.subject.name}&rdquo;</>
+                    ) : (
+                      <>
+                        {n.type === NotificationTypes.Comment && 'commented on'}
+                        {n.type === NotificationTypes.Event &&
+                          (sourceEvent.type.session
+                            ? 'completed a routine on'
+                            : 'recorded')}{' '}
+                        &ldquo;
+                        {sourceEvent.type.session?.mission?.name ??
+                          sourceEvent.type.name}
+                        &rdquo;
+                        {sourceEvent.type.session && (
+                          <>
+                            {' '}
+                            session&nbsp;{sourceEvent.type.session.order + 1}
+                          </>
+                        )}
+                      </>
                     )}
                   </ViewEventButton>
                   {n.comment && (
