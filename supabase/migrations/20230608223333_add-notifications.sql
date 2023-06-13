@@ -74,11 +74,11 @@ create or replace function public.handle_insert_event ()
     profile_id uuid;
   begin
     select array_agg(sm.profile_id) into subject_manager_profile_ids
-    from subject_managers sm
-    where sm.subject_id = new.subject_id and sm.profile_id <> new.profile_id;
+      from subject_managers sm
+      where sm.subject_id = new.subject_id and sm.profile_id <> new.profile_id;
     select array_agg(tm.profile_id) into team_member_profile_ids
-    from subjects s join team_members tm on s.team_id = tm.team_id
-    where s.id = new.subject_id and tm.profile_id <> new.profile_id;
+      from subjects s join team_members tm on s.team_id = tm.team_id
+      where s.id = new.subject_id and tm.profile_id <> new.profile_id;
     for profile_id in (
       select unnest(array_cat(subject_manager_profile_ids, team_member_profile_ids)))
         loop

@@ -14,7 +14,8 @@ const listNotifications = async () =>
             name,
             session:sessions(
               id,
-              mission:missions(id, name)
+              mission:missions(id, name),
+              order
             )
           )
         ),
@@ -29,7 +30,8 @@ const listNotifications = async () =>
           name,
           session:sessions(
             id,
-            mission:missions(id, name)
+            mission:missions(id, name),
+            order
           )
         )
       ),

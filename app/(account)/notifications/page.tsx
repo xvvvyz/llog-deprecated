@@ -87,9 +87,14 @@ const Page = async () => {
                     {n.type === NotificationTypes.Comment && 'commented on'}
                     {n.type === NotificationTypes.Event &&
                       (event.type.session
-                        ? 'recorded a routine on'
+                        ? 'completed a routine on'
                         : 'recorded')}{' '}
+                    &ldquo;
                     {event.type.session?.mission?.name ?? event.type.name}
+                    &rdquo;
+                    {event.type.session && (
+                      <> session&nbsp;{event.type.session.order + 1}</>
+                    )}
                   </ViewEventButton>
                   {n.comment && (
                     <DirtyHtml className="line-clamp-2 pt-3">
