@@ -48,6 +48,7 @@ const SubjectSettingsForm = ({
 }: SubjectSettingsFormProps) => {
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle();
+  const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });
   const dropzone = useAvatarDropzone();
   const eventTypes = forceArray(subject.event_types);
@@ -98,7 +99,7 @@ const SubjectSettingsForm = ({
           supabase,
         });
 
-        form.reset(values);
+        startTransition(router.refresh);
       })}
     >
       <SubjectDetailsFormSection<SubjectSettingsFormValues>
@@ -107,7 +108,7 @@ const SubjectSettingsForm = ({
       />
       <Button
         className="mb-4 mt-8 w-full"
-        loading={form.formState.isSubmitting}
+        loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Saving…"
         type="submit"
       >
