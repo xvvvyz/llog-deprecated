@@ -7,8 +7,8 @@ import IconButton from '@/(account)/_components/icon-button';
 import NotificationTypes from '@/(account)/_constants/enum-notification-types';
 import listNotifications from '@/(account)/_server/list-notifications';
 import forceArray from '@/(account)/_utilities/force-array';
+import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
-import { revalidatePath } from 'next/cache';
 import ViewEventButton from './_components/view-event-button';
 
 import {
@@ -48,10 +48,16 @@ const Page = async () => {
                 key={n.id}
               >
                 <div className="relative">
-                  <Avatar
-                    file={event.subject.image_uri}
-                    name={event.subject.name}
-                  />
+                  <Button
+                    className="m-0 block p-0"
+                    href={`/subjects/${event.subject.id}`}
+                    variant="link"
+                  >
+                    <Avatar
+                      file={event.subject.image_uri}
+                      name={event.subject.name}
+                    />
+                  </Button>
                   <div className="absolute -bottom-4 -right-4 rounded-full bg-bg-2">
                     <div className="rounded-full border border-alpha-1 bg-alpha-1 p-1">
                       {n.type === NotificationTypes.Comment && (
@@ -110,8 +116,6 @@ const Page = async () => {
                             .from('notifications')
                             .update({ read: !n.read })
                             .eq('id', n.id);
-
-                          revalidatePath('/notifications');
                         }}
                       >
                         <IconButton
@@ -134,8 +138,6 @@ const Page = async () => {
                             .from('notifications')
                             .delete()
                             .eq('id', n.id);
-
-                          revalidatePath('/notifications');
                         }}
                       >
                         <IconButton

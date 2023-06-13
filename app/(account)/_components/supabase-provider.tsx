@@ -14,12 +14,24 @@ const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const supabase = useMemo(() => c(), []);
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
+    const { data: authChannel } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') router.push('/sign-in');
       router.refresh();
     });
 
-    return () => data.subscription.unsubscribe();
+    const notificationsChannel = supabase
+      .channel('notifications')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        router.refresh
+      )
+      .subscribe();
+
+    return () => {
+      void authChannel.subscription.unsubscribe();
+      void supabase.removeChannel(notificationsChannel);
+    };
   }, [router, supabase]);
 
   return (

@@ -18,9 +18,10 @@ npm run db:start # outputs supabase url & key
 Add the following to your `.env` file:
 
 ```dotenv
+OPENAI_API_KEY=<OPENAI_API_KEY>
+
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 NEXT_PUBLIC_SUPABASE_URL=<SUPABSE_API_URL>
-OPENAI_API_KEY=<OPENAI_API_KEY>
 
 # optimize images with supabase instead of next
 NEXT_PUBLIC_SUPABASE_PRO=1
@@ -37,7 +38,7 @@ If you modify the database schema:
 
 ```shell
 npm run db:types
-npm run db:diff -- migration_description
+npm run db:diff -- migration-description
 ```
 
 ## Production Notes
