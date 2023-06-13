@@ -20,7 +20,7 @@ const DownloadEventsButton = ({ subjectId }: DownloadEventsButtonProps) => {
       onClick={async () => {
         isDownloading.setTrue();
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const r = await fetch(`/api/subjects/${subjectId}/events.csv?tz=${tz}`);
+        const r = await fetch(`/subjects/${subjectId}/events.csv?tz=${tz}`);
         const blob = await r.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
