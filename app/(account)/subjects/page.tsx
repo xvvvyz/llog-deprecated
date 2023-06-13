@@ -73,5 +73,4 @@ const Page = async () => {
 };
 
 export const metadata = { title: 'Subjects' };
-export const revalidate = 0;
 export default Page;

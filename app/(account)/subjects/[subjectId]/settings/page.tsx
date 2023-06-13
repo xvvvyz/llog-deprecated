@@ -51,5 +51,4 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject.name, 'Settings']) };
 };
 
-export const revalidate = 0;
 export default Page;

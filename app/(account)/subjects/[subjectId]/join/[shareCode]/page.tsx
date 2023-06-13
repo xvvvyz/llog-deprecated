@@ -21,5 +21,4 @@ const Page = async ({ params: { shareCode, subjectId } }: PageProps) => {
   redirect(`/subjects/${subjectId}/timeline`);
 };
 
-export const revalidate = 0;
 export default Page;

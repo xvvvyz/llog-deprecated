@@ -42,5 +42,4 @@ const Layout = async ({
   );
 };
 
-export const revalidate = 0;
 export default Layout;

@@ -34,5 +34,4 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   );
 };
 
-export const revalidate = 0;
 export default Page;

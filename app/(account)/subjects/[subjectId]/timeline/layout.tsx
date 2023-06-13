@@ -74,5 +74,4 @@ export const generateMetadata = async ({
   return { title: subject.name };
 };
 
-export const revalidate = 0;
 export default Layout;

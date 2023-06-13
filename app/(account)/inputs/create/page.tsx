@@ -20,5 +20,4 @@ const Page = async () => {
 };
 
 export const metadata = { title: formatTitle(['Inputs', 'Create']) };
-export const revalidate = 0;
 export default Page;

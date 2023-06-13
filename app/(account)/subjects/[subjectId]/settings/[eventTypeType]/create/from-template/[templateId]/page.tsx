@@ -68,5 +68,4 @@ export const generateMetadata = async ({
   };
 };
 
-export const revalidate = 0;
 export default Page;

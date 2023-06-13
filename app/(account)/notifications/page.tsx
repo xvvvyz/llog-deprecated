@@ -183,5 +183,4 @@ const Page = async () => {
 };
 
 export const metadata = { title: 'Notifications' };
-export const revalidate = 0;
 export default Page;
