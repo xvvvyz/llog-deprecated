@@ -1,6 +1,7 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
 import getEventTypeWithInputsAndOptions from '@/(account)/_server/get-event-type-with-inputs-and-options';
 import getSubject from '@/(account)/_server/get-subject';
@@ -16,10 +17,11 @@ interface PageProps {
 }
 
 const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: type }, user] = await Promise.all([
+  const [{ data: subject }, { data: type }, user, teamId] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputsAndOptions(eventTypeId),
     getCurrentUser(),
+    getCurrentTeamId(),
   ]);
 
   if (!subject || !type || !user) notFound();
@@ -35,7 +37,12 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
           ]}
         />
       </Header>
-      <EventCard eventType={type} subjectId={subjectId} userId={user.id} />
+      <EventCard
+        eventType={type}
+        isTeamMember={subject.team_id === teamId}
+        subjectId={subjectId}
+        userId={user.id}
+      />
     </>
   );
 };

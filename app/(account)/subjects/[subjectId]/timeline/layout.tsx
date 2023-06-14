@@ -25,16 +25,18 @@ const Layout = async ({
   missions,
   params: { subjectId },
 }: LayoutProps) => {
-  const { data: subject } = await getSubject(subjectId);
+  const [{ data: subject }, teamId] = await Promise.all([
+    getSubject(subjectId),
+    getCurrentTeamId(),
+  ]);
+
   if (!subject) notFound();
-  const currentTeamId = await getCurrentTeamId();
-  const isTeamMember = subject.team_id === currentTeamId;
 
   return (
     <>
       <Header className="flex justify-between gap-8">
         <BackButton href="/subjects" />
-        {isTeamMember ? (
+        {subject.team_id === teamId ? (
           <>
             <div className="flex items-center justify-center gap-4 overflow-hidden">
               <Avatar file={subject.image_uri} name={subject.name} />

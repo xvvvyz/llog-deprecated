@@ -27,7 +27,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     { data: mission },
     { data: availableInputs },
     { data: availableTemplates },
-    currentUser,
+    user,
   ] = await Promise.all([
     getSubject(subjectId),
     getMissionWithEventTypes(missionId),
@@ -36,7 +36,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     getCurrentUser(),
   ]);
 
-  if (!subject || !mission || !currentUser) notFound();
+  if (!subject || !mission || !user) notFound();
 
   return (
     <>
@@ -58,7 +58,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
         availableTemplates={availableTemplates}
         mission={mission as GetMissionWithEventTypesData}
         subjectId={subjectId}
-        userId={currentUser.id}
+        userId={user.id}
       />
     </>
   );

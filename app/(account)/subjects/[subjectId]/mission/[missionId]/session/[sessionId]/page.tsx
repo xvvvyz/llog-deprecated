@@ -1,3 +1,4 @@
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
 import getMission from '@/(account)/_server/get-mission';
 import getSession from '@/(account)/_server/get-session';
@@ -19,13 +20,21 @@ interface PageProps {
 const Page = async ({
   params: { missionId, sessionId, subjectId },
 }: PageProps) => {
-  const [{ data: mission }, { data: session }, user] = await Promise.all([
+  const [
+    { data: subject },
+    { data: mission },
+    { data: session },
+    user,
+    teamId,
+  ] = await Promise.all([
+    getSubject(subjectId),
     getMission(missionId),
     getSession(sessionId),
     getCurrentUser(),
+    getCurrentTeamId(),
   ]);
 
-  if (!mission || !session || !user) notFound();
+  if (!subject || !mission || !session || !user) notFound();
 
   return forceArray(session.routines).map((routine) => {
     const event = firstIfArray(routine.event);
@@ -34,6 +43,7 @@ const Page = async ({
       <EventCard
         event={event}
         eventType={routine}
+        isTeamMember={subject.team_id === teamId}
         key={routine.id}
         mission={mission}
         subjectId={subjectId}

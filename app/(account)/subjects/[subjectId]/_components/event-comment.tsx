@@ -16,6 +16,7 @@ interface EventCommentProps {
   createdAt: string;
   id: string;
   profile: Database['public']['Tables']['profiles']['Row'];
+  isTeamMember: boolean;
   userId: string;
 }
 
@@ -24,6 +25,7 @@ const EventComment = ({
   createdAt,
   id,
   profile,
+  isTeamMember,
   userId,
 }: EventCommentProps) => {
   const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
@@ -66,7 +68,7 @@ const EventComment = ({
               formatter="date-time"
             />
           </div>
-          {userId === profile.id && (
+          {(userId === profile.id || isTeamMember) && (
             <Menu className="-m-3 p-3">
               <Menu.Button className="-m-3 p-3">
                 <EllipsisVerticalIcon className="relative -right-2 -top-[0.18rem] w-5" />

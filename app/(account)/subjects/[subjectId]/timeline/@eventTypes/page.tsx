@@ -15,11 +15,14 @@ interface PageProps {
 }
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
-  const { data: subject } = await getSubject(subjectId);
+  const [{ data: subject }, { data: eventTypes }, teamId] = await Promise.all([
+    getSubject(subjectId),
+    listSubjectEventTypes(subjectId),
+    getCurrentTeamId(),
+  ]);
+
   if (!subject) return null;
-  const currentTeamId = await getCurrentTeamId();
-  const isTeamMember = subject.team_id === currentTeamId;
-  const { data: eventTypes } = await listSubjectEventTypes(subjectId);
+  const isTeamMember = subject.team_id === teamId;
 
   const { observations, routines } = forceArray(eventTypes).reduce(
     (

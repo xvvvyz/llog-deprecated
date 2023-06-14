@@ -14,12 +14,14 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 interface TimelineEventCardProps {
   group: ListEventsData;
+  isTeamMember: boolean;
   subjectId: string;
   userId: string;
 }
 
 const TimelineEventCard = ({
   group,
+  isTeamMember,
   subjectId,
   userId,
 }: TimelineEventCardProps) => {
@@ -88,7 +90,11 @@ const TimelineEventCard = ({
               />
               {!!comments.length && (
                 <div className="space-y-4 border-t border-alpha-1 p-4">
-                  <EventComments comments={comments} userId={userId} />
+                  <EventComments
+                    comments={comments}
+                    isTeamMember={isTeamMember}
+                    userId={userId}
+                  />
                   <EventCommentForm
                     eventId={event.id}
                     inputClassName="rounded-sm"

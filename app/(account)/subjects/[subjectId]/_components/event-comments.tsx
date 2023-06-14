@@ -12,10 +12,16 @@ interface EventCommentsProps {
     id: string;
     profile: Database['public']['Tables']['profiles']['Row'];
   }>;
+  isTeamMember: boolean;
   userId: string;
 }
 
-const EventComments = ({ className, comments, userId }: EventCommentsProps) => {
+const EventComments = ({
+  className,
+  comments,
+  isTeamMember,
+  userId,
+}: EventCommentsProps) => {
   if (!comments.length) return null;
 
   return (
@@ -25,6 +31,7 @@ const EventComments = ({ className, comments, userId }: EventCommentsProps) => {
           content={content}
           createdAt={created_at}
           id={id}
+          isTeamMember={isTeamMember}
           key={id}
           profile={profile}
           userId={userId}

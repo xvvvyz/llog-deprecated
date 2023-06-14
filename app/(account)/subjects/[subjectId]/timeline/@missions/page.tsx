@@ -12,11 +12,13 @@ interface PageProps {
 }
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
-  const { data: subject } = await getSubject(subjectId);
+  const [{ data: subject }, { data: missions }, teamId] = await Promise.all([
+    getSubject(subjectId),
+    listMissions(subjectId),
+    getCurrentTeamId(),
+  ]);
+
   if (!subject) return null;
-  const currentTeamId = await getCurrentTeamId();
-  const isTeamMember = subject.team_id === currentTeamId;
-  const { data: missions } = await listMissions(subjectId);
 
   return (
     <LinkList>
@@ -37,7 +39,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             href={`/subjects/${subjectId}/mission/${mission.id}/session/${activeSession.id}`}
             key={mission.id}
             text={mission.name}
-            {...(isTeamMember
+            {...(subject.team_id === teamId
               ? {
                   rightHref: `/subjects/${subjectId}/settings/mission/${mission.id}?back=/subjects/${subjectId}`,
                   rightIcon: 'edit',

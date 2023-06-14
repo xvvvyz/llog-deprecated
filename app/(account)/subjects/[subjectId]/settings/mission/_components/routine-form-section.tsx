@@ -212,7 +212,11 @@ const RoutineFormSection = <T extends FieldValues>({
           <EventInputs inputs={forceArray(event.inputs)} />
           {!!event.comments.length && (
             <div className="space-y-4 border-t border-alpha-1 p-4">
-              <EventComments comments={event.comments} userId={userId} />
+              <EventComments
+                comments={event.comments}
+                isTeamMember
+                userId={userId}
+              />
               <EventCommentForm
                 eventId={event.id}
                 inputClassName="rounded-sm"

@@ -9,11 +9,17 @@ import TimelineEventCard from './timeline-event-card';
 
 interface TimelineEventsProps {
   events: ListEventsData;
+  isTeamMember: boolean;
   subjectId: string;
   userId: string;
 }
 
-const TimelineEvents = ({ events, subjectId, userId }: TimelineEventsProps) => {
+const TimelineEvents = ({
+  events,
+  isTeamMember,
+  subjectId,
+  userId,
+}: TimelineEventsProps) => {
   const [formattedEvents, setFormattedEvents] = useState<
     Array<Map<string, ListEventsData>>
   >([]);
@@ -51,6 +57,7 @@ const TimelineEvents = ({ events, subjectId, userId }: TimelineEventsProps) => {
             {dayGroup.map((eventGroup) => (
               <TimelineEventCard
                 group={eventGroup}
+                isTeamMember={isTeamMember}
                 key={eventGroup[0].id}
                 subjectId={subjectId}
                 userId={userId}

@@ -11,7 +11,7 @@ import listSubjects, {
 
 const Page = async () => {
   const { data: subjects } = await listSubjects();
-  const currentTeamId = await getCurrentTeamId();
+  const teamId = await getCurrentTeamId();
 
   const {
     clientSubjects,
@@ -21,7 +21,7 @@ const Page = async () => {
     teamSubjects: NonNullable<ListSubjectsData>;
   } = forceArray(subjects).reduce(
     (acc, subject) => {
-      if (subject.team_id === currentTeamId) acc.teamSubjects.push(subject);
+      if (subject.team_id === teamId) acc.teamSubjects.push(subject);
       else acc.clientSubjects.push(subject);
       return acc;
     },

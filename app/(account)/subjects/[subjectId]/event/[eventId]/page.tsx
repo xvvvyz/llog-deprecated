@@ -1,6 +1,7 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
 import getEvent, { GetEventData } from '@/(account)/_server/get-event';
 import getSubject from '@/(account)/_server/get-subject';
@@ -17,10 +18,11 @@ interface PageProps {
 }
 
 const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: event }, user] = await Promise.all([
+  const [{ data: subject }, { data: event }, user, teamId] = await Promise.all([
     getSubject(subjectId),
     getEvent(eventId),
     getCurrentUser(),
+    getCurrentTeamId(),
   ]);
 
   if (!subject || !event || !user) notFound();
@@ -40,6 +42,7 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
       <EventCard
         event={event as GetEventData}
         eventType={type}
+        isTeamMember={subject.team_id === teamId}
         subjectId={subjectId}
         userId={user.id}
       />

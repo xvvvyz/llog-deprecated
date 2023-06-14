@@ -17,6 +17,7 @@ interface EventCardProps {
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<GetSessionData>['routines'][0];
   hideContent?: boolean;
+  isTeamMember: boolean;
   mission?: GetMissionData | GetEventData['type']['mission'];
   subjectId: string;
   userId: string;
@@ -27,6 +28,7 @@ const EventCard = ({
   event,
   eventType,
   hideContent,
+  isTeamMember,
   mission,
   subjectId,
   userId,
@@ -57,7 +59,11 @@ const EventCard = ({
     />
     {event && (
       <div className="space-y-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
-        <EventComments comments={forceArray(event.comments)} userId={userId} />
+        <EventComments
+          comments={forceArray(event.comments)}
+          isTeamMember={isTeamMember}
+          userId={userId}
+        />
         <EventCommentForm eventId={event.id} />
       </div>
     )}
