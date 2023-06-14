@@ -1,4 +1,6 @@
 import Alert from '@/(account)/_components/alert';
+import Avatar from '@/(account)/_components/avatar';
+import DateTime from '@/(account)/_components/date-time';
 import IconButton from '@/(account)/_components/icon-button';
 import Menu from '@/(account)/_components/menu';
 import RichTextarea from '@/(account)/_components/rich-textarea';
@@ -7,14 +9,19 @@ import TEMPLATE_TYPE_LABELS from '@/(account)/_constants/constant-template-type-
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
 import TemplateTypes from '@/(account)/_constants/enum-template-types';
 import useBackLink from '@/(account)/_hooks/use-back-link';
+import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatCacheLink from '@/(account)/_utilities/format-cache-link';
 import globalValueCache from '@/(account)/_utilities/global-value-cache';
+import EventCommentForm from '@/(account)/subjects/[subjectId]/_components/event-comment-form';
+import EventComments from '@/(account)/subjects/[subjectId]/_components/event-comments';
+import EventInputs from '@/(account)/subjects/[subjectId]/_components/event-inputs';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { useBoolean } from 'usehooks-ts';
 
 import {
@@ -33,22 +40,31 @@ import {
 
 interface RoutineFormSectionProps<T extends FieldValues> {
   eventTypeArray: UseFieldArrayReturn<T, T[string], 'key'>;
+  eventTypeId: string;
   eventTypeIndex: number;
   eventTypeKey: string;
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
   name: string;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   sessionIndex: number;
+  userId?: string;
 }
 
 const RoutineFormSection = <T extends FieldValues>({
   eventTypeArray,
+  eventTypeId,
   eventTypeIndex,
   eventTypeKey,
   form,
   inputOptions,
   name,
+  routineEventsMap,
   sessionIndex,
+  userId,
 }: RoutineFormSectionProps<T>) => {
   const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });
@@ -62,6 +78,8 @@ const RoutineFormSection = <T extends FieldValues>({
     transform: CSS.Translate.toString(transform),
     transition,
   };
+
+  const event = routineEventsMap[eventTypeId];
 
   return (
     <li className="mb-4" ref={setNodeRef} style={style}>
@@ -140,7 +158,10 @@ const RoutineFormSection = <T extends FieldValues>({
         name={`${name}.${eventTypeIndex}.inputs` as T[string]}
         render={({ field }) => (
           <Select
-            className="rounded-t-none border-t-0"
+            className={twMerge(
+              'rounded-t-none border-t-0',
+              event && userId && 'rounded-b-none'
+            )}
             formatCreateLabel={(value: string) => `Create "${value}" input`}
             isCreatable
             isLoading={isTransitioning}
@@ -175,6 +196,31 @@ const RoutineFormSection = <T extends FieldValues>({
           />
         )}
       />
+      {event && userId && (
+        <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-reverse-1">
+          <div className="flex justify-between px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
+            <div className="flex items-center gap-4">
+              <Avatar
+                className="-my-[0.15rem]"
+                name={event.profile.first_name}
+                size="xs"
+              />
+              {event.profile.first_name} {event.profile.last_name}
+            </div>
+            <DateTime date={event.created_at} formatter="time" />
+          </div>
+          <EventInputs inputs={forceArray(event.inputs)} />
+          {!!event.comments.length && (
+            <div className="space-y-4 border-t border-alpha-1 p-4">
+              <EventComments comments={event.comments} userId={userId} />
+              <EventCommentForm
+                eventId={event.id}
+                inputClassName="rounded-sm"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </li>
   );
 };

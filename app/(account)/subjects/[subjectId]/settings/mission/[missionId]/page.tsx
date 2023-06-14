@@ -9,9 +9,10 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/settings/mission/_components/mission-form';
 import { notFound } from 'next/navigation';
 
-import getMissionWithRoutines, {
+import getCurrentUser from '@/(account)/_server/get-current-user';
+import getMissionWithEventTypes, {
   GetMissionWithEventTypesData,
-} from '@/(account)/_server/get-mission-with-routines';
+} from '@/(account)/_server/get-mission-with-event-types';
 
 interface PageProps {
   params: {
@@ -26,14 +27,16 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     { data: mission },
     { data: availableInputs },
     { data: availableTemplates },
+    currentUser,
   ] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithRoutines(missionId),
+    getMissionWithEventTypes(missionId),
     listInputs(),
     listRoutineTemplatesWithData(),
+    getCurrentUser(),
   ]);
 
-  if (!subject || !mission) notFound();
+  if (!subject || !mission || !currentUser) notFound();
 
   return (
     <>
@@ -55,6 +58,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
         availableTemplates={availableTemplates}
         mission={mission as GetMissionWithEventTypesData}
         subjectId={subjectId}
+        userId={currentUser.id}
       />
     </>
   );
@@ -65,7 +69,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithRoutines(missionId),
+    getMissionWithEventTypes(missionId),
   ]);
 
   if (!subject || !mission) return;

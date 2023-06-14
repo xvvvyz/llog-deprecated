@@ -1,7 +1,7 @@
 import Alert from '@/(account)/_components/alert';
 import DateTime from '@/(account)/_components/date-time';
 import Menu from '@/(account)/_components/menu';
-import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-routines';
+import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
@@ -38,9 +38,14 @@ interface SessionFormSectionProps<T extends FieldValues> {
   availableTemplates: ListTemplatesData;
   form: UseFormReturn<T>;
   missionId?: string;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   sessionArray: UseFieldArrayReturn<T, T[string]>;
   sessionIndex: number;
   subjectId: string;
+  userId?: string;
 }
 
 const SessionFormSection = <T extends FieldValues>({
@@ -48,9 +53,11 @@ const SessionFormSection = <T extends FieldValues>({
   availableTemplates,
   form,
   missionId,
+  routineEventsMap,
   sessionArray,
   sessionIndex,
   subjectId,
+  userId,
 }: SessionFormSectionProps<T>) => {
   const deleteAlert = useBoolean();
   const scheduleModal = useBoolean();
@@ -295,8 +302,10 @@ const SessionFormSection = <T extends FieldValues>({
       <RoutinesFormSection<T>
         form={form}
         inputOptions={availableInputs}
+        routineEventsMap={routineEventsMap}
         sessionIndex={sessionIndex}
         templateOptions={forceArray(availableTemplates)}
+        userId={userId}
       />
     </li>
   );

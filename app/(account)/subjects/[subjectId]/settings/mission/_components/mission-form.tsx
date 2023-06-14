@@ -5,7 +5,7 @@ import EventTypes from '@/(account)/_constants/enum-event-types';
 import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
 import useSupabase from '@/(account)/_hooks/use-supabase';
-import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-routines';
+import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
@@ -23,6 +23,7 @@ interface MissionFormProps {
   availableTemplates: ListTemplatesData;
   mission?: GetMissionWithEventTypesData;
   subjectId: string;
+  userId?: string;
 }
 
 type MissionFormValues = Database['public']['Tables']['missions']['Row'] & {
@@ -42,10 +43,16 @@ const MissionForm = ({
   availableTemplates,
   mission,
   subjectId,
+  userId,
 }: MissionFormProps) => {
   const [redirect, isRedirecting] = useSubmitRedirect();
   const sessions = forceArray(mission?.sessions);
   const supabase = useSupabase();
+
+  const routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  > = {};
 
   const form = useForm<MissionFormValues>({
     defaultValues: useDefaultValues({
@@ -60,6 +67,7 @@ const MissionForm = ({
             ...session,
             routines: forceArray(session?.routines).map((r) => {
               const routine = firstIfArray(r);
+              routineEventsMap[routine.id] = firstIfArray(routine.event);
 
               return {
                 ...routine,
@@ -354,7 +362,9 @@ const MissionForm = ({
         availableTemplates={availableTemplates}
         form={form}
         missionId={mission?.id}
+        routineEventsMap={routineEventsMap}
         subjectId={subjectId}
+        userId={userId}
       />
       <Button
         className="mt-8 w-full"

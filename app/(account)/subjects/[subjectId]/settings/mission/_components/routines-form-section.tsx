@@ -3,6 +3,7 @@
 import IconButton from '@/(account)/_components/icon-button';
 import Select from '@/(account)/_components/select';
 import TemplateTypes from '@/(account)/_constants/enum-template-types';
+import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import { TemplateType } from '@/(account)/_types/template';
@@ -27,15 +28,22 @@ import {
 interface RoutinesFormSection<T extends FieldValues> {
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   sessionIndex: number;
   templateOptions: NonNullable<ListTemplatesData>;
+  userId?: string;
 }
 
 const RoutinesFormSection = <T extends FieldValues>({
   form,
   inputOptions,
+  routineEventsMap,
   sessionIndex,
   templateOptions,
+  userId,
 }: RoutinesFormSection<T>) => {
   const name = `sessions.${sessionIndex}.routines`;
 
@@ -72,13 +80,20 @@ const RoutinesFormSection = <T extends FieldValues>({
             {routinesArray.fields.map((eventType, eventTypeIndex) => (
               <RoutineFormSection<T>
                 eventTypeArray={routinesArray}
+                eventTypeId={
+                  (
+                    eventType as GetMissionWithEventTypesData['sessions'][0]['routines'][0]
+                  ).id
+                }
                 eventTypeIndex={eventTypeIndex}
                 eventTypeKey={eventType.key}
                 form={form}
                 inputOptions={inputOptions}
                 key={eventType.key}
                 name={name}
+                routineEventsMap={routineEventsMap}
                 sessionIndex={sessionIndex}
+                userId={userId}
               />
             ))}
           </SortableContext>

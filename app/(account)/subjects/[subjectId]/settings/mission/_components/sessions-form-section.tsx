@@ -1,3 +1,4 @@
+import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
@@ -17,7 +18,12 @@ interface SessionsFormSectionProps<T extends FieldValues> {
   availableTemplates: ListTemplatesData;
   form: UseFormReturn<T>;
   missionId?: string;
+  routineEventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+  >;
   subjectId: string;
+  userId?: string;
 }
 
 const SessionsFormSection = <T extends FieldValues>({
@@ -25,7 +31,9 @@ const SessionsFormSection = <T extends FieldValues>({
   availableTemplates,
   form,
   missionId,
+  routineEventsMap,
   subjectId,
+  userId,
 }: SessionsFormSectionProps<T>) => {
   const sessionArray = useFieldArray({
     control: form.control,
@@ -43,9 +51,11 @@ const SessionsFormSection = <T extends FieldValues>({
               form={form}
               key={session.id}
               missionId={missionId}
+              routineEventsMap={routineEventsMap}
               sessionArray={sessionArray}
               sessionIndex={sessionIndex}
               subjectId={subjectId}
+              userId={userId}
             />
           ))}
         </ul>

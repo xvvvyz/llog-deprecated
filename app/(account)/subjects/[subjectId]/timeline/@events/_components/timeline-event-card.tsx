@@ -82,7 +82,10 @@ const TimelineEventCard = ({
                   <DateTime date={event.created_at} formatter="time" />
                 </div>
               )}
-              <EventInputs inputs={forceArray(event.inputs)} />
+              <EventInputs
+                className="bg-alpha-reverse-1"
+                inputs={forceArray(event.inputs)}
+              />
               {!!comments.length && (
                 <div className="space-y-4 border-t border-alpha-1 p-4">
                   <EventComments comments={comments} userId={userId} />

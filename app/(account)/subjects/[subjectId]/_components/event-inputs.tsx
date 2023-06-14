@@ -21,7 +21,7 @@ const EventInputs = ({ className, inputs }: EventInputsProps) => {
 
   return (
     <div className={className}>
-      <table className="w-full table-fixed bg-alpha-reverse-1">
+      <table className="w-full table-fixed">
         <tbody>
           {Object.entries(
             inputs.reduce((acc, { input, option, value }) => {
