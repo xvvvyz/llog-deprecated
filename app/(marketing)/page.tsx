@@ -11,12 +11,9 @@ const Page = () => (
       </Button>
     </header>
     <main>
-      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg lg:max-w-3xl">
+      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg">
         <h1 className="text-2xl sm:text-3xl">
-          <span className="text-fg-3">
-            Refine your animal behavior consulting business with
-          </span>{' '}
-          collaborative, data-driven behavior modification.
+          Collaborative, data-driven behavior modification.
         </h1>
         <Button className="mt-8" href="/sign-up">
           Sign up to get early access

@@ -92,7 +92,7 @@ const Page = async () => {
                   >
                     {n.profile?.first_name} {n.profile?.last_name}{' '}
                     {n.type === NotificationTypes.JoinSubject ? (
-                      <>joined &ldquo;{n.subject.name}&rdquo;</>
+                      <>joined {n.subject.name}</>
                     ) : (
                       <>
                         {n.type === NotificationTypes.Comment && 'commented on'}
@@ -100,10 +100,8 @@ const Page = async () => {
                           (sourceEvent.type.session
                             ? 'completed a routine on'
                             : 'recorded')}{' '}
-                        &ldquo;
                         {sourceEvent.type.session?.mission?.name ??
                           sourceEvent.type.name}
-                        &rdquo;
                         {sourceEvent.type.session && (
                           <>
                             {' '}

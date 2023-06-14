@@ -156,7 +156,7 @@ const MultiValueLabel = <TOption extends IOption>({
     <div className="flex items-center gap-2 overflow-visible">
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
-          className="ml-0.5 mr-0.5"
+          className="ml-0.5 mr-0.5 rounded-full"
           file={props.data.image_uri}
           name={props.data.label ?? props.data.name ?? ''}
           size="xs"
@@ -175,7 +175,7 @@ const MultiValueLabel = <TOption extends IOption>({
           {(props.data.subjects as NonNullable<IOption['subjects']>).map(
             ({ id, image_uri, name }) => (
               <Avatar
-                className="-mr-2 border border-alpha-reverse-2"
+                className="-mr-2 rounded-full border border-alpha-reverse-2"
                 file={image_uri}
                 key={id}
                 name={name}
