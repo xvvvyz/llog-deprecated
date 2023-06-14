@@ -59,4 +59,5 @@ const Layout = async ({ children }: LayoutProps) => {
   );
 };
 
+export const revalidate = 0;
 export default Layout;
