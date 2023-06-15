@@ -1,6 +1,6 @@
 'use client';
 
-import SupabaseContext from '@/(account)/_context/supabase-context';
+import SupabaseContext from '@/_context/supabase-context';
 import { createPagesBrowserClient as c } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useMemo } from 'react';

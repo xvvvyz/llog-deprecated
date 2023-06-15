@@ -13,7 +13,7 @@ import { Database } from '@/_types/database';
 import { Dialog } from '@headlessui/react';
 import { useState } from 'react';
 import { useBoolean } from 'usehooks-ts';
-import RoutinesFormSection from './routines-form-section';
+import PartsFormSection from './parts-form-section';
 
 import {
   ArrowDownIcon,
@@ -36,12 +36,12 @@ import {
 interface SessionFormSectionProps<T extends FieldValues> {
   availableInputs: NonNullable<ListInputsData>;
   availableTemplates: ListTemplatesData;
+  eventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['parts'][0]['event']
+  >;
   form: UseFormReturn<T>;
   missionId?: string;
-  routineEventsMap: Record<
-    string,
-    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
-  >;
   sessionArray: UseFieldArrayReturn<T, T[string]>;
   sessionIndex: number;
   subjectId: string;
@@ -51,9 +51,9 @@ interface SessionFormSectionProps<T extends FieldValues> {
 const SessionFormSection = <T extends FieldValues>({
   availableInputs,
   availableTemplates,
+  eventsMap,
   form,
   missionId,
-  routineEventsMap,
   sessionArray,
   sessionIndex,
   subjectId,
@@ -78,16 +78,16 @@ const SessionFormSection = <T extends FieldValues>({
   const [originalScheduledFor, setOriginalScheduledFor] =
     useState(scheduledFor);
 
-  const { completedRoutines, totalRoutines } = session.routines.reduce(
+  const { completedParts, totalParts } = session.parts.reduce(
     (
-      acc: { completedRoutines: number; totalRoutines: number },
-      routine: GetMissionWithEventTypesData['sessions'][0]['routines'][0]
+      acc: { completedParts: number; totalParts: number },
+      part: GetMissionWithEventTypesData['sessions'][0]['parts'][0]
     ) => {
-      acc.totalRoutines += 1;
-      if (firstIfArray(routine.event)) acc.completedRoutines += 1;
+      acc.totalParts += 1;
+      if (firstIfArray(part.event)) acc.completedParts += 1;
       return acc;
     },
-    { completedRoutines: 0, totalRoutines: 0 }
+    { completedParts: 0, totalParts: 0 }
   );
 
   const reorderSession = () => {
@@ -200,18 +200,18 @@ const SessionFormSection = <T extends FieldValues>({
       <div className="mt-2 flex max-w-none items-end justify-between px-2 pb-2">
         <span className="text-xl text-fg-1">Session {sessionIndex + 1}</span>
         <div className="flex items-end gap-4">
-          {!!completedRoutines && (
+          {!!completedParts && (
             <Button
               className="relative -top-px"
               href={`/subjects/${subjectId}/mission/${missionId}/session/${session.id}`}
               target="_blank"
               variant="link"
             >
-              {completedRoutines} of {totalRoutines} completed
+              {completedParts} of {totalParts} completed
               <ArrowUpRightIcon className="w-5" />
             </Button>
           )}
-          {scheduledFor && !completedRoutines && (
+          {scheduledFor && !completedParts && (
             <Button
               className="relative -top-px"
               onClick={openScheduleModal}
@@ -227,7 +227,7 @@ const SessionFormSection = <T extends FieldValues>({
               <EllipsisHorizontalIcon className="relative -top-0.5 w-5" />
             </Menu.Button>
             <Menu.Items>
-              {!completedRoutines && (
+              {!completedParts && (
                 <Menu.Item onClick={openScheduleModal}>
                   <ClockIcon className="w-5 text-fg-3" />
                   Schedule session
@@ -236,7 +236,7 @@ const SessionFormSection = <T extends FieldValues>({
               <Menu.Item
                 onClick={() =>
                   sessionArray.insert(sessionIndex, {
-                    routines: [],
+                    parts: [],
                     scheduled_for: scheduledFor,
                   } as PathValue<T, T[string]>)
                 }
@@ -247,14 +247,14 @@ const SessionFormSection = <T extends FieldValues>({
               <Menu.Item
                 onClick={() => {
                   const to = {
-                    routines: session.routines.map(
+                    parts: session.parts.map(
                       (
-                        routine: Database['public']['Tables']['event_types']['Insert'] & {
+                        part: Database['public']['Tables']['event_types']['Insert'] & {
                           inputs: Database['public']['Tables']['inputs']['Insert'][];
                         }
                       ) => ({
-                        content: routine.content,
-                        inputs: routine.inputs,
+                        content: part.content,
+                        inputs: part.inputs,
                       })
                     ),
                     scheduled_for: session.scheduled_for,
@@ -263,7 +263,7 @@ const SessionFormSection = <T extends FieldValues>({
                   const toIndex = sessionIndex + 1;
 
                   sessionArray.insert(toIndex, to, {
-                    focusName: `sessions.${toIndex}.routines.0.content`,
+                    focusName: `sessions.${toIndex}.parts.0.content`,
                   });
                 }}
               >
@@ -299,10 +299,10 @@ const SessionFormSection = <T extends FieldValues>({
           </Menu>
         </div>
       </div>
-      <RoutinesFormSection<T>
+      <PartsFormSection<T>
+        eventsMap={eventsMap}
         form={form}
         inputOptions={availableInputs}
-        routineEventsMap={routineEventsMap}
         sessionIndex={sessionIndex}
         templateOptions={forceArray(availableTemplates)}
         userId={userId}

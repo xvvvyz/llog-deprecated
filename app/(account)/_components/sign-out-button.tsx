@@ -1,7 +1,7 @@
 'use client';
 
 import IconButton from '@/(account)/_components/icon-button';
-import useSupabase from '@/(account)/_hooks/use-supabase';
+import useSupabase from '@/_hooks/use-supabase';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useBoolean } from 'usehooks-ts';
 

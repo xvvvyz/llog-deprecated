@@ -2,10 +2,10 @@
 
 import useAvatarDropzone from '@/(account)/_hooks/use-avatar-dropzone';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import uploadSubjectAvatar from '@/(account)/_utilities/upload-subject-avatar';
 import SubjectDetailsFormSection from '@/(account)/subjects/_components/subject-details-form-section';
 import Button from '@/_components/button';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useForm } from 'react-hook-form';
 

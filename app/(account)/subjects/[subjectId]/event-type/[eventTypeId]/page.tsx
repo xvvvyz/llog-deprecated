@@ -17,14 +17,15 @@ interface PageProps {
 }
 
 const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: type }, user, teamId] = await Promise.all([
-    getSubject(subjectId),
-    getEventTypeWithInputsAndOptions(eventTypeId),
-    getCurrentUser(),
-    getCurrentTeamId(),
-  ]);
+  const [{ data: subject }, { data: eventType }, user, teamId] =
+    await Promise.all([
+      getSubject(subjectId),
+      getEventTypeWithInputsAndOptions(eventTypeId),
+      getCurrentUser(),
+      getCurrentTeamId(),
+    ]);
 
-  if (!subject || !type || !user) notFound();
+  if (!subject || !eventType || !user) notFound();
 
   return (
     <>
@@ -33,12 +34,12 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
         <Breadcrumbs
           items={[
             [subject.name, `/subjects/${subjectId}/timeline`],
-            [type.name ?? ''],
+            [eventType.name ?? ''],
           ]}
         />
       </Header>
       <EventCard
-        eventType={type}
+        eventType={eventType}
         isTeamMember={subject.team_id === teamId}
         subjectId={subjectId}
         userId={user.id}

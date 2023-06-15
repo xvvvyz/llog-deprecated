@@ -1,12 +1,7 @@
-import EventTypes from '@/(account)/_constants/enum-event-types';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
-import forceArray from '@/(account)/_utilities/force-array';
+import listSubjectEventTypes from '@/(account)/_server/list-subject-event-types';
 import EventTypeList from '@/(account)/subjects/[subjectId]/timeline/@eventTypes/_components/event-type-list';
-
-import listSubjectEventTypes, {
-  ListSubjectEventTypesData,
-} from '@/(account)/_server/list-subject-event-types';
 
 interface PageProps {
   params: {
@@ -21,51 +16,14 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     getCurrentTeamId(),
   ]);
 
-  if (!subject) return null;
-  const isTeamMember = subject.team_id === teamId;
-
-  const { observations, routines } = forceArray(eventTypes).reduce(
-    (
-      acc: {
-        observations: NonNullable<ListSubjectEventTypesData>;
-        routines: NonNullable<ListSubjectEventTypesData>;
-      },
-      eventType
-    ) => {
-      switch (eventType.type) {
-        case EventTypes.Observation: {
-          acc.observations.push(eventType);
-          break;
-        }
-
-        case EventTypes.Routine: {
-          acc.routines.push(eventType);
-          break;
-        }
-
-        default: {
-          // noop
-        }
-      }
-
-      return acc;
-    },
-    { observations: [], routines: [] }
-  );
+  if (!subject || !eventTypes) return null;
 
   return (
-    <>
-      <EventTypeList
-        eventTypes={routines}
-        isTeamMember={isTeamMember}
-        subjectId={subjectId}
-      />
-      <EventTypeList
-        eventTypes={observations}
-        isTeamMember={isTeamMember}
-        subjectId={subjectId}
-      />
-    </>
+    <EventTypeList
+      eventTypes={eventTypes}
+      isTeamMember={subject.team_id === teamId}
+      subjectId={subjectId}
+    />
   );
 };
 

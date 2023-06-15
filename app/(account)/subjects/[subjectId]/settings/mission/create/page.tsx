@@ -3,7 +3,7 @@ import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
 import getSubject from '@/(account)/_server/get-subject';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
-import listRoutineTemplatesWithData from '@/(account)/_server/list-routine-templates-with-data';
+import listTemplatesWithData from '@/(account)/_server/list-templates-with-data';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/settings/mission/_components/mission-form';
@@ -23,7 +23,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   ] = await Promise.all([
     getSubject(subjectId),
     listInputs(),
-    listRoutineTemplatesWithData(),
+    listTemplatesWithData(),
   ]);
 
   if (!subject) notFound();

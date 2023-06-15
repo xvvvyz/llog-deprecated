@@ -5,7 +5,6 @@ import Checkbox from '@/(account)/_components/checkbox';
 import NumberInput from '@/(account)/_components/input-number';
 import Select from '@/(account)/_components/select';
 import InputTypes from '@/(account)/_constants/enum-input-types';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { GetEventData } from '@/(account)/_server/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/(account)/_server/get-event-type-with-inputs-and-options';
 import { GetSessionData } from '@/(account)/_server/get-session';
@@ -14,6 +13,7 @@ import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import parseSeconds from '@/(account)/_utilities/parse-seconds';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -24,11 +24,11 @@ import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;
-  event?: GetEventData | GetSessionData['routines'][0]['event'][0];
+  event?: GetEventData | GetSessionData['parts'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionData>['routines'][0];
+    | NonNullable<GetSessionData>['parts'][0];
   isMission?: boolean;
   subjectId: string;
 }

@@ -24,7 +24,7 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
       name={'banner' as T[string]}
       render={({ field }) => (
         <RichTextarea
-          className="text-center text-fg-3 [&>*]:mx-auto [&>*]:max-w-sm"
+          className="px-0 text-center text-fg-3 [&>*]:mx-auto [&>*]:max-w-sm [&>*]:px-4"
           label="Banner"
           {...field}
         />

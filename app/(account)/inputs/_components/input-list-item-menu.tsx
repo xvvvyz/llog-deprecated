@@ -3,7 +3,7 @@
 import Alert from '@/(account)/_components/alert';
 import Menu from '@/(account)/_components/menu';
 import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
-import useSupabase from '@/(account)/_hooks/use-supabase';
+import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -25,7 +25,7 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
     <>
       <Alert
         confirmText="Delete input"
-        description="Deleting this input does not remove it from existing routines, observations and events."
+        description="Deleting this input does not remove it from existing event types and events."
         isConfirming={isConfirming.value}
         isConfirmingText="Deleting input…"
         onConfirm={async () => {

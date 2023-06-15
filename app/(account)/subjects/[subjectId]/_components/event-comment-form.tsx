@@ -2,8 +2,8 @@
 
 import IconButton from '@/(account)/_components/icon-button';
 import RichTextarea from '@/(account)/_components/rich-textarea';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
+import useSupabase from '@/_hooks/use-supabase';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';

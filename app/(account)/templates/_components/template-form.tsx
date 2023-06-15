@@ -2,13 +2,10 @@
 
 import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
-import TEMPLATE_TYPE_LABELS from '@/(account)/_constants/constant-template-type-labels';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import TemplateTypes from '@/(account)/_constants/enum-template-types';
 import useBackLink from '@/(account)/_hooks/use-back-link';
 import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { GetTemplateData } from '@/(account)/_server/get-template';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { TemplateDataType } from '@/(account)/_types/template';
@@ -19,6 +16,7 @@ import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import sortInputs from '@/(account)/_utilities/sort-inputs';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database, Json } from '@/_types/database';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -32,7 +30,6 @@ interface TemplateFormProps {
 type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
   content: string;
   inputs: Database['public']['Tables']['inputs']['Row'][];
-  type: { id: TemplateTypes };
 };
 
 const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
@@ -53,9 +50,6 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       ),
       name: template?.name ?? '',
       public: template?.public ?? false,
-      type: template?.type
-        ? { id: template.type, label: TEMPLATE_TYPE_LABELS[template.type] }
-        : null,
     },
   });
 
@@ -65,7 +59,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
     <form
       className="form"
       onSubmit={form.handleSubmit(
-        async ({ content, id, inputs, name, public: p, type }) => {
+        async ({ content, id, inputs, name, public: p }) => {
           const { error: templateError } = await supabase
             .from('templates')
             .upsert({
@@ -76,7 +70,6 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
               id,
               name: name.trim(),
               public: p,
-              type: type?.id,
             })
             .single();
 
@@ -89,28 +82,6 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         }
       )}
     >
-      <Controller
-        control={form.control}
-        name="type"
-        render={({ field }) => (
-          <Select
-            isClearable={false}
-            isSearchable={false}
-            label="Type"
-            options={[
-              {
-                id: TemplateTypes.Observation,
-                label: TEMPLATE_TYPE_LABELS[TemplateTypes.Observation],
-              },
-              {
-                id: TemplateTypes.Routine,
-                label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
-              },
-            ]}
-            {...field}
-          />
-        )}
-      />
       <Input label="Name" {...form.register('name')} />
       <Controller
         control={form.control}

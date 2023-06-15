@@ -20,7 +20,7 @@ const EventTypeList = ({
         text={eventType.name as string}
         {...(isTeamMember
           ? {
-              rightHref: `/subjects/${subjectId}/settings/${eventType.type}/${eventType.id}?back=/subjects/${subjectId}`,
+              rightHref: `/subjects/${subjectId}/settings/event-type/${eventType.id}?back=/subjects/${subjectId}`,
               rightIcon: 'edit',
               rightLabel: 'Edit',
             }

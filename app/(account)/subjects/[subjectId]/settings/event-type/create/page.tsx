@@ -1,24 +1,20 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
-import EventTypes from '@/(account)/_constants/enum-event-types';
 import getSubject from '@/(account)/_server/get-subject';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
-import EventTypeForm from '@/(account)/subjects/[subjectId]/settings/[eventTypeType]/_components/event-type-form';
+import EventTypeForm from '@/(account)/subjects/[subjectId]/settings/event-type/_components/event-type-form';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
-    eventTypeType: EventTypes;
     subjectId: string;
   };
 }
 
-const Page = async ({ params: { eventTypeType, subjectId } }: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
-
+const Page = async ({ params: { subjectId } }: PageProps) => {
   const [{ data: subject }, { data: availableInputs }] = await Promise.all([
     getSubject(subjectId),
     listInputs(),
@@ -34,7 +30,7 @@ const Page = async ({ params: { eventTypeType, subjectId } }: PageProps) => {
           items={[
             [subject.name, `/subjects/${subjectId}/timeline`],
             ['Settings', `/subjects/${subjectId}/settings`],
-            [`Create ${eventTypeType}`],
+            ['Create event type'],
           ]}
         />
       </Header>
@@ -44,20 +40,19 @@ const Page = async ({ params: { eventTypeType, subjectId } }: PageProps) => {
           subjectId
         )}
         subjectId={subjectId}
-        type={eventTypeType as EventTypes}
       />
     </>
   );
 };
 
 export const generateMetadata = async ({
-  params: { eventTypeType, subjectId },
+  params: { subjectId },
 }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
   if (!subject) return;
 
   return {
-    title: formatTitle([subject.name, 'Settings', `Create ${eventTypeType}`]),
+    title: formatTitle([subject.name, 'Settings', 'Create event type']),
   };
 };
 

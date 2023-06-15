@@ -6,7 +6,7 @@ import DateTime from '@/(account)/_components/date-time';
 import DirtyHtml from '@/(account)/_components/dirty-html';
 import Menu from '@/(account)/_components/menu';
 import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
-import useSupabase from '@/(account)/_hooks/use-supabase';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';

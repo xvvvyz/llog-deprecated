@@ -2,13 +2,10 @@
 
 import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
-import TEMPLATE_TYPE_LABELS from '@/(account)/_constants/constant-template-type-labels';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import EventTypes from '@/(account)/_constants/enum-event-types';
 import useBackLink from '@/(account)/_hooks/use-back-link';
 import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { GetEventTypeWithInputsData } from '@/(account)/_server/get-event-type-with-inputs';
 import { GetTemplateData } from '@/(account)/_server/get-template';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
@@ -19,6 +16,7 @@ import globalValueCache from '@/(account)/_utilities/global-value-cache';
 import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -29,7 +27,6 @@ interface EventTypeFormProps {
   eventType?: GetEventTypeWithInputsData;
   subjectId: string;
   template?: GetTemplateData;
-  type?: EventTypes;
 }
 
 type EventTypeFormValues =
@@ -42,7 +39,6 @@ const EventTypeForm = ({
   eventType,
   subjectId,
   template,
-  type,
 }: EventTypeFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const [redirect, isRedirecting] = useSubmitRedirect();
@@ -63,7 +59,6 @@ const EventTypeForm = ({
           ),
       name: eventType?.name ?? template?.name ?? '',
       order: eventType?.order,
-      type: eventType?.type ?? type,
     },
   });
 
@@ -73,7 +68,7 @@ const EventTypeForm = ({
     <form
       className="form"
       onSubmit={form.handleSubmit(
-        async ({ content, id, inputs, name, order, type }) => {
+        async ({ content, id, inputs, name, order }) => {
           const { data: eventTypeData, error: eventTypeError } = await supabase
             .from('event_types')
             .upsert({
@@ -82,7 +77,6 @@ const EventTypeForm = ({
               name,
               order,
               subject_id: subjectId,
-              type,
             })
             .select('id')
             .single();
@@ -171,7 +165,7 @@ const EventTypeForm = ({
           loadingText="Saving…"
           type="submit"
         >
-          Save {defaultValues.type}
+          Save event type
         </Button>
         <Button
           className="w-full"
@@ -183,10 +177,6 @@ const EventTypeForm = ({
               content: values.content,
               inputs: values.inputs,
               name: values.name,
-              type: {
-                id: values.type,
-                label: TEMPLATE_TYPE_LABELS[values.type],
-              },
             });
 
             globalValueCache.set(CacheKeys.EventTypeForm, values);

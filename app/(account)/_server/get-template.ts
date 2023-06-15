@@ -3,7 +3,7 @@ import createServerComponentClient from '@/_server/create-server-component-clien
 const getTemplate = (templateId: string) =>
   createServerComponentClient()
     .from('templates')
-    .select('data, id, name, public, type')
+    .select('data, id, name, public')
     .eq('id', templateId)
     .single();
 

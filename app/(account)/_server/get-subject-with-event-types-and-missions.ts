@@ -6,7 +6,7 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
     .select(
       `
       banner,
-      event_types(id, name, type),
+      event_types(id, name),
       id,
       image_uri,
       managers:profiles(first_name, id, last_name),
@@ -19,7 +19,6 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
     .order('name', { foreignTable: 'missions' })
     .is('event_types.session_id', null)
     .eq('event_types.deleted', false)
-    .order('type', { foreignTable: 'event_types' })
     .order('order', { foreignTable: 'event_types' })
     .single();
 

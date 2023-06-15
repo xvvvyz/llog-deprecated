@@ -3,11 +3,10 @@ import createServerComponentClient from '@/_server/create-server-component-clien
 const listSubjectEventTypes = (subjectId: string) =>
   createServerComponentClient()
     .from('event_types')
-    .select('id, name, type')
+    .select('id, name')
     .eq('subject_id', subjectId)
     .is('session_id', null)
     .eq('deleted', false)
-    .not('type', 'is', null)
     .order('order');
 
 export type ListSubjectEventTypesData = Awaited<

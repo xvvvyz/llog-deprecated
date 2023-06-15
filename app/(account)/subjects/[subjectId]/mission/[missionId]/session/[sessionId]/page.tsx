@@ -36,15 +36,15 @@ const Page = async ({
 
   if (!subject || !mission || !session || !user) notFound();
 
-  return forceArray(session.routines).map((routine) => {
-    const event = firstIfArray(routine.event);
+  return forceArray(session.parts).map((part) => {
+    const event = firstIfArray(part.event);
 
     return (
       <EventCard
         event={event}
-        eventType={routine}
+        eventType={part}
         isTeamMember={subject.team_id === teamId}
-        key={routine.id}
+        key={part.id}
         mission={mission}
         subjectId={subjectId}
         userId={user.id}

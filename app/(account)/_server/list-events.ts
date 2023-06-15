@@ -28,8 +28,7 @@ const listEvents = (subjectId: string) =>
           order
         ),
         name,
-        order,
-        type
+        order
       )`
     )
     .eq('subject_id', subjectId)
@@ -65,7 +64,7 @@ export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
-    'id' | 'name' | 'order' | 'type'
+    'id' | 'name' | 'order'
   > & {
     session: Pick<
       Database['public']['Tables']['sessions']['Row'],

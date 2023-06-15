@@ -5,9 +5,7 @@ import IconButton from '@/(account)/_components/icon-button';
 import Menu from '@/(account)/_components/menu';
 import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
-import TEMPLATE_TYPE_LABELS from '@/(account)/_constants/constant-template-type-labels';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import TemplateTypes from '@/(account)/_constants/enum-template-types';
 import useBackLink from '@/(account)/_hooks/use-back-link';
 import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
@@ -38,34 +36,34 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 
-interface RoutineFormSectionProps<T extends FieldValues> {
+interface PartFormSectionProps<T extends FieldValues> {
   eventTypeArray: UseFieldArrayReturn<T, T[string], 'key'>;
   eventTypeId: string;
   eventTypeIndex: number;
   eventTypeKey: string;
+  eventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['parts'][0]['event']
+  >;
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
   name: string;
-  routineEventsMap: Record<
-    string,
-    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
-  >;
   sessionIndex: number;
   userId?: string;
 }
 
-const RoutineFormSection = <T extends FieldValues>({
+const PartFormSection = <T extends FieldValues>({
   eventTypeArray,
   eventTypeId,
   eventTypeIndex,
   eventTypeKey,
+  eventsMap,
   form,
   inputOptions,
   name,
-  routineEventsMap,
   sessionIndex,
   userId,
-}: RoutineFormSectionProps<T>) => {
+}: PartFormSectionProps<T>) => {
   const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });
   const deleteAlert = useBoolean();
@@ -79,12 +77,12 @@ const RoutineFormSection = <T extends FieldValues>({
     transition,
   };
 
-  const event = routineEventsMap[eventTypeId];
+  const event = eventsMap[eventTypeId];
 
   return (
     <li className="mb-4" ref={setNodeRef} style={style}>
       <Alert
-        confirmText="Delete routine"
+        confirmText="Delete part"
         onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
         {...deleteAlert}
       />
@@ -114,17 +112,11 @@ const RoutineFormSection = <T extends FieldValues>({
 
                         globalValueCache.set(CacheKeys.TemplateForm, {
                           content:
-                            values.sessions[sessionIndex].routines[
-                              eventTypeIndex
-                            ].content,
+                            values.sessions[sessionIndex].parts[eventTypeIndex]
+                              .content,
                           inputs:
-                            values.sessions[sessionIndex].routines[
-                              eventTypeIndex
-                            ].inputs,
-                          type: {
-                            id: TemplateTypes.Routine,
-                            label: TEMPLATE_TYPE_LABELS[TemplateTypes.Routine],
-                          },
+                            values.sessions[sessionIndex].parts[eventTypeIndex]
+                              .inputs,
                         });
 
                         globalValueCache.set(CacheKeys.MissionForm, values);
@@ -143,7 +135,7 @@ const RoutineFormSection = <T extends FieldValues>({
                     </Menu.Item>
                     <Menu.Item onClick={deleteAlert.setTrue}>
                       <TrashIcon className="w-5 text-fg-3" />
-                      Delete routine
+                      Delete part
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>
@@ -229,4 +221,4 @@ const RoutineFormSection = <T extends FieldValues>({
   );
 };
 
-export default RoutineFormSection;
+export default PartFormSection;

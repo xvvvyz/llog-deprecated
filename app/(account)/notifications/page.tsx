@@ -98,7 +98,7 @@ const Page = async () => {
                         {n.type === NotificationTypes.Comment && 'commented on'}
                         {n.type === NotificationTypes.Event &&
                           (sourceEvent.type.session
-                            ? 'completed a routine on'
+                            ? 'made progress on'
                             : 'recorded')}{' '}
                         {sourceEvent.type.session?.mission?.name ??
                           sourceEvent.type.name}

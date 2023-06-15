@@ -34,8 +34,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
           order
         ),
         name,
-        order,
-        type
+        order
       )`
     )
     .eq('subject_id', ctx.params.subjectId)
@@ -43,23 +42,11 @@ export const GET = async (req: Request, ctx: GetContext) => {
     .order('created_at', { foreignTable: 'comments' })
     .order('order', { foreignTable: 'inputs' });
 
-  if (!eventsData) {
-    return new NextResponse(null, { status: 404 });
-  }
+  if (!eventsData) return new NextResponse(null, { status: 404 });
 
   const headerMap: Record<string, number> = {};
-
-  const csvHeader = [
-    'Timestamp',
-    'Event',
-    'Type',
-    'Session',
-    'Routine',
-    'Author',
-  ];
-
+  const csvHeader = ['Timestamp', 'Event', 'Type', 'Session', 'Part', 'Author'];
   const csvRows: string[][] = [];
-
   const searchParams = new URL(req.url).searchParams;
 
   const tz =
@@ -76,7 +63,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
         'yyyy-MM-dd HH:mm:ss zzz'
       ),
       event.type.name ?? event.type.session.mission.name,
-      event.type.session ? 'mission' : event.type.type,
+      event.type.session ? 'mission' : 'event',
       event.type.session ? event.type.session?.order + 1 : '',
       event.type.session ? event.type.order + 1 : '',
       `${profile.first_name} ${profile.last_name}`,

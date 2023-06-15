@@ -7,7 +7,7 @@ const getSession = (sessionId: string) =>
     .select(
       `
       order,
-      routines:event_types(
+      parts:event_types(
         content,
         event:events(
           comments(
@@ -32,25 +32,24 @@ const getSession = (sessionId: string) =>
           )
         ),
         name,
-        order,
-        type
+        order
       ),
       scheduled_for`
     )
     .eq('id', sessionId)
-    .eq('routines.deleted', false)
-    .eq('routines.inputs.input.options.deleted', false)
-    .order('order', { foreignTable: 'routines' })
-    .order('order', { foreignTable: 'routines.event.inputs' })
-    .order('order', { foreignTable: 'routines.inputs' })
-    .order('order', { foreignTable: 'routines.inputs.input.options' })
+    .eq('parts.deleted', false)
+    .eq('parts.inputs.input.options.deleted', false)
+    .order('order', { foreignTable: 'parts' })
+    .order('order', { foreignTable: 'parts.event.inputs' })
+    .order('order', { foreignTable: 'parts.inputs' })
+    .order('order', { foreignTable: 'parts.inputs.input.options' })
     .single();
 
 export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'] & {
-  routines: Array<
+  parts: Array<
     Pick<
       Database['public']['Tables']['event_types']['Row'],
-      'content' | 'id' | 'name' | 'order' | 'type'
+      'content' | 'id' | 'name' | 'order'
     > & {
       event: Array<
         Pick<

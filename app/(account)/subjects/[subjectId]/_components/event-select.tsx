@@ -1,6 +1,6 @@
 import Select from '@/(account)/_components/select';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { InputType } from '@/(account)/_types/input';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';

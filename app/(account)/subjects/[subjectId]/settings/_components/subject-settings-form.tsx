@@ -4,12 +4,9 @@ import IconButton from '@/(account)/_components/icon-button';
 import LinkList from '@/(account)/_components/link-list';
 import Select from '@/(account)/_components/select';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import EventTypes from '@/(account)/_constants/enum-event-types';
-import TemplateTypes from '@/(account)/_constants/enum-template-types';
 import useAvatarDropzone from '@/(account)/_hooks/use-avatar-dropzone';
 import useBackLink from '@/(account)/_hooks/use-back-link';
 import useDefaultValues from '@/(account)/_hooks/use-default-values';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { GetSubjectWithEventTypesData } from '@/(account)/_server/get-subject-with-event-types-and-missions';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import { TemplateType } from '@/(account)/_types/template';
@@ -20,6 +17,7 @@ import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import uploadSubjectAvatar from '@/(account)/_utilities/upload-subject-avatar';
 import SubjectDetailsFormSection from '@/(account)/subjects/_components/subject-details-form-section';
 import Button from '@/_components/button';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
@@ -55,15 +53,9 @@ const SubjectSettingsForm = ({
   const eventTypes = forceArray(subject.event_types);
   const managers = forceArray(subject.managers);
   const missions = forceArray(subject.missions);
-  const newObservationTransition = useTransition();
-  const newRoutineTransition = useTransition();
+  const newEventTypeTransition = useTransition();
   const router = useRouter();
-  const routines = eventTypes.filter((e) => e.type === EventTypes.Routine);
   const supabase = useSupabase();
-
-  const observations = eventTypes.filter(
-    (e) => e.type === EventTypes.Observation
-  );
 
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.SubjectSettingsForm,
@@ -119,9 +111,9 @@ const SubjectSettingsForm = ({
       </Button>
       <section className="mt-2">
         <h1 className="px-2 text-xl text-fg-1">Missions</h1>
-        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
-          Missions are a sequence of routines that form a long-term
-          modification&nbsp;plan.
+        <p className="mt-2 max-w-sm px-2 text-fg-3">
+          Create long-term modification plans. Examples: &ldquo;Reduce
+          separation anxiety&rdquo;, &ldquo;Improve recall&rdquo;
         </p>
         {!!missions.length && (
           <LinkList className="mx-0 mt-4">
@@ -148,20 +140,20 @@ const SubjectSettingsForm = ({
         </Button>
       </section>
       <section className="mt-2">
-        <h1 className="px-2 text-xl text-fg-1">Routines</h1>
-        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
-          Routines are a sequence of actions that can be performed
-          at&nbsp;any&nbsp;time.
+        <h1 className="px-2 text-xl text-fg-1">Event types</h1>
+        <p className="mt-2 max-w-sm px-2 text-fg-3">
+          Define the events you want to track. Examples: &ldquo;Exercise&rdquo;,
+          &ldquo;Feeding&rdquo;, &ldquo;Barking&rdquo;, &ldquo;Sleeping&rdquo;
         </p>
-        {!!routines.length && (
+        {!!eventTypes.length && (
           <LinkList className="mx-0 mt-4">
-            {routines.map((routine) => (
+            {eventTypes.map((eventType) => (
               <LinkList.Item
-                href={`/subjects/${subject.id}/settings/routine/${routine.id}?back=${backLink}`}
+                href={`/subjects/${subject.id}/settings/event-type/${eventType.id}?back=${backLink}`}
                 icon="edit"
-                key={routine.id}
+                key={eventType.id}
                 onClick={saveToCache}
-                text={routine.name}
+                text={eventType.name}
               />
             ))}
           </LinkList>
@@ -169,30 +161,29 @@ const SubjectSettingsForm = ({
         <div className="mt-4 flex items-center gap-4">
           <div className="flex-grow">
             <Select
-              instanceId="routineTemplate"
+              instanceId="eventTypeTemplate"
+              isLoading={newEventTypeTransition[0]}
               noOptionsMessage={() => 'No templates'}
               onChange={(e) => {
                 saveToCache();
 
                 globalValueCache.set(CacheKeys.EventTypeForm, {
-                  order: routines.length,
+                  order: eventTypes.length,
                 });
 
                 const template = e as TemplateType;
 
-                newRoutineTransition[1](() =>
+                newEventTypeTransition[1](() =>
                   router.push(
                     formatCacheLink({
                       backLink,
-                      path: `/subjects/${subject.id}/settings/routine/create/from-template/${template.id}`,
+                      path: `/subjects/${subject.id}/settings/event-type/create/from-template/${template.id}`,
                       useCache: true,
                     })
                   )
                 );
               }}
-              options={forceArray(availableTemplates).filter(
-                (template) => template.type === TemplateTypes.Routine
-              )}
+              options={forceArray(availableTemplates)}
               placeholder="Create from template…"
               value={null}
             />
@@ -202,22 +193,20 @@ const SubjectSettingsForm = ({
             className="p-2"
             colorScheme="transparent"
             icon={<PlusIcon className="m-0.5 w-5" />}
-            label="Create routine"
+            label="Create event type"
             onClick={() => {
               saveToCache();
 
               globalValueCache.set(CacheKeys.EventTypeForm, {
-                order: routines.length,
+                order: eventTypes.length,
               });
 
-              newRoutineTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/routine/create`,
-                    useCache: true,
-                  })
-                )
+              router.push(
+                formatCacheLink({
+                  backLink,
+                  path: `/subjects/${subject.id}/settings/event-type/create`,
+                  useCache: true,
+                })
               );
             }}
             type="button"
@@ -226,87 +215,9 @@ const SubjectSettingsForm = ({
         </div>
       </section>
       <section className="mt-2">
-        <h1 className="px-2 text-xl text-fg-1">Observations</h1>
-        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
-          Observations allow you to track events or behaviors that occur
-          over&nbsp;time.
-        </p>
-        {!!observations.length && (
-          <LinkList className="mx-0 mt-4">
-            {observations.map((observation) => (
-              <LinkList.Item
-                href={`/subjects/${subject.id}/settings/observation/${observation.id}?back=${backLink}`}
-                icon="edit"
-                key={observation.id}
-                onClick={saveToCache}
-                text={observation.name}
-              />
-            ))}
-          </LinkList>
-        )}
-        <div className="mt-4 flex items-center gap-4">
-          <div className="flex-grow">
-            <Select
-              instanceId="observationTemplate"
-              noOptionsMessage={() => 'No templates'}
-              onChange={(e) => {
-                saveToCache();
-
-                globalValueCache.set(CacheKeys.EventTypeForm, {
-                  order: observations.length,
-                });
-
-                const template = e as TemplateType;
-
-                newObservationTransition[1](() =>
-                  router.push(
-                    formatCacheLink({
-                      backLink,
-                      path: `/subjects/${subject.id}/settings/observation/create/from-template/${template.id}`,
-                      useCache: true,
-                    })
-                  )
-                );
-              }}
-              options={forceArray(availableTemplates).filter(
-                (template) => template.type === TemplateTypes.Observation
-              )}
-              placeholder="Create from template…"
-              value={null}
-            />
-          </div>
-          <span className="text-fg-3">or</span>
-          <IconButton
-            className="p-2"
-            colorScheme="transparent"
-            icon={<PlusIcon className="m-0.5 w-5" />}
-            label="Create observation"
-            onClick={() => {
-              saveToCache();
-
-              globalValueCache.set(CacheKeys.EventTypeForm, {
-                order: observations.length,
-              });
-
-              newObservationTransition[1](() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: `/subjects/${subject.id}/settings/observation/create`,
-                    useCache: true,
-                  })
-                )
-              );
-            }}
-            type="button"
-            variant="primary"
-          />
-        </div>
-      </section>
-      <section className="mt-2">
-        <h1 className="px-2 text-xl text-fg-1">Clients</h1>
-        <p className="mt-2 max-w-xs px-2 leading-tight text-fg-3">
-          Clients can complete routines, make observations and
+        <h1 className="px-2 text-xl text-fg-1">Members</h1>
+        <p className="mt-2 max-w-sm px-2 text-fg-3">
+          Add members by sharing the link below. Members can record events and
           add&nbsp;comments.
         </p>
         {!!managers.length && (
@@ -363,7 +274,7 @@ const SubjectSettingsForm = ({
           ) : (
             <>
               <ClipboardDocumentIcon className="w-5" />
-              Copy client link
+              Copy member link
             </>
           )}
         </Button>

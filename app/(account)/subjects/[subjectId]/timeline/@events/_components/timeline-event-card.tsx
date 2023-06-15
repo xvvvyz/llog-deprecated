@@ -66,22 +66,25 @@ const TimelineEventCard = ({
       )}
       <ul className="divide-y divide-alpha-1">
         {group.map((event) => {
-          const routineNumber = firstIfArray(event.type).order + 1;
+          const partNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
 
           return (
             <li key={event.id}>
               {lastEventType.session && (
-                <div className="flex items-center justify-between bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
-                  <div className="flex items-center gap-4">
+                <div className="flex justify-between bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
+                  <div className="flex gap-4">
                     <Avatar
                       className="-my-[0.15rem]"
                       name={firstIfArray(event.profile).first_name}
                       size="xs"
                     />
-                    Routine {routineNumber}
+                    {lastEventProfile.first_name} {lastEventProfile.last_name}{' '}
                   </div>
-                  <DateTime date={event.created_at} formatter="time" />
+                  <div className="flex gap-4">
+                    <DateTime date={event.created_at} formatter="time" />
+                    {partNumber}
+                  </div>
                 </div>
               )}
               <EventInputs

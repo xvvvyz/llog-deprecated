@@ -1,4 +1,4 @@
-import Context from '@/(account)/_context/supabase-context';
+import Context from '@/_context/supabase-context';
 import { Database } from '@/_types/database';
 import { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useContext } from 'react';

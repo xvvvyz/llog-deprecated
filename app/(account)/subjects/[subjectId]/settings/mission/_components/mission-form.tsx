@@ -1,10 +1,8 @@
 'use client';
 
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import EventTypes from '@/(account)/_constants/enum-event-types';
 import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
@@ -14,6 +12,7 @@ import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useForm } from 'react-hook-form';
 import SessionsFormSection from './sessions-form-section';
@@ -29,7 +28,7 @@ interface MissionFormProps {
 type MissionFormValues = Database['public']['Tables']['missions']['Row'] & {
   sessions: Array<
     Database['public']['Tables']['sessions']['Row'] & {
-      routines: Array<
+      parts: Array<
         Database['public']['Tables']['event_types']['Row'] & {
           inputs: Array<Database['public']['Tables']['inputs']['Row']>;
         }
@@ -49,9 +48,9 @@ const MissionForm = ({
   const sessions = forceArray(mission?.sessions);
   const supabase = useSupabase();
 
-  const routineEventsMap: Record<
+  const eventsMap: Record<
     string,
-    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
+    GetMissionWithEventTypesData['sessions'][0]['parts'][0]['event']
   > = {};
 
   const form = useForm<MissionFormValues>({
@@ -65,23 +64,20 @@ const MissionForm = ({
 
           return {
             ...session,
-            routines: forceArray(session?.routines).map((r) => {
-              const routine = firstIfArray(r);
-              routineEventsMap[routine.id] = firstIfArray(routine.event);
+            parts: forceArray(session?.parts).map((r) => {
+              const part = firstIfArray(r);
+              eventsMap[part.id] = firstIfArray(part.event);
 
               return {
-                ...routine,
-                inputs: forceArray(routine?.inputs).reduce(
-                  (acc, { input_id }) => {
-                    const input = availableInputs?.find(
-                      ({ id }) => id === input_id
-                    );
+                ...part,
+                inputs: forceArray(part?.inputs).reduce((acc, { input_id }) => {
+                  const input = availableInputs?.find(
+                    ({ id }) => id === input_id
+                  );
 
-                    if (input) acc.push(input);
-                    return acc;
-                  },
-                  []
-                ),
+                  if (input) acc.push(input);
+                  return acc;
+                }, []),
               };
             }),
             scheduled_for:
@@ -211,18 +207,17 @@ const MissionForm = ({
           .getValues('sessions')
           .reduce(
             (acc, session) => {
-              session.routines.map((routine, order) => {
+              session.parts.map((part, order) => {
                 const payload: Database['public']['Tables']['event_types']['Insert'] =
                   {
-                    content: sanitizeHtml(routine.content),
+                    content: sanitizeHtml(part.content),
                     order,
                     session_id: session.id,
                     subject_id: subjectId,
-                    type: EventTypes.Routine,
                   };
 
-                if (routine.id) {
-                  payload.id = routine.id;
+                if (part.id) {
+                  payload.id = part.id;
                   acc.updatedEventTypes.push(payload);
                 } else {
                   acc.insertedEventTypes.push(payload);
@@ -244,9 +239,9 @@ const MissionForm = ({
         const deletedEventTypeIds = sessions.reduce((acc, s) => {
           const session = firstIfArray(s);
 
-          forceArray(session?.routines).forEach((routine) => {
-            if (!updatedEventTypes.some(({ id }) => id === routine.id)) {
-              acc.push(routine.id);
+          forceArray(session?.parts).forEach((part) => {
+            if (!updatedEventTypes.some(({ id }) => id === part.id)) {
+              acc.push(part.id);
             }
           });
 
@@ -294,11 +289,11 @@ const MissionForm = ({
             'sessions',
             form.getValues().sessions.map((session) => ({
               ...session,
-              routines: session.routines.map((routine) => {
-                if (routine.id) return routine;
+              parts: session.parts.map((part) => {
+                if (part.id) return part;
                 const id = insertEventTypesDataReverse.pop()?.id;
-                if (!id) return routine;
-                return { ...routine, id };
+                if (!id) return part;
+                return { ...part, id };
               }),
             }))
           );
@@ -308,12 +303,12 @@ const MissionForm = ({
           .getValues()
           .sessions.reduce(
             (acc, session) => {
-              session.routines.forEach((routine) => {
-                if (routine.id) acc.deleteEventTypeInputs.push(routine.id);
+              session.parts.forEach((part) => {
+                if (part.id) acc.deleteEventTypeInputs.push(part.id);
 
-                routine.inputs.forEach((input, order) => {
+                part.inputs.forEach((input, order) => {
                   acc.insertEventTypeInputs.push({
-                    event_type_id: routine.id,
+                    event_type_id: part.id,
                     input_id: input.id,
                     order,
                   });
@@ -360,9 +355,9 @@ const MissionForm = ({
       <SessionsFormSection<MissionFormValues>
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}
+        eventsMap={eventsMap}
         form={form}
         missionId={mission?.id}
-        routineEventsMap={routineEventsMap}
         subjectId={subjectId}
         userId={userId}
       />

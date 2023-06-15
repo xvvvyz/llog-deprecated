@@ -1,15 +1,15 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
+import getCurrentUser from '@/(account)/_server/get-current-user';
 import getSubject from '@/(account)/_server/get-subject';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
-import listRoutineTemplatesWithData from '@/(account)/_server/list-routine-templates-with-data';
+import listTemplatesWithData from '@/(account)/_server/list-templates-with-data';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/settings/mission/_components/mission-form';
 import { notFound } from 'next/navigation';
 
-import getCurrentUser from '@/(account)/_server/get-current-user';
 import getMissionWithEventTypes, {
   GetMissionWithEventTypesData,
 } from '@/(account)/_server/get-mission-with-event-types';
@@ -32,7 +32,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     getSubject(subjectId),
     getMissionWithEventTypes(missionId),
     listInputs(),
-    listRoutineTemplatesWithData(),
+    listTemplatesWithData(),
     getCurrentUser(),
   ]);
 

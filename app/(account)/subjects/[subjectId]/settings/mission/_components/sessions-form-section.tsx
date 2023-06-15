@@ -16,12 +16,12 @@ import {
 interface SessionsFormSectionProps<T extends FieldValues> {
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesData;
+  eventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['parts'][0]['event']
+  >;
   form: UseFormReturn<T>;
   missionId?: string;
-  routineEventsMap: Record<
-    string,
-    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
-  >;
   subjectId: string;
   userId?: string;
 }
@@ -29,9 +29,9 @@ interface SessionsFormSectionProps<T extends FieldValues> {
 const SessionsFormSection = <T extends FieldValues>({
   availableInputs,
   availableTemplates,
+  eventsMap,
   form,
   missionId,
-  routineEventsMap,
   subjectId,
   userId,
 }: SessionsFormSectionProps<T>) => {
@@ -48,10 +48,10 @@ const SessionsFormSection = <T extends FieldValues>({
             <SessionFormSection<T>
               availableInputs={availableInputs}
               availableTemplates={availableTemplates}
+              eventsMap={eventsMap}
               form={form}
               key={session.id}
               missionId={missionId}
-              routineEventsMap={routineEventsMap}
               sessionArray={sessionArray}
               sessionIndex={sessionIndex}
               subjectId={subjectId}
@@ -78,7 +78,7 @@ const SessionsFormSection = <T extends FieldValues>({
           }
 
           sessionArray.append({
-            routines: [],
+            parts: [],
             scheduled_for: formattedNewScheduledFor,
           } as FieldArray<T, T[string]>);
         }}

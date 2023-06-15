@@ -2,14 +2,13 @@
 
 import IconButton from '@/(account)/_components/icon-button';
 import Select from '@/(account)/_components/select';
-import TemplateTypes from '@/(account)/_constants/enum-template-types';
 import { GetMissionWithEventTypesData } from '@/(account)/_server/get-mission-with-event-types';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesData } from '@/(account)/_server/list-templates';
 import { TemplateType } from '@/(account)/_types/template';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { FieldValues, useFieldArray, UseFormReturn } from 'react-hook-form';
-import RoutineFormSection from './routine-form-section';
+import PartFormSection from './part-form-section';
 
 import {
   closestCenter,
@@ -25,29 +24,29 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-interface RoutinesFormSection<T extends FieldValues> {
+interface PartsFormSection<T extends FieldValues> {
+  eventsMap: Record<
+    string,
+    GetMissionWithEventTypesData['sessions'][0]['parts'][0]['event']
+  >;
   form: UseFormReturn<T>;
   inputOptions: NonNullable<ListInputsData>;
-  routineEventsMap: Record<
-    string,
-    GetMissionWithEventTypesData['sessions'][0]['routines'][0]['event']
-  >;
   sessionIndex: number;
   templateOptions: NonNullable<ListTemplatesData>;
   userId?: string;
 }
 
-const RoutinesFormSection = <T extends FieldValues>({
+const PartsFormSection = <T extends FieldValues>({
+  eventsMap,
   form,
   inputOptions,
-  routineEventsMap,
   sessionIndex,
   templateOptions,
   userId,
-}: RoutinesFormSection<T>) => {
-  const name = `sessions.${sessionIndex}.routines`;
+}: PartsFormSection<T>) => {
+  const name = `sessions.${sessionIndex}.parts`;
 
-  const routinesArray = useFieldArray({
+  const partsArray = useFieldArray({
     control: form.control,
     keyName: 'key',
     name: name as T[string],
@@ -65,33 +64,33 @@ const RoutinesFormSection = <T extends FieldValues>({
             const { active, over } = event;
 
             if (over && active.id !== over.id) {
-              routinesArray.move(
-                routinesArray.fields.findIndex((f) => f.key === active.id),
-                routinesArray.fields.findIndex((f) => f.key === over.id)
+              partsArray.move(
+                partsArray.fields.findIndex((f) => f.key === active.id),
+                partsArray.fields.findIndex((f) => f.key === over.id)
               );
             }
           }}
           sensors={sensors}
         >
           <SortableContext
-            items={routinesArray.fields.map((eventType) => eventType.key)}
+            items={partsArray.fields.map((eventType) => eventType.key)}
             strategy={verticalListSortingStrategy}
           >
-            {routinesArray.fields.map((eventType, eventTypeIndex) => (
-              <RoutineFormSection<T>
-                eventTypeArray={routinesArray}
+            {partsArray.fields.map((eventType, eventTypeIndex) => (
+              <PartFormSection<T>
+                eventTypeArray={partsArray}
                 eventTypeId={
                   (
-                    eventType as GetMissionWithEventTypesData['sessions'][0]['routines'][0]
+                    eventType as GetMissionWithEventTypesData['sessions'][0]['parts'][0]
                   ).id
                 }
                 eventTypeIndex={eventTypeIndex}
                 eventTypeKey={eventType.key}
+                eventsMap={eventsMap}
                 form={form}
                 inputOptions={inputOptions}
                 key={eventType.key}
                 name={name}
-                routineEventsMap={routineEventsMap}
                 sessionIndex={sessionIndex}
                 userId={userId}
               />
@@ -108,17 +107,15 @@ const RoutinesFormSection = <T extends FieldValues>({
               const template = e as TemplateType;
               if (!template) return;
 
-              routinesArray.append({
+              partsArray.append({
                 content: template?.data?.content || '',
                 inputs: inputOptions.filter((input) =>
                   template?.data?.inputIds?.includes(input.id)
                 ),
               } as T[string]);
             }}
-            options={templateOptions.filter(
-              (template) => template.type === TemplateTypes.Routine
-            )}
-            placeholder="Add routine from template…"
+            options={templateOptions}
+            placeholder="Add from template…"
             value={null}
           />
         </div>
@@ -127,9 +124,9 @@ const RoutinesFormSection = <T extends FieldValues>({
           className="p-2"
           colorScheme="transparent"
           icon={<PlusIcon className="m-0.5 w-5" />}
-          label="Add routine"
+          label="Add event type"
           onClick={() =>
-            routinesArray.append({
+            partsArray.append({
               content: '',
               inputs: [],
             } as T[string])
@@ -142,4 +139,4 @@ const RoutinesFormSection = <T extends FieldValues>({
   );
 };
 
-export default RoutinesFormSection;
+export default PartsFormSection;

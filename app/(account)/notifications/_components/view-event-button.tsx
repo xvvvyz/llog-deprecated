@@ -1,7 +1,7 @@
 'use client';
 
-import useSupabase from '@/(account)/_hooks/use-supabase';
 import Button from '@/_components/button';
+import useSupabase from '@/_hooks/use-supabase';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';

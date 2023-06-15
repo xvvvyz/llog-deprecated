@@ -25,8 +25,8 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       {forceArray(missions).reduce((acc, mission) => {
         const sessions = forceArray(mission.sessions);
 
-        const activeSession = sessions.find(({ routines }) =>
-          routines.find(
+        const activeSession = sessions.find(({ parts }) =>
+          parts.find(
             (et: { events: Database['public']['Tables']['events']['Row'][] }) =>
               !et.events.length
           )

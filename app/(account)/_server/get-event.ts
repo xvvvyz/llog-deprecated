@@ -30,8 +30,7 @@ const getEvent = (eventId: string) =>
           )
         ),
         name,
-        order,
-        type
+        order
       )`
     )
     .eq('id', eventId)
@@ -63,7 +62,7 @@ export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],
-    'content' | 'id' | 'name' | 'order' | 'type'
+    'content' | 'id' | 'name' | 'order'
   > & {
     inputs: Array<
       Pick<InputType, 'id' | 'label' | 'settings' | 'type'> & {

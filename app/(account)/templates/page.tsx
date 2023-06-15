@@ -22,7 +22,6 @@ const Page = async () => {
               href={`/templates/${template.id}`}
               icon="edit"
               key={template.id}
-              pill={template.type.charAt(0).toUpperCase()}
               text={template.name}
             />
           ))}

@@ -1,36 +1,30 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
-import EventTypes from '@/(account)/_constants/enum-event-types';
+import getEventTypeWithInputs from '@/(account)/_server/get-event-type-with-inputs';
 import getSubject from '@/(account)/_server/get-subject';
-import getTemplate from '@/(account)/_server/get-template';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
-import EventTypeForm from '@/(account)/subjects/[subjectId]/settings/[eventTypeType]/_components/event-type-form';
+import EventTypeForm from '@/(account)/subjects/[subjectId]/settings/event-type/_components/event-type-form';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
-    eventTypeType: EventTypes;
+    eventTypeId: string;
     subjectId: string;
-    templateId: string;
   };
 }
 
-const Page = async ({
-  params: { eventTypeType, subjectId, templateId },
-}: PageProps) => {
-  if (!Object.values(EventTypes).includes(eventTypeType)) notFound();
-
-  const [{ data: subject }, { data: availableInputs }, { data: template }] =
+const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
+  const [{ data: subject }, { data: eventType }, { data: availableInputs }] =
     await Promise.all([
       getSubject(subjectId),
+      getEventTypeWithInputs(eventTypeId),
       listInputs(),
-      getTemplate(templateId),
     ]);
 
-  if (!subject) notFound();
+  if (!subject || !eventType) notFound();
 
   return (
     <>
@@ -40,7 +34,7 @@ const Page = async ({
           items={[
             [subject.name, `/subjects/${subjectId}/timeline`],
             ['Settings', `/subjects/${subjectId}/settings`],
-            [`Create ${eventTypeType}`],
+            [eventType.name ?? ''],
           ]}
         />
       </Header>
@@ -49,23 +43,23 @@ const Page = async ({
           availableInputs as ListInputsData,
           subjectId
         )}
+        eventType={eventType}
         subjectId={subjectId}
-        template={template}
-        type={eventTypeType as EventTypes}
       />
     </>
   );
 };
 
 export const generateMetadata = async ({
-  params: { eventTypeType, subjectId },
+  params: { eventTypeId, subjectId },
 }: PageProps) => {
-  const { data: subject } = await getSubject(subjectId);
-  if (!subject) return;
+  const [{ data: subject }, { data: eventType }] = await Promise.all([
+    getSubject(subjectId),
+    getEventTypeWithInputs(eventTypeId),
+  ]);
 
-  return {
-    title: formatTitle([subject.name, 'Settings', `Create ${eventTypeType}`]),
-  };
+  if (!subject || !eventType) return;
+  return { title: formatTitle([subject.name, 'Settings', eventType.name]) };
 };
 
 export default Page;

@@ -11,7 +11,7 @@ const getMissionWithEventTypes = (missionId: string) =>
       sessions(
         id,
         order,
-        routines:event_types(
+        parts:event_types(
           content,
           event:events(
             comments(
@@ -32,18 +32,17 @@ const getMissionWithEventTypes = (missionId: string) =>
           id,
           inputs:event_type_inputs(input_id),
           name,
-          order,
-          type
+          order
         ),
         scheduled_for
       )`
     )
     .eq('id', missionId)
     .eq('sessions.deleted', false)
-    .eq('sessions.routines.deleted', false)
+    .eq('sessions.parts.deleted', false)
     .order('order', { foreignTable: 'sessions' })
-    .order('order', { foreignTable: 'sessions.routines' })
-    .order('order', { foreignTable: 'sessions.routines.inputs' })
+    .order('order', { foreignTable: 'sessions.parts' })
+    .order('order', { foreignTable: 'sessions.parts.inputs' })
     .single();
 
 export type GetMissionWithEventTypesData = Awaited<
@@ -54,10 +53,10 @@ export type GetMissionWithEventTypesData = Awaited<
       Database['public']['Tables']['sessions']['Row'],
       'id' | 'order' | 'scheduled_for'
     > & {
-      routines: Array<
+      parts: Array<
         Pick<
           Database['public']['Tables']['event_types']['Row'],
-          'content' | 'id' | 'name' | 'order' | 'type'
+          'content' | 'id' | 'name' | 'order'
         > & {
           event: Pick<
             Database['public']['Tables']['events']['Row'],

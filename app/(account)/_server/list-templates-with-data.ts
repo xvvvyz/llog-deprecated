@@ -4,7 +4,7 @@ import getCurrentTeamId from './get-current-team-id';
 const listTemplates = async () =>
   createServerComponentClient()
     .from('templates')
-    .select('id, name')
+    .select('data, id, name')
     .match({ team_id: await getCurrentTeamId() })
     .order('name');
 
