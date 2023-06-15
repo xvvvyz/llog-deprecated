@@ -59,7 +59,7 @@ const Layout = async ({
         )}
       </Header>
       {subject.banner && (
-        <DirtyHtml className="mx-auto -mt-1 max-w-sm px-4 pb-12 text-center text-fg-3">
+        <DirtyHtml className="mx-auto -mt-2 max-w-sm px-4 pb-14 text-center text-fg-3">
           {subject.banner}
         </DirtyHtml>
       )}

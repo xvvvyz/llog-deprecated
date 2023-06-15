@@ -1,7 +1,7 @@
+import LinkList from '@/(account)/_components/link-list';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectEventTypes from '@/(account)/_server/list-subject-event-types';
-import EventTypeList from '@/(account)/subjects/[subjectId]/timeline/@eventTypes/_components/event-type-list';
 
 interface PageProps {
   params: {
@@ -16,14 +16,25 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     getCurrentTeamId(),
   ]);
 
-  if (!subject || !eventTypes) return null;
+  if (!subject || !eventTypes?.length) return null;
 
   return (
-    <EventTypeList
-      eventTypes={eventTypes}
-      isTeamMember={subject.team_id === teamId}
-      subjectId={subjectId}
-    />
+    <LinkList>
+      {eventTypes.map((eventType) => (
+        <LinkList.Item
+          href={`/subjects/${subjectId}/event-type/${eventType.id}`}
+          key={eventType.id}
+          text={eventType.name as string}
+          {...(subject.team_id === teamId
+            ? {
+                rightHref: `/subjects/${subjectId}/settings/event-type/${eventType.id}?back=/subjects/${subjectId}`,
+                rightIcon: 'edit',
+                rightLabel: 'Edit',
+              }
+            : {})}
+        />
+      ))}
+    </LinkList>
   );
 };
 
