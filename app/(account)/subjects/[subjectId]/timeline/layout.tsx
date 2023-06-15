@@ -1,5 +1,6 @@
 import Avatar from '@/(account)/_components/avatar';
 import BackButton from '@/(account)/_components/back-button';
+import DirtyHtml from '@/(account)/_components/dirty-html';
 import Header from '@/(account)/_components/header';
 import IconButton from '@/(account)/_components/icon-button';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
@@ -57,6 +58,11 @@ const Layout = async ({
           </>
         )}
       </Header>
+      {subject.banner && (
+        <DirtyHtml className="mx-auto -mt-1 max-w-sm px-4 pb-12 text-center text-fg-3">
+          {subject.banner}
+        </DirtyHtml>
+      )}
       <div className="space-y-4">
         {missions}
         {eventTypes}

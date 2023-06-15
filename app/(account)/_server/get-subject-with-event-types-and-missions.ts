@@ -5,6 +5,7 @@ const getSubjectWithEventTypesAndMissions = (subjectId: string) =>
     .from('subjects')
     .select(
       `
+      banner,
       event_types(id, name, type),
       id,
       image_uri,

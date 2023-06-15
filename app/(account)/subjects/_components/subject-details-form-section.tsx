@@ -1,7 +1,8 @@
 import AvatarDropzone from '@/(account)/_components/avatar-dropzone';
+import RichTextarea from '@/(account)/_components/rich-textarea';
 import Input from '@/_components/input';
 import { DropzoneState } from 'react-dropzone';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
+import { Controller, FieldValues, UseFormReturn } from 'react-hook-form';
 
 interface SubjectDetailsFormSectionProps<T extends FieldValues> {
   dropzone: DropzoneState;
@@ -18,6 +19,17 @@ const SubjectDetailsFormSection = <T extends FieldValues>({
       <span className="label">Profile image</span>
       <AvatarDropzone dropzone={dropzone} form={form} />
     </label>
+    <Controller
+      control={form.control}
+      name={'banner' as T[string]}
+      render={({ field }) => (
+        <RichTextarea
+          className="text-center text-fg-3 [&>*]:mx-auto [&>*]:max-w-sm"
+          label="Banner"
+          {...field}
+        />
+      )}
+    />
   </>
 );
 

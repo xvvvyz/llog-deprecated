@@ -16,6 +16,7 @@ import { TemplateType } from '@/(account)/_types/template';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatCacheLink from '@/(account)/_utilities/format-cache-link';
 import globalValueCache from '@/(account)/_utilities/global-value-cache';
+import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import uploadSubjectAvatar from '@/(account)/_utilities/upload-subject-avatar';
 import SubjectDetailsFormSection from '@/(account)/subjects/_components/subject-details-form-section';
 import Button from '@/_components/button';
@@ -68,6 +69,7 @@ const SubjectSettingsForm = ({
     cacheKey: CacheKeys.SubjectSettingsForm,
     defaultValues: {
       avatar: subject.image_uri,
+      banner: subject.banner,
       id: subject.id,
       name: subject.name,
       share_code: subject.share_code,
@@ -84,6 +86,7 @@ const SubjectSettingsForm = ({
       className="form"
       onSubmit={form.handleSubmit(async (values) => {
         const { error: subjectError } = await supabase.from('subjects').upsert({
+          banner: sanitizeHtml(values.banner),
           id: values.id,
           name: values.name.trim(),
         });
