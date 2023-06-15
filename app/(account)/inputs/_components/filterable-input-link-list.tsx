@@ -1,7 +1,6 @@
 'use client';
 
 import LinkList from '@/(account)/_components/link-list';
-import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
 import usePrevious from '@/(account)/_hooks/use-previous';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -79,7 +78,6 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
             icon="edit"
             key={input.id}
             menu={<InputListItemMenu inputId={input.id} />}
-            pill={INPUT_LABELS[input.type]}
             text={input.label}
           />
         ))}

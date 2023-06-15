@@ -130,9 +130,9 @@ const RichTextarea = (
   });
 
   useEffect(() => {
-    if (!editor || value) return;
-    editor.commands.setContent('');
-  }, [editor, value]);
+    if (!editorRef.current || value === editorRef.current?.getHTML()) return;
+    editorRef.current.commands.setContent(value ?? '');
+  }, [value]);
 
   useEffect(() => {
     editorRef.current = editor;

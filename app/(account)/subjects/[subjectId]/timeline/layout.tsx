@@ -2,29 +2,37 @@ import Avatar from '@/(account)/_components/avatar';
 import BackButton from '@/(account)/_components/back-button';
 import DirtyHtml from '@/(account)/_components/dirty-html';
 import Header from '@/(account)/_components/header';
-import IconButton from '@/(account)/_components/icon-button';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
-import { PencilIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
+export const generateMetadata = async ({
+  params: { subjectId },
+}: LayoutProps) => {
+  const { data: subject } = await getSubject(subjectId);
+
+  return {
+    title: subject?.name,
+  };
+};
+
+export const revalidate = 0;
+
 interface LayoutProps {
-  // eventModal: ReactNode;
   eventTypes: ReactNode;
   events: ReactNode;
-  // missionModal: ReactNode;
   missions: ReactNode;
   params: { subjectId: string };
+  teamMemberHeader: ReactNode;
 }
 
 const Layout = async ({
-  // eventModal,
   eventTypes,
   events,
-  // missionModal,
   missions,
   params: { subjectId },
+  teamMemberHeader,
 }: LayoutProps) => {
   const [{ data: subject }, teamId] = await Promise.all([
     getSubject(subjectId),
@@ -35,31 +43,14 @@ const Layout = async ({
 
   return (
     <>
+      {subject.team_id === teamId && teamMemberHeader}
       <Header className="flex justify-between gap-8">
         <BackButton href="/subjects" />
-        {subject.team_id === teamId ? (
-          <>
-            <div className="flex items-center justify-center gap-4 overflow-hidden">
-              <Avatar file={subject.image_uri} name={subject.name} />
-              <h1 className="truncate">{subject.name}</h1>
-            </div>
-            <IconButton
-              href={`/subjects/${subject.id}/settings`}
-              icon={
-                <PencilIcon className="relative -right-[0.15em] w-7 p-0.5" />
-              }
-              label="Edit"
-            />
-          </>
-        ) : (
-          <>
-            <h1 className="truncate text-2xl">{subject.name}</h1>
-            <Avatar file={subject.image_uri} name={subject.name} />
-          </>
-        )}
+        <h1 className="truncate text-2xl">{subject.name}</h1>
+        <Avatar file={subject.image_uri} name={subject.name} />
       </Header>
       {subject.banner && (
-        <DirtyHtml className="mx-auto -mt-2 max-w-sm px-4 pb-14 text-center text-fg-3">
+        <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-3">
           {subject.banner}
         </DirtyHtml>
       )}
@@ -68,18 +59,8 @@ const Layout = async ({
         {eventTypes}
       </div>
       {events}
-      {/*{eventModal}*/}
-      {/*{missionModal}*/}
     </>
   );
-};
-
-export const generateMetadata = async ({
-  params: { subjectId },
-}: LayoutProps) => {
-  const { data: subject } = await getSubject(subjectId);
-  if (!subject) return;
-  return { title: subject.name };
 };
 
 export default Layout;

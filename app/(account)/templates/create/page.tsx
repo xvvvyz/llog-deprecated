@@ -5,6 +5,12 @@ import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
 import formatTitle from '@/(account)/_utilities/format-title';
 import TemplateForm from '@/(account)/templates/_components/template-form';
 
+export const metadata = {
+  title: formatTitle(['Templates', 'Create']),
+};
+
+export const revalidate = 0;
+
 const Page = async () => {
   const { data: availableInputs } = await listInputs();
 
@@ -19,5 +25,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: formatTitle(['Templates', 'Create']) };
 export default Page;

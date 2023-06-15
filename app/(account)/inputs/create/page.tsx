@@ -5,6 +5,12 @@ import listSubjectsByTeamId from '@/(account)/_server/list-subjects-by-team-id';
 import formatTitle from '@/(account)/_utilities/format-title';
 import InputForm from '@/(account)/inputs/_components/input-form';
 
+export const metadata = {
+  title: formatTitle(['Inputs', 'Create']),
+};
+
+export const revalidate = 0;
+
 const Page = async () => {
   const { data: subjects } = await listSubjectsByTeamId();
 
@@ -19,5 +25,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: formatTitle(['Inputs', 'Create']) };
 export default Page;

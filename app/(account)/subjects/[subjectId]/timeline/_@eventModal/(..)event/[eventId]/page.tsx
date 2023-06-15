@@ -4,8 +4,8 @@ import getEvent, { GetEventData } from '@/(account)/_server/get-event';
 import getSubject from '@/(account)/_server/get-subject';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
+import EventModal from '@/(account)/subjects/[subjectId]/timeline/_@eventModal/(..)event/[eventId]/_components/event-modal';
 import { notFound } from 'next/navigation';
-import EventModal from './_components/event-modal';
 
 interface PageProps {
   params: {

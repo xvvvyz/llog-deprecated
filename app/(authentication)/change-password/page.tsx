@@ -1,6 +1,10 @@
+import ChangePasswordForm from '@/(authentication)/change-password/_components/change-password-form';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { redirect } from 'next/navigation';
-import ChangePasswordForm from './_components/change-password-form';
+
+export const metadata = {
+  title: 'Change password',
+};
 
 const Page = () => {
   const action = async (values: FormData) => {
@@ -22,5 +26,4 @@ const Page = () => {
   );
 };
 
-export const metadata = { title: 'Change password' };
 export default Page;

@@ -7,7 +7,7 @@ const listSubjectEventTypes = (subjectId: string) =>
     .eq('subject_id', subjectId)
     .is('session_id', null)
     .eq('deleted', false)
-    .order('order');
+    .order('name');
 
 export type ListSubjectEventTypesData = Awaited<
   ReturnType<typeof listSubjectEventTypes>

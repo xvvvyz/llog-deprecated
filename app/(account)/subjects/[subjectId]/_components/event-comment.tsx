@@ -58,7 +58,7 @@ const EventComment = ({
       <Avatar className="mt-0.5" name={profile.first_name} />
       <div className="flex-1">
         <div className="flex h-5 w-full justify-between">
-          <div className="flex w-full gap-2 text-xs uppercase tracking-widest text-fg-3">
+          <div className="smallcaps flex w-full gap-2">
             <span className="w-0 flex-1 truncate">
               {profile.first_name} {profile.last_name}
             </span>

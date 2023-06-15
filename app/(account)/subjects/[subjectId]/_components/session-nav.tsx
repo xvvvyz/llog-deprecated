@@ -30,7 +30,7 @@ const SessionNav = ({
     >
       <IconButton
         disabled={!sessionIndex}
-        href={`/subjects/${subjectId}/mission/${mission.id}/session/${previousSessionId}`}
+        href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${previousSessionId}`}
         icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
         label="Previous session"
         replace
@@ -40,7 +40,7 @@ const SessionNav = ({
       </span>
       <IconButton
         disabled={sessionIndex === sessions.length - 1}
-        href={`/subjects/${subjectId}/mission/${mission.id}/session/${nextSessionId}`}
+        href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${nextSessionId}`}
         icon={<ChevronRightIcon className="relative -right-2 w-7" />}
         label="Next session"
         replace

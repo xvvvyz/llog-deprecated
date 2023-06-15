@@ -11,11 +11,11 @@ import EventForm from './event-form';
 
 interface EventCardProps {
   className?: string;
-  event?: GetEventData | GetSessionData['parts'][0]['event'][0];
+  event?: GetEventData | GetSessionData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionData>['parts'][0];
+    | NonNullable<GetSessionData>['modules'][0];
   hideContent?: boolean;
   isTeamMember: boolean;
   mission?: GetMissionData | GetEventData['type']['mission'];
@@ -35,8 +35,8 @@ const EventCard = ({
 }: EventCardProps) => (
   <div className={twMerge('form gap-0 p-0', className)}>
     {mission && typeof eventType.order === 'number' && (
-      <div className="px-4 pt-8 text-xs uppercase tracking-widest text-fg-3 sm:px-8">
-        Part {eventType.order + 1}
+      <div className="smallcaps px-4 pt-8 font-mono sm:px-8">
+        Module {eventType.order + 1}
       </div>
     )}
     {!hideContent && !!eventType.content && (

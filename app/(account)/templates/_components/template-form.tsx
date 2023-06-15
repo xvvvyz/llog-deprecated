@@ -58,29 +58,27 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
   return (
     <form
       className="form"
-      onSubmit={form.handleSubmit(
-        async ({ content, id, inputs, name, public: p }) => {
-          const { error: templateError } = await supabase
-            .from('templates')
-            .upsert({
-              data: {
-                content: sanitizeHtml(content),
-                inputIds: inputs.map((input) => input.id),
-              } as Json,
-              id,
-              name: name.trim(),
-              public: p,
-            })
-            .single();
+      onSubmit={form.handleSubmit(async (values) => {
+        const { error: templateError } = await supabase
+          .from('templates')
+          .upsert({
+            data: {
+              content: sanitizeHtml(values.content),
+              inputIds: values.inputs.map((input) => input.id),
+            } as Json,
+            id: values.id,
+            name: values.name.trim(),
+            public: values.public,
+          })
+          .single();
 
-          if (templateError) {
-            alert(templateError?.message);
-            return;
-          }
-
-          await redirect('/templates');
+        if (templateError) {
+          alert(templateError?.message);
+          return;
         }
-      )}
+
+        await redirect('/templates');
+      })}
     >
       <Input label="Name" {...form.register('name')} />
       <Controller

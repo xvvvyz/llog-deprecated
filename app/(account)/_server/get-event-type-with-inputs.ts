@@ -10,10 +10,10 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
       inputs:event_type_inputs(
         input:inputs(id, label, subjects(id, image_uri, name))
       ),
-      name,
-      order`
+      name`
     )
     .eq('id', eventTypeId)
+    .eq('inputs.input.subjects.deleted', false)
     .order('order', { foreignTable: 'event_type_inputs' })
     .single();
 

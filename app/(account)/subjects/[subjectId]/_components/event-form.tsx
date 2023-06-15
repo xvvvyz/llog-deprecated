@@ -24,11 +24,11 @@ import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;
-  event?: GetEventData | GetSessionData['parts'][0]['event'][0];
+  event?: GetEventData | GetSessionData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionData>['parts'][0];
+    | NonNullable<GetSessionData>['modules'][0];
   isMission?: boolean;
   subjectId: string;
 }
@@ -316,7 +316,7 @@ const EventForm = ({
           router.refresh();
 
           if (!isMission && !event) {
-            router.push(`/subjects/${subjectId}/event/${eventData.id}`);
+            router.push(`/subjects/${subjectId}/events/${eventData.id}`);
           }
         });
       })}

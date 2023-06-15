@@ -1,8 +1,12 @@
+import ForgotPasswordForm from '@/(authentication)/forgot-password/_components/forgot-password-form';
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import ForgotPasswordForm from './_components/forgot-password-form';
+
+export const metadata = {
+  title: 'Forgot password',
+};
 
 const Page = () => {
   const action = async (values: FormData) => {
@@ -38,5 +42,4 @@ const Page = () => {
   );
 };
 
-export const metadata = { title: 'Forgot password' };
 export default Page;

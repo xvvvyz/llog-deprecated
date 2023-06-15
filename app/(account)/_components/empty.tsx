@@ -9,7 +9,7 @@ interface EmptyProps {
 const Empty = ({ children, className }: EmptyProps) => (
   <p
     className={twMerge(
-      'mt-16 flex flex-wrap items-center justify-center gap-4 px-4 text-fg-3',
+      'mx-auto mt-16 max-w-xs px-4 text-center text-fg-3',
       className
     )}
   >

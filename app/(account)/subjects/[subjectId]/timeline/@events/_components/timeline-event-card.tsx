@@ -36,21 +36,23 @@ const TimelineEventCard = ({
         className="m-0 w-full gap-4 rounded-t border-b border-alpha-1 p-0 px-4 py-3"
         href={
           lastEventType.session
-            ? `/subjects/${subjectId}/mission/${lastEventType.session.mission.id}/session/${lastEventType.session.id}`
-            : `/subjects/${subjectId}/event/${lastEvent.id}`
+            ? `/subjects/${subjectId}/missions/${lastEventType.session.mission.id}/sessions/${lastEventType.session.id}`
+            : `/subjects/${subjectId}/events/${lastEvent.id}`
         }
         variant="link"
       >
-        {lastEventType.session
-          ? lastEventType.session.mission.name
-          : lastEventType.name}
+        <span className="leading-snug">
+          {lastEventType.session
+            ? lastEventType.session.mission.name
+            : lastEventType.name}
+        </span>
         <div className="ml-auto flex shrink-0 items-center gap-4">
           {lastEventType.session && <Pill>Session {sessionNumber}</Pill>}
           <ArrowRightIcon className="w-5" />
         </div>
       </Button>
       {!lastEventType.session && (
-        <div className="flex items-center gap-4 whitespace-nowrap bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
+        <div className="smallcaps flex items-center gap-4 whitespace-nowrap bg-alpha-reverse-1 px-4 py-3">
           <Avatar
             className="-my-[0.15rem]"
             name={lastEventProfile.first_name}
@@ -66,14 +68,15 @@ const TimelineEventCard = ({
       )}
       <ul className="divide-y divide-alpha-1">
         {group.map((event) => {
-          const partNumber = firstIfArray(event.type).order + 1;
+          const moduleNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
 
           return (
             <li key={event.id}>
               {lastEventType.session && (
-                <div className="flex justify-between bg-alpha-reverse-1 px-4 py-3 text-xs uppercase tracking-widest text-fg-3">
-                  <div className="flex gap-4">
+                <div className="smallcaps flex items-baseline justify-between bg-alpha-reverse-1 px-4 py-3">
+                  <div className="flex items-baseline gap-4">
+                    <span className="font-mono">{moduleNumber}</span>
                     <Avatar
                       className="-my-[0.15rem]"
                       name={firstIfArray(event.profile).first_name}
@@ -81,10 +84,7 @@ const TimelineEventCard = ({
                     />
                     {lastEventProfile.first_name} {lastEventProfile.last_name}{' '}
                   </div>
-                  <div className="flex gap-4">
-                    <DateTime date={event.created_at} formatter="time" />
-                    {partNumber}
-                  </div>
+                  <DateTime date={event.created_at} formatter="time" />
                 </div>
               )}
               <EventInputs

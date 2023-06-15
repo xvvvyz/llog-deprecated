@@ -1,8 +1,12 @@
+import SignUpForm from '@/(authentication)/sign-up/_components/sign-up-form';
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import SignUpForm from './_components/sign-up-form';
+
+export const metadata = {
+  title: 'Sign up',
+};
 
 interface PageProps {
   searchParams: {
@@ -53,5 +57,4 @@ const Page = ({ searchParams }: PageProps) => {
   );
 };
 
-export const metadata = { title: 'Sign up' };
 export default Page;

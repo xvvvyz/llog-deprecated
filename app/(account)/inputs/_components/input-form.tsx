@@ -11,7 +11,6 @@ import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
 import useUpdateGlobalValueCache from '@/(account)/_hooks/use-update-global-value-cache';
 import { GetInputData } from '@/(account)/_server/get-input';
-import { GetInputWithoutIdsData } from '@/(account)/_server/get-input-without-ids';
 import { ListSubjectsByTeamIdData } from '@/(account)/_server/list-subjects-by-team-id';
 import { InputType } from '@/(account)/_types/input';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -32,7 +31,7 @@ const INPUT_TYPE_OPTIONS = [
 ];
 
 interface InputFormProps {
-  duplicateInputData?: GetInputWithoutIdsData;
+  duplicateInputData?: GetInputData;
   input?: GetInputData;
   subjects?: ListSubjectsByTeamIdData;
 }
@@ -52,7 +51,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const defaultValues = useDefaultValues({
     cacheKey: CacheKeys.InputForm,
     defaultValues: {
-      id: input?.id,
+      id: duplicateInputData ? undefined : input?.id,
       label: initialInput?.label ?? '',
       options: forceArray(initialInput?.options),
       settings: initialInput?.settings,

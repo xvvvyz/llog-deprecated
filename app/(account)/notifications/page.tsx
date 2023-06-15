@@ -7,18 +7,25 @@ import IconButton from '@/(account)/_components/icon-button';
 import NotificationTypes from '@/(account)/_constants/enum-notification-types';
 import listNotifications from '@/(account)/_server/list-notifications';
 import forceArray from '@/(account)/_utilities/force-array';
+import ViewEventButton from '@/(account)/notifications/_components/view-event-button';
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
-import ViewEventButton from './_components/view-event-button';
 
 import {
+  BoltIcon,
   ChatBubbleBottomCenterTextIcon,
-  CheckBadgeIcon,
   EnvelopeIcon,
   EnvelopeOpenIcon,
-  TrashIcon,
+  StarIcon,
   UserPlusIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
+
+export const metadata = {
+  title: 'Notifications',
+};
+
+export const revalidate = 0;
 
 const Page = async () => {
   const { data } = await listNotifications();
@@ -63,66 +70,26 @@ const Page = async () => {
                       {n.type === NotificationTypes.Comment && (
                         <ChatBubbleBottomCenterTextIcon className="w-5" />
                       )}
-                      {n.type === NotificationTypes.Event && (
-                        <CheckBadgeIcon className="w-5" />
-                      )}
+                      {n.type === NotificationTypes.Event &&
+                        (sourceEvent.type.session ? (
+                          <StarIcon className="w-5" />
+                        ) : (
+                          <BoltIcon className="w-5" />
+                        ))}
                       {n.type === NotificationTypes.JoinSubject && (
                         <UserPlusIcon className="w-5" />
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="-my-1 w-full leading-snug">
-                  <ViewEventButton
-                    href={
-                      sourceEvent
-                        ? sourceEvent.type.session
-                          ? `/subjects/${n.subject.id}/mission/${sourceEvent.type.session.mission.id}/session/${sourceEvent.type.session.id}?back=/notifications`
-                          : `/subjects/${n.subject.id}/event/${sourceEvent.id}?back=/notifications`
-                        : `/subjects/${n.subject.id}/timeline?back=/notifications`
-                    }
-                    notificationIds={
-                      eventOrSessionIdNotificationIdMap[
-                        sourceEvent?.type?.session?.id ??
-                          sourceEvent?.id ??
-                          n.subject.id
-                      ]
-                    }
-                    notificationRead={n.read}
-                  >
-                    {n.profile?.first_name} {n.profile?.last_name}{' '}
-                    {n.type === NotificationTypes.JoinSubject ? (
-                      <>joined {n.subject.name}</>
-                    ) : (
-                      <>
-                        {n.type === NotificationTypes.Comment && 'commented on'}
-                        {n.type === NotificationTypes.Event &&
-                          (sourceEvent.type.session
-                            ? 'made progress on'
-                            : 'recorded')}{' '}
-                        {sourceEvent.type.session?.mission?.name ??
-                          sourceEvent.type.name}
-                        {sourceEvent.type.session && (
-                          <>
-                            {' '}
-                            session&nbsp;{sourceEvent.type.session.order + 1}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </ViewEventButton>
-                  {n.comment && (
-                    <DirtyHtml className="line-clamp-2 pt-3">
-                      {n.comment.content}
-                    </DirtyHtml>
-                  )}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
+                <div className="w-full leading-snug">
+                  <div className="-mt-1 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex gap-4">
                       {!n.read && (
-                        <div className="relative top-[0.075em] h-3 w-3 rounded-full border border-alpha-4 bg-red-1" />
+                        <div className="mt-0.5 h-3 w-3 rounded-full border border-alpha-4 bg-red-1" />
                       )}
                       <DateTime
-                        className="whitespace-nowrap text-xs uppercase tracking-widest text-fg-3"
+                        className="smallcaps whitespace-nowrap"
                         date={n.created_at}
                         formatter="relative"
                       />
@@ -161,13 +128,62 @@ const Page = async () => {
                         }}
                       >
                         <IconButton
-                          icon={<TrashIcon className="w-5" />}
+                          icon={<XMarkIcon className="w-5" />}
                           type="submit"
                           variant="link"
                         />
                       </form>
                     </div>
                   </div>
+                  <ViewEventButton
+                    href={
+                      sourceEvent
+                        ? sourceEvent.type.session
+                          ? `/subjects/${n.subject.id}/missions/${sourceEvent.type.session.mission.id}/sessions/${sourceEvent.type.session.id}?back=/notifications`
+                          : `/subjects/${n.subject.id}/events/${sourceEvent.id}?back=/notifications`
+                        : `/subjects/${n.subject.id}/timeline?back=/notifications`
+                    }
+                    notificationIds={
+                      eventOrSessionIdNotificationIdMap[
+                        sourceEvent?.type?.session?.id ??
+                          sourceEvent?.id ??
+                          n.subject.id
+                      ]
+                    }
+                    notificationRead={n.read}
+                  >
+                    {n.profile?.first_name} {n.profile?.last_name}{' '}
+                    {n.type === NotificationTypes.JoinSubject ? (
+                      <>joined {n.subject.name}</>
+                    ) : (
+                      <>
+                        {n.type === NotificationTypes.Comment && 'commented on'}
+                        {n.type === NotificationTypes.Event &&
+                          (sourceEvent.type.session
+                            ? 'completed a'
+                            : 'recorded')}{' '}
+                        {sourceEvent.type.session?.mission?.name ??
+                          sourceEvent.type.name}
+                        {sourceEvent.type.session && (
+                          <>
+                            {' '}
+                            session&nbsp;{sourceEvent.type.session.order + 1}
+                            &nbsp;
+                            {n.type === NotificationTypes.Comment ? (
+                              <>module&nbsp;{sourceEvent.type.order + 1}</>
+                            ) : (
+                              'module'
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+                  </ViewEventButton>
+                  {n.comment && (
+                    <DirtyHtml className="line-clamp-2 pt-4">
+                      {n.comment.content}
+                    </DirtyHtml>
+                  )}
                 </div>
               </div>
             );
@@ -180,5 +196,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: 'Notifications' };
 export default Page;

@@ -5,6 +5,12 @@ import sortInputs from '@/(account)/_utilities/sort-inputs';
 import FilterableInputLinkList from '@/(account)/inputs/_components/filterable-input-link-list';
 import Button from '@/_components/button';
 
+export const metadata = {
+  title: 'Inputs',
+};
+
+export const revalidate = 0;
+
 const Page = async () => {
   const { data: inputs } = await listInputs();
 
@@ -25,5 +31,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: 'Inputs' };
 export default Page;

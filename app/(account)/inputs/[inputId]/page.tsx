@@ -7,6 +7,16 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import InputForm from '@/(account)/inputs/_components/input-form';
 import { notFound } from 'next/navigation';
 
+export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
+  const { data: input } = await getInput(inputId);
+
+  return {
+    title: formatTitle(['Inputs', input?.label]),
+  };
+};
+
+export const revalidate = 0;
+
 interface PageProps {
   params: {
     inputId: string;
@@ -30,12 +40,6 @@ const Page = async ({ params: { inputId } }: PageProps) => {
       <InputForm input={input as GetInputData} subjects={subjects} />
     </>
   );
-};
-
-export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
-  const { data: input } = await getInput(inputId);
-  if (!input) return;
-  return { title: formatTitle(['Inputs', input.label]) };
 };
 
 export default Page;

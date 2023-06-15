@@ -25,7 +25,6 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
     <>
       <Alert
         confirmText="Delete input"
-        description="Deleting this input does not remove it from existing event types and events."
         isConfirming={isConfirming.value}
         isConfirmingText="Deleting input…"
         onConfirm={async () => {
@@ -46,7 +45,7 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
         {...deleteAlert}
       />
       <Menu className="shrink-0">
-        <Menu.Button className="h-full border-l border-alpha-1 bg-alpha-reverse-1 px-4 group-first:rounded-tr group-last:rounded-br">
+        <Menu.Button className="h-full border-l border-alpha-1 px-4 group-first:rounded-tr group-last:rounded-br">
           <EllipsisVerticalIcon className="w-5" />
         </Menu.Button>
         <Menu.Items>

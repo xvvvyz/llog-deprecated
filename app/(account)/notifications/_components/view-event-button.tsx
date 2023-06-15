@@ -24,7 +24,7 @@ const ViewEventButton = ({
 
   return (
     <Button
-      className="mx-0 line-clamp-2 w-full items-start justify-between gap-4 px-0"
+      className="mx-0 mt-0 line-clamp-2 w-full items-start justify-between gap-4 px-0"
       href={href}
       onClick={async () => {
         if (notificationRead) return;

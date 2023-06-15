@@ -35,16 +35,16 @@ const Page = async ({
 
   if (!subject || !mission || !session || !user) notFound();
 
-  return forceArray(session.parts).map((part) => {
-    const event = firstIfArray(part.event);
+  return forceArray(session.modules).map((module) => {
+    const event = firstIfArray(module.event);
 
     return (
       <EventCard
         className="shadow-lg"
         event={event}
-        eventType={part}
+        eventType={module}
         isTeamMember={subject.team_id === teamId}
-        key={part.id}
+        key={module.id}
         mission={mission}
         subjectId={subjectId}
         userId={user.id}

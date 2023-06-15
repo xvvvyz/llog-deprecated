@@ -1,7 +1,11 @@
+import SignInForm from '@/(authentication)/sign-in/_components/sign-in-form';
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { redirect } from 'next/navigation';
-import SignInForm from './_components/sign-in-form';
+
+export const metadata = {
+  title: 'Sign in',
+};
 
 interface PageProps {
   searchParams: {
@@ -40,5 +44,4 @@ const Page = ({ searchParams }: PageProps) => {
   );
 };
 
-export const metadata = { title: 'Sign in' };
 export default Page;

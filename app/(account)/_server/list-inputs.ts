@@ -8,6 +8,7 @@ const listInputs = async () =>
     .select('id, label, subjects(id, image_uri, name), type')
     .eq('team_id', await getCurrentTeamId())
     .eq('deleted', false)
+    .eq('subjects.deleted', false)
     .order('name', { foreignTable: 'subjects' })
     .order('label');
 

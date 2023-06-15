@@ -45,7 +45,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
   if (!eventsData) return new NextResponse(null, { status: 404 });
 
   const headerMap: Record<string, number> = {};
-  const csvHeader = ['Timestamp', 'Name', 'Session', 'Part', 'Author'];
+  const csvHeader = ['Timestamp', 'Name', 'Session', 'Module', 'Author'];
   const csvRows: string[][] = [];
   const searchParams = new URL(req.url).searchParams;
 

@@ -2,12 +2,17 @@ import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
 import LinkList from '@/(account)/_components/link-list';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import forceArray from '@/(account)/_utilities/force-array';
-import Button from '@/_components/button';
-
 import listSubjects, {
   ListSubjectsData,
 } from '@/(account)/_server/list-subjects';
+import forceArray from '@/(account)/_utilities/force-array';
+import Button from '@/_components/button';
+
+export const metadata = {
+  title: 'Subjects',
+};
+
+export const revalidate = 0;
 
 const Page = async () => {
   const { data: subjects } = await listSubjects();
@@ -44,10 +49,10 @@ const Page = async () => {
           <LinkList>
             {teamSubjects.map((subject) => (
               <LinkList.Item
-                avatar={subject.image_uri}
+                avatars={[subject]}
                 href={`/subjects/${subject.id}/timeline`}
                 key={subject.id}
-                rightHref={`/subjects/${subject.id}/settings?back=/subjects`}
+                rightHref={`/subjects/${subject.id}/edit?back=/subjects`}
                 rightIcon="edit"
                 rightLabel="Edit"
                 text={subject.name}
@@ -57,7 +62,7 @@ const Page = async () => {
           <LinkList>
             {clientSubjects.map((subject) => (
               <LinkList.Item
-                avatar={subject.image_uri}
+                avatars={[subject]}
                 href={`/subjects/${subject.id}/timeline`}
                 key={subject.id}
                 text={subject.name}
@@ -72,5 +77,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: 'Subjects' };
 export default Page;

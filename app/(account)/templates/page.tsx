@@ -4,6 +4,12 @@ import LinkList from '@/(account)/_components/link-list';
 import listTemplates from '@/(account)/_server/list-templates';
 import Button from '@/_components/button';
 
+export const metadata = {
+  title: 'Templates',
+};
+
+export const revalidate = 0;
+
 const Page = async () => {
   const { data: templates } = await listTemplates();
 
@@ -33,5 +39,4 @@ const Page = async () => {
   );
 };
 
-export const metadata = { title: 'Templates' };
 export default Page;

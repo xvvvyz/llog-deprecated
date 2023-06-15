@@ -11,6 +11,7 @@ const listNotifications = async () =>
           id,
           type:event_types(
             name,
+            order,
             session:sessions(
               id,
               mission:missions(id, name),
@@ -24,6 +25,7 @@ const listNotifications = async () =>
         id,
         type:event_types(
           name,
+          order,
           session:sessions(
             id,
             mission:missions(id, name),

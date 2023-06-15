@@ -1,18 +1,13 @@
 import { ListInputsData } from '@/(account)/_server/list-inputs';
-import { Database } from '@/_types/database';
-import forceArray from './force-array';
+import forceArray from '@/(account)/_utilities/force-array';
 
 const filterListInputsDataBySubjectId = (
   inputs: ListInputsData,
   subjectId: string
-): ListInputsData =>
-  forceArray(inputs).filter(
-    ({ subjects }) =>
-      !subjects ||
-      !subjects.length ||
-      (subjects as Database['public']['Tables']['subjects']['Row'][]).some(
-        ({ id }) => id === subjectId
-      )
-  ) as ListInputsData;
+) =>
+  forceArray(inputs).filter(({ subjects }) => {
+    const s = forceArray(subjects);
+    return !s.length || s.some(({ id }) => id === subjectId);
+  }) as NonNullable<ListInputsData>;
 
 export default filterListInputsDataBySubjectId;

@@ -24,7 +24,7 @@ interface LinkListProps {
 
 interface ListItemProps {
   avatar?: string | null;
-  avatars?: { id: string; image_uri: string; name: string }[];
+  avatars?: { id: string; image_uri: string | null; name: string }[];
   className?: string;
   href?: string;
   icon?: keyof typeof icons;
@@ -50,7 +50,6 @@ const LinkList = Object.assign(
   ),
   {
     Item: ({
-      avatar,
       avatars,
       className,
       href,
@@ -73,15 +72,11 @@ const LinkList = Object.assign(
           onClick={onClick}
           variant="link"
         >
-          {typeof avatar !== 'undefined' && (
-            <Avatar className="-my-2" file={avatar} name={text} size="sm" />
-          )}
-          <span className="truncate">{text}</span>
           {avatars && !!avatars.length && (
             <div className="mr-2 flex">
               {avatars.map(({ id, image_uri, name }) => (
                 <Avatar
-                  className="-mr-2 border border-alpha-reverse-2"
+                  className="-mr-2 border border-alpha-reverse-2 bg-bg-2"
                   file={image_uri}
                   key={id}
                   name={name}
@@ -90,6 +85,7 @@ const LinkList = Object.assign(
               ))}
             </div>
           )}
+          <span className="leading-snug [overflow-wrap:anywhere]">{text}</span>
           <div className="ml-auto flex shrink-0 items-center gap-4">
             {pill && <Pill>{pill}</Pill>}
             {icons[icon]}
@@ -97,10 +93,11 @@ const LinkList = Object.assign(
         </Button>
         {rightIcon && rightLabel && (
           <IconButton
-            className="m-0 shrink-0 border-0 border-l border-alpha-1 bg-alpha-reverse-1 px-4 hover:border-alpha-1 group-first:rounded-tr group-last:rounded-br"
+            className="m-0 shrink-0 border-l border-alpha-1 px-4 py-2"
             href={rightHref}
             icon={icons[rightIcon]}
             label={rightLabel}
+            variant="link"
           />
         )}
         {menu && menu}

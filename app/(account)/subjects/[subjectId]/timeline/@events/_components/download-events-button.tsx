@@ -5,16 +5,21 @@ import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useBoolean } from 'usehooks-ts';
 
 interface DownloadEventsButtonProps {
+  disabled?: boolean;
   subjectId: string;
 }
 
-const DownloadEventsButton = ({ subjectId }: DownloadEventsButtonProps) => {
+const DownloadEventsButton = ({
+  disabled,
+  subjectId,
+}: DownloadEventsButtonProps) => {
   const isDownloading = useBoolean(false);
 
   return (
     <Button
       className="w-[12rem]"
       colorScheme="transparent"
+      disabled={disabled}
       loading={isDownloading.value}
       loadingText="Downloading…"
       onClick={async () => {
