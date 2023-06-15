@@ -325,7 +325,7 @@ const EventForm = ({
         <Input
           label={
             <div className="inline-flex items-center gap-2 whitespace-nowrap">
-              <span>Recorded by</span>
+              <span>{isMission ? 'Completed' : 'Recorded'} by</span>
               <Avatar name={event.profile.first_name} size="xs" />
               <span className="truncate">
                 {event.profile.first_name} {event.profile.last_name}
@@ -441,7 +441,7 @@ const EventForm = ({
         loadingText="Saving…"
         type="submit"
       >
-        {event ? 'Save inputs' : isMission ? 'Complete' : 'Save event'}
+        {event ? 'Save inputs' : isMission ? 'Complete' : 'Record event'}
       </Button>
     </form>
   );
