@@ -160,7 +160,10 @@ const ModuleFormSection = <T extends FieldValues>({
             isCreatable
             isLoading={isTransitioning}
             isMulti
+            name={field.name}
             noOptionsMessage={() => 'Type to create a new input'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value as any)}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, {
                 label: value,
@@ -186,7 +189,7 @@ const ModuleFormSection = <T extends FieldValues>({
               subjects: forceArray(subjects),
             }))}
             placeholder="Select inputs or type to create…"
-            {...field}
+            value={field.value as any}
           />
         )}
       />

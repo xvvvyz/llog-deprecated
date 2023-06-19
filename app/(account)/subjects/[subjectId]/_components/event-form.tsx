@@ -1,6 +1,5 @@
 'use client';
 
-import Avatar from '@/(account)/_components/avatar';
 import Checkbox from '@/(account)/_components/checkbox';
 import NumberInput from '@/(account)/_components/input-number';
 import Select from '@/(account)/_components/select';
@@ -16,7 +15,7 @@ import Input from '@/_components/input';
 import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
@@ -35,10 +34,13 @@ interface EventFormProps {
 
 type CheckboxInputType = boolean;
 
-type DurationInputType = Array<{
-  id: string;
-  label: string;
-}>;
+type DurationInputTypeOption = { id: string; label: string };
+
+type DurationInputType = [
+  DurationInputTypeOption,
+  DurationInputTypeOption,
+  DurationInputTypeOption
+];
 
 type MultiSelectInputType = Array<
   Database['public']['Tables']['input_options']['Row']
@@ -87,7 +89,7 @@ const EventForm = ({
 
   const form = useForm<EventFormValues>({
     defaultValues: {
-      completionTime: formatDatetimeLocal(event?.created_at),
+      completionTime: formatDatetimeLocal(event?.created_at ?? new Date()),
       id: event?.id,
       inputs: eventTypeInputs.map(({ input }) => {
         const inputInputs = eventInputs.filter(
@@ -167,6 +169,21 @@ const EventForm = ({
       }),
     },
   });
+
+  useEffect(() => {
+    if (!isMission || event) return;
+
+    const interval: NodeJS.Timeout = setInterval(() => {
+      if (form.formState.dirtyFields.completionTime) {
+        clearInterval(interval);
+        return;
+      }
+
+      form.setValue('completionTime', formatDatetimeLocal(new Date()));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [event, form, isMission]);
 
   return (
     <form
@@ -321,22 +338,12 @@ const EventForm = ({
         });
       })}
     >
-      {event && (
-        <Input
-          label={
-            <div className="inline-flex items-center gap-2 whitespace-nowrap">
-              <span>{isMission ? 'Completed' : 'Recorded'} by</span>
-              <Avatar name={event.profile.first_name} size="xs" />
-              <span className="truncate">
-                {event.profile.first_name} {event.profile.last_name}
-              </span>
-            </div>
-          }
-          step="any"
-          type="datetime-local"
-          {...form.register('completionTime')}
-        />
-      )}
+      <Input
+        label={isMission ? 'When was this completed?' : 'When did this happen?'}
+        step="any"
+        type="datetime-local"
+        {...form.register('completionTime')}
+      />
       {eventTypeInputs.map(({ input }, i) => {
         const id = `${eventType.id}-inputs-${i}`;
 
@@ -357,12 +364,15 @@ const EventForm = ({
                         className="rounded-r-none border-r-0"
                         inputType="number"
                         isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value as any)}
                         options={Array.from({ length: 24 }, (_, i) => ({
                           id: String(i),
                           label: `${i}h`,
                         }))}
                         placeholder="Hours"
-                        {...field}
+                        value={field.value as any}
                       />
                     )}
                   />
@@ -374,12 +384,15 @@ const EventForm = ({
                         className="rounded-none"
                         inputType="number"
                         isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value as any)}
                         options={Array.from({ length: 60 }, (_, i) => ({
                           id: String(i),
                           label: `${i}m`,
                         }))}
                         placeholder="Minutes"
-                        {...field}
+                        value={field.value as any}
                       />
                     )}
                   />
@@ -391,12 +404,15 @@ const EventForm = ({
                         className="rounded-l-none border-l-0"
                         inputType="number"
                         isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value as any)}
                         options={Array.from({ length: 60 }, (_, i) => ({
                           id: String(i),
                           label: `${i}s`,
                         }))}
                         placeholder="Seconds"
-                        {...field}
+                        value={field.value as any}
                       />
                     )}
                   />
@@ -432,20 +448,21 @@ const EventForm = ({
         );
       })}
       <Button
-        className={twMerge(
-          'w-full',
-          (event || eventTypeInputs.length) && 'mt-8'
-        )}
+        className="mt-8 w-full"
         colorScheme={event ? 'transparent' : 'accent'}
         loading={form.formState.isSubmitting || isTransitioning}
         loadingText="Saving…"
         type="submit"
       >
-        {event ? 'Save inputs' : isMission ? 'Complete' : 'Record event'}
+        {event
+          ? 'Save inputs'
+          : isMission
+          ? 'Mark as complete'
+          : 'Record event'}
       </Button>
     </form>
   );
 };
 
-export type { EventFormValues };
+export type { EventFormValues, MultiSelectInputType, SelectInputType };
 export default EventForm;

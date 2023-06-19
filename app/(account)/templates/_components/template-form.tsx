@@ -96,7 +96,10 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
             isLoading={isTransitioning}
             isMulti
             label="Inputs"
+            name={field.name}
             noOptionsMessage={() => 'Type to create a new input'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value as any)}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, { label: value });
               globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
@@ -115,7 +118,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
             }}
             options={forceArray(availableInputs).sort(sortInputs)}
             placeholder="Select inputs or type to create…"
-            {...field}
+            value={field.value as any}
           />
         )}
       />

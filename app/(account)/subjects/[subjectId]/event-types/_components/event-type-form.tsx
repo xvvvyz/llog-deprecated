@@ -132,7 +132,10 @@ const EventTypeForm = ({
             isLoading={isTransitioning}
             isMulti
             label="Inputs"
+            name={field.name}
             noOptionsMessage={() => 'Type to create a new input'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value as any)}
             onCreateOption={async (value: unknown) => {
               globalValueCache.set(CacheKeys.InputForm, { label: value });
               globalValueCache.set(CacheKeys.EventTypeForm, form.getValues());
@@ -151,7 +154,7 @@ const EventTypeForm = ({
             }}
             options={forceArray(availableInputs)}
             placeholder="Select inputs or type to create…"
-            {...field}
+            value={field.value as any}
           />
         )}
       />

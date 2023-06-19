@@ -215,23 +215,28 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             hasAvatar
             isMulti
             label="For"
+            name={field.name}
             noOptionsMessage={() => 'No subjects'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value as any)}
             options={forceArray(subjects)}
             placeholder="All subjects…"
-            {...field}
+            value={field.value as any}
           />
         )}
       />
       <Controller
         control={form.control}
         name="type"
-        render={({ field: { onChange, ...field } }) => (
+        render={({ field }) => (
           <Select
             isClearable={false}
             isSearchable={false}
             label="Type"
+            name={field.name}
+            onBlur={field.onBlur}
             onChange={(option) => {
-              onChange(option);
+              field.onChange(option as any);
               form.setValue('settings', null);
 
               switch ((option as InputFormValues['options'][0])?.id) {
@@ -263,7 +268,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             }}
             options={INPUT_TYPE_OPTIONS}
             placeholder="Select type…"
-            {...field}
+            value={field.value as any}
           />
         )}
       />
