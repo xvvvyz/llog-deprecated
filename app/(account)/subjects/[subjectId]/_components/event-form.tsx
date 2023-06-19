@@ -2,6 +2,7 @@
 
 import Checkbox from '@/(account)/_components/checkbox';
 import NumberInput from '@/(account)/_components/input-number';
+import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
 import InputTypes from '@/(account)/_constants/enum-input-types';
 import { GetEventData } from '@/(account)/_server/get-event';
@@ -10,6 +11,7 @@ import { GetSessionData } from '@/(account)/_server/get-session';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import parseSeconds from '@/(account)/_utilities/parse-seconds';
+import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import useSupabase from '@/_hooks/use-supabase';
@@ -62,6 +64,7 @@ type StopwatchInputType = {
 };
 
 interface EventFormValues {
+  comment?: string;
   completionTime?: string;
   id?: string;
   inputs: Array<
@@ -188,155 +191,173 @@ const EventForm = ({
   return (
     <form
       className={twMerge('flex flex-col gap-6', className)}
-      onSubmit={form.handleSubmit(async ({ completionTime, id, inputs }) => {
-        const { data: eventData, error: eventError } = await supabase
-          .from('events')
-          .upsert({
-            created_at: completionTime
-              ? new Date(completionTime).toISOString()
-              : undefined,
-            event_type_id: eventType.id,
-            id,
-            subject_id: subjectId,
-          })
-          .select('created_at, id')
-          .single();
+      onSubmit={form.handleSubmit(
+        async ({ comment, completionTime, id, inputs }) => {
+          const { data: eventData, error: eventError } = await supabase
+            .from('events')
+            .upsert({
+              created_at: completionTime
+                ? new Date(completionTime).toISOString()
+                : undefined,
+              event_type_id: eventType.id,
+              id,
+              subject_id: subjectId,
+            })
+            .select('created_at, id')
+            .single();
 
-        if (eventError) {
-          alert(eventError.message);
-          return;
-        }
-
-        form.setValue('id', eventData.id);
-
-        form.setValue(
-          'completionTime',
-          formatDatetimeLocal(eventData.created_at)
-        );
-
-        const deletedEventInputs = eventInputs.map(({ id }) => id);
-
-        if (deletedEventInputs.length) {
-          const { error: deletedEventInputsError } = await supabase
-            .from('event_inputs')
-            .delete()
-            .in('id', deletedEventInputs);
-
-          if (deletedEventInputsError) {
-            alert(deletedEventInputsError.message);
+          if (eventError) {
+            alert(eventError.message);
             return;
           }
-        }
 
-        const { insertedEventInputs } = inputs.reduce(
-          (acc, input, i) => {
-            if (
-              input === '' ||
-              input === null ||
-              (Array.isArray(input) && !input.some((v) => v))
-            ) {
-              return acc;
+          form.setValue('id', eventData.id);
+
+          form.setValue(
+            'completionTime',
+            formatDatetimeLocal(eventData.created_at)
+          );
+
+          const deletedEventInputs = eventInputs.map(({ id }) => id);
+
+          if (deletedEventInputs.length) {
+            const { error: deletedEventInputsError } = await supabase
+              .from('event_inputs')
+              .delete()
+              .in('id', deletedEventInputs);
+
+            if (deletedEventInputsError) {
+              alert(deletedEventInputsError.message);
+              return;
             }
+          }
 
-            const eventTypeInput = eventTypeInputs[i].input;
-
-            const payload: Database['public']['Tables']['event_inputs']['Insert'] =
-              {
-                event_id: eventData.id,
-                input_id: eventTypeInput.id,
-                input_option_id: null,
-                value: null,
-              };
-
-            switch (eventTypeInput.type) {
-              case InputTypes.Checkbox:
-              case InputTypes.Number: {
-                payload.value = input;
-                acc.insertedEventInputs.push(payload);
+          const { insertedEventInputs } = inputs.reduce(
+            (acc, input, i) => {
+              if (
+                input === '' ||
+                input === null ||
+                (Array.isArray(input) && !input.some((v) => v))
+              ) {
                 return acc;
               }
 
-              case InputTypes.Duration: {
-                payload.value = String(
-                  Number((input as DurationInputType)[0]?.id || 0) * 60 * 60 +
-                    Number((input as DurationInputType)[1]?.id || 0) * 60 +
-                    Number((input as DurationInputType)[2]?.id || 0)
-                );
+              const eventTypeInput = eventTypeInputs[i].input;
 
-                acc.insertedEventInputs.push(payload);
-                return acc;
-              }
+              const payload: Database['public']['Tables']['event_inputs']['Insert'] =
+                {
+                  event_id: eventData.id,
+                  input_id: eventTypeInput.id,
+                  input_option_id: null,
+                  value: null,
+                };
 
-              case InputTypes.MultiSelect: {
-                (input as MultiSelectInputType).forEach(({ id }, order) =>
-                  acc.insertedEventInputs.push({
-                    ...payload,
-                    input_option_id: id,
-                    order,
-                  })
-                );
+              switch (eventTypeInput.type) {
+                case InputTypes.Checkbox:
+                case InputTypes.Number: {
+                  payload.value = input;
+                  acc.insertedEventInputs.push(payload);
+                  return acc;
+                }
 
-                return acc;
-              }
+                case InputTypes.Duration: {
+                  payload.value = String(
+                    Number((input as DurationInputType)[0]?.id || 0) * 60 * 60 +
+                      Number((input as DurationInputType)[1]?.id || 0) * 60 +
+                      Number((input as DurationInputType)[2]?.id || 0)
+                  );
 
-              case InputTypes.Select: {
-                payload.input_option_id = (input as SelectInputType)?.id;
-                acc.insertedEventInputs.push(payload);
-                return acc;
-              }
+                  acc.insertedEventInputs.push(payload);
+                  return acc;
+                }
 
-              case InputTypes.Stopwatch: {
-                (input as StopwatchInputType).notes.forEach(
-                  ({ id, time }: { id: string; time: string }, order) =>
+                case InputTypes.MultiSelect: {
+                  (input as MultiSelectInputType).forEach(({ id }, order) =>
                     acc.insertedEventInputs.push({
                       ...payload,
                       input_option_id: id,
                       order,
-                      value: time,
                     })
-                );
+                  );
 
-                if (Number((input as StopwatchInputType).time)) {
-                  acc.insertedEventInputs.push({
-                    ...payload,
-                    value: (input as StopwatchInputType).time,
-                  });
+                  return acc;
                 }
 
-                return acc;
-              }
+                case InputTypes.Select: {
+                  payload.input_option_id = (input as SelectInputType)?.id;
+                  acc.insertedEventInputs.push(payload);
+                  return acc;
+                }
 
-              default: {
-                return acc;
+                case InputTypes.Stopwatch: {
+                  (input as StopwatchInputType).notes.forEach(
+                    ({ id, time }: { id: string; time: string }, order) =>
+                      acc.insertedEventInputs.push({
+                        ...payload,
+                        input_option_id: id,
+                        order,
+                        value: time,
+                      })
+                  );
+
+                  if (Number((input as StopwatchInputType).time)) {
+                    acc.insertedEventInputs.push({
+                      ...payload,
+                      value: (input as StopwatchInputType).time,
+                    });
+                  }
+
+                  return acc;
+                }
+
+                default: {
+                  return acc;
+                }
               }
+            },
+            {
+              insertedEventInputs: [] as Array<
+                Database['public']['Tables']['event_inputs']['Insert']
+              >,
             }
-          },
-          {
-            insertedEventInputs: [] as Array<
-              Database['public']['Tables']['event_inputs']['Insert']
-            >,
-          }
-        );
+          );
 
-        if (insertedEventInputs.length) {
-          const { error: insertedEventInputsError } = await supabase
-            .from('event_inputs')
-            .insert(insertedEventInputs);
+          if (insertedEventInputs.length) {
+            const { error: insertedEventInputsError } = await supabase
+              .from('event_inputs')
+              .insert(insertedEventInputs);
 
-          if (insertedEventInputsError) {
-            alert(insertedEventInputsError.message);
-            return;
+            if (insertedEventInputsError) {
+              alert(insertedEventInputsError.message);
+              return;
+            }
           }
+
+          if (comment) {
+            const { error: commentError } = await supabase
+              .from('comments')
+              .insert({
+                content: sanitizeHtml(comment) as string,
+                event_id: eventData.id,
+              });
+
+            if (commentError) {
+              alert(commentError.message);
+              return;
+            } else {
+              form.setValue('comment', undefined);
+            }
+          }
+
+          startTransition(() => {
+            router.refresh();
+
+            if (!isMission && !event) {
+              router.push(`/subjects/${subjectId}/timeline`);
+            }
+          });
         }
-
-        startTransition(() => {
-          router.refresh();
-
-          if (!isMission && !event) {
-            router.push(`/subjects/${subjectId}/events/${eventData.id}`);
-          }
-        });
-      })}
+      )}
     >
       <Input
         label={isMission ? 'When was this completed?' : 'When did this happen?'}
@@ -447,6 +468,13 @@ const EventForm = ({
           </div>
         );
       })}
+      {!event && (
+        <Controller
+          control={form.control}
+          name="comment"
+          render={({ field }) => <RichTextarea label="Comment" {...field} />}
+        />
+      )}
       <Button
         className="mt-8 w-full"
         colorScheme={event ? 'transparent' : 'accent'}
