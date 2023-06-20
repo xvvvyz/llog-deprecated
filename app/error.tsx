@@ -5,19 +5,15 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import va from '@vercel/analytics';
 import { useEffect } from 'react';
 
-const Error = ({ error }: { error: Error }) => {
+const Error = () => {
   const supabase = useSupabase();
 
   useEffect(() => {
     (async () => {
       const { data } = await supabase.auth.getUser();
-
-      va.track('error', {
-        message: error.message,
-        user: data?.user?.id ?? null,
-      });
+      va.track('error', { user: data?.user?.id ?? null });
     })();
-  }, [error, supabase]);
+  }, [supabase]);
 
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center gap-9 py-12 text-center">
