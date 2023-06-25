@@ -1,7 +1,7 @@
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
-import getMission from '@/(account)/_server/get-mission';
-import getSession from '@/(account)/_server/get-session';
+import getMissionWithActiveSessions from '@/(account)/_server/get-mission-with-active-sessions';
+import getSessionWithEvents from '@/(account)/_server/get-session-with-events';
 import getSubject from '@/(account)/_server/get-subject';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -14,7 +14,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMission(missionId),
+    getMissionWithActiveSessions(missionId),
   ]);
 
   const sessions = forceArray(mission?.sessions);
@@ -50,8 +50,8 @@ const Page = async ({
     teamId,
   ] = await Promise.all([
     getSubject(subjectId),
-    getMission(missionId),
-    getSession(sessionId),
+    getMissionWithActiveSessions(missionId),
+    getSessionWithEvents(sessionId),
     getCurrentUser(),
     getCurrentTeamId(),
   ]);

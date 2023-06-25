@@ -12,6 +12,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import Typography from '@tiptap/extension-typography';
+import Underline from '@tiptap/extension-underline';
 import { twMerge } from 'tailwind-merge';
 import DirtyHtml from './dirty-html';
 
@@ -108,6 +109,7 @@ const RichTextarea = (
       }),
       Text,
       Typography,
+      Underline,
       Extension.create({
         addKeyboardShortcuts() {
           const handleEnter: KeyboardShortcutCommand = ({ editor }) => {

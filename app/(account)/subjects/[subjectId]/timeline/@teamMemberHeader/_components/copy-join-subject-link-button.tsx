@@ -24,6 +24,7 @@ const CopyJoinSubjectLinkButton = ({
 
   return (
     <Button
+      className="whitespace-nowrap"
       loading={isCopyingToClipboard}
       loadingText="Generating link…"
       onClick={async () => {

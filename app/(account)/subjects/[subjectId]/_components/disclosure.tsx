@@ -17,7 +17,7 @@ const Disclosure = ({ children, className, disabled }: DisclosureProps) => {
   return (
     <div
       className={twMerge(
-        'group relative max-h-20 overflow-hidden pb-8 pt-4 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-[hsla(40,5%,13%,0.3)] after:via-[hsla(40,5%,13%,0.9)] after:to-[hsl(40,5%,13%)]',
+        'group relative -my-8 max-h-24 overflow-hidden py-8 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-[hsla(40,5%,13%,0.3)] after:via-[hsla(40,5%,13%,0.9)] after:to-[hsl(40,5%,13%)]',
         disclosure.value && 'max-h-full after:hidden',
         disabled ? 'cursor-default' : 'select-none',
         className

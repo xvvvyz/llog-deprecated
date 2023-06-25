@@ -31,7 +31,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   return (
     <>
       <Header>
-        <BackButton href={`/subjects/${subjectId}/timeline`} />
+        <BackButton href={'/subjects'} />
         <Breadcrumbs
           items={[[subject.name, `/subjects/${subjectId}/timeline`], ['Edit']]}
         />

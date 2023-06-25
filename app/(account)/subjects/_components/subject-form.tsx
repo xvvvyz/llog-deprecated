@@ -2,8 +2,6 @@
 
 import AvatarDropzone from '@/(account)/_components/avatar-dropzone';
 import RichTextarea from '@/(account)/_components/rich-textarea';
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import useDefaultValues from '@/(account)/_hooks/use-default-values';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
 import { GetSubjectData } from '@/(account)/_server/get-subject';
 import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
@@ -20,7 +18,7 @@ interface SubjectFormProps {
 }
 
 type SubjectFormValues = Database['public']['Tables']['subjects']['Row'] & {
-  avatar?: File | string;
+  avatar?: File | string | null;
 };
 
 const SubjectForm = ({ subject }: SubjectFormProps) => {
@@ -35,15 +33,12 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
   });
 
   const form = useForm<SubjectFormValues>({
-    defaultValues: useDefaultValues({
-      cacheKey: CacheKeys.SubjectSettingsForm,
-      defaultValues: {
-        avatar: subject?.image_uri,
-        banner: subject?.banner,
-        id: subject?.id,
-        name: subject?.name ?? '',
-      },
-    }),
+    defaultValues: {
+      avatar: subject?.image_uri,
+      banner: subject?.banner,
+      id: subject?.id,
+      name: subject?.name ?? '',
+    },
   });
 
   return (

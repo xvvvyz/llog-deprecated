@@ -57,11 +57,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
         <Breadcrumbs
           items={[
             [subject.name, `/subjects/${subjectId}/timeline`],
-            [
-              eventType.name,
-              `/subjects/${subjectId}/event-types/${eventType.id}`,
-            ],
-            ['Edit'],
+            [eventType.name],
           ]}
         />
       </Header>

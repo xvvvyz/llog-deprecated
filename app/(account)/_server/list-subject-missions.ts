@@ -10,9 +10,9 @@ const listSubjectMissions = (subjectId: string) =>
     .or(`scheduled_for.lte.${new Date().toISOString()},scheduled_for.is.null`, {
       foreignTable: 'sessions',
     })
-    .order('order', { foreignTable: 'sessions' })
     .eq('sessions.modules.deleted', false)
-    .order('name');
+    .order('name')
+    .order('order', { foreignTable: 'sessions' });
 
 export type ListSubjectMissionsData = Awaited<
   ReturnType<typeof listSubjectMissions>

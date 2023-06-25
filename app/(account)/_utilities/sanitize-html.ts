@@ -10,6 +10,7 @@ const sanitizeHtml = (html?: string | null) =>
           ol: [],
           p: [],
           strong: [],
+          u: [],
           ul: [],
         },
       })

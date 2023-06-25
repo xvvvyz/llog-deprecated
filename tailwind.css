@@ -38,10 +38,6 @@
   li > p:first-child {
     @apply inline;
   }
-
-  hr {
-    @apply border-t border-alpha-1;
-  }
 }
 
 @layer components {

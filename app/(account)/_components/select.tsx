@@ -244,7 +244,7 @@ const Placeholder = <TOption extends IOption>({
   children,
   ...props
 }: PlaceholderProps<TOption>) => (
-  <components.Placeholder className="m-1 px-2 text-fg-3" {...props}>
+  <components.Placeholder className="m-1 pl-2 text-fg-3" {...props}>
     {children}
   </components.Placeholder>
 );

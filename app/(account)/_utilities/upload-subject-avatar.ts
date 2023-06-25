@@ -5,7 +5,7 @@ const uploadSubjectAvatar = async ({
   subjectId,
   supabase,
 }: {
-  avatar?: File | string;
+  avatar?: File | string | null;
   subjectId: string;
   supabase: SupabaseClient;
 }) => {

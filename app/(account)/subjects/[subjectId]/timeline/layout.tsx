@@ -43,12 +43,12 @@ const Layout = async ({
 
   return (
     <>
-      {subject.team_id === teamId && teamMemberHeader}
       <Header className="flex justify-between gap-8">
         <BackButton href="/subjects" />
         <h1 className="truncate text-2xl">{subject.name}</h1>
         <Avatar file={subject.image_uri} name={subject.name} />
       </Header>
+      {subject.team_id === teamId && teamMemberHeader}
       {subject.banner && (
         <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-3">
           {subject.banner}

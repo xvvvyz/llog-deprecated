@@ -5,9 +5,10 @@ import NumberInput from '@/(account)/_components/input-number';
 import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
 import InputTypes from '@/(account)/_constants/enum-input-types';
+import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
 import { GetEventData } from '@/(account)/_server/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/(account)/_server/get-event-type-with-inputs-and-options';
-import { GetSessionData } from '@/(account)/_server/get-session';
+import { GetSessionWithEventsData } from '@/(account)/_server/get-session-with-events';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import parseSeconds from '@/(account)/_utilities/parse-seconds';
@@ -16,8 +17,7 @@ import Button from '@/_components/button';
 import Input from '@/_components/input';
 import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
-import { useRouter } from 'next/navigation';
-import { useEffect, useTransition } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
@@ -25,11 +25,11 @@ import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;
-  event?: GetEventData | GetSessionData['modules'][0]['event'][0];
+  event?: GetEventData | GetSessionWithEventsData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionData>['modules'][0];
+    | NonNullable<GetSessionWithEventsData>['modules'][0];
   isMission?: boolean;
   subjectId: string;
 }
@@ -84,10 +84,9 @@ const EventForm = ({
   isMission,
   subjectId,
 }: EventFormProps) => {
-  const [isTransitioning, startTransition] = useTransition();
+  const [redirect, isRedirecting] = useSubmitRedirect();
   const eventInputs = forceArray(event?.inputs);
   const eventTypeInputs = forceArray(eventType?.inputs);
-  const router = useRouter();
   const supabase = useSupabase();
 
   const form = useForm<EventFormValues>({
@@ -349,12 +348,8 @@ const EventForm = ({
             }
           }
 
-          startTransition(() => {
-            router.refresh();
-
-            if (!isMission && !event) {
-              router.push(`/subjects/${subjectId}/timeline`);
-            }
+          await redirect(`/subjects/${subjectId}/timeline`, {
+            redirect: !isMission && !event,
           });
         }
       )}
@@ -478,7 +473,7 @@ const EventForm = ({
       <Button
         className="mt-8 w-full"
         colorScheme={event ? 'transparent' : 'accent'}
-        loading={form.formState.isSubmitting || isTransitioning}
+        loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"
       >

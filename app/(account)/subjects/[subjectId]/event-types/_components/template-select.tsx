@@ -10,12 +10,16 @@ import { FieldValues, PathValue, UseFormSetValue } from 'react-hook-form';
 interface CreateEventTypeFromTemplateSelectProps<T extends FieldValues> {
   availableInputs: NonNullable<ListInputsData>;
   formSetValue: UseFormSetValue<T>;
+  isMission?: boolean;
+  namePrefix: string;
   templateOptions: NonNullable<ListTemplatesWithDataData>;
 }
 
 const TemplateSelect = <T extends FieldValues>({
   availableInputs,
   formSetValue,
+  isMission,
+  namePrefix,
   templateOptions,
 }: CreateEventTypeFromTemplateSelectProps<T>) => (
   <Select
@@ -24,18 +28,20 @@ const TemplateSelect = <T extends FieldValues>({
     onChange={(e) => {
       const template = e as TemplateType;
 
-      formSetValue(
-        'name' as T[string],
-        template.name as PathValue<T, T[string]>
-      );
+      if (!isMission) {
+        formSetValue(
+          `${namePrefix}name` as T[string],
+          template.name as PathValue<T, T[string]>
+        );
+      }
 
       formSetValue(
-        'content' as T[string],
+        `${namePrefix}content` as T[string],
         template.data?.content as PathValue<T, T[string]>
       );
 
       formSetValue(
-        'inputs' as T[string],
+        `${namePrefix}inputs` as T[string],
         availableInputs.filter(({ id }) =>
           forceArray(template.data?.inputIds).includes(id)
         ) as PathValue<T, T[string]>

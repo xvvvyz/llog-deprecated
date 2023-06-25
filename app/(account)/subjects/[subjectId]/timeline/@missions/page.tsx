@@ -2,9 +2,9 @@ import LinkList from '@/(account)/_components/link-list';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectMissions from '@/(account)/_server/list-subject-missions';
+import findActiveSession from '@/(account)/_utilities/find-active-session';
 import forceArray from '@/(account)/_utilities/force-array';
 import Button from '@/_components/button';
-import { Database } from '@/_types/database';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -27,25 +27,18 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   const listItems = missions.reduce((acc, mission) => {
     const sessions = forceArray(mission.sessions);
-
-    const activeSession = sessions.find(({ modules }) =>
-      modules.find(
-        (et: { events: Database['public']['Tables']['events']['Row'][] }) =>
-          !et.events.length
-      )
-    );
-
+    const activeSession = findActiveSession(sessions);
     if (!isTeamMember && !activeSession) return acc;
-    const editHref = `/subjects/${subjectId}/missions/${mission.id}/edit`;
+    const editHref = `/subjects/${subjectId}/missions/${mission.id}/sessions`;
 
     acc.push(
       <LinkList.Item
         href={
-          isTeamMember && !activeSession
-            ? editHref
-            : `/subjects/${subjectId}/missions/${mission.id}/sessions/${activeSession.id}`
+          activeSession
+            ? `/subjects/${subjectId}/missions/${mission.id}/sessions/${activeSession.id}`
+            : editHref
         }
-        icon={isTeamMember && !activeSession ? 'edit' : 'arrow'}
+        icon={activeSession ? 'arrow' : 'edit'}
         key={mission.id}
         text={mission.name}
         {...(isTeamMember && activeSession

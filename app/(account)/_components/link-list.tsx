@@ -34,7 +34,7 @@ interface ListItemProps {
   rightHref?: string;
   rightIcon?: keyof typeof icons;
   rightLabel?: string;
-  text: string;
+  text: ReactNode;
 }
 
 const LinkList = Object.assign(

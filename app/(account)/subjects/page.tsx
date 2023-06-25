@@ -2,11 +2,12 @@ import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
 import LinkList from '@/(account)/_components/link-list';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
+import forceArray from '@/(account)/_utilities/force-array';
+import Button from '@/_components/button';
+
 import listSubjects, {
   ListSubjectsData,
 } from '@/(account)/_server/list-subjects';
-import forceArray from '@/(account)/_utilities/force-array';
-import Button from '@/_components/button';
 
 export const metadata = {
   title: 'Subjects',
@@ -52,7 +53,7 @@ const Page = async () => {
                 avatars={[subject]}
                 href={`/subjects/${subject.id}/timeline`}
                 key={subject.id}
-                rightHref={`/subjects/${subject.id}/edit?back=/subjects`}
+                rightHref={`/subjects/${subject.id}/edit`}
                 rightIcon="edit"
                 rightLabel="Edit"
                 text={subject.name}

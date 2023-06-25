@@ -21,11 +21,11 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   if (!subject || !managers) return null;
 
   return (
-    <div className="-mb-10 mt-16 px-4">
-      <div className="flex items-end justify-between gap-8 border-b border-alpha-1 pb-6 pt-1">
-        <div className="flex flex-wrap items-end gap-6">
+    <div className="-mt-10 mb-16 px-4">
+      <div className="flex items-start justify-between gap-6 border-t border-alpha-1 pb-1 pt-6">
+        <div className="flex items-start gap-6">
           {!!managers?.length && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {forceArray(managers).map(({ manager }) => (
                 <Avatar key={manager.id} name={manager.first_name} size="sm" />
               ))}
@@ -36,7 +36,10 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             subjectId={subjectId}
           />
         </div>
-        <Button href={`/subjects/${subjectId}/edit`} variant="link">
+        <Button
+          href={`/subjects/${subjectId}/edit?back=/subjects/${subjectId}/timeline`}
+          variant="link"
+        >
           <PencilIcon className="w-5" />
           Edit
         </Button>

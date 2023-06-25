@@ -2,17 +2,19 @@
 
 import Button from '@/_components/button';
 import { usePathname } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
 interface BreadcrumbProps {
-  items: ([string, string | undefined] | [string])[];
+  className?: string;
+  items: string[][];
 }
 
-const Breadcrumbs = ({ items }: BreadcrumbProps) => {
+const Breadcrumbs = ({ className, items }: BreadcrumbProps) => {
   const pathname = usePathname();
   const filteredItems = items.filter((item) => item[0]);
 
   return (
-    <h1 className="ml-4 text-right">
+    <h1 className={twMerge('text-right', className)}>
       {filteredItems.length === 1 ? (
         <span className="text-2xl">{items[0]}</span>
       ) : (

@@ -2,11 +2,8 @@ import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
 import getSubject from '@/(account)/_server/get-subject';
-import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
-import listTemplatesWithData from '@/(account)/_server/list-templates-with-data';
-import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
-import MissionForm from '@/(account)/subjects/[subjectId]/missions/[missionId]/edit/_components/mission-form';
+import MissionForm from '@/(account)/subjects/[subjectId]/missions/_components/mission-form';
 import { notFound } from 'next/navigation';
 
 export const generateMetadata = async ({
@@ -28,16 +25,7 @@ interface PageProps {
 }
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
-  const [
-    { data: subject },
-    { data: availableInputs },
-    { data: availableTemplates },
-  ] = await Promise.all([
-    getSubject(subjectId),
-    listInputs(),
-    listTemplatesWithData(),
-  ]);
-
+  const { data: subject } = await getSubject(subjectId);
   if (!subject) notFound();
 
   return (
@@ -51,14 +39,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           ]}
         />
       </Header>
-      <MissionForm
-        availableInputs={filterListInputsDataBySubjectId(
-          availableInputs as ListInputsData,
-          subjectId
-        )}
-        availableTemplates={availableTemplates}
-        subjectId={subjectId}
-      />
+      <MissionForm subjectId={subjectId} />
     </>
   );
 };

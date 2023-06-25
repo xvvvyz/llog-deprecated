@@ -98,7 +98,7 @@ const Notifications = ({
             </div>
           </div>
         </div>
-        <div className="w-full leading-snug">
+        <div className="w-full">
           <div className="-mt-1 flex flex-wrap items-center justify-between gap-3">
             <div className="flex gap-4">
               {!n.read && (
@@ -183,11 +183,7 @@ const Notifications = ({
               </>
             )}
           </ViewEventButton>
-          {comment && (
-            <DirtyHtml className="line-clamp-2 pt-4">
-              {comment.content}
-            </DirtyHtml>
-          )}
+          {comment && <DirtyHtml className="pt-4">{comment.content}</DirtyHtml>}
         </div>
       </div>
     );
