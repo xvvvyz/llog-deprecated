@@ -43,7 +43,9 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
         }
 
         await redirect(
-          `/subjects/${subjectId}/missions/${missionData.id}/sessions/create/0`
+          mission
+            ? `/subjects/${subjectId}/missions/${missionData.id}/sessions`
+            : `/subjects/${subjectId}/missions/${missionData.id}/sessions/create/0`
         );
       })}
     >
