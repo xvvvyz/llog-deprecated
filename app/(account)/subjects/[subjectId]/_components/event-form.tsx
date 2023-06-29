@@ -8,7 +8,7 @@ import InputTypes from '@/(account)/_constants/enum-input-types';
 import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
 import { GetEventData } from '@/(account)/_server/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/(account)/_server/get-event-type-with-inputs-and-options';
-import { GetSessionWithEventsData } from '@/(account)/_server/get-session-with-events';
+import { GetSessionWithDetailsData } from '@/(account)/_server/get-session-with-details';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import parseSeconds from '@/(account)/_utilities/parse-seconds';
@@ -25,11 +25,11 @@ import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;
-  event?: GetEventData | GetSessionWithEventsData['modules'][0]['event'][0];
+  event?: GetEventData | GetSessionWithDetailsData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionWithEventsData>['modules'][0];
+    | NonNullable<GetSessionWithDetailsData>['modules'][0];
   isMission?: boolean;
   subjectId: string;
 }
@@ -343,8 +343,6 @@ const EventForm = ({
             if (commentError) {
               alert(commentError.message);
               return;
-            } else {
-              form.setValue('comment', undefined);
             }
           }
 
@@ -355,6 +353,7 @@ const EventForm = ({
       )}
     >
       <Input
+        id={`${eventType.id}-completionTime`}
         label={isMission ? 'When was this completed?' : 'When did this happen?'}
         step="any"
         type="datetime-local"

@@ -8,19 +8,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef(
   (
-    { className, label, right, type, name, ...rest }: InputProps,
+    { className, id, label, right, type, name, ...rest }: InputProps,
     ref: Ref<HTMLInputElement>
   ) => (
     <div className="group relative w-full">
       {label && (
-        <label className="label" htmlFor={name}>
+        <label className="label" htmlFor={id ?? name}>
           {label}
         </label>
       )}
       <input
         autoComplete="off"
         className={twMerge('input', right && 'pr-[2.4rem]', className)}
-        id={name}
+        id={id ?? name}
         name={name}
         ref={ref}
         type={type ?? 'text'}

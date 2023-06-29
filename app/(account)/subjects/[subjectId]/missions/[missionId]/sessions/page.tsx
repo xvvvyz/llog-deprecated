@@ -96,7 +96,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                           formatter="date"
                         />
                       ) : completedModules.length ? (
-                        `${completedModules.length} of ${modules.length} complete`
+                        `${completedModules.length} of ${modules.length} completed`
                       ) : (
                         'Not started'
                       )}

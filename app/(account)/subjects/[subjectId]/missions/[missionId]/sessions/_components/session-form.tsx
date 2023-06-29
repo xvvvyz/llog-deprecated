@@ -8,6 +8,7 @@ import { GetMissionWithSessionsData } from '@/(account)/_server/get-mission-with
 import { GetSessionData } from '@/(account)/_server/get-session';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
+import firstIfArray from '@/(account)/_utilities/first-if-array';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatDatetimeLocal from '@/(account)/_utilities/format-datetime-local';
 import globalValueCache from '@/(account)/_utilities/global-value-cache';
@@ -100,6 +101,11 @@ const SessionForm = ({
     },
     { nextSession: null, previousSession: null }
   );
+
+  const moduleIdEventMap = modules.reduce((acc, module) => {
+    acc[module.id] = firstIfArray(module.event);
+    return acc;
+  }, {});
 
   const form = useForm<SessionFormValues>({
     defaultValues: useDefaultValues({
@@ -495,16 +501,17 @@ const SessionForm = ({
               items={modulesArray.fields.map((eventType) => eventType.key)}
               strategy={verticalListSortingStrategy}
             >
-              {modulesArray.fields.map((eventType, eventTypeIndex) => (
+              {modulesArray.fields.map((module, eventTypeIndex) => (
                 <ModuleFormSection<SessionFormValues>
                   availableInputs={availableInputs}
                   availableTemplates={availableTemplates}
+                  event={moduleIdEventMap[module.id]}
                   eventTypeArray={modulesArray as any}
                   eventTypeIndex={eventTypeIndex}
-                  eventTypeKey={eventType.key}
+                  eventTypeKey={module.key}
                   form={form}
                   hasOnlyOne={modulesArray.fields.length === 1}
-                  key={eventType.key}
+                  key={module.key}
                 />
               ))}
             </SortableContext>
@@ -515,10 +522,7 @@ const SessionForm = ({
             className="w-full"
             colorScheme="transparent"
             onClick={() =>
-              modulesArray.append({
-                content: '',
-                inputs: [],
-              } as any)
+              modulesArray.append({ content: '', inputs: [] } as any)
             }
           >
             <PlusIcon className="w-5" />
@@ -629,5 +633,4 @@ const SessionForm = ({
   );
 };
 
-export type { SessionFormValues };
 export default SessionForm;

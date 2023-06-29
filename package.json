@@ -63,10 +63,10 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.1",
     "react-select": "^5.7.3",
-    "supabase": "^1.75.1",
+    "supabase": "^1.75.2",
     "tailwind-merge": "^1.13.2",
     "tailwindcss": "^3.3.2",
-    "typescript": "^5.1.5",
+    "typescript": "^5.1.6",
     "usehooks-ts": "^2.9.1",
     "vercel": "^31.0.1",
     "xss": "^1.0.14"

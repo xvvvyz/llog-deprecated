@@ -34,7 +34,7 @@ const SessionLayout = async ({
   params: { edit, missionId, order, sessionId, subjectId },
 }: LayoutLayoutProps) => {
   if ((edit && edit !== 'edit') || (order && isNaN(Number(order)))) notFound();
-  const isEdit = !!order || !!edit;
+  const isEditOrCreate = !!order || !!edit;
 
   const [{ data: subject }, { data: mission }, teamId] = await Promise.all([
     getSubject(subjectId),
@@ -49,7 +49,7 @@ const SessionLayout = async ({
     [mission.name],
   ];
 
-  if (isEdit) {
+  if (isEditOrCreate) {
     breadcrumbs[1][1] = `/subjects/${subjectId}/missions/${missionId}/sessions`;
     breadcrumbs[2] = [order ? 'Add session' : 'Edit session'];
   }
@@ -64,14 +64,14 @@ const SessionLayout = async ({
   const previousSessionId = sessions[sessionIndex - 1]?.id;
   const nextSessionId = sessions[sessionIndex + (order ? 0 : 1)]?.id;
   const totalSessions = sessions.length + (order ? 1 : 0);
-  const editSuffix = isEdit ? '/edit' : '';
+  const editSuffix = isEditOrCreate ? '/edit' : '';
 
   return (
     <>
       <Header>
         <BackButton
           href={
-            isEdit
+            isEditOrCreate
               ? `/subjects/${subjectId}/missions/${missionId}/sessions`
               : `/subjects/${subjectId}/timeline`
           }
@@ -91,7 +91,7 @@ const SessionLayout = async ({
             Session {sessionIndex + 1} of {totalSessions}
           </span>
           {subject.team_id === teamId &&
-            (isEdit ? (
+            (isEditOrCreate ? (
               <Button
                 disabled={!!order}
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}`}
@@ -110,7 +110,7 @@ const SessionLayout = async ({
               </Button>
             ))}
         </div>
-        {isEdit && sessionIndex >= totalSessions - 1 ? (
+        {isEditOrCreate && sessionIndex >= totalSessions - 1 ? (
           <IconButton
             disabled={!!order}
             href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${sessions.length}`}

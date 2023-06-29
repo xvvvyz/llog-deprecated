@@ -1,7 +1,7 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
 import { Database } from '@/_types/database';
 
-const getSessionWithEvents = (sessionId: string) =>
+const getSessionWithDetails = (sessionId: string) =>
   createServerComponentClient()
     .from('sessions')
     .select(
@@ -47,8 +47,8 @@ const getSessionWithEvents = (sessionId: string) =>
     .order('order', { foreignTable: 'modules.inputs.input.options' })
     .single();
 
-export type GetSessionWithEventsData = Awaited<
-  ReturnType<typeof getSessionWithEvents>
+export type GetSessionWithDetailsData = Awaited<
+  ReturnType<typeof getSessionWithDetails>
 >['data'] & {
   modules: Array<
     Pick<
@@ -105,4 +105,4 @@ export type GetSessionWithEventsData = Awaited<
   >;
 };
 
-export default getSessionWithEvents;
+export default getSessionWithDetails;

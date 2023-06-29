@@ -2,13 +2,13 @@
 
 import Avatar from '@/(account)/_components/avatar';
 import DateTime from '@/(account)/_components/date-time';
-import Pill from '@/(account)/_components/pill';
+import InputTypes from '@/(account)/_constants/enum-input-types';
 import { ListEventsData } from '@/(account)/_server/list-events';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
 import forceArray from '@/(account)/_utilities/force-array';
+import formatInputValue from '@/(account)/_utilities/format-input-value';
 import EventCommentForm from '@/(account)/subjects/[subjectId]/_components/event-comment-form';
 import EventComments from '@/(account)/subjects/[subjectId]/_components/event-comments';
-import EventInputs from '@/(account)/subjects/[subjectId]/_components/event-inputs';
 import Button from '@/_components/button';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
@@ -47,7 +47,9 @@ const TimelineEventCard = ({
             : lastEventType.name}
         </span>
         <div className="ml-auto flex shrink-0 items-center gap-4">
-          {lastEventType.session && <Pill>Session {sessionNumber}</Pill>}
+          {lastEventType.session && (
+            <span className="text-fg-3">Session {sessionNumber}</span>
+          )}
           <ArrowRightIcon className="w-5" />
         </div>
       </Button>
@@ -70,13 +72,16 @@ const TimelineEventCard = ({
         {group.map((event) => {
           const moduleNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
+          const inputs = forceArray(event.inputs);
 
           return (
             <li key={event.id}>
               {lastEventType.session && (
-                <div className="smallcaps flex items-baseline justify-between bg-alpha-reverse-1 px-4 py-3">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono">{moduleNumber}</span>
+                <div className="smallcaps flex items-center justify-between bg-alpha-reverse-1 px-4 py-3">
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-base leading-none">
+                      {moduleNumber}
+                    </span>
                     <Avatar
                       className="-my-[0.15rem]"
                       name={firstIfArray(event.profile).first_name}
@@ -87,10 +92,50 @@ const TimelineEventCard = ({
                   <DateTime date={event.created_at} formatter="time" />
                 </div>
               )}
-              <EventInputs
-                className="bg-alpha-reverse-1"
-                inputs={forceArray(event.inputs)}
-              />
+              {!!inputs.length && (
+                <div className="bg-alpha-reverse-1 pb-2">
+                  <table className="w-full table-fixed">
+                    <tbody>
+                      {Object.entries(
+                        inputs.reduce(
+                          (acc, { input, option, value }) => {
+                            if (!input) return acc;
+                            acc[input.id] = acc[input.id] ?? { values: [] };
+                            acc[input.id].label = input.label;
+                            acc[input.id].type = input.type;
+
+                            if (value || option?.label) {
+                              acc[input.id].values.push({
+                                label: option?.label,
+                                value,
+                              });
+                            }
+
+                            return acc;
+                          },
+                          {} as Record<
+                            string,
+                            {
+                              label: string;
+                              type: InputTypes;
+                              values: { label?: string; value?: string }[];
+                            }
+                          >
+                        )
+                      ).map(([id, { label, type, values }]: any) => (
+                        <tr key={id}>
+                          <td className="truncate px-4 py-1 align-top text-fg-3">
+                            {label}
+                          </td>
+                          <td className="truncate p-0 py-1 pr-4 align-top">
+                            {formatInputValue[type as InputTypes](values)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
               {!!comments.length && (
                 <div className="space-y-4 border-t border-alpha-1 p-4">
                   <EventComments

@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 import IconButton from './icon-button';
-import Pill from './pill';
 
 import {
   ArrowRightIcon,
@@ -30,7 +29,6 @@ interface ListItemProps {
   icon?: keyof typeof icons;
   menu?: ReactNode;
   onClick?: () => void;
-  pill?: ReactNode;
   rightHref?: string;
   rightIcon?: keyof typeof icons;
   rightLabel?: string;
@@ -56,7 +54,6 @@ const LinkList = Object.assign(
       icon = 'arrow',
       menu,
       onClick,
-      pill,
       rightHref,
       rightIcon,
       rightLabel,
@@ -86,10 +83,7 @@ const LinkList = Object.assign(
             </div>
           )}
           <span className="leading-snug [overflow-wrap:anywhere]">{text}</span>
-          <div className="ml-auto flex shrink-0 items-center gap-4">
-            {pill && <Pill>{pill}</Pill>}
-            {icons[icon]}
-          </div>
+          <div className="ml-auto shrink-0">{icons[icon]}</div>
         </Button>
         {rightIcon && rightLabel && (
           <IconButton

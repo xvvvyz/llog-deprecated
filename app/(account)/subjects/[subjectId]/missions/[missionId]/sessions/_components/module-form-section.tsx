@@ -1,4 +1,5 @@
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
+import { GetSessionData } from '@/(account)/_server/get-session';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
 import EventTypeFormSection from '@/(account)/subjects/[subjectId]/_components/event-type-form-section';
@@ -14,6 +15,7 @@ import {
 interface ModuleFormSectionProps<T extends FieldValues> {
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesWithDataData;
+  event: GetSessionData['modules'][0]['event'];
   eventTypeArray: UseFieldArrayReturn<T, T['modules'], 'key'>;
   eventTypeIndex: number;
   eventTypeKey: string;
@@ -24,6 +26,7 @@ interface ModuleFormSectionProps<T extends FieldValues> {
 const ModuleFormSection = <T extends FieldValues>({
   availableInputs,
   availableTemplates,
+  event,
   eventTypeArray,
   eventTypeIndex,
   eventTypeKey,
@@ -60,6 +63,7 @@ const ModuleFormSection = <T extends FieldValues>({
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}
         cacheKey={CacheKeys.SessionForm}
+        event={event}
         eventTypeArray={eventTypeArray}
         eventTypeIndex={eventTypeIndex}
         form={form}

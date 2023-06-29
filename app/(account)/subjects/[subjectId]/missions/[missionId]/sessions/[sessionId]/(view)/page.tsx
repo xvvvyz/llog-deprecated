@@ -3,7 +3,7 @@ import Empty from '@/(account)/_components/empty';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
 import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
-import getSessionWithEvents from '@/(account)/_server/get-session-with-events';
+import getSessionWithDetails from '@/(account)/_server/get-session-with-details';
 import getSubject from '@/(account)/_server/get-subject';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -53,7 +53,7 @@ const Page = async ({
   ] = await Promise.all([
     getSubject(subjectId),
     getMissionWithSessions(missionId),
-    getSessionWithEvents(sessionId),
+    getSessionWithDetails(sessionId),
     getCurrentUser(),
     getCurrentTeamId(),
   ]);

@@ -50,7 +50,7 @@ const TimelineEvents = ({
         return (
           <div className="space-y-4" key={firstEvent.created_at}>
             <DateTime
-              className="ml-4 mr-2 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2 leading-none text-fg-3"
+              className="smallcaps mx-4 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2"
               date={firstEvent.created_at}
               formatter="date"
             />

@@ -1,11 +1,13 @@
 'use client';
 
 import Alert from '@/(account)/_components/alert';
+import Avatar from '@/(account)/_components/avatar';
 import IconButton from '@/(account)/_components/icon-button';
 import RichTextarea from '@/(account)/_components/rich-textarea';
 import Select from '@/(account)/_components/select';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
 import useBackLink from '@/(account)/_hooks/use-back-link';
+import { GetSessionData } from '@/(account)/_server/get-session';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -16,6 +18,7 @@ import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { useBoolean } from 'usehooks-ts';
 
 import {
@@ -35,13 +38,13 @@ import {
   UseFieldArrayReturn,
   UseFormReturn,
 } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
 
 interface EventTypeFormSectionProps<T extends FieldValues> {
   attributes?: DraggableAttributes;
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesWithDataData;
   cacheKey: CacheKeys;
+  event?: GetSessionData['modules'][0]['event'];
   eventTypeArray?: UseFieldArrayReturn<T, T['modules'], 'key'>;
   eventTypeIndex?: number;
   form: UseFormReturn<T>;
@@ -57,6 +60,7 @@ const EventTypeFormSection = <T extends FieldValues>({
   availableInputs,
   availableTemplates,
   cacheKey,
+  event,
   eventTypeArray,
   eventTypeIndex,
   form,
@@ -112,13 +116,25 @@ const EventTypeFormSection = <T extends FieldValues>({
       <div
         className={twMerge(
           'flex flex-col gap-8 border-b border-alpha-1 px-4 py-8 sm:px-8',
-          attributes && listeners && 'border-t border-alpha-1'
+          attributes && listeners && 'border-t border-alpha-1',
+          event && 'pt-0'
         )}
       >
+        {event && (
+          <div className="smallcaps flex items-center gap-4 whitespace-nowrap pt-4 sm:rounded-t">
+            <Avatar
+              className="-my-[0.15rem]"
+              name={event.profile.first_name}
+              size="xs"
+            />
+            {event.profile.first_name} {event.profile.last_name}
+            <span className="ml-auto">Completed</span>
+          </div>
+        )}
         {moduleNumber && eventTypeArray && (
           <div className="-mt-1 flex items-center justify-between">
-            <div className="smallcaps font-mono">Module {moduleNumber}</div>
-            <div className="flex gap-6 pb-1">
+            <div className="text-fg-3">Module {moduleNumber}</div>
+            <div className="flex gap-6">
               {saveAsTemplateButton}
               <Button
                 disabled={hasOnlyOne}

@@ -10,7 +10,10 @@ const getSession = (sessionId: string) =>
       order,
       modules:event_types(
         content,
-        events:events(id),
+        event:events(
+          id,
+          profile:profiles(first_name, id, last_name)
+        ),
         id,
         inputs:event_type_inputs(input_id),
         order
@@ -30,7 +33,14 @@ export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'] & {
       Database['public']['Tables']['event_types']['Row'],
       'content' | 'id' | 'order'
     > & {
-      events: Array<Pick<Database['public']['Tables']['events']['Row'], 'id'>>;
+      event: Array<
+        Pick<Database['public']['Tables']['events']['Row'], 'id'>
+      > & {
+        profile: Pick<
+          Database['public']['Tables']['profiles']['Row'],
+          'first_name' | 'id' | 'last_name'
+        >;
+      };
       inputs: Array<
         Pick<
           Database['public']['Tables']['event_type_inputs']['Row'],
