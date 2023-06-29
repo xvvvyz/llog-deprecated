@@ -2,7 +2,7 @@ import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
 import IconButton from '@/(account)/_components/icon-button';
-import getMissionWithActiveSessions from '@/(account)/_server/get-mission-with-active-sessions';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
 import getSubject from '@/(account)/_server/get-subject';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -10,7 +10,6 @@ import Button from '@/_components/button';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -39,9 +38,7 @@ const SessionLayout = async ({
 
   const [{ data: subject }, { data: mission }, teamId] = await Promise.all([
     getSubject(subjectId),
-    isEdit
-      ? getMissionWithSessions(missionId)
-      : getMissionWithActiveSessions(missionId),
+    getMissionWithSessions(missionId),
     getCurrentTeamId(),
   ]);
 
@@ -64,7 +61,6 @@ const SessionLayout = async ({
     : sessions.findIndex(({ id }) => id === sessionId);
 
   if (sessionIndex === -1) notFound();
-  const session = sessions[sessionIndex];
   const previousSessionId = sessions[sessionIndex - 1]?.id;
   const nextSessionId = sessions[sessionIndex + (order ? 0 : 1)]?.id;
   const totalSessions = sessions.length + (order ? 1 : 0);
@@ -97,11 +93,7 @@ const SessionLayout = async ({
           {subject.team_id === teamId &&
             (isEdit ? (
               <Button
-                disabled={
-                  order ||
-                  (session?.scheduled_for &&
-                    new Date(session.scheduled_for) > new Date())
-                }
+                disabled={!!order}
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}`}
                 variant="link"
               >

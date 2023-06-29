@@ -35,7 +35,8 @@ const getSessionWithEvents = (sessionId: string) =>
         name,
         order
       ),
-      scheduled_for`
+      scheduled_for,
+      title`
     )
     .eq('id', sessionId)
     .eq('modules.deleted', false)

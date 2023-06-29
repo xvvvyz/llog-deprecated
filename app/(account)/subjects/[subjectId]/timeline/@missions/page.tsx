@@ -54,14 +54,10 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="px-4">
-      <LinkList
-        className={twMerge('m-0', isTeamMember && 'rounded-b-none border-b-0')}
-      >
-        {listItems}
-      </LinkList>
+      <LinkList className="m-0">{listItems}</LinkList>
       {isTeamMember && (
         <Button
-          className={twMerge('w-full', !!listItems.length && 'rounded-t-none')}
+          className={twMerge('w-full', listItems.length && 'mt-4')}
           colorScheme="transparent"
           href={`/subjects/${subject.id}/missions/create`}
           type="button"

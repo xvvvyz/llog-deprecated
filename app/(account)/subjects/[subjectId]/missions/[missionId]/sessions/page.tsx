@@ -1,13 +1,12 @@
 import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
+import DateTime from '@/(account)/_components/date-time';
 import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
 import IconButton from '@/(account)/_components/icon-button';
-import LinkList from '@/(account)/_components/link-list';
-import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
+import getMissionWithSessionsAndEvents from '@/(account)/_server/get-mission-with-sessions-and-events';
 import getSubject from '@/(account)/_server/get-subject';
 import forceArray from '@/(account)/_utilities/force-array';
-import formatDateTime from '@/(account)/_utilities/format-date-time';
 import formatTitle from '@/(account)/_utilities/format-title';
 import Button from '@/_components/button';
 import { PencilIcon } from '@heroicons/react/24/outline';
@@ -18,7 +17,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMissionWithSessionsAndEvents(missionId),
   ]);
 
   return {
@@ -38,7 +37,7 @@ interface PageProps {
 const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMissionWithSessionsAndEvents(missionId),
   ]);
 
   if (!subject || !mission) notFound();
@@ -71,28 +70,44 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
         </Button>
       </Header>
       {sessions.length ? (
-        <LinkList>
-          {sessions.map((session) => (
-            <LinkList.Item
-              href={`/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`}
-              icon="edit"
-              key={session.id}
-              pill={
-                new Date(session.scheduled_for) > new Date()
-                  ? formatDateTime(session.scheduled_for)
-                  : undefined
-              }
-              text={
-                <>
-                  Session {session.order + 1}
-                  {!!session.title && (
-                    <span className="text-fg-3"> - {session.title}</span>
-                  )}
-                </>
-              }
-            />
-          ))}
-        </LinkList>
+        <ul className="mx-4 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 leading-snug">
+          {sessions.map((session) => {
+            const modules = forceArray(session.modules);
+            const completedModules = modules.filter((m) => m.events.length);
+
+            return (
+              <li key={session.id}>
+                <Button
+                  className="m-0 w-full justify-between gap-6 px-4 py-3"
+                  href={`/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`}
+                  variant="link"
+                >
+                  <div>
+                    Session {session.order + 1}
+                    {session.title && (
+                      <span className="before:px-3 before:text-alpha-4 before:content-['/']">
+                        {session.title}
+                      </span>
+                    )}
+                    <div className="smallcaps pb-1 pt-2 text-fg-3">
+                      {new Date(session.scheduled_for) > new Date() ? (
+                        <DateTime
+                          date={session.scheduled_for}
+                          formatter="date"
+                        />
+                      ) : completedModules.length ? (
+                        `${completedModules.length} of ${modules.length} complete`
+                      ) : (
+                        'Not started'
+                      )}
+                    </div>
+                  </div>
+                  <PencilIcon className="w-5 shrink-0" />
+                </Button>
+              </li>
+            );
+          })}
+        </ul>
       ) : (
         <Empty>No sessions</Empty>
       )}

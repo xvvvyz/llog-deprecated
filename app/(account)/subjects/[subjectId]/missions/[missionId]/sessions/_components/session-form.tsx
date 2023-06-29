@@ -193,7 +193,9 @@ const SessionForm = ({
               id: values.id,
               mission_id: mission.id,
               order: values.order,
-              scheduled_for: values.scheduled_for,
+              scheduled_for: values.scheduled_for
+                ? new Date(values.scheduled_for).toISOString()
+                : null,
               title: values.title,
             })
             .select('id')

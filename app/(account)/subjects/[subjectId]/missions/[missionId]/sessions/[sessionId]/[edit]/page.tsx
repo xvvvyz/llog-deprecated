@@ -1,4 +1,3 @@
-import getMissionWithActiveSessions from '@/(account)/_server/get-mission-with-active-sessions';
 import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
 import getSession, { GetSessionData } from '@/(account)/_server/get-session';
 import getSubject from '@/(account)/_server/get-subject';
@@ -17,7 +16,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithActiveSessions(missionId),
+    getMissionWithSessions(missionId),
   ]);
 
   return {

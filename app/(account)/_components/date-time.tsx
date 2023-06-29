@@ -20,7 +20,7 @@ interface DateTimeProps {
 }
 
 const DateTime = ({ className, date, formatter }: DateTimeProps) => {
-  const [dateString, setDateString] = useState<string>();
+  const [dateString, setDateString] = useState<string | undefined>('-');
 
   useEffect(() => {
     setDateString(formatters[formatter](date));

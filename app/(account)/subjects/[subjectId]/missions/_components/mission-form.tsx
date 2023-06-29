@@ -43,7 +43,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
         }
 
         await redirect(
-          `/subjects/${subjectId}/missions/${missionData.id}/sessions`
+          `/subjects/${subjectId}/missions/${missionData.id}/sessions/create/0`
         );
       })}
     >
@@ -54,7 +54,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
         loadingText="Saving…"
         type="submit"
       >
-        {mission ? 'Save mission name' : 'Save mission name and continue'}
+        {mission ? 'Save mission' : 'Save mission and continue'}
       </Button>
     </form>
   );

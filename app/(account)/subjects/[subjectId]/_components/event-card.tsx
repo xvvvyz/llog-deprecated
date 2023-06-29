@@ -1,6 +1,6 @@
 import { GetEventData } from '@/(account)/_server/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/(account)/_server/get-event-type-with-inputs-and-options';
-import { GetMissionWithActiveSessionsData } from '@/(account)/_server/get-mission-with-active-sessions';
+import { GetMissionWithSessionsData } from '@/(account)/_server/get-mission-with-sessions';
 import { GetSessionWithEventsData } from '@/(account)/_server/get-session-with-events';
 import forceArray from '@/(account)/_utilities/force-array';
 import Disclosure from '@/(account)/subjects/[subjectId]/_components/disclosure';
@@ -18,7 +18,7 @@ interface EventCardProps {
     | NonNullable<GetSessionWithEventsData>['modules'][0];
   hideContent?: boolean;
   isTeamMember: boolean;
-  mission?: GetMissionWithActiveSessionsData | GetEventData['type']['mission'];
+  mission?: GetMissionWithSessionsData | GetEventData['type']['mission'];
   subjectId: string;
   userId: string;
 }

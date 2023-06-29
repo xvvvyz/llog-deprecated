@@ -1,6 +1,8 @@
+import DateTime from '@/(account)/_components/date-time';
+import Empty from '@/(account)/_components/empty';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getCurrentUser from '@/(account)/_server/get-current-user';
-import getMissionWithActiveSessions from '@/(account)/_server/get-mission-with-active-sessions';
+import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
 import getSessionWithEvents from '@/(account)/_server/get-session-with-events';
 import getSubject from '@/(account)/_server/get-subject';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
@@ -14,7 +16,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithActiveSessions(missionId),
+    getMissionWithSessions(missionId),
   ]);
 
   const sessions = forceArray(mission?.sessions);
@@ -50,29 +52,49 @@ const Page = async ({
     teamId,
   ] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithActiveSessions(missionId),
+    getMissionWithSessions(missionId),
     getSessionWithEvents(sessionId),
     getCurrentUser(),
     getCurrentTeamId(),
   ]);
 
-  if (!subject || !mission || !session || !user) notFound();
+  if (!subject || !mission || !session || !user) {
+    notFound();
+  }
 
-  return forceArray(session.modules).map((module) => {
-    const event = firstIfArray(module.event);
-
+  if (session.scheduled_for && new Date(session.scheduled_for) > new Date()) {
     return (
-      <EventCard
-        event={event}
-        eventType={module}
-        isTeamMember={subject.team_id === teamId}
-        key={module.id}
-        mission={mission}
-        subjectId={subjectId}
-        userId={user.id}
-      />
+      <Empty className="mt-10 max-w-lg">
+        Scheduled for <DateTime date={session.scheduled_for} formatter="date" />{' '}
+        at <DateTime date={session.scheduled_for} formatter="time" />
+      </Empty>
     );
-  });
+  }
+
+  return (
+    <>
+      {session.title && (
+        <p className="mx-auto -mt-4 max-w-sm px-4 pb-8 text-center">
+          {session.title}
+        </p>
+      )}
+      {forceArray(session.modules).map((module) => {
+        const event = firstIfArray(module.event);
+
+        return (
+          <EventCard
+            event={event}
+            eventType={module}
+            isTeamMember={subject.team_id === teamId}
+            key={module.id}
+            mission={mission}
+            subjectId={subjectId}
+            userId={user.id}
+          />
+        );
+      })}
+    </>
+  );
 };
 
 export default Page;
