@@ -25,7 +25,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="px-4">
-      <LinkList className="m-0">
+      <LinkList
+        className={twMerge('m-0', isTeamMember && 'rounded-b-none border-b-0')}
+      >
         {eventTypes.map((eventType) => (
           <LinkList.Item
             href={`/subjects/${subjectId}/event-types/${eventType.id}`}
@@ -43,7 +45,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       </LinkList>
       {isTeamMember && (
         <Button
-          className={twMerge('w-full', eventTypes.length && 'mt-4')}
+          className={twMerge('w-full', eventTypes.length && 'rounded-t-none')}
           colorScheme="transparent"
           href={`/subjects/${subject.id}/event-types/create`}
           type="button"

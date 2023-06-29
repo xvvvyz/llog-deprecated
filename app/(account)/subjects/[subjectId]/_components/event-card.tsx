@@ -56,14 +56,14 @@ const EventCard = ({
         </div>
       )}
       {(showModule || showDescription) && (
-        <div className="flex flex-col gap-8 border-b border-alpha-1 pb-8 pt-7">
+        <div className="flex flex-col gap-8 border-b border-alpha-1 py-8">
           {showModule && (
             <div className="px-4 font-mono text-fg-3 sm:px-8">
               Module {(eventType.order as number) + 1}
             </div>
           )}
           {showDescription && (
-            <Disclosure className="px-4 sm:px-8" disabled={!event}>
+            <Disclosure disabled={!event}>
               {eventType.content as string}
             </Disclosure>
           )}

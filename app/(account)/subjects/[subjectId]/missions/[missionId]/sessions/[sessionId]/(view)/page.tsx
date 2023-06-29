@@ -65,8 +65,8 @@ const Page = async ({
   if (session.scheduled_for && new Date(session.scheduled_for) > new Date()) {
     return (
       <Empty className="mt-10 max-w-lg">
-        Scheduled for <DateTime date={session.scheduled_for} formatter="date" />{' '}
-        at <DateTime date={session.scheduled_for} formatter="time" />
+        Scheduled for{' '}
+        <DateTime date={session.scheduled_for} formatter="date-time" />
       </Empty>
     );
   }

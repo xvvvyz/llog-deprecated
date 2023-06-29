@@ -33,7 +33,7 @@ const TimelineEventCard = ({
   return (
     <article className="overflow-hidden rounded border border-alpha-1 bg-bg-2">
       <Button
-        className="m-0 w-full gap-4 rounded-t border-b border-alpha-1 p-0 px-4 py-3 leading-snug"
+        className="m-0 w-full gap-6 rounded-t border-b border-alpha-1 p-0 px-4 py-3 leading-snug"
         href={
           lastEventType.session
             ? `/subjects/${subjectId}/missions/${lastEventType.session.mission.id}/sessions/${lastEventType.session.id}`
