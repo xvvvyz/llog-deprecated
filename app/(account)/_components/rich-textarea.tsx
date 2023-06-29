@@ -143,7 +143,10 @@ const RichTextarea = (
   return (
     <div className="group relative w-full">
       {label && (
-        <label className="label" htmlFor={name}>
+        <label
+          className="label"
+          onClick={() => editorRef.current?.commands?.focus('end')}
+        >
           {label}
         </label>
       )}

@@ -83,7 +83,9 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                   variant="link"
                 >
                   <div>
-                    Session {session.order + 1}
+                    <span className="font-mono">
+                      Session {session.order + 1}
+                    </span>
                     {session.title && (
                       <span className="before:px-3 before:text-alpha-4 before:content-['/']">
                         {session.title}

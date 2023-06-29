@@ -57,7 +57,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       <LinkList className="m-0">{listItems}</LinkList>
       {isTeamMember && (
         <Button
-          className={twMerge('w-full', listItems.length && 'mt-4')}
+          className={twMerge('w-full', listItems.length && 'rounded-t-none')}
           colorScheme="transparent"
           href={`/subjects/${subject.id}/missions/create`}
           type="button"

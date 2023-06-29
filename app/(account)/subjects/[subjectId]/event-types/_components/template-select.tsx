@@ -35,17 +35,20 @@ const TemplateSelect = <T extends FieldValues>({
         );
       }
 
-      formSetValue(
-        `${namePrefix}content` as T[string],
-        template.data?.content as PathValue<T, T[string]>
-      );
+      if (template.data?.content) {
+        formSetValue(
+          `${namePrefix}content` as T[string],
+          template.data?.content as PathValue<T, T[string]>
+        );
+      }
 
-      formSetValue(
-        `${namePrefix}inputs` as T[string],
-        availableInputs.filter(({ id }) =>
-          forceArray(template.data?.inputIds).includes(id)
-        ) as PathValue<T, T[string]>
-      );
+      const inputs = availableInputs.filter(({ id }) =>
+        forceArray(template.data?.inputIds).includes(id)
+      ) as PathValue<T, T[string]>;
+
+      if (inputs.length) {
+        formSetValue(`${namePrefix}inputs` as T[string], inputs);
+      }
     }}
     options={templateOptions}
     placeholder="Copy values from template…"

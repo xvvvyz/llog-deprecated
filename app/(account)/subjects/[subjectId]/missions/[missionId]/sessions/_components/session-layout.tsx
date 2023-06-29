@@ -86,26 +86,28 @@ const SessionLayout = async ({
           label="Previous session"
           replace
         />
-        <div className="flex items-center gap-6">
-          <span className="text-fg-3">
+        <div className="flex items-baseline gap-6">
+          <span className="font-mono text-fg-3">
             Session {sessionIndex + 1} of {totalSessions}
           </span>
           {subject.team_id === teamId &&
             (isEditOrCreate ? (
               <Button
+                className="items-baseline"
                 disabled={!!order}
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}`}
                 variant="link"
               >
-                <EyeIcon className="w-5" />
+                <EyeIcon className="relative top-1 w-5" />
                 View
               </Button>
             ) : (
               <Button
+                className="items-baseline"
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}/edit`}
                 variant="link"
               >
-                <PencilIcon className="w-5" />
+                <PencilIcon className="relative top-1 w-5" />
                 Edit
               </Button>
             ))}

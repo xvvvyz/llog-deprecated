@@ -11,9 +11,9 @@ import {
 } from '@heroicons/react/24/outline';
 
 const icons = {
-  arrow: <ArrowRightIcon className="w-5" />,
-  edit: <PencilIcon className="w-5" />,
-  trash: <TrashIcon className="w-5" />,
+  arrow: <ArrowRightIcon className="ml-auto w-5 shrink-0" />,
+  edit: <PencilIcon className="ml-auto w-5 shrink-0" />,
+  trash: <TrashIcon className="ml-auto w-5 shrink-0" />,
 };
 
 interface LinkListProps {
@@ -83,7 +83,7 @@ const LinkList = Object.assign(
             </div>
           )}
           <span className="leading-snug [overflow-wrap:anywhere]">{text}</span>
-          <div className="ml-auto shrink-0">{icons[icon]}</div>
+          {icons[icon]}
         </Button>
         {rightIcon && rightLabel && (
           <IconButton

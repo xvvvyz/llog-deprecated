@@ -84,7 +84,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       <Controller
         control={form.control}
         name="content"
-        render={({ field }) => <RichTextarea label="Description" {...field} />}
+        render={({ field }) => <RichTextarea label="Content" {...field} />}
       />
       <Controller
         control={form.control}

@@ -33,7 +33,7 @@ const TimelineEventCard = ({
   return (
     <article className="overflow-hidden rounded border border-alpha-1 bg-bg-2">
       <Button
-        className="m-0 w-full gap-4 rounded-t border-b border-alpha-1 p-0 px-4 py-3"
+        className="m-0 w-full gap-4 rounded-t border-b border-alpha-1 p-0 px-4 py-3 leading-snug"
         href={
           lastEventType.session
             ? `/subjects/${subjectId}/missions/${lastEventType.session.mission.id}/sessions/${lastEventType.session.id}`
@@ -41,14 +41,14 @@ const TimelineEventCard = ({
         }
         variant="link"
       >
-        <span className="leading-snug">
-          {lastEventType.session
-            ? lastEventType.session.mission.name
-            : lastEventType.name}
-        </span>
+        {lastEventType.session
+          ? lastEventType.session.mission.name
+          : lastEventType.name}
         <div className="ml-auto flex shrink-0 items-center gap-4">
           {lastEventType.session && (
-            <span className="text-fg-3">Session {sessionNumber}</span>
+            <span className="relative top-px font-mono">
+              Session {sessionNumber}
+            </span>
           )}
           <ArrowRightIcon className="w-5" />
         </div>

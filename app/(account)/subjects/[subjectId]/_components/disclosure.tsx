@@ -17,7 +17,7 @@ const Disclosure = ({ children, className, disabled }: DisclosureProps) => {
   return (
     <div
       className={twMerge(
-        'group relative -mb-8 -mt-9 max-h-24 overflow-hidden py-8 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-[hsla(40,5%,13%,0.3)] after:via-[hsla(40,5%,13%,0.9)] after:to-[hsl(40,5%,13%)]',
+        'group relative -mb-8 -mt-9 max-h-24 overflow-hidden py-8 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-transparent after:via-[hsla(40,5%,13%,0.75)] after:to-[hsl(40,5%,13%)]',
         disclosure.value && 'max-h-full after:hidden',
         disabled ? 'cursor-default' : 'select-none',
         className
@@ -31,7 +31,7 @@ const Disclosure = ({ children, className, disabled }: DisclosureProps) => {
     >
       <DirtyHtml>{children}</DirtyHtml>
       {!disclosure.value && (
-        <ChevronDownIcon className="absolute bottom-4 left-1/2 z-10 w-5 -translate-x-1/2 text-fg-2 transition-colors group-hover:text-fg-1" />
+        <ChevronDownIcon className="absolute bottom-4 left-1/2 z-10 w-7 -translate-x-1/2 text-fg-2 transition-colors group-hover:text-fg-1" />
       )}
     </div>
   );
