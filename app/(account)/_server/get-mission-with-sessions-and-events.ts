@@ -21,6 +21,7 @@ const getMissionWithSessionsAndEvents = (missionId: string) =>
     .eq('id', missionId)
     .eq('sessions.deleted', false)
     .order('order', { foreignTable: 'sessions' })
+    .eq('sessions.modules.deleted', false)
     .single();
 
 export type GetMissionWithSessionsAndEventsData = Awaited<
