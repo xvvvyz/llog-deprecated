@@ -84,6 +84,8 @@ const SessionForm = ({
   const isMovingLeft = useBoolean();
   const isMovingRight = useBoolean();
   const modules = forceArray(session?.modules);
+  const moveLeftAlert = useBoolean();
+  const moveRightAlert = useBoolean();
   const hasEvents = modules.some((module) => module.events?.length);
   const router = useRouter();
   const scheduleModal = useBoolean();
@@ -417,27 +419,7 @@ const SessionForm = ({
                 isMovingLeft.value ||
                 isMoveLeftTransitioning
               }
-              onClick={async () => {
-                const newOrder = currentOrder - 1;
-
-                if (session) {
-                  isMovingLeft.setTrue();
-                  await reorderSession(newOrder);
-                  isMovingLeft.setFalse();
-                  startMoveLeftTransition(router.refresh);
-                } else {
-                  globalValueCache.set(CacheKeys.SessionForm, {
-                    ...form.getValues(),
-                    order: newOrder,
-                  });
-
-                  startMoveLeftTransition(() =>
-                    router.push(
-                      `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-                    )
-                  );
-                }
-              }}
+              onClick={moveLeftAlert.setTrue}
               size="sm"
             >
               <ArrowLeftIcon className="-ml-1 w-5" />
@@ -450,27 +432,7 @@ const SessionForm = ({
                 isMovingRight.value ||
                 isMoveRightTransitioning
               }
-              onClick={async () => {
-                const newOrder = currentOrder + 1;
-
-                if (session) {
-                  isMovingRight.setTrue();
-                  await reorderSession(newOrder);
-                  isMovingRight.setFalse();
-                  startMoveRightTransition(router.refresh);
-                } else {
-                  globalValueCache.set(CacheKeys.SessionForm, {
-                    ...form.getValues(),
-                    order: newOrder,
-                  });
-
-                  startMoveRightTransition(() =>
-                    router.push(
-                      `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-                    )
-                  );
-                }
-              }}
+              onClick={moveRightAlert.setTrue}
               size="sm"
             >
               Move
@@ -570,6 +532,69 @@ const SessionForm = ({
           });
         }}
         {...deleteAlert}
+      />
+      <Alert
+        cancelText="Close"
+        confirmText="Move session"
+        description={`Swap positions with session ${currentOrder}`}
+        isConfirming={isMovingLeft.value || isMoveLeftTransitioning}
+        isConfirmingText="Moving session…"
+        onConfirm={async () => {
+          const newOrder = currentOrder - 1;
+
+          if (session) {
+            isMovingLeft.setTrue();
+            await reorderSession(newOrder);
+            isMovingLeft.setFalse();
+            startMoveLeftTransition(router.refresh);
+          } else {
+            globalValueCache.set(CacheKeys.SessionForm, {
+              ...form.getValues(),
+              order: newOrder,
+            });
+
+            startMoveLeftTransition(() =>
+              router.push(
+                `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
+              )
+            );
+          }
+
+          moveLeftAlert.setFalse();
+        }}
+        title={`Move session ${currentOrder + 1}`}
+        {...moveLeftAlert}
+      />
+      <Alert
+        confirmText="Move session"
+        description={`Swap positions with session ${currentOrder + 2}`}
+        isConfirming={isMovingRight.value || isMoveRightTransitioning}
+        isConfirmingText="Moving session…"
+        onConfirm={async () => {
+          const newOrder = currentOrder + 1;
+
+          if (session) {
+            isMovingRight.setTrue();
+            await reorderSession(newOrder);
+            isMovingRight.setFalse();
+            startMoveRightTransition(router.refresh);
+          } else {
+            globalValueCache.set(CacheKeys.SessionForm, {
+              ...form.getValues(),
+              order: newOrder,
+            });
+
+            startMoveRightTransition(() =>
+              router.push(
+                `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
+              )
+            );
+          }
+
+          moveRightAlert.setFalse();
+        }}
+        title={`Move session ${currentOrder + 1}`}
+        {...moveRightAlert}
       />
       <Dialog
         className="relative z-10"

@@ -62,7 +62,7 @@ const LinkList = Object.assign(
       <li className="group flex">
         <Button
           className={twMerge(
-            'm-0 grow gap-6 overflow-hidden px-4 py-3',
+            'm-0 grow gap-4 overflow-hidden px-4 py-3',
             className
           )}
           href={href}
@@ -70,14 +70,14 @@ const LinkList = Object.assign(
           variant="link"
         >
           {avatars && !!avatars.length && (
-            <div className="mr-2 flex">
+            <div className="flex gap-1">
               {avatars.map(({ id, image_uri, name }) => (
                 <Avatar
-                  className="-mr-2 border border-alpha-reverse-2 bg-bg-2"
+                  className="-my-0.5"
                   file={image_uri}
                   key={id}
                   name={name}
-                  size="sm"
+                  size={avatars.length > 1 ? 'xs' : 'sm'}
                 />
               ))}
             </div>
