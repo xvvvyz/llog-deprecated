@@ -38,7 +38,7 @@ const SessionLayout = async ({
 
   const [{ data: subject }, { data: mission }, teamId] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMissionWithSessions(missionId, isEditOrCreate),
     getCurrentTeamId(),
   ]);
 
@@ -55,16 +55,37 @@ const SessionLayout = async ({
   }
 
   const sessions = forceArray(mission.sessions);
+  const currentSession = sessions.find(({ id }) => id === sessionId);
+  const sessionOrder = order ? Number(order) : currentSession?.order;
+  if (typeof sessionOrder === 'undefined') notFound();
 
-  const sessionIndex = order
-    ? Math.max(0, Math.min(Number(order), sessions.length))
-    : sessions.findIndex(({ id }) => id === sessionId);
+  const { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
+    (acc, session, i) => {
+      acc.highestOrder = Math.max(acc.highestOrder, session.order);
 
-  if (sessionIndex === -1) notFound();
-  const previousSessionId = sessions[sessionIndex - 1]?.id;
-  const nextSessionId = sessions[sessionIndex + (order ? 0 : 1)]?.id;
-  const totalSessions = sessions.length + (order ? 1 : 0);
+      if (currentSession) {
+        if (currentSession.id === session.id) {
+          acc.nextSessionId = sessions[i + 1]?.id;
+          acc.previousSessionId = sessions[i - 1]?.id;
+        }
+      } else {
+        if (session.order === sessionOrder) {
+          acc.nextSessionId = sessions[i + 1]?.id;
+          acc.previousSessionId = sessions[i]?.id;
+        }
+      }
+
+      return acc;
+    },
+    {
+      highestOrder: sessionOrder,
+      nextSessionId: null,
+      previousSessionId: sessions[sessionOrder - 1]?.id ?? null,
+    }
+  );
+
   const editSuffix = isEditOrCreate ? '/edit' : '';
+  const nextSessionOrder = highestOrder + 1;
 
   return (
     <>
@@ -80,7 +101,7 @@ const SessionLayout = async ({
       </Header>
       <nav className="flex w-full items-center justify-between px-4">
         <IconButton
-          disabled={!sessionIndex}
+          disabled={!previousSessionId}
           href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
           label="Previous session"
@@ -88,13 +109,15 @@ const SessionLayout = async ({
         />
         <div className="flex items-baseline gap-6">
           <span className="font-mono text-fg-3">
-            Session {sessionIndex + 1} of {totalSessions}
+            Session {sessionOrder + 1} of {highestOrder + 1}
           </span>
-          {subject.team_id === teamId &&
+          {currentSession?.draft || order ? (
+            <span className="smallcaps">Draft</span>
+          ) : (
+            subject.team_id === teamId &&
             (isEditOrCreate ? (
               <Button
-                className="items-baseline"
-                disabled={!!order}
+                className="-my-4 items-baseline"
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}`}
                 variant="link"
               >
@@ -103,26 +126,27 @@ const SessionLayout = async ({
               </Button>
             ) : (
               <Button
-                className="items-baseline"
+                className="-my-4 items-baseline"
                 href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}/edit`}
                 variant="link"
               >
                 <PencilIcon className="relative top-1 w-5" />
                 Edit
               </Button>
-            ))}
+            ))
+          )}
         </div>
-        {isEditOrCreate && sessionIndex >= totalSessions - 1 ? (
+        {isEditOrCreate && sessionOrder >= highestOrder ? (
           <IconButton
             disabled={!!order}
-            href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${sessions.length}`}
+            href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative -right-2 w-7" />}
             label="Add session"
             replace
           />
         ) : (
           <IconButton
-            disabled={sessionIndex >= totalSessions - 1}
+            disabled={!nextSessionId}
             href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative -right-2 w-7" />}
             label="Next session"

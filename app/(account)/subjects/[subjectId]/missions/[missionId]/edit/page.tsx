@@ -2,7 +2,6 @@ import BackButton from '@/(account)/_components/back-button';
 import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
 import getMission from '@/(account)/_server/get-mission';
-import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
 import getSubject from '@/(account)/_server/get-subject';
 import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/missions/_components/mission-form';
@@ -13,7 +12,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMission(missionId),
   ]);
 
   return {

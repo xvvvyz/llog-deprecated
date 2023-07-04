@@ -4,7 +4,9 @@ import DateTime from '@/(account)/_components/date-time';
 import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
 import IconButton from '@/(account)/_components/icon-button';
-import getMissionWithSessionsAndEvents from '@/(account)/_server/get-mission-with-sessions-and-events';
+import getMissionWithSessionsAndEvents, {
+  GetMissionWithSessionsAndEventsData,
+} from '@/(account)/_server/get-mission-with-sessions-and-events';
 import getSubject from '@/(account)/_server/get-subject';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatTitle from '@/(account)/_utilities/format-title';
@@ -41,7 +43,18 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   ]);
 
   if (!subject || !mission) notFound();
-  const sessions = forceArray(mission.sessions).reverse();
+  const sessions = forceArray(mission.sessions);
+
+  const { highestOrder, sessionsReversed } = sessions.reduce(
+    (acc, session, i) => {
+      acc.highestOrder = Math.max(acc.highestOrder, session.order);
+      acc.sessionsReversed.push(sessions[sessions.length - i - 1]);
+      return acc;
+    },
+    { highestOrder: 0, sessionsReversed: [] }
+  );
+
+  const nextSessionOrder = highestOrder + 1;
 
   return (
     <>
@@ -63,52 +76,57 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
       <Header className="-mt-3">
         <h1 className="text-2xl">Sessions</h1>
         <Button
-          href={`/subjects/${subjectId}/missions/${missionId}/sessions/create/${sessions.length}`}
+          href={`/subjects/${subjectId}/missions/${missionId}/sessions/create/${nextSessionOrder}`}
           size="sm"
         >
           Add session
         </Button>
       </Header>
-      {sessions.length ? (
+      {sessionsReversed.length ? (
         <ul className="mx-4 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 leading-snug">
-          {sessions.map((session) => {
-            const modules = forceArray(session.modules);
-            const completedModules = modules.filter((m) => m.events.length);
+          {sessionsReversed.map(
+            (session: GetMissionWithSessionsAndEventsData['sessions'][0]) => {
+              const modules = forceArray(session.modules);
+              const completedModules = modules.filter((m) => m.events.length);
 
-            return (
-              <li key={session.id}>
-                <Button
-                  className="m-0 w-full justify-between gap-6 px-4 py-3"
-                  href={`/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`}
-                  variant="link"
-                >
-                  <div>
-                    <span className="font-mono">
-                      Session {session.order + 1}
-                    </span>
-                    {session.title && (
-                      <span className="before:px-3 before:text-alpha-4 before:content-['/']">
-                        {session.title}
+              return (
+                <li key={session.id}>
+                  <Button
+                    className="m-0 w-full justify-between gap-6 px-4 py-3"
+                    href={`/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`}
+                    variant="link"
+                  >
+                    <div>
+                      <span className="font-mono">
+                        Session {session.order + 1}
                       </span>
-                    )}
-                    <div className="smallcaps pb-1 pt-2 text-fg-3">
-                      {new Date(session.scheduled_for) > new Date() ? (
-                        <DateTime
-                          date={session.scheduled_for}
-                          formatter="date"
-                        />
-                      ) : completedModules.length ? (
-                        `${completedModules.length} of ${modules.length} completed`
-                      ) : (
-                        'Not started'
+                      {session.title && (
+                        <span className="before:px-3 before:text-alpha-4 before:content-['/']">
+                          {session.title}
+                        </span>
                       )}
+                      <div className="smallcaps pb-1 pt-2 text-fg-3">
+                        {session.draft ? (
+                          'Draft'
+                        ) : new Date(session.scheduled_for ?? '') >
+                          new Date() ? (
+                          <DateTime
+                            date={session.scheduled_for ?? ''}
+                            formatter="date"
+                          />
+                        ) : completedModules.length ? (
+                          `${completedModules.length} of ${modules.length} completed`
+                        ) : (
+                          'Not started'
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <PencilIcon className="w-5 shrink-0" />
-                </Button>
-              </li>
-            );
-          })}
+                    <PencilIcon className="w-5 shrink-0" />
+                  </Button>
+                </li>
+              );
+            }
+          )}
         </ul>
       ) : (
         <Empty>No sessions</Empty>

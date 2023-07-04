@@ -91,17 +91,11 @@ const SessionForm = ({
   const scheduleModal = useBoolean();
   const sensors = useSensors(useSensor(PointerSensor));
   const sessions = forceArray(mission.sessions);
-  const totalSessions = sessions.length + (typeof order === 'number' ? 1 : 0);
   const supabase = useSupabase();
 
-  const { nextSession, previousSession } = sessions.reduce(
-    (acc, s, i) => {
-      if (s.id !== session?.id) return acc;
-      acc.previousSession = sessions[i - 1];
-      acc.nextSession = sessions[i + 1];
-      return acc;
-    },
-    { nextSession: null, previousSession: null }
+  const highestPublishedOrder = sessions.reduce(
+    (acc, s) => (s.draft ? acc : Math.max(acc, s.order)),
+    0
   );
 
   const moduleIdEventMap = modules.reduce((acc, module) => {
@@ -113,6 +107,7 @@ const SessionForm = ({
     defaultValues: useDefaultValues({
       cacheKey: CacheKeys.SessionForm,
       defaultValues: {
+        draft: session?.draft ?? true,
         id: session?.id,
         modules: modules.length
           ? modules.map((module) => ({
@@ -147,6 +142,7 @@ const SessionForm = ({
   });
 
   const scheduledFor = form.watch('scheduled_for');
+  const draft = form.watch('draft');
 
   const cancelScheduleModal = () => {
     form.setValue('scheduled_for', ogScheduledFor ?? null);
@@ -164,7 +160,7 @@ const SessionForm = ({
       sessions.reduce((acc, s) => {
         const common = { id: s.id, mission_id: mission.id };
 
-        if (s.order === newOrder) {
+        if (s.order === newOrder && !draft) {
           acc.push({ ...common, order: currentOrder });
         } else if (s.id === session?.id) {
           acc.push({ ...common, order: newOrder });
@@ -174,190 +170,190 @@ const SessionForm = ({
       }, [])
     );
 
+  const onSubmit = form.handleSubmit(async (values) => {
+    const finalOrder = values.draft
+      ? values.order
+      : Math.min(values.order, highestPublishedOrder + 1);
+
+    if (!values.draft) {
+      const { error: sessionsError } = await supabase.from('sessions').upsert(
+        sessions
+          .filter((session) => session.id !== values.id && !session.draft)
+          .map((session, index) => ({
+            id: session.id,
+            mission_id: mission.id,
+            order: index < finalOrder ? index : index + 1,
+          }))
+      );
+
+      if (sessionsError) {
+        alert(sessionsError.message);
+        return;
+      }
+    }
+
+    const { data: sessionData, error: sessionError } = await supabase
+      .from('sessions')
+      .upsert({
+        draft: values.draft,
+        id: values.id,
+        mission_id: mission.id,
+        order: finalOrder,
+        scheduled_for: values.scheduled_for
+          ? new Date(values.scheduled_for).toISOString()
+          : null,
+        title: values.title,
+      })
+      .select('id')
+      .single();
+
+    if (sessionError) {
+      alert(sessionError.message);
+      return;
+    }
+
+    form.setValue('id', sessionData.id);
+
+    const { insertedEventTypes, updatedEventTypes } = values.modules.reduce(
+      (acc, module, order) => {
+        const payload: Database['public']['Tables']['event_types']['Insert'] = {
+          content: sanitizeHtml(module.content),
+          order,
+          session_id: sessionData.id,
+          subject_id: subjectId,
+        };
+
+        if (module.id) {
+          payload.id = module.id;
+          acc.updatedEventTypes.push(payload);
+        } else {
+          acc.insertedEventTypes.push(payload);
+        }
+
+        return acc;
+      },
+      {
+        insertedEventTypes: [] as Array<
+          Database['public']['Tables']['event_types']['Insert']
+        >,
+        updatedEventTypes: [] as Array<
+          Database['public']['Tables']['event_types']['Insert']
+        >,
+      }
+    );
+
+    const deletedEventTypeIds = modules.reduce((acc, module) => {
+      if (!updatedEventTypes.some(({ id }) => id === module.id)) {
+        acc.push(module.id);
+      }
+
+      return acc;
+    }, [] as string[]);
+
+    if (deletedEventTypeIds.length) {
+      const { error: deletedEventTypesError } = await supabase
+        .from('event_types')
+        .update({ deleted: true })
+        .in('id', deletedEventTypeIds);
+
+      if (deletedEventTypesError) {
+        alert(deletedEventTypesError.message);
+        return;
+      }
+    }
+
+    if (updatedEventTypes.length) {
+      const { error: updateEventTypesError } = await supabase
+        .from('event_types')
+        .upsert(updatedEventTypes);
+
+      if (updateEventTypesError) {
+        alert(updateEventTypesError.message);
+        return;
+      }
+    }
+
+    if (insertedEventTypes.length) {
+      const { data: insertEventTypesData, error: insertEventTypesError } =
+        await supabase
+          .from('event_types')
+          .upsert(insertedEventTypes)
+          .select('id');
+
+      if (insertEventTypesError) {
+        alert(insertEventTypesError.message);
+        return;
+      }
+
+      const insertEventTypesDataReverse = insertEventTypesData.reverse();
+
+      form.setValue(
+        'modules',
+        values.modules.map((module) => {
+          if (module.id) return module;
+          const id = insertEventTypesDataReverse.pop()?.id;
+          if (!id) return module;
+          return { ...module, id };
+        })
+      );
+    }
+
+    const { deleteEventTypeInputs, insertEventTypeInputs } = form
+      .getValues('modules')
+      .reduce(
+        (acc, module) => {
+          if (module.id) acc.deleteEventTypeInputs.push(module.id);
+
+          module.inputs.forEach((input, order) => {
+            acc.insertEventTypeInputs.push({
+              event_type_id: module.id,
+              input_id: input.id,
+              order,
+            });
+          });
+
+          return acc;
+        },
+        {
+          deleteEventTypeInputs: [] as string[],
+          insertEventTypeInputs: [] as Array<
+            Database['public']['Tables']['event_type_inputs']['Insert']
+          >,
+        }
+      );
+
+    if (deleteEventTypeInputs.length) {
+      const { error: deleteEventTypeInputsError } = await supabase
+        .from('event_type_inputs')
+        .delete()
+        .in('event_type_id', deleteEventTypeInputs);
+
+      if (deleteEventTypeInputsError) {
+        alert(deleteEventTypeInputsError.message);
+        return;
+      }
+    }
+
+    if (insertEventTypeInputs.length) {
+      const { error: insertEventTypeInputsError } = await supabase
+        .from('event_type_inputs')
+        .insert(insertEventTypeInputs);
+
+      if (insertEventTypeInputsError) {
+        alert(insertEventTypeInputsError.message);
+        return;
+      }
+    }
+
+    startFormTransition(() => {
+      router.refresh();
+      router.push(`/subjects/${subjectId}/missions/${mission.id}/sessions`);
+    });
+  });
+
   return (
     <>
-      <form
-        onSubmit={form.handleSubmit(async (values) => {
-          const { error: sessionsError } = await supabase
-            .from('sessions')
-            .upsert(
-              sessions
-                .filter((session) => session.id !== values.id)
-                .map((session, index) => ({
-                  id: session.id,
-                  mission_id: mission.id,
-                  order: index < values.order ? index : index + 1,
-                }))
-            );
-
-          if (sessionsError) {
-            alert(sessionsError.message);
-            return;
-          }
-
-          const { data: sessionData, error: sessionError } = await supabase
-            .from('sessions')
-            .upsert({
-              id: values.id,
-              mission_id: mission.id,
-              order: values.order,
-              scheduled_for: values.scheduled_for
-                ? new Date(values.scheduled_for).toISOString()
-                : null,
-              title: values.title,
-            })
-            .select('id')
-            .single();
-
-          if (sessionError) {
-            alert(sessionError.message);
-            return;
-          }
-
-          form.setValue('id', sessionData.id);
-
-          const { insertedEventTypes, updatedEventTypes } =
-            values.modules.reduce(
-              (acc, module, order) => {
-                const payload: Database['public']['Tables']['event_types']['Insert'] =
-                  {
-                    content: sanitizeHtml(module.content),
-                    order,
-                    session_id: sessionData.id,
-                    subject_id: subjectId,
-                  };
-
-                if (module.id) {
-                  payload.id = module.id;
-                  acc.updatedEventTypes.push(payload);
-                } else {
-                  acc.insertedEventTypes.push(payload);
-                }
-
-                return acc;
-              },
-              {
-                insertedEventTypes: [] as Array<
-                  Database['public']['Tables']['event_types']['Insert']
-                >,
-                updatedEventTypes: [] as Array<
-                  Database['public']['Tables']['event_types']['Insert']
-                >,
-              }
-            );
-
-          const deletedEventTypeIds = modules.reduce((acc, module) => {
-            if (!updatedEventTypes.some(({ id }) => id === module.id)) {
-              acc.push(module.id);
-            }
-
-            return acc;
-          }, [] as string[]);
-
-          if (deletedEventTypeIds.length) {
-            const { error: deletedEventTypesError } = await supabase
-              .from('event_types')
-              .update({ deleted: true })
-              .in('id', deletedEventTypeIds);
-
-            if (deletedEventTypesError) {
-              alert(deletedEventTypesError.message);
-              return;
-            }
-          }
-
-          if (updatedEventTypes.length) {
-            const { error: updateEventTypesError } = await supabase
-              .from('event_types')
-              .upsert(updatedEventTypes);
-
-            if (updateEventTypesError) {
-              alert(updateEventTypesError.message);
-              return;
-            }
-          }
-
-          if (insertedEventTypes.length) {
-            const { data: insertEventTypesData, error: insertEventTypesError } =
-              await supabase
-                .from('event_types')
-                .upsert(insertedEventTypes)
-                .select('id');
-
-            if (insertEventTypesError) {
-              alert(insertEventTypesError.message);
-              return;
-            }
-
-            const insertEventTypesDataReverse = insertEventTypesData.reverse();
-
-            form.setValue(
-              'modules',
-              values.modules.map((module) => {
-                if (module.id) return module;
-                const id = insertEventTypesDataReverse.pop()?.id;
-                if (!id) return module;
-                return { ...module, id };
-              })
-            );
-          }
-
-          const { deleteEventTypeInputs, insertEventTypeInputs } = form
-            .getValues('modules')
-            .reduce(
-              (acc, module) => {
-                if (module.id) acc.deleteEventTypeInputs.push(module.id);
-
-                module.inputs.forEach((input, order) => {
-                  acc.insertEventTypeInputs.push({
-                    event_type_id: module.id,
-                    input_id: input.id,
-                    order,
-                  });
-                });
-
-                return acc;
-              },
-              {
-                deleteEventTypeInputs: [] as string[],
-                insertEventTypeInputs: [] as Array<
-                  Database['public']['Tables']['event_type_inputs']['Insert']
-                >,
-              }
-            );
-
-          if (deleteEventTypeInputs.length) {
-            const { error: deleteEventTypeInputsError } = await supabase
-              .from('event_type_inputs')
-              .delete()
-              .in('event_type_id', deleteEventTypeInputs);
-
-            if (deleteEventTypeInputsError) {
-              alert(deleteEventTypeInputsError.message);
-              return;
-            }
-          }
-
-          if (insertEventTypeInputs.length) {
-            const { error: insertEventTypeInputsError } = await supabase
-              .from('event_type_inputs')
-              .insert(insertEventTypeInputs);
-
-            if (insertEventTypeInputsError) {
-              alert(insertEventTypeInputsError.message);
-              return;
-            }
-          }
-
-          startFormTransition(() => {
-            router.refresh();
-
-            router.push(
-              `/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionData.id}/edit`
-            );
-          });
-        })}
-      >
+      <form>
         <div className="flex flex-wrap justify-center gap-2 px-4">
           <Button
             colorScheme="transparent"
@@ -377,7 +373,12 @@ const SessionForm = ({
             disabled={!session || isDuplicateTransitioning}
             onClick={() => {
               if (!session) return;
-              const newOrder = currentOrder + 1;
+
+              const newOrder = Math.max(
+                currentOrder + 1,
+                highestPublishedOrder + 1
+              );
+
               const values = form.getValues();
 
               globalValueCache.set(CacheKeys.SessionForm, {
@@ -419,7 +420,25 @@ const SessionForm = ({
                 isMovingLeft.value ||
                 isMoveLeftTransitioning
               }
-              onClick={moveLeftAlert.setTrue}
+              onClick={() => {
+                if (session) {
+                  moveLeftAlert.setTrue();
+                  return;
+                }
+
+                const newOrder = currentOrder - 1;
+
+                globalValueCache.set(CacheKeys.SessionForm, {
+                  ...form.getValues(),
+                  order: newOrder,
+                });
+
+                startMoveLeftTransition(() =>
+                  router.push(
+                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
+                  )
+                );
+              }}
               size="sm"
             >
               <ArrowLeftIcon className="-ml-1 w-5" />
@@ -428,11 +447,29 @@ const SessionForm = ({
             <Button
               colorScheme="transparent"
               disabled={
-                currentOrder >= totalSessions - 1 ||
+                (!draft && currentOrder >= highestPublishedOrder) ||
                 isMovingRight.value ||
                 isMoveRightTransitioning
               }
-              onClick={moveRightAlert.setTrue}
+              onClick={() => {
+                if (session) {
+                  moveRightAlert.setTrue();
+                  return;
+                }
+
+                const newOrder = currentOrder + 1;
+
+                globalValueCache.set(CacheKeys.SessionForm, {
+                  ...form.getValues(),
+                  order: newOrder,
+                });
+
+                startMoveRightTransition(() =>
+                  router.push(
+                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
+                  )
+                );
+              }}
               size="sm"
             >
               Move
@@ -490,13 +527,35 @@ const SessionForm = ({
             <PlusIcon className="w-5" />
             Add module
           </Button>
+        </div>
+        <div className="form mt-4 flex-row gap-4">
+          {draft && (
+            <Button
+              className="w-full"
+              colorScheme="transparent"
+              disabled={form.formState.isSubmitting || isFormTransitioning}
+              loading={
+                draft && (form.formState.isSubmitting || isFormTransitioning)
+              }
+              loadingText="Saving…"
+              onClick={onSubmit}
+            >
+              Save as draft
+            </Button>
+          )}
           <Button
             className="w-full"
-            loading={form.formState.isSubmitting || isFormTransitioning}
+            disabled={form.formState.isSubmitting || isFormTransitioning}
+            loading={
+              !draft && (form.formState.isSubmitting || isFormTransitioning)
+            }
             loadingText="Saving…"
-            type="submit"
+            onClick={() => {
+              form.setValue('draft', false);
+              void onSubmit();
+            }}
           >
-            Save session
+            {draft ? <>Save &amp; publish</> : <>Save session</>}
           </Button>
         </div>
       </form>
@@ -520,14 +579,25 @@ const SessionForm = ({
             return;
           }
 
+          await supabase.from('sessions').upsert(
+            sessions.reduce((acc, s) => {
+              if (s.order > currentOrder && !s.draft) {
+                acc.push({
+                  id: s.id,
+                  mission_id: mission.id,
+                  order: s.order - 1,
+                });
+              }
+
+              return acc;
+            }, [])
+          );
+
           startDeleteTransition(() => {
-            let suffix = '';
-            if (nextSession) suffix = `/${nextSession.id}/edit`;
-            else if (previousSession) suffix = `/${previousSession.id}/edit`;
             router.refresh();
 
             router.replace(
-              `/subjects/${subjectId}/missions/${mission.id}/sessions${suffix}`
+              `/subjects/${subjectId}/missions/${mission.id}/sessions`
             );
           });
         }}
@@ -536,64 +606,40 @@ const SessionForm = ({
       <Alert
         cancelText="Close"
         confirmText="Move session"
-        description={`Swap positions with session ${currentOrder}`}
+        description={`Current position: ${currentOrder + 1}`}
         isConfirming={isMovingLeft.value || isMoveLeftTransitioning}
         isConfirmingText="Moving session…"
         onConfirm={async () => {
+          isMovingLeft.setTrue();
           const newOrder = currentOrder - 1;
-
-          if (session) {
-            isMovingLeft.setTrue();
-            await reorderSession(newOrder);
-            isMovingLeft.setFalse();
-            startMoveLeftTransition(router.refresh);
-          } else {
-            globalValueCache.set(CacheKeys.SessionForm, {
-              ...form.getValues(),
-              order: newOrder,
-            });
-
-            startMoveLeftTransition(() =>
-              router.push(
-                `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-              )
-            );
-          }
-
-          moveLeftAlert.setFalse();
+          await reorderSession(newOrder);
+          form.setValue('order', newOrder);
+          isMovingLeft.setFalse();
+          startMoveLeftTransition(router.refresh);
+          if (newOrder < 1) moveLeftAlert.setFalse();
         }}
-        title={`Move session ${currentOrder + 1}`}
+        title={`New position: ${currentOrder}`}
         {...moveLeftAlert}
       />
       <Alert
+        cancelText="Close"
         confirmText="Move session"
-        description={`Swap positions with session ${currentOrder + 2}`}
+        description={`Current position: ${currentOrder + 1}`}
         isConfirming={isMovingRight.value || isMoveRightTransitioning}
         isConfirmingText="Moving session…"
         onConfirm={async () => {
+          isMovingRight.setTrue();
           const newOrder = currentOrder + 1;
+          await reorderSession(newOrder);
+          form.setValue('order', newOrder);
+          isMovingRight.setFalse();
+          startMoveRightTransition(router.refresh);
 
-          if (session) {
-            isMovingRight.setTrue();
-            await reorderSession(newOrder);
-            isMovingRight.setFalse();
-            startMoveRightTransition(router.refresh);
-          } else {
-            globalValueCache.set(CacheKeys.SessionForm, {
-              ...form.getValues(),
-              order: newOrder,
-            });
-
-            startMoveRightTransition(() =>
-              router.push(
-                `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-              )
-            );
+          if (!draft && newOrder >= highestPublishedOrder) {
+            moveRightAlert.setFalse();
           }
-
-          moveRightAlert.setFalse();
         }}
-        title={`Move session ${currentOrder + 1}`}
+        title={`New position: ${currentOrder + 2}`}
         {...moveRightAlert}
       />
       <Dialog

@@ -16,7 +16,7 @@ export const generateMetadata = async ({
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMissionWithSessions(missionId, true),
   ]);
 
   return {
@@ -45,7 +45,7 @@ const Page = async ({
     { data: availableTemplates },
   ] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId),
+    getMissionWithSessions(missionId, true),
     getSession(sessionId),
     listInputs(),
     listTemplatesWithData(),

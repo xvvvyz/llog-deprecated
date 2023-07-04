@@ -6,6 +6,7 @@ const getSession = (sessionId: string) =>
     .from('sessions')
     .select(
       `
+      draft,
       id,
       order,
       modules:event_types(
