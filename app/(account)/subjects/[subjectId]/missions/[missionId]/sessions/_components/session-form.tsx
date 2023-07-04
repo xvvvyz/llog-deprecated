@@ -95,7 +95,7 @@ const SessionForm = ({
 
   const highestPublishedOrder = sessions.reduce(
     (acc, s) => (s.draft ? acc : Math.max(acc, s.order)),
-    0
+    -1
   );
 
   const moduleIdEventMap = modules.reduce((acc, module) => {

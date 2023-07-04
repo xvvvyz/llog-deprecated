@@ -78,7 +78,7 @@ const SessionLayout = async ({
       return acc;
     },
     {
-      highestOrder: sessionOrder,
+      highestOrder: -1,
       nextSessionId: null,
       previousSessionId: sessions[sessionOrder - 1]?.id ?? null,
     }
@@ -109,7 +109,8 @@ const SessionLayout = async ({
         />
         <div className="flex items-baseline gap-6">
           <span className="font-mono text-fg-3">
-            Session {sessionOrder + 1} of {highestOrder + 1}
+            Session {sessionOrder + 1}
+            {!isEditOrCreate && <> of {highestOrder + 1}</>}
           </span>
           {currentSession?.draft || order ? (
             <span className="smallcaps">Draft</span>
