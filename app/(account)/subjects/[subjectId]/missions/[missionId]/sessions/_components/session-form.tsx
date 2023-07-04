@@ -86,7 +86,7 @@ const SessionForm = ({
   const modules = forceArray(session?.modules);
   const moveLeftAlert = useBoolean();
   const moveRightAlert = useBoolean();
-  const hasEvents = modules.some((module) => module.events?.length);
+  const hasEvents = modules.some((module) => module.event?.length);
   const router = useRouter();
   const scheduleModal = useBoolean();
   const sensors = useSensors(useSensor(PointerSensor));

@@ -12,7 +12,7 @@ const getMissionWithSessionsAndEvents = (missionId: string) =>
         draft,
         id,
         modules:event_types(
-          events(id),
+          event:events(id),
           id
         ),
         order,

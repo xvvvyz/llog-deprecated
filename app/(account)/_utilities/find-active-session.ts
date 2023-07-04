@@ -5,7 +5,7 @@ const findActiveSession = (
     Database['public']['Tables']['sessions']['Row'] & {
       modules: Array<
         Database['public']['Tables']['event_types']['Row'] & {
-          events: Database['public']['Tables']['events']['Row'][];
+          event: Database['public']['Tables']['events']['Row'][];
         }
       >;
     }
@@ -13,8 +13,8 @@ const findActiveSession = (
 ) =>
   sessions.find(({ modules }) =>
     modules.find(
-      (et: { events: Database['public']['Tables']['events']['Row'][] }) =>
-        !et.events.length
+      (et: { event: Database['public']['Tables']['events']['Row'][] }) =>
+        !et.event.length
     )
   );
 

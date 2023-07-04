@@ -3,7 +3,9 @@ import createServerComponentClient from '@/_server/create-server-component-clien
 const listSubjectMissions = (subjectId: string) =>
   createServerComponentClient()
     .from('missions')
-    .select('id, name, sessions(id, modules:event_types(events(id)), order)')
+    .select(
+      'id, name, sessions(id, modules:event_types(event:events(id)), order)'
+    )
     .eq('subject_id', subjectId)
     .eq('deleted', false)
     .order('name')

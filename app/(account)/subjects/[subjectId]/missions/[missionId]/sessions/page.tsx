@@ -87,7 +87,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
           {sessionsReversed.map(
             (session: GetMissionWithSessionsAndEventsData['sessions'][0]) => {
               const modules = forceArray(session.modules);
-              const completedModules = modules.filter((m) => m.events.length);
+              const completedModules = modules.filter((m) => m.event.length);
 
               return (
                 <li key={session.id}>
