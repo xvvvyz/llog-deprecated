@@ -572,10 +572,9 @@ const SessionForm = ({
             .update({ deleted: true })
             .eq('id', session.id);
 
-          isDeleting.setFalse();
-
           if (error) {
             alert(error.message);
+            isDeleting.setFalse();
             return;
           }
 
@@ -592,6 +591,8 @@ const SessionForm = ({
               return acc;
             }, [])
           );
+
+          isDeleting.setFalse();
 
           startDeleteTransition(() => {
             router.refresh();
