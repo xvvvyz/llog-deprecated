@@ -355,6 +355,14 @@ const EventForm = ({
       <Input
         id={`${eventType.id}-completionTime`}
         label={isMission ? 'When was this completed?' : 'When did this happen?'}
+        max={formatDatetimeLocal(
+          (() => {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow;
+          })()
+        )}
         step="any"
         type="datetime-local"
         {...form.register('completionTime')}
