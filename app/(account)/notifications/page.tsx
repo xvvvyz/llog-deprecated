@@ -3,6 +3,7 @@ import listNotifications from '@/(account)/_server/list-notifications';
 import forceArray from '@/(account)/_utilities/force-array';
 import Notifications from '@/(account)/notifications/_components/notifications';
 import createServerActionClient from '@/_server/create-server-action-client';
+import { revalidatePath } from 'next/cache';
 
 export const metadata = {
   title: 'Notifications',
@@ -39,6 +40,8 @@ const Page = async () => {
               .from('notifications')
               .delete()
               .eq('id', id);
+
+            revalidatePath('/notifications');
           }}
           eventOrSessionIdNotificationIdMap={eventOrSessionIdNotificationIdMap}
           notifications={notifications}
@@ -49,6 +52,8 @@ const Page = async () => {
               .from('notifications')
               .update({ read: !read })
               .eq('id', id);
+
+            revalidatePath('/notifications');
           }}
         />
       </div>

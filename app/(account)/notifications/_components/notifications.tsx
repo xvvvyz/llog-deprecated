@@ -10,7 +10,6 @@ import { ListNotificationsData } from '@/(account)/_server/list-notifications';
 import firstIfArray from '@/(account)/_utilities/first-if-array';
 import ViewEventButton from '@/(account)/notifications/_components/view-event-button';
 import Button from '@/_components/button';
-import { experimental_useOptimistic as useOptimistic } from 'react';
 
 import {
   BoltIcon,
@@ -41,28 +40,9 @@ const Notifications = ({
   notifications,
   toggleNotificationReadAction,
 }: NotificationsProps) => {
-  const [optimisticNotifications, optimisticAction] = useOptimistic(
-    notifications,
-    (state, { action, id }) => {
-      switch (action) {
-        case 'delete': {
-          return state.filter((n) => n.id !== id);
-        }
+  if (!notifications.length) return <Empty>No notifications</Empty>;
 
-        case 'toggle-read': {
-          return state.map((n) => (n.id === id ? { ...n, read: !n.read } : n));
-        }
-
-        default: {
-          return state;
-        }
-      }
-    }
-  );
-
-  if (!optimisticNotifications.length) return <Empty>No notifications</Empty>;
-
-  return optimisticNotifications.map((n) => {
+  return notifications.map((n) => {
     const comment = firstIfArray(n.comment);
     const profile = firstIfArray(n.profile);
     const sourceEvent = comment?.event ?? n.event;
@@ -113,7 +93,6 @@ const Notifications = ({
             <div className="ml-auto flex gap-6">
               <form
                 action={async () => {
-                  optimisticAction({ action: 'toggle-read', id: n.id });
                   await toggleNotificationReadAction(n);
                 }}
               >
@@ -131,7 +110,6 @@ const Notifications = ({
               </form>
               <form
                 action={async () => {
-                  optimisticAction({ action: 'delete', id: n.id });
                   await deleteNotificationAction(n.id);
                 }}
               >
