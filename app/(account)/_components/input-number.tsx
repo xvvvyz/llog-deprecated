@@ -34,7 +34,7 @@ const NumberInput = forwardRef(
       placeholder,
       value,
     }: NumberInputProps,
-    ref: Ref<HTMLInputElement>
+    ref: Ref<HTMLInputElement>,
   ) => {
     const [state, send] = useMachine(
       numberInput.machine({
@@ -51,7 +51,7 @@ const NumberInput = forwardRef(
           min: Number(min),
           minFractionDigits: Number(minFractionDigits),
         },
-      }
+      },
     );
 
     const api = numberInput.connect(state, send, normalizeProps);
@@ -87,7 +87,7 @@ const NumberInput = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 NumberInput.displayName = 'NumberInput';

@@ -17,7 +17,7 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
         )
       ),
       name,
-      order`
+      order`,
     )
     .eq('id', eventTypeId)
     .order('order', { foreignTable: 'inputs' })

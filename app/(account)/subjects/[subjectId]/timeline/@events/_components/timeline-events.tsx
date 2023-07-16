@@ -27,17 +27,20 @@ const TimelineEvents = ({
   useEffect(() => {
     setFormattedEvents(
       Object.values(
-        events.reduce((acc, event) => {
-          const date = formatDate(event.created_at);
-          acc[date] = acc[date] ?? new Map();
-          const type = firstIfArray(event.type);
-          const key = type.session?.id ?? event.id;
-          const keyEvents = (acc[date].get(key) ?? []) as ListEventsData;
-          keyEvents.unshift(event);
-          acc[date].set(key, keyEvents);
-          return acc;
-        }, {} as Record<string, Map<string, ListEventsData>>)
-      )
+        events.reduce(
+          (acc, event) => {
+            const date = formatDate(event.created_at);
+            acc[date] = acc[date] ?? new Map();
+            const type = firstIfArray(event.type);
+            const key = type.session?.id ?? event.id;
+            const keyEvents = (acc[date].get(key) ?? []) as ListEventsData;
+            keyEvents.unshift(event);
+            acc[date].set(key, keyEvents);
+            return acc;
+          },
+          {} as Record<string, Map<string, ListEventsData>>,
+        ),
+      ),
     );
   }, [events]);
 

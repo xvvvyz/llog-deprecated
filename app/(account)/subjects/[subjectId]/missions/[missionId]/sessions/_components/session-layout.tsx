@@ -81,7 +81,7 @@ const SessionLayout = async ({
       highestOrder: -1,
       nextSessionId: null,
       previousSessionId: sessions[sessionOrder - 1]?.id ?? null,
-    }
+    },
   );
 
   const editSuffix = isEditOrCreate ? '/edit' : '';

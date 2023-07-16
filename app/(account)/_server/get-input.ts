@@ -11,7 +11,7 @@ const getInput = (inputId: string) =>
       options:input_options(id, label),
       settings,
       subjects_for:input_subjects(subject_id),
-      type`
+      type`,
     )
     .eq('id', inputId)
     .eq('options.deleted', false)

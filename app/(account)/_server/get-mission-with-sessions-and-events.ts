@@ -18,7 +18,7 @@ const getMissionWithSessionsAndEvents = (missionId: string) =>
         order,
         scheduled_for,
         title
-      )`
+      )`,
     )
     .eq('id', missionId)
     .eq('sessions.deleted', false)

@@ -95,7 +95,7 @@ const SessionForm = ({
 
   const highestPublishedOrder = sessions.reduce(
     (acc, s) => (s.draft ? acc : Math.max(acc, s.order)),
-    -1
+    -1,
   );
 
   const moduleIdEventMap = modules.reduce((acc, module) => {
@@ -115,7 +115,7 @@ const SessionForm = ({
               id: module.id,
               inputs: forceArray(module?.inputs).reduce((acc, { input_id }) => {
                 const input = availableInputs?.find(
-                  ({ id }) => id === input_id
+                  ({ id }) => id === input_id,
                 );
 
                 if (input) acc.push(input);
@@ -167,7 +167,7 @@ const SessionForm = ({
         }
 
         return acc;
-      }, [])
+      }, []),
     );
 
   const onSubmit = form.handleSubmit(async (values) => {
@@ -183,7 +183,7 @@ const SessionForm = ({
             id: session.id,
             mission_id: mission.id,
             order: index < finalOrder ? index : index + 1,
-          }))
+          })),
       );
 
       if (sessionsError) {
@@ -239,7 +239,7 @@ const SessionForm = ({
         updatedEventTypes: [] as Array<
           Database['public']['Tables']['event_types']['Insert']
         >,
-      }
+      },
     );
 
     const deletedEventTypeIds = modules.reduce((acc, module) => {
@@ -294,7 +294,7 @@ const SessionForm = ({
           const id = insertEventTypesDataReverse.pop()?.id;
           if (!id) return module;
           return { ...module, id };
-        })
+        }),
       );
     }
 
@@ -319,7 +319,7 @@ const SessionForm = ({
           insertEventTypeInputs: [] as Array<
             Database['public']['Tables']['event_type_inputs']['Insert']
           >,
-        }
+        },
       );
 
     if (deleteEventTypeInputs.length) {
@@ -376,7 +376,7 @@ const SessionForm = ({
 
               const newOrder = Math.max(
                 currentOrder + 1,
-                highestPublishedOrder + 1
+                highestPublishedOrder + 1,
               );
 
               const values = form.getValues();
@@ -394,7 +394,7 @@ const SessionForm = ({
 
               startDuplicateTransition(() => {
                 router.push(
-                  `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
+                  `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
                 );
               });
             }}
@@ -435,8 +435,8 @@ const SessionForm = ({
 
                 startMoveLeftTransition(() =>
                   router.push(
-                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-                  )
+                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
+                  ),
                 );
               }}
               size="sm"
@@ -466,8 +466,8 @@ const SessionForm = ({
 
                 startMoveRightTransition(() =>
                   router.push(
-                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`
-                  )
+                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
+                  ),
                 );
               }}
               size="sm"
@@ -490,7 +490,7 @@ const SessionForm = ({
               if (over && active.id !== over.id) {
                 modulesArray.move(
                   modulesArray.fields.findIndex((f) => f.key === active.id),
-                  modulesArray.fields.findIndex((f) => f.key === over.id)
+                  modulesArray.fields.findIndex((f) => f.key === over.id),
                 );
               }
             }}
@@ -589,7 +589,7 @@ const SessionForm = ({
               }
 
               return acc;
-            }, [])
+            }, []),
           );
 
           isDeleting.setFalse();
@@ -598,7 +598,7 @@ const SessionForm = ({
             router.refresh();
 
             router.replace(
-              `/subjects/${subjectId}/missions/${mission.id}/sessions`
+              `/subjects/${subjectId}/missions/${mission.id}/sessions`,
             );
           });
         }}

@@ -4,7 +4,7 @@ const listSubjectMissions = (subjectId: string) =>
   createServerComponentClient()
     .from('missions')
     .select(
-      'id, name, sessions(id, modules:event_types(event:events(id)), order)'
+      'id, name, sessions(id, modules:event_types(event:events(id)), order)',
     )
     .eq('subject_id', subjectId)
     .eq('deleted', false)
@@ -20,4 +20,5 @@ const listSubjectMissions = (subjectId: string) =>
 export type ListSubjectMissionsData = Awaited<
   ReturnType<typeof listSubjectMissions>
 >['data'];
+
 export default listSubjectMissions;

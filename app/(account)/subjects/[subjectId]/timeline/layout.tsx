@@ -22,6 +22,7 @@ export const revalidate = 0;
 interface LayoutProps {
   eventTypes: ReactNode;
   events: ReactNode;
+  insights: ReactNode;
   missions: ReactNode;
   params: { subjectId: string };
   teamMemberHeader: ReactNode;
@@ -30,6 +31,7 @@ interface LayoutProps {
 const Layout = async ({
   eventTypes,
   events,
+  insights,
   missions,
   params: { subjectId },
   teamMemberHeader,
@@ -54,9 +56,12 @@ const Layout = async ({
           {subject.banner}
         </DirtyHtml>
       )}
-      <div className="space-y-4">
-        {missions}
-        {eventTypes}
+      <div className="space-y-16">
+        <div className="space-y-4">
+          {missions}
+          {eventTypes}
+        </div>
+        {insights}
       </div>
       {events}
     </>

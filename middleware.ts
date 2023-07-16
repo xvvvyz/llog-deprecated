@@ -23,18 +23,18 @@ export const middleware = async (req: NextRequest) => {
 
   if (
     ['/api', '/inputs', '/notifications', '/subjects', '/templates'].some((p) =>
-      req.nextUrl.pathname.startsWith(p)
+      req.nextUrl.pathname.startsWith(p),
     ) &&
     !session.data.session
   ) {
     const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';
 
     const redirect = encodeURIComponent(
-      `${req.nextUrl.pathname}${req.nextUrl.search}`
+      `${req.nextUrl.pathname}${req.nextUrl.search}`,
     );
 
     return NextResponse.redirect(
-      new URL(`/sign-${inOrUp}?redirect=${redirect}`, req.url)
+      new URL(`/sign-${inOrUp}?redirect=${redirect}`, req.url),
     );
   }
 

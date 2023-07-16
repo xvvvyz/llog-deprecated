@@ -10,7 +10,7 @@ const Empty = ({ children, className }: EmptyProps) => (
   <p
     className={twMerge(
       'mx-auto mt-16 max-w-xs px-4 text-center text-fg-3',
-      className
+      className,
     )}
   >
     {children}

@@ -46,7 +46,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
       content: templateData?.content,
       id: template?.id,
       inputs: forceArray(availableInputs).filter(({ id }) =>
-        forceArray(templateData?.inputIds).includes(id)
+        forceArray(templateData?.inputIds).includes(id),
       ),
       name: template?.name ?? '',
       public: template?.public ?? false,
@@ -112,8 +112,8 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
                     updateCacheKey: CacheKeys.TemplateForm,
                     updateCachePath: 'inputs',
                     useCache: true,
-                  })
-                )
+                  }),
+                ),
               );
             }}
             options={forceArray(availableInputs).sort(sortInputs)}

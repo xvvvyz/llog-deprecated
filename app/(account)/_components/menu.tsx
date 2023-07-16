@@ -14,7 +14,7 @@ const Menu = Object.assign(
       <M.Button
         className={twMerge(
           'flex items-center justify-center text-fg-2 outline-none transition-colors hover:text-fg-1',
-          className
+          className,
         )}
         {...rest}
       />
@@ -26,7 +26,7 @@ const Menu = Object.assign(
             className={twMerge(
               'w-full justify-start gap-4 rounded-none border-y-0 ring-transparent ring-offset-0 first:rounded-t first:border-t last:rounded-b last:border-b',
               active && 'bg-alpha-4 text-fg-1',
-              className
+              className,
             )}
             colorScheme="transparent"
             {...rest}
@@ -42,14 +42,14 @@ const Menu = Object.assign(
       <M.Items
         className={twMerge(
           'absolute -right-px -top-px z-10 w-56 origin-top-right rounded bg-bg-2 shadow-lg outline-none',
-          className
+          className,
         )}
         {...rest}
       >
         {children}
       </M.Items>
     ),
-  }
+  },
 );
 
 export default Menu;

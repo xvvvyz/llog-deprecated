@@ -57,7 +57,7 @@ const Page = async ({
     <SessionForm
       availableInputs={filterListInputsDataBySubjectId(
         availableInputs as ListInputsData,
-        subjectId
+        subjectId,
       )}
       availableTemplates={availableTemplates as ListTemplatesWithDataData}
       mission={mission}

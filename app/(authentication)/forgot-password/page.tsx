@@ -18,7 +18,7 @@ const Page = () => {
     const { error } =
       await createServerActionClient().auth.resetPasswordForEmail(
         values.get('email') as string,
-        { redirectTo: `${proto}://${host}/change-password` }
+        { redirectTo: `${proto}://${host}/change-password` },
       );
 
     if (error) return { error: error?.message };

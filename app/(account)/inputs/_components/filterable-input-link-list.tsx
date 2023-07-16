@@ -34,13 +34,13 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
         keys: ['label', 'subjects.name', 'type'],
         threshold: 0.3,
       }),
-    [inputs]
+    [inputs],
   );
 
   const filter = useCallback(
     (value: string) =>
       setFilteredInputs(fuse.search(value).map((result) => result.item)),
-    [fuse]
+    [fuse],
   );
 
   const inputsLen = inputs.length;

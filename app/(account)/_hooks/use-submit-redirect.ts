@@ -9,7 +9,7 @@ const useSubmitRedirect = () => {
   return [
     async (
       path: string,
-      { redirect }: { redirect?: boolean } = { redirect: true }
+      { redirect }: { redirect?: boolean } = { redirect: true },
     ) =>
       startTransition(() => {
         router.refresh();

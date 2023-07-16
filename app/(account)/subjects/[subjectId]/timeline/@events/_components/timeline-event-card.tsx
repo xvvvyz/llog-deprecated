@@ -120,8 +120,8 @@ const TimelineEventCard = ({
                               type: InputTypes;
                               values: { label?: string; value?: string }[];
                             }
-                          >
-                        )
+                          >,
+                        ),
                       ).map(([id, { label, type, values }]: any) => (
                         <tr key={id}>
                           <td className="truncate px-4 py-1 align-top text-fg-3">

@@ -36,7 +36,7 @@ const getSessionWithDetails = (sessionId: string) =>
         order
       ),
       scheduled_for,
-      title`
+      title`,
     )
     .eq('id', sessionId)
     .eq('modules.deleted', false)

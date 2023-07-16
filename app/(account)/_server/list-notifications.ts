@@ -37,7 +37,7 @@ const listNotifications = async () =>
       profile:source_profile_id(first_name, last_name),
       read,
       subject:subjects(id, image_uri, name),
-      type`
+      type`,
     )
     .order('created_at', { ascending: false })
     .limit(50);

@@ -1,6 +1,6 @@
 const formatDatetimeLocal = (
   input?: Date | string,
-  { seconds }: { seconds: boolean } = { seconds: true }
+  { seconds }: { seconds: boolean } = { seconds: true },
 ) => {
   if (!input) return input;
   const utcDate = input instanceof Date ? input : new Date(input);

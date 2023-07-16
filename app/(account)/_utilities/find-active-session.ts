@@ -9,13 +9,13 @@ const findActiveSession = (
         }
       >;
     }
-  >
+  >,
 ) =>
   sessions.find(({ modules }) =>
     modules.find(
       (et: { event: Database['public']['Tables']['events']['Row'][] }) =>
-        !et.event.length
-    )
+        !et.event.length,
+    ),
   );
 
 export default findActiveSession;

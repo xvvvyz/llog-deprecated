@@ -86,7 +86,7 @@ const EventTypeForm = ({
                 event_type_id: eventTypeData.id,
                 input_id: input.id,
                 order,
-              }))
+              })),
             );
 
           if (insertEventTypeInputsError) {

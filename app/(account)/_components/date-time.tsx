@@ -15,7 +15,7 @@ const formatters = {
 
 interface DateTimeProps {
   className?: string;
-  date: string;
+  date: string | Date;
   formatter: keyof typeof formatters;
 }
 
@@ -27,7 +27,7 @@ const DateTime = ({ className, date, formatter }: DateTimeProps) => {
   }, [date, formatter]);
 
   return (
-    <time className={className} dateTime={date}>
+    <time className={className} dateTime={new Date(date).toISOString()}>
       {dateString}
     </time>
   );

@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef(
   (
     { className, id, label, right, type, name, ...rest }: InputProps,
-    ref: Ref<HTMLInputElement>
+    ref: Ref<HTMLInputElement>,
   ) => (
     <div className="group relative w-full">
       {label && (
@@ -32,7 +32,7 @@ const Input = forwardRef(
         </div>
       )}
     </div>
-  )
+  ),
 );
 
 Input.displayName = 'Input';

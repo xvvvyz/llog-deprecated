@@ -31,7 +31,7 @@ const AvatarDropzone = <T extends FieldValues>({
         form.setValue(
           'avatar' as T[string],
           e.target.files?.[0] as PathValue<T, T[string]>,
-          { shouldDirty: true }
+          { shouldDirty: true },
         );
       }}
     />

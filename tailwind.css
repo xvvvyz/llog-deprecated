@@ -60,7 +60,7 @@
   }
 
   .prose {
-    @apply space-y-3 whitespace-pre-wrap break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-3 prose-td:px-3 prose-td:py-1;
+    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-3 prose-td:px-3 prose-td:py-1;
   }
 
   .smallcaps {

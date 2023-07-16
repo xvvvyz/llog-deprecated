@@ -57,8 +57,8 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       settings: initialInput?.settings,
       subjects: forceArray(subjects).filter(({ id }) =>
         forceArray(initialInput?.subjects_for).some(
-          ({ subject_id }) => subject_id === id
-        )
+          ({ subject_id }) => subject_id === id,
+        ),
       ),
       type: INPUT_TYPE_OPTIONS.find(({ id }) => id === initialInput?.type),
     },
@@ -129,7 +129,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               {
                 insertedOptions: [] as InputFormValues['options'],
                 updatedOptions: [] as InputFormValues['options'],
-              }
+              },
             );
 
             const deletedOptionIds = forceArray(input?.options).reduce(
@@ -140,7 +140,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
 
                 return acc;
               },
-              []
+              [],
             );
 
             if (deletedOptionIds.length) {
@@ -192,7 +192,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                 subjects.map(({ id }) => ({
                   input_id: inputData.id,
                   subject_id: id,
-                }))
+                })),
               );
 
             if (inputSubjectsError) {
@@ -203,7 +203,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
 
           updateGlobalValueCache({ ...inputData, subjects });
           await redirect('/inputs');
-        }
+        },
       )}
     >
       <Input label="Label" {...form.register('label')} />
@@ -297,7 +297,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                                   `options.${optionIndex - 1}.label`,
                                   {
                                     shouldSelect: true,
-                                  }
+                                  },
                                 );
                               }
 

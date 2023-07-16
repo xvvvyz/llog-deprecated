@@ -54,7 +54,7 @@ const RichTextarea = (
     right?: ReactNode;
     value?: string | null;
   },
-  ref: Ref<{ focus: () => void }>
+  ref: Ref<{ focus: () => void }>,
 ) => {
   const editorRef: MutableRefObject<Editor | null> = useRef(null);
 
@@ -73,7 +73,7 @@ const RichTextarea = (
         class: twMerge(
           'prose input cursor-text min-h-[4.2rem]',
           right && 'pr-10',
-          className
+          className,
         ),
         role: 'textbox',
       },
@@ -158,7 +158,7 @@ const RichTextarea = (
             'input min-h-[4.2rem]',
             !value && 'text-fg-3',
             right && 'pr-10',
-            className
+            className,
           )}
         >
           {value || `<p>${placeholder ?? '‎'}</p>`}

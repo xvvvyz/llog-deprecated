@@ -33,7 +33,7 @@ const EventComment = ({
   const supabase = useSupabase();
 
   return (
-    <article className="flex gap-4" role="comment">
+    <div className="flex gap-4">
       <Alert
         confirmText="Delete comment"
         isConfirming={isConfirming.value}
@@ -86,7 +86,7 @@ const EventComment = ({
           {content}
         </DirtyHtml>
       </div>
-    </article>
+    </div>
   );
 };
 

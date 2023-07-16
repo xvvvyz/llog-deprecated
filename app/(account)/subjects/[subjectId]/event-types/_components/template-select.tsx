@@ -31,19 +31,19 @@ const TemplateSelect = <T extends FieldValues>({
       if (!isMission) {
         formSetValue(
           `${namePrefix}name` as T[string],
-          template.name as PathValue<T, T[string]>
+          template.name as PathValue<T, T[string]>,
         );
       }
 
       if (template.data?.content) {
         formSetValue(
           `${namePrefix}content` as T[string],
-          template.data?.content as PathValue<T, T[string]>
+          template.data?.content as PathValue<T, T[string]>,
         );
       }
 
       const inputs = availableInputs.filter(({ id }) =>
-        forceArray(template.data?.inputIds).includes(id)
+        forceArray(template.data?.inputIds).includes(id),
       ) as PathValue<T, T[string]>;
 
       if (inputs.length) {

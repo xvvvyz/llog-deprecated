@@ -41,7 +41,7 @@ type DurationInputTypeOption = { id: string; label: string };
 type DurationInputType = [
   DurationInputTypeOption,
   DurationInputTypeOption,
-  DurationInputTypeOption
+  DurationInputTypeOption,
 ];
 
 type MultiSelectInputType = Array<
@@ -95,7 +95,7 @@ const EventForm = ({
       id: event?.id,
       inputs: eventTypeInputs.map(({ input }) => {
         const inputInputs = eventInputs.filter(
-          ({ input_id }) => input_id === input.id
+          ({ input_id }) => input_id === input.id,
         );
 
         switch (input.type) {
@@ -106,7 +106,7 @@ const EventForm = ({
           case InputTypes.Duration: {
             if (!inputInputs[0]?.value) return [];
             const { hours, minutes, seconds } = parseSeconds(
-              inputInputs[0].value
+              inputInputs[0].value,
             );
 
             return [
@@ -126,8 +126,8 @@ const EventForm = ({
                 ({
                   id,
                 }: Database['public']['Tables']['input_options']['Row']) =>
-                  input_option_id === id
-              )
+                  input_option_id === id,
+              ),
             );
           }
 
@@ -137,7 +137,7 @@ const EventForm = ({
                 ({
                   id,
                 }: Database['public']['Tables']['input_options']['Row']) =>
-                  id === inputInputs[0]?.input_option_id
+                  id === inputInputs[0]?.input_option_id,
               ) ?? null
             );
           }
@@ -147,7 +147,7 @@ const EventForm = ({
               notes: inputInputs.reduce(
                 (
                   acc: StopwatchInputType['notes'],
-                  { input_option_id, value }
+                  { input_option_id, value },
                 ) => {
                   input.options.forEach(
                     ({
@@ -156,12 +156,12 @@ const EventForm = ({
                     }: Database['public']['Tables']['input_options']['Row']) => {
                       if (input_option_id !== id) return;
                       acc.push({ id, label, time: value });
-                    }
+                    },
                   );
 
                   return acc;
                 },
-                []
+                [],
               ),
               time: inputInputs.find(({ input_option_id }) => !input_option_id)
                 ?.value,
@@ -214,7 +214,7 @@ const EventForm = ({
 
           form.setValue(
             'completionTime',
-            formatDatetimeLocal(eventData.created_at)
+            formatDatetimeLocal(eventData.created_at),
           );
 
           const deletedEventInputs = eventInputs.map(({ id }) => id);
@@ -263,7 +263,7 @@ const EventForm = ({
                   payload.value = String(
                     Number((input as DurationInputType)[0]?.id || 0) * 60 * 60 +
                       Number((input as DurationInputType)[1]?.id || 0) * 60 +
-                      Number((input as DurationInputType)[2]?.id || 0)
+                      Number((input as DurationInputType)[2]?.id || 0),
                   );
 
                   acc.insertedEventInputs.push(payload);
@@ -276,7 +276,7 @@ const EventForm = ({
                       ...payload,
                       input_option_id: id,
                       order,
-                    })
+                    }),
                   );
 
                   return acc;
@@ -296,7 +296,7 @@ const EventForm = ({
                         input_option_id: id,
                         order,
                         value: time,
-                      })
+                      }),
                   );
 
                   if (Number((input as StopwatchInputType).time)) {
@@ -318,7 +318,7 @@ const EventForm = ({
               insertedEventInputs: [] as Array<
                 Database['public']['Tables']['event_inputs']['Insert']
               >,
-            }
+            },
           );
 
           if (insertedEventInputs.length) {
@@ -349,7 +349,7 @@ const EventForm = ({
           await redirect(`/subjects/${subjectId}/timeline`, {
             redirect: !isMission && !event,
           });
-        }
+        },
       )}
     >
       <Input
@@ -361,7 +361,7 @@ const EventForm = ({
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
             return tomorrow;
-          })()
+          })(),
         )}
         step="any"
         type="datetime-local"

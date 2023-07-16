@@ -21,7 +21,7 @@ const formatRelativeTime = (input?: Date | string) => {
 
       return formatter.format(
         Math.round(delta),
-        key as Intl.RelativeTimeFormatUnit
+        key as Intl.RelativeTimeFormatUnit,
       );
     }
   }

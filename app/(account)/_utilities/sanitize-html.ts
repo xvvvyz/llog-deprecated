@@ -5,6 +5,7 @@ const sanitizeHtml = (html?: string | null) =>
     ? xss(html, {
         whiteList: {
           a: ['href', 'target'],
+          br: [],
           em: [],
           li: [],
           ol: [],

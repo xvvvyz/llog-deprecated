@@ -46,7 +46,7 @@ type SelectProps<TOption> = ReactSelectProps<TOption> &
   };
 
 const ClearIndicator = <TOption extends IOption>(
-  props: ClearIndicatorProps<TOption>
+  props: ClearIndicatorProps<TOption>,
 ) => (
   <components.ClearIndicator {...props}>
     <div className="cursor-pointer p-1 text-fg-2 transition-colors hover:text-fg-1">
@@ -76,7 +76,7 @@ const Control = <TOption extends IOption>({
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
         selectProps.isDisabled && 'disabled group-hover:bg-alpha-1',
-        selectProps.className
+        selectProps.className,
       )}
       menuIsOpen={menuIsOpen}
       selectProps={selectProps}
@@ -165,7 +165,7 @@ const MultiValueLabel = <TOption extends IOption>({
       <span
         className={twMerge(
           'whitespace-normal py-0.5 leading-snug',
-          !(props.selectProps as SelectProps<TOption>).hasAvatar && 'pl-2'
+          !(props.selectProps as SelectProps<TOption>).hasAvatar && 'pl-2',
         )}
       >
         {children}
@@ -181,7 +181,7 @@ const MultiValueLabel = <TOption extends IOption>({
                 name={name}
                 size="xs"
               />
-            )
+            ),
           )}
         </div>
       )}
@@ -209,7 +209,7 @@ const Option = <TOption extends IOption>({
     <div
       className={twMerge(
         'flex items-center gap-4 px-4 py-2 leading-snug text-fg-2 transition-colors hover:cursor-pointer',
-        props.isFocused && 'bg-alpha-1 text-fg-1'
+        props.isFocused && 'bg-alpha-1 text-fg-1',
       )}
     >
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
@@ -279,7 +279,7 @@ const Select = <TOption extends IOption>(
     placeholder,
     ...props
   }: SelectProps<TOption>,
-  ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>
+  ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
 ) => {
   const commonProps = {
     closeMenuOnSelect: !props.isMulti,

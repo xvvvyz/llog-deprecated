@@ -20,7 +20,7 @@ const Spinner = ({
       className={twMerge(
         'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-2',
         color,
-        'border-l-transparent'
+        'border-l-transparent',
       )}
       role="alert"
     />

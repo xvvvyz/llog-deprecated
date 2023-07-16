@@ -63,7 +63,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       variant = 'primary',
       ...rest
     },
-    ref
+    ref,
   ) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -76,7 +76,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       variants[variant],
       (disabled || loading || pending) && disabledVariants[variant],
       href && pathname?.startsWith(href) && activeClassName,
-      className
+      className,
     );
 
     if (href) {
@@ -119,7 +119,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         )}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = 'Button';

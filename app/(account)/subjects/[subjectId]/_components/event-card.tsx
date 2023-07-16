@@ -43,7 +43,7 @@ const EventCard = ({
         <div
           className={twMerge(
             'smallcaps flex items-center gap-4 whitespace-nowrap px-4 pt-4 sm:rounded-t sm:px-8',
-            !showModule && !showDescription && 'border-b border-alpha-1 pb-4'
+            !showModule && !showDescription && 'border-b border-alpha-1 pb-4',
           )}
         >
           <Avatar
@@ -73,7 +73,7 @@ const EventCard = ({
         className={twMerge(
           'bg-alpha-reverse-1 px-4 py-8 sm:px-8',
           !showModule && !showDescription && !event && 'sm:rounded-t',
-          !event && 'sm:rounded-b'
+          !event && 'sm:rounded-b',
         )}
         event={event}
         eventType={eventType}

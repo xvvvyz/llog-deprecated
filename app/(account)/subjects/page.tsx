@@ -34,7 +34,7 @@ const Page = async () => {
     {
       clientSubjects: [] as NonNullable<ListSubjectsData>,
       teamSubjects: [] as NonNullable<ListSubjectsData>,
-    }
+    },
   );
 
   return (

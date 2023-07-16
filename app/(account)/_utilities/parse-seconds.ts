@@ -5,7 +5,7 @@ const parseSeconds = (s: string | number) => {
   const minutes = String(Math.floor(totalSeconds / 60));
 
   const secondsWithFraction = String(
-    parseFloat((totalSeconds % 60).toFixed(2))
+    parseFloat((totalSeconds % 60).toFixed(2)),
   );
 
   const [seconds, fraction] = secondsWithFraction.split('.');

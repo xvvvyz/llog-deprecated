@@ -10,7 +10,7 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
       inputs:event_type_inputs(
         input:inputs(id, label, subjects(id, image_uri, name))
       ),
-      name`
+      name`,
     )
     .eq('id', eventTypeId)
     .eq('inputs.input.subjects.deleted', false)

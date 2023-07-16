@@ -53,7 +53,7 @@ const EventStopwatch = <T extends FieldValues>({
 
   const initialTIme = useMemo(
     () => form.getValues(`${name}.time` as T[string]),
-    [form, name]
+    [form, name],
   );
 
   const stopwatch = useStopwatch(initialTIme);
@@ -67,7 +67,7 @@ const EventStopwatch = <T extends FieldValues>({
   useEffect(() => {
     form.setValue(
       `${name}.time` as T[string],
-      stopwatch.debouncedTime as PathValue<T, T[string]>
+      stopwatch.debouncedTime as PathValue<T, T[string]>,
     );
   }, [form, name, stopwatch.debouncedTime]);
 
@@ -110,7 +110,7 @@ const EventStopwatch = <T extends FieldValues>({
           <Select
             className={twMerge(
               'mt-2',
-              !!timedNoteArray.fields.length && 'rounded-b-none'
+              !!timedNoteArray.fields.length && 'rounded-b-none',
             )}
             instanceId={`inputs-${inputIndex}-select`}
             isCreatable={input.settings?.isCreatable}
@@ -161,7 +161,9 @@ const EventStopwatch = <T extends FieldValues>({
             <ul className="divide-y divide-alpha-1 rounded-b border border-t-0 border-alpha-1 bg-alpha-1">
               {timedNoteArray.fields.map((note, noteIndex) => {
                 const t = parseSeconds(
-                  form.getValues(`${name}.notes.${noteIndex}.time` as T[string])
+                  form.getValues(
+                    `${name}.notes.${noteIndex}.time` as T[string],
+                  ),
                 );
 
                 return (
@@ -177,7 +179,7 @@ const EventStopwatch = <T extends FieldValues>({
                     </div>
                     <div className="text-fg-3">
                       {form.getValues(
-                        `${name}.notes.${noteIndex}.label` as T[string]
+                        `${name}.notes.${noteIndex}.label` as T[string],
                       )}
                     </div>
                     <IconButton

@@ -46,7 +46,7 @@ const ModuleFormSection = <T extends FieldValues>({
     <li
       className={twMerge(
         'form relative gap-0 p-0',
-        isDragging && 'z-10 shadow-2xl'
+        isDragging && 'z-10 shadow-2xl',
       )}
       ref={setNodeRef}
       style={{

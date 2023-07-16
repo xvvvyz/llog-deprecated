@@ -29,7 +29,7 @@ const listEvents = (subjectId: string) =>
         ),
         name,
         order
-      )`
+      )`,
     )
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })

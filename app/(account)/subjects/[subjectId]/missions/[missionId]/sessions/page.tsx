@@ -51,7 +51,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
       acc.sessionsReversed.push(sessions[sessions.length - i - 1]);
       return acc;
     },
-    { highestOrder: -1, sessionsReversed: [] }
+    { highestOrder: -1, sessionsReversed: [] },
   );
 
   const nextSessionOrder = highestOrder + 1;
@@ -125,7 +125,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                   </Button>
                 </li>
               );
-            }
+            },
           )}
         </ul>
       ) : (

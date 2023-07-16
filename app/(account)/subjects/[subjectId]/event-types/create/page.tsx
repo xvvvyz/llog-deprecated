@@ -56,7 +56,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       <EventTypeForm
         availableInputs={filterListInputsDataBySubjectId(
           availableInputs as ListInputsData,
-          subjectId
+          subjectId,
         )}
         availableTemplates={availableTemplates as ListTemplatesWithDataData}
         subjectId={subjectId}

@@ -5,14 +5,14 @@
 ## Development Setup
 
 Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git),
-[Node](https://nodejs.org/en/download) and
+[Node](https://nodejs.org/en/download), [pnpm](https://pnpm.io/installation) and
 [Docker](https://docs.docker.com/engine/install), then:
 
 ```shell
 git clone git@github.com:xvvvyz/llog.git
 cd llog
-npm i
-npm run db:start # outputs supabase url & key
+pnpm i
+pnpm run db:start # outputs supabase url & key
 ```
 
 Add the following to your `.env` file:
@@ -30,15 +30,15 @@ NEXT_PUBLIC_SUPABASE_PRO=1
 Generate types and start the dev server:
 
 ```shell
-npm run db:types
-npm start
+pnpm run db:types
+pnpm start
 ```
 
 If you modify the database schema:
 
 ```shell
-npm run db:types
-npm run db:diff -- migration-description
+pnpm run db:types
+pnpm run db:diff -- migration-description
 ```
 
 ## Production Notes

@@ -31,7 +31,7 @@ const getEvent = (eventId: string) =>
         ),
         name,
         order
-      )`
+      )`,
     )
     .eq('id', eventId)
     .eq('type.inputs.input.options.deleted', false)

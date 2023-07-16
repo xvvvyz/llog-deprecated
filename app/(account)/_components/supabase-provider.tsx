@@ -24,7 +24,7 @@ const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'notifications' },
-        router.refresh
+        router.refresh,
       )
       .subscribe();
 

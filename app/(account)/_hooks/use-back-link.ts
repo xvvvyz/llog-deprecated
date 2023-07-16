@@ -5,7 +5,7 @@ const useBackLink = (params: Record<string, boolean | string> = {}) => {
   const searchParams = useSearchParams();
 
   const newSearchParams = new URLSearchParams(
-    searchParams as unknown as URLSearchParams
+    searchParams as unknown as URLSearchParams,
   );
 
   Object.entries(params).forEach(([k, v]) => newSearchParams.set(k, String(v)));

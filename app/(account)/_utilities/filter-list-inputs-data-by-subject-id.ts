@@ -3,7 +3,7 @@ import forceArray from '@/(account)/_utilities/force-array';
 
 const filterListInputsDataBySubjectId = (
   inputs: ListInputsData,
-  subjectId: string
+  subjectId: string,
 ) =>
   forceArray(inputs).filter(({ subjects }) => {
     const s = forceArray(subjects);

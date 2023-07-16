@@ -23,7 +23,7 @@ const formatInputValue = {
   select: (values: Value[]) => values[0]?.label,
   stopwatch: (values: Value[]) => {
     const t = parseSeconds(
-      (values.find(({ label }) => !label)?.value as string) ?? '0'
+      (values.find(({ label }) => !label)?.value as string) ?? '0',
     );
 
     let s = '';

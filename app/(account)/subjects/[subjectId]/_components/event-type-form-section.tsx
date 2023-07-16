@@ -93,7 +93,7 @@ const EventTypeFormSection = <T extends FieldValues>({
             backLink,
             path: '/templates/create',
             useCache: true,
-          })
+          }),
         );
       }}
       variant="link"
@@ -117,7 +117,7 @@ const EventTypeFormSection = <T extends FieldValues>({
         className={twMerge(
           'flex flex-col gap-8 border-b border-alpha-1 px-4 py-8 sm:px-8',
           attributes && listeners && 'border-t border-alpha-1',
-          event && 'pt-0'
+          event && 'pt-0',
         )}
       >
         {event && (
@@ -205,8 +205,8 @@ const EventTypeFormSection = <T extends FieldValues>({
                       updateCacheKey: cacheKey,
                       updateCachePath: `${namePrefix}inputs`,
                       useCache: true,
-                    })
-                  )
+                    }),
+                  ),
                 );
               }}
               options={forceArray(availableInputs)}

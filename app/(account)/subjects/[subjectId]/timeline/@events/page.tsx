@@ -20,7 +20,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
       listEvents(subjectId),
       getCurrentUser(),
       getCurrentTeamId(),
-    ]
+    ],
   );
 
   return (

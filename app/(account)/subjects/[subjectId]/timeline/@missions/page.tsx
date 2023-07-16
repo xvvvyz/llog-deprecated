@@ -44,7 +44,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         {...(isTeamMember && activeSession
           ? { rightHref: editHref, rightIcon: 'edit', rightLabel: 'Edit' }
           : {})}
-      />
+      />,
     );
 
     return acc;

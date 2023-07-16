@@ -47,7 +47,7 @@ const CopyJoinSubjectLinkButton = ({
         }
 
         await copyToClipboard(
-          `${location.origin}/subjects/${subjectId}/join/${shareCode}`
+          `${location.origin}/subjects/${subjectId}/join/${shareCode}`,
         );
 
         toggleCopyingToClipboard();

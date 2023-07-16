@@ -10,7 +10,7 @@ interface CheckboxProps
 const Checkbox = forwardRef(
   (
     { className, label, name, value, ...rest }: CheckboxProps,
-    ref: Ref<HTMLInputElement>
+    ref: Ref<HTMLInputElement>,
   ) => (
     <label
       className={twMerge('input group flex select-none gap-4 py-4', className)}
@@ -30,7 +30,7 @@ const Checkbox = forwardRef(
       </span>
       <span className="label p-0 peer-checked:text-fg-1">{label}</span>
     </label>
-  )
+  ),
 );
 
 Checkbox.displayName = 'Checkbox';

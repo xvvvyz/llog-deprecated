@@ -35,7 +35,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
         ),
         name,
         order
-      )`
+      )`,
     )
     .eq('subject_id', ctx.params.subjectId)
     .order('created_at', { ascending: false })
@@ -48,20 +48,20 @@ export const GET = async (req: Request, ctx: GetContext) => {
   const csvHeader = ['Timestamp', 'Name', 'Session', 'Module', 'Author'];
   const csvRows: string[][] = [];
   const searchParams = new URL(req.url).searchParams;
-
-  const tz =
-    searchParams.get('tz') ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const tz = searchParams.get('tz');
 
   eventsData.forEach((eventData, i) => {
     const event = firstIfArray(eventData);
     const profile = firstIfArray(event.profile);
 
     csvRows[i] = [
-      formatInTimeZone(
-        new Date(event.created_at),
-        tz,
-        'yyyy-MM-dd HH:mm:ss zzz'
-      ),
+      tz
+        ? formatInTimeZone(
+            new Date(event.created_at),
+            tz,
+            'yyyy-MM-dd HH:mm:ss zzz',
+          )
+        : event.created_at,
       event.type.name ?? event.type.session.mission.name,
       event.type.session ? event.type.session?.order + 1 : '',
       event.type.session ? event.type.order + 1 : '',
@@ -71,7 +71,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
     const inputs = forceArray(event.inputs).reduce(
       (
         acc: Record<string, { label: string; values: string[] }>,
-        { input, option, value }
+        { input, option, value },
       ) => {
         if (!input) return acc;
         acc[input.id] = acc[input.id] ?? { values: [] };
@@ -86,7 +86,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
 
         return acc;
       },
-      {}
+      {},
     );
 
     Object.entries(inputs).forEach(([key, value]) => {
@@ -117,12 +117,12 @@ export const GET = async (req: Request, ctx: GetContext) => {
 
       const who = `${profile.first_name} ${profile.last_name}`.replaceAll(
         '""',
-        '"'
+        '"',
       );
 
       csvRows[i][headerMap[columnName]] = `"${who}: ${text.replaceAll(
         '""',
-        '"'
+        '"',
       )}"`;
     });
   });
@@ -133,7 +133,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
 
   return new NextResponse(csv, {
     headers: {
-      'Content-Disposition': `attachment; filename=events.csv`,
+      'Content-Disposition': 'attachment; filename=events.csv',
       'Content-Type': 'text/csv',
     },
     status: 200,

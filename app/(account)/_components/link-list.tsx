@@ -40,7 +40,7 @@ const LinkList = Object.assign(
     <ul
       className={twMerge(
         'mx-4 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 empty:hidden',
-        className
+        className,
       )}
     >
       {children}
@@ -63,7 +63,7 @@ const LinkList = Object.assign(
         <Button
           className={twMerge(
             'm-0 grow gap-4 overflow-hidden px-4 py-3',
-            className
+            className,
           )}
           href={href}
           onClick={onClick}
@@ -97,7 +97,7 @@ const LinkList = Object.assign(
         {menu && menu}
       </li>
     ),
-  }
+  },
 );
 
 export default LinkList;

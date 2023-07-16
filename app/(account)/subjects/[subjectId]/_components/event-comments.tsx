@@ -25,7 +25,7 @@ const EventComments = ({
   if (!comments.length) return null;
 
   return (
-    <ul className={twMerge('space-y-4', className)} role="section">
+    <div className={twMerge('space-y-4', className)}>
       {comments.map(({ content, created_at, id, profile }) => (
         <EventComment
           content={content}
@@ -37,7 +37,7 @@ const EventComments = ({
           userId={userId}
         />
       ))}
-    </ul>
+    </div>
   );
 };
 
