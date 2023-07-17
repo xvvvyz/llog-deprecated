@@ -42,6 +42,7 @@ const Layout = async ({
   ]);
 
   if (!subject) notFound();
+  const isTeamMember = subject.team_id === teamId;
 
   return (
     <>
@@ -50,7 +51,7 @@ const Layout = async ({
         <h1 className="truncate text-2xl">{subject.name}</h1>
         <Avatar file={subject.image_uri} name={subject.name} />
       </Header>
-      {subject.team_id === teamId && teamMemberHeader}
+      {isTeamMember && teamMemberHeader}
       {subject.banner && (
         <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-3">
           {subject.banner}
@@ -61,7 +62,7 @@ const Layout = async ({
           {missions}
           {eventTypes}
         </div>
-        {insights}
+        {isTeamMember && insights}
       </div>
       {events}
     </>

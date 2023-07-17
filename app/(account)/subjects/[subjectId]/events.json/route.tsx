@@ -25,6 +25,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
       profile:profiles(first_name, last_name),
       type:event_types(
         session:sessions(
+          id,
           mission:missions(name),
           order
         ),
@@ -33,11 +34,12 @@ export const GET = async (req: Request, ctx: GetContext) => {
       )`,
     )
     .eq('subject_id', ctx.params.subjectId)
-    .order('created_at', { ascending: false })
+    .order('created_at')
     .order('order', { foreignTable: 'inputs' });
 
   if (!events) return new NextResponse(null, { status: 404 });
   const json: Array<any> = [];
+  const previousModuleCompletionTime: Record<string, number> = {};
 
   events.forEach((e) => {
     const event = firstIfArray(e);
@@ -54,7 +56,24 @@ export const GET = async (req: Request, ctx: GetContext) => {
       Timestamp: event.created_at,
     };
 
-    json.push(common);
+    json.push({
+      ...common,
+      TimeSincePreviousModuleCompleted: event.type.session
+        ? previousModuleCompletionTime[event.type.session.id]
+          ? Math.floor(
+              (new Date(event.created_at).getTime() -
+                new Date(
+                  previousModuleCompletionTime[event.type.session.id],
+                ).getTime()) /
+                1000,
+            )
+          : 0
+        : undefined,
+    });
+
+    if (event.type.session) {
+      previousModuleCompletionTime[event.type.session.id] = event.created_at;
+    }
 
     forceArray(event.inputs).forEach((input) => {
       json.push({
