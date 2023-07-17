@@ -5,7 +5,7 @@ import IconButton from '@/(account)/_components/icon-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { User } from '@supabase/gotrue-js';
+import { User } from '@supabase/gotrue-js/src/lib/types';
 import { useChat } from 'ai/react';
 import merge from 'lodash/merge';
 import { nanoid } from 'nanoid';

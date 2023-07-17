@@ -4,6 +4,8 @@ const nextConfig = {
     dirs: ['app'],
   },
   experimental: {
+    legacyBrowsers: false,
+    outputFileTracingIgnores: ['**canvas**'],
     serverActions: true,
   },
   images: {
