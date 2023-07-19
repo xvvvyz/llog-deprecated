@@ -86,22 +86,13 @@ const ChatForm = ({
                   const spec = merge(
                     {
                       config: {
-                        axis: {
-                          domainColor: '#ddd',
-                          grid: false,
-                          tickColor: '#ddd',
-                          title: null,
-                        },
+                        axis: { grid: false, title: null },
                         axisX: { labelAngle: -33 },
-                        legend: { columns: 2, orient: 'top', title: null },
+                        legend: { columns: 1, orient: 'top', title: null },
                         padding: 20,
                         style: {
-                          'guide-label': {
-                            fill: '#111',
-                            font: 'monospace',
-                          },
+                          'guide-label': { font: 'monospace' },
                           'guide-title': {
-                            fill: '#111',
                             font: 'monospace',
                             fontWeight: 'normal',
                           },
@@ -200,54 +191,28 @@ const ChatForm = ({
             const data = await res.json();
             dataRef.current = data;
 
-            const availableFieldValues: Record<string, Set<string> | string[]> =
-              {
-                InputLabel: new Set(),
-                Name: new Set(),
-                RecordType: ['Event', 'EventInput', 'MissionEvent'],
-                RecordedBy: new Set(),
-              };
-
-            const inputTypes: Record<string, string> = {};
+            const fields: Record<string, Set<string> | string[] | null> = {
+              'Name (nominal)': new Set(),
+            };
 
             for (const d of data) {
-              if (d.Name) {
-                (availableFieldValues.Name as Set<string>).add(d.Name);
-              }
+              (fields['Name (nominal)'] as Set<string>).add(
+                d['Name (nominal)'],
+              );
 
-              if (d.RecordedBy) {
-                (availableFieldValues.RecordedBy as Set<string>).add(
-                  d.RecordedBy,
-                );
-              }
-
-              if (d.InputLabel) {
-                (availableFieldValues.InputLabel as Set<string>).add(
-                  d.InputLabel,
-                );
-              }
-
-              if (!inputTypes[d.InputLabel]) {
-                inputTypes[d.InputLabel] =
-                  /(select|multi_select|checkbox)/.test(d.InputType)
-                    ? 'nominal'
-                    : 'quantitative';
+              for (const key of Object.keys(d)) {
+                if (key === 'Name (nominal)') continue;
+                if (!fields[key]) fields[key] = null;
               }
             }
 
-            for (const [key, value] of Object.entries(availableFieldValues)) {
-              if (value instanceof Set) {
-                availableFieldValues[key] = Array.from(value);
-              } else {
-                availableFieldValues[key] = value;
-              }
-            }
+            fields['Name (nominal)'] = Array.from(
+              fields['Name (nominal)'] as Set<string>,
+            );
 
             setMessages([
               {
-                content: JSON.stringify({
-                  metadata: { availableFieldValues, inputTypes },
-                }),
+                content: JSON.stringify({ fields }),
                 id: nanoid(),
                 role: 'system',
               },

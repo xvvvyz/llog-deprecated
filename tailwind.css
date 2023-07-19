@@ -38,6 +38,11 @@
   li > p:first-child {
     @apply inline;
   }
+
+  /* hack because Vega-Lite no have easy way to style tooltips ): */
+  #vg-tooltip-element {
+    @apply rounded-sm border-0 px-4 py-2 font-mono shadow-2xl;
+  }
 }
 
 @layer components {

@@ -27,8 +27,8 @@ dependencies:
     specifier: ^0.4.1
     version: 0.4.1(@supabase/supabase-js@2.26.0)
   '@supabase/gotrue-js':
-    specifier: ^2.42.0
-    version: 2.42.0(encoding@0.1.13)
+    specifier: ^2.44.1
+    version: 2.44.1(encoding@0.1.13)
   '@supabase/supabase-js':
     specifier: ^2.26.0
     version: 2.26.0(encoding@0.1.13)
@@ -102,8 +102,8 @@ dependencies:
     specifier: ^0.12.0
     version: 0.12.0(react-dom@18.2.0)(react@18.2.0)
   ai:
-    specifier: ^2.1.21
-    version: 2.1.21(react@18.2.0)(svelte@4.0.5)(vue@3.3.4)
+    specifier: ^2.1.22
+    version: 2.1.22(react@18.2.0)(svelte@4.0.5)(vue@3.3.4)
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.26)
@@ -189,8 +189,8 @@ dependencies:
     specifier: ^2.9.1
     version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
   vercel:
-    specifier: ^31.0.3
-    version: 31.0.3(@types/node@14.18.33)(encoding@0.1.13)
+    specifier: ^31.0.4
+    version: 31.0.4(@types/node@14.18.33)(encoding@0.1.13)
   xss:
     specifier: ^1.0.14
     version: 1.0.14
@@ -2493,8 +2493,8 @@ packages:
       - encoding
     dev: false
 
-  /@supabase/gotrue-js@2.42.0(encoding@0.1.13):
-    resolution: {integrity: sha512-qYyTD+WVP9gjE7Hzw/ywoL9f+1kuUxeKJbb9JSsxV4wZHdKKPFHczfna8ecbmapH7423OXp0lgQAUDX97M39qw==}
+  /@supabase/gotrue-js@2.44.1(encoding@0.1.13):
+    resolution: {integrity: sha512-/6AEWvvGHHFazoiLp8Uf17UfKRYmcOAnY5N4dcpLuUZkvilc8dHpgEngC/XLlZqWsK1r3lcjwROU3I8IBfGwDg==}
     dependencies:
       cross-fetch: 3.1.8(encoding@0.1.13)
     transitivePeerDependencies:
@@ -2531,7 +2531,7 @@ packages:
     resolution: {integrity: sha512-RXmTPTobaYAwkSobadHZmEVLmzX3SGrtRZIGfLWnLv92VzBRrjuXn0a+bJqKl50GUzsyqPA+j5pod7EwMkcH5A==}
     dependencies:
       '@supabase/functions-js': 2.1.2(encoding@0.1.13)
-      '@supabase/gotrue-js': 2.42.0(encoding@0.1.13)
+      '@supabase/gotrue-js': 2.44.1(encoding@0.1.13)
       '@supabase/postgrest-js': 1.7.2(encoding@0.1.13)
       '@supabase/realtime-js': 2.7.3
       '@supabase/storage-js': 2.5.1(encoding@0.1.13)
@@ -2899,7 +2899,7 @@ packages:
   /@types/node-fetch@2.6.3:
     resolution: {integrity: sha512-ETTL1mOEdq/sxUtgtOhKjyB2Irra4cjxksvcMUR5Zr4n+PxVhsCD9WS46oPbHL3et9Zde7CNRr+WUNlcHvsX+w==}
     dependencies:
-      '@types/node': 14.18.33
+      '@types/node': 20.4.2
       form-data: 3.0.1
     dev: false
 
@@ -3293,12 +3293,12 @@ packages:
       web-vitals: 0.2.4
     dev: false
 
-  /@vercel/gatsby-plugin-vercel-builder@1.3.13(encoding@0.1.13):
-    resolution: {integrity: sha512-Qi2zuH5RJZIg/OveGXjHwakwvFxqRKa8X3WZWdPZkUhcPPDaoBLZPr8cBgWaRYXIvZUmACUfbK71a7S1uwuALw==}
+  /@vercel/gatsby-plugin-vercel-builder@1.3.14(encoding@0.1.13):
+    resolution: {integrity: sha512-Q0HnEL8Mw246EOwiT089O12XrdtPR7XVMe8VqByekdv4ppkjc4LV5TbXaOP8ZczTinFxYxbWUwK4GnpJoZidag==}
     dependencies:
       '@sinclair/typebox': 0.25.24
       '@vercel/build-utils': 6.8.2
-      '@vercel/node': 2.15.5(encoding@0.1.13)
+      '@vercel/node': 2.15.6(encoding@0.1.13)
       '@vercel/routing-utils': 2.2.1
       esbuild: 0.14.47
       etag: 1.8.1
@@ -3317,8 +3317,8 @@ packages:
     resolution: {integrity: sha512-1rzFB664G6Yzp7j4ezW9hvVjqnaU2BhyUdhchbsxtRuxkMpGgPBZKhjzRQHFvlmkz37XLC658T5Nb1P91b4sBw==}
     dev: false
 
-  /@vercel/next@3.8.8:
-    resolution: {integrity: sha512-h/TcVnrjnRrxkgTod80Wpy9Lo2k+DCpsNtRX+G0tJ8q8/WxMucQQ0dLv0t3J5vwmypowPzYzK5kKSfrewQVMxg==}
+  /@vercel/next@3.9.0:
+    resolution: {integrity: sha512-o5xGLLYU9crP3ReDJSTU8y4gwgAEbSQSp6CG9QQYHFkn3YBJrgubXpNj1+OSfCcGKH9AK0TAfayJPPbwKilwvA==}
     dev: false
 
   /@vercel/nft@0.22.5(encoding@0.1.13):
@@ -3342,8 +3342,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vercel/node@2.15.5(encoding@0.1.13):
-    resolution: {integrity: sha512-KYMeVyGBsZ1xw/74/95wZdE/ZW1cRa8nrMKasjy2r54IuOUcdE35bcpMhw7hip34esL+PtQI50rXtMTQOLa0kQ==}
+  /@vercel/node@2.15.6(encoding@0.1.13):
+    resolution: {integrity: sha512-LXV971i7bCL+W9lz+IFG6P876gnp2coA0/5mrG3nr+wbo+9iU0pPO6YZcQ8tmhcmepILl8HnTvYHNTECZUeN6w==}
     dependencies:
       '@edge-runtime/node-utils': 2.0.3
       '@edge-runtime/primitives': 2.1.2
@@ -3383,8 +3383,8 @@ packages:
       - supports-color
     dev: false
 
-  /@vercel/remix-builder@1.8.17(@types/node@14.18.33)(encoding@0.1.13):
-    resolution: {integrity: sha512-v5xDVzRiG4xVw93dcevUUE5davDluTq6Mt2MtG0vM138Dc7zGlccbjd+Jqa+j7sm/V/xRQzDLJlPaZsPvJaBVg==}
+  /@vercel/remix-builder@1.8.18(@types/node@14.18.33)(encoding@0.1.13):
+    resolution: {integrity: sha512-GYIFBe+z3/AuPHhXcpKtMLDj+1LrgcfE3HKka9RuUbfLOcJbfwdFODWHV7c7D5zgEu/KTIGEO6dOJp8GQmPzng==}
     dependencies:
       '@remix-run/dev': /@vercel/remix-run-dev@1.18.1(@types/node@14.18.33)(encoding@0.1.13)
       '@vercel/build-utils': 6.8.2
@@ -3502,11 +3502,11 @@ packages:
     resolution: {integrity: sha512-J8I0B7wAn8piGoPhBroBfJWgMEJTMEL/2o8MCoCyWdaE7MRtpXhI10pj8IvcUvAECoGJ+SM1Pm+SvBqtbtZ5FQ==}
     dev: false
 
-  /@vercel/static-build@1.3.40(encoding@0.1.13):
-    resolution: {integrity: sha512-cjGNyqgV5Y3qfIMqW1iuT7L/xZkrbv+YA54VFjE7xEtvYJ0yAwfGtRYgIfkuTmZwmmVMcTfi/kxmGJ7dqjd7gA==}
+  /@vercel/static-build@1.3.41(encoding@0.1.13):
+    resolution: {integrity: sha512-1wHz338v/72RqmLu2S3XtUZkyTQfw1QR7kpODj+DIXVzz2HcpGqv70voex+B3FeC6wtD2yLCtTi2eLmFLEiB8A==}
     dependencies:
       '@vercel/gatsby-plugin-vercel-analytics': 1.0.10
-      '@vercel/gatsby-plugin-vercel-builder': 1.3.13(encoding@0.1.13)
+      '@vercel/gatsby-plugin-vercel-builder': 1.3.14(encoding@0.1.13)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -3750,8 +3750,8 @@ packages:
     resolution: {integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==}
     dev: false
 
-  /ai@2.1.21(react@18.2.0)(svelte@4.0.5)(vue@3.3.4):
-    resolution: {integrity: sha512-0133/3Zn6jO5RxxzDXBdgV5n9BcfQVWAqOdBqJXyctNQUcQ7blpH4YKfqrSZFb3t860Xws3JUhoF2utxxVdk9A==}
+  /ai@2.1.22(react@18.2.0)(svelte@4.0.5)(vue@3.3.4):
+    resolution: {integrity: sha512-aj9cfaEKyqdu1ypNKZ+6bmySp1+EwOokOL62Pmz7RsGSz803H31+z3fzeoPT64s8ARr2SRvIjjhwOEehKYrj2g==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.2.0
@@ -10970,21 +10970,21 @@ packages:
       - encoding
     dev: false
 
-  /vercel@31.0.3(@types/node@14.18.33)(encoding@0.1.13):
-    resolution: {integrity: sha512-wyvOgmq/Srk/Ex/ItaaF3BUxWzcJS4gYhbqYSKNPM2eMj7yfaicZH+PIAOevKbLZQM/4E9RnoL+dWJw3xNRhLA==}
+  /vercel@31.0.4(@types/node@14.18.33)(encoding@0.1.13):
+    resolution: {integrity: sha512-KO2r6he/KtCWg7mgdiGVJefe6Y369yfne794/K3mzFjJZo8A1lEt6vB5yy2a79G4SX8VY7JfT2DvfsAlhIb7vQ==}
     engines: {node: '>= 14'}
     hasBin: true
     dependencies:
       '@vercel/build-utils': 6.8.2
       '@vercel/go': 2.5.1
       '@vercel/hydrogen': 0.0.64
-      '@vercel/next': 3.8.8
-      '@vercel/node': 2.15.5(encoding@0.1.13)
+      '@vercel/next': 3.9.0
+      '@vercel/node': 2.15.6(encoding@0.1.13)
       '@vercel/python': 3.1.60
       '@vercel/redwood': 1.1.15(encoding@0.1.13)
-      '@vercel/remix-builder': 1.8.17(@types/node@14.18.33)(encoding@0.1.13)
+      '@vercel/remix-builder': 1.8.18(@types/node@14.18.33)(encoding@0.1.13)
       '@vercel/ruby': 1.3.76
-      '@vercel/static-build': 1.3.40(encoding@0.1.13)
+      '@vercel/static-build': 1.3.41(encoding@0.1.13)
     transitivePeerDependencies:
       - '@remix-run/serve'
       - '@swc/core'

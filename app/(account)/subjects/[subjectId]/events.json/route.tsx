@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server';
 
 export const revalidate = 60;
 
+const strip = (str: string) => str.replace(/['"]/g, '');
+
 interface GetContext {
   params: {
     subjectId: string;
@@ -45,20 +47,8 @@ export const GET = async (req: Request, ctx: GetContext) => {
     const event = firstIfArray(e);
     const profile = firstIfArray(event.profile);
 
-    const common = {
-      ModuleNumber: event.type.session ? event.type.order + 1 : undefined,
-      Name: event.type.name ?? event.type.session?.mission?.name,
-      RecordType: event.type.session ? 'MissionEvent' : 'Event',
-      RecordedBy: `${profile.first_name} ${profile.last_name}`,
-      SessionNumber: event.type.session
-        ? event.type.session?.order + 1
-        : undefined,
-      Timestamp: event.created_at,
-    };
-
-    json.push({
-      ...common,
-      TimeSincePreviousModuleCompleted: event.type.session
+    const row: any = {
+      'Module duration (quantitative)': event.type.session
         ? previousModuleCompletionTime[event.type.session.id]
           ? Math.floor(
               (new Date(event.created_at).getTime() -
@@ -69,21 +59,35 @@ export const GET = async (req: Request, ctx: GetContext) => {
             )
           : 0
         : undefined,
-    });
+      'Module number (ordinal)': event.type.session
+        ? event.type.order + 1
+        : undefined,
+      'Name (nominal)': strip(
+        event.type.name ?? event.type.session?.mission?.name,
+      ),
+      'Recorded by (nominal)': strip(
+        `${profile.first_name} ${profile.last_name}`,
+      ),
+      'Session number (ordinal)': event.type.session
+        ? event.type.session?.order + 1
+        : undefined,
+      'Timestamp (temporal)': event.created_at,
+    };
 
     if (event.type.session) {
       previousModuleCompletionTime[event.type.session.id] = event.created_at;
     }
 
-    forceArray(event.inputs).forEach((input) => {
-      json.push({
-        ...common,
-        InputLabel: input.input?.label,
-        InputType: input.input?.type,
-        InputValue: input.value ?? input.option?.label,
-        RecordType: 'EventInput',
-      });
+    forceArray(event.inputs).forEach((input: any) => {
+      const type = /(duration|number)/.test(input.input.type)
+        ? 'quantitative'
+        : 'nominal';
+      const key = strip(`${input.input.label} (${type})`);
+      row[key] = row[key] ?? [];
+      row[key].push(input.value ?? input.option.label);
     });
+
+    json.push(row);
   });
 
   return new NextResponse(JSON.stringify(json), { status: 200 });
