@@ -40,6 +40,7 @@ Must color by "Name (nominal)" when a name is not specified.
 Must use "Module duration (quantitative)" to calculate session duration.
 Must use a heatmap when comparing two nominal fields.
 Must always use a "point" mark instead of "line".
+Must avoid stacked bar charts when possible.
 
 Fields that should not be flattened:
 
@@ -63,7 +64,7 @@ create_vis {"mark":"point","encoding":{"x":{"field":"Timestamp (temporal)","scal
 
 {"fields":{"Timestamp (temporal)":null,"Name (nominal)":[]}}
 Prompt: events by time of day
-create_vis {"mark":"rect","encoding":{"x":{"field":"Timestamp (temporal)","timeUnit":"hours"},"y":{"field":"Name (nominal)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (temporal)","timeUnit":"hours","title":"Time of Day"},{"aggregate":"count"}]}}
+create_vis {"mark":"rect","encoding":{"x":{"field":"Timestamp (temporal)","timeUnit":"hours","axis":{"tickBand":"extent"}},"y":{"field":"Name (nominal)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (temporal)","timeUnit":"hours","title":"Time of Day"},{"aggregate":"count"}]}}
 
 {"fields":{"Name (nominal)":[]}}
 Prompt: event counts
