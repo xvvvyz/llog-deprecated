@@ -105,6 +105,7 @@ const EventForm = ({
 
           case InputTypes.Duration: {
             if (!inputInputs[0]?.value) return [];
+
             const { hours, minutes, seconds } = parseSeconds(
               inputInputs[0].value,
             );

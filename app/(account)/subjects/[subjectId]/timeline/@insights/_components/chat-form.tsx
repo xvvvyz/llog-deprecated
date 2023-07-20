@@ -192,23 +192,19 @@ const ChatForm = ({
             dataRef.current = data;
 
             const fields: Record<string, Set<string> | string[] | null> = {
-              'Name (nominal)': new Set(),
+              'Name (n)': new Set(),
             };
 
             for (const d of data) {
-              (fields['Name (nominal)'] as Set<string>).add(
-                d['Name (nominal)'],
-              );
+              (fields['Name (n)'] as Set<string>).add(d['Name (n)']);
 
               for (const key of Object.keys(d)) {
-                if (key === 'Name (nominal)') continue;
+                if (key === 'Name (n)') continue;
                 if (!fields[key]) fields[key] = null;
               }
             }
 
-            fields['Name (nominal)'] = Array.from(
-              fields['Name (nominal)'] as Set<string>,
-            );
+            fields['Name (n)'] = Array.from(fields['Name (n)'] as Set<string>);
 
             setMessages([
               {

@@ -19,104 +19,127 @@ const systemMessages = [
 
 If asked about your capabilities, respond briefly (one or two sentences) with the types of charts that are possible to create with Vega-Lite (but do not mention Vega-Lite).
 
-Inputs: event types and modules have data inputs which are either quantitative or nominal.
-Event types: define one-off things that can be recorded. Once recorded, an event is created.
-Missions: long term modification plans which are comprised of sessions.
-Sessions: define a series of modules to be completed in one sitting.
-Modules: define the steps of a session to be completed. Once completed, an event is created.
-Event: a record of something that has has occurred. These are the things that are visualized.
+Inputs: event types and modules have data inputs which are either quantitative or nominal
+Event types: define one-off things that can be recorded. Once recorded, an event is created
+Missions: long term modification plans which are comprised of sessions
+Sessions: define a series of modules to be completed in one sitting
+Modules: define the steps of a session to be completed. Once completed, an event is created
+Event: a record of something that has has occurred. These are the things that are visualized
 
-Timestamp: time of event in ISO 8601 format
-Name: name of the event type or mission
-Recorded by: name of the person who recorded the event
-Module duration: time between completion of previous module and current module in seconds
+Timestamp (t): time of event in ISO 8601 format
+Name (n): name of the event type or mission
+Recorded by (n): name of the person who recorded the event
+Module duration (q): time between completion of previous module and current module in seconds
+
+(n): nominal values
+(o): ordinal values
+(q): quantitative values
+(t): temporal values
+(an): array of nominal value e.g ['a', 'b']
+(aqn): array of arrays of quantitative and nominal values e.g [[1, 'a'], [2, 'b']]
+
+Fields that always have values:
+
+Timestamp (t)
+Name (n)
+Recorded by (n)
 
 Rules for "create_vis" function:
 
-Must pass valid Vega-Lite JSON as arguments.
-Must filter out values with a transform filter when possible.
-Must use "field types" key below to determine field types.
-Must color by "Name (nominal)" when a name is not specified.
-Must use "Module duration (quantitative)" to calculate session duration.
-Must use a heatmap when comparing two nominal fields.
-Must always use a "point" mark instead of "line".
-Must avoid stacked bar charts when possible.
-
-Fields that should not be flattened:
-
-- Timestamp (temporal)
-- Name (nominal)
-- Recorded by (nominal)
-- Session number (ordinal)
-- Module number (ordinal)
-- Module duration (quantitative)
-
-Important: all other fields should be flattened.
-
-Bad: {"flatten":["Timestamp (temporal)"]}
-Bad: {"flatten":["Name (nominal)"]}
+Must use a "filter" transform when charting fields that may not have values e.g {"filter":"datum['Foo (n)']"}
+Must use a "flatten" transform when charting "(an)" or "(aqn)" fields e.g {"flatten":["Foo (an)"]}
+Must use a "color" encoding on "Name (n)" when a name is not specified e.g {"color":{"field":"Name (n)"}}
+Must use a "point" mark when charting "(q)" fields
 
 Sample fields, prompts and "create_vis" function calls:
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":[]}}
-Prompt: events over time
-create_vis {"mark":"point","encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}},"y":{"field":"Name (nominal)","sort":{"op":"count"}}}}
-
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":[]}}
-Prompt: events by time of day
-create_vis {"mark":"rect","encoding":{"x":{"field":"Timestamp (temporal)","timeUnit":"hours","axis":{"tickBand":"extent"}},"y":{"field":"Name (nominal)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (temporal)","timeUnit":"hours","title":"Time of Day"},{"aggregate":"count"}]}}
-
-{"fields":{"Name (nominal)":[]}}
+{"fields":{"Name (n)":[]}}
 Prompt: event counts
-create_vis {"mark":"bar","encoding":{"x":{"aggregate":"count"},"y":{"field":"Name (nominal)","sort":{"op":"count"}}}}
+create_vis {"mark":"bar","encoding":{"x":{"aggregate":"count"},"y":{"field":"Name (n)","sort":{"op":"count"}}}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":["Some event name"]}}
-Prompt: some event name over time
-create_vis {"mark":"point","transform":[{"filter":"datum['Name (nominal)']=='Some event name'"}],"encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":[]}}
+Prompt: events vs time
+create_vis {"mark":"point","encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Name (n)","sort":{"op":"count"}}}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":[],"Quantitative input (quantitative)":null}}
-Prompt: quantitative input over time
-create_vis {"mark":"line","transform":[{"filter":"datum['Quantitative input (quantitative)']"},{"flatten":["Quantitative input (quantitative)"]}],"encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}},"y":{"field":"Quantitative input (quantitative)","type":"quantitative"},"color":{"field":"Name (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":[]}}
+Prompt: events vs time of day
+create_vis {"mark":"rect","encoding":{"x":{"field":"Timestamp (t)","timeUnit":"hours","axis":{"tickCount":"hours"}},"y":{"field":"Name (n)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (t)","timeUnit":"hours"},{"aggregate":"count"}]}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":["Some event name"],"Quantitative input (quantitative)":null}}
-Prompt: some event name quantitative input over time
-create_vis {"mark":"line","transform":[{"filter":"datum['Name (nominal)']=='Some event name'&&datum['Quantitative input (quantitative)']"},{"flatten":["Quantitative input (quantitative)"]}],"encoding":{"x":{"field":"Timestamp (temporal)",,"scale":{"type":"time"}},"y":{"field":"Quantitative input (quantitative)","type":"quantitative"}}}
+{"fields":{"Name (n)":[],"Foo (n)":null}}
+Prompt: foo counts
+create_vis {"mark":"bar","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"aggregate":"count"},"y":{"field":"Foo (n)","sort":{"op":"count"}},"color":{"field":"Name (n)"}}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":[],"Nominal input (nominal)":null}}
-Prompt: nominal input over time
-create_vis {"mark":"point","transform":[{"filter":"datum['Nominal input (nominal)']"},{"flatten":["Nominal input (nominal)"]}],"encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}},"y":{"field":"Nominal input (nominal)","sort":{"op":"count"}},"color":{"field":"Name (nominal)"}}}
+{"fields":{"Name (n)":[],"Foo (an)":null}}
+Prompt: foo counts
+create_vis {"mark":"bar","transform":[{"filter":"datum['Foo (an)']"},{"flatten":["Foo (an)"]}],"encoding":{"x":{"aggregate":"count"},"y":{"field":"Foo (an)","sort":{"op":"count"}},"color":{"field":"Name (n)"}}}
 
-{"fields":{"Name (nominal)":[],"Nominal input (nominal)":null}}
-Prompt: nominal input counts
-create_vis {"mark":"bar","transform":[{"filter":"datum['Nominal input (nominal)']"},{"flatten":["Nominal input (nominal)"]}],"encoding":{"x":{"aggregate":"count"},"y":{"field":"Nominal input (nominal)","sort":{"op":"count"}},"color":{"field":"Name (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"]}}
+Prompt: foo vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}}}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":["Some event name"],"Nominal input (nominal)":null}}
-Prompt: some event name nominal input over time
-create_vis {"mark":"point","transform":[{"filter":"datum['Name (nominal)']=='Some event name'&&datum['Nominal input (nominal)']"},{"flatten":["Nominal input (nominal)"]}],"encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}},"y":{"field":"Nominal input (nominal)","sort":{"op":"count"}}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":[],"Foo (q)":null}}
+Prompt: foo vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Foo (q)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Foo (q)","type":"quantitative"},"color":{"field":"Name (n)"}}}
 
-{"fields":{"Timestamp (temporal)":null,"Name (nominal)":["Some event name"],"Recorded by (nominal)":null,"Nominal input (nominal)":null}}
-Prompt: some event name nominal input over time by person
-create_vis {"mark":"point","transform":[{"filter":"datum['Name (nominal)']=='Some event name'&&datum['Nominal input (nominal)']"},{"flatten":["Nominal input (nominal)"]}],"encoding":{"x":{"field":"Timestamp (temporal)","scale":{"type":"time"}},"y":{"field":"Nominal input (nominal)","sort":{"op":"count"}},"color":{"field":"Recorded by (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":[],"Foo (n)":null}}
+Prompt: foo vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Foo (n)"},"color":{"field":"Name (n)"}}}
 
-{"fields":{"Name (nominal)":[],"Session number (ordinal)":null,"Module duration (quantitative)":null}}
-Prompt: session duration over time
-create_vis {"mark":"line","transform":[{"filter":"datum['Module duration (quantitative)']"},{"aggregate":[{"op":"sum","field":"Module duration (quantitative)","as":"Session duration (quantitative)"}],"groupby":["Name (nominal)","Session number (ordinal)"]}],"encoding":{"x":{"field":"Session number (ordinal)"},"y":{"field":"Session duration (quantitative)","type":"quantitative"},"color":{"field":"Name (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":[],"Foo (q)":null}}
+Prompt: foo vs time of day
+create_vis {"mark":"point","transform":[{"filter":"datum['Foo (q)']"}],"encoding":{"x":{"field":"Timestamp (t)","timeUnit":"hours","axis":{"tickCount":"hours"}},"y":{"field":"Foo (q)","type":"quantitative"},"color":{"field":"Name (n)"}}}
 
-{"fields":{"Name (nominal)":["Some mission name"],"Session number (ordinal)":null,"Module duration (quantitative)":null}}
-Prompt: some mission name session duration over time
-create_vis {"mark":"line","transform":[{"filter":"datum['Name (nominal)']=='Some mission name'&&datum['Module duration (quantitative)']"},{"aggregate":[{"op":"sum","field":"Module duration (quantitative)","as":"Session duration (quantitative)"}],"groupby":["Name (nominal)","Session number (ordinal)"]}],"encoding":{"x":{"field":"Session number (ordinal)"},"y":{"field":"Session duration (quantitative)","type":"quantitative"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (q)":null}}
+Prompt: foo bar vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (q)']"}],"encoding":{"x":{"field":"Timestamp (t)",,"scale":{"type":"time"}},"y":{"field":"Bar (q)","type":"quantitative"}}}
 
-{"fields":{"Quantitative input (quantitative)":null,"Nominal input (nominal)":null}}
-Prompt: quantitative input vs nominal input
-create_vis {"mark":"point","transform":[{"filter":"datum['Nominal input (nominal)']&&datum['Quantitative input (quantitative)']"},{"flatten":["Nominal input (nominal)","Quantitative input (quantitative)"]},{"filter":"datum['Nominal input (nominal)']&&datum['Quantitative input (quantitative)']"}],"encoding":{"x":{"field":"Quantitative input (quantitative)","type":"quantitative"},"y":{"field":"Nominal input (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (n)":null}}
+Prompt: foo bar vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"}}}
 
-{"fields":{"Quantitative input (quantitative)":null,"Nominal input (nominal)":null}}
-Prompt: quantitative input vs nominal input convert quantitative input seconds to minutes
-create_vis {"mark":"point","transform":[{"filter":"datum['Nominal input (nominal)']&&datum['Quantitative input (quantitative)']"},{"flatten":["Nominal input (nominal)","Quantitative input (quantitative)"]},{"filter":"datum['Nominal input (nominal)']&&datum['Quantitative input (quantitative)']"},{"calculate":"datum['Quantitative input (quantitative)']/60","as":"Quantitative input in minutes (quantitative)"}],"encoding":{"x":{"field":"Quantitative input in minutes (quantitative)","type":"quantitative"},"y":{"field":"Nominal input (nominal)"}}}
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (q)":null}}
+Prompt: foo bar daily average vs time
+create_vis {"transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (q)']"},{"field":"Timestamp (t)","timeUnit":"date","as":"Date"}],"mark":"line","encoding":{"x":{"field":"Date","scale":{"type":"time"}},"y":{"field":"Bar (q)","aggregate":"average"}}}
 
-{"fields":{"Nominal input (nominal)":null,"Recorded by (nominal)":null}}
-Prompt: nominal input vs who recorded
-create_vis {"mark":"rect","transform":[{"filter":"datum['Nominal input (nominal)']"},{"flatten":["Nominal input (nominal)"]},{"filter":"datum['Nominal input (nominal)']"}],"encoding":{"x":{"field":"Nominal input (nominal)"},"y":{"field":"Recorded by (nominal)"},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}`,
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (n)":null}}
+Prompt: foo bar vs time of day
+create_vis {"mark":"rect","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","timeUnit":"hours","axis":{"tickCount":"hours"}},"y":{"field":"Bar (n)"},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (t)","timeUnit":"hours"},{"aggregate":"count"}]}}
+
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (q)":null}}
+Prompt: foo bar vs day of week with average line
+create_vis {"transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (q)']"}],"layer":[{"mark":{"type":"point","opacity":0.3},"encoding":{"x":{"field":"Timestamp (t)","timeUnit":"day","axis":{"tickCount":"day"}},"y":{"field":"Bar (q)","type":"quantitative"},"tooltip":[{"field":"Bar (q)"},{"field":"Timestamp (t)","timeUnit":"day"}]}},{"mark":"line","encoding":{"x":{"field":"Timestamp (t)","timeUnit":"day"},"y":{"field":"Bar (q)","aggregate":"average"}}}]}
+
+{"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Recorded by (n)":null,"Bar (n)":null}}
+Prompt: foo bar vs time vs who recorded
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"},"color":{"field":"Recorded by (n)"}}}
+
+{"fields":{"Name (n)":[],"Session number (o)":null,"Module duration (q)":null}}
+Prompt: session duration vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Module duration (q)']"},{"aggregate":[{"op":"sum","field":"Module duration (q)","as":"Session duration (q)"}],"groupby":["Name (n)","Session number (o)"]}],"encoding":{"x":{"field":"Session number (o)"},"y":{"field":"Session duration (q)","type":"quantitative"},"color":{"field":"Name (n)"}}}
+
+{"fields":{"Name (n)":["Foo"],"Session number (o)":null,"Module duration (q)":null}}
+Prompt: foo session duration vs time
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Module duration (q)']"},{"aggregate":[{"op":"sum","field":"Module duration (q)","as":"Session duration (q)"}],"groupby":["Name (n)","Session number (o)"]}],"encoding":{"x":{"field":"Session number (o)"},"y":{"field":"Session duration (q)","type":"quantitative"}}}
+
+{"fields":{"Foo (q)":null,"Bar (n)":null}}
+Prompt: foo vs bar
+create_vis {"mark":"point","transform":[{"filter":"datum['Bar (n)']&&datum['Foo (q)']"}],"encoding":{"x":{"field":"Foo (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}
+
+{"fields":{"Foo (n)":null,"Bar (an)":null}}
+Prompt: foo vs bar
+create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (n)']&&datum['Bar (an)']"},{"flatten":["Bar (an)"]}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Bar (an)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
+
+{"fields":{"Foo (an)":null,"Bar (an)":null}}
+Prompt: foo vs bar no null values
+create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (an)']&&datum['Bar (an)']"},{"flatten":["Foo (an)","Bar (an)"]},{"filter":"datum['Foo (an)']&&datum['Bar (an)']"}],"encoding":{"x":{"field":"Foo (an)","sort":{"op":"count","order":"descending"}},"y":{"field":"Bar (an)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
+
+{"fields":{"Foo (n)":null,"Recorded by (n)":null}}
+Prompt: foo vs who recorded
+create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Recorded by (n)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
+
+{"fields":{"Foo (q)":null,"Bar (n)":null}}
+Prompt: foo vs bar convert foo seconds to minutes
+create_vis {"mark":"point","transform":[{"filter":"datum['Bar (n)']&&datum['Foo (q)']"},{"calculate":"datum['Foo (q)']/60","as":"Foo in minutes (q)"}],"encoding":{"x":{"field":"Foo in minutes (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}`,
     role: 'system',
   },
 ];
@@ -131,7 +154,6 @@ export const POST = async (req: Request) => {
         functions,
         messages: [...systemMessages, ...messages],
         model: 'gpt-4-0613',
-        // model: 'gpt-3.5-turbo-0613',
         stream: true,
         temperature: 0.4,
       }),
