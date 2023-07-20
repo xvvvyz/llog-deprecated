@@ -41,7 +41,7 @@ const ChatForm = ({
     experimental_onFunctionCall: async () => {},
     initialMessages: [
       {
-        content: 'Hello! I can create visualizations of your data.',
+        content: 'Hello! Ask me about your event data.',
         id: nanoid(),
         role: 'assistant',
       },
