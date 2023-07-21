@@ -36,7 +36,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
       )`,
     )
     .eq('subject_id', ctx.params.subjectId)
-    .order('created_at')
+    .order('created_at', { ascending: false })
     .order('order', { foreignTable: 'inputs' });
 
   if (!events) return new NextResponse(null, { status: 404 });

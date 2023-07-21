@@ -41,7 +41,7 @@ const ChatForm = ({
     experimental_onFunctionCall: async () => {},
     initialMessages: [
       {
-        content: 'Hello! Ask me about your event data.',
+        content: 'Hello! What would you like to see?',
         id: nanoid(),
         role: 'assistant',
       },
@@ -50,7 +50,7 @@ const ChatForm = ({
 
   return (
     <div className="px-4">
-      <div className="space-y-4 rounded border border-alpha-1 bg-bg-2 py-4">
+      <div className="space-y-4 rounded border border-alpha-1 bg-alpha-reverse-1 py-4">
         <div className="space-y-4" role="section">
           {useMemo(
             () =>
@@ -167,7 +167,7 @@ const ChatForm = ({
                       <div className="smallcaps h-5">
                         {m.role === 'user'
                           ? `${first_name} ${last_name}`
-                          : 'Visualization assistant'}
+                          : 'Visualization Assistant'}
                       </div>
                       <div className="mt-1">
                         <ReactMarkdown className="prose" linkTarget="_blank">
@@ -223,7 +223,7 @@ const ChatForm = ({
             className="rounded-sm"
             disabled={isInitializing.value || isLoading}
             onChange={handleInputChange}
-            placeholder="What do you want to see?"
+            placeholder="Send message…"
             right={
               <IconButton
                 className="m-0 px-3 py-2.5"
