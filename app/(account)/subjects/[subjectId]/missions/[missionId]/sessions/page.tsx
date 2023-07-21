@@ -46,9 +46,13 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   if (!subject || !mission) notFound();
   const sessions = forceArray(mission.sessions);
 
-  const highestOrder = sessions.reduce(
-    (acc, session) => Math.max(acc, session.order),
-    -1,
+  const { highestOrder, sessionsReversed } = sessions.reduce(
+    (acc, session, i) => {
+      acc.highestOrder = Math.max(acc.highestOrder, session.order);
+      acc.sessionsReversed.push(sessions[sessions.length - i - 1]);
+      return acc;
+    },
+    { highestOrder: -1, sessionsReversed: [] },
   );
 
   const nextSessionOrder = highestOrder + 1;
@@ -79,9 +83,9 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
           Add session
         </Button>
       </Header>
-      {sessions.length ? (
+      {sessionsReversed.length ? (
         <ul className="mx-4 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 leading-snug">
-          {sessions.map(
+          {sessionsReversed.map(
             (session: GetMissionWithSessionsAndEventsData['sessions'][0]) => {
               const modules = forceArray(session.modules);
               const completedModules = modules.filter((m) => m.event.length);

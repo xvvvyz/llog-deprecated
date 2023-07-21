@@ -10,8 +10,8 @@ const listSubjectMissions = (subjectId: string) =>
     .eq('deleted', false)
     .order('name')
     .eq('sessions.deleted', false)
-    .eq('sessions.draft', false)
     .order('order', { foreignTable: 'sessions' })
+    .eq('sessions.draft', false)
     .or(`scheduled_for.lte.${new Date().toISOString()},scheduled_for.is.null`, {
       foreignTable: 'sessions',
     })

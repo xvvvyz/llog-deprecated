@@ -137,7 +137,7 @@ const SessionLayout = async ({
             ))
           )}
         </div>
-        {isEditOrCreate && sessionOrder >= highestOrder ? (
+        {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={!!order}
             href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${nextSessionOrder}`}

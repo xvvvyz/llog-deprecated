@@ -6,9 +6,9 @@ const getMissionWithSessions = (missionId: string, includeDraft = false) =>
     .select('id, name, sessions(draft, id, order, scheduled_for, title)')
     .eq('id', missionId)
     .eq('sessions.deleted', false)
-    .not('sessions.draft', 'is', includeDraft ? null : true)
-    .order('draft', { foreignTable: 'sessions' })
     .order('order', { foreignTable: 'sessions' })
+    .not('sessions.draft', 'is', includeDraft ? null : true)
+    .order('draft', { ascending: false, foreignTable: 'sessions' })
     .single();
 
 export type GetMissionWithSessionsData = Awaited<

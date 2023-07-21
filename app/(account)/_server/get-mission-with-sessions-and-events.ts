@@ -22,8 +22,8 @@ const getMissionWithSessionsAndEvents = (missionId: string) =>
     )
     .eq('id', missionId)
     .eq('sessions.deleted', false)
-    .order('order', { ascending: false, foreignTable: 'sessions' })
-    .order('draft', { foreignTable: 'sessions' })
+    .order('order', { foreignTable: 'sessions' })
+    .order('draft', { ascending: false, foreignTable: 'sessions' })
     .eq('sessions.modules.deleted', false)
     .single();
 
