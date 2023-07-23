@@ -43,7 +43,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
   const json: Array<any> = [];
   const previousModuleCompletionTime: Record<string, number> = {};
 
-  events.forEach((e) => {
+  events.reverse().forEach((e) => {
     const event = firstIfArray(e);
     const profile = firstIfArray(event.profile);
 

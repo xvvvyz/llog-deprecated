@@ -56,7 +56,8 @@ Module duration (q): time between completion of previous session module and curr
 
 Rules for "create_vis" function:
 
-Must use a "filter" transform when charting fields that may not have values e.g {"filter":"datum['Foo (n)']"}
+Must use a "filter" transform when charting fields that may not have values e.g {"filter":"datum['Foo (q)']"}
+Must use "isValid" when filtering nominal fields e.g {"filter":"isValid(datum['Foo (n)'])"}
 Must use a "flatten" transform when charting "(an)" or "(aqn)" fields e.g {"flatten":["Foo (an)"]}
 Must use a "color" encoding on "Name (n)" when a name is not specified e.g {"color":{"field":"Name (n)"}}
 Must use a "point" mark when charting "(q)" fields
@@ -77,7 +78,7 @@ create_vis {"mark":"rect","encoding":{"x":{"field":"Timestamp (t)","timeUnit":"h
 
 {"fields":{"Name (n)":[],"Foo (n)":null}}
 Prompt: foo counts
-create_vis {"mark":"bar","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"aggregate":"count"},"y":{"field":"Foo (n)","sort":{"op":"count"}},"color":{"field":"Name (n)"}}}
+create_vis {"mark":"bar","transform":[{"filter":"isValid(datum['Foo (n)'])"}],"encoding":{"x":{"aggregate":"count"},"y":{"field":"Foo (n)","sort":{"op":"count"}},"color":{"field":"Name (n)"}}}
 
 {"fields":{"Name (n)":[],"Foo (an)":null}}
 Prompt: foo counts
@@ -93,7 +94,7 @@ create_vis {"mark":"point","transform":[{"filter":"datum['Foo (q)']"}],"encoding
 
 {"fields":{"Timestamp (t)":null,"Name (n)":[],"Foo (n)":null}}
 Prompt: foo vs time
-create_vis {"mark":"point","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Foo (n)"},"color":{"field":"Name (n)"}}}
+create_vis {"mark":"point","transform":[{"filter":"isValid(datum['Foo (n)'])"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Foo (n)"},"color":{"field":"Name (n)"}}}
 
 {"fields":{"Timestamp (t)":null,"Name (n)":[],"Foo (q)":null}}
 Prompt: foo vs time of day
@@ -105,7 +106,7 @@ create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&dat
 
 {"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (n)":null}}
 Prompt: foo bar vs time
-create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"}}}
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&isValid(datum['Bar (n)'])"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"}}}
 
 {"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (q)":null}}
 Prompt: foo bar daily average vs time
@@ -113,7 +114,7 @@ create_vis {"transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (q)']"}
 
 {"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (n)":null}}
 Prompt: foo bar vs time of day
-create_vis {"mark":"rect","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","timeUnit":"hours","axis":{"tickCount":"hours"}},"y":{"field":"Bar (n)"},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (t)","timeUnit":"hours"},{"aggregate":"count"}]}}
+create_vis {"mark":"rect","transform":[{"filter":"datum['Name (n)']=='Foo'&&isValid(datum['Bar (n)'])"}],"encoding":{"x":{"field":"Timestamp (t)","timeUnit":"hours","axis":{"tickCount":"hours"}},"y":{"field":"Bar (n)"},"color":{"aggregate":"count"},"tooltip":[{"field":"Timestamp (t)","timeUnit":"hours"},{"aggregate":"count"}]}}
 
 {"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Bar (q)":null}}
 Prompt: foo bar vs day of week with average line
@@ -121,7 +122,7 @@ create_vis {"transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (q)']"}
 
 {"fields":{"Timestamp (t)":null,"Name (n)":["Foo"],"Recorded by (n)":null,"Bar (n)":null}}
 Prompt: foo bar vs time vs who recorded
-create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&datum['Bar (n)']"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"},"color":{"field":"Recorded by (n)"}}}
+create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&isValid(datum['Bar (n)'])"}],"encoding":{"x":{"field":"Timestamp (t)","scale":{"type":"time"}},"y":{"field":"Bar (n)"},"color":{"field":"Recorded by (n)"}}}
 
 {"fields":{"Name (n)":[],"Session number (o)":null,"Module duration (q)":null}}
 Prompt: session duration vs time
@@ -133,11 +134,11 @@ create_vis {"mark":"point","transform":[{"filter":"datum['Name (n)']=='Foo'&&dat
 
 {"fields":{"Foo (q)":null,"Bar (n)":null}}
 Prompt: foo vs bar
-create_vis {"mark":"point","transform":[{"filter":"datum['Bar (n)']&&datum['Foo (q)']"}],"encoding":{"x":{"field":"Foo (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}
+create_vis {"mark":"point","transform":[{"filter":"isValid(datum['Bar (n)'])&&datum['Foo (q)']"}],"encoding":{"x":{"field":"Foo (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}
 
 {"fields":{"Foo (n)":null,"Bar (an)":null}}
 Prompt: foo vs bar
-create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (n)']&&datum['Bar (an)']"},{"flatten":["Bar (an)"]}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Bar (an)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
+create_vis {"mark":"rect","transform":[{"filter":"isValid(datum['Foo (n)'])&&datum['Bar (an)']"},{"flatten":["Bar (an)"]}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Bar (an)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
 
 {"fields":{"Foo (an)":null,"Bar (an)":null}}
 Prompt: foo vs bar no null values
@@ -145,11 +146,11 @@ create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (an)']&&datum['Bar 
 
 {"fields":{"Foo (n)":null,"Recorded by (n)":null}}
 Prompt: foo vs who recorded
-create_vis {"mark":"rect","transform":[{"filter":"datum['Foo (n)']"}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Recorded by (n)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
+create_vis {"mark":"rect","transform":[{"filter":"isValid(datum['Foo (n)'])"}],"encoding":{"x":{"field":"Foo (n)","sort":{"op":"count","order":"descending"}},"y":{"field":"Recorded by (n)","sort":{"op":"count"}},"color":{"aggregate":"count"},"tooltip":[{"aggregate":"count"}]}}
 
 {"fields":{"Foo (q)":null,"Bar (n)":null}}
 Prompt: foo vs bar convert foo seconds to minutes
-create_vis {"mark":"point","transform":[{"filter":"datum['Bar (n)']&&datum['Foo (q)']"},{"calculate":"datum['Foo (q)']/60","as":"Foo in minutes (q)"}],"encoding":{"x":{"field":"Foo in minutes (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}`,
+create_vis {"mark":"point","transform":[{"filter":"isValid(datum['Bar (n)'])&&datum['Foo (q)']"},{"calculate":"datum['Foo (q)']/60","as":"Foo in minutes (q)"}],"encoding":{"x":{"field":"Foo in minutes (q)","type":"quantitative"},"y":{"field":"Bar (n)"}}}`,
     role: 'system',
   },
 ];
