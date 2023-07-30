@@ -59,7 +59,8 @@ const SessionLayout = async ({
   const sessionOrder = order ? Number(order) : currentSession?.order;
   if (typeof sessionOrder === 'undefined') notFound();
 
-  const { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
+  // eslint-disable-next-line prefer-const
+  let { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
     (acc, session, i) => {
       acc.highestOrder = Math.max(acc.highestOrder, session.order);
 
@@ -77,12 +78,24 @@ const SessionLayout = async ({
 
       return acc;
     },
-    {
-      highestOrder: -1,
-      nextSessionId: null,
-      previousSessionId: sessions[sessionOrder - 1]?.id ?? null,
-    },
+    { highestOrder: -1, nextSessionId: null, previousSessionId: null },
   );
+
+  if (
+    isEditOrCreate &&
+    sessions.length > 0 &&
+    !previousSessionId &&
+    !nextSessionId
+  ) {
+    sessions.some((session) => {
+      if (session.order < sessionOrder) {
+        previousSessionId = session.id;
+      } else if (session.order > sessionOrder) {
+        nextSessionId = session.id;
+        return true;
+      }
+    });
+  }
 
   const editSuffix = isEditOrCreate ? '/edit' : '';
   const nextSessionOrder = highestOrder + 1;
