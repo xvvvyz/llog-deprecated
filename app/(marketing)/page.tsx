@@ -23,7 +23,7 @@ const Page = () => (
         <h1 className="mx-auto max-w-[21rem] text-5xl font-bold text-white md:max-w-2xl lg:max-w-3xl lg:text-6xl">
           The ultimate platform for behavior consultants
         </h1>
-        <p className="mx-auto mt-8 max-w-[23rem] text-lg text-fg-3">
+        <p className="mx-auto mt-8 max-w-[21rem] text-fg-3">
           Collaboratively track behavior with clients, save time and
           deliver&nbsp;incredible&nbsp;results.
         </p>
@@ -46,15 +46,15 @@ const Page = () => (
             Planning, tracking and analyzing,&nbsp;simplified
           </h1>
           <p className="mx-auto mt-6 max-w-lg text-fg-3">
-            Packed with stunningly simple yet powerful features, we built llog
-            to make working together towards behavioral
-            goals&nbsp;a&nbsp;pure&nbsp;joy.
+            Packed with stunningly simple yet powerful features, we
+            built&nbsp;llog to make working together towards
+            behavioral&nbsp;goals&nbsp;a&nbsp;pure&nbsp;joy.
           </p>
         </div>
         <div className="mt-24 grid gap-x-12 gap-y-10 lg:grid-cols-2">
           <div>
             <div className="sm:pl-4">
-              <h2 className="text-lg text-white">
+              <h2 className="text-xl text-white">
                 Manage clients from anywhere
               </h2>
               <p className="mt-2 max-w-sm text-fg-3">
@@ -69,7 +69,7 @@ const Page = () => (
           </div>
           <div className="flex flex-col gap-5 lg:flex-col-reverse">
             <div className="sm:pl-4">
-              <h2 className="text-lg text-white">Record what matters most</h2>
+              <h2 className="text-xl text-white">Record what matters most</h2>
               <p className="mt-2 max-w-sm text-fg-3">
                 Fully customizable and reusable inputs give you the freedom to
                 track pretty&nbsp;much&nbsp;anything. If you can imagine it, you
@@ -82,7 +82,7 @@ const Page = () => (
           </div>
           <div>
             <div className="sm:pl-4">
-              <h2 className="text-lg text-white">Keep an eye on every event</h2>
+              <h2 className="text-xl text-white">Keep an eye on every event</h2>
               <p className="mt-2 max-w-sm text-fg-3">
                 Live activity timelines and real-time notifications keep you
                 right on top of client progress, day in day out. You will
@@ -95,7 +95,7 @@ const Page = () => (
           </div>
           <div className="flex flex-col gap-5 lg:flex-col-reverse">
             <div className="sm:pl-4">
-              <h2 className="text-lg text-white">Extract valuable insights</h2>
+              <h2 className="text-xl text-white">Extract valuable insights</h2>
               <p className="mt-2 max-w-sm text-fg-3">
                 Spot trends and anomalies with our AI-powered data visualization
                 assistant. Stop guessing and start making
@@ -114,8 +114,9 @@ const Page = () => (
             Get started in minutes, no strings&nbsp;attached
           </h1>
           <p className="mx-auto mt-6 max-w-lg text-fg-3">
-            We will get you set up in no time. Sign up for free and start
-            building your dream online behavior consulting business&nbsp;today.
+            We will get you set up in no time. Sign up for free and
+            start&nbsp;building your dream online behavior
+            consulting&nbsp;business&nbsp;today.
           </p>
           <Button className="mt-8 w-full sm:w-auto" href="/sign-up">
             Get early access
@@ -123,36 +124,34 @@ const Page = () => (
         </div>
       </section>
       <section className="mx-auto max-w-5xl px-6 py-24">
-        <h1 className="sr-only">Frequently asked questions</h1>
-        <ul className="grid gap-6 lg:grid-cols-2 lg:gap-12">
+        <h1 className="mx-auto max-w-xs text-center text-3xl font-bold text-white sm:max-w-full">
+          Frequently asked questions
+        </h1>
+        <ul className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-12">
           <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
-            <h2 className="text-lg text-white">What is early access?</h2>
+            <h2 className="text-xl text-white">What is early access?</h2>
             <p className="mt-2 max-w-sm text-fg-3">
-              We are in the process of molding llog&rsquo;s future and would
-              love your active involvement to maximize its utility. Early access
-              is&nbsp;100%&nbsp;free.
+              We are reaching out to a small number of people to get feedback
+              and help us shape&nbsp;llog&rsquo;s&nbsp;future.
             </p>
           </li>
           <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
-            <h2 className="text-lg text-white">Can I export my data?</h2>
+            <h2 className="text-xl text-white">Can I export my data?</h2>
             <p className="mt-2 max-w-sm text-fg-3">
-              Yes, you can export your data at any time in CSV format. Also, we
-              will completely eliminate your data from our servers{' '}
-              <Button variant="link" href="mailto:data@llog.app">
-                upon&nbsp;request
-              </Button>
-              .
+              Yes, you can export your data at any time via CSV. We can create
+              custom exports&nbsp;upon&nbsp;request.
             </p>
           </li>
         </ul>
         <p className="mt-8 text-center text-fg-3">
-          Confused?{' '}
+          Still have questions? Let&rsquo;s talk.
+          <br />
           <Button variant="link" href="mailto:contact@llog.app">
             Email us
           </Button>{' '}
           or{' '}
           <Button variant="link" href="https://cal.com/xvvvyz/llog-demo">
-            schedule a demo
+            schedule a call
           </Button>
           .
         </p>

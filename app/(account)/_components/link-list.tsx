@@ -70,7 +70,7 @@ const LinkList = Object.assign(
           variant="link"
         >
           {avatars && !!avatars.length && (
-            <div className="flex flex-wrap gap-1">
+            <div className="-ml-1 flex flex-wrap gap-1">
               {avatars.map(({ id, image_uri, name }) => (
                 <Avatar
                   className={avatars.length === 1 ? '-my-0.5' : undefined}
