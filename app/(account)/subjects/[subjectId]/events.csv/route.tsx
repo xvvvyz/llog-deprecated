@@ -3,7 +3,6 @@ import firstIfArray from '@/(account)/_utilities/first-if-array';
 import forceArray from '@/(account)/_utilities/force-array';
 import createServerRouteClient from '@/_server/create-server-route-client';
 import { formatInTimeZone } from 'date-fns-tz';
-import { JSDOM } from 'jsdom';
 import { NextResponse } from 'next/server';
 
 interface GetContext {
@@ -104,7 +103,7 @@ export const GET = async (req: Request, ctx: GetContext) => {
     const event = firstIfArray(eventData);
 
     forceArray(event.comments).forEach((comment, index) => {
-      const text = new JSDOM(comment.content).window.document.body.textContent;
+      const text = comment.content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ');
       if (!text) return;
       const columnName = `Comment ${index + 1}`;
 

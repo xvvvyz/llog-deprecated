@@ -50,7 +50,7 @@ const ChatForm = ({
 
   return (
     <div className="px-4">
-      <div className="space-y-4 rounded border border-alpha-1 bg-alpha-reverse-1 py-4">
+      <div className="space-y-4 rounded border border-alpha-1 bg-bg-2 py-4">
         <div className="space-y-4" role="section">
           {useMemo(
             () =>

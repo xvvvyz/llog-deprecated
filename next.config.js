@@ -5,7 +5,7 @@ const nextConfig = {
   },
   experimental: {
     legacyBrowsers: false,
-    outputFileTracingExcludes: { '**/*': 'node_modules/canvas' },
+    outputFileTracingIgnores: ['**canvas**'],
     serverActions: true,
   },
   images: {
@@ -26,6 +26,10 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
+  webpack: (config) => {
+    config.externals.push({ canvas: 'commonjs canvas' });
+    return config;
+  },
 };
 
 module.exports = nextConfig;

@@ -26,6 +26,7 @@ jobs:
       - run: pnpm exec supabase link --project-ref "$SUPABASE_PROJECT_ID"
       - run: pnpm run db:start
       - run: pnpm run db:types
+      - run: pnpm exec next telemetry disable
       - run: pnpm exec vercel build
       - run:
           pnpm exec supabase db push --password "$SUPABASE_DB_PASSWORD_INLINE"
