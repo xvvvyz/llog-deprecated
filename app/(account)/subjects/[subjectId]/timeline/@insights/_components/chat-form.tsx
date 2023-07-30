@@ -170,6 +170,8 @@ const ChatForm = ({
                           : 'Visualization Assistant'}
                       </div>
                       <div className="mt-1">
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
                         <ReactMarkdown className="prose" linkTarget="_blank">
                           {m.content}
                         </ReactMarkdown>

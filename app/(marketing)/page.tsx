@@ -1,52 +1,194 @@
 import Button from '@/_components/button';
+import { PhotoIcon, PlayIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import pugPng from './_images/pug.png';
 
 const Page = () => (
-  <>
-    <header className="mx-auto flex max-w-4xl items-baseline justify-between px-6 pt-8">
-      <h1 className="text-2xl">
-        llog<span className="text-fg-3">.app</span>
-      </h1>
-      <Button colorScheme="transparent" href="/sign-in" size="sm">
-        Log in
+  <div>
+    <nav className="mx-auto flex max-w-5xl items-baseline justify-between px-6 pt-8">
+      <Button className="text-3xl font-bold text-white" href="/" variant="link">
+        llog.app
       </Button>
-    </header>
-    <main>
-      <div className="flex flex-col px-6 py-24 xs:mx-auto xs:max-w-sm xs:items-center xs:text-center sm:max-w-lg">
-        <h1 className="text-2xl sm:text-3xl">
-          Collaborative, data-driven behavior modification.
-        </h1>
-        <Button className="mt-8" href="/sign-up">
-          Sign up to get early access
+      <div className="flex items-baseline gap-6">
+        <Button colorScheme="transparent" href="/sign-in" size="sm">
+          Log in
+        </Button>
+        <Button className="hidden sm:block" href="/sign-up" size="sm">
+          Sign up
         </Button>
       </div>
-      <div className="mx-auto h-24 w-px bg-alpha-2" />
-      <div className="mx-auto max-w-lg space-y-32 px-6 py-24 text-2xl text-fg-3 xs:text-center">
-        <p>
-          <span className="text-fg-1">Plan.</span> Design comprehensive
-          behavior&nbsp;modification&nbsp;missions.
+    </nav>
+    <header>
+      <div className="mx-auto max-w-5xl px-6 py-24 text-center">
+        <h1 className="mx-auto max-w-[21rem] text-5xl font-bold text-white md:max-w-2xl lg:max-w-3xl lg:text-6xl">
+          The ultimate platform for behavior consultants
+        </h1>
+        <p className="mx-auto mt-8 max-w-[23rem] text-lg text-fg-3">
+          Collaboratively track behavior with clients, save time and
+          deliver&nbsp;incredible&nbsp;results.
         </p>
-        <div className="mx-auto h-24 w-px bg-alpha-2" />
-        <p>
-          <span className="text-fg-1">Share.</span> Delight clients with a
-          streamlined&nbsp;experience.
-        </p>
-        <div className="mx-auto h-24 w-px bg-alpha-2" />
-        <p>
-          <span className="text-fg-1">Track.</span> Create custom inputs &amp;
-          collaboratively&nbsp;record&nbsp;data.
-        </p>
-        <div className="mx-auto h-24 w-px bg-alpha-2" />
-        <p>
-          <span className="text-fg-1">Learn.</span> Validate hypotheses with
-          visualizations&nbsp;&amp;&nbsp;insights.
-        </p>
+        <Button className="mt-10 w-full shrink-0 sm:w-auto" href="/sign-up">
+          Get early access
+        </Button>
       </div>
-      <div className="mx-auto h-24 w-px bg-alpha-2" />
-      <div className="flex flex-col px-6 pb-48 pt-24 xs:items-center">
-        <Button href="/sign-up">Sign up to get early access</Button>
+      <div className="before:content-[' '] relative before:absolute before:top-0 before:-z-10 before:block before:h-1/2 before:w-full before:border-b before:border-b-alpha-1">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="flex aspect-video w-full items-center justify-center rounded border border-alpha-1 bg-bg-2">
+            <PlayIcon className="w-11" />
+          </div>
+        </div>
       </div>
+    </header>
+    <main>
+      <section className="mx-auto max-w-5xl px-6 py-24">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white">
+            Planning, tracking and analyzing,&nbsp;simplified
+          </h1>
+          <p className="mx-auto mt-6 max-w-lg text-fg-3">
+            Packed with stunningly simple yet powerful features, we built llog
+            to make working together towards behavioral
+            goals&nbsp;a&nbsp;pure&nbsp;joy.
+          </p>
+        </div>
+        <div className="mt-24 grid gap-x-12 gap-y-10 lg:grid-cols-2">
+          <div>
+            <div className="sm:pl-4">
+              <h2 className="text-lg text-white">
+                Manage clients from anywhere
+              </h2>
+              <p className="mt-2 max-w-sm text-fg-3">
+                Choose where and when you work with your clients. Pre-schedule
+                training sessions so your clients are ready to take on
+                every&nbsp;new&nbsp;day.
+              </p>
+            </div>
+            <div className="mt-5 flex aspect-video w-full items-center justify-center rounded border border-alpha-1 bg-bg-2">
+              <PhotoIcon className="w-11" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-5 lg:flex-col-reverse">
+            <div className="sm:pl-4">
+              <h2 className="text-lg text-white">Record what matters most</h2>
+              <p className="mt-2 max-w-sm text-fg-3">
+                Fully customizable and reusable inputs give you the freedom to
+                track pretty&nbsp;much&nbsp;anything. If you can imagine it, you
+                can track it.
+              </p>
+            </div>
+            <div className="flex aspect-video w-full items-center justify-center rounded border border-alpha-1 bg-bg-2">
+              <PhotoIcon className="w-11" />
+            </div>
+          </div>
+          <div>
+            <div className="sm:pl-4">
+              <h2 className="text-lg text-white">Keep an eye on every event</h2>
+              <p className="mt-2 max-w-sm text-fg-3">
+                Live activity timelines and real-time notifications keep you
+                right on top of client progress, day in day out. You will
+                never&nbsp;miss&nbsp;a&nbsp;beat.
+              </p>
+            </div>
+            <div className="mt-5 flex aspect-video w-full items-center justify-center rounded border border-alpha-1 bg-bg-2">
+              <PhotoIcon className="w-11" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-5 lg:flex-col-reverse">
+            <div className="sm:pl-4">
+              <h2 className="text-lg text-white">Extract valuable insights</h2>
+              <p className="mt-2 max-w-sm text-fg-3">
+                Spot trends and anomalies with our AI-powered data visualization
+                assistant. Stop guessing and start making
+                data-driven&nbsp;decisions.
+              </p>
+            </div>
+            <div className="flex aspect-video w-full items-center justify-center rounded border border-alpha-1 bg-bg-2">
+              <PhotoIcon className="w-11" />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="border-y border-alpha-1">
+        <div className="mx-auto max-w-5xl px-6 py-24 text-center">
+          <h1 className="text-3xl font-bold text-white">
+            Get started in minutes, no strings&nbsp;attached
+          </h1>
+          <p className="mx-auto mt-6 max-w-lg text-fg-3">
+            We will get you set up in no time. Sign up for free and start
+            building your dream online behavior consulting business&nbsp;today.
+          </p>
+          <Button className="mt-8 w-full sm:w-auto" href="/sign-up">
+            Get early access
+          </Button>
+        </div>
+      </section>
+      <section className="mx-auto max-w-5xl px-6 py-24">
+        <h1 className="sr-only">Frequently asked questions</h1>
+        <ul className="grid gap-6 lg:grid-cols-2 lg:gap-12">
+          <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
+            <h2 className="text-lg text-white">What is early access?</h2>
+            <p className="mt-2 max-w-sm text-fg-3">
+              We are in the process of molding llog&rsquo;s future and would
+              love your active involvement to maximize its utility. Early access
+              is&nbsp;100%&nbsp;free.
+            </p>
+          </li>
+          <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
+            <h2 className="text-lg text-white">Can I export my data?</h2>
+            <p className="mt-2 max-w-sm text-fg-3">
+              Yes, you can export your data at any time in CSV format. Also, we
+              will completely eliminate your data from our servers{' '}
+              <Button variant="link" href="mailto:data@llog.app">
+                upon&nbsp;request
+              </Button>
+              .
+            </p>
+          </li>
+        </ul>
+        <p className="mt-8 text-center text-fg-3">
+          Confused?{' '}
+          <Button variant="link" href="mailto:contact@llog.app">
+            Email us
+          </Button>{' '}
+          or{' '}
+          <Button variant="link" href="https://cal.com/xvvvyz/llog-demo">
+            schedule a demo
+          </Button>
+          .
+        </p>
+      </section>
     </main>
-  </>
+    <footer className="border-t border-alpha-1">
+      <div className="relative mx-auto max-w-5xl px-6 pt-24">
+        <div className="flex flex-col items-center gap-12">
+          <Button
+            className="text-3xl font-bold text-white"
+            href="/"
+            variant="link"
+          >
+            llog.app
+          </Button>
+          <div className="flex flex-col items-center gap-3">
+            <Button variant="link" href="#">
+              Terms of service
+            </Button>
+            <Button variant="link" href="#">
+              Privacy policy
+            </Button>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <Button href="/sign-up" variant="link">
+              Sign up
+            </Button>
+            <Button href="/sign-in" variant="link">
+              Log in
+            </Button>
+          </div>
+          <Image alt="" quality={100} src={pugPng} width="200" />
+        </div>
+      </div>
+    </footer>
+  </div>
 );
 
 export default Page;

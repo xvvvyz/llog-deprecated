@@ -39,6 +39,7 @@ module.exports = {
       lg: '56rem',
       md: '42rem',
       sm: '32rem',
+      xl: '64rem',
       xs: '25rem',
     },
     typography: {
