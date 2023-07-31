@@ -8,7 +8,7 @@ interface SpinnerProps {
 
 const Spinner = ({
   className,
-  color = 'border-fg-2',
+  color = 'border-fg-3',
   loadingText,
 }: SpinnerProps) => (
   <div

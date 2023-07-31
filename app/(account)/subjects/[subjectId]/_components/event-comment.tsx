@@ -75,7 +75,7 @@ const EventComment = ({
               </Menu.Button>
               <Menu.Items>
                 <Menu.Item onClick={deleteAlert.setTrue}>
-                  <TrashIcon className="w-5 text-fg-3" />
+                  <TrashIcon className="w-5 text-fg-4" />
                   Delete comment
                 </Menu.Item>
               </Menu.Items>

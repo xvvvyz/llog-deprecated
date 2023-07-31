@@ -79,7 +79,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         name="banner"
         render={({ field }) => (
           <RichTextarea
-            className="px-0 text-center text-fg-3 [&>*]:mx-auto [&>*]:max-w-sm [&>*]:px-4"
+            className="px-0 text-center text-fg-4 [&>*]:mx-auto [&>*]:max-w-sm [&>*]:px-4"
             label="Banner"
             {...field}
           />

@@ -14,11 +14,11 @@
     --color-alpha-reverse-2: hsla(45, 6%, 5%, 50%);
     --color-bg-1: hsl(45, 6%, 10%);
     --color-bg-2: hsl(45, 6%, 14%);
-    --color-fg-1: hsl(45, 6%, 95%, 80%);
-    --color-fg-2: hsl(45, 6%, 95%, 65%);
-    --color-fg-3: hsla(45, 6%, 95%, 50%);
+    --color-fg-1: hsla(45, 6%, 95%, 95%);
+    --color-fg-2: hsl(45, 6%, 95%, 80%);
+    --color-fg-3: hsl(45, 6%, 95%, 65%);
+    --color-fg-4: hsla(45, 6%, 95%, 50%);
     --color-red-1: hsl(5, 85%, 40%);
-    --color-white: hsla(45, 6%, 95%, 95%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
     --radius-default: 0.9rem;
@@ -31,7 +31,7 @@
   }
 
   body {
-    @apply h-full bg-bg-1 text-fg-1;
+    @apply h-full bg-bg-1 text-fg-2;
   }
 
   /* hack because list-inside with nest p tag forces marker to have its own line */
@@ -51,11 +51,11 @@
   }
 
   .input {
-    @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-1 outline-none transition-colors placeholder:text-fg-3 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
+    @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-2 outline-none transition-colors placeholder:text-fg-4 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
   }
 
   .label {
-    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-2 transition-colors group-focus-within:text-fg-1 group-hover:text-fg-1;
+    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-3 transition-colors group-focus-within:text-fg-2 group-hover:text-fg-2;
   }
 }
 
@@ -69,10 +69,10 @@
   }
 
   .prose {
-    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-2 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-white prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-2 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-3 prose-td:px-3 prose-td:py-1;
+    @apply space-y-3 break-words prose-a:-m-1 prose-a:p-1 prose-a:text-fg-3 prose-a:underline prose-a:transition-colors prose-a:hover:cursor-pointer prose-strong:font-bold prose-strong:text-fg-1 prose-ol:list-inside prose-ol:list-decimal prose-ol:space-y-3 prose-ul:list-inside prose-ul:list-disc prose-ul:space-y-3 prose-li:marker:text-fg-3 prose-table:min-w-full prose-table:whitespace-nowrap prose-table:border prose-table:border-t-0 prose-table:border-alpha-1 prose-table:bg-bg-2 prose-table:text-sm prose-tr:border-t prose-tr:border-alpha-1 prose-th:px-3 prose-th:py-1 prose-th:text-left prose-th:font-normal prose-th:text-fg-4 prose-td:px-3 prose-td:py-1;
   }
 
   .smallcaps {
-    @apply text-xs uppercase tracking-widest text-fg-3;
+    @apply text-xs uppercase tracking-widest text-fg-4;
   }
 }

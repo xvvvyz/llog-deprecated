@@ -53,7 +53,7 @@ const Layout = async ({
       </Header>
       {isTeamMember && teamMemberHeader}
       {subject.banner && (
-        <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-3">
+        <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-4">
           {subject.banner}
         </DirtyHtml>
       )}

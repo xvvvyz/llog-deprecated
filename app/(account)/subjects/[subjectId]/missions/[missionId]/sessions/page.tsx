@@ -106,7 +106,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                           {session.title}
                         </span>
                       )}
-                      <div className="smallcaps pb-1 pt-2 text-fg-3">
+                      <div className="smallcaps pb-1 pt-2 text-fg-4">
                         {session.draft ? (
                           'Draft'
                         ) : new Date(session.scheduled_for ?? '') >

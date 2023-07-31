@@ -34,7 +34,7 @@ const Alert = ({
         <Dialog.Panel className="w-full max-w-xs transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
           <Dialog.Title className="text-2xl">{title}</Dialog.Title>
           {description && (
-            <Dialog.Description className="mt-2 text-fg-3">
+            <Dialog.Description className="mt-2 text-fg-4">
               {description}
             </Dialog.Description>
           )}

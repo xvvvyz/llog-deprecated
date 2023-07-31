@@ -28,7 +28,7 @@ const Checkbox = forwardRef(
       <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-2 bg-alpha-3 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-3 peer-hover:bg-alpha-4 peer-checked:peer-hover:bg-accent-2 peer-checked:[&>svg]:visible">
         <CheckIcon className="invisible h-5 w-5" />
       </span>
-      <span className="label p-0 peer-checked:text-fg-1">{label}</span>
+      <span className="label p-0 peer-checked:text-fg-2">{label}</span>
     </label>
   ),
 );

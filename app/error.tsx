@@ -8,7 +8,7 @@ const Error = () => (
     <p>
       Something went wrong. Try refreshing this page.
       <br />
-      <span className="text-fg-3">
+      <span className="text-fg-4">
         Email <a href="mailto:help@llog.app">help@llog.app</a> if the problem
         persists.
       </span>

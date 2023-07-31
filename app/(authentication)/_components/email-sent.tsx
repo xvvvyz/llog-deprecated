@@ -11,7 +11,7 @@ const EmailSent = ({ children }: ConfirmationProps) => (
     <p className="text-center">
       {children}
       <br />
-      <span className="text-fg-3">You can close this tab.</span>
+      <span className="text-fg-4">You can close this tab.</span>
     </p>
   </>
 );

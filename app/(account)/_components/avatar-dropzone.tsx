@@ -12,7 +12,7 @@ const AvatarDropzone = <T extends FieldValues>({
   form,
 }: AvatarDropzoneProps<T>) => (
   <div
-    className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-3 outline-none ring-accent-2 transition-colors hover:border-alpha-3 focus:ring-1"
+    className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-4 outline-none ring-accent-2 transition-colors hover:border-alpha-3 focus:ring-1"
     {...dropzone.getRootProps()}
   >
     <Avatar
@@ -21,7 +21,7 @@ const AvatarDropzone = <T extends FieldValues>({
     />
     <p>
       Drag image here or{' '}
-      <span className="text-fg-2 transition-colors group-hover:text-fg-1">
+      <span className="text-fg-3 transition-colors group-hover:text-fg-2">
         browse
       </span>
     </p>

@@ -13,7 +13,7 @@ const Menu = Object.assign(
     Button: ({ className, ...rest }: Parameters<typeof M.Button>[0]) => (
       <M.Button
         className={twMerge(
-          'flex items-center justify-center text-fg-2 outline-none transition-colors hover:text-fg-1',
+          'flex items-center justify-center text-fg-3 outline-none transition-colors hover:text-fg-2',
           className,
         )}
         {...rest}
@@ -25,7 +25,7 @@ const Menu = Object.assign(
           <Button
             className={twMerge(
               'w-full justify-start gap-4 rounded-none border-y-0 ring-transparent ring-offset-0 first:rounded-t first:border-t last:rounded-b last:border-b',
-              active && 'bg-alpha-4 text-fg-1',
+              active && 'bg-alpha-4 text-fg-2',
               className,
             )}
             colorScheme="transparent"

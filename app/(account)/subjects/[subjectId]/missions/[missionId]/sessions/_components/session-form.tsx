@@ -653,7 +653,7 @@ const SessionForm = ({
           <div className="flex min-h-full items-center justify-center">
             <Dialog.Panel className="w-full max-w-sm transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
               <Dialog.Title className="text-2xl">Schedule session</Dialog.Title>
-              <Dialog.Description className="mt-4 px-4 text-fg-3">
+              <Dialog.Description className="mt-4 px-4 text-fg-4">
                 Scheduled sessions are not visible to clients until the
                 specified time.
               </Dialog.Description>

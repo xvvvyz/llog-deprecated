@@ -72,7 +72,7 @@ const ChatForm = ({
                   if (!dataRef.current || !Object.keys(args).length) {
                     return (
                       <div
-                        className="border-t border-alpha-1 px-4 pt-4 text-left font-mono text-xs text-fg-3 [overflow-wrap:anywhere]"
+                        className="border-t border-alpha-1 px-4 pt-4 text-left font-mono text-xs text-fg-4 [overflow-wrap:anywhere]"
                         key={m.id}
                       >
                         {JSON.stringify(m.function_call).replace(

@@ -23,9 +23,9 @@ module.exports = {
       'fg-1': 'var(--color-fg-1)',
       'fg-2': 'var(--color-fg-2)',
       'fg-3': 'var(--color-fg-3)',
+      'fg-4': 'var(--color-fg-4)',
       'red-1': 'var(--color-red-1)',
       transparent: 'transparent',
-      white: 'var(--color-white)',
     },
     fontFamily: {
       body: 'var(--font-body)',
@@ -47,8 +47,8 @@ module.exports = {
         css: {
           a: {
             '&:hover': {
-              // hack because prose-a:hover:text-fg-1 is highlighting all links
-              color: 'var(--color-fg-1)',
+              // hack because prose-a:hover:text-fg-2 is highlighting all links
+              color: 'var(--color-fg-2)',
             },
           },
         },

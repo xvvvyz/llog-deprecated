@@ -28,8 +28,8 @@ const Page = () => {
   return (
     <>
       <div className="sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
-        <h1 className="text-3xl font-bold text-white">Forgot your password?</h1>
-        <p className="mb-10 mt-3 text-fg-3">
+        <h1 className="text-3xl font-bold text-fg-1">Forgot your password?</h1>
+        <p className="mb-10 mt-3 text-fg-4">
           Enter the email address associated with your account and we will send
           you a link to change&nbsp;your&nbsp;password.
         </p>

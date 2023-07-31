@@ -124,7 +124,7 @@ const TimelineEventCard = ({
                         ),
                       ).map(([id, { label, type, values }]: any) => (
                         <tr key={id}>
-                          <td className="truncate px-4 py-1 align-top text-fg-3">
+                          <td className="truncate px-4 py-1 align-top text-fg-4">
                             {label}
                           </td>
                           <td className="truncate p-0 py-1 pr-4 align-top">

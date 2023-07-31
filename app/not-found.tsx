@@ -6,7 +6,7 @@ const NotFound = () => (
     <p>
       404: You seem to be lost.
       <br />
-      <span className="text-fg-3">Page not found.</span>
+      <span className="text-fg-4">Page not found.</span>
     </p>
   </div>
 );

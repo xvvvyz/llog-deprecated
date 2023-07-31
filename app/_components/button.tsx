@@ -11,12 +11,12 @@ const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-accent-2 hover:bg-alpha-4 font-normal bg-alpha-3 text-fg-2 hover:text-fg-1',
+    'ring-accent-2 hover:bg-alpha-4 font-normal bg-alpha-3 text-fg-3 hover:text-fg-2',
 };
 
 const spinnerColorSchemes = {
   accent: 'border-bg-1',
-  transparent: 'border-fg-1',
+  transparent: 'border-fg-2',
 };
 
 const sizes = {
@@ -25,7 +25,7 @@ const sizes = {
 };
 
 const variants = {
-  link: 'p-3 -m-3 border-0 text-fg-2 hover:text-fg-1',
+  link: 'p-3 -m-3 border-0 text-fg-3 hover:text-fg-2',
   primary: 'focus:ring-1 rounded justify-center',
 };
 

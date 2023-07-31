@@ -133,7 +133,7 @@ const EventTypeFormSection = <T extends FieldValues>({
         )}
         {moduleNumber && eventTypeArray && (
           <div className="-mt-1 flex items-center justify-between">
-            <div className="font-mono text-fg-3">Module {moduleNumber}</div>
+            <div className="font-mono text-fg-4">Module {moduleNumber}</div>
             <div className="flex gap-6">
               {saveAsTemplateButton}
               <Button

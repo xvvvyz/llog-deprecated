@@ -104,7 +104,7 @@ const RichTextarea = (
       Paragraph,
       Placeholder.configure({
         emptyNodeClass:
-          'first:before:text-fg-3 first:before:absolute first:before:content-[attr(data-placeholder)]',
+          'first:before:text-fg-4 first:before:absolute first:before:content-[attr(data-placeholder)]',
         placeholder,
       }),
       Text,
@@ -156,7 +156,7 @@ const RichTextarea = (
         <DirtyHtml
           className={twMerge(
             'input min-h-[4.2rem]',
-            !value && 'text-fg-3',
+            !value && 'text-fg-4',
             right && 'pr-10',
             className,
           )}

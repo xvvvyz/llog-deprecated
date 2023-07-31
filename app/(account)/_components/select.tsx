@@ -49,7 +49,7 @@ const ClearIndicator = <TOption extends IOption>(
   props: ClearIndicatorProps<TOption>,
 ) => (
   <components.ClearIndicator {...props}>
-    <div className="cursor-pointer p-1 text-fg-2 transition-colors hover:text-fg-1">
+    <div className="cursor-pointer p-1 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </components.ClearIndicator>
@@ -88,7 +88,7 @@ const Control = <TOption extends IOption>({
 };
 
 const DropdownIndicator = () => (
-  <ChevronUpDownIcon className="mx-1 w-5 text-fg-2 transition-colors group-hover:text-fg-1" />
+  <ChevronUpDownIcon className="mx-1 w-5 text-fg-3 transition-colors group-hover:text-fg-2" />
 );
 
 const Input = <TOption extends IOption>({
@@ -191,14 +191,14 @@ const MultiValueLabel = <TOption extends IOption>({
 
 const MultiValueRemove = (props: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
-    <div className="-m-1 p-1 pr-2 text-fg-2 transition-colors hover:text-fg-1">
+    <div className="-m-1 p-1 pr-2 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </components.MultiValueRemove>
 );
 
 const NoOptionsMessage = ({ children }: { children: ReactNode }) => (
-  <div className="p-2 text-center text-fg-2">{children}</div>
+  <div className="p-2 text-center text-fg-3">{children}</div>
 );
 
 const Option = <TOption extends IOption>({
@@ -208,8 +208,8 @@ const Option = <TOption extends IOption>({
   <components.Option {...props}>
     <div
       className={twMerge(
-        'flex items-center gap-4 px-4 py-2 leading-snug text-fg-2 transition-colors hover:cursor-pointer',
-        props.isFocused && 'bg-alpha-1 text-fg-1',
+        'flex items-center gap-4 px-4 py-2 leading-snug text-fg-3 transition-colors hover:cursor-pointer',
+        props.isFocused && 'bg-alpha-1 text-fg-2',
       )}
     >
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
@@ -244,7 +244,7 @@ const Placeholder = <TOption extends IOption>({
   children,
   ...props
 }: PlaceholderProps<TOption>) => (
-  <components.Placeholder className="m-1 pl-2 text-fg-3" {...props}>
+  <components.Placeholder className="m-1 pl-2 text-fg-4" {...props}>
     {children}
   </components.Placeholder>
 );

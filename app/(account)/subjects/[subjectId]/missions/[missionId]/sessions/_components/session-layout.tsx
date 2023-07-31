@@ -121,7 +121,7 @@ const SessionLayout = async ({
           replace
         />
         <div className="flex items-baseline gap-6">
-          <span className="font-mono text-fg-3">
+          <span className="font-mono text-fg-4">
             Session {sessionOrder + 1}
             {!isEditOrCreate && <> of {highestOrder + 1}</>}
           </span>

@@ -50,11 +50,11 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
         </Menu.Button>
         <Menu.Items>
           <Menu.Item href={`/inputs/create/from-template/${inputId}`}>
-            <DocumentDuplicateIcon className="w-5 text-fg-3" />
+            <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate input
           </Menu.Item>
           <Menu.Item onClick={deleteAlert.setTrue}>
-            <TrashIcon className="w-5 text-fg-3" />
+            <TrashIcon className="w-5 text-fg-4" />
             Delete input
           </Menu.Item>
         </Menu.Items>

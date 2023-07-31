@@ -82,11 +82,11 @@ const EventStopwatch = <T extends FieldValues>({
           colorScheme="transparent"
           onClick={stopwatch.toggle}
         >
-          <div className="font-mono text-fg-1" role="timer">
+          <div className="font-mono text-fg-2" role="timer">
             {stopwatch.hasHours && `${stopwatch.hours}:`}
             {stopwatch.hasMinutes && `${stopwatch.minutes}:`}
             {stopwatch.seconds}
-            <span className="text-fg-3">.{stopwatch.fraction}</span>
+            <span className="text-fg-4">.{stopwatch.fraction}</span>
           </div>
           {stopwatch.isRunning ? (
             <PauseIcon className="w-5" />
@@ -175,9 +175,9 @@ const EventStopwatch = <T extends FieldValues>({
                       {t.hasHours && `${t.hours}:`}
                       {t.hasMinutes && `${t.minutes}:`}
                       {t.seconds}
-                      <span className="text-fg-3">.{t.fraction}</span>
+                      <span className="text-fg-4">.{t.fraction}</span>
                     </div>
-                    <div className="text-fg-3">
+                    <div className="text-fg-4">
                       {form.getValues(
                         `${name}.notes.${noteIndex}.label` as T[string],
                       )}
