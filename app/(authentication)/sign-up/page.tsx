@@ -44,9 +44,7 @@ const Page = ({ searchParams }: PageProps) => {
   return (
     <>
       <div className="sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
-        <h1 className="mb-10 text-3xl font-bold text-fg-1">
-          Create your account
-        </h1>
+        <h1 className="mb-10 text-2xl">Create your account</h1>
         <SignUpForm action={action} />
       </div>
       <p className="flex gap-4">

@@ -54,7 +54,7 @@ const Page = () => (
         <div className="mt-24 grid gap-x-12 gap-y-10 lg:grid-cols-2">
           <div>
             <div className="sm:pl-4">
-              <h2 className="text-xl text-fg-1">
+              <h2 className="text-xl font-bold text-fg-1">
                 Manage clients from anywhere
               </h2>
               <p className="mt-2 max-w-sm text-fg-4">
@@ -69,7 +69,9 @@ const Page = () => (
           </div>
           <div className="flex flex-col gap-5 lg:flex-col-reverse">
             <div className="sm:pl-4">
-              <h2 className="text-xl text-fg-1">Record what matters most</h2>
+              <h2 className="text-xl font-bold text-fg-1">
+                Record what matters most
+              </h2>
               <p className="mt-2 max-w-sm text-fg-4">
                 Fully customizable and reusable inputs give you the freedom to
                 track pretty&nbsp;much&nbsp;anything. If you can imagine it, you
@@ -82,7 +84,9 @@ const Page = () => (
           </div>
           <div>
             <div className="sm:pl-4">
-              <h2 className="text-xl text-fg-1">Keep an eye on every event</h2>
+              <h2 className="text-xl font-bold text-fg-1">
+                Keep an eye on every event
+              </h2>
               <p className="mt-2 max-w-sm text-fg-4">
                 Live activity timelines and real-time notifications keep you
                 right on top of client progress, day in day out. You will
@@ -95,7 +99,9 @@ const Page = () => (
           </div>
           <div className="flex flex-col gap-5 lg:flex-col-reverse">
             <div className="sm:pl-4">
-              <h2 className="text-xl text-fg-1">Extract valuable insights</h2>
+              <h2 className="text-xl font-bold text-fg-1">
+                Extract valuable insights
+              </h2>
               <p className="mt-2 max-w-sm text-fg-4">
                 Spot trends and anomalies with our AI-powered data visualization
                 assistant. Stop guessing and start making
@@ -129,14 +135,18 @@ const Page = () => (
         </h1>
         <ul className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-12">
           <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
-            <h2 className="text-xl text-fg-1">What is early access?</h2>
+            <h2 className="text-xl font-bold text-fg-1">
+              What is early access?
+            </h2>
             <p className="mt-2 max-w-sm text-fg-4">
               We are reaching out to a small number of people to get feedback
               and help us shape&nbsp;llog&rsquo;s&nbsp;future.
             </p>
           </li>
           <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
-            <h2 className="text-xl text-fg-1">Can I export my data?</h2>
+            <h2 className="text-xl font-bold text-fg-1">
+              Can I export my data?
+            </h2>
             <p className="mt-2 max-w-sm text-fg-4">
               Yes, you can export your data at any time via CSV. We can create
               custom exports&nbsp;upon&nbsp;request.
