@@ -192,25 +192,38 @@ const ChatForm = ({
             const res = await fetch(`/subjects/${subjectId}/events.json`);
             const data = await res.json();
             dataRef.current = data;
-
-            const fields: Record<string, Set<string> | string[] | null> = {
-              'Name (n)': new Set(),
-            };
+            const fields: Record<string, Set<string> | null> = {};
 
             for (const d of data) {
-              (fields['Name (n)'] as Set<string>).add(d['Name (n)']);
+              for (const [key, value] of Object.entries(d)) {
+                if (!/\((n|an)\)$/i.test(key) || !value) {
+                  fields[key] = null;
+                  continue;
+                }
 
-              for (const key of Object.keys(d)) {
-                if (key === 'Name (n)') continue;
-                if (!fields[key]) fields[key] = null;
+                fields[key] = fields[key] ?? new Set();
+
+                if (/\(n\)$/i.test(key)) {
+                  (fields[key] as Set<string>).add(value as string);
+                } else if (/\(an\)$/i.test(key)) {
+                  (value as string[]).forEach((item) =>
+                    (fields[key] as Set<string>).add(item),
+                  );
+                }
               }
             }
 
-            fields['Name (n)'] = Array.from(fields['Name (n)'] as Set<string>);
-
             setMessages([
               {
-                content: JSON.stringify({ fields }),
+                content: JSON.stringify({
+                  fields: Object.entries(fields).reduce(
+                    (acc, [key, value]) => {
+                      acc[key] = value ? Array.from(value) : value;
+                      return acc;
+                    },
+                    {} as Record<string, string[] | null>,
+                  ),
+                }),
                 id: nanoid(),
                 role: 'system',
               },
