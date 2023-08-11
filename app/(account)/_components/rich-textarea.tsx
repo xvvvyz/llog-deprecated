@@ -25,6 +25,7 @@ import {
   useEditor,
 } from '@tiptap/react';
 
+import Tooltip from '@/(account)/_components/tooltip';
 import {
   ChangeEvent,
   forwardRef,
@@ -47,11 +48,13 @@ const RichTextarea = (
     onEnter,
     placeholder,
     right,
+    tooltip,
     value,
   }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
     label?: string;
     onEnter?: () => void;
     right?: ReactNode;
+    tooltip?: ReactNode;
     value?: string | null;
   },
   ref: Ref<{ focus: () => void }>,
@@ -142,14 +145,23 @@ const RichTextarea = (
 
   return (
     <div className="group relative w-full">
-      {label && (
-        <label
-          className="label"
-          onClick={() => editorRef.current?.commands?.focus('end')}
-        >
-          {label}
-        </label>
-      )}
+      <div className="flex justify-between">
+        {label && (
+          <label
+            className="label"
+            onClick={() => editorRef.current?.commands?.focus('end')}
+          >
+            {label}
+          </label>
+        )}
+        {tooltip && (
+          <Tooltip
+            className="relative -top-1 -mr-[0.15rem]"
+            id={`${name}-tooltip`}
+            tip={tooltip}
+          />
+        )}
+      </div>
       {editor ? (
         <EditorContent editor={editor} name={name} />
       ) : (

@@ -8,7 +8,7 @@ import getSubject from '@/(account)/_server/get-subject';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatTitle from '@/(account)/_utilities/format-title';
 import Button from '@/_components/button';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import { InformationCircleIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 
 import getMissionWithSessionsAndEvents, {
@@ -130,7 +130,12 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
           )}
         </ul>
       ) : (
-        <Empty>No sessions</Empty>
+        <Empty className="mx-4">
+          <InformationCircleIcon className="w-7" />
+          Schedule detailed training sessions
+          <br />
+          to be completed over time.
+        </Empty>
       )}
     </>
   );

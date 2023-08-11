@@ -4,6 +4,7 @@ import Checkbox from '@/(account)/_components/checkbox';
 import IconButton from '@/(account)/_components/icon-button';
 import NumberInput from '@/(account)/_components/input-number';
 import Select from '@/(account)/_components/select';
+import Tooltip from '@/(account)/_components/tooltip';
 import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
 import InputTypes from '@/(account)/_constants/enum-input-types';
@@ -221,6 +222,12 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             onChange={(value) => field.onChange(value as any)}
             options={forceArray(subjects)}
             placeholder="All subjects…"
+            tooltip={
+              <>
+                If this input isn&rsquo;t applicable to all of your subjects,
+                you can specify the relevant subjects here.
+              </>
+            }
             value={field.value as any}
           />
         )}
@@ -275,9 +282,23 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       {hasOptions && (
         <>
           <fieldset className="group">
-            <span className="label">
-              {type === InputTypes.Stopwatch ? 'Timed notes' : 'Options'}
-            </span>
+            <div className="flex justify-between">
+              <span className="label">
+                {type === InputTypes.Stopwatch ? 'Timed notes' : 'Options'}
+              </span>
+              {type === InputTypes.Stopwatch && (
+                <Tooltip
+                  className="relative -top-1 -mr-[0.15rem]"
+                  id="options-tip"
+                  tip={
+                    <>
+                      If you add options or allow options to be created, you can
+                      record notes that are associated with a timestamp.
+                    </>
+                  }
+                />
+              )}
+            </div>
             <div className="space-y-2">
               {!!optionsArray.fields.length && (
                 <ul className="flex flex-col gap-2">
@@ -347,8 +368,14 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             </div>
           </fieldset>
           <Checkbox
-            className="mt-2 justify-center"
+            className="mt-2"
             label="Allow options to be created"
+            tooltip={
+              <>
+                Enable this when you don&rsquo;t know all possible options in
+                advance.
+              </>
+            }
             {...form.register('settings.isCreatable')}
           />
         </>

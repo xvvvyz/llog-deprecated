@@ -3,6 +3,7 @@ import Header from '@/(account)/_components/header';
 import LinkList from '@/(account)/_components/link-list';
 import listTemplates from '@/(account)/_server/list-templates';
 import Button from '@/_components/button';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata = {
   title: 'Templates',
@@ -33,7 +34,12 @@ const Page = async () => {
           ))}
         </LinkList>
       ) : (
-        <Empty>No templates</Empty>
+        <Empty className="mx-4">
+          <InformationCircleIcon className="w-7" />
+          Templates define reusable content for
+          <br />
+          event types and session modules.
+        </Empty>
       )}
     </>
   );

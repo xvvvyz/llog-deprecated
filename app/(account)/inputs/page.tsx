@@ -4,6 +4,7 @@ import listInputs from '@/(account)/_server/list-inputs';
 import sortInputs from '@/(account)/_utilities/sort-inputs';
 import FilterableInputLinkList from '@/(account)/inputs/_components/filterable-input-link-list';
 import Button from '@/_components/button';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata = {
   title: 'Inputs',
@@ -25,7 +26,12 @@ const Page = async () => {
       {!!inputs?.length ? (
         <FilterableInputLinkList inputs={inputs.sort(sortInputs)} />
       ) : (
-        <Empty>No inputs</Empty>
+        <Empty className="mx-4">
+          <InformationCircleIcon className="w-7" />
+          Inputs define the specific data points
+          <br />
+          you are interested in tracking.
+        </Empty>
       )}
     </>
   );

@@ -16,6 +16,7 @@ import {
   ChatBubbleBottomCenterTextIcon,
   EnvelopeIcon,
   EnvelopeOpenIcon,
+  InformationCircleIcon,
   StarIcon,
   UserPlusIcon,
   XMarkIcon,
@@ -40,7 +41,16 @@ const Notifications = ({
   notifications,
   toggleNotificationReadAction,
 }: NotificationsProps) => {
-  if (!notifications.length) return <Empty>No notifications</Empty>;
+  if (!notifications.length) {
+    return (
+      <Empty>
+        <InformationCircleIcon className="w-7" />
+        Events and comments added by
+        <br />
+        clients will appear here.
+      </Empty>
+    );
+  }
 
   return notifications.map((n) => {
     const comment = firstIfArray(n.comment);

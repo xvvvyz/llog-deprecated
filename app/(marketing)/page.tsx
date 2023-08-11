@@ -133,7 +133,7 @@ const Page = () => (
         <h1 className="mx-auto max-w-xs text-center text-3xl font-bold text-fg-1 sm:max-w-full">
           Frequently asked questions
         </h1>
-        <ul className="mt-8 grid gap-6 xl:grid-cols-2 xl:gap-12">
+        <ul className="mt-24 grid gap-6 xl:grid-cols-2 xl:gap-12">
           <li className="rounded border border-alpha-1 bg-bg-2 px-8 py-6">
             <h2 className="text-xl font-bold text-fg-1">
               What is early access?
@@ -153,7 +153,7 @@ const Page = () => (
             </p>
           </li>
         </ul>
-        <p className="mt-8 text-center text-fg-4">
+        <p className="mt-24 text-center text-fg-4">
           Still have questions? Let&rsquo;s talk.
           <br />
           <Button variant="link" href="mailto:contact@llog.app">

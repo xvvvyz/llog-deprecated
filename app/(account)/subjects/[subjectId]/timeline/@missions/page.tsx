@@ -1,4 +1,5 @@
 import LinkList from '@/(account)/_components/link-list';
+import Tooltip from '@/(account)/_components/tooltip';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectMissions from '@/(account)/_server/list-subject-missions';
@@ -60,15 +61,30 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         {listItems}
       </LinkList>
       {isTeamMember && (
-        <Button
-          className={twMerge('w-full', listItems.length && 'rounded-t-none')}
-          colorScheme="transparent"
-          href={`/subjects/${subject.id}/missions/create`}
-          type="button"
-        >
-          <PlusIcon className="w-5" />
-          Create mission
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button
+            className={twMerge('w-full', listItems.length && 'rounded-t-none')}
+            colorScheme="transparent"
+            href={`/subjects/${subject.id}/missions/create`}
+            type="button"
+          >
+            <PlusIcon className="w-5" />
+            Create mission
+          </Button>
+          {!listItems.length && (
+            <Tooltip
+              id="missions-tip"
+              tip={
+                <>
+                  Missions are long-term training plans. For example,
+                  &ldquo;Reduce separation anxiety&rdquo; or &ldquo;Stop barking
+                  at the door&rdquo;.
+                </>
+              }
+              tipClassName="max-w-[18.5rem]"
+            />
+          )}
+        </div>
       )}
     </div>
   );

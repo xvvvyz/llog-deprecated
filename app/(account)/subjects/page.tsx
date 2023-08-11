@@ -8,6 +8,7 @@ import Button from '@/_components/button';
 import listSubjects, {
   ListSubjectsData,
 } from '@/(account)/_server/list-subjects';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata = {
   title: 'Subjects',
@@ -72,7 +73,12 @@ const Page = async () => {
           </LinkList>
         </div>
       ) : (
-        <Empty>No subjects</Empty>
+        <Empty className="mx-4">
+          <InformationCircleIcon className="w-7" />
+          Subjects can be dogs, cats, humans or
+          <br />
+          anything else you want to track.
+        </Empty>
       )}
     </>
   );

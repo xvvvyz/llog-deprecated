@@ -7,6 +7,9 @@ import listEvents, { ListEventsData } from '@/(account)/_server/list-events';
 import DownloadEventsButton from '@/(account)/subjects/[subjectId]/timeline/@events/_components/download-events-button';
 import TimelineEvents from '@/(account)/subjects/[subjectId]/timeline/@events/_components/timeline-events';
 
+import InsightsButton from '@/(account)/subjects/[subjectId]/timeline/@events/_components/insights-button';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
+
 interface PageProps {
   params: {
     subjectId: string;
@@ -23,16 +26,27 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     ],
   );
 
+  if (!subject || !user) return null;
+
   return (
     <div className="mt-16">
       <Header className="mb-2">
         <h1 className="text-2xl">Timeline</h1>
-        <DownloadEventsButton
-          disabled={!events?.length}
-          subjectId={subjectId}
-        />
+        <div className="space-x-4">
+          {subject.team_id === teamId && (
+            <InsightsButton
+              disabled={!events?.length}
+              subjectId={subject.id}
+              user={user}
+            />
+          )}
+          <DownloadEventsButton
+            disabled={!events?.length}
+            subjectId={subjectId}
+          />
+        </div>
       </Header>
-      {subject && events?.length && user ? (
+      {events?.length ? (
         <TimelineEvents
           events={events as ListEventsData}
           isTeamMember={subject.team_id === teamId}
@@ -40,7 +54,13 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           userId={user.id}
         />
       ) : (
-        <Empty>No events</Empty>
+        <div className="space-y-4 px-4">
+          <div className="mx-4 h-16 border-l-2 border-dashed border-alpha-2" />
+          <Empty>
+            <InformationCircleIcon className="w-7" />
+            Recorded events will appear here.
+          </Empty>
+        </div>
       )}
     </div>
   );

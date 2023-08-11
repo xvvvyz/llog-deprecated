@@ -3,13 +3,14 @@ import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import Header from '@/(account)/_components/header';
 import getSubject from '@/(account)/_server/get-subject';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
-import listTemplatesWithData, {
-  ListTemplatesWithDataData,
-} from '@/(account)/_server/list-templates-with-data';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/(account)/_utilities/format-title';
 import EventTypeForm from '@/(account)/subjects/[subjectId]/event-types/_components/event-type-form';
 import { notFound } from 'next/navigation';
+
+import listTemplatesWithData, {
+  ListTemplatesWithDataData,
+} from '@/(account)/_server/list-templates-with-data';
 
 export const generateMetadata = async ({
   params: { subjectId },

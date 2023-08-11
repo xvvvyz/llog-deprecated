@@ -59,7 +59,7 @@ const CopyJoinSubjectLinkButton = ({
       {hasCopied.value ? (
         <>
           <CheckIcon className="w-5" />
-          Link copied&hellip;
+          Copied, share it!
         </>
       ) : (
         <>

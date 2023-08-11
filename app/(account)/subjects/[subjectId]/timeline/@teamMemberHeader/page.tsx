@@ -1,4 +1,5 @@
 import Avatar from '@/(account)/_components/avatar';
+import Tooltip from '@/(account)/_components/tooltip';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectManagers from '@/(account)/_server/list-subject-managers';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -22,7 +23,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="-mt-10 mb-16 px-4">
-      <div className="flex items-start justify-between gap-6 border-t border-alpha-1 pb-1 pt-6">
+      <div className="flex items-start justify-between gap-8 border-t border-alpha-1 pb-1 pt-6">
         <div className="flex items-start gap-6">
           {!!managers?.length && (
             <div className="flex flex-wrap gap-2">
@@ -31,10 +32,22 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
               ))}
             </div>
           )}
-          <CopyJoinSubjectLinkButton
-            shareCode={subject.share_code}
-            subjectId={subjectId}
-          />
+          <div className="flex items-center gap-4">
+            <Tooltip
+              id="clients-tip"
+              placement="left"
+              tip={
+                <>
+                  Clients can complete missions, record events and
+                  add&nbsp;comments.
+                </>
+              }
+            />
+            <CopyJoinSubjectLinkButton
+              shareCode={subject.share_code}
+              subjectId={subjectId}
+            />
+          </div>
         </div>
         <Button
           href={`/subjects/${subjectId}/edit?back=/subjects/${subjectId}/timeline`}

@@ -1,4 +1,5 @@
 import LinkList from '@/(account)/_components/link-list';
+import Tooltip from '@/(account)/_components/tooltip';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectEventTypes from '@/(account)/_server/list-subject-event-types';
@@ -44,15 +45,30 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         ))}
       </LinkList>
       {isTeamMember && (
-        <Button
-          className={twMerge('w-full', eventTypes.length && 'rounded-t-none')}
-          colorScheme="transparent"
-          href={`/subjects/${subject.id}/event-types/create`}
-          type="button"
-        >
-          <PlusIcon className="w-5" />
-          Create event type
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button
+            className={twMerge('w-full', eventTypes.length && 'rounded-t-none')}
+            colorScheme="transparent"
+            href={`/subjects/${subject.id}/event-types/create`}
+            type="button"
+          >
+            <PlusIcon className="w-5" />
+            Create event type
+          </Button>
+          {!eventTypes.length && (
+            <Tooltip
+              id="event-types-tip"
+              tip={
+                <>
+                  Event types define individual events that can be recorded. For
+                  example, &ldquo;Barking&rdquo;, &ldquo;Medication&rdquo; or
+                  &ldquo;Vet visit&rdquo;.
+                </>
+              }
+              tipClassName="max-w-[18.5rem]"
+            />
+          )}
+        </div>
       )}
     </div>
   );

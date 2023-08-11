@@ -23,6 +23,7 @@ import ReactSelect, {
   SingleValueProps,
 } from 'react-select';
 
+import Tooltip from '@/(account)/_components/tooltip';
 import {
   ChevronUpDownIcon,
   PlusIcon,
@@ -43,6 +44,7 @@ type SelectProps<TOption> = ReactSelectProps<TOption> &
     inputType?: 'text' | 'number';
     isCreatable?: boolean;
     label?: string;
+    tooltip?: ReactNode;
   };
 
 const ClearIndicator = <TOption extends IOption>(
@@ -277,6 +279,7 @@ const Select = <TOption extends IOption>(
     label,
     name,
     placeholder,
+    tooltip,
     ...props
   }: SelectProps<TOption>,
   ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
@@ -315,14 +318,27 @@ const Select = <TOption extends IOption>(
   };
 
   return (
-    <label className="group">
-      {label && <span className="label">{label}</span>}
+    <div className="group">
+      <div className="flex justify-between">
+        {label && (
+          <label className="label" htmlFor={`react-select-${name}-input`}>
+            {label}
+          </label>
+        )}
+        {tooltip && (
+          <Tooltip
+            className="relative -top-1 -mr-[0.15rem]"
+            id={`${name}-tooltip`}
+            tip={tooltip}
+          />
+        )}
+      </div>
       {isCreatable ? (
         <Creatable ref={ref} {...commonProps} />
       ) : (
         <ReactSelect ref={ref} {...commonProps} />
       )}
-    </label>
+    </div>
   );
 };
 

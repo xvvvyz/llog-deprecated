@@ -17,7 +17,6 @@ const DownloadEventsButton = ({
 
   return (
     <Button
-      className="w-[12rem]"
       colorScheme="transparent"
       disabled={disabled}
       loading={isDownloading.value}
@@ -41,7 +40,7 @@ const DownloadEventsButton = ({
       size="sm"
     >
       <ArrowDownTrayIcon className="w-5" />
-      Download events
+      CSV
     </Button>
   );
 };

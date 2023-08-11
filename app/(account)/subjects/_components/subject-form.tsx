@@ -80,7 +80,13 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         render={({ field }) => (
           <RichTextarea
             className="px-0 text-center text-fg-4 [&>*]:mx-auto [&>*]:max-w-sm [&>*]:px-4"
-            label="Banner"
+            label="Text banner"
+            tooltip={
+              <>
+                Add an optional note displayed at the top of your
+                subject&rsquo;s profile.
+              </>
+            }
             {...field}
           />
         )}
