@@ -105,8 +105,8 @@ dependencies:
     specifier: ^0.15.0
     version: 0.15.0
   ai:
-    specifier: ^2.1.32
-    version: 2.1.32(react@18.2.0)(solid-js@1.7.8)(svelte@4.0.5)(vue@3.3.4)
+    specifier: ^2.1.33
+    version: 2.1.33(react@18.2.0)(solid-js@1.7.8)(svelte@4.0.5)(vue@3.3.4)
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.26)
@@ -2044,8 +2044,8 @@ packages:
       - supports-color
     dev: false
 
-  /ai@2.1.32(react@18.2.0)(solid-js@1.7.8)(svelte@4.0.5)(vue@3.3.4):
-    resolution: {integrity: sha512-G+mk7OfSxVR5s2cmpni89olZjXo5XbxPzzG8DAZThoJA2725hczfvO/gqLYGUToq92vzr0XgCHP6JJFK9so5fg==}
+  /ai@2.1.33(react@18.2.0)(solid-js@1.7.8)(svelte@4.0.5)(vue@3.3.4):
+    resolution: {integrity: sha512-8VK/yl8vME9a/F1aIOi384wyDC/A+/8bQVrspvUJUA5De03DZBecw7LDOyee50kEjT7c64GNXOmBc8pBkX4oXw==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.2.0
