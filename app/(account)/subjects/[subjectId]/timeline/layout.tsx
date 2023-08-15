@@ -50,14 +50,16 @@ const Layout = async ({
         <Avatar file={subject.image_uri} name={subject.name} />
       </Header>
       {isTeamMember && teamMemberHeader}
-      {subject.banner && (
-        <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 pb-14 text-center text-fg-4">
-          {subject.banner}
-        </DirtyHtml>
-      )}
-      <div className="space-y-4">
-        {missions}
-        {eventTypes}
+      <div className="space-y-14">
+        {subject.banner && (
+          <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 text-center text-fg-4">
+            {subject.banner}
+          </DirtyHtml>
+        )}
+        <div className="space-y-4">
+          {missions}
+          {eventTypes}
+        </div>
       </div>
       {events}
     </>

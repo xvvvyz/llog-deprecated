@@ -29,7 +29,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   if (!subject || !user) return null;
 
   return (
-    <div className="mt-16">
+    <>
       <Header className="mb-2">
         <h1 className="text-2xl">Timeline</h1>
         <div className="space-x-4">
@@ -62,7 +62,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           </Empty>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

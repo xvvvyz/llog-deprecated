@@ -47,7 +47,7 @@ const Notifications = ({
         <InformationCircleIcon className="w-7" />
         Events and comments added by
         <br />
-        clients will appear here.
+        others will appear here.
       </Empty>
     );
   }
