@@ -215,7 +215,7 @@ const EventTypeFormSection = <T extends FieldValues>({
                 moduleNumber ? undefined : (
                   <>
                     Define the specific data points you are interested in
-                    tracking for this event type. For example,
+                    tracking for this event type. For example:
                     &ldquo;Duration&rdquo;, &ldquo;Rating&rdquo;, &ldquo;Body
                     language&rdquo;, etc.
                   </>

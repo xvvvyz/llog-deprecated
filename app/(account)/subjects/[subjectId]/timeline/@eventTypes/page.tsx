@@ -61,11 +61,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
               tip={
                 <>
                   Event types define individual events that can be recorded. For
-                  example, &ldquo;Barking&rdquo;, &ldquo;Medication&rdquo; or
-                  &ldquo;Vet visit&rdquo;.
+                  example: &ldquo;Barking&rdquo; or &ldquo;Vet visit&rdquo;
                 </>
               }
-              tipClassName="max-w-[18.5rem]"
             />
           )}
         </div>

@@ -76,12 +76,11 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
               id="missions-tip"
               tip={
                 <>
-                  Missions are long-term training plans. For example,
-                  &ldquo;Reduce separation anxiety&rdquo; or &ldquo;Stop barking
-                  at the door&rdquo;.
+                  Missions are long-term training plans. For example:
+                  &ldquo;Reduce separation anxiety&rdquo; or &ldquo;Stop
+                  barking&rdquo;
                 </>
               }
-              tipClassName="max-w-[18.5rem]"
             />
           )}
         </div>

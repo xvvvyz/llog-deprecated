@@ -35,9 +35,10 @@ const Tooltip = ({
   return (
     <>
       <button
+        {...api.triggerProps}
         className={twMerge('-m-3 p-3', className)}
         type="button"
-        {...api.triggerProps}
+        onClick={api.open}
       >
         <InformationCircleIcon className="w-5 text-fg-3" />
       </button>
