@@ -32,7 +32,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     <>
       <Header className="mb-2">
         <h1 className="text-2xl">Timeline</h1>
-        <div className="space-x-4">
+        <div className="divide-x divide-alpha-1">
           {subject.team_id === teamId && (
             <InsightsButton
               disabled={!events?.length}
@@ -41,9 +41,12 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             />
           )}
           <DownloadEventsButton
+            className={subject.team_id === teamId ? 'rounded-l-none' : ''}
             disabled={!events?.length}
             subjectId={subjectId}
-          />
+          >
+            {subject.team_id === teamId ? 'Events' : 'Download events'}
+          </DownloadEventsButton>
         </div>
       </Header>
       {events?.length ? (

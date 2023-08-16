@@ -2,14 +2,19 @@
 
 import Button from '@/_components/button';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { ReactNode } from 'react';
 import { useBoolean } from 'usehooks-ts';
 
 interface DownloadEventsButtonProps {
+  children: ReactNode;
+  className?: string;
   disabled?: boolean;
   subjectId: string;
 }
 
 const DownloadEventsButton = ({
+  children,
+  className,
   disabled,
   subjectId,
 }: DownloadEventsButtonProps) => {
@@ -18,17 +23,12 @@ const DownloadEventsButton = ({
   return (
     <Button
       colorScheme="transparent"
-      disabled={disabled}
-      loading={isDownloading.value}
-      loadingText="Downloading…"
+      className={className}
+      disabled={disabled || isDownloading.value}
       onClick={async () => {
         isDownloading.setTrue();
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const r = await fetch(
-          `/subjects/${subjectId}/events.csv?tz=${tz}&download=true`,
-        );
-
+        const r = await fetch(`/subjects/${subjectId}/events.csv?tz=${tz}`);
         const blob = await r.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -40,7 +40,7 @@ const DownloadEventsButton = ({
       size="sm"
     >
       <ArrowDownTrayIcon className="w-5" />
-      CSV
+      {children}
     </Button>
   );
 };

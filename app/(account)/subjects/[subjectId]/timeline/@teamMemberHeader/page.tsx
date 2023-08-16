@@ -33,16 +33,18 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
             </div>
           )}
           <div className="flex items-center gap-4">
-            <Tooltip
-              id="clients-tip"
-              placement="left"
-              tip={
-                <>
-                  Clients can complete missions, record events and
-                  add&nbsp;comments.
-                </>
-              }
-            />
+            {!managers?.length && (
+              <Tooltip
+                id="clients-tip"
+                placement="left"
+                tip={
+                  <>
+                    Clients can complete missions, record events and
+                    add&nbsp;comments.
+                  </>
+                }
+              />
+            )}
             <CopyJoinSubjectLinkButton
               shareCode={subject.share_code}
               subjectId={subjectId}

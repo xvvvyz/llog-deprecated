@@ -21,6 +21,7 @@ const InsightsButton = ({ disabled, subjectId, user }: InsightsButtonProps) => {
     <>
       <Button
         colorScheme="transparent"
+        className="rounded-r-none border-r-0"
         disabled={disabled}
         onClick={modal.setTrue}
         size="sm"
