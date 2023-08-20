@@ -18,7 +18,7 @@ const Crisp = ({ crispSignature, user }: CrispProviderProps) => {
     C.user.setEmail(user.email as string, crispSignature);
     const meta = user.user_metadata;
     C.user.setNickname(`${meta.first_name} ${meta.last_name}`);
-    C.session.setSegments([meta.is_client ? 'Client' : 'Consultant'], true);
+    C.session.setSegments([meta.is_client ? 'client' : 'consultant'], true);
     C.load();
   }, [crispSignature, user]);
 

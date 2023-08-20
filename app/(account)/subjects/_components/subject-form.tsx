@@ -62,7 +62,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
 
         await uploadSubjectAvatar({
           avatar: values.avatar,
-          subjectId: values.id,
+          subjectId: subjectData.id,
           supabase,
         });
 
