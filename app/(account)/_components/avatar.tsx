@@ -40,7 +40,7 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
           title={name}
         />
       ) : (
-        <span aria-hidden>{name[0]}</span>
+        <span aria-hidden>{Array.from(name)[0]}</span>
       )}
     </div>
   );
