@@ -50,3 +50,5 @@ pnpm run db:diff -- migration-description
 - Update email templates
 - Update url config
 - Enable realtime
+- Add `CRISP_SECRET_KEY` to vercel env
+- Add `OPENAI_API_KEY` to vercel env

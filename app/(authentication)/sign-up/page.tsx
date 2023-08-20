@@ -23,17 +23,16 @@ const Page = ({ searchParams }: PageProps) => {
 
     const proto = headers().get('x-forwarded-proto');
     const host = headers().get('host');
-    const email = values.get('email') as string;
 
     const { error } = await createServerActionClient().auth.signUp({
-      email,
+      email: values.get('email') as string,
       options: {
         data: {
           first_name: values.get('firstName') as string,
           is_client: isClient,
           last_name: values.get('lastName') as string,
         },
-        emailRedirectTo: `${proto}://${host}/sign-up/exchange-code-for-session?redirect=${actionRedirect}&email=${email}`,
+        emailRedirectTo: `${proto}://${host}/sign-up/exchange-code-for-session?redirect=${actionRedirect}`,
       },
       password: values.get('password') as string,
     });
