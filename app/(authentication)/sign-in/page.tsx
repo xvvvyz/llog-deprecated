@@ -1,3 +1,4 @@
+import setCrispSignatureCookie from '@/(authentication)/_utilities/set-crisp-signature-cookie';
 import SignInForm from '@/(authentication)/sign-in/_components/sign-in-form';
 import Button from '@/_components/button';
 import createServerActionClient from '@/_server/create-server-action-client';
@@ -19,12 +20,15 @@ const Page = ({ searchParams }: PageProps) => {
   const action = async (values: FormData) => {
     'use server';
 
+    const email = values.get('email') as string;
+
     const { error } = await createServerActionClient().auth.signInWithPassword({
-      email: values.get('email') as string,
+      email,
       password: values.get('password') as string,
     });
 
     if (error) return { error: error?.message };
+    setCrispSignatureCookie(email);
     redirect(actionRedirect);
   };
 

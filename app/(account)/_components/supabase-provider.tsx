@@ -15,8 +15,10 @@ const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
 
   useEffect(() => {
     const { data: authChannel } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_OUT') router.push('/sign-in');
-      router.refresh();
+      if (event === 'SIGNED_OUT') {
+        router.push('/sign-in');
+        router.refresh();
+      }
     });
 
     const notificationsChannel = supabase
