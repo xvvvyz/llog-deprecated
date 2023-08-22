@@ -1,21 +1,34 @@
+import { useToggle } from '@uidotdev/usehooks';
 import { useEffect, useTransition } from 'react';
-import { useBoolean } from 'usehooks-ts';
 import usePrevious from './use-previous';
 
 const useDeleteAlert = () => {
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
+  const [isConfirming, toggleIsConfirming] = useToggle(false);
   const [isTransitioning, startTransition] = useTransition();
-  const deleteAlert = useBoolean();
-  const isConfirming = useBoolean();
   const isTransitioningPrevious = usePrevious(isTransitioning);
 
   useEffect(() => {
     if (!isTransitioning && isTransitioningPrevious) {
-      deleteAlert.setFalse();
-      isConfirming.setFalse();
+      toggleDeleteAlert(false);
+      toggleIsConfirming(false);
     }
-  }, [deleteAlert, isConfirming, isTransitioning, isTransitioningPrevious]);
+  }, [
+    deleteAlert,
+    isConfirming,
+    isTransitioning,
+    isTransitioningPrevious,
+    toggleDeleteAlert,
+    toggleIsConfirming,
+  ]);
 
-  return { deleteAlert, isConfirming, startTransition };
+  return {
+    deleteAlert,
+    isConfirming,
+    startTransition,
+    toggleDeleteAlert,
+    toggleIsConfirming,
+  };
 };
 
 export default useDeleteAlert;

@@ -1,22 +1,22 @@
 import parseSeconds from '@/(account)/_utilities/parse-seconds';
+import { useToggle } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useBoolean, useDebounce } from 'usehooks-ts';
 
 const useStopwatch = (initialTime: string | number) => {
+  const [isRunning, toggleIsRunning] = useToggle(false);
   const [time, setTime] = useState(+initialTime || 0);
   const frameId = useRef<number | undefined>();
-  const isRunning = useBoolean();
   const startTime = useRef<number>(0);
 
   const update = useCallback(() => {
-    if (isRunning.value) {
+    if (isRunning) {
       setTime((performance.now() - startTime.current) / 1000);
       frameId.current = requestAnimationFrame(update);
     }
-  }, [isRunning.value]);
+  }, [isRunning]);
 
   useEffect(() => {
-    if (isRunning.value) {
+    if (isRunning) {
       startTime.current = performance.now() - time * 1000;
       frameId.current = requestAnimationFrame(update);
     } else if (frameId.current) {
@@ -29,7 +29,7 @@ const useStopwatch = (initialTime: string | number) => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRunning.value]);
+  }, [isRunning]);
 
   const reset = useCallback(() => {
     setTime(0);
@@ -40,21 +40,18 @@ const useStopwatch = (initialTime: string | number) => {
       frameId.current = undefined;
     }
 
-    isRunning.setFalse();
+    toggleIsRunning(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     ...parseSeconds(time),
-    debouncedTime: useDebounce(time, 1000),
     hasTime: time !== 0,
-    isRunning: isRunning.value,
+    isRunning,
     reset,
-    start: isRunning.setTrue,
-    stop: isRunning.setFalse,
     time,
-    toggle: isRunning.toggle,
+    toggle: toggleIsRunning,
   };
 };
 

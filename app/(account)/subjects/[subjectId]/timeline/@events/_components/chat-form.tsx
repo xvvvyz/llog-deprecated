@@ -6,6 +6,7 @@ import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { User } from '@supabase/gotrue-js/src/lib/types';
+import { useToggle } from '@uidotdev/usehooks';
 import { useChat } from 'ai/react';
 import merge from 'lodash/merge';
 import { nanoid } from 'nanoid';
@@ -14,7 +15,6 @@ import { useMemo, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { VegaLite } from 'react-vega';
 import { VegaLiteProps } from 'react-vega/lib/VegaLite';
-import { useBoolean } from 'usehooks-ts';
 
 interface ChatFormProps {
   subjectId: string;
@@ -28,7 +28,7 @@ const ChatForm = ({
   },
 }: ChatFormProps) => {
   const dataRef = useRef();
-  const isInitializing = useBoolean();
+  const [isInitializing, toggleIsInitializing] = useToggle(false);
 
   const {
     handleInputChange,
@@ -186,7 +186,7 @@ const ChatForm = ({
         onSubmit={async (e) => {
           if (dataRef.current) return handleSubmit(e);
           e.preventDefault();
-          isInitializing.setTrue();
+          toggleIsInitializing(true);
           const res = await fetch(`/subjects/${subjectId}/events.json`);
           const data = await res.json();
           dataRef.current = data;
@@ -228,13 +228,13 @@ const ChatForm = ({
             ...messages,
           ]);
 
-          isInitializing.setFalse();
+          toggleIsInitializing(false);
           return handleSubmit(e);
         }}
       >
         <Input
           className="rounded-sm"
-          disabled={isInitializing.value || isLoading}
+          disabled={isInitializing || isLoading}
           onChange={handleInputChange}
           placeholder="Ask for a visualization…"
           right={
@@ -242,7 +242,7 @@ const ChatForm = ({
               className="m-0 px-3 py-2.5"
               icon={<PaperAirplaneIcon className="w-5" />}
               label="Submit"
-              loading={isInitializing.value || isLoading}
+              loading={isInitializing || isLoading}
               loadingText="Submitting…"
               type="submit"
             />

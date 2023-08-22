@@ -2,8 +2,8 @@
 
 import Button from '@/_components/button';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { useToggle } from '@uidotdev/usehooks';
 import { ReactNode } from 'react';
-import { useBoolean } from 'usehooks-ts';
 
 interface DownloadEventsButtonProps {
   children: ReactNode;
@@ -18,15 +18,15 @@ const DownloadEventsButton = ({
   disabled,
   subjectId,
 }: DownloadEventsButtonProps) => {
-  const isDownloading = useBoolean(false);
+  const [isDownloading, toggleIsDownloading] = useToggle(false);
 
   return (
     <Button
       colorScheme="transparent"
       className={className}
-      disabled={disabled || isDownloading.value}
+      disabled={disabled || isDownloading}
       onClick={async () => {
-        isDownloading.setTrue();
+        toggleIsDownloading();
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const r = await fetch(`/subjects/${subjectId}/events.csv?tz=${tz}`);
         const blob = await r.blob();
@@ -35,7 +35,7 @@ const DownloadEventsButton = ({
         a.href = url;
         a.download = 'events.csv';
         a.click();
-        isDownloading.setFalse();
+        toggleIsDownloading();
       }}
       size="sm"
     >

@@ -28,18 +28,27 @@ const EventComment = ({
   isTeamMember,
   userId,
 }: EventCommentProps) => {
-  const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
   const router = useRouter();
   const supabase = useSupabase();
+
+  const {
+    deleteAlert,
+    toggleDeleteAlert,
+    toggleIsConfirming,
+    isConfirming,
+    startTransition,
+  } = useDeleteAlert();
 
   return (
     <div className="flex gap-4">
       <Alert
         confirmText="Delete comment"
-        isConfirming={isConfirming.value}
+        isConfirming={isConfirming}
         isConfirmingText="Deleting comment…"
+        isOpen={deleteAlert}
+        onClose={toggleDeleteAlert}
         onConfirm={async () => {
-          isConfirming.setTrue();
+          toggleIsConfirming(true);
 
           const { error } = await supabase
             .from('comments')
@@ -47,13 +56,12 @@ const EventComment = ({
             .eq('id', id);
 
           if (error) {
-            isConfirming.setFalse();
+            toggleIsConfirming(false);
             alert(error.message);
           } else {
             startTransition(router.refresh);
           }
         }}
-        {...deleteAlert}
       />
       <Avatar className="mt-0.5" name={profile.first_name} />
       <div className="flex-1">
@@ -74,7 +82,7 @@ const EventComment = ({
                 <EllipsisVerticalIcon className="relative -right-2 -top-[0.18rem] w-5" />
               </Menu.Button>
               <Menu.Items>
-                <Menu.Item onClick={deleteAlert.setTrue}>
+                <Menu.Item onClick={() => toggleDeleteAlert(true)}>
                   <TrashIcon className="w-5 text-fg-4" />
                   Delete comment
                 </Menu.Item>

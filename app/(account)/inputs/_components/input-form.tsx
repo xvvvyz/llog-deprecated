@@ -4,7 +4,6 @@ import Checkbox from '@/(account)/_components/checkbox';
 import IconButton from '@/(account)/_components/icon-button';
 import NumberInput from '@/(account)/_components/input-number';
 import Select from '@/(account)/_components/select';
-import Tooltip from '@/(account)/_components/tooltip';
 import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
 import CacheKeys from '@/(account)/_constants/enum-cache-keys';
 import InputTypes from '@/(account)/_constants/enum-input-types';
@@ -78,9 +77,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
   const type = form.watch('type')?.id;
 
   const hasOptions =
-    type === InputTypes.Select ||
-    type === InputTypes.MultiSelect ||
-    type === InputTypes.Stopwatch;
+    type === InputTypes.Select || type === InputTypes.MultiSelect;
 
   return (
     <form
@@ -259,8 +256,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                 }
 
                 case InputTypes.MultiSelect:
-                case InputTypes.Select:
-                case InputTypes.Stopwatch: {
+                case InputTypes.Select: {
                   form.setValue('settings', {
                     isCreatable: false,
                   });
@@ -282,23 +278,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       {hasOptions && (
         <>
           <fieldset className="group">
-            <div className="flex justify-between">
-              <span className="label">
-                {type === InputTypes.Stopwatch ? 'Timed notes' : 'Options'}
-              </span>
-              {type === InputTypes.Stopwatch && (
-                <Tooltip
-                  className="relative -top-1 -mr-[0.15rem]"
-                  id="options-tip"
-                  tip={
-                    <>
-                      If you add options or allow options to be created, you can
-                      record notes that are associated with a timestamp.
-                    </>
-                  }
-                />
-              )}
-            </div>
+            <span className="label">Options</span>
             <div className="space-y-2">
               {!!optionsArray.fields.length && (
                 <ul className="flex flex-col gap-2">

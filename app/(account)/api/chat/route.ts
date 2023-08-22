@@ -43,7 +43,6 @@ Event field types:
 (q): quantitative values
 (t): temporal values
 (an): array of nominal value e.g ['a', 'b']
-(aqn): array of arrays of quantitative and nominal values e.g [[1, 'a'], [2, 'b']]
 
 Default event fields:
 
@@ -58,7 +57,7 @@ Rules for "create_vis" function:
 
 Must use a "filter" transform when charting fields that may not have values e.g {"filter":"datum['Foo (q)']"}
 Must use "isValid" when filtering nominal fields e.g {"filter":"isValid(datum['Foo (n)'])"}
-Must use a "flatten" transform when charting "(an)" or "(aqn)" fields e.g {"flatten":["Foo (an)"]}
+Must use a "flatten" transform when charting "(an)" fields e.g {"flatten":["Foo (an)"]}
 Must use a "color" encoding on "Name (n)" when a name is not specified e.g {"color":{"field":"Name (n)"}}
 Must use a "point" mark when charting "(q)" fields
 

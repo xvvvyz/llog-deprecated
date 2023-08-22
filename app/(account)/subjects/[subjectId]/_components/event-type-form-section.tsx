@@ -19,7 +19,6 @@ import Input from '@/_components/input';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useBoolean } from 'usehooks-ts';
 
 import {
   DraggableAttributes,
@@ -32,6 +31,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 
+import { useToggle } from '@uidotdev/usehooks';
 import {
   Controller,
   FieldValues,
@@ -70,8 +70,8 @@ const EventTypeFormSection = <T extends FieldValues>({
   moduleNumber,
   namePrefix = '',
 }: EventTypeFormSectionProps<T>) => {
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
   const [isTransitioning, startTransition] = useTransition();
-  const deleteAlert = useBoolean();
   const backLink = useBackLink({ useCache: true });
   const router = useRouter();
 
@@ -138,7 +138,7 @@ const EventTypeFormSection = <T extends FieldValues>({
               {saveAsTemplateButton}
               <Button
                 disabled={hasOnlyOne}
-                onClick={deleteAlert.setTrue}
+                onClick={() => toggleDeleteAlert(true)}
                 variant="link"
               >
                 <TrashIcon className="w-5" />
@@ -146,8 +146,9 @@ const EventTypeFormSection = <T extends FieldValues>({
               </Button>
               <Alert
                 confirmText="Delete module"
+                isOpen={deleteAlert}
+                onClose={toggleDeleteAlert}
                 onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
-                {...deleteAlert}
               />
             </div>
           </div>

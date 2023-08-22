@@ -82,24 +82,16 @@ const listEventsFormatted = async (subjectId: string) => {
     forceArray(event.inputs).forEach((input: any) => {
       const strippedLabel = strip(input.input.label);
 
-      if (input.input.type === 'stopwatch') {
-        if (input.option?.label) {
-          const key = `${strippedLabel} timed notes (aqn)`;
-          const value = [input.value, input.option.label];
-          row[key] = row[key] ?? [];
-          row[key].push(value);
-        } else {
-          row[`${strippedLabel} total time (q)`] = input.value;
-        }
+      if (input.input.type === 'multi_select') {
+        const key = `${strippedLabel} (an)`;
+        row[key] = row[key] ?? [];
+        row[key].push(input.option.label);
       } else {
-        if (input.input.type === 'multi_select') {
-          const key = `${strippedLabel} (an)`;
-          row[key] = row[key] ?? [];
-          row[key].push(input.option.label);
-        } else {
-          const type = /(duration|number)/.test(input.input.type) ? 'q' : 'n';
-          row[`${strippedLabel} (${type})`] = input.value ?? input.option.label;
-        }
+        const type = /(duration|number|stopwatch)/.test(input.input.type)
+          ? 'q'
+          : 'n';
+
+        row[`${strippedLabel} (${type})`] = input.value ?? input.option.label;
       }
     });
 

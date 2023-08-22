@@ -10,10 +10,10 @@ interface AlertProps {
   description?: ReactNode;
   isConfirming?: boolean;
   isConfirmingText?: string;
+  isOpen: boolean;
+  onClose: () => void;
   onConfirm?: () => void;
   title?: string;
-  toggle: () => void;
-  value: boolean;
 }
 
 const Alert = ({
@@ -22,12 +22,12 @@ const Alert = ({
   description,
   isConfirming,
   isConfirmingText,
+  isOpen,
+  onClose,
   onConfirm,
   title = 'Are you sure?',
-  toggle,
-  value,
 }: AlertProps) => (
-  <Dialog className="relative z-20" onClose={toggle} open={value}>
+  <Dialog className="relative z-20" onClose={onClose} open={isOpen}>
     <div className="fixed inset-0 bg-alpha-reverse-2 backdrop-blur-sm" />
     <div className="fixed inset-0 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center">
@@ -41,7 +41,7 @@ const Alert = ({
           <div className="mt-16 flex flex-col-reverse gap-4">
             <Button
               className="m-0 -mb-3 w-full justify-center p-0 py-3"
-              onClick={toggle}
+              onClick={onClose}
               variant="link"
             >
               {cancelText}

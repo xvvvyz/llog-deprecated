@@ -2,9 +2,9 @@ import Select from '@/(account)/_components/select';
 import { InputType } from '@/(account)/_types/input';
 import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
+import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { useBoolean } from 'usehooks-ts';
 
 interface EventSelectProps {
   field: any;
@@ -16,7 +16,7 @@ interface EventSelectProps {
 }
 
 const EventSelect = ({ field, input }: EventSelectProps) => {
-  const { value: isCreating, toggle: toggleIsCreating } = useBoolean();
+  const [isCreating, toggleIsCreating] = useToggle(false);
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const supabase = useSupabase();

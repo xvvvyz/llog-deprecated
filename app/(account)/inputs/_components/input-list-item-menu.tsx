@@ -19,16 +19,25 @@ interface InputListItemMenuProps {
 const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   const router = useRouter();
   const supabase = useSupabase();
-  const { deleteAlert, isConfirming, startTransition } = useDeleteAlert();
+
+  const {
+    deleteAlert,
+    isConfirming,
+    startTransition,
+    toggleDeleteAlert,
+    toggleIsConfirming,
+  } = useDeleteAlert();
 
   return (
     <>
       <Alert
         confirmText="Delete input"
-        isConfirming={isConfirming.value}
+        isConfirming={isConfirming}
         isConfirmingText="Deleting input…"
+        isOpen={deleteAlert}
+        onClose={toggleDeleteAlert}
         onConfirm={async () => {
-          isConfirming.setTrue();
+          toggleIsConfirming(true);
 
           const { error } = await supabase
             .from('inputs')
@@ -36,13 +45,12 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
             .eq('id', inputId);
 
           if (error) {
-            isConfirming.setFalse();
+            toggleIsConfirming(false);
             alert(error.message);
           } else {
             startTransition(router.refresh);
           }
         }}
-        {...deleteAlert}
       />
       <Menu className="shrink-0">
         <Menu.Button className="h-full border-l border-alpha-1 px-4 group-first:rounded-tr group-last:rounded-br">
@@ -53,7 +61,7 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate input
           </Menu.Item>
-          <Menu.Item onClick={deleteAlert.setTrue}>
+          <Menu.Item onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
             Delete input
           </Menu.Item>

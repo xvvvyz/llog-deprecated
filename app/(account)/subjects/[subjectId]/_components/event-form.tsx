@@ -54,14 +54,7 @@ type SelectInputType =
   | Database['public']['Tables']['input_options']['Row']
   | null;
 
-type StopwatchInputType = {
-  notes: Array<{
-    id: string;
-    label: string;
-    time: string;
-  }>;
-  time: string;
-};
+type StopwatchInputType = string;
 
 interface EventFormValues {
   comment?: string;
@@ -117,7 +110,8 @@ const EventForm = ({
             ];
           }
 
-          case InputTypes.Number: {
+          case InputTypes.Number:
+          case InputTypes.Stopwatch: {
             return inputInputs[0]?.value ?? '';
           }
 
@@ -141,32 +135,6 @@ const EventForm = ({
                   id === inputInputs[0]?.input_option_id,
               ) ?? null
             );
-          }
-
-          case InputTypes.Stopwatch: {
-            return {
-              notes: inputInputs.reduce(
-                (
-                  acc: StopwatchInputType['notes'],
-                  { input_option_id, value },
-                ) => {
-                  input.options.forEach(
-                    ({
-                      id,
-                      label,
-                    }: Database['public']['Tables']['input_options']['Row']) => {
-                      if (input_option_id !== id) return;
-                      acc.push({ id, label, time: value });
-                    },
-                  );
-
-                  return acc;
-                },
-                [],
-              ),
-              time: inputInputs.find(({ input_option_id }) => !input_option_id)
-                ?.value,
-            };
           }
         }
       }),
@@ -254,7 +222,8 @@ const EventForm = ({
 
               switch (eventTypeInput.type) {
                 case InputTypes.Checkbox:
-                case InputTypes.Number: {
+                case InputTypes.Number:
+                case InputTypes.Stopwatch: {
                   payload.value = input;
                   acc.insertedEventInputs.push(payload);
                   return acc;
@@ -286,27 +255,6 @@ const EventForm = ({
                 case InputTypes.Select: {
                   payload.input_option_id = (input as SelectInputType)?.id;
                   acc.insertedEventInputs.push(payload);
-                  return acc;
-                }
-
-                case InputTypes.Stopwatch: {
-                  (input as StopwatchInputType).notes.forEach(
-                    ({ id, time }: { id: string; time: string }, order) =>
-                      acc.insertedEventInputs.push({
-                        ...payload,
-                        input_option_id: id,
-                        order,
-                        value: time,
-                      }),
-                  );
-
-                  if (Number((input as StopwatchInputType).time)) {
-                    acc.insertedEventInputs.push({
-                      ...payload,
-                      value: (input as StopwatchInputType).time,
-                    });
-                  }
-
                   return acc;
                 }
 
@@ -365,6 +313,7 @@ const EventForm = ({
           })(),
         )}
         step="any"
+        suppressHydrationWarning
         type="datetime-local"
         {...form.register('completionTime')}
       />

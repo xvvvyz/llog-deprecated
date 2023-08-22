@@ -3,9 +3,9 @@
 import Button from '@/_components/button';
 import useSupabase from '@/_hooks/use-supabase';
 import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
 import { nanoid } from 'nanoid';
 import { useRef } from 'react';
-import { useBoolean, useCopyToClipboard, useToggle } from 'usehooks-ts';
 
 interface CopyJoinSubjectLinkButton {
   shareCode: string | null;
@@ -17,8 +17,8 @@ const CopyJoinSubjectLinkButton = ({
   subjectId,
 }: CopyJoinSubjectLinkButton) => {
   const [, copyToClipboard] = useCopyToClipboard();
-  const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle();
-  const hasCopied = useBoolean();
+  const [hasCopiedToClipboard, toggleHasCopiedToClipboard] = useToggle(false);
+  const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle(false);
   const supabase = useSupabase();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -51,12 +51,17 @@ const CopyJoinSubjectLinkButton = ({
         );
 
         toggleCopyingToClipboard();
-        timeoutRef.current = setTimeout(hasCopied.setFalse, 2000);
-        hasCopied.setTrue();
+
+        timeoutRef.current = setTimeout(
+          () => toggleHasCopiedToClipboard(false),
+          2000,
+        );
+
+        toggleHasCopiedToClipboard(true);
       }}
       variant="link"
     >
-      {hasCopied.value ? (
+      {hasCopiedToClipboard ? (
         <>
           <CheckIcon className="w-5" />
           Copied, share it!

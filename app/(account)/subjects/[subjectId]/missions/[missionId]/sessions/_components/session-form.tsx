@@ -22,7 +22,6 @@ import { Dialog } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useBoolean } from 'usehooks-ts';
 
 import {
   closestCenter,
@@ -46,6 +45,7 @@ import {
   PlusIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
+import { useToggle } from '@uidotdev/usehooks';
 
 interface SessionFormProps {
   availableInputs: ListInputsData;
@@ -72,23 +72,23 @@ const SessionForm = ({
   session,
   subjectId,
 }: SessionFormProps) => {
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
   const [isDeleteTransitioning, startDeleteTransition] = useTransition();
+  const [isDeleting, toggleIsDeleting] = useToggle(false);
   const [isDuplicateTransitioning, startDuplicateTransition] = useTransition();
   const [isFormTransitioning, startFormTransition] = useTransition();
   const [isMoveLeftTransitioning, startMoveLeftTransition] = useTransition();
   const [isMoveRightTransitioning, startMoveRightTransition] = useTransition();
+  const [isMovingLeft, toggleIsMovingLeft] = useToggle(false);
+  const [isMovingRight, toggleIsMovingRight] = useToggle(false);
+  const [moveLeftAlert, toggleMoveLeftAlert] = useToggle(false);
+  const [moveRightAlert, toggleMoveRightAlert] = useToggle(false);
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
+  const [scheduleModal, toggleScheduleModal] = useToggle(false);
   const currentOrder = session?.order ?? order ?? 0;
-  const deleteAlert = useBoolean();
-  const isDeleting = useBoolean();
-  const isMovingLeft = useBoolean();
-  const isMovingRight = useBoolean();
   const modules = forceArray(session?.modules);
-  const moveLeftAlert = useBoolean();
-  const moveRightAlert = useBoolean();
   const hasEvents = modules.some((module) => module.event?.length);
   const router = useRouter();
-  const scheduleModal = useBoolean();
   const sensors = useSensors(useSensor(PointerSensor));
   const sessions = forceArray(mission.sessions);
   const supabase = useSupabase();
@@ -147,12 +147,12 @@ const SessionForm = ({
   const cancelScheduleModal = () => {
     form.setValue('scheduled_for', ogScheduledFor ?? null);
     setOgScheduledFor(null);
-    scheduleModal.setFalse();
+    toggleScheduleModal(false);
   };
 
   const openScheduleModal = () => {
     setOgScheduledFor(scheduledFor);
-    scheduleModal.setTrue();
+    toggleScheduleModal(true);
   };
 
   const reorderSession = (newOrder: number) =>
@@ -407,7 +407,7 @@ const SessionForm = ({
             <Button
               colorScheme="transparent"
               disabled={!session}
-              onClick={deleteAlert.setTrue}
+              onClick={() => toggleDeleteAlert(true)}
               size="sm"
             >
               <TrashIcon className="-ml-1 w-5" />
@@ -416,13 +416,11 @@ const SessionForm = ({
             <Button
               colorScheme="transparent"
               disabled={
-                currentOrder < 1 ||
-                isMovingLeft.value ||
-                isMoveLeftTransitioning
+                currentOrder < 1 || isMovingLeft || isMoveLeftTransitioning
               }
               onClick={() => {
                 if (session) {
-                  moveLeftAlert.setTrue();
+                  toggleMoveLeftAlert(true);
                   return;
                 }
 
@@ -448,12 +446,12 @@ const SessionForm = ({
               colorScheme="transparent"
               disabled={
                 (!draft && currentOrder >= highestPublishedOrder) ||
-                isMovingRight.value ||
+                isMovingRight ||
                 isMoveRightTransitioning
               }
               onClick={() => {
                 if (session) {
-                  moveRightAlert.setTrue();
+                  toggleMoveRightAlert(true);
                   return;
                 }
 
@@ -561,11 +559,11 @@ const SessionForm = ({
       </form>
       <Alert
         confirmText="Delete session"
-        isConfirming={isDeleting.value || isDeleteTransitioning}
+        isConfirming={isDeleting || isDeleteTransitioning}
         isConfirmingText="Deleting session…"
         onConfirm={async () => {
           if (!session) return;
-          isDeleting.setTrue();
+          toggleIsDeleting(true);
 
           const { error } = await supabase
             .from('sessions')
@@ -574,7 +572,7 @@ const SessionForm = ({
 
           if (error) {
             alert(error.message);
-            isDeleting.setFalse();
+            toggleIsDeleting(false);
             return;
           }
 
@@ -592,7 +590,7 @@ const SessionForm = ({
             }, []),
           );
 
-          isDeleting.setFalse();
+          toggleIsDeleting(false);
 
           startDeleteTransition(() => {
             router.refresh();
@@ -602,51 +600,54 @@ const SessionForm = ({
             );
           });
         }}
-        {...deleteAlert}
+        isOpen={deleteAlert}
+        onClose={toggleDeleteAlert}
       />
       <Alert
         cancelText="Close"
         confirmText="Move session"
         description={`Current position: ${currentOrder + 1}`}
-        isConfirming={isMovingLeft.value || isMoveLeftTransitioning}
+        isConfirming={isMovingLeft || isMoveLeftTransitioning}
         isConfirmingText="Moving session…"
+        isOpen={moveLeftAlert}
         onConfirm={async () => {
-          isMovingLeft.setTrue();
+          toggleIsMovingLeft(true);
           const newOrder = currentOrder - 1;
           await reorderSession(newOrder);
           form.setValue('order', newOrder);
-          isMovingLeft.setFalse();
+          toggleIsMovingLeft(false);
           startMoveLeftTransition(router.refresh);
-          if (newOrder < 1) moveLeftAlert.setFalse();
+          if (newOrder < 1) toggleMoveLeftAlert(false);
         }}
+        onClose={toggleMoveLeftAlert}
         title={`New position: ${currentOrder}`}
-        {...moveLeftAlert}
       />
       <Alert
         cancelText="Close"
         confirmText="Move session"
         description={`Current position: ${currentOrder + 1}`}
-        isConfirming={isMovingRight.value || isMoveRightTransitioning}
+        isConfirming={isMovingRight || isMoveRightTransitioning}
         isConfirmingText="Moving session…"
+        isOpen={moveRightAlert}
         onConfirm={async () => {
-          isMovingRight.setTrue();
+          toggleIsMovingRight(true);
           const newOrder = currentOrder + 1;
           await reorderSession(newOrder);
           form.setValue('order', newOrder);
-          isMovingRight.setFalse();
+          toggleIsMovingRight(false);
           startMoveRightTransition(router.refresh);
 
           if (!draft && newOrder >= highestPublishedOrder) {
-            moveRightAlert.setFalse();
+            toggleMoveRightAlert(false);
           }
         }}
+        onClose={toggleMoveRightAlert}
         title={`New position: ${currentOrder + 2}`}
-        {...moveRightAlert}
       />
       <Dialog
         className="relative z-10"
         onClose={cancelScheduleModal}
-        open={scheduleModal.value}
+        open={scheduleModal}
       >
         <div className="fixed inset-0 bg-alpha-reverse-2 backdrop-blur-sm" />
         <div className="fixed inset-0 overflow-y-auto">
@@ -663,7 +664,7 @@ const SessionForm = ({
                   onKeyDown={(e) => {
                     if (e.key !== 'Enter') return;
                     e.preventDefault();
-                    scheduleModal.setFalse();
+                    toggleScheduleModal(false);
                   }}
                   step={60}
                   type="datetime-local"
@@ -676,7 +677,7 @@ const SessionForm = ({
                     disabled={!scheduledFor}
                     onClick={() => {
                       form.setValue('scheduled_for', null);
-                      scheduleModal.setFalse();
+                      toggleScheduleModal(false);
                     }}
                   >
                     Clear
@@ -684,7 +685,7 @@ const SessionForm = ({
                   <Button
                     className="w-full"
                     disabled={!scheduledFor}
-                    onClick={scheduleModal.setFalse}
+                    onClick={() => toggleScheduleModal(false)}
                   >
                     Schedule
                   </Button>
