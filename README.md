@@ -1,6 +1,6 @@
 # llog
 
-> Collaborative, data-driven behavior modification.
+> The ultimate platform for behavior consultants.
 
 ## Development Setup
 
@@ -18,15 +18,15 @@ pnpm run db:start # outputs supabase url & key
 Add the following to your `.env` file:
 
 ```dotenv
-CRISP_SECRET_KEY=<CRISP_SECRET_KEY>
-OPENAI_API_KEY=<OPENAI_API_KEY>
-
-NEXT_PUBLIC_CRISP_WEBSITE_ID=<CRISP_WEBSITE_ID>
+# required
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 NEXT_PUBLIC_SUPABASE_URL=<SUPABSE_API_URL>
 
-# optimize images with supabase instead of next
+# optional
+CRISP_SECRET_KEY=<CRISP_SECRET_KEY>
+NEXT_PUBLIC_CRISP_WEBSITE_ID=<CRISP_WEBSITE_ID>
 NEXT_PUBLIC_SUPABASE_PRO=1
+OPENAI_API_KEY=<OPENAI_API_KEY>
 ```
 
 Generate types and start the dev server:
@@ -50,5 +50,25 @@ pnpm run db:diff -- migration-description
 - Update email templates
 - Update url config
 - Enable realtime
-- Add `CRISP_SECRET_KEY` to vercel env
-- Add `OPENAI_API_KEY` to vercel env
+- Vercel environment secrets:
+  - CRISP_SECRET_KEY
+  - OPENAI_API_KEY
+- Github environment secrets:
+  - NEXT_PUBLIC_CRISP_WEBSITE_ID
+  - NEXT_PUBLIC_SUPABASE_ANON_KEY
+  - NEXT_PUBLIC_SUPABASE_PRO
+  - NEXT_PUBLIC_SUPABASE_URL
+  - SUPABASE_DB_PASSWORD
+  - SUPABASE_PROJECT_ID
+
+### Email Templates
+
+<!-- prettier-ignore -->
+```html
+Hello,<br><br>Here is the link: <a href="{{ .ConfirmationURL }}">reset your password</a>.<br><br>If you did not make this request, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
+```
+
+<!-- prettier-ignore -->
+```html
+Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your email address</a>.<br><br>If you did not sign up for llog, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
+```
