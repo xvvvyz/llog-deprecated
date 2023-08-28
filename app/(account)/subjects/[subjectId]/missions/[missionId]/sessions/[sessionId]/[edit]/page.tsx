@@ -3,6 +3,7 @@ import getSession, { GetSessionData } from '@/(account)/_server/get-session';
 import getSubject from '@/(account)/_server/get-subject';
 import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
 import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
+import forceArray from '@/(account)/_utilities/force-array';
 import formatTitle from '@/(account)/_utilities/format-title';
 import SessionForm from '@/(account)/subjects/[subjectId]/missions/[missionId]/sessions/_components/session-form';
 import { notFound } from 'next/navigation';
@@ -11,28 +12,38 @@ import listTemplatesWithData, {
   ListTemplatesWithDataData,
 } from '@/(account)/_server/list-templates-with-data';
 
+interface PageProps {
+  params: {
+    missionId: string;
+    order: string;
+    sessionId: string;
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
-  params: { missionId, subjectId },
+  params: { missionId, order, sessionId, subjectId },
 }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
     getMissionWithSessions(missionId, true),
   ]);
 
+  const sessions = forceArray(mission?.sessions);
+  const currentSession = sessions.find(({ id }) => id === sessionId);
+  const sessionOrder = order ? Number(order) : currentSession?.order;
+
   return {
-    title: formatTitle([subject?.name, mission?.name, 'Create session']),
+    title: formatTitle([
+      subject?.name,
+      mission?.name,
+      sessionOrder + 1,
+      'Edit',
+    ]),
   };
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    missionId: string;
-    sessionId: string;
-    subjectId: string;
-  };
-}
 
 const Page = async ({
   params: { missionId, sessionId, subjectId },

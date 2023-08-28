@@ -9,7 +9,7 @@ const Error = () => (
       Something went wrong. Try refreshing this page.
       <br />
       <span className="text-fg-4">
-        Email <a href="mailto:help@llog.app">help@llog.app</a> if the problem
+        Email <a href="mailto:contact@llog.app">help@llog.app</a> if the problem
         persists.
       </span>
     </p>

@@ -11,6 +11,14 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    missionId: string;
+    sessionId: string;
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
   params: { missionId, sessionId, subjectId },
 }: PageProps) => {
@@ -32,14 +40,6 @@ export const generateMetadata = async ({
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    missionId: string;
-    sessionId: string;
-    subjectId: string;
-  };
-}
 
 const Page = async ({
   params: { missionId, sessionId, subjectId },
@@ -64,9 +64,13 @@ const Page = async ({
 
   if (session.scheduled_for && new Date(session.scheduled_for) > new Date()) {
     return (
-      <Empty className="mt-10 max-w-lg">
-        Scheduled for{' '}
-        <DateTime date={session.scheduled_for} formatter="date-time" />
+      <Empty className="mt-10 block max-w-lg">
+        Session will be available{' '}
+        <DateTime
+          className="inline"
+          date={session.scheduled_for}
+          formatter="date-time"
+        />
       </Empty>
     );
   }

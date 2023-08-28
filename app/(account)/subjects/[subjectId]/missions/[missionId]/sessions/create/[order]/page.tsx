@@ -10,21 +10,6 @@ import listTemplatesWithData, {
   ListTemplatesWithDataData,
 } from '@/(account)/_server/list-templates-with-data';
 
-export const generateMetadata = async ({
-  params: { missionId, subjectId },
-}: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
-    getSubject(subjectId),
-    getMissionWithSessions(missionId, true),
-  ]);
-
-  return {
-    title: formatTitle([subject?.name, mission?.name, 'Create session']),
-  };
-};
-
-export const revalidate = 0;
-
 interface PageProps {
   params: {
     missionId: string;
@@ -32,6 +17,26 @@ interface PageProps {
     subjectId: string;
   };
 }
+
+export const generateMetadata = async ({
+  params: { missionId, order, subjectId },
+}: PageProps) => {
+  const [{ data: subject }, { data: mission }] = await Promise.all([
+    getSubject(subjectId),
+    getMissionWithSessions(missionId, true),
+  ]);
+
+  return {
+    title: formatTitle([
+      subject?.name,
+      mission?.name,
+      String(Number(order) + 1),
+      'Edit',
+    ]),
+  };
+};
+
+export const revalidate = 0;
 
 const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
   const [

@@ -10,16 +10,18 @@ import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {
-  DocumentDuplicateIcon,
   EllipsisVerticalIcon,
+  PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 
-interface InputListItemMenuProps {
-  inputId: string;
+interface SubjectLinkListItemMenuItemsProps {
+  subjectId: string;
 }
 
-const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
+const SubjectLinkListItemMenu = ({
+  subjectId,
+}: SubjectLinkListItemMenuItemsProps) => {
   const router = useRouter();
   const supabase = useSupabase();
 
@@ -34,18 +36,18 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   return (
     <>
       <Alert
-        confirmText="Delete input"
+        confirmText="Delete subject"
         isConfirming={isConfirming}
-        isConfirmingText="Deleting input…"
+        isConfirmingText="Deleting subject…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
         onConfirm={async () => {
           toggleIsConfirming(true);
 
           const { error } = await supabase
-            .from('inputs')
-            .delete()
-            .eq('id', inputId);
+            .from('subjects')
+            .update({ deleted: true })
+            .eq('id', subjectId);
 
           if (error) {
             toggleIsConfirming(false);
@@ -62,13 +64,13 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/inputs/create/from-template/${inputId}`}>
-            <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate input
+          <MenuItem href={`/subjects/${subjectId}/edit?back=/subjects`}>
+            <PencilIcon className="w-5 text-fg-4" />
+            Edit subject
           </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete input
+            Delete subject
           </MenuItem>
         </MenuItems>
       </Menu>
@@ -76,4 +78,4 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   );
 };
 
-export default InputListItemMenu;
+export default SubjectLinkListItemMenu;

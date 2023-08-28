@@ -10,16 +10,20 @@ import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {
-  DocumentDuplicateIcon,
   EllipsisVerticalIcon,
+  PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 
-interface InputListItemMenuProps {
-  inputId: string;
+interface SessionLinkListItemMenuProps {
+  missionId: string;
+  subjectId: string;
 }
 
-const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
+const SessionLinkListItemMenu = ({
+  missionId,
+  subjectId,
+}: SessionLinkListItemMenuProps) => {
   const router = useRouter();
   const supabase = useSupabase();
 
@@ -34,18 +38,18 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   return (
     <>
       <Alert
-        confirmText="Delete input"
+        confirmText="Delete session"
         isConfirming={isConfirming}
-        isConfirmingText="Deleting input…"
+        isConfirmingText="Deleting session…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
         onConfirm={async () => {
           toggleIsConfirming(true);
 
           const { error } = await supabase
-            .from('inputs')
+            .from('missions')
             .delete()
-            .eq('id', inputId);
+            .eq('id', missionId);
 
           if (error) {
             toggleIsConfirming(false);
@@ -55,20 +59,22 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           }
         }}
       />
-      <Menu className="shrink-0">
+      <Menu className="h-full shrink-0">
         <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
           <div className="rounded-full p-2 group-hover:bg-alpha-1">
             <EllipsisVerticalIcon className="w-5" />
           </div>
         </MenuButton>
-        <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/inputs/create/from-template/${inputId}`}>
-            <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate input
+        <MenuItems className="mr-1">
+          <MenuItem
+            href={`/subjects/${subjectId}/missions/${missionId}/edit?back=/subjects/${subjectId}/timeline`}
+          >
+            <PencilIcon className="w-5 text-fg-4" />
+            Edit mission name
           </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete input
+            Delete mission
           </MenuItem>
         </MenuItems>
       </Menu>
@@ -76,4 +82,4 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   );
 };
 
-export default InputListItemMenu;
+export default SessionLinkListItemMenu;

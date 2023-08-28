@@ -7,6 +7,12 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import InputForm from '@/(account)/inputs/_components/input-form';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    inputId: string;
+  };
+}
+
 export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
   const { data: input } = await getInput(inputId);
 
@@ -16,12 +22,6 @@ export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    inputId: string;
-  };
-}
 
 const Page = async ({ params: { inputId } }: PageProps) => {
   const [{ data: input }, { data: subjects }] = await Promise.all([

@@ -20,6 +20,7 @@ module.exports = {
       'alpha-reverse-2': 'var(--color-alpha-reverse-2)',
       'bg-1': 'var(--color-bg-1)',
       'bg-2': 'var(--color-bg-2)',
+      'bg-3': 'var(--color-bg-3)',
       'fg-1': 'var(--color-fg-1)',
       'fg-2': 'var(--color-fg-2)',
       'fg-3': 'var(--color-fg-3)',

@@ -23,7 +23,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="-mt-10 mb-16 px-4">
-      <div className="flex items-start justify-between gap-8 border-t border-alpha-1 pb-1 pt-6">
+      <div className="flex items-start justify-between gap-8 pb-1">
         <div className="flex items-start gap-6">
           {!!managers?.length && (
             <div className="flex flex-wrap gap-2">

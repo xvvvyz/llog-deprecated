@@ -10,16 +10,20 @@ import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
 import {
-  DocumentDuplicateIcon,
   EllipsisVerticalIcon,
+  PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 
-interface InputListItemMenuProps {
-  inputId: string;
+interface EventTypeLinkListItemMenuProps {
+  eventTypeId: string;
+  subjectId: string;
 }
 
-const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
+const EventTypeLinkListItemMenu = ({
+  eventTypeId,
+  subjectId,
+}: EventTypeLinkListItemMenuProps) => {
   const router = useRouter();
   const supabase = useSupabase();
 
@@ -34,18 +38,18 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   return (
     <>
       <Alert
-        confirmText="Delete input"
+        confirmText="Delete event type"
         isConfirming={isConfirming}
-        isConfirmingText="Deleting input…"
+        isConfirmingText="Deleting event type…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
         onConfirm={async () => {
           toggleIsConfirming(true);
 
           const { error } = await supabase
-            .from('inputs')
+            .from('event_types')
             .delete()
-            .eq('id', inputId);
+            .eq('id', eventTypeId);
 
           if (error) {
             toggleIsConfirming(false);
@@ -62,13 +66,15 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/inputs/create/from-template/${inputId}`}>
-            <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate input
+          <MenuItem
+            href={`/subjects/${subjectId}/event-types/${eventTypeId}/edit`}
+          >
+            <PencilIcon className="w-5 text-fg-4" />
+            Edit event type
           </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete input
+            Delete event type
           </MenuItem>
         </MenuItems>
       </Menu>
@@ -76,4 +82,4 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   );
 };
 
-export default InputListItemMenu;
+export default EventTypeLinkListItemMenu;

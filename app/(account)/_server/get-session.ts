@@ -23,7 +23,7 @@ const getSession = (sessionId: string) =>
       title`,
     )
     .eq('id', sessionId)
-    .eq('modules.deleted', false)
+    .eq('modules.archived', false)
     .order('order', { foreignTable: 'modules' })
     .order('order', { foreignTable: 'modules.inputs' })
     .single();

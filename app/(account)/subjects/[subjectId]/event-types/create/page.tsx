@@ -12,6 +12,12 @@ import listTemplatesWithData, {
   ListTemplatesWithDataData,
 } from '@/(account)/_server/list-templates-with-data';
 
+interface PageProps {
+  params: {
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
   params: { subjectId },
 }: PageProps) => {
@@ -23,12 +29,6 @@ export const generateMetadata = async ({
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    subjectId: string;
-  };
-}
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const [

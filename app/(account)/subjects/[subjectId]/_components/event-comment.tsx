@@ -5,6 +5,9 @@ import Avatar from '@/(account)/_components/avatar';
 import DateTime from '@/(account)/_components/date-time';
 import DirtyHtml from '@/(account)/_components/dirty-html';
 import Menu from '@/(account)/_components/menu';
+import MenuButton from '@/(account)/_components/menu-button';
+import MenuItem from '@/(account)/_components/menu-item';
+import MenuItems from '@/(account)/_components/menu-items';
 import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
 import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
@@ -65,28 +68,28 @@ const EventComment = ({
       />
       <Avatar className="mt-0.5" name={profile.first_name} />
       <div className="flex-1">
-        <div className="flex h-5 w-full justify-between">
+        <div className="flex h-5 w-full justify-between gap-2">
           <div className="smallcaps flex w-full gap-2">
             <span className="w-0 flex-1 truncate">
               {profile.first_name} {profile.last_name}
             </span>
             <DateTime
-              className="relative -right-px flex-shrink-0 whitespace-nowrap"
+              className="flex-shrink-0 whitespace-nowrap"
               date={createdAt}
               formatter="date-time"
             />
           </div>
           {(userId === profile.id || isTeamMember) && (
-            <Menu className="-m-3 p-3">
-              <Menu.Button className="-m-3 p-3">
-                <EllipsisVerticalIcon className="relative -right-2 -top-[0.18rem] w-5" />
-              </Menu.Button>
-              <Menu.Items>
-                <Menu.Item onClick={() => toggleDeleteAlert(true)}>
+            <Menu className="-mr-2 -mt-2.5">
+              <MenuButton className="rounded-full p-2 hover:bg-alpha-1">
+                <EllipsisVerticalIcon className="w-5" />
+              </MenuButton>
+              <MenuItems>
+                <MenuItem onClick={() => toggleDeleteAlert(true)}>
                   <TrashIcon className="w-5 text-fg-4" />
                   Delete comment
-                </Menu.Item>
-              </Menu.Items>
+                </MenuItem>
+              </MenuItems>
             </Menu>
           )}
         </div>

@@ -1,10 +1,10 @@
-import LinkList from '@/(account)/_components/link-list';
 import Tooltip from '@/(account)/_components/tooltip';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import listSubjectEventTypes from '@/(account)/_server/list-subject-event-types';
+import EventTypeLinkListItemMenu from '@/(account)/subjects/[subjectId]/timeline/@eventTypes/_components/event-type-link-list-item-menu';
 import Button from '@/_components/button';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
 
 interface PageProps {
@@ -26,24 +26,39 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="px-4">
-      <LinkList
-        className={twMerge('m-0', isTeamMember && 'rounded-b-none border-b-0')}
+      <ul
+        className={twMerge(
+          'rounded border border-alpha-1 bg-bg-2 py-1',
+          isTeamMember && 'rounded-b-none border-b-0',
+        )}
       >
         {eventTypes.map((eventType) => (
-          <LinkList.Item
-            href={`/subjects/${subjectId}/event-types/${eventType.id}`}
+          <li
+            className="flex items-stretch hover:bg-alpha-1"
             key={eventType.id}
-            text={eventType.name as string}
-            {...(isTeamMember
-              ? {
-                  rightHref: `/subjects/${subjectId}/event-types/${eventType.id}/edit`,
-                  rightIcon: 'edit',
-                  rightLabel: 'Edit',
-                }
-              : {})}
-          />
+          >
+            <Button
+              className={twMerge(
+                'm-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere]',
+                isTeamMember && 'pr-0',
+              )}
+              href={`/subjects/${subjectId}/event-types/${eventType.id}`}
+              variant="link"
+            >
+              {eventType.name}
+              {!isTeamMember && (
+                <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+              )}
+            </Button>
+            {isTeamMember && (
+              <EventTypeLinkListItemMenu
+                eventTypeId={eventType.id}
+                subjectId={subjectId}
+              />
+            )}
+          </li>
         ))}
-      </LinkList>
+      </ul>
       {isTeamMember && (
         <div className="flex items-center gap-4">
           <Button

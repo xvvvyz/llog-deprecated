@@ -7,6 +7,13 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/missions/_components/mission-form';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    missionId: string;
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
   params: { missionId, subjectId },
 }: PageProps) => {
@@ -21,13 +28,6 @@ export const generateMetadata = async ({
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    missionId: string;
-    subjectId: string;
-  };
-}
 
 const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([

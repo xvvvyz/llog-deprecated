@@ -34,7 +34,9 @@ const SessionLayout = async ({
   params: { edit, missionId, order, sessionId, subjectId },
 }: LayoutLayoutProps) => {
   if ((edit && edit !== 'edit') || (order && isNaN(Number(order)))) notFound();
-  const isEditOrCreate = !!order || !!edit;
+  const isCreate = !!order;
+  const isEdit = !!edit;
+  const isEditOrCreate = isCreate || isEdit;
 
   const [{ data: subject }, { data: mission }, teamId] = await Promise.all([
     getSubject(subjectId),
@@ -44,20 +46,24 @@ const SessionLayout = async ({
 
   if (!subject || !mission) notFound();
 
-  const breadcrumbs = [
-    [subject.name, `/subjects/${subjectId}/timeline`],
-    [mission.name],
-  ];
-
-  if (isEditOrCreate) {
-    breadcrumbs[1][1] = `/subjects/${subjectId}/missions/${missionId}/sessions`;
-    breadcrumbs[2] = [order ? 'Add session' : 'Edit session'];
-  }
-
   const sessions = forceArray(mission.sessions);
   const currentSession = sessions.find(({ id }) => id === sessionId);
   const sessionOrder = order ? Number(order) : currentSession?.order;
   if (typeof sessionOrder === 'undefined') notFound();
+
+  const breadcrumbs = [
+    [subject.name, `/subjects/${subjectId}/timeline`],
+    [mission.name, `/subjects/${subjectId}/missions/${missionId}/sessions`],
+    [`${sessionOrder + 1}`],
+  ];
+
+  if (isEditOrCreate) {
+    breadcrumbs[3] = ['Edit'];
+
+    if (isEdit && !currentSession?.draft) {
+      breadcrumbs[2][1] = `/subjects/${subjectId}/missions/${missionId}/sessions/${sessionId}`;
+    }
+  }
 
   // eslint-disable-next-line prefer-const
   let { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
@@ -152,7 +158,7 @@ const SessionLayout = async ({
         </div>
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
-            disabled={!!order}
+            disabled={isCreate}
             href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative -right-2 w-7" />}
             label="Add session"

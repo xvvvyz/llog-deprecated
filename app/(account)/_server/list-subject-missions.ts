@@ -7,15 +7,14 @@ const listSubjectMissions = (subjectId: string) =>
       'id, name, sessions(id, modules:event_types(event:events(id)), order)',
     )
     .eq('subject_id', subjectId)
-    .eq('deleted', false)
+    .eq('archived', false)
     .order('name')
-    .eq('sessions.deleted', false)
     .order('order', { foreignTable: 'sessions' })
     .eq('sessions.draft', false)
     .or(`scheduled_for.lte.${new Date().toISOString()},scheduled_for.is.null`, {
       foreignTable: 'sessions',
     })
-    .eq('sessions.modules.deleted', false);
+    .eq('sessions.modules.archived', false);
 
 export type ListSubjectMissionsData = Awaited<
   ReturnType<typeof listSubjectMissions>

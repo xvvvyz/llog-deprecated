@@ -3,32 +3,21 @@ import Breadcrumbs from '@/(account)/_components/breadcrumbs';
 import DateTime from '@/(account)/_components/date-time';
 import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
-import IconButton from '@/(account)/_components/icon-button';
+import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import getSubject from '@/(account)/_server/get-subject';
 import forceArray from '@/(account)/_utilities/force-array';
 import formatTitle from '@/(account)/_utilities/format-title';
 import Button from '@/_components/button';
-import { InformationCircleIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
+
+import {
+  ArrowRightIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline';
 
 import getMissionWithSessionsAndEvents, {
   GetMissionWithSessionsAndEventsData,
 } from '@/(account)/_server/get-mission-with-sessions-and-events';
-
-export const generateMetadata = async ({
-  params: { missionId, subjectId },
-}: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
-    getSubject(subjectId),
-    getMissionWithSessionsAndEvents(missionId),
-  ]);
-
-  return {
-    title: formatTitle([subject?.name, mission?.name, 'Sessions']),
-  };
-};
-
-export const revalidate = 0;
 
 interface PageProps {
   params: {
@@ -37,13 +26,43 @@ interface PageProps {
   };
 }
 
-const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
+export const generateMetadata = async ({
+  params: { missionId, subjectId },
+}: PageProps) => {
+  const [{ data: subject }, teamId] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessionsAndEvents(missionId),
+    getCurrentTeamId(),
   ]);
 
-  if (!subject || !mission) notFound();
+  const isTeamMember = subject?.team_id === teamId;
+
+  const { data: mission } = await getMissionWithSessionsAndEvents(
+    missionId,
+    isTeamMember,
+  );
+
+  return {
+    title: formatTitle([subject?.name, mission?.name]),
+  };
+};
+
+export const revalidate = 0;
+
+const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
+  const [{ data: subject }, teamId] = await Promise.all([
+    getSubject(subjectId),
+    getCurrentTeamId(),
+  ]);
+
+  if (!subject) notFound();
+  const isTeamMember = subject.team_id === teamId;
+
+  const { data: mission } = await getMissionWithSessionsAndEvents(
+    missionId,
+    isTeamMember,
+  );
+
+  if (!mission) notFound();
   const sessions = forceArray(mission.sessions);
 
   const { highestOrder, sessionsReversed } = sessions.reduce(
@@ -68,23 +87,20 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
             [mission.name],
           ]}
         />
-        <IconButton
-          href={`/subjects/${subjectId}/missions/${missionId}/edit`}
-          icon={<PencilIcon className="relative -left-[0.16em] w-7" />}
-          label="Edit"
-        />
       </Header>
-      <Header className="-mt-3">
-        <h1 className="text-2xl">Sessions</h1>
-        <Button
-          href={`/subjects/${subjectId}/missions/${missionId}/sessions/create/${nextSessionOrder}`}
-          size="sm"
-        >
-          Add session
-        </Button>
-      </Header>
+      {isTeamMember && (
+        <Header className="-mt-3">
+          <h1 className="text-2xl">Sessions</h1>
+          <Button
+            href={`/subjects/${subjectId}/missions/${missionId}/sessions/create/${nextSessionOrder}`}
+            size="sm"
+          >
+            Add session
+          </Button>
+        </Header>
+      )}
       {sessionsReversed.length ? (
-        <ul className="mx-4 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 leading-snug">
+        <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
           {sessionsReversed.map(
             (session: GetMissionWithSessionsAndEventsData['sessions'][0]) => {
               const modules = forceArray(session.modules);
@@ -93,8 +109,12 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
               return (
                 <li key={session.id}>
                   <Button
-                    className="m-0 w-full justify-between gap-6 px-4 py-3"
-                    href={`/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`}
+                    className="m-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere] hover:bg-alpha-1"
+                    href={
+                      isTeamMember
+                        ? `/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`
+                        : `/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}`
+                    }
                     variant="link"
                   >
                     <div>
@@ -106,7 +126,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                           {session.title}
                         </span>
                       )}
-                      <div className="smallcaps pb-1 pt-2 text-fg-4">
+                      <div className="smallcaps pb-1 pt-1 text-fg-4">
                         {session.draft ? (
                           'Draft'
                         ) : new Date(session.scheduled_for ?? '') >
@@ -122,7 +142,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
                         )}
                       </div>
                     </div>
-                    <PencilIcon className="w-5 shrink-0" />
+                    <ArrowRightIcon className="ml-auto w-5 shrink-0" />
                   </Button>
                 </li>
               );

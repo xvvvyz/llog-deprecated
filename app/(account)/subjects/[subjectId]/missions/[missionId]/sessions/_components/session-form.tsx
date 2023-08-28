@@ -253,7 +253,7 @@ const SessionForm = ({
     if (deletedEventTypeIds.length) {
       const { error: deletedEventTypesError } = await supabase
         .from('event_types')
-        .update({ deleted: true })
+        .delete()
         .in('id', deletedEventTypeIds);
 
       if (deletedEventTypesError) {
@@ -567,7 +567,7 @@ const SessionForm = ({
 
           const { error } = await supabase
             .from('sessions')
-            .update({ deleted: true })
+            .delete()
             .eq('id', session.id);
 
           if (error) {

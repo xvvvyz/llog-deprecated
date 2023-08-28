@@ -1,9 +1,10 @@
 'use client';
 
-import LinkList from '@/(account)/_components/link-list';
+import Avatar from '@/(account)/_components/avatar';
 import usePrevious from '@/(account)/_hooks/use-previous';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import forceArray from '@/(account)/_utilities/force-array';
+import Button from '@/_components/button';
 import Input from '@/_components/input';
 import Fuse from 'fuse.js';
 import InputListItemMenu from './input-list-item-menu';
@@ -70,18 +71,31 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
           ref={ref}
         />
       </div>
-      <LinkList>
-        {filteredInputs.map((input) => (
-          <LinkList.Item
-            avatars={forceArray(input.subjects)}
-            href={`/inputs/${input.id}`}
-            icon="edit"
-            key={input.id}
-            menu={<InputListItemMenu inputId={input.id} />}
-            text={input.label}
-          />
-        ))}
-      </LinkList>
+      <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
+        {filteredInputs.map((input) => {
+          const avatars = forceArray(input.subjects);
+
+          return (
+            <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
+              <Button
+                className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                href={`/inputs/${input.id}`}
+                variant="link"
+              >
+                {!!avatars.length && (
+                  <div className="-my-0.5 flex flex-wrap gap-1">
+                    {avatars.map(({ id, image_uri, name }) => (
+                      <Avatar file={image_uri} key={id} name={name} size="sm" />
+                    ))}
+                  </div>
+                )}
+                {input.label}
+              </Button>
+              <InputListItemMenu inputId={input.id} />
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };

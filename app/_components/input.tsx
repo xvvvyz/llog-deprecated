@@ -23,7 +23,7 @@ const Input = forwardRef(
         {tooltip && (
           <Tooltip
             className="relative -top-1 -mr-[0.15rem]"
-            id={`${name}-tooltip`}
+            id={`${name}-tip`}
             tip={tooltip}
           />
         )}

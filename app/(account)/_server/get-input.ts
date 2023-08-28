@@ -13,7 +13,6 @@ const getInput = (inputId: string) =>
       type`,
     )
     .eq('id', inputId)
-    .eq('options.deleted', false)
     .order('order', { foreignTable: 'options' })
     .single();
 

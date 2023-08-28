@@ -1,7 +1,7 @@
 import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
-import LinkList from '@/(account)/_components/link-list';
 import listTemplates from '@/(account)/_server/list-templates';
+import TemplateLinkListItemMenu from '@/(account)/templates/_components/template-link-list-item-menu';
 import Button from '@/_components/button';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
@@ -22,17 +22,24 @@ const Page = async () => {
           Create template
         </Button>
       </Header>
-      {!!templates?.length ? (
-        <LinkList>
+      {templates?.length ? (
+        <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
           {templates.map((template) => (
-            <LinkList.Item
-              href={`/templates/${template.id}`}
-              icon="edit"
+            <li
+              className="flex items-stretch hover:bg-alpha-1"
               key={template.id}
-              text={template.name}
-            />
+            >
+              <Button
+                className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                href={`/templates/${template.id}`}
+                variant="link"
+              >
+                {template.name}
+              </Button>
+              <TemplateLinkListItemMenu templateId={template.id} />
+            </li>
           ))}
-        </LinkList>
+        </ul>
       ) : (
         <Empty className="mx-4">
           <InformationCircleIcon className="w-7" />

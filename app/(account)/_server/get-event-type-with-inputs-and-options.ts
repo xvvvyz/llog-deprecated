@@ -21,7 +21,6 @@ const getEventTypeWithInputsAndOptions = (eventTypeId: string) =>
     )
     .eq('id', eventTypeId)
     .order('order', { foreignTable: 'inputs' })
-    .eq('inputs.input.options.deleted', false)
     .order('order', { foreignTable: 'inputs.input.options' })
     .single();
 

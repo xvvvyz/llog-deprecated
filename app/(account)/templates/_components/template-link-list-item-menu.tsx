@@ -9,17 +9,15 @@ import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
 import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 
-import {
-  DocumentDuplicateIcon,
-  EllipsisVerticalIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-interface InputListItemMenuProps {
-  inputId: string;
+interface TemplateLinkListItemMenuItemsProps {
+  templateId: string;
 }
 
-const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
+const TemplateLinkListItemMenu = ({
+  templateId,
+}: TemplateLinkListItemMenuItemsProps) => {
   const router = useRouter();
   const supabase = useSupabase();
 
@@ -34,18 +32,18 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   return (
     <>
       <Alert
-        confirmText="Delete input"
+        confirmText="Delete template"
         isConfirming={isConfirming}
-        isConfirmingText="Deleting input…"
+        isConfirmingText="Deleting template…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
         onConfirm={async () => {
           toggleIsConfirming(true);
 
           const { error } = await supabase
-            .from('inputs')
+            .from('templates')
             .delete()
-            .eq('id', inputId);
+            .eq('id', templateId);
 
           if (error) {
             toggleIsConfirming(false);
@@ -62,13 +60,9 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/inputs/create/from-template/${inputId}`}>
-            <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate input
-          </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete input
+            Delete template
           </MenuItem>
         </MenuItems>
       </Menu>
@@ -76,4 +70,4 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
   );
 };
 
-export default InputListItemMenu;
+export default TemplateLinkListItemMenu;

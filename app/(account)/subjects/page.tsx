@@ -1,14 +1,18 @@
 import Empty from '@/(account)/_components/empty';
 import Header from '@/(account)/_components/header';
-import LinkList from '@/(account)/_components/link-list';
 import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
 import forceArray from '@/(account)/_utilities/force-array';
+import SubjectLinkListItemMenu from '@/(account)/subjects/_components/subject-link-list-item-menu';
 import Button from '@/_components/button';
+import {
+  ArrowRightIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline';
 
+import Avatar from '@/(account)/_components/avatar';
 import listSubjects, {
   ListSubjectsData,
 } from '@/(account)/_server/list-subjects';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata = {
   title: 'Subjects',
@@ -46,31 +50,57 @@ const Page = async () => {
           Create subject
         </Button>
       </Header>
-      {!!subjects?.length ? (
+      {subjects?.length ? (
         <div className="space-y-4">
-          <LinkList>
-            {teamSubjects.map((subject) => (
-              <LinkList.Item
-                avatars={[subject]}
-                href={`/subjects/${subject.id}/timeline`}
-                key={subject.id}
-                rightHref={`/subjects/${subject.id}/edit`}
-                rightIcon="edit"
-                rightLabel="Edit"
-                text={subject.name}
-              />
-            ))}
-          </LinkList>
-          <LinkList>
-            {clientSubjects.map((subject) => (
-              <LinkList.Item
-                avatars={[subject]}
-                href={`/subjects/${subject.id}/timeline`}
-                key={subject.id}
-                text={subject.name}
-              />
-            ))}
-          </LinkList>
+          {!!teamSubjects.length && (
+            <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
+              {teamSubjects.map((subject) => (
+                <li
+                  className="flex items-stretch hover:bg-alpha-1"
+                  key={subject.id}
+                >
+                  <Button
+                    className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                    href={`/subjects/${subject.id}/timeline`}
+                    variant="link"
+                  >
+                    <Avatar
+                      className="-my-0.5"
+                      file={subject.image_uri}
+                      key={subject.id}
+                      name={subject.name}
+                      size="sm"
+                    />
+                    {subject.name}
+                  </Button>
+                  <SubjectLinkListItemMenu subjectId={subject.id} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {!!clientSubjects.length && (
+            <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
+              {clientSubjects.map((subject) => (
+                <li key={subject.id}>
+                  <Button
+                    className="m-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere] hover:bg-alpha-1"
+                    href={`/subjects/${subject.id}/timeline`}
+                    variant="link"
+                  >
+                    <Avatar
+                      className="-my-0.5"
+                      file={subject.image_uri}
+                      key={subject.id}
+                      name={subject.name}
+                      size="sm"
+                    />
+                    {subject.name}
+                    <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       ) : (
         <Empty className="mx-4">

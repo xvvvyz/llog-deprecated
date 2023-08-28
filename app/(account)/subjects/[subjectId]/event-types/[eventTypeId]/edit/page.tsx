@@ -13,6 +13,13 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import EventTypeForm from '@/(account)/subjects/[subjectId]/event-types/_components/event-type-form';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    eventTypeId: string;
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
   params: { eventTypeId, subjectId },
 }: PageProps) => {
@@ -27,13 +34,6 @@ export const generateMetadata = async ({
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    eventTypeId: string;
-    subjectId: string;
-  };
-}
 
 const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   const [

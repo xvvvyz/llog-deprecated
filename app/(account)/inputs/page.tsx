@@ -23,7 +23,7 @@ const Page = async () => {
           Create input
         </Button>
       </Header>
-      {!!inputs?.length ? (
+      {inputs?.length ? (
         <FilterableInputLinkList inputs={inputs.sort(sortInputs)} />
       ) : (
         <Empty className="mx-4">

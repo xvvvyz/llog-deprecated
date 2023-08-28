@@ -144,7 +144,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
             if (deletedOptionIds.length) {
               const { error: deletedOptionsError } = await supabase
                 .from('input_options')
-                .update({ deleted: true })
+                .delete()
                 .in('id', deletedOptionIds);
 
               if (deletedOptionsError) {

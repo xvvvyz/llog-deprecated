@@ -6,6 +6,12 @@ import formatTitle from '@/(account)/_utilities/format-title';
 import SubjectForm from '@/(account)/subjects/_components/subject-form';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    subjectId: string;
+  };
+}
+
 export const generateMetadata = async ({
   params: { subjectId },
 }: PageProps) => {
@@ -17,12 +23,6 @@ export const generateMetadata = async ({
 };
 
 export const revalidate = 0;
-
-interface PageProps {
-  params: {
-    subjectId: string;
-  };
-}
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);

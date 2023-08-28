@@ -11,6 +11,7 @@ import EventCommentForm from '@/(account)/subjects/[subjectId]/_components/event
 import EventComments from '@/(account)/subjects/[subjectId]/_components/event-comments';
 import Button from '@/_components/button';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { twMerge } from 'tailwind-merge';
 
 interface TimelineEventCardProps {
   group: ListEventsData;
@@ -31,9 +32,9 @@ const TimelineEventCard = ({
   const sessionNumber = lastEventType.session?.order + 1;
 
   return (
-    <article className="overflow-hidden rounded border border-alpha-1 bg-bg-2">
+    <article className="rounded border border-alpha-1 bg-bg-2 py-1">
       <Button
-        className="m-0 w-full gap-6 rounded-t border-b border-alpha-1 p-0 px-4 py-3 leading-snug"
+        className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
         href={
           lastEventType.session
             ? `/subjects/${subjectId}/missions/${lastEventType.session.mission.id}/sessions/${lastEventType.session.id}`
@@ -54,7 +55,7 @@ const TimelineEventCard = ({
         </div>
       </Button>
       {!lastEventType.session && (
-        <div className="smallcaps flex items-center gap-4 whitespace-nowrap bg-alpha-reverse-1 px-4 py-3">
+        <div className="smallcaps flex items-center gap-4 whitespace-nowrap border-t border-alpha-1 px-4 py-3">
           <Avatar
             className="-my-[0.15rem]"
             name={lastEventProfile.first_name}
@@ -68,7 +69,12 @@ const TimelineEventCard = ({
           />
         </div>
       )}
-      <ul className="divide-y divide-alpha-1">
+      <ul
+        className={twMerge(
+          'divide-y divide-alpha-1',
+          lastEventType.session && 'border-t border-alpha-1',
+        )}
+      >
         {group.map((event) => {
           const moduleNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
@@ -77,7 +83,7 @@ const TimelineEventCard = ({
           return (
             <li key={event.id}>
               {lastEventType.session && (
-                <div className="smallcaps flex items-center justify-between bg-alpha-reverse-1 px-4 py-3">
+                <div className="smallcaps flex items-center justify-between px-4 py-3">
                   <div className="flex items-center gap-4">
                     <span className="font-mono text-base leading-none">
                       {moduleNumber}
@@ -93,7 +99,7 @@ const TimelineEventCard = ({
                 </div>
               )}
               {!!inputs.length && (
-                <div className="bg-alpha-reverse-1 pb-2">
+                <div className="py-2">
                   <table className="w-full table-fixed">
                     <tbody>
                       {Object.entries(
@@ -137,7 +143,7 @@ const TimelineEventCard = ({
                 </div>
               )}
               {!!comments.length && (
-                <div className="space-y-4 border-t border-alpha-1 p-4">
+                <div className="space-y-4 p-4">
                   <EventComments
                     comments={comments}
                     isTeamMember={isTeamMember}

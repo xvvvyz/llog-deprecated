@@ -32,11 +32,7 @@ const Checkbox = forwardRef(
         </span>
       </label>
       {tooltip && (
-        <Tooltip
-          className="-mr-[0.15rem]"
-          id={`${name}-tooltip`}
-          tip={tooltip}
-        />
+        <Tooltip className="-mr-[0.15rem]" id={`${name}-tip`} tip={tooltip} />
       )}
     </div>
   ),

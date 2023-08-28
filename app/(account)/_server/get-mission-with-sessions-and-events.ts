@@ -1,7 +1,10 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
 import { Database } from '@/_types/database';
 
-const getMissionWithSessionsAndEvents = (missionId: string) =>
+const getMissionWithSessionsAndEvents = (
+  missionId: string,
+  includeDraft = false,
+) =>
   createServerComponentClient()
     .from('missions')
     .select(
@@ -21,10 +24,10 @@ const getMissionWithSessionsAndEvents = (missionId: string) =>
       )`,
     )
     .eq('id', missionId)
-    .eq('sessions.deleted', false)
     .order('order', { foreignTable: 'sessions' })
+    .not('sessions.draft', 'is', includeDraft ? null : true)
     .order('draft', { ascending: false, foreignTable: 'sessions' })
-    .eq('sessions.modules.deleted', false)
+    .eq('sessions.modules.archived', false)
     .single();
 
 export type GetMissionWithSessionsAndEventsData = Awaited<

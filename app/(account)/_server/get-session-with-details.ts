@@ -39,8 +39,7 @@ const getSessionWithDetails = (sessionId: string) =>
       title`,
     )
     .eq('id', sessionId)
-    .eq('modules.deleted', false)
-    .eq('modules.inputs.input.options.deleted', false)
+    .eq('modules.archived', false)
     .order('order', { foreignTable: 'modules' })
     .order('order', { foreignTable: 'modules.event.inputs' })
     .order('order', { foreignTable: 'modules.inputs' })
