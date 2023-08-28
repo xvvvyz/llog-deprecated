@@ -30,7 +30,7 @@ const Page = async () => {
               key={template.id}
             >
               <Button
-                className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
                 href={`/templates/${template.id}`}
                 variant="link"
               >

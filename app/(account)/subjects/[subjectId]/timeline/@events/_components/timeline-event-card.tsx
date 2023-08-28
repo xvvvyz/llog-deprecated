@@ -32,7 +32,7 @@ const TimelineEventCard = ({
   const sessionNumber = lastEventType.session?.order + 1;
 
   return (
-    <article className="rounded border border-alpha-1 bg-bg-2 py-1">
+    <article className="rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
         className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
         href={
@@ -99,7 +99,7 @@ const TimelineEventCard = ({
                 </div>
               )}
               {!!inputs.length && (
-                <div className="py-2">
+                <div className="-my-1.5 pb-4 pt-3">
                   <table className="w-full table-fixed">
                     <tbody>
                       {Object.entries(
@@ -130,10 +130,8 @@ const TimelineEventCard = ({
                         ),
                       ).map(([id, { label, type, values }]: any) => (
                         <tr key={id}>
-                          <td className="truncate px-4 py-1 align-top text-fg-4">
-                            {label}
-                          </td>
-                          <td className="truncate p-0 py-1 pr-4 align-top">
+                          <td className="truncate px-4 text-fg-4">{label}</td>
+                          <td className="truncate pr-4">
                             {formatInputValue[type as InputTypes](values)}
                           </td>
                         </tr>
@@ -143,7 +141,7 @@ const TimelineEventCard = ({
                 </div>
               )}
               {!!comments.length && (
-                <div className="space-y-4 p-4">
+                <div className="space-y-4 px-4 pb-4 pt-3">
                   <EventComments
                     comments={comments}
                     isTeamMember={isTeamMember}

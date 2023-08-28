@@ -72,14 +72,16 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="px-4">
-      <ul
-        className={twMerge(
-          'm-0 rounded border border-alpha-1 bg-bg-2 py-1',
-          isTeamMember && 'rounded-b-none border-b-0',
-        )}
-      >
-        {listItems}
-      </ul>
+      {!!listItems.length && (
+        <ul
+          className={twMerge(
+            'm-0 rounded border border-alpha-1 bg-bg-2 py-1',
+            isTeamMember && 'rounded-b-none border-b-0',
+          )}
+        >
+          {listItems}
+        </ul>
+      )}
       {isTeamMember && (
         <div className="flex items-center gap-4">
           <Button

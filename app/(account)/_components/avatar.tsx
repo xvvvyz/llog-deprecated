@@ -37,7 +37,6 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
           loader={generateImageLoader({ aspectRatio: '1:1' })}
           sizes={sizes[size].imgSizes}
           src={src}
-          title={name}
         />
       ) : (
         <span aria-hidden>{Array.from(name)[0]}</span>

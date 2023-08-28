@@ -60,7 +60,7 @@ const Page = async () => {
                   key={subject.id}
                 >
                   <Button
-                    className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                    className="m-0 w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
                     href={`/subjects/${subject.id}/timeline`}
                     variant="link"
                   >
@@ -83,7 +83,7 @@ const Page = async () => {
               {clientSubjects.map((subject) => (
                 <li key={subject.id}>
                   <Button
-                    className="m-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere] hover:bg-alpha-1"
+                    className="m-0 w-full gap-6 px-4 py-3 leading-snug [overflow-wrap:anywhere] hover:bg-alpha-1"
                     href={`/subjects/${subject.id}/timeline`}
                     variant="link"
                   >

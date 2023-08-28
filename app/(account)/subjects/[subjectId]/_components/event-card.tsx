@@ -71,8 +71,7 @@ const EventCard = ({
       )}
       <EventForm
         className={twMerge(
-          'px-4 py-8 sm:px-8',
-          !!mission && 'bg-alpha-reverse-1',
+          'bg-alpha-reverse-1 px-4 py-8 sm:px-8',
           !showModule && !showDescription && !event && 'sm:rounded-t',
           !event && 'sm:rounded-b',
         )}

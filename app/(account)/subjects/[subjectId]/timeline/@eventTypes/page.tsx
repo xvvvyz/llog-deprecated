@@ -26,39 +26,41 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <div className="px-4">
-      <ul
-        className={twMerge(
-          'rounded border border-alpha-1 bg-bg-2 py-1',
-          isTeamMember && 'rounded-b-none border-b-0',
-        )}
-      >
-        {eventTypes.map((eventType) => (
-          <li
-            className="flex items-stretch hover:bg-alpha-1"
-            key={eventType.id}
-          >
-            <Button
-              className={twMerge(
-                'm-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere]',
-                isTeamMember && 'pr-0',
-              )}
-              href={`/subjects/${subjectId}/event-types/${eventType.id}`}
-              variant="link"
+      {!!eventTypes.length && (
+        <ul
+          className={twMerge(
+            'rounded border border-alpha-1 bg-bg-2 py-1',
+            isTeamMember && 'rounded-b-none border-b-0',
+          )}
+        >
+          {eventTypes.map((eventType) => (
+            <li
+              className="flex items-stretch hover:bg-alpha-1"
+              key={eventType.id}
             >
-              {eventType.name}
-              {!isTeamMember && (
-                <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+              <Button
+                className={twMerge(
+                  'm-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere]',
+                  isTeamMember && 'pr-0',
+                )}
+                href={`/subjects/${subjectId}/event-types/${eventType.id}`}
+                variant="link"
+              >
+                {eventType.name}
+                {!isTeamMember && (
+                  <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+                )}
+              </Button>
+              {isTeamMember && (
+                <EventTypeLinkListItemMenu
+                  eventTypeId={eventType.id}
+                  subjectId={subjectId}
+                />
               )}
-            </Button>
-            {isTeamMember && (
-              <EventTypeLinkListItemMenu
-                eventTypeId={eventType.id}
-                subjectId={subjectId}
-              />
-            )}
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      )}
       {isTeamMember && (
         <div className="flex items-center gap-4">
           <Button

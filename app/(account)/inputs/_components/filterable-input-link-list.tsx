@@ -1,6 +1,7 @@
 'use client';
 
 import Avatar from '@/(account)/_components/avatar';
+import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
 import usePrevious from '@/(account)/_hooks/use-previous';
 import { ListInputsData } from '@/(account)/_server/list-inputs';
 import forceArray from '@/(account)/_utilities/force-array';
@@ -78,18 +79,23 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
           return (
             <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
               <Button
-                className="m-0 flex w-full gap-4 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
                 href={`/inputs/${input.id}`}
                 variant="link"
               >
+                <div>
+                  {input.label}
+                  <div className="smallcaps pb-0.5 pt-1">
+                    {INPUT_LABELS[input.type]}
+                  </div>
+                </div>
                 {!!avatars.length && (
-                  <div className="-my-0.5 flex flex-wrap gap-1">
+                  <div className="-my-0.5 ml-auto flex shrink-0 gap-1.5">
                     {avatars.map(({ id, image_uri, name }) => (
-                      <Avatar file={image_uri} key={id} name={name} size="sm" />
+                      <Avatar file={image_uri} key={id} name={name} size="xs" />
                     ))}
                   </div>
                 )}
-                {input.label}
               </Button>
               <InputListItemMenu inputId={input.id} />
             </li>
