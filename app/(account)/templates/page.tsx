@@ -1,8 +1,8 @@
-import Empty from '@/(account)/_components/empty';
-import Header from '@/(account)/_components/header';
-import listTemplates from '@/(account)/_server/list-templates';
 import TemplateLinkListItemMenu from '@/(account)/templates/_components/template-link-list-item-menu';
 import Button from '@/_components/button';
+import Empty from '@/_components/empty';
+import Header from '@/_components/header';
+import listTemplates from '@/_server/list-templates';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata = {

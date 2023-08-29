@@ -1,10 +1,10 @@
 'use client';
 
-import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import { GetMissionData } from '@/(account)/_server/get-mission';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import useSubmitRedirect from '@/_hooks/use-submit-redirect';
 import useSupabase from '@/_hooks/use-supabase';
+import { GetMissionData } from '@/_server/get-mission';
 import { Database } from '@/_types/database';
 import { useForm } from 'react-hook-form';
 

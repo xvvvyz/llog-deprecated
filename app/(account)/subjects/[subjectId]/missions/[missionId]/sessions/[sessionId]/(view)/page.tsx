@@ -1,14 +1,14 @@
-import DateTime from '@/(account)/_components/date-time';
-import Empty from '@/(account)/_components/empty';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getCurrentUser from '@/(account)/_server/get-current-user';
-import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
-import getSessionWithDetails from '@/(account)/_server/get-session-with-details';
-import getSubject from '@/(account)/_server/get-subject';
-import firstIfArray from '@/(account)/_utilities/first-if-array';
-import forceArray from '@/(account)/_utilities/force-array';
-import formatTitle from '@/(account)/_utilities/format-title';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
+import DateTime from '@/_components/date-time';
+import Empty from '@/_components/empty';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getCurrentUser from '@/_server/get-current-user';
+import getMissionWithSessions from '@/_server/get-mission-with-sessions';
+import getSessionWithDetails from '@/_server/get-session-with-details';
+import getSubject from '@/_server/get-subject';
+import firstIfArray from '@/_utilities/first-if-array';
+import forceArray from '@/_utilities/force-array';
+import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

@@ -1,4 +1,4 @@
-import { ListInputsData } from '@/(account)/_server/list-inputs';
+import { ListInputsData } from '@/_server/list-inputs';
 
 const sortInputs = (a: ListInputsData[0], b: ListInputsData[0]) => {
   const aSubjectName =

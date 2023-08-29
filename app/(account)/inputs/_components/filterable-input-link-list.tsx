@@ -1,12 +1,12 @@
 'use client';
 
-import Avatar from '@/(account)/_components/avatar';
-import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
-import usePrevious from '@/(account)/_hooks/use-previous';
-import { ListInputsData } from '@/(account)/_server/list-inputs';
-import forceArray from '@/(account)/_utilities/force-array';
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import INPUT_LABELS from '@/_constants/constant-input-labels';
+import usePrevious from '@/_hooks/use-previous';
+import { ListInputsData } from '@/_server/list-inputs';
+import forceArray from '@/_utilities/force-array';
 import Fuse from 'fuse.js';
 import InputListItemMenu from './input-list-item-menu';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import DirtyHtml from '@/(account)/_components/dirty-html';
+import DirtyHtml from '@/_components/dirty-html';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useToggle } from '@uidotdev/usehooks';
 import { twMerge } from 'tailwind-merge';

@@ -1,15 +1,15 @@
 'use client';
 
-import AvatarDropzone from '@/(account)/_components/avatar-dropzone';
-import RichTextarea from '@/(account)/_components/rich-textarea';
-import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import { GetSubjectData } from '@/(account)/_server/get-subject';
-import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
-import uploadSubjectAvatar from '@/(account)/_utilities/upload-subject-avatar';
+import AvatarDropzone from '@/_components/avatar-dropzone';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import RichTextarea from '@/_components/rich-textarea';
+import useSubmitRedirect from '@/_hooks/use-submit-redirect';
 import useSupabase from '@/_hooks/use-supabase';
+import { GetSubjectData } from '@/_server/get-subject';
 import { Database } from '@/_types/database';
+import sanitizeHtml from '@/_utilities/sanitize-html';
+import uploadSubjectAvatar from '@/_utilities/upload-subject-avatar';
 import { Crisp as C } from 'crisp-sdk-web';
 import { useDropzone } from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';

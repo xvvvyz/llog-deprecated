@@ -1,16 +1,16 @@
 'use client';
 
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import useDefaultValues from '@/(account)/_hooks/use-default-values';
-import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import { GetEventTypeWithInputsData } from '@/(account)/_server/get-event-type-with-inputs';
-import { ListInputsData } from '@/(account)/_server/list-inputs';
-import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
-import forceArray from '@/(account)/_utilities/force-array';
-import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
 import EventTypeFormSection from '@/(account)/subjects/[subjectId]/_components/event-type-form-section';
+import CacheKeys from '@/_constants/enum-cache-keys';
+import useDefaultValues from '@/_hooks/use-default-values';
+import useSubmitRedirect from '@/_hooks/use-submit-redirect';
 import useSupabase from '@/_hooks/use-supabase';
+import { GetEventTypeWithInputsData } from '@/_server/get-event-type-with-inputs';
+import { ListInputsData } from '@/_server/list-inputs';
+import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
 import { Database } from '@/_types/database';
+import forceArray from '@/_utilities/force-array';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { useForm } from 'react-hook-form';
 
 interface EventTypeFormProps {

@@ -1,13 +1,12 @@
-import Empty from '@/(account)/_components/empty';
-import Header from '@/(account)/_components/header';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getCurrentUser from '@/(account)/_server/get-current-user';
-import getSubject from '@/(account)/_server/get-subject';
-import listEvents, { ListEventsData } from '@/(account)/_server/list-events';
 import DownloadEventsButton from '@/(account)/subjects/[subjectId]/timeline/@events/_components/download-events-button';
 import TimelineEvents from '@/(account)/subjects/[subjectId]/timeline/@events/_components/timeline-events';
+import Empty from '@/_components/empty';
+import Header from '@/_components/header';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getCurrentUser from '@/_server/get-current-user';
+import getSubject from '@/_server/get-subject';
+import listEvents, { ListEventsData } from '@/_server/list-events';
 
-import InsightsButton from '@/(account)/subjects/[subjectId]/timeline/@events/_components/insights-button';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 
 interface PageProps {
@@ -32,22 +31,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     <>
       <Header className="mb-2">
         <h1 className="text-2xl">Timeline</h1>
-        <div className="divide-x divide-alpha-1">
-          {subject.team_id === teamId && (
-            <InsightsButton
-              disabled={!events?.length}
-              subjectId={subject.id}
-              user={user}
-            />
-          )}
-          <DownloadEventsButton
-            className={subject.team_id === teamId ? 'rounded-l-none' : ''}
-            disabled={!events?.length}
-            subjectId={subjectId}
-          >
-            {subject.team_id === teamId ? 'Events' : 'Download events'}
-          </DownloadEventsButton>
-        </div>
+        <DownloadEventsButton disabled={!events?.length} subjectId={subjectId}>
+          Download events
+        </DownloadEventsButton>
       </Header>
       {events?.length ? (
         <TimelineEvents

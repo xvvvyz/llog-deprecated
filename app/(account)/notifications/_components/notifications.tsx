@@ -1,15 +1,15 @@
 'use client';
 
-import Avatar from '@/(account)/_components/avatar';
-import DateTime from '@/(account)/_components/date-time';
-import DirtyHtml from '@/(account)/_components/dirty-html';
-import Empty from '@/(account)/_components/empty';
-import IconButton from '@/(account)/_components/icon-button';
-import NotificationTypes from '@/(account)/_constants/enum-notification-types';
-import { ListNotificationsData } from '@/(account)/_server/list-notifications';
-import firstIfArray from '@/(account)/_utilities/first-if-array';
 import ViewEventButton from '@/(account)/notifications/_components/view-event-button';
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
+import DateTime from '@/_components/date-time';
+import DirtyHtml from '@/_components/dirty-html';
+import Empty from '@/_components/empty';
+import IconButton from '@/_components/icon-button';
+import NotificationTypes from '@/_constants/enum-notification-types';
+import { ListNotificationsData } from '@/_server/list-notifications';
+import firstIfArray from '@/_utilities/first-if-array';
 
 import {
   BoltIcon,

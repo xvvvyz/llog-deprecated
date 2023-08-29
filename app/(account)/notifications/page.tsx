@@ -1,8 +1,8 @@
-import Header from '@/(account)/_components/header';
-import listNotifications from '@/(account)/_server/list-notifications';
-import forceArray from '@/(account)/_utilities/force-array';
 import Notifications from '@/(account)/notifications/_components/notifications';
+import Header from '@/_components/header';
 import createServerActionClient from '@/_server/create-server-action-client';
+import listNotifications from '@/_server/list-notifications';
+import forceArray from '@/_utilities/force-array';
 import { revalidatePath } from 'next/cache';
 
 export const metadata = {

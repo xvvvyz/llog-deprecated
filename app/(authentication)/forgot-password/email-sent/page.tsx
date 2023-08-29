@@ -1,4 +1,4 @@
-import EmailSent from '@/(authentication)/_components/email-sent';
+import EmailSent from '@/_components/email-sent';
 
 export const metadata = {
   title: 'Forgot password',

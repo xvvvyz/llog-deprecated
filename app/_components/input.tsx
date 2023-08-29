@@ -1,4 +1,4 @@
-import Tooltip from '@/(account)/_components/tooltip';
+import Tooltip from '@/_components/tooltip';
 import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 

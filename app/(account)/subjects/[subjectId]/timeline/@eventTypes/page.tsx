@@ -1,9 +1,9 @@
-import Tooltip from '@/(account)/_components/tooltip';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getSubject from '@/(account)/_server/get-subject';
-import listSubjectEventTypes from '@/(account)/_server/list-subject-event-types';
 import EventTypeLinkListItemMenu from '@/(account)/subjects/[subjectId]/timeline/@eventTypes/_components/event-type-link-list-item-menu';
 import Button from '@/_components/button';
+import Tooltip from '@/_components/tooltip';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getSubject from '@/_server/get-subject';
+import listSubjectEventTypes from '@/_server/list-subject-event-types';
 import { ArrowRightIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
 

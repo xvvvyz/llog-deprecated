@@ -1,7 +1,7 @@
 'use client';
 
-import forceArray from '@/(account)/_utilities/force-array';
 import Spinner from '@/_components/spinner';
+import forceArray from '@/_utilities/force-array';
 import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
@@ -23,7 +23,7 @@ import ReactSelect, {
   SingleValueProps,
 } from 'react-select';
 
-import Tooltip from '@/(account)/_components/tooltip';
+import Tooltip from '@/_components/tooltip';
 import {
   ChevronUpDownIcon,
   PlusIcon,

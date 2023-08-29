@@ -1,5 +1,5 @@
-import { TemplateDataType } from '@/(account)/_types/template';
 import createServerComponentClient from '@/_server/create-server-component-client';
+import { TemplateDataType } from '@/_types/template';
 import getCurrentTeamId from './get-current-team-id';
 
 const listTemplatesWithData = async () =>

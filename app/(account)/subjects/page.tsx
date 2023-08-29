@@ -1,18 +1,16 @@
-import Empty from '@/(account)/_components/empty';
-import Header from '@/(account)/_components/header';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import forceArray from '@/(account)/_utilities/force-array';
 import SubjectLinkListItemMenu from '@/(account)/subjects/_components/subject-link-list-item-menu';
 import Button from '@/_components/button';
+import Empty from '@/_components/empty';
+import Header from '@/_components/header';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import forceArray from '@/_utilities/force-array';
 import {
   ArrowRightIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
-import Avatar from '@/(account)/_components/avatar';
-import listSubjects, {
-  ListSubjectsData,
-} from '@/(account)/_server/list-subjects';
+import Avatar from '@/_components/avatar';
+import listSubjects, { ListSubjectsData } from '@/_server/list-subjects';
 
 export const metadata = {
   title: 'Subjects',

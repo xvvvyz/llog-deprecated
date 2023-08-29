@@ -1,6 +1,6 @@
-import SupabaseProvider from '@/(account)/_components/supabase-provider';
-import getCurrentUser from '@/(account)/_server/get-current-user';
 import Crisp from '@/_components/crisp';
+import SupabaseProvider from '@/_components/supabase-provider';
+import getCurrentUser from '@/_server/get-current-user';
 import createHmac from '@/_utilities/create-hmac';
 import { Analytics } from '@vercel/analytics/react';
 import { Figtree, Inconsolata } from 'next/font/google';

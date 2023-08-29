@@ -25,7 +25,7 @@ import {
   useEditor,
 } from '@tiptap/react';
 
-import Tooltip from '@/(account)/_components/tooltip';
+import Tooltip from '@/_components/tooltip';
 import {
   ChangeEvent,
   forwardRef,

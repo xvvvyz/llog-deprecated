@@ -1,7 +1,7 @@
 import Button from '@/_components/button';
+import pugPng from '@/_images/pug.png';
 import { PhotoIcon, PlayIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import pugPng from './_images/pug.png';
 
 const Page = () => (
   <div>

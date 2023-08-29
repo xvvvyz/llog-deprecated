@@ -1,7 +1,7 @@
-import Select from '@/(account)/_components/select';
-import { InputType } from '@/(account)/_types/input';
+import Select from '@/_components/select';
 import useSupabase from '@/_hooks/use-supabase';
 import { Database } from '@/_types/database';
+import { InputType } from '@/_types/input';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';

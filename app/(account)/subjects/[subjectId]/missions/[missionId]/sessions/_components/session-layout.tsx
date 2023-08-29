@@ -1,12 +1,12 @@
-import BackButton from '@/(account)/_components/back-button';
-import Breadcrumbs from '@/(account)/_components/breadcrumbs';
-import Header from '@/(account)/_components/header';
-import IconButton from '@/(account)/_components/icon-button';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
-import getSubject from '@/(account)/_server/get-subject';
-import forceArray from '@/(account)/_utilities/force-array';
+import BackButton from '@/_components/back-button';
+import Breadcrumbs from '@/_components/breadcrumbs';
 import Button from '@/_components/button';
+import Header from '@/_components/header';
+import IconButton from '@/_components/icon-button';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getMissionWithSessions from '@/_server/get-mission-with-sessions';
+import getSubject from '@/_server/get-subject';
+import forceArray from '@/_utilities/force-array';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 

@@ -1,10 +1,10 @@
-import Avatar from '@/(account)/_components/avatar';
-import Tooltip from '@/(account)/_components/tooltip';
-import getSubject from '@/(account)/_server/get-subject';
-import listSubjectManagers from '@/(account)/_server/list-subject-managers';
-import forceArray from '@/(account)/_utilities/force-array';
 import CopyJoinSubjectLinkButton from '@/(account)/subjects/[subjectId]/timeline/@teamMemberHeader/_components/copy-join-subject-link-button';
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
+import Tooltip from '@/_components/tooltip';
+import getSubject from '@/_server/get-subject';
+import listSubjectManagers from '@/_server/list-subject-managers';
+import forceArray from '@/_utilities/force-array';
 import { PencilIcon } from '@heroicons/react/24/outline';
 
 interface PageProps {

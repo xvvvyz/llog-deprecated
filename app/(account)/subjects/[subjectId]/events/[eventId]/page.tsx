@@ -1,13 +1,13 @@
-import BackButton from '@/(account)/_components/back-button';
-import Breadcrumbs from '@/(account)/_components/breadcrumbs';
-import Header from '@/(account)/_components/header';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getCurrentUser from '@/(account)/_server/get-current-user';
-import getEvent, { GetEventData } from '@/(account)/_server/get-event';
-import getSubject from '@/(account)/_server/get-subject';
-import firstIfArray from '@/(account)/_utilities/first-if-array';
-import formatTitle from '@/(account)/_utilities/format-title';
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
+import BackButton from '@/_components/back-button';
+import Breadcrumbs from '@/_components/breadcrumbs';
+import Header from '@/_components/header';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getCurrentUser from '@/_server/get-current-user';
+import getEvent, { GetEventData } from '@/_server/get-event';
+import getSubject from '@/_server/get-subject';
+import firstIfArray from '@/_utilities/first-if-array';
+import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

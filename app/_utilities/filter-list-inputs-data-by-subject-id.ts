@@ -1,5 +1,5 @@
-import { ListInputsData } from '@/(account)/_server/list-inputs';
-import forceArray from '@/(account)/_utilities/force-array';
+import { ListInputsData } from '@/_server/list-inputs';
+import forceArray from '@/_utilities/force-array';
 
 const filterListInputsDataBySubjectId = (
   inputs: ListInputsData,

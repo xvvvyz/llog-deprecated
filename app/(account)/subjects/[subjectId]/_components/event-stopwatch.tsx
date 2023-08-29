@@ -1,9 +1,9 @@
 'use client';
 
-import IconButton from '@/(account)/_components/icon-button';
-import useStopwatch from '@/(account)/_hooks/use-stopwatch';
-import { InputType } from '@/(account)/_types/input';
 import Button from '@/_components/button';
+import IconButton from '@/_components/icon-button';
+import useStopwatch from '@/_hooks/use-stopwatch';
+import { InputType } from '@/_types/input';
 import { useThrottle } from '@uidotdev/usehooks';
 import { useEffect } from 'react';
 import { FieldValues, PathValue, UseFormReturn } from 'react-hook-form';

@@ -1,10 +1,10 @@
-import Avatar from '@/(account)/_components/avatar';
-import { GetEventData } from '@/(account)/_server/get-event';
-import { GetEventTypeWithInputsAndOptionsData } from '@/(account)/_server/get-event-type-with-inputs-and-options';
-import { GetMissionWithSessionsData } from '@/(account)/_server/get-mission-with-sessions';
-import { GetSessionWithDetailsData } from '@/(account)/_server/get-session-with-details';
-import forceArray from '@/(account)/_utilities/force-array';
 import Disclosure from '@/(account)/subjects/[subjectId]/_components/disclosure';
+import Avatar from '@/_components/avatar';
+import { GetEventData } from '@/_server/get-event';
+import { GetEventTypeWithInputsAndOptionsData } from '@/_server/get-event-type-with-inputs-and-options';
+import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
+import { GetSessionWithDetailsData } from '@/_server/get-session-with-details';
+import forceArray from '@/_utilities/force-array';
 import { twMerge } from 'tailwind-merge';
 import EventCommentForm from './event-comment-form';
 import EventComments from './event-comments';

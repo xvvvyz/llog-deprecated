@@ -1,15 +1,15 @@
 'use client';
 
-import Avatar from '@/(account)/_components/avatar';
-import DateTime from '@/(account)/_components/date-time';
-import InputTypes from '@/(account)/_constants/enum-input-types';
-import { ListEventsData } from '@/(account)/_server/list-events';
-import firstIfArray from '@/(account)/_utilities/first-if-array';
-import forceArray from '@/(account)/_utilities/force-array';
-import formatInputValue from '@/(account)/_utilities/format-input-value';
 import EventCommentForm from '@/(account)/subjects/[subjectId]/_components/event-comment-form';
 import EventComments from '@/(account)/subjects/[subjectId]/_components/event-comments';
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
+import DateTime from '@/_components/date-time';
+import InputTypes from '@/_constants/enum-input-types';
+import { ListEventsData } from '@/_server/list-events';
+import firstIfArray from '@/_utilities/first-if-array';
+import forceArray from '@/_utilities/force-array';
+import formatInputValue from '@/_utilities/format-input-value';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { twMerge } from 'tailwind-merge';
 

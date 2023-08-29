@@ -1,9 +1,9 @@
-import Avatar from '@/(account)/_components/avatar';
-import BackButton from '@/(account)/_components/back-button';
-import DirtyHtml from '@/(account)/_components/dirty-html';
-import Header from '@/(account)/_components/header';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getSubject from '@/(account)/_server/get-subject';
+import Avatar from '@/_components/avatar';
+import BackButton from '@/_components/back-button';
+import DirtyHtml from '@/_components/dirty-html';
+import Header from '@/_components/header';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getSubject from '@/_server/get-subject';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 

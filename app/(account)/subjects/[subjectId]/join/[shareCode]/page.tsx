@@ -1,5 +1,5 @@
-import getSubject from '@/(account)/_server/get-subject';
 import createServerComponentClient from '@/_server/create-server-component-client';
+import getSubject from '@/_server/get-subject';
 import { redirect } from 'next/navigation';
 
 interface PageProps {

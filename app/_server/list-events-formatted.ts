@@ -1,6 +1,6 @@
-import firstIfArray from '@/(account)/_utilities/first-if-array';
-import forceArray from '@/(account)/_utilities/force-array';
 import createServerRouteClient from '@/_server/create-server-route-client';
+import firstIfArray from '@/_utilities/first-if-array';
+import forceArray from '@/_utilities/force-array';
 
 const strip = (str: string) => str.replace(/['"\[\]]/g, '');
 

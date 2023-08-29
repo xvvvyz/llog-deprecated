@@ -1,9 +1,9 @@
-import BackButton from '@/(account)/_components/back-button';
-import Breadcrumbs from '@/(account)/_components/breadcrumbs';
-import Header from '@/(account)/_components/header';
-import getSubject from '@/(account)/_server/get-subject';
-import formatTitle from '@/(account)/_utilities/format-title';
 import MissionForm from '@/(account)/subjects/[subjectId]/missions/_components/mission-form';
+import BackButton from '@/_components/back-button';
+import Breadcrumbs from '@/_components/breadcrumbs';
+import Header from '@/_components/header';
+import getSubject from '@/_server/get-subject';
+import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 interface PageProps {

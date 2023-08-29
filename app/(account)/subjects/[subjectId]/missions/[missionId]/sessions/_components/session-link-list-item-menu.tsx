@@ -1,11 +1,11 @@
 'use client';
 
-import Alert from '@/(account)/_components/alert';
-import Menu from '@/(account)/_components/menu';
-import MenuButton from '@/(account)/_components/menu-button';
-import MenuItem from '@/(account)/_components/menu-item';
-import MenuItems from '@/(account)/_components/menu-items';
-import useDeleteAlert from '@/(account)/_hooks/use-delete-alert';
+import Alert from '@/_components/alert';
+import Menu from '@/_components/menu';
+import MenuButton from '@/_components/menu-button';
+import MenuItem from '@/_components/menu-item';
+import MenuItems from '@/_components/menu-items';
+import useDeleteAlert from '@/_hooks/use-delete-alert';
 import useSupabase from '@/_hooks/use-supabase';
 import { useRouter } from 'next/navigation';
 

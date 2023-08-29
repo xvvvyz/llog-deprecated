@@ -1,16 +1,16 @@
-import getMissionWithSessions from '@/(account)/_server/get-mission-with-sessions';
-import getSession, { GetSessionData } from '@/(account)/_server/get-session';
-import getSubject from '@/(account)/_server/get-subject';
-import listInputs, { ListInputsData } from '@/(account)/_server/list-inputs';
-import filterListInputsDataBySubjectId from '@/(account)/_utilities/filter-list-inputs-data-by-subject-id';
-import forceArray from '@/(account)/_utilities/force-array';
-import formatTitle from '@/(account)/_utilities/format-title';
 import SessionForm from '@/(account)/subjects/[subjectId]/missions/[missionId]/sessions/_components/session-form';
+import getMissionWithSessions from '@/_server/get-mission-with-sessions';
+import getSession, { GetSessionData } from '@/_server/get-session';
+import getSubject from '@/_server/get-subject';
+import listInputs, { ListInputsData } from '@/_server/list-inputs';
+import filterListInputsDataBySubjectId from '@/_utilities/filter-list-inputs-data-by-subject-id';
+import forceArray from '@/_utilities/force-array';
+import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 import listTemplatesWithData, {
   ListTemplatesWithDataData,
-} from '@/(account)/_server/list-templates-with-data';
+} from '@/_server/list-templates-with-data';
 
 interface PageProps {
   params: {

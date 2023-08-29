@@ -1,13 +1,13 @@
-import BackButton from '@/(account)/_components/back-button';
-import Breadcrumbs from '@/(account)/_components/breadcrumbs';
-import DateTime from '@/(account)/_components/date-time';
-import Empty from '@/(account)/_components/empty';
-import Header from '@/(account)/_components/header';
-import getCurrentTeamId from '@/(account)/_server/get-current-team-id';
-import getSubject from '@/(account)/_server/get-subject';
-import forceArray from '@/(account)/_utilities/force-array';
-import formatTitle from '@/(account)/_utilities/format-title';
+import BackButton from '@/_components/back-button';
+import Breadcrumbs from '@/_components/breadcrumbs';
 import Button from '@/_components/button';
+import DateTime from '@/_components/date-time';
+import Empty from '@/_components/empty';
+import Header from '@/_components/header';
+import getCurrentTeamId from '@/_server/get-current-team-id';
+import getSubject from '@/_server/get-subject';
+import forceArray from '@/_utilities/force-array';
+import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
 import {
@@ -17,7 +17,7 @@ import {
 
 import getMissionWithSessionsAndEvents, {
   GetMissionWithSessionsAndEventsData,
-} from '@/(account)/_server/get-mission-with-sessions-and-events';
+} from '@/_server/get-mission-with-sessions-and-events';
 
 interface PageProps {
   params: {

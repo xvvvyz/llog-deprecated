@@ -1,23 +1,23 @@
 'use client';
 
-import Checkbox from '@/(account)/_components/checkbox';
-import IconButton from '@/(account)/_components/icon-button';
-import NumberInput from '@/(account)/_components/input-number';
-import Select from '@/(account)/_components/select';
-import INPUT_LABELS from '@/(account)/_constants/constant-input-labels';
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import InputTypes from '@/(account)/_constants/enum-input-types';
-import useDefaultValues from '@/(account)/_hooks/use-default-values';
-import useSubmitRedirect from '@/(account)/_hooks/use-submit-redirect';
-import useUpdateGlobalValueCache from '@/(account)/_hooks/use-update-global-value-cache';
-import { GetInputData } from '@/(account)/_server/get-input';
-import { ListSubjectsByTeamIdData } from '@/(account)/_server/list-subjects-by-team-id';
-import { InputType } from '@/(account)/_types/input';
-import forceArray from '@/(account)/_utilities/force-array';
 import Button from '@/_components/button';
+import Checkbox from '@/_components/checkbox';
+import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import NumberInput from '@/_components/input-number';
+import Select from '@/_components/select';
+import INPUT_LABELS from '@/_constants/constant-input-labels';
+import CacheKeys from '@/_constants/enum-cache-keys';
+import InputTypes from '@/_constants/enum-input-types';
+import useDefaultValues from '@/_hooks/use-default-values';
+import useSubmitRedirect from '@/_hooks/use-submit-redirect';
 import useSupabase from '@/_hooks/use-supabase';
+import useUpdateGlobalValueCache from '@/_hooks/use-update-global-value-cache';
+import { GetInputData } from '@/_server/get-input';
+import { ListSubjectsByTeamIdData } from '@/_server/list-subjects-by-team-id';
 import { Database } from '@/_types/database';
+import { InputType } from '@/_types/input';
+import forceArray from '@/_utilities/force-array';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 

@@ -1,10 +1,10 @@
 'use client';
 
-import Select from '@/(account)/_components/select';
-import { ListInputsData } from '@/(account)/_server/list-inputs';
-import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
-import { TemplateType } from '@/(account)/_types/template';
-import forceArray from '@/(account)/_utilities/force-array';
+import Select from '@/_components/select';
+import { ListInputsData } from '@/_server/list-inputs';
+import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
+import { TemplateType } from '@/_types/template';
+import forceArray from '@/_utilities/force-array';
 import { FieldValues, PathValue, UseFormSetValue } from 'react-hook-form';
 
 interface CreateEventTypeFromTemplateSelectProps<T extends FieldValues> {

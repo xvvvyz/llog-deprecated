@@ -1,4 +1,4 @@
-import listEventsFormatted from '@/(account)/_server/list-events-formatted';
+import listEventsFormatted from '@/_server/list-events-formatted';
 import { NextResponse } from 'next/server';
 
 export const revalidate = 60;

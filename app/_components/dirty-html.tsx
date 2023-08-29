@@ -1,4 +1,4 @@
-import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { twMerge } from 'tailwind-merge';
 
 interface HtmlProps {

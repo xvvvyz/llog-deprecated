@@ -1,4 +1,4 @@
-import parseSeconds from '@/(account)/_utilities/parse-seconds';
+import parseSeconds from '@/_utilities/parse-seconds';
 import { useToggle } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

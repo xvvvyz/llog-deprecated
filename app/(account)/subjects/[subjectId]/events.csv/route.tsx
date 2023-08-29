@@ -1,4 +1,4 @@
-import listEventsFormatted from '@/(account)/_server/list-events-formatted';
+import listEventsFormatted from '@/_server/list-events-formatted';
 import { json2csv } from 'json-2-csv';
 import { NextResponse } from 'next/server';
 

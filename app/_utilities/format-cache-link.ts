@@ -1,4 +1,4 @@
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
+import CacheKeys from '@/_constants/enum-cache-keys';
 
 const formatCacheLink = ({
   backLink,

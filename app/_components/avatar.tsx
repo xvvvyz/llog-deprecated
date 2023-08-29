@@ -1,7 +1,7 @@
 'use client';
 
-import formatImageUrl from '@/(account)/_utilities/format-image-url';
-import generateImageLoader from '@/(account)/_utilities/generate-image-loader';
+import formatImageUrl from '@/_utilities/format-image-url';
+import generateImageLoader from '@/_utilities/generate-image-loader';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 

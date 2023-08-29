@@ -1,9 +1,9 @@
 'use client';
 
-import IconButton from '@/(account)/_components/icon-button';
-import RichTextarea from '@/(account)/_components/rich-textarea';
-import sanitizeHtml from '@/(account)/_utilities/sanitize-html';
+import IconButton from '@/_components/icon-button';
+import RichTextarea from '@/_components/rich-textarea';
 import useSupabase from '@/_hooks/use-supabase';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';

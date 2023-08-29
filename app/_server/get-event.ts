@@ -1,6 +1,6 @@
-import { InputType } from '@/(account)/_types/input';
 import createServerComponentClient from '@/_server/create-server-component-client';
 import { Database } from '@/_types/database';
+import { InputType } from '@/_types/input';
 
 const getEvent = (eventId: string) =>
   createServerComponentClient()

@@ -1,8 +1,8 @@
-import IconButton from '@/(account)/_components/icon-button';
-import SignOutButton from '@/(account)/_components/sign-out-button';
-import countNotifications from '@/(account)/_server/count-notifications';
-import getCurrentUser from '@/(account)/_server/get-current-user';
 import Button from '@/_components/button';
+import IconButton from '@/_components/icon-button';
+import SignOutButton from '@/_components/sign-out-button';
+import countNotifications from '@/_server/count-notifications';
+import getCurrentUser from '@/_server/get-current-user';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { ReactNode } from 'react';
 

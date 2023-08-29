@@ -1,9 +1,9 @@
 'use client';
 
-import formatDate from '@/(account)/_utilities/format-date';
-import formatDateTime from '@/(account)/_utilities/format-date-time';
-import formatRelativeTime from '@/(account)/_utilities/format-relative-time';
-import formatTime from '@/(account)/_utilities/format-time';
+import formatDate from '@/_utilities/format-date';
+import formatDateTime from '@/_utilities/format-date-time';
+import formatRelativeTime from '@/_utilities/format-relative-time';
+import formatTime from '@/_utilities/format-time';
 import { useEffect, useState } from 'react';
 
 const formatters = {

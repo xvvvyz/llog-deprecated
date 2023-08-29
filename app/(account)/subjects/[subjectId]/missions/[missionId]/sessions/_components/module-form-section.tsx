@@ -1,8 +1,8 @@
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import { GetSessionData } from '@/(account)/_server/get-session';
-import { ListInputsData } from '@/(account)/_server/list-inputs';
-import { ListTemplatesWithDataData } from '@/(account)/_server/list-templates-with-data';
 import EventTypeFormSection from '@/(account)/subjects/[subjectId]/_components/event-type-form-section';
+import CacheKeys from '@/_constants/enum-cache-keys';
+import { GetSessionData } from '@/_server/get-session';
+import { ListInputsData } from '@/_server/list-inputs';
+import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
 import { useSortable } from '@dnd-kit/sortable';
 import { twMerge } from 'tailwind-merge';
 

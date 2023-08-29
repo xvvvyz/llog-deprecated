@@ -1,5 +1,5 @@
-import CacheKeys from '@/(account)/_constants/enum-cache-keys';
-import globalValueCache from '@/(account)/_utilities/global-value-cache';
+import CacheKeys from '@/_constants/enum-cache-keys';
+import globalValueCache from '@/_utilities/global-value-cache';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { useSearchParams } from 'next/navigation';
