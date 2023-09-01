@@ -71,21 +71,16 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   if (!listItems.length && !isTeamMember) return null;
 
   return (
-    <div className="px-4">
+    <div>
       {!!listItems.length && (
-        <ul
-          className={twMerge(
-            'm-0 rounded border border-alpha-1 bg-bg-2 py-1',
-            isTeamMember && 'rounded-b-none border-b-0',
-          )}
-        >
+        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
           {listItems}
         </ul>
       )}
       {isTeamMember && (
-        <div className="flex items-center gap-4">
+        <div className="mt-4 flex items-center gap-4">
           <Button
-            className={twMerge('w-full', listItems.length && 'rounded-t-none')}
+            className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subject.id}/missions/create`}
             type="button"

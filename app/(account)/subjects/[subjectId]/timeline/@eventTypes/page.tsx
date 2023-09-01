@@ -25,14 +25,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   if (!eventTypes.length && !isTeamMember) return null;
 
   return (
-    <div className="px-4">
+    <div>
       {!!eventTypes.length && (
-        <ul
-          className={twMerge(
-            'rounded border border-alpha-1 bg-bg-2 py-1',
-            isTeamMember && 'rounded-b-none border-b-0',
-          )}
-        >
+        <ul className="rounded border border-alpha-1 bg-bg-2 py-1">
           {eventTypes.map((eventType) => (
             <li
               className="flex items-stretch hover:bg-alpha-1"
@@ -62,9 +57,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
         </ul>
       )}
       {isTeamMember && (
-        <div className="flex items-center gap-4">
+        <div className="mt-4 flex items-center gap-4">
           <Button
-            className={twMerge('w-full', eventTypes.length && 'rounded-t-none')}
+            className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subject.id}/event-types/create`}
             type="button"

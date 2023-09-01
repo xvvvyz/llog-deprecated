@@ -6,19 +6,19 @@
   :root {
     --color-accent-1: hsl(45, 96%, 45%);
     --color-accent-2: hsl(45, 96%, 60%);
-    --color-alpha-1: hsla(45, 6%, 95%, 7%);
-    --color-alpha-2: hsla(45, 6%, 95%, 10%);
-    --color-alpha-3: hsla(45, 6%, 95%, 13%);
-    --color-alpha-4: hsla(45, 6%, 95%, 16%);
-    --color-alpha-reverse-1: hsla(45, 6%, 5%, 25%);
-    --color-alpha-reverse-2: hsla(45, 6%, 5%, 50%);
-    --color-bg-1: hsl(45, 6%, 10%);
-    --color-bg-2: hsl(45, 6%, 14%);
-    --color-bg-3: hsl(45, 6%, 22%);
-    --color-fg-1: hsla(45, 6%, 95%, 95%);
-    --color-fg-2: hsl(45, 6%, 95%, 80%);
-    --color-fg-3: hsl(45, 6%, 95%, 65%);
-    --color-fg-4: hsla(45, 6%, 95%, 50%);
+    --color-alpha-1: hsla(45, 5%, 100%, 5%);
+    --color-alpha-2: hsla(45, 5%, 100%, 10%);
+    --color-alpha-3: hsla(45, 5%, 100%, 15%);
+    --color-alpha-4: hsla(45, 5%, 100%, 20%);
+    --color-alpha-reverse-1: hsla(0, 0%, 0%, 10%);
+    --color-alpha-reverse-2: hsla(0, 0%, 0%, 20%);
+    --color-bg-1: hsl(45, 5%, 12%);
+    --color-bg-2: hsl(45, 5%, 16%);
+    --color-bg-3: hsl(45, 5%, 20%);
+    --color-fg-1: hsla(0, 0%, 100%, 90%);
+    --color-fg-2: hsla(0, 0%, 100%, 75%);
+    --color-fg-3: hsla(0, 0%, 100%, 60%);
+    --color-fg-4: hsla(0, 0%, 100%, 45%);
     --color-red-1: hsl(5, 85%, 40%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
@@ -40,9 +40,9 @@
     @apply inline;
   }
 
-  /* hack because Vega-Lite no have easy way to style tooltips ): */
-  #vg-tooltip-element {
-    @apply rounded-sm border-0 px-4 py-2 font-mono shadow-2xl;
+  /* hack to style observable plot tooltips */
+  [aria-label='tip'] {
+    @apply fill-bg-3 stroke-0 text-fg-1;
   }
 }
 
@@ -62,7 +62,7 @@
 
 @layer utilities {
   .disabled {
-    @apply pointer-events-none opacity-60;
+    @apply pointer-events-none opacity-50;
   }
 
   .prose {

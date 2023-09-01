@@ -86,7 +86,7 @@ const Page = async () => {
                     variant="link"
                   >
                     <Avatar
-                      className="-my-0.5"
+                      className="-my-0.5 -mr-2"
                       file={subject.image_uri}
                       key={subject.id}
                       name={subject.name}

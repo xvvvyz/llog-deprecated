@@ -1,3 +1,5 @@
+import DownloadEventsButton from '@/(account)/subjects/[subjectId]/timeline/_components/download-events-button';
+import InsightsModalButton from '@/(account)/subjects/[subjectId]/timeline/_components/insights-modal-button';
 import Avatar from '@/_components/avatar';
 import BackButton from '@/_components/back-button';
 import DirtyHtml from '@/_components/dirty-html';
@@ -50,9 +52,9 @@ const Layout = async ({
         <Avatar file={subject.image_uri} name={subject.name} />
       </Header>
       {isTeamMember && teamMemberHeader}
-      <div className="space-y-14">
+      <div className="space-y-14 px-4">
         {subject.banner && (
-          <DirtyHtml className="mx-auto -mt-4 max-w-sm px-4 text-center text-fg-4">
+          <DirtyHtml className="mx-auto -mt-4 max-w-sm text-center text-fg-4">
             {subject.banner}
           </DirtyHtml>
         )}
@@ -61,7 +63,14 @@ const Layout = async ({
           {eventTypes}
         </div>
       </div>
-      {events}
+      <Header className="mb-0">
+        <h1 className="text-2xl">Timeline</h1>
+        <div className="flex gap-4">
+          <DownloadEventsButton subjectId={subjectId} />
+          <InsightsModalButton subjectId={subject.id} />
+        </div>
+      </Header>
+      <div className="mt-2.5 space-y-4 px-4">{events}</div>
     </>
   );
 };

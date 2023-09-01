@@ -3,28 +3,18 @@
 import Button from '@/_components/button';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useToggle } from '@uidotdev/usehooks';
-import { ReactNode } from 'react';
 
 interface DownloadEventsButtonProps {
-  children: ReactNode;
-  className?: string;
-  disabled?: boolean;
   subjectId: string;
 }
 
-const DownloadEventsButton = ({
-  children,
-  className,
-  disabled,
-  subjectId,
-}: DownloadEventsButtonProps) => {
+const DownloadEventsButton = ({ subjectId }: DownloadEventsButtonProps) => {
   const [isDownloading, toggleIsDownloading] = useToggle(false);
 
   return (
     <Button
       colorScheme="transparent"
-      className={className}
-      disabled={disabled || isDownloading}
+      disabled={isDownloading}
       onClick={async () => {
         toggleIsDownloading();
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -40,7 +30,7 @@ const DownloadEventsButton = ({
       size="sm"
     >
       <ArrowDownTrayIcon className="w-5" />
-      {children}
+      CSV
     </Button>
   );
 };

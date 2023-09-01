@@ -514,18 +514,16 @@ const SessionForm = ({
             </SortableContext>
           </DndContext>
         </ul>
-        <div className="form mt-4">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={() =>
-              modulesArray.append({ content: '', inputs: [] } as any)
-            }
-          >
-            <PlusIcon className="w-5" />
-            Add module
-          </Button>
-        </div>
+        <Button
+          className="mt-4 w-full"
+          colorScheme="transparent"
+          onClick={() =>
+            modulesArray.append({ content: '', inputs: [] } as any)
+          }
+        >
+          <PlusIcon className="w-5" />
+          Add module
+        </Button>
         <div className="form mt-4 flex-row gap-4">
           {draft && (
             <Button

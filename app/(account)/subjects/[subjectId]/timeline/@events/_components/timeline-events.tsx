@@ -44,33 +44,29 @@ const TimelineEvents = ({
     );
   }, [events]);
 
-  return (
-    <div className="space-y-4 px-4">
-      {formattedEvents.map((groups) => {
-        const dayGroup = Array.from(groups.values());
-        const firstEvent = dayGroup[0][0];
+  return formattedEvents.map((groups) => {
+    const dayGroup = Array.from(groups.values());
+    const firstEvent = dayGroup[0][0];
 
-        return (
-          <div className="space-y-4" key={firstEvent.created_at}>
-            <DateTime
-              className="smallcaps mx-4 flex h-16 items-end justify-end border-l-2 border-dashed border-alpha-2"
-              date={firstEvent.created_at}
-              formatter="date"
-            />
-            {dayGroup.map((eventGroup) => (
-              <TimelineEventCard
-                group={eventGroup}
-                isTeamMember={isTeamMember}
-                key={eventGroup[0].id}
-                subjectId={subjectId}
-                userId={userId}
-              />
-            ))}
-          </div>
-        );
-      })}
-    </div>
-  );
+    return (
+      <div className="space-y-4" key={firstEvent.created_at}>
+        <DateTime
+          className="smallcaps mx-4 flex h-14 items-end justify-end border-l-2 border-dashed border-alpha-2"
+          date={firstEvent.created_at}
+          formatter="date"
+        />
+        {dayGroup.map((eventGroup) => (
+          <TimelineEventCard
+            group={eventGroup}
+            isTeamMember={isTeamMember}
+            key={eventGroup[0].id}
+            subjectId={subjectId}
+            userId={userId}
+          />
+        ))}
+      </div>
+    );
+  });
 };
 
 export default TimelineEvents;

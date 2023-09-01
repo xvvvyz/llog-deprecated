@@ -43,7 +43,7 @@ const listEventsFormatted = async (subjectId: string) => {
     const profile = firstIfArray(event.profile);
 
     const row: any = {
-      'Comments (an)':
+      Comments:
         event.comments && event.comments.length
           ? event.comments.map((comment: any) =>
               `${comment.profile.first_name} ${
@@ -53,7 +53,7 @@ const listEventsFormatted = async (subjectId: string) => {
                 .replace(/ $/, ''),
             )
           : undefined,
-      'Module duration (q)': event.type.session
+      'Module duration': event.type.session
         ? previousModuleCompletionTime[event.type.session.id]
           ? Math.floor(
               (new Date(event.created_at).getTime() -
@@ -64,15 +64,13 @@ const listEventsFormatted = async (subjectId: string) => {
             )
           : 0
         : undefined,
-      'Module number (o)': event.type.session
-        ? event.type.order + 1
-        : undefined,
-      'Name (n)': strip(event.type.name ?? event.type.session?.mission?.name),
-      'Recorded by (n)': strip(`${profile.first_name} ${profile.last_name}`),
-      'Session number (o)': event.type.session
+      'Module number': event.type.session ? event.type.order + 1 : undefined,
+      Name: strip(event.type.name ?? event.type.session?.mission?.name),
+      'Recorded by': strip(`${profile.first_name} ${profile.last_name}`),
+      'Session number': event.type.session
         ? event.type.session.order + 1
         : undefined,
-      'Timestamp (t)': event.created_at,
+      Timestamp: event.created_at,
     };
 
     if (event.type.session) {
@@ -80,18 +78,14 @@ const listEventsFormatted = async (subjectId: string) => {
     }
 
     forceArray(event.inputs).forEach((input: any) => {
-      const strippedLabel = strip(input.input.label);
+      if (!input.input) return;
+      const strippedLabel = strip(input.input?.label);
 
       if (input.input.type === 'multi_select') {
-        const key = `${strippedLabel} (an)`;
-        row[key] = row[key] ?? [];
-        row[key].push(input.option.label);
+        row[strippedLabel] = row[strippedLabel] ?? [];
+        row[strippedLabel].push(input.option.label);
       } else {
-        const type = /(duration|number|stopwatch)/.test(input.input.type)
-          ? 'q'
-          : 'n';
-
-        row[`${strippedLabel} (${type})`] = input.value ?? input.option.label;
+        row[strippedLabel] = input.value ?? input.option.label;
       }
     });
 

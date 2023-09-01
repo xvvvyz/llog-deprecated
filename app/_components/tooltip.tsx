@@ -44,7 +44,7 @@ const Tooltip = ({
       </button>
       {api.isOpen && (
         <div
-          className="z-10 rounded border border-alpha-1 bg-bg-2 px-6 py-5 text-fg-1 shadow-lg"
+          className="z-10 rounded border border-alpha-1 bg-bg-3 px-6 py-5 text-fg-1 shadow-lg"
           {...api.positionerProps}
         >
           <div
