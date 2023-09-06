@@ -34,7 +34,7 @@ const Page = ({ searchParams }: PageProps) => {
         <h1 className="mb-10 text-2xl">Welcome back</h1>
         <SignInForm action={action} />
       </div>
-      <p className="flex gap-6">
+      <p className="flex gap-4">
         <span className="text-fg-4">Don&rsquo;t have an account?</span>
         <Button forwardSearchParams href="/sign-up" variant="link">
           Sign up

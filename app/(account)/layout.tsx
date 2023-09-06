@@ -15,7 +15,7 @@ const Layout = async ({ children }: LayoutProps) => {
   const { count } = await countNotifications();
 
   return (
-    <div className="mx-auto max-w-lg pb-20">
+    <div className="mx-auto max-w-lg pb-16">
       <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8 leading-none text-fg-3">
         <div className="flex flex-wrap gap-4">
           <Button activeClassName="text-fg-2" href="/subjects" variant="link">
@@ -55,6 +55,14 @@ const Layout = async ({ children }: LayoutProps) => {
         </div>
       </nav>
       {children}
+      {!user?.user_metadata?.is_client && (
+        <p className="mt-16 flex justify-center gap-4">
+          <span className="text-fg-4">Questions or feedback?</span>
+          <Button variant="link" href="mailto:help@llog.app">
+            contact@llog.app
+          </Button>
+        </p>
+      )}
     </div>
   );
 };

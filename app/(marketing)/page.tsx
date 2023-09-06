@@ -103,8 +103,8 @@ const Page = () => (
                 Extract valuable insights
               </h2>
               <p className="mt-2 max-w-sm text-fg-4">
-                Spot trends and anomalies with our AI-powered data visualization
-                assistant. Stop guessing and start making
+                Automatically configured dashboards based on your inputs allow
+                you to spot trends with ease. Start making
                 data-driven&nbsp;decisions.
               </p>
             </div>
@@ -153,18 +153,12 @@ const Page = () => (
             </p>
           </li>
         </ul>
-        <p className="mt-24 text-center text-fg-4">
-          Still have questions? Let&rsquo;s talk.
-          <br />
+        <div className="mt-24 flex justify-center gap-4 text-fg-4">
+          Still have questions?
           <Button variant="link" href="mailto:contact@llog.app">
-            Email us
-          </Button>{' '}
-          or{' '}
-          <Button variant="link" href="https://cal.com/xvvvyz/llog-demo">
-            schedule a call
+            contact@llog.app
           </Button>
-          .
-        </p>
+        </div>
       </section>
     </main>
     <footer className="border-t border-alpha-1">
