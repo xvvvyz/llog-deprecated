@@ -1,4 +1,4 @@
-import listEventsFormatted from '@/_server/list-events-formatted';
+import listEventsFormattedWithComments from '@/_server/list-events-formatted-with-comments';
 import { json2csv } from 'json-2-csv';
 import { NextResponse } from 'next/server';
 
@@ -11,7 +11,7 @@ interface GetContext {
 }
 
 export const GET = async (req: Request, ctx: GetContext) => {
-  const events = await listEventsFormatted(ctx.params.subjectId);
+  const events = await listEventsFormattedWithComments(ctx.params.subjectId);
   if (!events.length) return new NextResponse(null, { status: 404 });
   const csv = await json2csv(events, { emptyFieldValue: '', sortHeader: true });
 

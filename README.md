@@ -23,10 +23,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 NEXT_PUBLIC_SUPABASE_URL=<SUPABSE_API_URL>
 
 # optional
-CRISP_SECRET_KEY=<CRISP_SECRET_KEY>
-NEXT_PUBLIC_CRISP_WEBSITE_ID=<CRISP_WEBSITE_ID>
 NEXT_PUBLIC_SUPABASE_PRO=1
-OPENAI_API_KEY=<OPENAI_API_KEY>
 ```
 
 Generate types and start the dev server:
@@ -50,9 +47,6 @@ pnpm run db:diff -- migration-description
 - Update email templates
 - Update url config
 - Enable realtime
-- Vercel environment secrets:
-  - CRISP_SECRET_KEY
-  - OPENAI_API_KEY
 - Github environment secrets:
   - NEXT_PUBLIC_CRISP_WEBSITE_ID
   - NEXT_PUBLIC_SUPABASE_ANON_KEY

@@ -4,11 +4,15 @@ import forceArray from '@/_utilities/force-array';
 
 const strip = (str: string) => str.replace(/['"\[\]]/g, '');
 
-const listEventsFormatted = async (subjectId: string) => {
+const listEventsFormattedWithComments = async (subjectId: string) => {
   const { data: events } = await createServerRouteClient()
     .from('events')
     .select(
       `
+      comments(
+        content,
+        profile:profiles(first_name, last_name)
+      ),
       created_at,
       inputs:event_inputs(
         input:inputs(label, type),
@@ -39,6 +43,16 @@ const listEventsFormatted = async (subjectId: string) => {
     const profile = firstIfArray(event.profile);
 
     const row: any = {
+      Comments:
+        event.comments && event.comments.length
+          ? event.comments.map((comment: any) =>
+              `${comment.profile.first_name} ${
+                comment.profile.last_name
+              }: ${comment.content.replace(/<[^>]+>/g, ' ')}`
+                .replace(/\s+/g, ' ')
+                .replace(/ $/, ''),
+            )
+          : undefined,
       'Module duration': event.type.session
         ? previousModuleCompletionTime[event.type.session.id]
           ? Math.floor(
@@ -81,4 +95,4 @@ const listEventsFormatted = async (subjectId: string) => {
   return json;
 };
 
-export default listEventsFormatted;
+export default listEventsFormattedWithComments;

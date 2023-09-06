@@ -26,7 +26,9 @@ const PlotFigure = ({
         backgroundColor: 'transparent',
         color: 'var(--color-fg-2)',
         fontFamily: 'var(--font-mono)',
+        letterSpacing: '0',
         overflow: 'visible',
+        textTransform: 'none',
       },
       x: { padding: 0, tickSize: 0, ...x },
       y: { padding: 0, tickSize: 0, ...y },
@@ -37,7 +39,7 @@ const PlotFigure = ({
     return () => p.remove();
   }, [color, options, x, y]);
 
-  return <div ref={containerRef} />;
+  return <div className="smallcaps" ref={containerRef} />;
 };
 
 export default PlotFigure;

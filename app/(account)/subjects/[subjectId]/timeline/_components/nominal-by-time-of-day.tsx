@@ -3,13 +3,20 @@
 import PlotFigure from '@/(account)/subjects/[subjectId]/timeline/_components/plot-figure';
 import { axisY, cell, group } from '@observablehq/plot';
 
-interface EventsByTimeOfDayProps {
+interface NominalByTimeOfDayProps {
   events?: Array<Record<string, unknown>>;
+  inputKey: string;
+  inputLabel?: string;
   width?: number;
 }
 
-const EventsByTimeOfDay = ({ events = [], width }: EventsByTimeOfDayProps) => {
-  if (!events.length || !width) return null;
+const NominalByTimeOfDay = ({
+  events = [],
+  inputKey,
+  inputLabel,
+  width,
+}: NominalByTimeOfDayProps) => {
+  if (events.length < 2 || !width) return null;
   const domain = Array.from({ length: 24 }).map((_, i) => i);
   const ticks = [];
   const tickRatio = Math.ceil(domain.length / (width / 60));
@@ -21,7 +28,7 @@ const EventsByTimeOfDay = ({ events = [], width }: EventsByTimeOfDayProps) => {
         marks: [
           axisY({
             label: null,
-            lineWidth: 9,
+            lineWidth: 10,
             textOverflow: 'ellipsis',
             tickSize: 0,
           }),
@@ -30,15 +37,14 @@ const EventsByTimeOfDay = ({ events = [], width }: EventsByTimeOfDayProps) => {
             group(
               { fill: 'count' },
               {
-                sort: { y: '-fill' },
                 tip: true,
-                x: (d) => new Date(d.Timestamp).getHours(),
-                y: 'Name',
+                x: (d) => new Date(d.Time).getHours(),
+                y: inputKey,
               },
             ),
           ),
         ],
-        title: 'Events by hour of day',
+        title: `${inputLabel ?? inputKey} / hour of day`,
         width,
         x: {
           domain,
@@ -56,4 +62,4 @@ const EventsByTimeOfDay = ({ events = [], width }: EventsByTimeOfDayProps) => {
   );
 };
 
-export default EventsByTimeOfDay;
+export default NominalByTimeOfDay;
