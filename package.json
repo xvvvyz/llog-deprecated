@@ -55,7 +55,6 @@
     "@zag-js/tooltip": "^0.18.0",
     "ai": "^2.2.11",
     "autoprefixer": "^10.4.15",
-    "crisp-sdk-web": "^1.0.21",
     "encoding": "^0.1.13",
     "eslint": "^8.48.0",
     "eslint-config-next": "^13.4.20-canary.15",

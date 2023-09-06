@@ -48,7 +48,6 @@ pnpm run db:diff -- migration-description
 - Update url config
 - Enable realtime
 - Github environment secrets:
-  - NEXT_PUBLIC_CRISP_WEBSITE_ID
   - NEXT_PUBLIC_SUPABASE_ANON_KEY
   - NEXT_PUBLIC_SUPABASE_PRO
   - NEXT_PUBLIC_SUPABASE_URL

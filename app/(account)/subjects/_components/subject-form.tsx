@@ -10,7 +10,6 @@ import { GetSubjectData } from '@/_server/get-subject';
 import { Database } from '@/_types/database';
 import sanitizeHtml from '@/_utilities/sanitize-html';
 import uploadSubjectAvatar from '@/_utilities/upload-subject-avatar';
-import { Crisp as C } from 'crisp-sdk-web';
 import { useDropzone } from 'react-dropzone';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -66,13 +65,6 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           subjectId: subjectData.id,
           supabase,
         });
-
-        if (!subject) {
-          C.session.pushEvent('subjects:create', {
-            id: subjectData.id,
-            name: values.name,
-          });
-        }
 
         await redirect(`/subjects/${subjectData.id}/timeline`);
       })}

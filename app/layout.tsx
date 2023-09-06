@@ -1,7 +1,4 @@
-import Crisp from '@/_components/crisp';
 import SupabaseProvider from '@/_components/supabase-provider';
-import getCurrentUser from '@/_server/get-current-user';
-import createHmac from '@/_utilities/create-hmac';
 import { Analytics } from '@vercel/analytics/react';
 import { Figtree, Inconsolata } from 'next/font/google';
 import { ReactNode } from 'react';
@@ -19,24 +16,14 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => {
-  const user = await getCurrentUser();
-
-  const crispSignature =
-    process.env.CRISP_SECRET_KEY && user?.email
-      ? await createHmac(process.env.CRISP_SECRET_KEY, user.email)
-      : null;
-
-  return (
-    <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
-      <body>
-        <SupabaseProvider>{children}</SupabaseProvider>
-        <Analytics />
-        <Crisp crispSignature={crispSignature} user={user} />
-      </body>
-    </html>
-  );
-};
+const Layout = async ({ children }: LayoutProps) => (
+  <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
+    <body>
+      <SupabaseProvider>{children}</SupabaseProvider>
+      <Analytics />
+    </body>
+  </html>
+);
 
 export const metadata = {
   description: '',
