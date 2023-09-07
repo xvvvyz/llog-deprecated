@@ -46,6 +46,7 @@ pnpm run db:diff -- migration-description
 - Update auth providers
 - Update email templates
 - Update url config
+- Add custom SMTP server
 - Enable realtime
 - Github environment secrets:
   - NEXT_PUBLIC_SUPABASE_ANON_KEY

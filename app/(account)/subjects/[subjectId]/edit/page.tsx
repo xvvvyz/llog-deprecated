@@ -1,10 +1,8 @@
 import SubjectForm from '@/(account)/subjects/_components/subject-form';
 import BackButton from '@/_components/back-button';
 import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
 import getSubject from '@/_server/get-subject';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -26,16 +24,16 @@ export const revalidate = 0;
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const { data: subject } = await getSubject(subjectId);
-  if (!subject) notFound();
+  if (!subject) return null;
 
   return (
     <>
-      <Header>
-        <BackButton href={'/subjects'} />
+      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
+        <BackButton href="/subjects" />
         <Breadcrumbs
-          items={[[subject.name, `/subjects/${subjectId}/timeline`], ['Edit']]}
+          items={[[subject.name, `/subjects/${subjectId}`], ['Edit']]}
         />
-      </Header>
+      </div>
       <SubjectForm subject={subject} />
     </>
   );

@@ -18,7 +18,7 @@ const Page = async ({ params: { shareCode, subjectId } }: PageProps) => {
     });
   }
 
-  redirect(`/subjects/${subjectId}/timeline`);
+  redirect(`/subjects/${subjectId}`);
 };
 
 export default Page;

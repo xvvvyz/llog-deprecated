@@ -165,6 +165,7 @@ const EventTypeFormSection = <T extends FieldValues>({
         {!moduleNumber && (
           <Input
             label="Name"
+            required
             {...form.register(`${namePrefix}name` as T[string])}
           />
         )}

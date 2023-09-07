@@ -1,10 +1,11 @@
 import SessionForm from '@/(account)/subjects/[subjectId]/missions/[missionId]/sessions/_components/session-form';
+import SessionLayout from '@/(account)/subjects/[subjectId]/missions/[missionId]/sessions/_components/session-layout';
+import getCurrentTeamId from '@/_server/get-current-team-id';
 import getMissionWithSessions from '@/_server/get-mission-with-sessions';
 import getSubject from '@/_server/get-subject';
 import listInputs, { ListInputsData } from '@/_server/list-inputs';
 import filterListInputsDataBySubjectId from '@/_utilities/filter-list-inputs-data-by-subject-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 import listTemplatesWithData, {
   ListTemplatesWithDataData,
@@ -44,26 +45,38 @@ const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
     { data: mission },
     { data: availableInputs },
     { data: availableTemplates },
+    teamId,
   ] = await Promise.all([
     getSubject(subjectId),
     getMissionWithSessions(missionId, true),
     listInputs(),
     listTemplatesWithData(),
+    getCurrentTeamId(),
   ]);
 
-  if (!subject || !mission) notFound();
+  const isTeamMember = subject?.team_id === teamId;
+  if (!subject || !mission || !isTeamMember) return null;
 
   return (
-    <SessionForm
-      availableInputs={filterListInputsDataBySubjectId(
-        availableInputs as ListInputsData,
-        subjectId,
-      )}
-      availableTemplates={availableTemplates as ListTemplatesWithDataData}
-      mission={mission}
-      order={Number(order)}
+    <SessionLayout
+      isTeamMember
+      missionId={missionId}
+      missionName={mission.name}
+      sessions={mission.sessions}
       subjectId={subjectId}
-    />
+      subjectName={subject.name}
+    >
+      <SessionForm
+        availableInputs={filterListInputsDataBySubjectId(
+          availableInputs as ListInputsData,
+          subjectId,
+        )}
+        availableTemplates={availableTemplates as ListTemplatesWithDataData}
+        mission={mission}
+        order={Number(order)}
+        subjectId={subjectId}
+      />
+    </SessionLayout>
   );
 };
 

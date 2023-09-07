@@ -5,7 +5,6 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
-import Empty from '@/_components/empty';
 import IconButton from '@/_components/icon-button';
 import NotificationTypes from '@/_constants/enum-notification-types';
 import { ListNotificationsData } from '@/_server/list-notifications';
@@ -16,7 +15,6 @@ import {
   ChatBubbleBottomCenterTextIcon,
   EnvelopeIcon,
   EnvelopeOpenIcon,
-  InformationCircleIcon,
   StarIcon,
   UserPlusIcon,
   XMarkIcon,
@@ -40,19 +38,8 @@ const Notifications = ({
   eventOrSessionIdNotificationIdMap,
   notifications,
   toggleNotificationReadAction,
-}: NotificationsProps) => {
-  if (!notifications.length) {
-    return (
-      <Empty>
-        <InformationCircleIcon className="w-7" />
-        Events and comments added by
-        <br />
-        others will appear here.
-      </Empty>
-    );
-  }
-
-  return notifications.map((n) => {
+}: NotificationsProps) =>
+  notifications.map((n) => {
     const comment = firstIfArray(n.comment);
     const profile = firstIfArray(n.profile);
     const sourceEvent = comment?.event ?? n.event;
@@ -66,7 +53,7 @@ const Notifications = ({
         <div className="relative">
           <Button
             className="m-0 block p-0"
-            href={`/subjects/${subject.id}/timeline?back=/notifications`}
+            href={`/subjects/${subject.id}?back=/notifications`}
             variant="link"
           >
             <Avatar file={subject.image_uri} name={subject.name} />
@@ -137,7 +124,7 @@ const Notifications = ({
                 ? sourceEvent.type.session
                   ? `/subjects/${subject.id}/missions/${sourceEvent.type.session.mission.id}/sessions/${sourceEvent.type.session.id}?back=/notifications`
                   : `/subjects/${subject.id}/events/${sourceEvent.id}?back=/notifications`
-                : `/subjects/${subject.id}/timeline?back=/notifications`
+                : `/subjects/${subject.id}?back=/notifications`
             }
             notificationIds={
               eventOrSessionIdNotificationIdMap[
@@ -176,6 +163,5 @@ const Notifications = ({
       </div>
     );
   });
-};
 
 export default Notifications;

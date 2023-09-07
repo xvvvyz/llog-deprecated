@@ -66,7 +66,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           supabase,
         });
 
-        await redirect(`/subjects/${subjectData.id}/timeline`);
+        await redirect(`/subjects/${subjectData.id}`);
       })}
     >
       <Input label="Name" {...form.register('name')} />

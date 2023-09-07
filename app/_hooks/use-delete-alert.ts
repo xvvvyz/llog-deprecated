@@ -1,6 +1,5 @@
-import { useToggle } from '@uidotdev/usehooks';
+import { usePrevious, useToggle } from '@uidotdev/usehooks';
 import { useEffect, useTransition } from 'react';
-import usePrevious from './use-previous';
 
 const useDeleteAlert = () => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);

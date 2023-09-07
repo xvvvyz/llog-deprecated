@@ -1,13 +1,8 @@
 import BackButton from '@/_components/back-button';
 import Breadcrumbs from '@/_components/breadcrumbs';
 import Button from '@/_components/button';
-import Header from '@/_components/header';
 import IconButton from '@/_components/icon-button';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import getMissionWithSessions from '@/_server/get-mission-with-sessions';
-import getSubject from '@/_server/get-subject';
-import forceArray from '@/_utilities/force-array';
-import { notFound } from 'next/navigation';
+import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
 import { ReactNode } from 'react';
 
 import {
@@ -18,42 +13,41 @@ import {
   PlusIcon,
 } from '@heroicons/react/24/outline';
 
-interface LayoutLayoutProps {
+interface SessionLayoutProps {
   children: ReactNode;
-  params: {
-    edit?: string;
-    missionId: string;
-    order?: string;
-    sessionId?: string;
-    subjectId: string;
-  };
+  isCreate?: boolean;
+  isEdit?: boolean;
+  isTeamMember: boolean;
+  missionId: string;
+  missionName: string;
+  order?: string;
+  sessionId?: string;
+  sessions: NonNullable<GetMissionWithSessionsData>['sessions'];
+  subjectId: string;
+  subjectName: string;
 }
 
 const SessionLayout = async ({
   children,
-  params: { edit, missionId, order, sessionId, subjectId },
-}: LayoutLayoutProps) => {
-  if ((edit && edit !== 'edit') || (order && isNaN(Number(order)))) notFound();
-  const isCreate = !!order;
-  const isEdit = !!edit;
+  isCreate,
+  isEdit,
+  isTeamMember,
+  missionId,
+  missionName,
+  order,
+  sessionId,
+  sessions,
+  subjectId,
+  subjectName,
+}: SessionLayoutProps) => {
   const isEditOrCreate = isCreate || isEdit;
-
-  const [{ data: subject }, { data: mission }, teamId] = await Promise.all([
-    getSubject(subjectId),
-    getMissionWithSessions(missionId, isEditOrCreate),
-    getCurrentTeamId(),
-  ]);
-
-  if (!subject || !mission) notFound();
-
-  const sessions = forceArray(mission.sessions);
   const currentSession = sessions.find(({ id }) => id === sessionId);
   const sessionOrder = order ? Number(order) : currentSession?.order;
-  if (typeof sessionOrder === 'undefined') notFound();
+  if (typeof sessionOrder === 'undefined') return null;
 
   const breadcrumbs = [
-    [subject.name, `/subjects/${subjectId}/timeline`],
-    [mission.name, `/subjects/${subjectId}/missions/${missionId}/sessions`],
+    [subjectName, `/subjects/${subjectId}`],
+    [missionName, `/subjects/${subjectId}/missions/${missionId}/sessions`],
     [`${sessionOrder + 1}`],
   ];
 
@@ -84,7 +78,11 @@ const SessionLayout = async ({
 
       return acc;
     },
-    { highestOrder: -1, nextSessionId: null, previousSessionId: null },
+    { highestOrder: -1, nextSessionId: null, previousSessionId: null } as {
+      highestOrder: number;
+      nextSessionId: string | null;
+      previousSessionId: string | null;
+    },
   );
 
   if (
@@ -108,20 +106,20 @@ const SessionLayout = async ({
 
   return (
     <>
-      <Header>
+      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
         <BackButton
           href={
             isEditOrCreate
               ? `/subjects/${subjectId}/missions/${missionId}/sessions`
-              : `/subjects/${subjectId}/timeline`
+              : `/subjects/${subjectId}`
           }
         />
         <Breadcrumbs items={breadcrumbs} />
-      </Header>
+      </div>
       <nav className="flex w-full items-center justify-between px-4">
         <IconButton
           disabled={!previousSessionId}
-          href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${previousSessionId}${editSuffix}`}
+          href={`/subjects/${subjectId}/missions/${missionId}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
           label="Previous session"
           replace
@@ -134,11 +132,11 @@ const SessionLayout = async ({
           {currentSession?.draft || order ? (
             <span className="smallcaps">Draft</span>
           ) : (
-            subject.team_id === teamId &&
+            isTeamMember &&
             (isEditOrCreate ? (
               <Button
                 className="-my-4 items-baseline"
-                href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}`}
+                href={`/subjects/${subjectId}/missions/${missionId}/sessions/${sessionId}`}
                 variant="link"
               >
                 <EyeIcon className="relative top-1 w-5" />
@@ -147,7 +145,7 @@ const SessionLayout = async ({
             ) : (
               <Button
                 className="-my-4 items-baseline"
-                href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${sessionId}/edit`}
+                href={`/subjects/${subjectId}/missions/${missionId}/sessions/${sessionId}/edit`}
                 variant="link"
               >
                 <PencilIcon className="relative top-1 w-5" />
@@ -159,7 +157,7 @@ const SessionLayout = async ({
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={isCreate}
-            href={`/subjects/${subjectId}/missions/${mission.id}/sessions/create/${nextSessionOrder}`}
+            href={`/subjects/${subjectId}/missions/${missionId}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative -right-2 w-7" />}
             label="Add session"
             replace
@@ -167,7 +165,7 @@ const SessionLayout = async ({
         ) : (
           <IconButton
             disabled={!nextSessionId}
-            href={`/subjects/${subjectId}/missions/${mission.id}/sessions/${nextSessionId}${editSuffix}`}
+            href={`/subjects/${subjectId}/missions/${missionId}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative -right-2 w-7" />}
             label="Next session"
             replace

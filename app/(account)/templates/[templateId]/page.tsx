@@ -1,11 +1,9 @@
 import TemplateForm from '@/(account)/templates/_components/template-form';
 import BackButton from '@/_components/back-button';
 import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
 import getTemplate from '@/_server/get-template';
 import listInputs, { ListInputsData } from '@/_server/list-inputs';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -31,14 +29,14 @@ const Page = async ({ params: { templateId } }: PageProps) => {
     listInputs(),
   ]);
 
-  if (!template) notFound();
+  if (!template) return null;
 
   return (
     <>
-      <Header>
+      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
         <BackButton href="/templates" />
         <Breadcrumbs items={[['Templates', '/templates'], [template.name]]} />
-      </Header>
+      </div>
       <TemplateForm
         availableInputs={availableInputs as ListInputsData}
         template={template}

@@ -1,14 +1,12 @@
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
 import BackButton from '@/_components/back-button';
 import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
 import getCurrentTeamId from '@/_server/get-current-team-id';
 import getCurrentUser from '@/_server/get-current-user';
 import getEvent, { GetEventData } from '@/_server/get-event';
 import getSubject from '@/_server/get-subject';
 import firstIfArray from '@/_utilities/first-if-array';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -40,20 +38,17 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
     getCurrentTeamId(),
   ]);
 
-  if (!subject || !event || !user) notFound();
+  if (!subject || !event || !user) return null;
   const eventType = firstIfArray(event.type);
 
   return (
     <>
-      <Header>
-        <BackButton href={`/subjects/${subjectId}/timeline`} />
+      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
+        <BackButton href={`/subjects/${subjectId}`} />
         <Breadcrumbs
-          items={[
-            [subject.name, `/subjects/${subjectId}/timeline`],
-            [eventType.name],
-          ]}
+          items={[[subject.name, `/subjects/${subjectId}`], [eventType.name]]}
         />
-      </Header>
+      </div>
       <EventCard
         event={event as GetEventData}
         eventType={eventType}

@@ -95,7 +95,7 @@ const EventTypeForm = ({
           }
         }
 
-        await redirect(`/subjects/${subjectId}/timeline`);
+        await redirect(`/subjects/${subjectId}`);
       })}
     >
       <EventTypeFormSection

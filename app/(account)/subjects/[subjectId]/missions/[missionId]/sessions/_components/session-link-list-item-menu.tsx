@@ -67,7 +67,7 @@ const SessionLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-1">
           <MenuItem
-            href={`/subjects/${subjectId}/missions/${missionId}/edit?back=/subjects/${subjectId}/timeline`}
+            href={`/subjects/${subjectId}/missions/${missionId}/edit?back=/subjects/${subjectId}`}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit mission name

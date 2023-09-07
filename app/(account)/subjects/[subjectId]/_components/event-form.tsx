@@ -295,7 +295,7 @@ const EventForm = ({
             }
           }
 
-          await redirect(`/subjects/${subjectId}/timeline`, {
+          await redirect(`/subjects/${subjectId}`, {
             redirect: !isMission && !event,
           });
         },

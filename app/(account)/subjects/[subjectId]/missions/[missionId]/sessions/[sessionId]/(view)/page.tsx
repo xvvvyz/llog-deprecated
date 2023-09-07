@@ -1,4 +1,5 @@
 import EventCard from '@/(account)/subjects/[subjectId]/_components/event-card';
+import SessionLayout from '@/(account)/subjects/[subjectId]/missions/[missionId]/sessions/_components/session-layout';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import getCurrentTeamId from '@/_server/get-current-team-id';
@@ -9,7 +10,7 @@ import getSubject from '@/_server/get-subject';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
+import { CalendarIcon } from '@heroicons/react/24/outline';
 
 interface PageProps {
   params: {
@@ -58,46 +59,56 @@ const Page = async ({
     getCurrentTeamId(),
   ]);
 
-  if (!subject || !mission || !session || !user) {
-    notFound();
-  }
-
-  if (session.scheduled_for && new Date(session.scheduled_for) > new Date()) {
-    return (
-      <Empty className="mt-10 block max-w-lg">
-        Session will be available{' '}
-        <DateTime
-          className="inline"
-          date={session.scheduled_for}
-          formatter="date-time"
-        />
-      </Empty>
-    );
-  }
+  if (!subject || !mission || !session || !user) return null;
+  const isTeamMember = subject.team_id === teamId;
 
   return (
-    <>
-      {session.title && (
-        <p className="mx-auto -mt-4 max-w-sm px-4 pb-8 text-center">
-          {session.title}
-        </p>
-      )}
-      {forceArray(session.modules).map((module) => {
-        const event = firstIfArray(module.event);
+    <SessionLayout
+      isTeamMember={isTeamMember}
+      missionId={missionId}
+      missionName={mission.name}
+      sessionId={sessionId}
+      sessions={mission.sessions}
+      subjectId={subjectId}
+      subjectName={subject.name}
+    >
+      {session.scheduled_for && new Date(session.scheduled_for) > new Date() ? (
+        <Empty className="max-w-lg">
+          <CalendarIcon className="w-7" />
+          <p>
+            Scheduled for{' '}
+            <DateTime
+              className="inline"
+              date={session.scheduled_for}
+              formatter="date-time"
+            />
+          </p>
+        </Empty>
+      ) : (
+        <>
+          {session.title && (
+            <p className="mx-auto -mt-4 max-w-sm px-4 pb-8 text-center">
+              {session.title}
+            </p>
+          )}
+          {forceArray(session.modules).map((module) => {
+            const event = firstIfArray(module.event);
 
-        return (
-          <EventCard
-            event={event}
-            eventType={module}
-            isTeamMember={subject.team_id === teamId}
-            key={module.id}
-            mission={mission}
-            subjectId={subjectId}
-            userId={user.id}
-          />
-        );
-      })}
-    </>
+            return (
+              <EventCard
+                event={event}
+                eventType={module}
+                isTeamMember={isTeamMember}
+                key={module.id}
+                mission={mission}
+                subjectId={subjectId}
+                userId={user.id}
+              />
+            );
+          })}
+        </>
+      )}
+    </SessionLayout>
   );
 };
 

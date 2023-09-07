@@ -1,11 +1,9 @@
 import InputForm from '@/(account)/inputs/_components/input-form';
 import BackButton from '@/_components/back-button';
 import Breadcrumbs from '@/_components/breadcrumbs';
-import Header from '@/_components/header';
 import getInput, { GetInputData } from '@/_server/get-input';
 import listSubjectsByTeamId from '@/_server/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -29,14 +27,14 @@ const Page = async ({ params: { inputId } }: PageProps) => {
     listSubjectsByTeamId(),
   ]);
 
-  if (!input) notFound();
+  if (!input) return null;
 
   return (
     <>
-      <Header>
+      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
         <BackButton href="/inputs" />
         <Breadcrumbs items={[['Inputs', '/inputs'], [input.label]]} />
-      </Header>
+      </div>
       <InputForm input={input as GetInputData} subjects={subjects} />
     </>
   );
