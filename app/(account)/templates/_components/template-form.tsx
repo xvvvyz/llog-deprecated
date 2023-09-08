@@ -80,7 +80,7 @@ const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
         await redirect('/templates');
       })}
     >
-      <Input label="Name" {...form.register('name')} />
+      <Input label="Name" maxLength={49} required {...form.register('name')} />
       <Controller
         control={form.control}
         name="content"

@@ -15,9 +15,15 @@ const SignInForm = ({ action }: SignInFormProps) => (
     }}
     className="flex flex-col gap-6"
   >
-    <Input label="Email address" name="email" type="email" />
+    <Input label="Email address" name="email" required type="email" />
     <div className="relative">
-      <Input label="Password" name="password" type="password" />
+      <Input
+        label="Password"
+        minLength={6}
+        name="password"
+        required
+        type="password"
+      />
       <Button
         className="absolute right-2 top-0"
         forwardSearchParams

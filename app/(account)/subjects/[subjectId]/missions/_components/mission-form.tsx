@@ -47,7 +47,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
         );
       })}
     >
-      <Input label="Name" {...form.register('name')} />
+      <Input label="Name" maxLength={49} required {...form.register('name')} />
       <Button
         className="mt-8 w-full"
         loading={form.formState.isSubmitting || isRedirecting}

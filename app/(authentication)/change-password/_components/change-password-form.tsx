@@ -15,7 +15,13 @@ const ChangePasswordForm = ({ action }: SignInFormProps) => (
     }}
     className="flex flex-col gap-6"
   >
-    <Input label="New password" name="password" type="password" />
+    <Input
+      label="New password"
+      minLength={6}
+      name="password"
+      required
+      type="password"
+    />
     <Button
       className="mt-8 w-full"
       loadingText="Changing password…"

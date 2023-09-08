@@ -15,7 +15,7 @@ const ForgotPasswordForm = ({ action }: ForgotPasswordFormProps) => (
     }}
     className="flex flex-col gap-6"
   >
-    <Input label="Email address" name="email" type="email" />
+    <Input label="Email address" name="email" required type="email" />
     <Button className="mt-8 w-full" loadingText="Sending link…" type="submit">
       Send reset link
     </Button>

@@ -69,7 +69,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         await redirect(`/subjects/${subjectData.id}`);
       })}
     >
-      <Input label="Name" {...form.register('name')} />
+      <Input label="Name" maxLength={49} required {...form.register('name')} />
       <label className="group">
         <span className="label">Profile image</span>
         <AvatarDropzone dropzone={dropzone} form={form} />

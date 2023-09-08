@@ -16,11 +16,17 @@ const SignUpForm = ({ action }: SignUpFormProps) => (
     className="flex flex-col gap-6"
   >
     <div className="flex gap-6">
-      <Input label="First name" name="firstName" />
-      <Input label="Last name" name="lastName" />
+      <Input label="First name" name="firstName" required />
+      <Input label="Last name" name="lastName" required />
     </div>
-    <Input label="Email address" name="email" type="email" />
-    <Input label="Password" name="password" type="password" />
+    <Input label="Email address" name="email" required type="email" />
+    <Input
+      label="Password"
+      minLength={6}
+      name="password"
+      required
+      type="password"
+    />
     <Button
       className="mt-8 w-full"
       loadingText="Creating account…"

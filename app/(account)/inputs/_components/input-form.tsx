@@ -204,7 +204,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         },
       )}
     >
-      <Input label="Label" {...form.register('label')} />
+      <Input label="Label" required {...form.register('label')} />
       <Controller
         control={form.control}
         name="subjects"
