@@ -202,7 +202,7 @@ const SessionForm = ({
         scheduled_for: values.scheduled_for
           ? new Date(values.scheduled_for).toISOString()
           : null,
-        title: values.title,
+        title: values.title?.trim(),
       })
       .select('id')
       .single();

@@ -55,7 +55,7 @@ const EventTypeForm = ({
           .upsert({
             content: sanitizeHtml(content) || null,
             id,
-            name,
+            name: name?.trim(),
             subject_id: subjectId,
           })
           .select('id')
