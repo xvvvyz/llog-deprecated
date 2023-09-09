@@ -1,7 +1,7 @@
 'use client';
 
 import PlotFigure from '@/(account)/subjects/[subjectId]/_components/plot-figure';
-import { axisY, cell, group } from '@observablehq/plot';
+import { axisY, cell, group, pointer, tip } from '@observablehq/plot';
 
 interface NominalByTimeOfDayProps {
   events?: Array<Record<string, unknown>>;
@@ -37,10 +37,26 @@ const NominalByTimeOfDay = ({
             group(
               { fill: 'count' },
               {
-                tip: true,
                 x: (d) => new Date(d.Time).getHours(),
                 y: inputKey,
               },
+            ),
+          ),
+          tip(
+            events,
+            group(
+              { fill: 'count' },
+              pointer({
+                channels: {
+                  'Hour of day': ([d]) =>
+                    new Date(d.Time).toLocaleTimeString(undefined, {
+                      hour: 'numeric',
+                    }),
+                },
+                lineWidth: 50,
+                x: (d) => new Date(d.Time).getHours(),
+                y: inputKey,
+              }),
             ),
           ),
         ],
