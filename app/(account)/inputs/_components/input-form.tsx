@@ -313,6 +313,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                               }
                             }}
                             placeholder="Label…"
+                            required
                             right={
                               <IconButton
                                 className="m-0 h-full w-full justify-center p-0"
