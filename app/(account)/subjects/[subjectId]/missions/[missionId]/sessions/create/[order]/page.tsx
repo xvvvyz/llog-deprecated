@@ -59,9 +59,11 @@ const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
 
   return (
     <SessionLayout
+      isCreate
       isTeamMember
       missionId={missionId}
       missionName={mission.name}
+      order={order}
       sessions={mission.sessions}
       subjectId={subjectId}
       subjectName={subject.name}
