@@ -26,7 +26,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
   if (!input) return null;
 
   return (
-    <div className="px-4">
+    <>
       <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
         <BackButton href="/inputs" />
         <Breadcrumbs items={[['Inputs', '/inputs'], ['Create']]} />
@@ -35,7 +35,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
         duplicateInputData={input as GetInputData}
         subjects={subjects}
       />
-    </div>
+    </>
   );
 };
 
