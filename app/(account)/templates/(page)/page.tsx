@@ -29,7 +29,7 @@ const Page = async () => {
       {templates.map((template) => (
         <li className="flex items-stretch hover:bg-alpha-1" key={template.id}>
           <Button
-            className="m-0 w-full px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+            className="m-0 w-full px-4 py-3 pr-0 leading-snug"
             href={`/templates/${template.id}`}
             variant="link"
           >

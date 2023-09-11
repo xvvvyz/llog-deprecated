@@ -93,9 +93,7 @@ const EventComment = ({
             </Menu>
           )}
         </div>
-        <DirtyHtml className="mt-1 [overflow-wrap:anywhere]">
-          {content}
-        </DirtyHtml>
+        <DirtyHtml className="mt-1">{content}</DirtyHtml>
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ const Layout = async ({ children }: LayoutProps) => {
             icon={
               <div className="relative">
                 {!!count && (
-                  <span className="absolute -top-1.5 right-7 rounded-sm border border-alpha-4 bg-red-1 px-1.5 py-0.5 text-xs text-fg-1">
+                  <span className="absolute -top-1.5 right-7 whitespace-nowrap rounded-sm border border-alpha-4 bg-red-1 px-1.5 py-0.5 text-xs text-fg-1">
                     {count}
                   </span>
                 )}

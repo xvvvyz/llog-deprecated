@@ -70,7 +70,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     const { pending } = useFormStatus();
 
     const cn = twMerge(
-      'outline-none border border-alpha-3 items-center inline-flex gap-2 transition-colors',
+      'outline-none border [overflow-wrap:anywhere] border-alpha-3 items-center inline-flex gap-2 transition-colors',
       variant !== 'link' && sizes[size],
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],

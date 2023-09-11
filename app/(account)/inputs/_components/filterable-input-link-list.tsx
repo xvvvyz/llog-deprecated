@@ -79,7 +79,7 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
           return (
             <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
               <Button
-                className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug [overflow-wrap:anywhere]"
+                className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug"
                 href={`/inputs/${input.id}`}
                 variant="link"
               >

@@ -25,7 +25,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             >
               <Button
                 className={twMerge(
-                  'm-0 flex w-full gap-4 px-4 py-3 leading-snug [overflow-wrap:anywhere]',
+                  'm-0 flex w-full gap-4 px-4 py-3 leading-snug',
                   isTeamMember && 'pr-0',
                 )}
                 href={`/subjects/${subjectId}/event-types/${eventType.id}`}

@@ -104,7 +104,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
               return (
                 <li key={session.id}>
                   <Button
-                    className="m-0 w-full gap-6 px-4 py-3 leading-snug [overflow-wrap:anywhere] hover:bg-alpha-1"
+                    className="m-0 w-full gap-6 px-4 py-3 leading-snug hover:bg-alpha-1"
                     href={
                       isTeamMember
                         ? `/subjects/${subjectId}/missions/${missionId}/sessions/${session.id}/edit`
