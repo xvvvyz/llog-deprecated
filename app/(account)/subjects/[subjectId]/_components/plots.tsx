@@ -1,19 +1,20 @@
 'use client';
 
-import NominalByTimeOfDay from '@/(account)/subjects/[subjectId]/_components/nominal-by-time-of-day';
-import NominalOverTime from '@/(account)/subjects/[subjectId]/_components/nominal-over-time';
-import QuantitativeOverTime from '@/(account)/subjects/[subjectId]/_components/quantitative-over-time';
+import PlotNominalByTimeOfDay from '@/(account)/subjects/[subjectId]/_components/plot-nominal-by-time-of-day';
+import PlotNominalFrequency from '@/(account)/subjects/[subjectId]/_components/plot-nominal-frequency';
+import PlotNominalOverTime from '@/(account)/subjects/[subjectId]/_components/plot-nominal-over-time';
+import PlotQuantitativeOverTime from '@/(account)/subjects/[subjectId]/_components/plot-quantitative-over-time';
 import Spinner from '@/_components/spinner';
 import formatDateTime from '@/_utilities/format-date-time';
 import { useParentSize } from '@cutting/use-get-parent-size';
 import { useToggle } from '@uidotdev/usehooks';
 import { useEffect, useRef, useState } from 'react';
 
-interface ChartsProps {
+interface PlotsProps {
   subjectId: string;
 }
 
-const Charts = ({ subjectId }: ChartsProps) => {
+const Plots = ({ subjectId }: PlotsProps) => {
   const [data, setData] = useState<Array<Record<string, unknown>>>();
   const [isLoading, toggleIsLoading] = useToggle(true);
   const ref = useRef<HTMLDivElement>(null);
@@ -92,21 +93,27 @@ const Charts = ({ subjectId }: ChartsProps) => {
       {!isLoading && events.length < 2 && (
         <p className="text-fg-4">Record events to see insights.</p>
       )}
-      <NominalOverTime
+      <PlotNominalOverTime
         channels={channels}
         events={events}
         inputKey="Name"
         inputLabel="Events"
         width={width}
       />
-      <NominalByTimeOfDay
+      <PlotNominalFrequency
+        events={events}
+        inputKey="Name"
+        inputLabel="Events"
+        width={width}
+      />
+      <PlotNominalByTimeOfDay
         events={events}
         inputKey="Name"
         inputLabel="Events"
         width={width}
       />
       {Object.entries(quantitativeInputEvents).map(([k, v]: any) => (
-        <QuantitativeOverTime
+        <PlotQuantitativeOverTime
           channels={channels}
           events={v}
           inputKey={k}
@@ -116,14 +123,20 @@ const Charts = ({ subjectId }: ChartsProps) => {
       ))}
       {Object.entries(nominalInputEvents).map(([k, v]: any) => (
         <>
-          <NominalOverTime
+          <PlotNominalOverTime
             channels={channels}
             events={v}
             inputKey={k}
             key={`${k}-over-time`}
             width={width}
           />
-          <NominalByTimeOfDay
+          <PlotNominalFrequency
+            events={v}
+            inputKey={k}
+            key={`${k}-counts`}
+            width={width}
+          />
+          <PlotNominalByTimeOfDay
             events={v}
             inputKey={k}
             key={`${k}-by-time-of-day`}
@@ -135,4 +148,4 @@ const Charts = ({ subjectId }: ChartsProps) => {
   );
 };
 
-export default Charts;
+export default Plots;

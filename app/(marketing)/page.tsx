@@ -20,13 +20,9 @@ const Page = () => (
     </nav>
     <header>
       <div className="mx-auto max-w-5xl px-6 py-24 text-center">
-        <h1 className="mx-auto max-w-[21rem] text-5xl font-bold text-fg-1 md:max-w-2xl lg:max-w-3xl lg:text-6xl">
-          The ultimate platform for behavior consultants
+        <h1 className="mx-auto max-w-sm text-5xl font-bold text-fg-1 sm:max-w-none lg:text-6xl">
+          The ultimate online behavior consulting platform
         </h1>
-        <p className="mx-auto mt-8 max-w-[21rem] text-fg-4">
-          Collaboratively track behavior with clients, save time and
-          deliver&nbsp;incredible&nbsp;results.
-        </p>
         <Button className="mt-10 w-full shrink-0 sm:w-auto" href="/sign-up">
           Get early access
         </Button>

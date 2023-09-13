@@ -3,19 +3,19 @@
 import PlotFigure from '@/(account)/subjects/[subjectId]/_components/plot-figure';
 import { axisY, cell, group, pointer, tip } from '@observablehq/plot';
 
-interface NominalByTimeOfDayProps {
+interface PlotNominalByTimeOfDayProps {
   events?: Array<Record<string, unknown>>;
   inputKey: string;
   inputLabel?: string;
   width?: number;
 }
 
-const NominalByTimeOfDay = ({
+const PlotNominalByTimeOfDay = ({
   events = [],
   inputKey,
   inputLabel,
   width,
-}: NominalByTimeOfDayProps) => {
+}: PlotNominalByTimeOfDayProps) => {
   if (events.length < 2 || !width) return null;
   const domain = Array.from({ length: 24 }).map((_, i) => i);
   const ticks = [];
@@ -78,4 +78,4 @@ const NominalByTimeOfDay = ({
   );
 };
 
-export default NominalByTimeOfDay;
+export default PlotNominalByTimeOfDay;

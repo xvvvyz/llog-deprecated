@@ -40,8 +40,18 @@
     @apply inline;
   }
 
+  /* hack to style observable plot titles */
+  figure[class^='plot-'] h2 {
+    @apply smallcaps;
+  }
+
+  /* hack to style observable plot charts */
+  figure[class^='plot-'] svg {
+    @apply overflow-visible bg-transparent font-mono text-fg-2;
+  }
+
   /* hack to style observable plot tooltips */
-  [aria-label='tip'] {
+  figure[class^='plot-'] svg [aria-label='tip'] {
     @apply fill-bg-3 stroke-0 text-fg-1;
   }
 }

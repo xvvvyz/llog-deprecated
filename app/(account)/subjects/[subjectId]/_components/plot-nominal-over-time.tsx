@@ -1,9 +1,9 @@
 'use client';
 
 import PlotFigure from '@/(account)/subjects/[subjectId]/_components/plot-figure';
-import { axisY, lineY, pointerX, tip } from '@observablehq/plot';
+import { axisY, dot, pointer, tip } from '@observablehq/plot';
 
-interface QuantitativeOverTimeProps {
+interface PlotNominalOverTimeProps {
   channels: Record<string, string>;
   events?: Array<Record<string, unknown>>;
   inputKey: string;
@@ -11,33 +11,33 @@ interface QuantitativeOverTimeProps {
   width?: number;
 }
 
-const QuantitativeOverTime = ({
+const PlotNominalOverTime = ({
   channels,
   events = [],
   inputKey,
   inputLabel,
   width,
-}: QuantitativeOverTimeProps) => {
+}: PlotNominalOverTimeProps) => {
   if (events.length < 2) return null;
 
   return (
     <PlotFigure
       options={{
-        marginLeft: 40,
         marks: [
           axisY({
             label: null,
-            lineWidth: 8,
+            lineWidth: 10,
             textOverflow: 'ellipsis',
             tickSize: 0,
           }),
-          lineY(events, {
+          dot(events, {
+            fill: 'currentColor',
             x: (d) => new Date(d.Time),
             y: inputKey,
           }),
           tip(
             events,
-            pointerX({
+            pointer({
               channels,
               lineWidth: 50,
               x: (d) => new Date(d.Time),
@@ -54,4 +54,4 @@ const QuantitativeOverTime = ({
   );
 };
 
-export default QuantitativeOverTime;
+export default PlotNominalOverTime;

@@ -1,6 +1,6 @@
 'use client';
 
-import Charts from '@/(account)/subjects/[subjectId]/_components/charts';
+import Plots from '@/(account)/subjects/[subjectId]/_components/plots';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import { Dialog } from '@headlessui/react';
@@ -35,7 +35,7 @@ const InsightsModalButton = ({ subjectId }: InsightsModalButtonProps) => {
                 onClick={() => toggleModal(false)}
               />
             </div>
-            <Charts subjectId={subjectId} />
+            <Plots subjectId={subjectId} />
           </Dialog.Panel>
         </div>
       </Dialog>
