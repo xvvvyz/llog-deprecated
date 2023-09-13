@@ -5,7 +5,7 @@ const listTemplates = async () =>
   createServerComponentClient()
     .from('templates')
     .select('id, name')
-    .match({ team_id: await getCurrentTeamId() })
+    .match({ team_id: (await getCurrentTeamId()) ?? '' })
     .order('name');
 
 export type ListTemplatesData = Awaited<

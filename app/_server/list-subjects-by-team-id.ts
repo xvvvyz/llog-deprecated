@@ -5,7 +5,7 @@ const listSubjectsByTeamId = async () =>
   createServerComponentClient()
     .from('subjects')
     .select('id, image_uri, name, team_id')
-    .eq('team_id', await getCurrentTeamId())
+    .eq('team_id', (await getCurrentTeamId()) ?? '')
     .eq('deleted', false)
     .order('name');
 

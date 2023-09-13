@@ -6,7 +6,7 @@ const listInputs = async () =>
   createServerComponentClient()
     .from('inputs')
     .select('id, label, subjects(id, image_uri, name), type')
-    .eq('team_id', await getCurrentTeamId())
+    .eq('team_id', (await getCurrentTeamId()) ?? '')
     .eq('archived', false)
     .eq('subjects.deleted', false)
     .order('name', { foreignTable: 'subjects' })
