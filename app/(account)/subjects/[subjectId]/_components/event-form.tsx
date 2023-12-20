@@ -25,6 +25,7 @@ import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;
+  disabled: boolean;
   event?: GetEventData | GetSessionWithDetailsData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
@@ -72,6 +73,7 @@ interface EventFormValues {
 
 const EventForm = ({
   className,
+  disabled,
   event,
   eventType,
   isMission,
@@ -438,6 +440,7 @@ const EventForm = ({
       <Button
         className="mt-8 w-full"
         colorScheme={event ? 'transparent' : 'accent'}
+        disabled={disabled}
         loading={form.formState.isSubmitting || isRedirecting}
         loadingText="Saving…"
         type="submit"

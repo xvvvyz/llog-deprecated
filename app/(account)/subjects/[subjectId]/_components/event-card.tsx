@@ -12,6 +12,7 @@ import EventForm from './event-form';
 
 interface EventCardProps {
   className?: string;
+  disabled: boolean;
   event?: GetEventData | GetSessionWithDetailsData['modules'][0]['event'][0];
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
@@ -26,6 +27,7 @@ interface EventCardProps {
 
 const EventCard = ({
   className,
+  disabled,
   event,
   eventType,
   hideContent,
@@ -38,7 +40,9 @@ const EventCard = ({
   const showDescription = !hideContent && !!eventType.content;
 
   return (
-    <div className={twMerge('form gap-0 p-0', className)}>
+    <div
+      className={twMerge('form gap-0 p-0', disabled && 'disabled', className)}
+    >
       {event && (
         <div
           className={twMerge(
@@ -75,6 +79,7 @@ const EventCard = ({
           !showModule && !showDescription && !event && 'sm:rounded-t',
           !event && 'sm:rounded-b',
         )}
+        disabled={disabled}
         event={event}
         eventType={eventType}
         isMission={!!mission}

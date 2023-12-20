@@ -91,11 +91,13 @@ const Page = async ({
               {session.title}
             </p>
           )}
-          {forceArray(session.modules).map((module) => {
+          {forceArray(session.modules).map((module, i) => {
             const event = firstIfArray(module.event);
+            const previousModule = forceArray(session.modules)[i - 1];
 
             return (
               <EventCard
+                disabled={!!previousModule && !previousModule.event.length}
                 event={event}
                 eventType={module}
                 isTeamMember={isTeamMember}
