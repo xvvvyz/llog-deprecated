@@ -1,6 +1,7 @@
 'use client';
 
 import Spinner from '@/_components/spinner';
+import Tooltip from '@/_components/tooltip';
 import forceArray from '@/_utilities/force-array';
 import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
@@ -23,7 +24,6 @@ import ReactSelect, {
   SingleValueProps,
 } from 'react-select';
 
-import Tooltip from '@/_components/tooltip';
 import {
   ChevronUpDownIcon,
   PlusIcon,

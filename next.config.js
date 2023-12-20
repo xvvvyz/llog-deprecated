@@ -3,9 +3,6 @@ const nextConfig = {
   eslint: {
     dirs: ['app'],
   },
-  experimental: {
-    serverActions: true,
-  },
   images: {
     remotePatterns: [
       {

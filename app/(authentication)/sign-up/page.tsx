@@ -1,8 +1,9 @@
 import SignUpForm from '@/(authentication)/sign-up/_components/sign-up-form';
-import Button from '@/_components/button';
+import ForwardSearchParamsLink from '@/_components/forward-search-params-link';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Sign up',
@@ -49,9 +50,11 @@ const Page = ({ searchParams }: PageProps) => {
       </div>
       <p className="flex gap-4">
         <span className="text-fg-4">Have an account?</span>
-        <Button forwardSearchParams href="/sign-in" variant="link">
-          Sign in
-        </Button>
+        <Suspense fallback={null}>
+          <ForwardSearchParamsLink href="/sign-in">
+            Sign in
+          </ForwardSearchParamsLink>
+        </Suspense>
       </p>
     </>
   );

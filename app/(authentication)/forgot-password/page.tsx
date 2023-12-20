@@ -1,8 +1,9 @@
 import ForgotPasswordForm from '@/(authentication)/forgot-password/_components/forgot-password-form';
-import Button from '@/_components/button';
+import ForwardSearchParamsLink from '@/_components/forward-search-params-link';
 import createServerActionClient from '@/_server/create-server-action-client';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Forgot password',
@@ -35,9 +36,11 @@ const Page = () => {
         </p>
         <ForgotPasswordForm action={action} />
       </div>
-      <Button forwardSearchParams href="/sign-in" variant="link">
-        Return to sign in
-      </Button>
+      <Suspense fallback={null}>
+        <ForwardSearchParamsLink href="/sign-in">
+          Return to sign in
+        </ForwardSearchParamsLink>
+      </Suspense>
     </>
   );
 };

@@ -364,41 +364,61 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
       {type === InputTypes.Number && (
         <>
           <fieldset className="flex gap-6">
-            <NumberInput
-              forceValue
-              id="settings-min-fraction-digits"
-              label="Min fraction digits"
-              max={maxFractionDigits}
-              min={0}
-              {...form.register('settings.minFractionDigits')}
+            <Controller
+              control={form.control}
+              name="settings.minFractionDigits"
+              render={({ field }) => (
+                <NumberInput
+                  label="Min fraction digits"
+                  max={maxFractionDigits}
+                  min={0}
+                  required
+                  {...field}
+                />
+              )}
             />
-            <NumberInput
-              forceValue
-              id="settings-max-fraction-digits"
-              label="Max fraction digits"
-              max={6}
-              min={minFractionDigits ?? 0}
-              {...form.register('settings.maxFractionDigits')}
+            <Controller
+              control={form.control}
+              name="settings.maxFractionDigits"
+              render={({ field }) => (
+                <NumberInput
+                  label="Max fraction digits"
+                  max={6}
+                  min={minFractionDigits ?? 0}
+                  required
+                  {...field}
+                />
+              )}
             />
           </fieldset>
           <fieldset className="flex gap-6">
-            <NumberInput
-              forceValue
-              id="settings-min"
-              label="Min value"
-              max={form.watch('settings.max')}
-              maxFractionDigits={maxFractionDigits}
-              minFractionDigits={minFractionDigits}
-              {...form.register('settings.min')}
+            <Controller
+              control={form.control}
+              name="settings.min"
+              render={({ field }) => (
+                <NumberInput
+                  label="Min value"
+                  max={form.watch('settings.max')}
+                  maxFractionDigits={maxFractionDigits}
+                  minFractionDigits={minFractionDigits}
+                  required
+                  {...field}
+                />
+              )}
             />
-            <NumberInput
-              forceValue
-              id="settings-max"
-              label="Max value"
-              maxFractionDigits={maxFractionDigits}
-              min={form.watch('settings.min')}
-              minFractionDigits={minFractionDigits}
-              {...form.register('settings.max')}
+            <Controller
+              control={form.control}
+              name="settings.max"
+              render={({ field }) => (
+                <NumberInput
+                  label="Max value"
+                  maxFractionDigits={maxFractionDigits}
+                  min={form.watch('settings.min')}
+                  minFractionDigits={minFractionDigits}
+                  required
+                  {...field}
+                />
+              )}
             />
           </fieldset>
         </>

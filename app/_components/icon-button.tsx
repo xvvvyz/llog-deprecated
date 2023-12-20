@@ -3,7 +3,7 @@
 import Button, { ButtonProps } from '@/_components/button';
 import Spinner from '@/_components/spinner';
 import { ReactNode } from 'react';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 
 interface IconButtonProps extends ButtonProps {
   icon: ReactNode;

@@ -1,19 +1,17 @@
-import Input from '@/_components/input';
+import { NumberInput as ArkNumberInput } from '@ark-ui/react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import * as numberInput from '@zag-js/number-input';
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react';
 import { InputHTMLAttributes, ReactNode, Ref, forwardRef } from 'react';
-import IconButton from './icon-button';
 
-interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  forceValue?: boolean;
-  id: string;
+interface NumberInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  id?: string;
   label?: string;
   max?: number | string;
   maxFractionDigits?: number | string;
   min?: number | string;
   minFractionDigits?: number | string;
   name: string;
+  onChange?: (value: number) => void;
   right?: ReactNode;
   value?: string;
 }
@@ -21,7 +19,6 @@ interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
 const NumberInput = forwardRef(
   (
     {
-      forceValue,
       id,
       label,
       max = Number.MAX_SAFE_INTEGER,
@@ -35,59 +32,39 @@ const NumberInput = forwardRef(
       value,
     }: NumberInputProps,
     ref: Ref<HTMLInputElement>,
-  ) => {
-    const [state, send] = useMachine(
-      numberInput.machine({
-        id,
-        name,
-        value,
-      }),
-      {
-        context: {
-          focusInputOnChange: false,
-          format: (value) => (forceValue && !value ? '0' : value),
-          max: Number(max),
-          maxFractionDigits: Number(maxFractionDigits),
-          min: Number(min),
-          minFractionDigits: Number(minFractionDigits),
-        },
-      },
-    );
-
-    const api = numberInput.connect(state, send, normalizeProps);
-
-    return (
-      <div {...api.rootProps} className="group">
-        {label && (
-          <label {...api.labelProps} className="label">
-            {label}
-          </label>
-        )}
-        <div className="flex">
-          <IconButton
-            {...api.decrementTriggerProps}
-            className="rounded-r-none px-3"
-            colorScheme="transparent"
-            icon={<MinusIcon className="w-5" />}
-            variant="primary"
-          />
-          <Input
-            {...mergeProps(api.inputProps, { onBlur, onChange })}
-            className="rounded-none border-x-0 px-0 text-center"
-            placeholder={placeholder}
-            ref={ref}
-          />
-          <IconButton
-            {...api.incrementTriggerProps}
-            className="rounded-l-none px-3"
-            colorScheme="transparent"
-            icon={<PlusIcon className="w-5" />}
-            variant="primary"
-          />
-        </div>
-      </div>
-    );
-  },
+  ) => (
+    <ArkNumberInput.Root
+      className="relative"
+      defaultValue={value}
+      formatOptions={{
+        maximumFractionDigits: Number(maxFractionDigits),
+        minimumFractionDigits: Number(minFractionDigits),
+      }}
+      id={id ?? name}
+      max={Number(max)}
+      min={Number(min)}
+      name={name}
+      onBlurCapture={onBlur}
+      onValueChange={({ valueAsNumber }) => onChange?.(valueAsNumber)}
+      value={value}
+    >
+      <ArkNumberInput.Label className="label">{label}</ArkNumberInput.Label>
+      <ArkNumberInput.Control className="flex">
+        <ArkNumberInput.DecrementTrigger className="disabled:disabled cursor-pointer rounded-l border border-alpha-3 p-3 text-fg-3 outline-none transition-colors hover:bg-alpha-1 hover:text-fg-2">
+          <MinusIcon className="w-5" />
+        </ArkNumberInput.DecrementTrigger>
+        <ArkNumberInput.Input
+          autoComplete="off"
+          className="input rounded-none border-x-0 px-0 text-center"
+          placeholder={placeholder}
+          ref={ref}
+        />
+        <ArkNumberInput.IncrementTrigger className="disabled:disabled cursor-pointer rounded-r border border-alpha-3 p-3 text-fg-3 outline-none transition-colors hover:bg-alpha-1 hover:text-fg-2">
+          <PlusIcon className="w-5" />
+        </ArkNumberInput.IncrementTrigger>
+      </ArkNumberInput.Control>
+    </ArkNumberInput.Root>
+  ),
 );
 
 NumberInput.displayName = 'NumberInput';

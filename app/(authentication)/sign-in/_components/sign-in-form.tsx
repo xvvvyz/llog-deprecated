@@ -1,7 +1,9 @@
 'use client';
 
 import Button from '@/_components/button';
+import ForwardSearchParamsLink from '@/_components/forward-search-params-link';
 import Input from '@/_components/input';
+import { Suspense } from 'react';
 
 interface SignInFormProps {
   action: (values: FormData) => Promise<{ error?: string }>;
@@ -24,14 +26,12 @@ const SignInForm = ({ action }: SignInFormProps) => (
         required
         type="password"
       />
-      <Button
-        className="absolute right-2 top-0"
-        forwardSearchParams
-        href="/forgot-password"
-        variant="link"
-      >
-        Forgot your password?
-      </Button>
+      <Suspense fallback={null}>
+        <ForwardSearchParamsLink
+          className="absolute right-2 top-0"
+          href="/forgot-password"
+        />
+      </Suspense>
     </div>
     <Button className="mt-8 w-full" loadingText="Signing in…" type="submit">
       Sign in

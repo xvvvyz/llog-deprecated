@@ -393,11 +393,19 @@ const EventForm = ({
               </fieldset>
             )}
             {input.type === InputTypes.Number && (
-              <NumberInput
-                id={id}
-                label={input.label}
-                {...input.settings}
-                {...form.register(`inputs.${i}`)}
+              <Controller
+                control={form.control}
+                name={`inputs.${i}`}
+                render={({ field }) => (
+                  <NumberInput
+                    label={input.label}
+                    name={field.name}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                    value={field.value}
+                    {...input.settings}
+                  />
+                )}
               />
             )}
             {(input.type === InputTypes.MultiSelect ||
@@ -437,8 +445,8 @@ const EventForm = ({
         {event
           ? 'Save inputs'
           : isMission
-          ? 'Mark as complete'
-          : 'Record event'}
+            ? 'Mark as complete'
+            : 'Record event'}
       </Button>
     </form>
   );
