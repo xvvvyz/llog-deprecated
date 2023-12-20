@@ -107,9 +107,6 @@ dependencies:
   '@vercel/analytics':
     specifier: ^1.1.1
     version: 1.1.1
-  '@zag-js/number-input':
-    specifier: ^0.31.1
-    version: 0.31.1
   '@zag-js/react':
     specifier: 0.31.1
     version: 0.31.1(react-dom@18.2.0)(react@18.2.0)
