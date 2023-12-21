@@ -45,7 +45,7 @@ const NumberInput = forwardRef(
       min={Number(min)}
       name={name}
       onBlurCapture={onBlur}
-      onValueChange={({ valueAsNumber }) => onChange?.(valueAsNumber)}
+      onValueChange={({ valueAsNumber }) => onChange?.(valueAsNumber || 0)}
       value={value}
     >
       <ArkNumberInput.Label className="label">{label}</ArkNumberInput.Label>
