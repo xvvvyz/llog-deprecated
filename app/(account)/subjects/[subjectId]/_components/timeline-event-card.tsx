@@ -11,6 +11,7 @@ import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import formatInputValue from '@/_utilities/format-input-value';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface TimelineEventCardProps {
@@ -26,6 +27,8 @@ const TimelineEventCard = ({
   subjectId,
   userId,
 }: TimelineEventCardProps) => {
+  const compressLast = useRef(false);
+  const compressStart = useRef<number | null>(null);
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
   const lastEventProfile = firstIfArray(lastEvent.profile);
@@ -75,10 +78,30 @@ const TimelineEventCard = ({
           lastEventType.session && 'border-t border-alpha-1',
         )}
       >
-        {group.map((event) => {
+        {group.map((event, i) => {
           const moduleNumber = firstIfArray(event.type).order + 1;
           const comments = forceArray(event.comments);
           const inputs = forceArray(event.inputs);
+          const profile = firstIfArray(event.profile);
+          const nextEvent = group[i + 1];
+
+          if (compressLast.current) {
+            compressLast.current = false;
+            compressStart.current = null;
+          }
+
+          if (
+            !comments.length &&
+            !inputs.length &&
+            nextEvent?.profile?.id === profile.id &&
+            !forceArray(nextEvent?.comments).length &&
+            !forceArray(nextEvent?.inputs).length
+          ) {
+            if (!compressStart.current) compressStart.current = moduleNumber;
+            return null;
+          } else {
+            compressLast.current = !!compressStart.current;
+          }
 
           return (
             <li key={event.id}>
@@ -86,14 +109,17 @@ const TimelineEventCard = ({
                 <div className="smallcaps flex items-center justify-between px-4 py-3">
                   <div className="flex items-center gap-4">
                     <span className="font-mono text-base leading-none">
+                      {compressLast.current && (
+                        <>{compressStart.current}&nbsp;&ndash;&nbsp;</>
+                      )}
                       {moduleNumber}
                     </span>
                     <Avatar
                       className="-my-[0.15rem]"
-                      name={firstIfArray(event.profile).first_name}
+                      name={profile.first_name}
                       size="xs"
                     />
-                    {lastEventProfile.first_name} {lastEventProfile.last_name}{' '}
+                    {profile.first_name} {profile.last_name}{' '}
                   </div>
                   <DateTime date={event.created_at} formatter="time" />
                 </div>
