@@ -52,6 +52,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
         />
       </div>
       <EventCard
+        disabled={false}
         eventType={eventType}
         isTeamMember={subject.team_id === teamId}
         subjectId={subjectId}
