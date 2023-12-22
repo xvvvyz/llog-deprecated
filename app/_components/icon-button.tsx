@@ -4,6 +4,7 @@ import Button, { ButtonProps } from '@/_components/button';
 import Spinner from '@/_components/spinner';
 import { ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
+import { twMerge } from 'tailwind-merge';
 
 interface IconButtonProps extends ButtonProps {
   icon: ReactNode;
@@ -12,6 +13,7 @@ interface IconButtonProps extends ButtonProps {
 }
 
 const IconButton = ({
+  className,
   icon,
   label,
   loading,
@@ -22,7 +24,12 @@ const IconButton = ({
   const { pending } = useFormStatus();
 
   return (
-    <Button disabled={loading || pending} variant="link" {...props}>
+    <Button
+      className={twMerge('print:hidden', className)}
+      disabled={loading || pending}
+      variant="link"
+      {...props}
+    >
       {loading || pending ? (
         <Spinner className={spinnerClassName} loadingText={loadingText} />
       ) : (

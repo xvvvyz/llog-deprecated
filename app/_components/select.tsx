@@ -278,6 +278,7 @@ const Select = <TOption extends IOption>(
     isLoading,
     label,
     name,
+    options,
     placeholder,
     tooltip,
     ...props
@@ -312,6 +313,7 @@ const Select = <TOption extends IOption>(
     name,
     noOptionsMessage: () =>
       isCreatable ? 'Type to create an option' : 'No options',
+    options,
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,
     ...props,
@@ -333,11 +335,21 @@ const Select = <TOption extends IOption>(
           />
         )}
       </div>
-      {isCreatable ? (
-        <Creatable ref={ref} {...commonProps} />
-      ) : (
-        <ReactSelect ref={ref} {...commonProps} />
-      )}
+      <div className="hidden px-4 print:block">
+        {options?.map((option, i) => (
+          <span key={option.label}>
+            {option.label}
+            {i < options.length - 1 && ', '}
+          </span>
+        ))}
+      </div>
+      <div className="print:hidden">
+        {isCreatable ? (
+          <Creatable ref={ref} {...commonProps} />
+        ) : (
+          <ReactSelect ref={ref} {...commonProps} />
+        )}
+      </div>
     </div>
   );
 };

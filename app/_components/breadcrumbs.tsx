@@ -26,7 +26,9 @@ const Breadcrumbs = ({ className, items }: BreadcrumbProps) => {
             key={label}
             variant="link"
           >
-            <div className="max-w-[10rem] truncate">{label}</div>
+            <div className="max-w-[10rem] truncate print:max-w-none">
+              {label}
+            </div>
           </Button>
         ))
       )}

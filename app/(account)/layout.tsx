@@ -15,8 +15,8 @@ const Layout = async ({ children }: LayoutProps) => {
   const { count } = await countNotifications();
 
   return (
-    <div className="mx-auto max-w-lg pb-20">
-      <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8 leading-none text-fg-3">
+    <div className="mx-auto max-w-lg pb-20 print:max-w-xl">
+      <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8 leading-none text-fg-3 print:hidden">
         <div className="flex flex-wrap gap-4">
           <Button activeClassName="text-fg-2" href="/subjects" variant="link">
             Subjects

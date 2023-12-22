@@ -160,7 +160,7 @@ const EventForm = ({
 
   return (
     <form
-      className={twMerge('flex flex-col gap-6', className)}
+      className={twMerge('flex flex-col gap-6 print:gap-0', className)}
       onSubmit={form.handleSubmit(
         async ({ comment, completionTime, id, inputs }) => {
           const { data: eventData, error: eventError } = await supabase
@@ -330,7 +330,7 @@ const EventForm = ({
             {input.type === InputTypes.Duration && (
               <fieldset>
                 <legend className="label">{input.label}</legend>
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-3 print:hidden">
                   <Controller
                     control={form.control}
                     name={`inputs.${i}.0`}
@@ -438,7 +438,7 @@ const EventForm = ({
         />
       )}
       <Button
-        className="mt-8 w-full"
+        className="mt-8 w-full print:hidden"
         colorScheme={event ? 'transparent' : 'accent'}
         disabled={disabled}
         loading={form.formState.isSubmitting || isRedirecting}

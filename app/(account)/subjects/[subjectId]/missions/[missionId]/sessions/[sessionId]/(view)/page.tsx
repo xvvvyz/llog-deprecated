@@ -87,7 +87,7 @@ const Page = async ({
       ) : (
         <>
           {session.title && (
-            <p className="mx-auto -mt-4 max-w-sm px-4 pb-8 text-center">
+            <p className="mx-auto -mt-4 max-w-sm px-4 pb-8 text-center print:hidden">
               {session.title}
             </p>
           )}

@@ -46,7 +46,7 @@ const EventCard = ({
       {event && (
         <div
           className={twMerge(
-            'smallcaps flex items-center gap-4 whitespace-nowrap px-4 pt-4 sm:rounded-t sm:px-8',
+            'smallcaps flex items-center gap-4 whitespace-nowrap px-4 pt-4 print:hidden sm:rounded-t sm:px-8',
             !showModule && !showDescription && 'border-b border-alpha-1 pb-4',
           )}
         >
@@ -60,7 +60,7 @@ const EventCard = ({
         </div>
       )}
       {(showModule || showDescription) && (
-        <div className="flex flex-col gap-8 border-b border-alpha-1 py-8">
+        <div className="flex flex-col gap-8 border-b border-alpha-1 py-8 print:pb-0 print:pt-12">
           {showModule && (
             <div className="px-4 font-mono text-fg-4 sm:px-8">
               Module {(eventType.order as number) + 1}
@@ -75,7 +75,7 @@ const EventCard = ({
       )}
       <EventForm
         className={twMerge(
-          'bg-alpha-reverse-1 px-4 py-8 sm:px-8',
+          'bg-alpha-reverse-1 px-4 py-8 print:-mx-4 print:py-0 sm:px-8',
           !showModule && !showDescription && !event && 'sm:rounded-t',
           !event && 'sm:rounded-b',
         )}
@@ -86,7 +86,7 @@ const EventCard = ({
         subjectId={subjectId}
       />
       {event && (
-        <div className="space-y-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
+        <div className="space-y-8 border-t border-alpha-1 px-4 py-8 print:hidden sm:px-8">
           <EventComments
             comments={forceArray(event.comments)}
             isTeamMember={isTeamMember}
