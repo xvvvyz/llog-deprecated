@@ -11,9 +11,7 @@ const ForwardSearchParamsLink = ({ href, ...rest }: ButtonProps) => {
       href={`${href}?${searchParams.toString()}`}
       variant="link"
       {...rest}
-    >
-      Forgot your password?
-    </Button>
+    />
   );
 };
 
