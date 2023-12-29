@@ -6,7 +6,9 @@ const sanitizeHtml = (html?: string | null) =>
         whiteList: {
           a: ['href', 'target'],
           br: [],
+          div: ['data-youtube-video'],
           em: [],
+          iframe: ['modestbranding', 'src'],
           li: [],
           ol: [],
           p: [],

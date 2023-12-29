@@ -4,12 +4,13 @@ import Breadcrumbs from '@/_components/breadcrumbs';
 import getEventTypeWithInputs from '@/_server/get-event-type-with-inputs';
 import getSubject from '@/_server/get-subject';
 import listInputs, { ListInputsData } from '@/_server/list-inputs';
+import filterListInputsDataBySubjectId from '@/_utilities/filter-list-inputs-data-by-subject-id';
+import formatTitle from '@/_utilities/format-title';
+
 import {
   default as listTemplatesWithData,
   ListTemplatesWithDataData,
 } from '@/_server/list-templates-with-data';
-import filterListInputsDataBySubjectId from '@/_utilities/filter-list-inputs-data-by-subject-id';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {

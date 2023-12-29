@@ -1,5 +1,6 @@
 'use client';
 
+import Tooltip from '@/_components/tooltip';
 import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
@@ -13,6 +14,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import Typography from '@tiptap/extension-typography';
 import Underline from '@tiptap/extension-underline';
+import Youtube from '@tiptap/extension-youtube';
 import { twMerge } from 'tailwind-merge';
 import DirtyHtml from './dirty-html';
 
@@ -25,7 +27,6 @@ import {
   useEditor,
 } from '@tiptap/react';
 
-import Tooltip from '@/_components/tooltip';
 import {
   ChangeEvent,
   forwardRef,
@@ -113,6 +114,7 @@ const RichTextarea = (
       Text,
       Typography,
       Underline,
+      Youtube.configure({ modestBranding: true }),
       Extension.create({
         addKeyboardShortcuts() {
           const handleEnter: KeyboardShortcutCommand = ({ editor }) => {
