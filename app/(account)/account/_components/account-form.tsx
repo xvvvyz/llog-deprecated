@@ -17,6 +17,7 @@ interface AccountFormProps {
 type AccountFormValues = Database['public']['Tables']['profiles']['Row'] &
   User & {
     avatar?: File | string | null;
+    password: string;
   };
 
 const AccountForm = ({ user }: AccountFormProps) => {
@@ -37,20 +38,27 @@ const AccountForm = ({ user }: AccountFormProps) => {
       first_name: user?.user_metadata?.first_name,
       id: user?.id,
       last_name: user?.user_metadata?.last_name,
+      password: '',
     },
   });
 
   return (
     <form
-      className="form"
+      className="form block p-0"
       onSubmit={form.handleSubmit(async (values) => {
-        await supabase.auth.updateUser({
+        const { error } = await supabase.auth.updateUser({
           data: {
             first_name: values.first_name,
             last_name: values.last_name,
           },
           email: values.email,
+          password: values.password || undefined,
         });
+
+        if (error) {
+          alert(error?.message);
+          return;
+        }
 
         if (values.avatar instanceof File) {
           await supabase.storage
@@ -61,35 +69,48 @@ const AccountForm = ({ user }: AccountFormProps) => {
         router.refresh();
       })}
     >
-      <div className="flex gap-6">
-        <Input label="First name" required {...form.register('first_name')} />
-        <Input label="Last name" required {...form.register('last_name')} />
+      <div className="form rounded-none border-0 bg-transparent">
+        <div className="flex gap-6">
+          <Input label="First name" required {...form.register('first_name')} />
+          <Input label="Last name" required {...form.register('last_name')} />
+        </div>
+        <label className="group">
+          <span className="label">Profile image</span>
+          <AvatarDropzone dropzone={dropzone} form={form} />
+        </label>
       </div>
-      <div>
+      <div className="form rounded-none border-x-0 bg-transparent">
+        <div>
+          <Input
+            label="Email address"
+            required
+            type="email"
+            {...form.register('email')}
+          />
+          {user.new_email && (
+            <p className="mt-2 px-4 text-sm text-fg-4">
+              Email change confirmation sent to: {user.new_email}
+            </p>
+          )}
+        </div>
         <Input
-          label="Email address"
-          required
-          type="email"
-          {...form.register('email')}
+          label="New password"
+          minLength={6}
+          placeholder="••••••••••••"
+          type="password"
+          {...form.register('password')}
         />
-        {user.new_email && (
-          <p className="mt-2 px-4 text-sm text-fg-4">
-            Email change confirmation sent to: {user.new_email}
-          </p>
-        )}
       </div>
-      <label className="group">
-        <span className="label">Profile image</span>
-        <AvatarDropzone dropzone={dropzone} form={form} />
-      </label>
-      <Button
-        className="mb-4 mt-8 w-full"
-        loading={form.formState.isSubmitting}
-        loadingText="Saving…"
-        type="submit"
-      >
-        Save account settings
-      </Button>
+      <div className="form rounded-none border-0 bg-transparent">
+        <Button
+          className="w-full"
+          loading={form.formState.isSubmitting}
+          loadingText="Saving…"
+          type="submit"
+        >
+          Save account settings
+        </Button>
+      </div>
     </form>
   );
 };

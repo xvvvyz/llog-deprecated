@@ -22,8 +22,8 @@ export const middleware = async (req: NextRequest) => {
   }
 
   if (
-    ['/api', '/inputs', '/notifications', '/subjects', '/templates'].some((p) =>
-      req.nextUrl.pathname.startsWith(p),
+    ['/account', '/inputs', '/notifications', '/subjects', '/templates'].some(
+      (p) => req.nextUrl.pathname.startsWith(p),
     ) &&
     !session.data.session
   ) {
