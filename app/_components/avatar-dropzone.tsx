@@ -17,7 +17,9 @@ const AvatarDropzone = <T extends FieldValues>({
   >
     <Avatar
       file={form.watch('avatar' as T[string])}
-      name={form.watch('name' as T[string])}
+      name={
+        form.watch('name' as T[string]) ?? form.watch('first_name' as T[string])
+      }
     />
     <p>
       Drag image here or{' '}

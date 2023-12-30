@@ -5,6 +5,7 @@ import { GetEventTypeWithInputsAndOptionsData } from '@/_server/get-event-type-w
 import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
 import { GetSessionWithDetailsData } from '@/_server/get-session-with-details';
 import forceArray from '@/_utilities/force-array';
+import { User } from '@supabase/gotrue-js';
 import { twMerge } from 'tailwind-merge';
 import EventCommentForm from './event-comment-form';
 import EventComments from './event-comments';
@@ -22,7 +23,7 @@ interface EventCardProps {
   isTeamMember: boolean;
   mission?: GetMissionWithSessionsData | GetEventData['type']['mission'];
   subjectId: string;
-  userId: string;
+  user: User;
 }
 
 const EventCard = ({
@@ -34,7 +35,7 @@ const EventCard = ({
   isTeamMember,
   mission,
   subjectId,
-  userId,
+  user,
 }: EventCardProps) => {
   const showModule = mission && typeof eventType.order === 'number';
   const showDescription = !hideContent && !!eventType.content;
@@ -52,6 +53,7 @@ const EventCard = ({
         >
           <Avatar
             className="-my-[0.15rem]"
+            file={event.profile.image_uri}
             name={event.profile.first_name}
             size="xs"
           />
@@ -90,7 +92,7 @@ const EventCard = ({
           <EventComments
             comments={forceArray(event.comments)}
             isTeamMember={isTeamMember}
-            userId={userId}
+            userId={user.id}
           />
           <EventCommentForm eventId={event.id} />
         </div>

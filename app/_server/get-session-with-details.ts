@@ -15,12 +15,12 @@ const getSessionWithDetails = (sessionId: string) =>
             content,
             created_at,
             id,
-            profile:profiles(first_name, id, last_name)
+            profile:profiles(first_name, id, image_uri, last_name)
           ),
           created_at,
           id,
           inputs:event_inputs(id, input_id, input_option_id, value),
-          profile:profiles(first_name, id, last_name)
+          profile:profiles(first_name, id, image_uri, last_name)
         ),
         id,
         inputs:event_type_inputs(
@@ -40,10 +40,10 @@ const getSessionWithDetails = (sessionId: string) =>
     )
     .eq('id', sessionId)
     .eq('modules.archived', false)
-    .order('order', { foreignTable: 'modules' })
-    .order('order', { foreignTable: 'modules.event.inputs' })
-    .order('order', { foreignTable: 'modules.inputs' })
-    .order('order', { foreignTable: 'modules.inputs.input.options' })
+    .order('order', { referencedTable: 'modules' })
+    .order('order', { referencedTable: 'modules.event.inputs' })
+    .order('order', { referencedTable: 'modules.inputs' })
+    .order('order', { referencedTable: 'modules.inputs.input.options' })
     .single();
 
 export type GetSessionWithDetailsData = Awaited<
@@ -66,7 +66,7 @@ export type GetSessionWithDetailsData = Awaited<
             > & {
               profile: Pick<
                 Database['public']['Tables']['profiles']['Row'],
-                'first_name' | 'id' | 'last_name'
+                'first_name' | 'id' | 'image_uri' | 'last_name'
               >;
             }
           >;
@@ -78,7 +78,7 @@ export type GetSessionWithDetailsData = Awaited<
           >;
           profile: Pick<
             Database['public']['Tables']['profiles']['Row'],
-            'first_name' | 'id' | 'last_name'
+            'first_name' | 'id' | 'image_uri' | 'last_name'
           >;
         }
       >;

@@ -66,7 +66,11 @@ const EventComment = ({
           }
         }}
       />
-      <Avatar className="mt-0.5" name={profile.first_name} />
+      <Avatar
+        className="mt-0.5"
+        file={profile.image_uri}
+        name={profile.first_name}
+      />
       <div className="flex-1">
         <div className="flex h-5 w-full justify-between gap-2">
           <div className="smallcaps flex w-full gap-2">

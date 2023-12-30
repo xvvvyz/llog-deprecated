@@ -10,7 +10,7 @@ const listEvents = (subjectId: string) =>
         content,
         created_at,
         id,
-        profile:profiles(first_name, id, last_name)
+        profile:profiles(first_name, id, image_uri, last_name)
       ),
       created_at,
       id,
@@ -19,7 +19,7 @@ const listEvents = (subjectId: string) =>
         option:input_options(id, label),
         value
       ),
-      profile:profiles(first_name, id, last_name),
+      profile:profiles(first_name, id, image_uri, last_name),
       type:event_types(
         id,
         session:sessions(
@@ -33,8 +33,8 @@ const listEvents = (subjectId: string) =>
     )
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
-    .order('created_at', { foreignTable: 'comments' })
-    .order('order', { foreignTable: 'inputs' })
+    .order('created_at', { referencedTable: 'comments' })
+    .order('order', { referencedTable: 'inputs' })
     .limit(50);
 
 export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
@@ -42,7 +42,7 @@ export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
     Pick<Database['public']['Tables']['comments']['Row'], 'content' | 'id'> & {
       profile: Pick<
         Database['public']['Tables']['profiles']['Row'],
-        'first_name' | 'id' | 'last_name'
+        'first_name' | 'id' | 'image_uri' | 'last_name'
       >;
     }
   >;
@@ -60,7 +60,7 @@ export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
   >;
   profile: Pick<
     Database['public']['Tables']['profiles']['Row'],
-    'first_name' | 'id' | 'last_name'
+    'first_name' | 'id' | 'image_uri' | 'last_name'
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],

@@ -146,8 +146,7 @@ const Notifications = ({
                 {sourceEvent.type.session && (
                   <>
                     {' '}
-                    session&nbsp;{sourceEvent.type.session.order + 1}
-                    &nbsp;
+                    session&nbsp;{sourceEvent.type.session.order + 1}{' '}
                     {n.type === NotificationTypes.Comment ? (
                       <>module&nbsp;{sourceEvent.type.order + 1}</>
                     ) : (

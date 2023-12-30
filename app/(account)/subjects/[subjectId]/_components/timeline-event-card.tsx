@@ -11,6 +11,7 @@ import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import formatInputValue from '@/_utilities/format-input-value';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { User } from '@supabase/gotrue-js';
 import { useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -18,14 +19,14 @@ interface TimelineEventCardProps {
   group: ListEventsData;
   isTeamMember: boolean;
   subjectId: string;
-  userId: string;
+  user: User;
 }
 
 const TimelineEventCard = ({
   group,
   isTeamMember,
   subjectId,
-  userId,
+  user,
 }: TimelineEventCardProps) => {
   const compressLast = useRef(false);
   const compressStart = useRef<number | null>(null);
@@ -61,6 +62,7 @@ const TimelineEventCard = ({
         <div className="smallcaps flex items-center gap-4 whitespace-nowrap border-t border-alpha-1 px-4 py-3">
           <Avatar
             className="-my-[0.15rem]"
+            file={lastEventProfile.image_uri}
             name={lastEventProfile.first_name}
             size="xs"
           />
@@ -116,6 +118,7 @@ const TimelineEventCard = ({
                     </span>
                     <Avatar
                       className="-my-[0.15rem]"
+                      file={profile.image_uri}
                       name={profile.first_name}
                       size="xs"
                     />
@@ -171,7 +174,7 @@ const TimelineEventCard = ({
                   <EventComments
                     comments={comments}
                     isTeamMember={isTeamMember}
-                    userId={userId}
+                    userId={user.id}
                   />
                   <EventCommentForm
                     eventId={event.id}

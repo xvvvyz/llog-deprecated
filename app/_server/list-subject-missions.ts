@@ -9,10 +9,10 @@ const listSubjectMissions = (subjectId: string) =>
     .eq('subject_id', subjectId)
     .eq('archived', false)
     .order('name')
-    .order('order', { foreignTable: 'sessions' })
+    .order('order', { referencedTable: 'sessions' })
     .eq('sessions.draft', false)
     .or(`scheduled_for.lte.${new Date().toISOString()},scheduled_for.is.null`, {
-      foreignTable: 'sessions',
+      referencedTable: 'sessions',
     })
     .eq('sessions.modules.archived', false);
 

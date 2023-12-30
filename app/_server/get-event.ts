@@ -11,12 +11,12 @@ const getEvent = (eventId: string) =>
         content,
         created_at,
         id,
-        profile:profiles(first_name, id, last_name)
+        profile:profiles(first_name, id, image_uri, last_name)
       ),
       created_at,
       id,
       inputs:event_inputs(id, input_id, input_option_id, value),
-      profile:profiles(first_name, id, last_name),
+      profile:profiles(first_name, id, image_uri, last_name),
       type:event_types(
         content,
         id,
@@ -34,10 +34,10 @@ const getEvent = (eventId: string) =>
       )`,
     )
     .eq('id', eventId)
-    .order('created_at', { foreignTable: 'comments' })
-    .order('order', { foreignTable: 'inputs' })
-    .order('order', { foreignTable: 'type.inputs' })
-    .order('order', { foreignTable: 'type.inputs.input.options' })
+    .order('created_at', { referencedTable: 'comments' })
+    .order('order', { referencedTable: 'inputs' })
+    .order('order', { referencedTable: 'type.inputs' })
+    .order('order', { referencedTable: 'type.inputs.input.options' })
     .single();
 
 export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
@@ -45,7 +45,7 @@ export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
     Pick<Database['public']['Tables']['comments']['Row'], 'content' | 'id'> & {
       profile: Pick<
         Database['public']['Tables']['profiles']['Row'],
-        'first_name' | 'id' | 'last_name'
+        'first_name' | 'id' | 'image_uri' | 'last_name'
       >;
     }
   >;
@@ -57,7 +57,7 @@ export type GetEventData = Awaited<ReturnType<typeof getEvent>>['data'] & {
   >;
   profile: Pick<
     Database['public']['Tables']['profiles']['Row'],
-    'first_name' | 'id' | 'last_name'
+    'first_name' | 'id' | 'image_uri' | 'last_name'
   >;
   type: Pick<
     Database['public']['Tables']['event_types']['Row'],

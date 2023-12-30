@@ -24,9 +24,9 @@ const getMissionWithSessionsAndEvents = (
       )`,
     )
     .eq('id', missionId)
-    .order('order', { foreignTable: 'sessions' })
+    .order('order', { referencedTable: 'sessions' })
     .not('sessions.draft', 'is', includeDraft ? null : true)
-    .order('draft', { ascending: false, foreignTable: 'sessions' })
+    .order('draft', { ascending: false, referencedTable: 'sessions' })
     .eq('sessions.modules.archived', false)
     .single();
 

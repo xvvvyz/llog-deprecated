@@ -32,7 +32,7 @@ const listEventsFormattedWithComments = async (subjectId: string) => {
     )
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
-    .order('order', { foreignTable: 'inputs' });
+    .order('order', { referencedTable: 'inputs' });
 
   if (!events) return [];
   const json: Array<any> = [];

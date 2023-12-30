@@ -34,7 +34,7 @@ const listNotifications = async () =>
         )
       ),
       id,
-      profile:source_profile_id(first_name, last_name),
+      profile:source_profile_id(first_name, image_uri, last_name),
       read,
       subject:subjects(id, image_uri, name),
       type`,

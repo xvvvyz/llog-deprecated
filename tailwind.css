@@ -55,6 +55,7 @@
     @apply fill-bg-3 stroke-0 text-fg-1;
   }
 
+  /* hack to style tip tap youtube videos */
   div[data-youtube-video] > iframe {
     @apply aspect-video h-auto w-full rounded;
   }

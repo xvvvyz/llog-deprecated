@@ -55,7 +55,7 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
         eventType={eventType}
         isTeamMember={subject.team_id === teamId}
         subjectId={subjectId}
-        userId={user.id}
+        user={user}
       />
     </>
   );

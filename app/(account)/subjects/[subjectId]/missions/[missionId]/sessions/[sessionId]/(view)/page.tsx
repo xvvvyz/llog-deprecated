@@ -73,7 +73,7 @@ const Page = async ({
       subjectName={subject.name}
     >
       {session.scheduled_for && new Date(session.scheduled_for) > new Date() ? (
-        <Empty className="max-w-lg">
+        <Empty className="max-w-lg rounded-none border-x-0 sm:rounded sm:border-x">
           <CalendarIcon className="w-7" />
           <p>
             Scheduled for{' '}
@@ -104,7 +104,7 @@ const Page = async ({
                 key={module.id}
                 mission={mission}
                 subjectId={subjectId}
-                userId={user.id}
+                user={user}
               />
             );
           })}

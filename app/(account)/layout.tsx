@@ -1,6 +1,6 @@
+import AccountMenu from '@/_components/account-menu';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
-import SignOutButton from '@/_components/sign-out-button';
 import countNotifications from '@/_server/count-notifications';
 import getCurrentUser from '@/_server/get-current-user';
 import { BellIcon } from '@heroicons/react/24/outline';
@@ -51,7 +51,7 @@ const Layout = async ({ children }: LayoutProps) => {
               </div>
             }
           />
-          <SignOutButton />
+          <AccountMenu user={user} />
         </div>
       </nav>
       {children}

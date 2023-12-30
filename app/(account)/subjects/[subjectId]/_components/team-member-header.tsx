@@ -25,7 +25,12 @@ const TeamMemberHeader = async ({
           {!!managers?.length && (
             <div className="flex flex-wrap gap-2">
               {forceArray(managers).map(({ manager }) => (
-                <Avatar key={manager.id} name={manager.first_name} size="sm" />
+                <Avatar
+                  key={manager.id}
+                  file={manager.image_uri}
+                  name={manager.first_name}
+                  size="sm"
+                />
               ))}
             </div>
           )}

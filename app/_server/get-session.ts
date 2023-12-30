@@ -24,8 +24,8 @@ const getSession = (sessionId: string) =>
     )
     .eq('id', sessionId)
     .eq('modules.archived', false)
-    .order('order', { foreignTable: 'modules' })
-    .order('order', { foreignTable: 'modules.inputs' })
+    .order('order', { referencedTable: 'modules' })
+    .order('order', { referencedTable: 'modules.inputs' })
     .single();
 
 export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'] & {

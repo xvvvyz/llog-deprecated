@@ -66,3 +66,8 @@ Hello,<br><br>Here is the link: <a href="{{ .ConfirmationURL }}">reset your pass
 ```html
 Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your email address</a>.<br><br>If you did not sign up for llog, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
 ```
+
+<!-- prettier-ignore -->
+```html
+Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your new email address</a>.<br><br>If you did not initiate this change, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
+```

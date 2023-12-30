@@ -2,14 +2,15 @@ import TimelineEvents from '@/(account)/subjects/[subjectId]/_components/timelin
 import Empty from '@/_components/empty';
 import listEvents, { ListEventsData } from '@/_server/list-events';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { User } from '@supabase/gotrue-js';
 
 interface EventsProps {
   isTeamMember: boolean;
   subjectId: string;
-  userId: string;
+  user: User;
 }
 
-const Events = async ({ isTeamMember, subjectId, userId }: EventsProps) => {
+const Events = async ({ isTeamMember, subjectId, user }: EventsProps) => {
   const { data: events } = await listEvents(subjectId);
 
   if (!events?.length) {
@@ -29,7 +30,7 @@ const Events = async ({ isTeamMember, subjectId, userId }: EventsProps) => {
       events={events as ListEventsData}
       isTeamMember={isTeamMember}
       subjectId={subjectId}
-      userId={userId}
+      user={user}
     />
   );
 };

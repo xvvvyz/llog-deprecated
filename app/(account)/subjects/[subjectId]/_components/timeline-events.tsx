@@ -4,6 +4,7 @@ import DateTime from '@/_components/date-time';
 import { ListEventsData } from '@/_server/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import formatDate from '@/_utilities/format-date';
+import { User } from '@supabase/gotrue-js';
 import { useEffect, useState } from 'react';
 import TimelineEventCard from './timeline-event-card';
 
@@ -11,14 +12,14 @@ interface TimelineEventsProps {
   events: ListEventsData;
   isTeamMember: boolean;
   subjectId: string;
-  userId: string;
+  user: User;
 }
 
 const TimelineEvents = ({
   events,
   isTeamMember,
   subjectId,
-  userId,
+  user,
 }: TimelineEventsProps) => {
   const [formattedEvents, setFormattedEvents] = useState<
     Array<Map<string, ListEventsData>>
@@ -61,7 +62,7 @@ const TimelineEvents = ({
             isTeamMember={isTeamMember}
             key={eventGroup[0].id}
             subjectId={subjectId}
-            userId={userId}
+            user={user}
           />
         ))}
       </div>

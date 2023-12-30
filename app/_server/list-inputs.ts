@@ -9,7 +9,7 @@ const listInputs = async () =>
     .eq('team_id', (await getCurrentTeamId()) ?? '')
     .eq('archived', false)
     .eq('subjects.deleted', false)
-    .order('name', { foreignTable: 'subjects' })
+    .order('name', { referencedTable: 'subjects' })
     .order('label');
 
 export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'] & {

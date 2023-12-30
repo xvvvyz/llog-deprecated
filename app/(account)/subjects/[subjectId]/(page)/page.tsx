@@ -66,11 +66,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
           <InsightsModalButton subjectId={subjectId} />
         </div>
       </div>
-      <Events
-        isTeamMember={isTeamMember}
-        subjectId={subjectId}
-        userId={user.id}
-      />
+      <Events isTeamMember={isTeamMember} subjectId={subjectId} user={user} />
     </div>
   );
 };
