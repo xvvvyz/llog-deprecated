@@ -81,7 +81,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
 
   return (
     <form
-      className="form"
+      className="form block p-0"
       onSubmit={form.handleSubmit(
         async ({
           id,
@@ -204,233 +204,246 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
         },
       )}
     >
-      <Input label="Label" required {...form.register('label')} />
-      <Controller
-        control={form.control}
-        name="subjects"
-        render={({ field }) => (
-          <Select
-            hasAvatar
-            isMulti
-            label="For"
-            name={field.name}
-            noOptionsMessage={() => 'No subjects'}
-            onBlur={field.onBlur}
-            onChange={(value) => field.onChange(value as any)}
-            options={forceArray(subjects)}
-            placeholder="All subjects…"
-            tooltip={
-              <>
-                If this input isn&rsquo;t applicable to all of your subjects,
-                you can specify the relevant subjects here.
-              </>
-            }
-            value={field.value as any}
-          />
-        )}
-      />
-      <Controller
-        control={form.control}
-        name="type"
-        render={({ field }) => (
-          <Select
-            isClearable={false}
-            isSearchable={false}
-            label="Type"
-            name={field.name}
-            onBlur={field.onBlur}
-            onChange={(option) => {
-              field.onChange(option as any);
-              form.setValue('settings', null);
-
-              switch ((option as InputFormValues['options'][0])?.id) {
-                case InputTypes.Number: {
-                  form.setValue('settings', {
-                    max: '100',
-                    maxFractionDigits: '0',
-                    min: '0',
-                    minFractionDigits: '0',
-                  });
-
-                  return;
-                }
-
-                case InputTypes.MultiSelect:
-                case InputTypes.Select: {
-                  form.setValue('settings', {
-                    isCreatable: false,
-                  });
-
-                  return;
-                }
-
-                default: {
-                  // noop
-                }
+      <div className="form rounded-none border-0 bg-transparent">
+        <Controller
+          control={form.control}
+          name="subjects"
+          render={({ field }) => (
+            <Select
+              hasAvatar
+              isMulti
+              label="For"
+              name={field.name}
+              noOptionsMessage={() => 'No subjects'}
+              onBlur={field.onBlur}
+              onChange={(value) => field.onChange(value as any)}
+              options={forceArray(subjects)}
+              placeholder="All subjects…"
+              tooltip={
+                <>
+                  If this input isn&rsquo;t applicable to all of your subjects,
+                  you can specify the relevant subjects here.
+                </>
               }
-            }}
-            options={INPUT_TYPE_OPTIONS}
-            placeholder="Select type…"
-            value={field.value as any}
-          />
-        )}
-      />
-      {hasOptions && (
-        <>
-          <fieldset className="group">
-            <span className="label">Options</span>
-            <div className="space-y-2">
-              {!!optionsArray.fields.length && (
-                <ul className="flex flex-col gap-2">
-                  {optionsArray.fields.map((option, optionIndex) => (
-                    <li key={option.id}>
-                      <Controller
-                        control={form.control}
-                        name={`options.${optionIndex}.label`}
-                        render={({ field }) => (
-                          <Input
-                            onKeyDown={(e) => {
-                              if (e.key === 'Backspace' && !field.value) {
-                                e.preventDefault();
-                                optionsArray.remove(optionIndex);
+              value={field.value as any}
+            />
+          )}
+        />
+      </div>
+      <div className="form rounded-none border-0 border-t bg-transparent">
+        <Input label="Label" required {...form.register('label')} />
+        <Controller
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <Select
+              isClearable={false}
+              isSearchable={false}
+              label="Type"
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={(option) => {
+                field.onChange(option as any);
+                form.setValue('settings', null);
 
-                                form.setFocus(
-                                  `options.${optionIndex - 1}.label`,
-                                  {
-                                    shouldSelect: true,
-                                  },
-                                );
-                              }
+                switch ((option as InputFormValues['options'][0])?.id) {
+                  case InputTypes.Number: {
+                    form.setValue('settings', {
+                      max: '100',
+                      maxFractionDigits: '0',
+                      min: '0',
+                      minFractionDigits: '0',
+                    });
 
-                              if (e.key === 'Enter') {
-                                e.preventDefault();
+                    return;
+                  }
 
-                                optionsArray.insert(optionIndex + 1, {
-                                  input_id: id ?? '',
-                                  label: '',
-                                  order: optionIndex + 1,
-                                });
-                              }
-                            }}
-                            placeholder="Label…"
-                            required
-                            right={
-                              <IconButton
-                                className="m-0 h-full w-full justify-center p-0"
-                                icon={<XMarkIcon className="w-5" />}
-                                label="Delete option"
-                                onClick={() => optionsArray.remove(optionIndex)}
-                                tabIndex={-1}
-                              />
-                            }
-                            {...field}
-                          />
-                        )}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <Button
-                className="w-full"
-                colorScheme="transparent"
-                onClick={() =>
-                  optionsArray.append({
-                    input_id: id ?? '',
-                    label: '',
-                    order: optionsArray.fields.length,
-                  })
+                  case InputTypes.MultiSelect:
+                  case InputTypes.Select: {
+                    form.setValue('settings', {
+                      isCreatable: false,
+                    });
+
+                    return;
+                  }
+
+                  default: {
+                    // noop
+                  }
                 }
-                type="button"
-              >
-                <PlusIcon className="w-5" />
-                Add option
-              </Button>
-            </div>
-          </fieldset>
-          <Checkbox
-            className="mt-2"
-            label="Allow options to be created"
-            tooltip={
-              <>
-                Enable this when you don&rsquo;t know all possible options in
-                advance.
-              </>
-            }
-            {...form.register('settings.isCreatable')}
-          />
-        </>
+              }}
+              options={INPUT_TYPE_OPTIONS}
+              placeholder="Select type…"
+              required
+              value={field.value as any}
+            />
+          )}
+        />
+      </div>
+      {(hasOptions || type === InputTypes.Number) && (
+        <div className="form rounded-none border-0 border-t bg-transparent">
+          {hasOptions && (
+            <>
+              <fieldset className="group">
+                <span className="label">Options</span>
+                <div className="space-y-2">
+                  {!!optionsArray.fields.length && (
+                    <ul className="flex flex-col gap-2">
+                      {optionsArray.fields.map((option, optionIndex) => (
+                        <li key={option.id}>
+                          <Controller
+                            control={form.control}
+                            name={`options.${optionIndex}.label`}
+                            render={({ field }) => (
+                              <Input
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Backspace' && !field.value) {
+                                    e.preventDefault();
+                                    optionsArray.remove(optionIndex);
+
+                                    form.setFocus(
+                                      `options.${optionIndex - 1}.label`,
+                                      {
+                                        shouldSelect: true,
+                                      },
+                                    );
+                                  }
+
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+
+                                    optionsArray.insert(optionIndex + 1, {
+                                      input_id: id ?? '',
+                                      label: '',
+                                      order: optionIndex + 1,
+                                    });
+                                  }
+                                }}
+                                placeholder="Label…"
+                                required
+                                right={
+                                  <IconButton
+                                    className="m-0 h-full w-full justify-center p-0"
+                                    icon={<XMarkIcon className="w-5" />}
+                                    label="Delete option"
+                                    onClick={() =>
+                                      optionsArray.remove(optionIndex)
+                                    }
+                                    tabIndex={-1}
+                                  />
+                                }
+                                {...field}
+                              />
+                            )}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <Button
+                    className="w-full"
+                    colorScheme="transparent"
+                    onClick={() =>
+                      optionsArray.append({
+                        input_id: id ?? '',
+                        label: '',
+                        order: optionsArray.fields.length,
+                      })
+                    }
+                    type="button"
+                  >
+                    <PlusIcon className="w-5" />
+                    Add option
+                  </Button>
+                </div>
+              </fieldset>
+              <Checkbox
+                className="mt-2"
+                label="Allow options to be created"
+                tooltip={
+                  <>
+                    Enable this when you don&rsquo;t know all possible options
+                    in advance.
+                  </>
+                }
+                {...form.register('settings.isCreatable')}
+              />
+            </>
+          )}
+          {type === InputTypes.Number && (
+            <>
+              <fieldset className="flex gap-6">
+                <Controller
+                  control={form.control}
+                  name="settings.minFractionDigits"
+                  render={({ field }) => (
+                    <NumberInput
+                      label="Min fraction digits"
+                      max={maxFractionDigits}
+                      min={0}
+                      required
+                      {...field}
+                    />
+                  )}
+                />
+                <Controller
+                  control={form.control}
+                  name="settings.maxFractionDigits"
+                  render={({ field }) => (
+                    <NumberInput
+                      label="Max fraction digits"
+                      max={6}
+                      min={minFractionDigits ?? 0}
+                      required
+                      {...field}
+                    />
+                  )}
+                />
+              </fieldset>
+              <fieldset className="flex gap-6">
+                <Controller
+                  control={form.control}
+                  name="settings.min"
+                  render={({ field }) => (
+                    <NumberInput
+                      label="Min value"
+                      max={form.watch('settings.max')}
+                      maxFractionDigits={maxFractionDigits}
+                      minFractionDigits={minFractionDigits}
+                      required
+                      {...field}
+                    />
+                  )}
+                />
+                <Controller
+                  control={form.control}
+                  name="settings.max"
+                  render={({ field }) => (
+                    <NumberInput
+                      label="Max value"
+                      maxFractionDigits={maxFractionDigits}
+                      min={form.watch('settings.min')}
+                      minFractionDigits={minFractionDigits}
+                      required
+                      {...field}
+                    />
+                  )}
+                />
+              </fieldset>
+            </>
+          )}
+        </div>
       )}
-      {type === InputTypes.Number && (
-        <>
-          <fieldset className="flex gap-6">
-            <Controller
-              control={form.control}
-              name="settings.minFractionDigits"
-              render={({ field }) => (
-                <NumberInput
-                  label="Min fraction digits"
-                  max={maxFractionDigits}
-                  min={0}
-                  required
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="settings.maxFractionDigits"
-              render={({ field }) => (
-                <NumberInput
-                  label="Max fraction digits"
-                  max={6}
-                  min={minFractionDigits ?? 0}
-                  required
-                  {...field}
-                />
-              )}
-            />
-          </fieldset>
-          <fieldset className="flex gap-6">
-            <Controller
-              control={form.control}
-              name="settings.min"
-              render={({ field }) => (
-                <NumberInput
-                  label="Min value"
-                  max={form.watch('settings.max')}
-                  maxFractionDigits={maxFractionDigits}
-                  minFractionDigits={minFractionDigits}
-                  required
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="settings.max"
-              render={({ field }) => (
-                <NumberInput
-                  label="Max value"
-                  maxFractionDigits={maxFractionDigits}
-                  min={form.watch('settings.min')}
-                  minFractionDigits={minFractionDigits}
-                  required
-                  {...field}
-                />
-              )}
-            />
-          </fieldset>
-        </>
-      )}
-      <Button
-        className="mt-8 w-full"
-        loading={form.formState.isSubmitting || isRedirecting}
-        loadingText="Saving…"
-        type="submit"
-      >
-        Save input
-      </Button>
+      <div className="form rounded-none border-0 border-t bg-transparent">
+        <Button
+          className="w-full"
+          loading={form.formState.isSubmitting || isRedirecting}
+          loadingText="Saving…"
+          type="submit"
+        >
+          Save input
+        </Button>
+      </div>
     </form>
   );
 };
