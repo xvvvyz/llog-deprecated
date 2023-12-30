@@ -26,12 +26,14 @@ const Events = async ({ isTeamMember, subjectId, user }: EventsProps) => {
   }
 
   return (
-    <TimelineEvents
-      events={events as ListEventsData}
-      isTeamMember={isTeamMember}
-      subjectId={subjectId}
-      user={user}
-    />
+    <div className="space-y-4">
+      <TimelineEvents
+        events={events as ListEventsData}
+        isTeamMember={isTeamMember}
+        subjectId={subjectId}
+        user={user}
+      />
+    </div>
   );
 };
 
