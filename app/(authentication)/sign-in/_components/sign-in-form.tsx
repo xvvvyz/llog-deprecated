@@ -30,7 +30,9 @@ const SignInForm = ({ action }: SignInFormProps) => (
         <ForwardSearchParamsLink
           className="absolute right-2 top-0"
           href="/forgot-password"
-        />
+        >
+          Forgot password?
+        </ForwardSearchParamsLink>
       </Suspense>
     </div>
     <Button className="mt-8 w-full" loadingText="Signing in…" type="submit">
