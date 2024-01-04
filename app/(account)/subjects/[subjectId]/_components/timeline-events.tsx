@@ -35,7 +35,17 @@ const TimelineEvents = ({
             const type = firstIfArray(event.type);
             const key = type.session?.id ?? event.id;
             const keyEvents = (acc[date].get(key) ?? []) as ListEventsData;
-            keyEvents.unshift(event);
+
+            const eventIndex = keyEvents.findIndex(
+              (e) => firstIfArray(e.type).order > type.order,
+            );
+
+            keyEvents.splice(
+              eventIndex === -1 ? keyEvents.length : eventIndex,
+              0,
+              event,
+            );
+
             acc[date].set(key, keyEvents);
             return acc;
           },
