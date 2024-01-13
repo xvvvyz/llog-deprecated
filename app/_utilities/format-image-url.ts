@@ -4,6 +4,8 @@ const formatImageUrl = (file?: string | File | null) => {
   }
 
   if (typeof file === 'string') {
+    if (file.startsWith('http')) return file;
+
     const pathPart = process.env.NEXT_PUBLIC_SUPABASE_PRO
       ? 'render/image'
       : 'object';

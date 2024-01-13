@@ -1,8 +1,7 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { Database } from '@/_types/database';
 
-const listEvents = (subjectId: string) =>
-  createServerComponentClient()
+const listEvents = (subjectId: string, { limit } = { limit: 50 }) => {
+  const q = createServerComponentClient()
     .from('events')
     .select(
       `
@@ -34,48 +33,12 @@ const listEvents = (subjectId: string) =>
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
     .order('created_at', { referencedTable: 'comments' })
-    .order('order', { referencedTable: 'inputs' })
-    .limit(50);
+    .order('order', { referencedTable: 'inputs' });
 
-export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'] & {
-  comments: Array<
-    Pick<Database['public']['Tables']['comments']['Row'], 'content' | 'id'> & {
-      profile: Pick<
-        Database['public']['Tables']['profiles']['Row'],
-        'first_name' | 'id' | 'image_uri' | 'last_name'
-      >;
-    }
-  >;
-  inputs: Array<
-    Pick<Database['public']['Tables']['event_inputs']['Row'], 'value'> & {
-      input: Pick<
-        Database['public']['Tables']['inputs']['Row'],
-        'id' | 'label' | 'type'
-      >;
-      option: Pick<
-        Database['public']['Tables']['input_options']['Row'],
-        'id' | 'label'
-      >;
-    }
-  >;
-  profile: Pick<
-    Database['public']['Tables']['profiles']['Row'],
-    'first_name' | 'id' | 'image_uri' | 'last_name'
-  >;
-  type: Pick<
-    Database['public']['Tables']['event_types']['Row'],
-    'id' | 'name' | 'order'
-  > & {
-    session: Pick<
-      Database['public']['Tables']['sessions']['Row'],
-      'id' | 'order'
-    > & {
-      mission: Pick<
-        Database['public']['Tables']['missions']['Row'],
-        'id' | 'name'
-      >;
-    };
-  };
+  if (limit) q.limit(limit);
+  return q;
 };
+
+export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];
 
 export default listEvents;

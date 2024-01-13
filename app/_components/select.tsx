@@ -160,7 +160,7 @@ const MultiValueLabel = <TOption extends IOption>({
         <Avatar
           className="ml-0.5 mr-0.5 rounded-full"
           file={props.data.image_uri}
-          name={props.data.label ?? props.data.name ?? ''}
+          id={props.data.id}
           size="xs"
         />
       )}
@@ -175,12 +175,12 @@ const MultiValueLabel = <TOption extends IOption>({
       {props.data.subjects && !!props.data.subjects.length && (
         <div className="mr-2 flex">
           {(props.data.subjects as NonNullable<IOption['subjects']>).map(
-            ({ id, image_uri, name }) => (
+            ({ id, image_uri }) => (
               <Avatar
                 className="-mr-2 rounded-full border border-alpha-reverse-2 bg-bg-2"
                 file={image_uri}
                 key={id}
-                name={name}
+                id={id}
                 size="xs"
               />
             ),
@@ -215,21 +215,17 @@ const Option = <TOption extends IOption>({
       )}
     >
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
-        <Avatar
-          file={props.data.image_uri}
-          name={props.data.label ?? props.data.name ?? ''}
-          size="sm"
-        />
+        <Avatar file={props.data.image_uri} id={props.data.id} size="sm" />
       )}
       <span>{children}</span>
       {props.data.subjects && !!props.data.subjects.length && (
         <div className="mr-2 flex">
-          {props.data.subjects.map(({ id, image_uri, name }) => (
+          {props.data.subjects.map(({ id, image_uri }) => (
             <Avatar
               className="-mr-2 border border-alpha-reverse-2 bg-bg-2"
               file={image_uri}
               key={id}
-              name={name}
+              id={id}
               size="sm"
             />
           ))}
@@ -260,11 +256,7 @@ const SingleValue = <TOption extends IOption>({
     {...props}
   >
     {(props.selectProps as SelectProps<TOption>).hasAvatar && (
-      <Avatar
-        file={props.data.image_uri}
-        name={props.data.label ?? props.data.name ?? ''}
-        size="sm"
-      />
+      <Avatar file={props.data.image_uri} id={props.data.id} size="sm" />
     )}
     {children}
   </components.SingleValue>
@@ -337,7 +329,7 @@ const Select = <TOption extends IOption>(
       </div>
       <div className="hidden px-4 print:block">
         {options?.map((option, i) => (
-          <span key={option.label}>
+          <span key={`${option.label}-label`}>
             {option.label}
             {i < options.length - 1 && ', '}
           </span>

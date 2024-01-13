@@ -1,5 +1,4 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { TemplateDataType } from '@/_types/template';
 import getCurrentTeamId from './get-current-team-id';
 
 const listTemplatesWithData = async () =>
@@ -11,8 +10,6 @@ const listTemplatesWithData = async () =>
 
 export type ListTemplatesWithDataData = Awaited<
   ReturnType<typeof listTemplatesWithData>
->['data'] & {
-  data: TemplateDataType;
-};
+>['data'];
 
 export default listTemplatesWithData;

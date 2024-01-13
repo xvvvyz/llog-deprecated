@@ -9,4 +9,5 @@ const listSubjects = async () =>
     .order('name');
 
 export type ListSubjectsData = Awaited<ReturnType<typeof listSubjects>>['data'];
+
 export default listSubjects;

@@ -8,4 +8,5 @@ const getSubject = (subjectId: string) =>
     .single();
 
 export type GetSubjectData = Awaited<ReturnType<typeof getSubject>>['data'];
+
 export default getSubject;

@@ -8,4 +8,5 @@ const getTemplate = (templateId: string) =>
     .single();
 
 export type GetTemplateData = Awaited<ReturnType<typeof getTemplate>>['data'];
+
 export default getTemplate;

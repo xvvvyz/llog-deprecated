@@ -7,7 +7,7 @@ const MenuItem = ({ className, ...rest }: ButtonProps) => (
     {({ active }) => (
       <Button
         className={twMerge(
-          'w-full justify-start gap-4 rounded-none border-0 bg-transparent ring-transparent ring-offset-0 hover:bg-alpha-1',
+          'h-10 w-full justify-start gap-4 rounded-none border-0 bg-transparent ring-transparent ring-offset-0 hover:bg-alpha-1',
           active && 'bg-alpha-1 text-fg-2',
           className,
         )}

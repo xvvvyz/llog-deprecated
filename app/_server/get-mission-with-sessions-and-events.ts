@@ -1,9 +1,8 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { Database } from '@/_types/database';
 
 const getMissionWithSessionsAndEvents = (
   missionId: string,
-  includeDraft = false,
+  { draft } = { draft: false },
 ) =>
   createServerComponentClient()
     .from('missions')
@@ -25,20 +24,13 @@ const getMissionWithSessionsAndEvents = (
     )
     .eq('id', missionId)
     .order('order', { referencedTable: 'sessions' })
-    .not('sessions.draft', 'is', includeDraft ? null : true)
+    .not('sessions.draft', 'is', draft ? null : true)
     .order('draft', { ascending: false, referencedTable: 'sessions' })
     .eq('sessions.modules.archived', false)
     .single();
 
 export type GetMissionWithSessionsAndEventsData = Awaited<
   ReturnType<typeof getMissionWithSessionsAndEvents>
->['data'] & {
-  sessions: Array<
-    Pick<
-      Database['public']['Tables']['sessions']['Row'],
-      'draft' | 'id' | 'order' | 'scheduled_for' | 'title'
-    >
-  >;
-};
+>['data'];
 
 export default getMissionWithSessionsAndEvents;

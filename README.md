@@ -69,5 +69,5 @@ Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your email address
 
 <!-- prettier-ignore -->
 ```html
-Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your new email address</a>.<br><br>If you did not initiate this change, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
+Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your new email address</a>.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
 ```

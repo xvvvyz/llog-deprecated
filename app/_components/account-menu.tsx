@@ -6,7 +6,7 @@ import MenuButton from '@/_components/menu-button';
 import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
 import useSupabase from '@/_hooks/use-supabase';
-import { User } from '@supabase/gotrue-js';
+import { User } from '@supabase/supabase-js';
 
 import {
   ArrowLeftStartOnRectangleIcon,
@@ -23,12 +23,9 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
   return (
     <Menu className="h-full shrink-0">
       <MenuButton>
-        <Avatar
-          file={user?.user_metadata?.image_uri}
-          name={user?.user_metadata?.first_name}
-        />
+        <Avatar file={user?.user_metadata?.image_uri} id={user?.id} />
       </MenuButton>
-      <MenuItems className="mt-12">
+      <MenuItems className="mt-10">
         <MenuItem href="/account">
           <Cog6ToothIcon className="w-5 text-fg-4" />
           Account settings

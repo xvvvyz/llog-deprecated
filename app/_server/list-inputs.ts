@@ -1,5 +1,4 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { Database } from '@/_types/database';
 import getCurrentTeamId from './get-current-team-id';
 
 const listInputs = async () =>
@@ -12,13 +11,6 @@ const listInputs = async () =>
     .order('name', { referencedTable: 'subjects' })
     .order('label');
 
-export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'] & {
-  subjects?: Array<
-    Pick<
-      Database['public']['Tables']['subjects']['Row'],
-      'id' | 'image_uri' | 'name'
-    >
-  >;
-};
+export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];
 
 export default listInputs;

@@ -1,5 +1,4 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { Database } from '@/_types/database';
 
 const getSession = (sessionId: string) =>
   createServerComponentClient()
@@ -28,28 +27,6 @@ const getSession = (sessionId: string) =>
     .order('order', { referencedTable: 'modules.inputs' })
     .single();
 
-export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'] & {
-  modules: Array<
-    Pick<
-      Database['public']['Tables']['event_types']['Row'],
-      'content' | 'id' | 'order'
-    > & {
-      event: Array<
-        Pick<Database['public']['Tables']['events']['Row'], 'id'>
-      > & {
-        profile: Pick<
-          Database['public']['Tables']['profiles']['Row'],
-          'first_name' | 'id' | 'last_name'
-        >;
-      };
-      inputs: Array<
-        Pick<
-          Database['public']['Tables']['event_type_inputs']['Row'],
-          'input_id'
-        >
-      >;
-    }
-  >;
-};
+export type GetSessionData = Awaited<ReturnType<typeof getSession>>['data'];
 
 export default getSession;

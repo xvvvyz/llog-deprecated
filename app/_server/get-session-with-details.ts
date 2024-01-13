@@ -1,5 +1,4 @@
 import createServerComponentClient from '@/_server/create-server-component-client';
-import { Database } from '@/_types/database';
 
 const getSessionWithDetails = (sessionId: string) =>
   createServerComponentClient()
@@ -48,60 +47,6 @@ const getSessionWithDetails = (sessionId: string) =>
 
 export type GetSessionWithDetailsData = Awaited<
   ReturnType<typeof getSessionWithDetails>
->['data'] & {
-  modules: Array<
-    Pick<
-      Database['public']['Tables']['event_types']['Row'],
-      'content' | 'id' | 'name' | 'order'
-    > & {
-      event: Array<
-        Pick<
-          Database['public']['Tables']['events']['Row'],
-          'created_at' | 'id'
-        > & {
-          comments: Array<
-            Pick<
-              Database['public']['Tables']['comments']['Row'],
-              'content' | 'created_at' | 'id'
-            > & {
-              profile: Pick<
-                Database['public']['Tables']['profiles']['Row'],
-                'first_name' | 'id' | 'image_uri' | 'last_name'
-              >;
-            }
-          >;
-          inputs: Array<
-            Pick<
-              Database['public']['Tables']['event_inputs']['Row'],
-              'id' | 'input_id' | 'input_option_id' | 'value'
-            >
-          >;
-          profile: Pick<
-            Database['public']['Tables']['profiles']['Row'],
-            'first_name' | 'id' | 'image_uri' | 'last_name'
-          >;
-        }
-      >;
-      inputs: Array<
-        Pick<
-          Database['public']['Tables']['event_type_inputs']['Row'],
-          'input_id'
-        > & {
-          input: Pick<
-            Database['public']['Tables']['inputs']['Row'],
-            'id' | 'label' | 'settings' | 'type'
-          > & {
-            options: Array<
-              Pick<
-                Database['public']['Tables']['input_options']['Row'],
-                'id' | 'label'
-              >
-            >;
-          };
-        }
-      >;
-    }
-  >;
-};
+>['data'];
 
 export default getSessionWithDetails;

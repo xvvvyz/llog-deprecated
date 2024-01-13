@@ -15,16 +15,23 @@ export const middleware = async (req: NextRequest) => {
   }).auth.getSession();
 
   if (
-    ['/', '/sign-in', '/sign-up'].includes(req.nextUrl.pathname) &&
+    ['/', '/forgot-password', '/sign-in', '/sign-up'].includes(
+      req.nextUrl.pathname,
+    ) &&
     session.data.session
   ) {
     return NextResponse.redirect(new URL('/subjects', req.url));
   }
 
   if (
-    ['/account', '/inputs', '/notifications', '/subjects', '/templates'].some(
-      (p) => req.nextUrl.pathname.startsWith(p),
-    ) &&
+    [
+      '/account',
+      '/change-password',
+      '/inputs',
+      '/notifications',
+      '/subjects',
+      '/templates',
+    ].some((p) => req.nextUrl.pathname.startsWith(p)) &&
     !session.data.session
   ) {
     const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';

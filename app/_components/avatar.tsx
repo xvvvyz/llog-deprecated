@@ -14,11 +14,11 @@ const sizes = {
 interface AvatarProps {
   className?: string;
   file?: string | File | null;
-  name: string;
+  id?: string;
   size?: keyof typeof sizes;
 }
 
-const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
+const Avatar = ({ className, file, id = '', size = 'md' }: AvatarProps) => {
   const src = formatImageUrl(file);
 
   return (
@@ -29,17 +29,18 @@ const Avatar = ({ className, file, name, size = 'md' }: AvatarProps) => {
         className,
       )}
     >
-      {src ? (
+      {(file || id) && (
         <Image
           alt=""
           className="object-cover object-center"
           fill
           loader={generateImageLoader({ aspectRatio: '1:1' })}
           sizes={sizes[size].imgSizes}
-          src={src}
+          src={
+            src ??
+            `https://api.dicebear.com/7.x/shapes/png?seed=${encodeURIComponent(id)}`
+          }
         />
-      ) : (
-        <span aria-hidden>{Array.from(name)[0]}</span>
       )}
     </div>
   );

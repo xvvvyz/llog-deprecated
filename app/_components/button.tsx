@@ -20,13 +20,13 @@ const spinnerColorSchemes = {
 };
 
 const sizes = {
-  md: 'px-4 py-2',
-  sm: 'px-4 py-1',
+  md: 'px-4 py-2 rounded',
+  sm: 'px-4 py-1 rounded-sm',
 };
 
 const variants = {
   link: 'p-3 -m-3 border-0 text-fg-3 hover:text-fg-2',
-  primary: 'focus:ring-1 rounded justify-center',
+  primary: 'focus:ring-1 justify-center',
 };
 
 const disabledVariants = {

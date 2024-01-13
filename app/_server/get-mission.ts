@@ -8,4 +8,5 @@ const getMission = (missionId: string) =>
     .single();
 
 export type GetMissionData = Awaited<ReturnType<typeof getMission>>['data'];
+
 export default getMission;
