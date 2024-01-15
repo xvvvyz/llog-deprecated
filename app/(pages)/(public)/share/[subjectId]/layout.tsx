@@ -30,7 +30,7 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
                     href={`/subjects/${subjectId}`}
                     variant="link"
                   >
-                    View full subject
+                    View full profile
                   </Button>
                 </>
               ) : (

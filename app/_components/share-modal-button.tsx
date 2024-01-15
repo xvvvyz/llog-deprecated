@@ -82,7 +82,7 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
                     href={`/share/${subjectId}`}
                     target="_blank"
                   >
-                    Preview public profile
+                    View public profile
                     <ArrowTopRightOnSquareIcon className="w-5" />
                   </Button>
                   <Button
