@@ -178,7 +178,7 @@ const TimelineEventCard = ({
                     isTeamMember={isTeamMember}
                     userId={user?.id}
                   />
-                  {user && (
+                  {!isPublic && (
                     <EventCommentForm
                       eventId={event.id}
                       inputClassName="rounded-sm"
