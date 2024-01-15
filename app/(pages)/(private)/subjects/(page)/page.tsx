@@ -5,11 +5,8 @@ import SubjectLinkListItemMenu from '@/_components/subject-link-list-item-menu';
 import getCurrentTeamId from '@/_server/get-current-team-id';
 import listSubjects, { ListSubjectsData } from '@/_server/list-subjects';
 import forceArray from '@/_utilities/force-array';
-
-import {
-  ArrowRightIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/24/outline';
+import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 
 export const metadata = { title: 'Subjects' };
 export const revalidate = 0;

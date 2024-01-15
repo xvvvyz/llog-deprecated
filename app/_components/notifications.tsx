@@ -8,17 +8,14 @@ import IconButton from '@/_components/icon-button';
 import ViewEventButton from '@/_components/view-event-button';
 import NotificationTypes from '@/_constants/enum-notification-types';
 import { ListNotificationsData } from '@/_server/list-notifications';
-
 import { Database } from '@/_types/database';
-import {
-  BoltIcon,
-  ChatBubbleBottomCenterTextIcon,
-  EnvelopeIcon,
-  EnvelopeOpenIcon,
-  StarIcon,
-  UserPlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import BoltIcon from '@heroicons/react/24/outline/BoltIcon';
+import ChatBubbleBottomCenterTextIcon from '@heroicons/react/24/outline/ChatBubbleBottomCenterTextIcon';
+import EnvelopeIcon from '@heroicons/react/24/outline/EnvelopeIcon';
+import EnvelopeOpenIcon from '@heroicons/react/24/outline/EnvelopeOpenIcon';
+import StarIcon from '@heroicons/react/24/outline/StarIcon';
+import UserPlusIcon from '@heroicons/react/24/outline/UserPlusIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 
 interface NotificationsProps {
   deleteNotificationAction: (id: string) => Promise<void>;

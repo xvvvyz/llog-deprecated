@@ -25,11 +25,11 @@ const InsightsModalButton = ({
         Insights
       </Button>
       <Dialog className="relative z-10" onClose={toggleModal} open={modal}>
-        <div className="fixed inset-0 bg-bg-1" />
+        <Dialog.Backdrop className="fixed inset-0 bg-bg-1" />
         <div className="fixed inset-0 overflow-y-auto">
           <Dialog.Panel className="min-h-full w-full space-y-24 bg-bg-1 p-8 md:p-16 lg:p-24">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl">Insights</h1>
+              <Dialog.Title className="text-2xl">Insights</Dialog.Title>
               <IconButton
                 icon={<XMarkIcon className="relative -right-[0.16em] w-7" />}
                 onClick={() => toggleModal(false)}

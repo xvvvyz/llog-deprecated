@@ -23,7 +23,7 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
                 <>
                   <span className="flex items-center gap-2 text-sm text-fg-4">
                     <ExclamationCircleIcon className="w-5 shrink-0" />
-                    Read-only share preview mode
+                    Public read-only profile
                   </span>
                   <Button
                     className="text-sm"
@@ -40,7 +40,7 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
                   </Button>
                   <span className="flex items-center gap-2 text-sm text-fg-4">
                     <ExclamationCircleIcon className="w-5 shrink-0" />
-                    Read-only mode
+                    Public read-only profile
                   </span>
                 </>
               )}

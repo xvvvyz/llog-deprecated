@@ -3,7 +3,7 @@ import createServerComponentClient from '@/_server/create-server-component-clien
 const getSubject = (subjectId: string) =>
   createServerComponentClient()
     .from('subjects')
-    .select('banner, id, image_uri, name, share_code, team_id')
+    .select('banner, id, image_uri, name, public, share_code, team_id')
     .eq('id', subjectId)
     .single();
 

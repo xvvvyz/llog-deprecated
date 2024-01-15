@@ -6,12 +6,9 @@ import MenuButton from '@/_components/menu-button';
 import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
 import useSupabase from '@/_hooks/use-supabase';
+import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
+import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon';
 import { User } from '@supabase/supabase-js';
-
-import {
-  ArrowLeftStartOnRectangleIcon,
-  Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
 
 interface AccountMenuProps {
   user: User | null;

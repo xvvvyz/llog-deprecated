@@ -28,7 +28,7 @@ const Alert = ({
   title = 'Are you sure?',
 }: AlertProps) => (
   <Dialog className="relative z-20" onClose={onClose} open={isOpen}>
-    <div className="fixed inset-0 bg-alpha-reverse-2 backdrop-blur-sm" />
+    <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-3 backdrop-blur-sm" />
     <div className="fixed inset-0 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center">
         <Dialog.Panel className="w-full max-w-xs transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">

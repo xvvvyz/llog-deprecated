@@ -1,18 +1,17 @@
 import Avatar from '@/_components/avatar';
 import BackButton from '@/_components/back-button';
-// import Button from '@/_components/button';
 import DirtyHtml from '@/_components/dirty-html';
 import DownloadEventsButton from '@/_components/download-events-button';
 import EventTypes from '@/_components/event-types';
 import Events from '@/_components/events';
 import InsightsModalButton from '@/_components/insights-modal-button';
 import Missions from '@/_components/missions';
+import ShareModalButton from '@/_components/share-modal-button';
 import TeamMemberHeader from '@/_components/team-member-header';
 import getCurrentTeamId from '@/_server/get-current-team-id';
 import getCurrentUser from '@/_server/get-current-user';
 import getPublicSubject from '@/_server/get-public-subject';
 import getSubject from '@/_server/get-subject';
-// import { ShareIcon } from '@heroicons/react/24/outline';
 import { notFound } from 'next/navigation';
 
 interface SubjectPageProps {
@@ -59,12 +58,9 @@ const SubjectPage = async ({ isPublic, subjectId }: SubjectPageProps) => {
         <div className="flex gap-6">
           <DownloadEventsButton isPublic={isPublic} subjectId={subjectId} />
           <InsightsModalButton isPublic={isPublic} subjectId={subjectId} />
-          {/*{isTeamMember && (*/}
-          {/*  <Button variant="link">*/}
-          {/*    <ShareIcon className="w-5" />*/}
-          {/*    Share*/}
-          {/*  </Button>*/}
-          {/*)}*/}
+          {isTeamMember && (
+            <ShareModalButton isPublic={subject.public} subjectId={subjectId} />
+          )}
         </div>
       </div>
       <Events

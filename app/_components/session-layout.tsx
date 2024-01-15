@@ -3,15 +3,12 @@ import Breadcrumbs from '@/_components/breadcrumbs';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
+import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
+import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
+import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
-
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EyeIcon,
-  PencilIcon,
-  PlusIcon,
-} from '@heroicons/react/24/outline';
 
 interface SessionLayoutProps {
   children: ReactNode;

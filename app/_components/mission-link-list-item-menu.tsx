@@ -7,14 +7,11 @@ import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
 import useDeleteAlert from '@/_hooks/use-delete-alert';
 import useSupabase from '@/_hooks/use-supabase';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
+import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
+import QueueListIcon from '@heroicons/react/24/outline/QueueListIcon';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useRouter } from 'next/navigation';
-
-import {
-  EllipsisVerticalIcon,
-  PencilIcon,
-  QueueListIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
 
 interface EventTypeLinkListItemMenuProps {
   missionId: string;

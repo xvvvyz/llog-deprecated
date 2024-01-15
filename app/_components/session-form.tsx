@@ -19,6 +19,12 @@ import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import globalValueCache from '@/_utilities/global-value-cache';
 import sanitizeHtml from '@/_utilities/sanitize-html';
 import { Dialog } from '@headlessui/react';
+import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
+import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
+import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
@@ -37,15 +43,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  ClockIcon,
-  DocumentDuplicateIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
 
 interface SessionFormProps {
   availableInputs: ListInputsData;
@@ -656,7 +653,7 @@ const SessionForm = ({
         onClose={cancelScheduleModal}
         open={scheduleModal}
       >
-        <div className="fixed inset-0 bg-alpha-reverse-2 backdrop-blur-sm" />
+        <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-3 backdrop-blur-sm" />
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center">
             <Dialog.Panel className="w-full max-w-sm transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">

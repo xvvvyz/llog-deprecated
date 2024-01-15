@@ -3,6 +3,9 @@
 import Spinner from '@/_components/spinner';
 import Tooltip from '@/_components/tooltip';
 import forceArray from '@/_utilities/force-array';
+import ChevronUpDownIcon from '@heroicons/react/24/outline/ChevronUpDownIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
@@ -23,12 +26,6 @@ import ReactSelect, {
   SelectInstance,
   SingleValueProps,
 } from 'react-select';
-
-import {
-  ChevronUpDownIcon,
-  PlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
 
 type IOption = {
   id: string;

@@ -16,6 +16,9 @@ import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
 import forceArray from '@/_utilities/force-array';
 import formatCacheLink from '@/_utilities/format-cache-link';
 import globalValueCache from '@/_utilities/global-value-cache';
+import Bars2Icon from '@heroicons/react/24/outline/Bars2Icon';
+import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -26,12 +29,6 @@ import {
   DraggableAttributes,
   DraggableSyntheticListeners,
 } from '@dnd-kit/core';
-
-import {
-  Bars2Icon,
-  DocumentTextIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
 
 interface EventTypeFormSectionProps<T extends FieldValues> {
   attributes?: DraggableAttributes;

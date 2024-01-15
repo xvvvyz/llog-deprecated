@@ -4,15 +4,12 @@ import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import useStopwatch from '@/_hooks/use-stopwatch';
 import { InputType } from '@/_types/input';
+import ArrowUturnLeftIcon from '@heroicons/react/24/outline/ArrowUturnLeftIcon';
+import PauseIcon from '@heroicons/react/24/outline/PauseIcon';
+import PlayIcon from '@heroicons/react/24/outline/PlayIcon';
 import { useThrottle } from '@uidotdev/usehooks';
 import { useEffect } from 'react';
 import { FieldValues, PathValue, UseFormReturn } from 'react-hook-form';
-
-import {
-  ArrowUturnLeftIcon,
-  PauseIcon,
-  PlayIcon,
-} from '@heroicons/react/24/outline';
 
 interface EventStopwatchProps<T extends FieldValues> {
   form: UseFormReturn<T>;

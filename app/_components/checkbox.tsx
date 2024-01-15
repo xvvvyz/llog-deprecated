@@ -15,7 +15,7 @@ const Checkbox = forwardRef(
     ref: Ref<HTMLInputElement>,
   ) => (
     <div className={twMerge('flex items-center gap-4', className)}>
-      <label className="input group flex select-none justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1">
+      <label className="input group flex select-none items-center justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1">
         <input
           className="peer absolute h-6 w-6 opacity-0"
           defaultChecked={Boolean(value)}
@@ -27,7 +27,7 @@ const Checkbox = forwardRef(
           {...rest}
         />
         <span className="label p-0 peer-checked:text-fg-2">{label}</span>
-        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-2 bg-alpha-3 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-3 peer-hover:bg-alpha-4 peer-checked:peer-hover:bg-accent-2 peer-checked:[&>svg]:visible">
+        <span className="box-content inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-2 bg-alpha-3 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-3 peer-hover:bg-alpha-4 peer-checked:peer-hover:bg-accent-2 peer-checked:[&>svg]:visible">
           <CheckIcon className="invisible h-5 w-5" />
         </span>
       </label>

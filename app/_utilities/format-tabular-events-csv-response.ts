@@ -4,8 +4,6 @@ import { json2csv } from 'json-2-csv';
 import { NextResponse } from 'next/server';
 
 const formatTabularEventsCsvResponse = (events: ListEventsData) => {
-  if (!events?.length) return new NextResponse(null, { status: 404 });
-
   const csv = json2csv(formatTabularEvents(events), {
     emptyFieldValue: '',
     sortHeader: true,

@@ -8,16 +8,13 @@ import getPublicMissionWithSessionsAndEvents from '@/_server/get-public-mission-
 import getPublicSubject from '@/_server/get-public-subject';
 import getSubject from '@/_server/get-subject';
 import forceArray from '@/_utilities/force-array';
-
-import {
-  ArrowRightIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/24/outline';
+import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
+import { notFound } from 'next/navigation';
 
 import getMissionWithSessionsAndEvents, {
   GetMissionWithSessionsAndEventsData,
 } from '@/_server/get-mission-with-sessions-and-events';
-import { notFound } from 'next/navigation';
 
 interface SubjectMissionSessionsPageProps {
   isPublic?: boolean;
