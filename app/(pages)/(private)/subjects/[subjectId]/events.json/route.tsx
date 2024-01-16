@@ -1,7 +1,7 @@
 import listEvents from '@/_server/list-events';
 import formatTabularEventsJsonResponse from '@/_utilities/format-tabular-events-json-response';
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 interface GetContext {
   params: {
