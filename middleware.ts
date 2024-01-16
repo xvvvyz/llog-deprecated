@@ -26,7 +26,6 @@ export const middleware = async (req: NextRequest) => {
   if (
     [
       '/account',
-      '/change-password',
       '/inputs',
       '/notifications',
       '/subjects',
