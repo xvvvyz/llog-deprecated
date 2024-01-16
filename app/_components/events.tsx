@@ -19,8 +19,8 @@ const Events = async ({
   user,
 }: EventsProps) => {
   const { data: events } = isPublic
-    ? await listPublicEvents(subjectId)
-    : await listEvents(subjectId);
+    ? await listPublicEvents(subjectId, { page: 0 })
+    : await listEvents(subjectId, { page: 0 });
 
   if (!events?.length) {
     return (

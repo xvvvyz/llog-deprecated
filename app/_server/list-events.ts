@@ -1,7 +1,11 @@
+import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
 import createServerComponentClient from '@/_server/create-server-component-client';
+import pageToRange from '@/_utilities/page-to-range';
 
-const listEvents = (subjectId: string, { limit } = { limit: 50 }) => {
-  const q = createServerComponentClient()
+const listEvents = (subjectId: string, { page }: { page?: number } = {}) => {
+  const [from, to] = pageToRange({ page, size: DEFAULT_PAGE_SIZE });
+
+  return createServerComponentClient()
     .from('events')
     .select(
       `
@@ -33,10 +37,8 @@ const listEvents = (subjectId: string, { limit } = { limit: 50 }) => {
     .eq('subject_id', subjectId)
     .order('created_at', { ascending: false })
     .order('created_at', { referencedTable: 'comments' })
-    .order('order', { referencedTable: 'inputs' });
-
-  if (limit) q.limit(limit);
-  return q;
+    .order('order', { referencedTable: 'inputs' })
+    .range(from, to);
 };
 
 export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];

@@ -10,6 +10,6 @@ interface GetContext {
 }
 
 export const GET = async (req: Request, ctx: GetContext) => {
-  const { data } = await listPublicEvents(ctx.params.subjectId, { limit: 0 });
+  const { data } = await listPublicEvents(ctx.params.subjectId);
   return formatTabularEventsCsvResponse(data);
 };

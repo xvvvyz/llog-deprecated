@@ -1,3 +1,4 @@
+import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
 import createServerComponentClient from '@/_server/create-server-component-client';
 
 const listNotifications = async () =>
@@ -40,7 +41,7 @@ const listNotifications = async () =>
       type`,
     )
     .order('created_at', { ascending: false })
-    .limit(50);
+    .limit(DEFAULT_PAGE_SIZE);
 
 export type ListNotificationsData = Awaited<
   ReturnType<typeof listNotifications>
