@@ -11,7 +11,7 @@ interface NumberInputProps
   min?: number | string;
   minFractionDigits?: number | string;
   name: string;
-  onChange?: (value: number) => void;
+  onChange?: (value: string) => void;
   right?: ReactNode;
   value?: string;
 }
@@ -45,7 +45,7 @@ const NumberInput = forwardRef(
       min={Number(min)}
       name={name}
       onBlurCapture={onBlur}
-      onValueChange={({ valueAsNumber }) => onChange?.(valueAsNumber || 0)}
+      onValueChange={({ value }) => onChange?.(value || '0')}
       value={value}
     >
       <ArkNumberInput.Label className="label">{label}</ArkNumberInput.Label>

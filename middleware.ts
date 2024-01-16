@@ -24,13 +24,9 @@ export const middleware = async (req: NextRequest) => {
   }
 
   if (
-    [
-      '/account',
-      '/inputs',
-      '/notifications',
-      '/subjects',
-      '/templates',
-    ].some((p) => req.nextUrl.pathname.startsWith(p)) &&
+    ['/account', '/inputs', '/notifications', '/subjects', '/templates'].some(
+      (p) => req.nextUrl.pathname.startsWith(p),
+    ) &&
     !session.data.session
   ) {
     const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';

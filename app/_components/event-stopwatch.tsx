@@ -27,7 +27,10 @@ const EventStopwatch = <T extends FieldValues>({
   const throttledTime = useThrottle(stopwatch.time, 1000);
 
   useEffect(() => {
-    form.setValue(name as T[string], throttledTime as PathValue<T, T[string]>);
+    form.setValue(
+      name as T[string],
+      String(throttledTime) as PathValue<T, T[string]>,
+    );
   }, [form, name, throttledTime]);
 
   return (
