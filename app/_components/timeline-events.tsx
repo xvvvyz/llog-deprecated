@@ -62,6 +62,8 @@ const TimelineEvents = ({
         ),
       ),
     );
+
+    setLoading(false);
   }, [paginated]);
 
   useEffect(() => {
@@ -115,12 +117,12 @@ const TimelineEvents = ({
 
       if (!newEvents?.length) {
         setHasMore(false);
-      } else {
-        setPaginated((state) => [...state, ...newEvents]);
-        if (newEvents.length < DEFAULT_PAGE_SIZE) setHasMore(false);
+        setLoading(false);
+        return;
       }
 
-      setLoading(false);
+      setPaginated((state) => [...state, ...newEvents]);
+      if (newEvents.length < DEFAULT_PAGE_SIZE) setHasMore(false);
     })();
   }, [isPublic, page, subjectId, supabase]);
 
