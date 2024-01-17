@@ -1,9 +1,11 @@
-import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
 import createServerComponentClient from '@/_server/create-server-component-client';
 import pageToRange from '@/_utilities/page-to-range';
 
-const listEvents = (subjectId: string, { page }: { page?: number } = {}) => {
-  const [from, to] = pageToRange({ page, size: DEFAULT_PAGE_SIZE });
+const listEvents = (
+  subjectId: string,
+  { page, size }: { page?: number; size?: number } = {},
+) => {
+  const [from, to] = pageToRange({ page, size });
 
   return createServerComponentClient()
     .from('events')

@@ -1,13 +1,12 @@
-import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
 import createServerComponentClient from '@/_server/create-server-component-client';
 import listEvents from '@/_server/list-events';
 import pageToRange from '@/_utilities/page-to-range';
 
 const listPublicEvents = (
   subjectId: string,
-  { page }: { page?: number } = {},
+  { page, size }: { page?: number; size?: number } = {},
 ) => {
-  const [from_arg, to_arg] = pageToRange({ page, size: DEFAULT_PAGE_SIZE });
+  const [from_arg, to_arg] = pageToRange({ page, size });
 
   return createServerComponentClient().rpc('list_public_events', {
     from_arg,

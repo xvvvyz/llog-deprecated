@@ -1,5 +1,6 @@
 import Empty from '@/_components/empty';
 import TimelineEvents from '@/_components/timeline-events';
+import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
 import listEvents from '@/_server/list-events';
 import listPublicEvents from '@/_server/list-public-events';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
@@ -19,8 +20,8 @@ const Events = async ({
   user,
 }: EventsProps) => {
   const { data: events } = isPublic
-    ? await listPublicEvents(subjectId, { page: 0 })
-    : await listEvents(subjectId, { page: 0 });
+    ? await listPublicEvents(subjectId, { size: DEFAULT_PAGE_SIZE })
+    : await listEvents(subjectId, { size: DEFAULT_PAGE_SIZE });
 
   if (!events?.length) {
     return (
