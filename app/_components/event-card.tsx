@@ -47,9 +47,7 @@ const EventCard = ({
   const comments = forceArray(event?.comments);
 
   return (
-    <div
-      className={twMerge('form gap-0 p-0', disabled && 'disabled', className)}
-    >
+    <div className={twMerge('form gap-0 p-0', className)}>
       {event && (
         <div
           className={twMerge(

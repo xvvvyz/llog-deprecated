@@ -25,7 +25,9 @@ const Switch = React.forwardRef<
         <SwitchPrimitives.Thumb className="block h-6 w-6 rounded bg-bg-2 shadow-sm transition-transform data-[state=checked]:translate-x-4" />
       </SwitchPrimitives.Root>
     </div>
-    {description && <p className="label mt-6 p-0 text-fg-4">{description}</p>}
+    {description && (
+      <span className="label mt-6 p-0 text-fg-4">{description}</span>
+    )}
   </label>
 ));
 

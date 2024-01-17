@@ -36,7 +36,7 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
       </Button>
       <Dialog className="relative z-10" onClose={toggleModal} open={modal}>
         <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-3 backdrop-blur-sm" />
-        <div className="fixed inset-4 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
             <Dialog.Panel className="w-full max-w-sm transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
               <div className="flex items-center justify-between">
