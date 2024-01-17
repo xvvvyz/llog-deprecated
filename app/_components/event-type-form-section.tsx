@@ -22,24 +22,31 @@ import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { Controller, FieldValues, UseFormReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+
+import {
+  ArrayPath,
+  Controller,
+  FieldValues,
+  UseFieldArrayReturn,
+  UseFormReturn,
+} from 'react-hook-form';
 
 import {
   DraggableAttributes,
   DraggableSyntheticListeners,
 } from '@dnd-kit/core';
 
-interface EventTypeFormSectionProps<T extends FieldValues> {
+interface EventTypeFormSectionProps<
+  T extends FieldValues,
+  U extends ArrayPath<T>,
+> {
   attributes?: DraggableAttributes;
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesWithDataData;
   cacheKey: CacheKeys;
   event?: NonNullable<GetSessionData>['modules'][0]['event'][0];
-
-  // todo: figure out how to type this
-  eventTypeArray?: any;
-
+  eventTypeArray?: UseFieldArrayReturn<T, U, 'key'>;
   eventTypeIndex?: number;
   form: UseFormReturn<T>;
   hasOnlyOne?: boolean;
@@ -49,7 +56,7 @@ interface EventTypeFormSectionProps<T extends FieldValues> {
   moduleNumber?: number;
 }
 
-const EventTypeFormSection = <T extends FieldValues>({
+const EventTypeFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
   attributes,
   availableInputs,
   availableTemplates,
@@ -63,7 +70,7 @@ const EventTypeFormSection = <T extends FieldValues>({
   listeners,
   moduleNumber,
   namePrefix = '',
-}: EventTypeFormSectionProps<T>) => {
+}: EventTypeFormSectionProps<T, U>) => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
   const [isTransitioning, startTransition] = useTransition();
   const backLink = useBackLink({ useCache: true });

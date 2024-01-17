@@ -4,24 +4,30 @@ import { GetSessionData } from '@/_server/get-session';
 import { ListInputsData } from '@/_server/list-inputs';
 import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
 import { useSortable } from '@dnd-kit/sortable';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-interface ModuleFormSectionProps<T extends FieldValues> {
+import {
+  ArrayPath,
+  FieldValues,
+  UseFieldArrayReturn,
+  UseFormReturn,
+} from 'react-hook-form';
+
+interface ModuleFormSectionProps<
+  T extends FieldValues,
+  U extends ArrayPath<T>,
+> {
   availableInputs: ListInputsData;
   availableTemplates: ListTemplatesWithDataData;
   event: NonNullable<GetSessionData>['modules'][0]['event'][0];
-
-  // todo: figure out how to type this
-  eventTypeArray: any;
-
+  eventTypeArray: UseFieldArrayReturn<T, U, 'key'>;
   eventTypeIndex: number;
   eventTypeKey: string;
   form: UseFormReturn<T>;
   hasOnlyOne?: boolean;
 }
 
-const ModuleFormSection = <T extends FieldValues>({
+const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
   availableInputs,
   availableTemplates,
   event,
@@ -30,7 +36,7 @@ const ModuleFormSection = <T extends FieldValues>({
   eventTypeKey,
   form,
   hasOnlyOne,
-}: ModuleFormSectionProps<T>) => {
+}: ModuleFormSectionProps<T, U>) => {
   const {
     attributes,
     isDragging,

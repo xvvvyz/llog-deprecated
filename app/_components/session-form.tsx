@@ -496,7 +496,7 @@ const SessionForm = ({
               strategy={verticalListSortingStrategy}
             >
               {modulesArray.fields.map((module, eventTypeIndex) => (
-                <ModuleFormSection<SessionFormValues>
+                <ModuleFormSection<SessionFormValues, 'modules'>
                   availableInputs={availableInputs}
                   availableTemplates={availableTemplates}
                   event={moduleIdEventMap[module.id]}
