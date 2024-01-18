@@ -3,6 +3,5 @@
 app/_types/database.ts
 next-env.d.ts
 node_modules/
-pnpm-lock.yaml
 supabase/.branches/
 supabase/.temp/

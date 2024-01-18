@@ -1,7 +1,6 @@
 {
   "name": "llog",
   "private": true,
-  "packageManager": "pnpm@8.6.7",
   "scripts": {
     "build": "next build",
     "db:diff": "supabase db diff -f",
@@ -13,7 +12,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "serve": "next start",
-    "start": "next dev"
+    "start": "next dev --turbo"
   },
   "dependencies": {
     "@ark-ui/react": "^1.2.1",
@@ -64,8 +63,7 @@
     "json-2-csv": "^5.0.1",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.4",
-    "next": "14.0.5-canary.58",
-    "openai-edge": "^1.2.2",
+    "next": "canary",
     "prettier": "^3.2.4",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",

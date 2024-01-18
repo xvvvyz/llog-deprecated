@@ -19,16 +19,13 @@ jobs:
     environment: Production
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-      - run: pnpm i
-      - run:
-          pnpm exec vercel pull --yes --environment=production
-          --token="$VERCEL_TOKEN"
-      - run: pnpm exec supabase link --project-ref "$SUPABASE_PROJECT_ID"
-      - run: pnpm run db:start
-      - run: pnpm run db:types
-      - run: pnpm exec next telemetry disable
-      - run: pnpm exec vercel build --prod
-      - run:
-          pnpm exec supabase db push --password "$SUPABASE_DB_PASSWORD_INLINE"
-      - run: pnpm exec vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - uses: oven-sh/setup-bun@v1
+      - run: bun i
+      - run: bun vercel pull -y --environment=production --token="$VERCEL_TOKEN"
+      - run: bun supabase link --project-ref "$SUPABASE_PROJECT_ID"
+      - run: bun db:start
+      - run: bun db:types
+      - run: bun next telemetry disable
+      - run: bun vercel build --prod
+      - run: bun supabase db push --password "$SUPABASE_DB_PASSWORD_INLINE"
+      - run: bun vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
