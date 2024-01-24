@@ -6,13 +6,12 @@
   :root {
     --color-accent-1: hsl(45, 96%, 45%);
     --color-accent-2: hsl(45, 96%, 60%);
-    --color-alpha-1: hsla(45, 5%, 100%, 5%);
-    --color-alpha-2: hsla(45, 5%, 100%, 10%);
-    --color-alpha-3: hsla(45, 5%, 100%, 15%);
-    --color-alpha-4: hsla(45, 5%, 100%, 20%);
-    --color-alpha-reverse-1: hsla(0, 0%, 0%, 10%);
-    --color-alpha-reverse-2: hsla(0, 0%, 0%, 20%);
-    --color-alpha-reverse-3: hsla(0, 0%, 0%, 30%);
+    --color-alpha-1: hsla(0, 0%, 100%, 5%);
+    --color-alpha-2: hsla(0, 0%, 100%, 10%);
+    --color-alpha-3: hsla(0, 0%, 100%, 15%);
+    --color-alpha-4: hsla(0, 0%, 100%, 20%);
+    --color-alpha-reverse-1: hsla(0, 0%, 0%, 40%);
+    --color-alpha-reverse-2: hsla(0, 0%, 0%, 10%);
     --color-bg-1: hsl(45, 5%, 12%);
     --color-bg-2: hsl(45, 5%, 16%);
     --color-bg-3: hsl(45, 5%, 20%);
@@ -71,10 +70,6 @@
 }
 
 @layer components {
-  .form {
-    @apply flex flex-col gap-6 border-y border-alpha-1 bg-bg-2 px-4 py-8 sm:rounded sm:border-x sm:px-8;
-  }
-
   .input {
     @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-2 outline-none transition-colors placeholder:text-fg-4 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2 print:hidden;
   }
@@ -98,6 +93,6 @@
   }
 
   .smallcaps {
-    @apply text-xs uppercase tracking-widest text-fg-4;
+    @apply text-xs uppercase tracking-widest;
   }
 }

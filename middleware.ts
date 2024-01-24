@@ -1,43 +1,72 @@
-import { Database } from '@/_types/database';
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { CookieOptions, createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
-  matcher: ['/((?!_next/static|favicon.ico).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 };
 
 export const middleware = async (req: NextRequest) => {
-  const res = NextResponse.next();
+  let res = NextResponse.next({ request: { headers: req.headers } });
 
-  const session = await createMiddlewareClient<Database>({
-    req,
-    res,
-  }).auth.getSession();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value;
+        },
+        remove(name: string, options: CookieOptions) {
+          req.cookies.set({ name, value: '', ...options });
+          res = NextResponse.next({ request: { headers: req.headers } });
+          res.cookies.set({ name, value: '', ...options });
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          req.cookies.set({ name, value, ...options });
+          res = NextResponse.next({ request: { headers: req.headers } });
+          res.cookies.set({ name, value, ...options });
+        },
+      },
+    },
+  );
 
-  if (
-    ['/', '/forgot-password', '/sign-in', '/sign-up'].includes(
-      req.nextUrl.pathname,
-    ) &&
-    session.data.session
-  ) {
-    return NextResponse.redirect(new URL('/subjects', req.url));
-  }
+  const user = await supabase.auth.getUser();
 
-  if (
-    ['/account', '/inputs', '/notifications', '/subjects', '/templates'].some(
-      (p) => req.nextUrl.pathname.startsWith(p),
-    ) &&
-    !session.data.session
-  ) {
-    const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';
+  if (user.data.user) {
+    const forcePublic = ['/', '/forgot-password', '/sign-in', '/sign-up'];
 
-    const redirect = encodeURIComponent(
-      `${req.nextUrl.pathname}${req.nextUrl.search}`,
-    );
+    if (forcePublic.includes(req.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/subjects', req.url));
+    }
+  } else {
+    if (req.nextUrl.pathname === '/') {
+      // temporary landing page redirect
+      return NextResponse.redirect(new URL('/sign-in', req.url));
+    }
 
-    return NextResponse.redirect(
-      new URL(`/sign-${inOrUp}?redirect=${redirect}`, req.url),
-    );
+    const forcePrivateStartsWith = [
+      '/account',
+      '/inputs',
+      '/notifications',
+      '/subjects',
+      '/templates',
+    ];
+
+    if (
+      forcePrivateStartsWith.some((p) => req.nextUrl.pathname.startsWith(p))
+    ) {
+      const inOrUp = req.nextUrl.pathname.includes('/join/') ? 'up' : 'in';
+
+      const redirect = encodeURIComponent(
+        `${req.nextUrl.pathname}${req.nextUrl.search}`,
+      );
+
+      return NextResponse.redirect(
+        new URL(`/sign-${inOrUp}?next=${redirect}`, req.url),
+      );
+    }
   }
 
   return res;

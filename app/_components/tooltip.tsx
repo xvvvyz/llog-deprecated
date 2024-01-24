@@ -1,6 +1,6 @@
 'use client';
 
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { normalizeProps, useMachine } from '@zag-js/react';
 import * as tooltip from '@zag-js/tooltip';
 import { ReactNode } from 'react';
@@ -44,11 +44,11 @@ const Tooltip = ({
       </button>
       {api.isOpen && (
         <div
-          className="z-10 rounded border border-alpha-1 bg-bg-3 px-6 py-5 text-fg-1 shadow-lg"
+          className="rounded border border-alpha-1 bg-bg-3 px-6 py-5 text-fg-1 shadow-lg"
           {...api.positionerProps}
         >
           <div
-            className={twMerge('max-w-[17rem]', tipClassName)}
+            className={twMerge('z-10 max-w-[17rem]', tipClassName)}
             {...api.contentProps}
           >
             {tip}

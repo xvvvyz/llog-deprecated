@@ -1,16 +1,21 @@
 import Button from '@/_components/button';
-import getCurrentUser from '@/_server/get-current-user';
-import getSubject from '@/_server/get-subject';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getSubject from '@/_queries/get-subject';
+import ExclamationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
+  modals: ReactNode;
   params: { subjectId: string };
 }
 
-const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
-  const user = await getCurrentUser();
+const Layout = async ({
+  children,
+  modals,
+  params: { subjectId },
+}: LayoutProps) => {
+  const user = await getCurrentUserFromSession();
   const { data: subject } = await getSubject(subjectId);
 
   return (
@@ -59,9 +64,8 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
           )}
         </div>
       </div>
-      <div className="mx-auto -mt-px max-w-lg pb-20 print:max-w-xl">
-        {children}
-      </div>
+      <div className="mx-auto max-w-lg pb-20">{children}</div>
+      {modals}
     </>
   );
 };

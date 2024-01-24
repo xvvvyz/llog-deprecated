@@ -1,8 +1,6 @@
-import BackButton from '@/_components/back-button';
-import Breadcrumbs from '@/_components/breadcrumbs';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
-import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
+import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
 import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
@@ -11,6 +9,7 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
+  back?: string;
   children: ReactNode;
   isCreate?: boolean;
   isEdit?: boolean;
@@ -26,6 +25,7 @@ interface SessionLayoutProps {
 }
 
 const SessionLayout = async ({
+  back,
   children,
   isCreate,
   isEdit,
@@ -49,7 +49,7 @@ const SessionLayout = async ({
     [subjectName, `/${shareOrSubjects}/${subjectId}`],
     [
       missionName,
-      `/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions`,
+      `/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`,
     ],
     [`${sessionOrder + 1}`],
   ];
@@ -58,7 +58,7 @@ const SessionLayout = async ({
     breadcrumbs[3] = ['Edit'];
 
     if (isEdit && !currentSession?.draft) {
-      breadcrumbs[2][1] = `/subjects/${subjectId}/missions/${missionId}/sessions/${sessionId}`;
+      breadcrumbs[2][1] = `/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`;
     }
   }
 
@@ -106,40 +106,35 @@ const SessionLayout = async ({
 
   const editSuffix = isEditOrCreate ? '/edit' : '';
   const nextSessionOrder = highestOrder + 1;
+  const queryParams = back ? `?back=${back}` : '';
 
   return (
     <>
-      <div className="my-16 flex h-8 items-center justify-between gap-8 px-4 print:hidden">
-        <BackButton
-          href={
-            isEditOrCreate
-              ? `/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions`
-              : `/${shareOrSubjects}/${subjectId}`
-          }
-        />
-        <Breadcrumbs items={breadcrumbs} />
-      </div>
-      <nav className="flex w-full items-center justify-between px-4 print:hidden">
+      <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions/${previousSessionId}${editSuffix}`}
-          icon={<ChevronLeftIcon className="relative -left-2 w-7" />}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}${queryParams}`}
+          icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
+          scroll={false}
         />
         <div className="flex items-baseline gap-6">
-          <span className="font-mono text-fg-4">
+          <span className="smallcaps text-fg-4">
             Session {sessionOrder + 1}
             {!isEditOrCreate && <> of {highestOrder + 1}</>}
           </span>
           {currentSession?.draft || order ? (
-            <span className="smallcaps">Draft</span>
+            <span className="smallcaps text-fg-4">Draft</span>
           ) : (
+            !isPublic &&
             isTeamMember &&
             (isEditOrCreate ? (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions/${sessionId}`}
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
+                replace
+                scroll={false}
                 variant="link"
               >
                 <EyeIcon className="relative top-1 w-5" />
@@ -148,7 +143,9 @@ const SessionLayout = async ({
             ) : (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions/${sessionId}/edit`}
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
+                replace
+                scroll={false}
                 variant="link"
               >
                 <PencilIcon className="relative top-1 w-5" />
@@ -160,22 +157,24 @@ const SessionLayout = async ({
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={isCreate}
-            href={`/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions/create/${nextSessionOrder}`}
-            icon={<PlusIcon className="relative -right-2 w-7" />}
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            icon={<PlusIcon className="relative right-1 w-7" />}
             label="Add session"
             replace
+            scroll={false}
           />
         ) : (
           <IconButton
             disabled={!nextSessionId}
-            href={`/${shareOrSubjects}/${subjectId}/missions/${missionId}/sessions/${nextSessionId}${editSuffix}`}
-            icon={<ChevronRightIcon className="relative -right-2 w-7" />}
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}${queryParams}`}
+            icon={<ChevronRightIcon className="relative right-1 w-7" />}
             label="Next session"
             replace
+            scroll={false}
           />
         )}
       </nav>
-      <div className="mt-8 flex flex-col gap-4">{children}</div>
+      {children}
     </>
   );
 };

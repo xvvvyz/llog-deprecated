@@ -1,25 +1,27 @@
 'use client';
 
+import upsertInput from '@/_actions/upsert-input';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
+import FormBanner from '@/_components/form-banner';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
-import NumberInput from '@/_components/input-number';
 import Select, { IOption } from '@/_components/select';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
-import CacheKeys from '@/_constants/enum-cache-keys';
 import InputTypes from '@/_constants/enum-input-types';
-import useDefaultValues from '@/_hooks/use-default-values';
-import useSubmitRedirect from '@/_hooks/use-submit-redirect';
-import useSupabase from '@/_hooks/use-supabase';
-import useUpdateGlobalValueCache from '@/_hooks/use-update-global-value-cache';
-import { GetInputData } from '@/_server/get-input';
-import { ListSubjectsByTeamIdData } from '@/_server/list-subjects-by-team-id';
+import useCachedForm from '@/_hooks/use-cached-form';
+import { GetInputData } from '@/_queries/get-input';
+import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
+import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { Database } from '@/_types/database';
-import { InputType } from '@/_types/input';
+import { InputSettingsJson } from '@/_types/input-settings-json';
 import forceArray from '@/_utilities/force-array';
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import getFormCacheKey from '@/_utilities/get-form-cache-key';
+import stopPropagation from '@/_utilities/stop-propagation';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
+import { useTransition } from 'react';
+import { Controller, useFieldArray } from 'react-hook-form';
 import { PropsValue } from 'react-select';
 
 const INPUT_TYPE_OPTIONS = [
@@ -32,180 +34,86 @@ const INPUT_TYPE_OPTIONS = [
 ];
 
 interface InputFormProps {
-  duplicateInputData?: GetInputData;
-  input?: GetInputData;
-  subjects?: ListSubjectsByTeamIdData;
+  back?: string;
+  disableCache?: boolean;
+  input?: Partial<GetInputData>;
+  isDuplicate?: boolean;
+  onClose?: () => void;
+  onSubmit?: (values: NonNullable<ListInputsBySubjectIdData>[0]) => void;
+  subjects?: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-type InputFormValues = InputType & {
-  options: Database['public']['Tables']['input_options']['Insert'][];
-  subjects: { id: string; image_uri: string; name: string }[];
+type InputFormValues = {
+  label: string;
+  options: Array<Database['public']['Tables']['input_options']['Insert']>;
+  settings?: InputSettingsJson;
+  subjects: Array<Database['public']['Tables']['subjects']['Row']>;
   type: { id: Database['public']['Enums']['input_type'] };
 };
 
-const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
-  const [redirect, isRedirecting] = useSubmitRedirect();
-  const initialInput = input ?? duplicateInputData;
-  const supabase = useSupabase();
-  const updateGlobalValueCache = useUpdateGlobalValueCache();
+const InputForm = ({
+  back,
+  disableCache,
+  input,
+  isDuplicate,
+  onClose,
+  onSubmit,
+  subjects,
+}: InputFormProps) => {
+  const [isTransitioning, startTransition] = useTransition();
 
-  const defaultValues = useDefaultValues({
-    cacheKey: CacheKeys.InputForm,
-    defaultValues: {
-      id: duplicateInputData ? undefined : input?.id,
-      label: initialInput?.label ?? '',
-      options: forceArray(initialInput?.options),
-      settings: initialInput?.settings,
-      subjects: forceArray(subjects).filter(({ id }) =>
-        forceArray(initialInput?.subjects_for).some(
-          ({ subject_id }) => subject_id === id,
+  const form = useCachedForm<InputFormValues>(
+    getFormCacheKey.input({ id: input?.id, isDuplicate }),
+    {
+      defaultValues: {
+        label: input?.label ?? '',
+        options: input?.options ?? [],
+        settings: input?.settings as InputSettingsJson,
+        subjects: forceArray(subjects).filter(({ id }) =>
+          input?.subjects_for?.some(({ subject_id }) => subject_id === id),
         ),
-      ),
-      type: INPUT_TYPE_OPTIONS.find(({ id }) => id === initialInput?.type),
+        type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
+      },
     },
-  });
-
-  const form = useForm<InputFormValues>({ defaultValues });
+    { disableCache },
+  );
 
   const optionsArray = useFieldArray({
     control: form.control,
     name: 'options',
   });
 
-  const id = form.watch('id');
-  const maxFractionDigits = form.watch('settings.maxFractionDigits');
-  const minFractionDigits = form.watch('settings.minFractionDigits');
   const type = form.watch('type')?.id;
-
-  const hasOptions =
-    type === InputTypes.Select || type === InputTypes.MultiSelect;
 
   return (
     <form
-      className="form block p-0"
-      onSubmit={form.handleSubmit(
-        async ({
-          id,
-          label,
-          options,
-          settings,
-          subjects,
-          type: typeObject,
-        }) => {
-          const type = typeObject?.id;
-
-          const { data: inputData, error: inputError } = await supabase
-            .from('inputs')
-            .upsert({ id, label: label.trim(), settings, type })
-            .select('id, label')
-            .single();
-
-          if (inputError) {
-            alert(inputError?.message);
-            return;
-          }
-
-          form.setValue('id', inputData.id);
-
-          if (hasOptions) {
-            const { insertedOptions, updatedOptions } = options.reduce(
-              (acc, option, order) => {
-                const payload: InputFormValues['options'][0] = {
-                  input_id: inputData.id,
-                  label: option.label.trim(),
-                  order,
-                };
-
-                if (option.id) {
-                  payload.id = option.id;
-                  acc.updatedOptions.push(payload);
-                } else {
-                  acc.insertedOptions.push(payload);
-                }
-
-                return acc;
-              },
-              {
-                insertedOptions: [] as InputFormValues['options'],
-                updatedOptions: [] as InputFormValues['options'],
-              },
+      className="divide-y divide-alpha-1"
+      onSubmit={stopPropagation(
+        form.handleSubmit((values) =>
+          startTransition(async () => {
+            const res = await upsertInput(
+              { inputId: isDuplicate ? undefined : input?.id, next: back },
+              values,
             );
 
-            const deletedOptionIds = forceArray(input?.options).reduce(
-              (acc, option) => {
-                if (!updatedOptions.some(({ id }) => id === option.id)) {
-                  acc.push(option.id);
-                }
+            if (res?.error) {
+              form.setError('root', { message: res.error, type: 'custom' });
+            } else if (res?.data) {
+              onSubmit?.({
+                id: res.data.id,
+                label: res.data.label,
+                subjects: values.subjects,
+                type: values.type.id,
+              });
 
-                return acc;
-              },
-              [],
-            );
-
-            if (deletedOptionIds.length) {
-              const { error: deletedOptionsError } = await supabase
-                .from('input_options')
-                .delete()
-                .in('id', deletedOptionIds);
-
-              if (deletedOptionsError) {
-                alert(deletedOptionsError.message);
-                return;
-              }
+              onClose?.();
             }
-
-            if (updatedOptions.length) {
-              const { error: inputOptionsError } = await supabase
-                .from('input_options')
-                .upsert(updatedOptions);
-
-              if (inputOptionsError) {
-                alert(inputOptionsError.message);
-                return;
-              }
-            }
-
-            if (insertedOptions.length) {
-              const { error: inputOptionsError } = await supabase
-                .from('input_options')
-                .insert(insertedOptions);
-
-              if (inputOptionsError) {
-                alert(inputOptionsError.message);
-                return;
-              }
-            }
-          }
-
-          if (defaultValues.subjects.length) {
-            await supabase
-              .from('input_subjects')
-              .delete()
-              .eq('input_id', inputData.id);
-          }
-
-          if (subjects.length) {
-            const { error: inputSubjectsError } = await supabase
-              .from('input_subjects')
-              .insert(
-                subjects.map(({ id }) => ({
-                  input_id: inputData.id,
-                  subject_id: id,
-                })),
-              );
-
-            if (inputSubjectsError) {
-              alert(inputSubjectsError.message);
-              return;
-            }
-          }
-
-          updateGlobalValueCache({ ...inputData, subjects });
-          await redirect('/inputs');
-        },
+          }),
+        ),
       )}
     >
-      <div className="form rounded-none border-0 bg-transparent">
+      {!disableCache && <FormBanner<InputFormValues> form={form} />}
+      <div className="px-4 py-8 sm:px-8">
         <Controller
           control={form.control}
           name="subjects"
@@ -218,7 +126,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               noOptionsMessage={() => 'No subjects'}
               onBlur={field.onBlur}
               onChange={(value) => field.onChange(value)}
-              options={forceArray(subjects)}
+              options={subjects as IOption[]}
               placeholder="All subjects…"
               tooltip={
                 <>
@@ -231,7 +139,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
           )}
         />
       </div>
-      <div className="form rounded-none border-0 border-t bg-transparent">
+      <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
         <Input label="Label" required {...form.register('label')} />
         <Controller
           control={form.control}
@@ -245,25 +153,26 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
               onBlur={field.onBlur}
               onChange={(option) => {
                 field.onChange(option);
-                form.setValue('settings', null);
+                form.setValue('settings', null, { shouldDirty: true });
 
                 switch ((option as InputFormValues['options'][0])?.id) {
                   case InputTypes.Number: {
-                    form.setValue('settings', {
-                      max: '100',
-                      maxFractionDigits: '0',
-                      min: '0',
-                      minFractionDigits: '0',
-                    });
+                    form.setValue(
+                      'settings',
+                      { max: '100', min: '0', step: '1' },
+                      { shouldDirty: true },
+                    );
 
                     return;
                   }
 
                   case InputTypes.MultiSelect:
                   case InputTypes.Select: {
-                    form.setValue('settings', {
-                      isCreatable: false,
-                    });
+                    form.setValue(
+                      'settings',
+                      { isCreatable: false },
+                      { shouldDirty: true },
+                    );
 
                     return;
                   }
@@ -281,9 +190,11 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
           )}
         />
       </div>
-      {(hasOptions || type === InputTypes.Number) && (
-        <div className="form rounded-none border-0 border-t bg-transparent">
-          {hasOptions && (
+      {(type === InputTypes.Select ||
+        type === InputTypes.MultiSelect ||
+        type === InputTypes.Number) && (
+        <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
+          {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
             <>
               <fieldset className="group">
                 <span className="label">Options</span>
@@ -314,7 +225,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                                     e.preventDefault();
 
                                     optionsArray.insert(optionIndex + 1, {
-                                      input_id: id ?? '',
+                                      input_id: input?.id ?? '',
                                       label: '',
                                       order: optionIndex + 1,
                                     });
@@ -346,7 +257,7 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
                     colorScheme="transparent"
                     onClick={() =>
                       optionsArray.append({
-                        input_id: id ?? '',
+                        input_id: input?.id ?? '',
                         label: '',
                         order: optionsArray.fields.length,
                       })
@@ -373,80 +284,73 @@ const InputForm = ({ input, duplicateInputData, subjects }: InputFormProps) => {
           )}
           {type === InputTypes.Number && (
             <>
-              <fieldset className="flex gap-6">
-                <Controller
-                  control={form.control}
-                  name="settings.minFractionDigits"
-                  render={({ field }) => (
-                    <NumberInput
-                      label="Min fraction digits"
-                      max={maxFractionDigits}
-                      min={0}
-                      required
-                      {...field}
-                    />
-                  )}
+              <fieldset className="flex gap-4">
+                <Input
+                  label="Min value"
+                  max={form.watch('settings.max')}
+                  required
+                  step={form.watch('settings.step')}
+                  type="number"
+                  {...form.register('settings.min')}
                 />
-                <Controller
-                  control={form.control}
-                  name="settings.maxFractionDigits"
-                  render={({ field }) => (
-                    <NumberInput
-                      label="Max fraction digits"
-                      max={6}
-                      min={minFractionDigits ?? 0}
-                      required
-                      {...field}
-                    />
-                  )}
+                <Input
+                  label="Max value"
+                  min={form.watch('settings.min')}
+                  required
+                  step={form.watch('settings.step')}
+                  type="number"
+                  {...form.register('settings.max')}
                 />
               </fieldset>
-              <fieldset className="flex gap-6">
-                <Controller
-                  control={form.control}
-                  name="settings.min"
-                  render={({ field }) => (
-                    <NumberInput
-                      label="Min value"
-                      max={form.watch('settings.max')}
-                      maxFractionDigits={maxFractionDigits}
-                      minFractionDigits={minFractionDigits}
-                      required
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  control={form.control}
-                  name="settings.max"
-                  render={({ field }) => (
-                    <NumberInput
-                      label="Max value"
-                      maxFractionDigits={maxFractionDigits}
-                      min={form.watch('settings.min')}
-                      minFractionDigits={minFractionDigits}
-                      required
-                      {...field}
-                    />
-                  )}
+              <fieldset>
+                <Input
+                  label="Step"
+                  min={0}
+                  required
+                  step="any"
+                  // explain html number input step so it's not confusing
+                  tooltip={
+                    <>
+                      Step is the interval between values. For example, if you
+                      set the step to 0.01, you can only select values that are
+                      multiples of 5 (5, 10, 15, etc).
+                    </>
+                  }
+                  type="number"
+                  {...form.register('settings.step')}
                 />
               </fieldset>
             </>
           )}
         </div>
       )}
-      <div className="form rounded-none border-0 border-t bg-transparent">
+      {form.formState.errors.root && (
+        <div className="px-4 py-8 text-center sm:px-8">
+          {form.formState.errors.root.message}
+        </div>
+      )}
+      <div className="flex gap-4 px-4 py-8 sm:px-8">
         <Button
           className="w-full"
-          loading={form.formState.isSubmitting || isRedirecting}
+          colorScheme="transparent"
+          href={back}
+          onClick={onClose}
+          scroll={false}
+        >
+          Close
+        </Button>
+        <Button
+          className="w-full"
+          loading={isTransitioning}
           loadingText="Saving…"
           type="submit"
         >
-          Save input
+          Save
         </Button>
       </div>
     </form>
   );
 };
 
+export type { InputFormValues };
 export default InputForm;

@@ -1,40 +1,41 @@
 'use client';
 
+import signUp from '@/_actions/sign-up';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import { useFormState } from 'react-dom';
 
 interface SignUpFormProps {
-  action: (values: FormData) => Promise<{ error?: string }>;
+  next?: string;
 }
 
-const SignUpForm = ({ action }: SignUpFormProps) => (
-  <form
-    action={async (values: FormData) => {
-      const { error } = await action(values);
-      if (error) alert(error);
-    }}
-    className="flex flex-col gap-6"
-  >
-    <div className="flex gap-6">
-      <Input label="First name" name="firstName" required />
-      <Input label="Last name" name="lastName" required />
-    </div>
-    <Input label="Email address" name="email" required type="email" />
-    <Input
-      label="Password"
-      minLength={6}
-      name="password"
-      required
-      type="password"
-    />
-    <Button
-      className="mt-8 w-full"
-      loadingText="Creating account…"
-      type="submit"
-    >
-      Create account
-    </Button>
-  </form>
-);
+const SignUpForm = ({ next }: SignUpFormProps) => {
+  const [state, action] = useFormState(signUp.bind(null, { next }), null);
+
+  return (
+    <form action={action} className="flex flex-col gap-6">
+      <div className="flex gap-6">
+        <Input label="First name" name="firstName" required />
+        <Input label="Last name" name="lastName" required />
+      </div>
+      <Input label="Email address" name="email" required type="email" />
+      <Input
+        label="Password"
+        minLength={6}
+        name="password"
+        required
+        type="password"
+      />
+      <Button
+        className="mt-8 w-full"
+        loadingText="Creating account…"
+        type="submit"
+      >
+        Create account
+      </Button>
+      {state?.error && <p className="text-center">{state.error}</p>}
+    </form>
+  );
+};
 
 export default SignUpForm;

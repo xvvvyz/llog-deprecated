@@ -1,34 +1,28 @@
 'use client';
 
-import Alert from '@/_components/alert';
+import upsertSession from '@/_actions/upsert-session';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
+import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
 import ModuleFormSection from '@/_components/module-form-section';
-import CacheKeys from '@/_constants/enum-cache-keys';
-import useDefaultValues from '@/_hooks/use-default-values';
-import useSupabase from '@/_hooks/use-supabase';
-import { GetMissionWithSessionsData } from '@/_server/get-mission-with-sessions';
-import { GetSessionData } from '@/_server/get-session';
-import { ListInputsData } from '@/_server/list-inputs';
-import { ListTemplatesWithDataData } from '@/_server/list-templates-with-data';
+import useCachedForm from '@/_hooks/use-cached-form';
+import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
+import { GetSessionData } from '@/_queries/get-session';
+import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
+import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
+import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import { Database } from '@/_types/database';
-import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
-import globalValueCache from '@/_utilities/global-value-cache';
-import sanitizeHtml from '@/_utilities/sanitize-html';
+import getFormCacheKey from '@/_utilities/get-form-cache-key';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Dialog } from '@headlessui/react';
-import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
-import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
-import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
-import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
-import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 
 import {
   closestCenter,
@@ -39,98 +33,83 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 
+import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
 interface SessionFormProps {
-  availableInputs: ListInputsData;
-  availableTemplates: ListTemplatesWithDataData;
+  availableInputs: NonNullable<ListInputsBySubjectIdData>;
+  availableTemplates: NonNullable<ListTemplatesWithDataData>;
+  isDuplicate?: boolean;
   mission: NonNullable<GetMissionWithSessionsData>;
   order?: number;
-  session?: GetSessionData;
+  session?: NonNullable<GetSessionData>;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
   subjectId: string;
 }
 
-type SessionFormValues = Database['public']['Tables']['sessions']['Row'] & {
-  modules: Array<
-    Database['public']['Tables']['event_types']['Row'] & {
-      inputs: Array<Database['public']['Tables']['inputs']['Row']>;
-    }
-  >;
+type SessionFormValues = {
+  draft: boolean;
+  modules: Array<{
+    content: string;
+    id?: string;
+    inputs: Array<Database['public']['Tables']['inputs']['Row']>;
+  }>;
+  scheduledFor: string | null;
+  title: string;
 };
 
 const SessionForm = ({
   availableInputs,
   availableTemplates,
+  isDuplicate,
   mission,
   order,
   session,
+  subjects,
   subjectId,
 }: SessionFormProps) => {
-  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
-  const [isDeleteTransitioning, startDeleteTransition] = useTransition();
-  const [isDeleting, toggleIsDeleting] = useToggle(false);
-  const [isDuplicateTransitioning, startDuplicateTransition] = useTransition();
-  const [isFormTransitioning, startFormTransition] = useTransition();
-  const [isMoveLeftTransitioning, startMoveLeftTransition] = useTransition();
-  const [isMoveRightTransitioning, startMoveRightTransition] = useTransition();
-  const [isMovingLeft, toggleIsMovingLeft] = useToggle(false);
-  const [isMovingRight, toggleIsMovingRight] = useToggle(false);
-  const [moveLeftAlert, toggleMoveLeftAlert] = useToggle(false);
-  const [moveRightAlert, toggleMoveRightAlert] = useToggle(false);
+  const [isTransitioning, startTransition] = useTransition();
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
-  const currentOrder = session?.order ?? order ?? 0;
+  const currentOrder = (isDuplicate ? order : session?.order ?? order) ?? 0;
   const modules = forceArray(session?.modules);
-  const hasEvents = modules.some((module) => module.event?.length);
-  const router = useRouter();
   const sensors = useSensors(useSensor(PointerSensor));
-  const sessions = forceArray(mission.sessions);
-  const supabase = useSupabase();
 
-  const highestPublishedOrder = sessions.reduce(
-    (acc, s) => (s.draft ? acc : Math.max(acc, s.order)),
-    -1,
-  );
+  const cacheKey = getFormCacheKey.session({
+    id: session?.id,
+    isDuplicate,
+    missionId: mission.id,
+    subjectId,
+  });
 
-  const moduleIdEventMap = modules.reduce((acc, module) => {
-    acc[module.id] = firstIfArray(module.event);
-    return acc;
-  }, {});
-
-  const form = useForm<SessionFormValues>({
-    defaultValues: useDefaultValues({
-      cacheKey: CacheKeys.SessionForm,
+  const form = useCachedForm<SessionFormValues>(
+    cacheKey,
+    {
       defaultValues: {
-        draft: session?.draft ?? true,
-        id: session?.id,
+        draft: isDuplicate ? true : session?.draft ?? true,
         modules: modules.length
           ? modules.map((module) => ({
-              content: module.content,
-              id: module.id,
-              inputs: forceArray(module?.inputs).reduce((acc, { input_id }) => {
-                const input = availableInputs?.find(
-                  ({ id }) => id === input_id,
-                );
-
-                if (input) acc.push(input);
-                return acc;
-              }, []),
+              content: module.content ?? '',
+              id: isDuplicate ? undefined : module.id,
+              inputs: availableInputs.filter((input) =>
+                module.inputs.some(({ input_id }) => input_id === input.id),
+              ),
             }))
           : [{ content: '', inputs: [] }],
-        order: currentOrder,
-        scheduled_for:
+        scheduledFor:
           !session?.scheduled_for ||
           (session.scheduled_for &&
             new Date(session.scheduled_for) < new Date())
-            ? undefined
+            ? null
             : formatDatetimeLocal(session.scheduled_for, { seconds: false }),
-        title: session?.title,
+        title: session?.title ?? '',
       },
-    }),
-  });
+    },
+    { ignoreValues: ['draft', 'order'] },
+  );
 
   const modulesArray = useFieldArray({
     control: form.control,
@@ -138,11 +117,15 @@ const SessionForm = ({
     name: 'modules',
   });
 
-  const scheduledFor = form.watch('scheduled_for');
   const draft = form.watch('draft');
+  const hasEvents = modules.some((module) => module.event?.length);
+  const scheduledFor = form.watch('scheduledFor');
 
   const cancelScheduleModal = () => {
-    form.setValue('scheduled_for', ogScheduledFor ?? null);
+    form.setValue('scheduledFor', ogScheduledFor ?? null, {
+      shouldDirty: true,
+    });
+
     setOgScheduledFor(null);
     toggleScheduleModal(false);
   };
@@ -152,333 +135,61 @@ const SessionForm = ({
     toggleScheduleModal(true);
   };
 
-  const reorderSession = (newOrder: number) =>
-    supabase.from('sessions').upsert(
-      sessions.reduce((acc, s) => {
-        const common = { id: s.id, mission_id: mission.id };
-
-        if (s.order === newOrder && !draft) {
-          acc.push({ ...common, order: currentOrder });
-        } else if (s.id === session?.id) {
-          acc.push({ ...common, order: newOrder });
-        }
-
-        return acc;
-      }, []),
-    );
-
-  const onSubmit = form.handleSubmit(async (values) => {
-    const finalOrder = values.draft
-      ? values.order
-      : Math.min(values.order, highestPublishedOrder + 1);
-
-    if (!values.draft) {
-      const { error: sessionsError } = await supabase.from('sessions').upsert(
-        sessions
-          .filter((session) => session.id !== values.id && !session.draft)
-          .map((session, index) => ({
-            id: session.id,
-            mission_id: mission.id,
-            order: index < finalOrder ? index : index + 1,
-          })),
-      );
-
-      if (sessionsError) {
-        alert(sessionsError.message);
-        return;
-      }
-    }
-
-    const { data: sessionData, error: sessionError } = await supabase
-      .from('sessions')
-      .upsert({
-        draft: values.draft,
-        id: values.id,
-        mission_id: mission.id,
-        order: finalOrder,
-        scheduled_for: values.scheduled_for
-          ? new Date(values.scheduled_for).toISOString()
-          : null,
-        title: values.title?.trim(),
-      })
-      .select('id')
-      .single();
-
-    if (sessionError) {
-      alert(sessionError.message);
-      return;
-    }
-
-    form.setValue('id', sessionData.id);
-
-    const { insertedEventTypes, updatedEventTypes } = values.modules.reduce(
-      (acc, module, order) => {
-        const payload: Database['public']['Tables']['event_types']['Insert'] = {
-          content: sanitizeHtml(module.content),
-          order,
-          session_id: sessionData.id,
-          subject_id: subjectId,
-        };
-
-        if (module.id) {
-          payload.id = module.id;
-          acc.updatedEventTypes.push(payload);
-        } else {
-          acc.insertedEventTypes.push(payload);
-        }
-
-        return acc;
-      },
-      {
-        insertedEventTypes: [] as Array<
-          Database['public']['Tables']['event_types']['Insert']
-        >,
-        updatedEventTypes: [] as Array<
-          Database['public']['Tables']['event_types']['Insert']
-        >,
-      },
-    );
-
-    const deletedEventTypeIds = modules.reduce((acc, module) => {
-      if (!updatedEventTypes.some(({ id }) => id === module.id)) {
-        acc.push(module.id);
-      }
-
-      return acc;
-    }, [] as string[]);
-
-    if (deletedEventTypeIds.length) {
-      const { error: deletedEventTypesError } = await supabase
-        .from('event_types')
-        .delete()
-        .in('id', deletedEventTypeIds);
-
-      if (deletedEventTypesError) {
-        alert(deletedEventTypesError.message);
-        return;
-      }
-    }
-
-    if (updatedEventTypes.length) {
-      const { error: updateEventTypesError } = await supabase
-        .from('event_types')
-        .upsert(updatedEventTypes);
-
-      if (updateEventTypesError) {
-        alert(updateEventTypesError.message);
-        return;
-      }
-    }
-
-    if (insertedEventTypes.length) {
-      const { data: insertEventTypesData, error: insertEventTypesError } =
-        await supabase
-          .from('event_types')
-          .upsert(insertedEventTypes)
-          .select('id');
-
-      if (insertEventTypesError) {
-        alert(insertEventTypesError.message);
-        return;
-      }
-
-      const insertEventTypesDataReverse = insertEventTypesData.reverse();
-
-      form.setValue(
-        'modules',
-        values.modules.map((module) => {
-          if (module.id) return module;
-          const id = insertEventTypesDataReverse.pop()?.id;
-          if (!id) return module;
-          return { ...module, id };
-        }),
-      );
-    }
-
-    const { deleteEventTypeInputs, insertEventTypeInputs } = form
-      .getValues('modules')
-      .reduce(
-        (acc, module) => {
-          if (module.id) acc.deleteEventTypeInputs.push(module.id);
-
-          module.inputs.forEach((input, order) => {
-            acc.insertEventTypeInputs.push({
-              event_type_id: module.id,
-              input_id: input.id,
-              order,
-            });
-          });
-
-          return acc;
-        },
-        {
-          deleteEventTypeInputs: [] as string[],
-          insertEventTypeInputs: [] as Array<
-            Database['public']['Tables']['event_type_inputs']['Insert']
-          >,
-        },
-      );
-
-    if (deleteEventTypeInputs.length) {
-      const { error: deleteEventTypeInputsError } = await supabase
-        .from('event_type_inputs')
-        .delete()
-        .in('event_type_id', deleteEventTypeInputs);
-
-      if (deleteEventTypeInputsError) {
-        alert(deleteEventTypeInputsError.message);
-        return;
-      }
-    }
-
-    if (insertEventTypeInputs.length) {
-      const { error: insertEventTypeInputsError } = await supabase
-        .from('event_type_inputs')
-        .insert(insertEventTypeInputs);
-
-      if (insertEventTypeInputsError) {
-        alert(insertEventTypeInputsError.message);
-        return;
-      }
-    }
-
-    startFormTransition(() => {
-      router.refresh();
-      router.push(`/subjects/${subjectId}/missions/${mission.id}/sessions`);
-    });
-  });
-
   return (
     <>
-      <form>
-        <div className="flex flex-wrap justify-center gap-2 px-4">
+      <form
+        className="!border-t-0"
+        onSubmit={form.handleSubmit((values) =>
+          startTransition(async () => {
+            values.scheduledFor = values.scheduledFor
+              ? new Date(values.scheduledFor).toISOString()
+              : null;
+
+            const res = await upsertSession(
+              {
+                currentOrder,
+                missionId: mission.id,
+                publishedOrder: Math.min(
+                  currentOrder,
+                  getHighestPublishedOrder(mission.sessions) + 1,
+                ),
+                sessionId: isDuplicate ? undefined : session?.id,
+                subjectId,
+              },
+              values,
+            );
+
+            if (res?.error) {
+              form.setError('root', { message: res.error, type: 'custom' });
+            }
+          }),
+        )}
+      >
+        <FormBanner<SessionFormValues>
+          className="mt-7 border-y border-alpha-1"
+          form={form}
+        />
+        <div className="flex items-center gap-6 px-4 py-8 sm:px-8">
+          <Input placeholder="Session title" {...form.register('title')} />
           <Button
-            colorScheme="transparent"
+            className="shrink-0"
             disabled={hasEvents}
             onClick={openScheduleModal}
-            size="sm"
+            variant="link"
           >
-            <ClockIcon className="-ml-1 w-5" />
+            <ClockIcon className="w-5" />
             {scheduledFor ? (
               <DateTime date={scheduledFor} formatter="date-time" />
             ) : (
               'Schedule'
             )}
           </Button>
-          <Button
-            colorScheme="transparent"
-            disabled={!session || isDuplicateTransitioning}
-            onClick={() => {
-              if (!session) return;
-
-              const newOrder = Math.max(
-                currentOrder + 1,
-                highestPublishedOrder + 1,
-              );
-
-              const values = form.getValues();
-
-              globalValueCache.set(CacheKeys.SessionForm, {
-                modules: values.modules.map((module) => ({
-                  content: module.content,
-                  inputs: module.inputs,
-                  order: module.order,
-                })),
-                order: newOrder,
-                scheduled_for: values.scheduled_for,
-                title: values.title,
-              });
-
-              startDuplicateTransition(() => {
-                router.push(
-                  `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
-                );
-              });
-            }}
-            size="sm"
-          >
-            <DocumentDuplicateIcon className="-ml-1 w-5" />
-            Duplicate
-          </Button>
-          <div className="flex gap-2">
-            <Button
-              colorScheme="transparent"
-              disabled={!session}
-              onClick={() => toggleDeleteAlert(true)}
-              size="sm"
-            >
-              <TrashIcon className="-ml-1 w-5" />
-              Delete
-            </Button>
-            <Button
-              colorScheme="transparent"
-              disabled={
-                currentOrder < 1 || isMovingLeft || isMoveLeftTransitioning
-              }
-              onClick={() => {
-                if (session) {
-                  toggleMoveLeftAlert(true);
-                  return;
-                }
-
-                const newOrder = currentOrder - 1;
-
-                globalValueCache.set(CacheKeys.SessionForm, {
-                  ...form.getValues(),
-                  order: newOrder,
-                });
-
-                startMoveLeftTransition(() =>
-                  router.push(
-                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
-                  ),
-                );
-              }}
-              size="sm"
-            >
-              <ArrowLeftIcon className="-ml-1 w-5" />
-              Move
-            </Button>
-            <Button
-              colorScheme="transparent"
-              disabled={
-                (!draft && currentOrder >= highestPublishedOrder) ||
-                isMovingRight ||
-                isMoveRightTransitioning
-              }
-              onClick={() => {
-                if (session) {
-                  toggleMoveRightAlert(true);
-                  return;
-                }
-
-                const newOrder = currentOrder + 1;
-
-                globalValueCache.set(CacheKeys.SessionForm, {
-                  ...form.getValues(),
-                  order: newOrder,
-                });
-
-                startMoveRightTransition(() =>
-                  router.push(
-                    `/subjects/${subjectId}/missions/${mission.id}/sessions/create/${newOrder}?useCache=true`,
-                  ),
-                );
-              }}
-              size="sm"
-            >
-              Move
-              <ArrowRightIcon className="-mr-1 w-5" />
-            </Button>
-          </div>
         </div>
-        <div className="form mt-10">
-          <Input placeholder="Session title" {...form.register('title')} />
-        </div>
-        <ul className="mt-4 space-y-4">
+        <ul className="space-y-4 px-4 sm:px-8">
           <DndContext
             collisionDetection={closestCenter}
             id="modules"
+            modifiers={[restrictToVerticalAxis]}
             onDragEnd={(event: DragEndEvent) => {
               const { active, over } = event;
 
@@ -499,164 +210,61 @@ const SessionForm = ({
                 <ModuleFormSection<SessionFormValues, 'modules'>
                   availableInputs={availableInputs}
                   availableTemplates={availableTemplates}
-                  event={moduleIdEventMap[module.id]}
                   eventTypeArray={modulesArray}
                   eventTypeIndex={eventTypeIndex}
                   eventTypeKey={module.key}
                   form={form}
                   hasOnlyOne={modulesArray.fields.length === 1}
                   key={module.key}
+                  subjects={subjects}
                 />
               ))}
             </SortableContext>
           </DndContext>
         </ul>
-        <Button
-          className="mt-4 w-full"
-          colorScheme="transparent"
-          onClick={() =>
-            modulesArray.append({
-              archived: false,
-              content: '',
-              id: '',
-              inputs: [],
-              name: null,
-              order: null,
-              session_id: null,
-              subject_id: subjectId,
-            })
-          }
-        >
-          <PlusIcon className="w-5" />
-          Add module
-        </Button>
-        <div className="form mt-4 flex-row gap-4">
+        <div className="px-4 py-8 sm:px-8">
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            onClick={() => modulesArray.append({ content: '', inputs: [] })}
+          >
+            <PlusIcon className="w-5" />
+            Add module
+          </Button>
+        </div>
+        {form.formState.errors.root && (
+          <div className="px-4 py-8 text-center sm:px-8">
+            {form.formState.errors.root.message}
+          </div>
+        )}
+        <div className="flex flex-row gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
           {draft && (
             <Button
               className="w-full"
               colorScheme="transparent"
-              disabled={form.formState.isSubmitting || isFormTransitioning}
-              loading={
-                draft && (form.formState.isSubmitting || isFormTransitioning)
-              }
+              loading={isTransitioning}
               loadingText="Saving…"
-              onClick={onSubmit}
+              type="submit"
             >
               Save as draft
             </Button>
           )}
           <Button
             className="w-full"
-            disabled={form.formState.isSubmitting || isFormTransitioning}
-            loading={
-              !draft && (form.formState.isSubmitting || isFormTransitioning)
-            }
+            loading={!draft && isTransitioning}
             loadingText="Saving…"
-            onClick={() => {
-              form.setValue('draft', false);
-              void onSubmit();
-            }}
+            onClick={() => form.setValue('draft', false)}
+            type="submit"
           >
-            {draft ? <>Save &amp; publish</> : <>Save session</>}
+            {draft ? <>Save &amp; publish</> : <>Save</>}
           </Button>
         </div>
       </form>
-      <Alert
-        confirmText="Delete session"
-        isConfirming={isDeleting || isDeleteTransitioning}
-        isConfirmingText="Deleting session…"
-        onConfirm={async () => {
-          if (!session) return;
-          toggleIsDeleting(true);
-
-          const { error } = await supabase
-            .from('sessions')
-            .delete()
-            .eq('id', session.id);
-
-          if (error) {
-            alert(error.message);
-            toggleIsDeleting(false);
-            return;
-          }
-
-          await supabase.from('sessions').upsert(
-            sessions.reduce((acc, s) => {
-              if (s.order > currentOrder && !s.draft) {
-                acc.push({
-                  id: s.id,
-                  mission_id: mission.id,
-                  order: s.order - 1,
-                });
-              }
-
-              return acc;
-            }, []),
-          );
-
-          toggleIsDeleting(false);
-
-          startDeleteTransition(() => {
-            router.refresh();
-
-            router.replace(
-              `/subjects/${subjectId}/missions/${mission.id}/sessions`,
-            );
-          });
-        }}
-        isOpen={deleteAlert}
-        onClose={toggleDeleteAlert}
-      />
-      <Alert
-        cancelText="Close"
-        confirmText="Move session"
-        description={`Current position: ${currentOrder + 1}`}
-        isConfirming={isMovingLeft || isMoveLeftTransitioning}
-        isConfirmingText="Moving session…"
-        isOpen={moveLeftAlert}
-        onConfirm={async () => {
-          toggleIsMovingLeft(true);
-          const newOrder = currentOrder - 1;
-          await reorderSession(newOrder);
-          form.setValue('order', newOrder);
-          toggleIsMovingLeft(false);
-          startMoveLeftTransition(router.refresh);
-          if (newOrder < 1) toggleMoveLeftAlert(false);
-        }}
-        onClose={toggleMoveLeftAlert}
-        title={`New position: ${currentOrder}`}
-      />
-      <Alert
-        cancelText="Close"
-        confirmText="Move session"
-        description={`Current position: ${currentOrder + 1}`}
-        isConfirming={isMovingRight || isMoveRightTransitioning}
-        isConfirmingText="Moving session…"
-        isOpen={moveRightAlert}
-        onConfirm={async () => {
-          toggleIsMovingRight(true);
-          const newOrder = currentOrder + 1;
-          await reorderSession(newOrder);
-          form.setValue('order', newOrder);
-          toggleIsMovingRight(false);
-          startMoveRightTransition(router.refresh);
-
-          if (!draft && newOrder >= highestPublishedOrder) {
-            toggleMoveRightAlert(false);
-          }
-        }}
-        onClose={toggleMoveRightAlert}
-        title={`New position: ${currentOrder + 2}`}
-      />
-      <Dialog
-        className="relative z-10"
-        onClose={cancelScheduleModal}
-        open={scheduleModal}
-      >
-        <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-3 backdrop-blur-sm" />
-        <div className="fixed inset-0 overflow-y-auto p-4">
+      <Dialog onClose={cancelScheduleModal} open={scheduleModal}>
+        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <Dialog.Panel className="w-full max-w-sm transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
+            <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
               <Dialog.Title className="text-2xl">Schedule session</Dialog.Title>
               <Dialog.Description className="mt-4 px-4 text-fg-4">
                 Scheduled sessions are not visible to clients until the
@@ -672,7 +280,7 @@ const SessionForm = ({
                   }}
                   step={60}
                   type="datetime-local"
-                  {...form.register('scheduled_for')}
+                  {...form.register('scheduledFor')}
                 />
                 <div className="flex gap-4">
                   <Button
@@ -680,7 +288,10 @@ const SessionForm = ({
                     colorScheme="transparent"
                     disabled={!scheduledFor}
                     onClick={() => {
-                      form.setValue('scheduled_for', null);
+                      form.setValue('scheduledFor', null, {
+                        shouldDirty: true,
+                      });
+
                       toggleScheduleModal(false);
                     }}
                   >
@@ -699,7 +310,7 @@ const SessionForm = ({
                   onClick={cancelScheduleModal}
                   variant="link"
                 >
-                  Cancel
+                  Close
                 </Button>
               </div>
             </Dialog.Panel>
@@ -710,4 +321,5 @@ const SessionForm = ({
   );
 };
 
+export type { SessionFormValues };
 export default SessionForm;

@@ -1,24 +1,26 @@
 import AccountMenu from '@/_components/account-menu';
 import Button from '@/_components/button';
-import IconButton from '@/_components/icon-button';
-import countNotifications from '@/_server/count-notifications';
-import getCurrentUser from '@/_server/get-current-user';
-import { BellIcon } from '@heroicons/react/24/outline';
+import NotificationsButton from '@/_components/notifications-button';
+import Subscriptions from '@/_components/subscriptions';
+import countNotifications from '@/_queries/count-notifications';
+import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
+  modals: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => {
-  const user = await getCurrentUser();
+const Layout = async ({ children, modals }: LayoutProps) => {
+  const user = await getCurrentUserFromSession();
   const { count } = await countNotifications();
 
   return (
-    <div className="mx-auto max-w-lg pb-20 print:max-w-xl">
+    <div className="mx-auto max-w-lg pb-20">
+      <Subscriptions />
       {user && (
-        <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8 leading-none text-fg-3 print:hidden">
-          <div className="flex flex-wrap gap-4">
+        <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8">
+          <div className="flex flex-wrap gap-4 sm:gap-6">
             <Button activeClassName="text-fg-2" href="/subjects" variant="link">
               Subjects
             </Button>
@@ -41,26 +43,14 @@ const Layout = async ({ children }: LayoutProps) => {
               </>
             )}
           </div>
-          <div className="flex gap-6">
-            <IconButton
-              activeClassName="text-fg-2"
-              href="/notifications"
-              icon={
-                <div className="relative">
-                  {!!count && (
-                    <span className="absolute -top-1.5 right-7 whitespace-nowrap rounded-sm border border-alpha-4 bg-red-1 px-1.5 py-0.5 text-xs text-fg-1">
-                      {count}
-                    </span>
-                  )}
-                  <BellIcon className="w-7" />
-                </div>
-              }
-            />
+          <div className="relative flex gap-6">
+            <NotificationsButton count={count ?? 0} />
             <AccountMenu user={user} />
           </div>
         </nav>
       )}
       {children}
+      {modals}
     </div>
   );
 };

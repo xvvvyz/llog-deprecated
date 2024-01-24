@@ -1,4 +1,4 @@
-import { ListEventsData } from '@/_server/list-events';
+import { ListEventsData } from '@/_queries/list-events';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import { NextResponse } from 'next/server';
 

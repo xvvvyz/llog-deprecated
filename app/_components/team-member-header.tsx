@@ -1,10 +1,8 @@
 import Avatar from '@/_components/avatar';
-import Button from '@/_components/button';
 import CopyJoinSubjectLinkButton from '@/_components/copy-join-subject-link-button';
+import EditSubjectButton from '@/_components/edit-subject-button';
 import Tooltip from '@/_components/tooltip';
-import listSubjectManagers from '@/_server/list-subject-managers';
-import forceArray from '@/_utilities/force-array';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import listSubjectManagers from '@/_queries/list-subject-managers';
 
 interface TeamMemberHeaderProps {
   subjectId: string;
@@ -23,11 +21,11 @@ const TeamMemberHeader = async ({
         <div className="flex items-start gap-6">
           {!!managers?.length && (
             <div className="flex flex-wrap gap-2">
-              {forceArray(managers).map(({ manager }) => (
+              {managers.map(({ manager }) => (
                 <Avatar
-                  key={manager.id}
-                  file={manager.image_uri}
-                  id={manager.id}
+                  key={manager?.id}
+                  file={manager?.image_uri}
+                  id={manager?.id}
                   size="sm"
                 />
               ))}
@@ -52,13 +50,7 @@ const TeamMemberHeader = async ({
             />
           </div>
         </div>
-        <Button
-          href={`/subjects/${subjectId}/edit?back=/subjects/${subjectId}`}
-          variant="link"
-        >
-          <PencilIcon className="w-5" />
-          Edit
-        </Button>
+        <EditSubjectButton subjectId={subjectId} />
       </div>
     </div>
   );

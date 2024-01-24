@@ -1,4 +1,4 @@
-import { ListInputsData } from '@/_server/list-inputs';
+import { ListInputsData } from '@/_queries/list-inputs';
 
 const sortInputs = (
   a: NonNullable<ListInputsData>[0],

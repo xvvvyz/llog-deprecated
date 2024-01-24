@@ -1,15 +1,14 @@
 'use client';
 
+import deleteTemplate from '@/_actions/delete-template';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
 import MenuButton from '@/_components/menu-button';
 import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
-import useDeleteAlert from '@/_hooks/use-delete-alert';
-import useSupabase from '@/_hooks/use-supabase';
-import { useRouter } from 'next/navigation';
-
-import { EllipsisVerticalIcon, TrashIcon } from '@heroicons/react/24/outline';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
+import { useToggle } from '@uidotdev/usehooks';
 
 interface TemplateLinkListItemMenuItemsProps {
   templateId: string;
@@ -18,40 +17,16 @@ interface TemplateLinkListItemMenuItemsProps {
 const TemplateLinkListItemMenu = ({
   templateId,
 }: TemplateLinkListItemMenuItemsProps) => {
-  const router = useRouter();
-  const supabase = useSupabase();
-
-  const {
-    deleteAlert,
-    isConfirming,
-    startTransition,
-    toggleDeleteAlert,
-    toggleIsConfirming,
-  } = useDeleteAlert();
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
 
   return (
     <>
       <Alert
         confirmText="Delete template"
-        isConfirming={isConfirming}
-        isConfirmingText="Deleting template…"
+        isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={async () => {
-          toggleIsConfirming(true);
-
-          const { error } = await supabase
-            .from('templates')
-            .delete()
-            .eq('id', templateId);
-
-          if (error) {
-            toggleIsConfirming(false);
-            alert(error.message);
-          } else {
-            startTransition(router.refresh);
-          }
-        }}
+        onConfirm={() => deleteTemplate(templateId)}
       />
       <Menu className="shrink-0">
         <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
@@ -62,7 +37,7 @@ const TemplateLinkListItemMenu = ({
         <MenuItems className="mr-2 mt-2">
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete template
+            Delete
           </MenuItem>
         </MenuItems>
       </Menu>

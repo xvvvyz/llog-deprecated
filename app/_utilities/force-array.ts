@@ -1,4 +1,4 @@
-const forceArray = (data?: unknown) => {
+const forceArray = <T>(data?: T | T[]) => {
   if (Array.isArray(data)) return data;
   if (data) return [data];
   return [];

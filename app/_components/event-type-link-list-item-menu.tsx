@@ -1,16 +1,17 @@
 'use client';
 
+import deleteEventType from '@/_actions/delete-event-type';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
 import MenuButton from '@/_components/menu-button';
 import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
-import useDeleteAlert from '@/_hooks/use-delete-alert';
-import useSupabase from '@/_hooks/use-supabase';
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
-import { useRouter } from 'next/navigation';
+import { useToggle } from '@uidotdev/usehooks';
+import { usePathname } from 'next/navigation';
 
 interface EventTypeLinkListItemMenuProps {
   eventTypeId: string;
@@ -21,40 +22,17 @@ const EventTypeLinkListItemMenu = ({
   eventTypeId,
   subjectId,
 }: EventTypeLinkListItemMenuProps) => {
-  const router = useRouter();
-  const supabase = useSupabase();
-
-  const {
-    deleteAlert,
-    isConfirming,
-    startTransition,
-    toggleDeleteAlert,
-    toggleIsConfirming,
-  } = useDeleteAlert();
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
+  const pathname = usePathname();
 
   return (
     <>
       <Alert
         confirmText="Delete event type"
-        isConfirming={isConfirming}
-        isConfirmingText="Deleting event type…"
+        isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={async () => {
-          toggleIsConfirming(true);
-
-          const { error } = await supabase
-            .from('event_types')
-            .delete()
-            .eq('id', eventTypeId);
-
-          if (error) {
-            toggleIsConfirming(false);
-            alert(error.message);
-          } else {
-            startTransition(router.refresh);
-          }
-        }}
+        onConfirm={() => deleteEventType(eventTypeId)}
       />
       <Menu className="shrink-0">
         <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
@@ -65,13 +43,21 @@ const EventTypeLinkListItemMenu = ({
         <MenuItems className="mr-2 mt-2">
           <MenuItem
             href={`/subjects/${subjectId}/event-types/${eventTypeId}/edit`}
+            scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
-            Edit event type
+            Edit
+          </MenuItem>
+          <MenuItem
+            href={`/templates/create/from-event-type/${eventTypeId}?back=${pathname}`}
+            scroll={false}
+          >
+            <DocumentDuplicateIcon className="w-5 text-fg-4" />
+            Create template
           </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete event type
+            Delete
           </MenuItem>
         </MenuItems>
       </Menu>

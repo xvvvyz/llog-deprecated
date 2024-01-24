@@ -65,7 +65,8 @@ const Control = <TOption extends IOption>({
   });
 
   const hasOptions =
-    selectProps.options.length > forceArray(selectProps.value)?.length;
+    selectProps.options.length >
+    forceArray(selectProps.value as TOption | TOption[]).length;
 
   return (
     <components.Control
@@ -140,7 +141,7 @@ const MultiValueContainer = ({
 }: MultiValueGenericProps) => (
   <div className="-my-px max-w-[calc(100%-2em)]">
     <components.MultiValueContainer {...props}>
-      <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded border border-alpha-1 bg-alpha-2 text-sm leading-6">
+      <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded-sm border border-alpha-1 bg-alpha-2 text-sm leading-6">
         {children}
       </div>
     </components.MultiValueContainer>
@@ -155,7 +156,7 @@ const MultiValueLabel = <TOption extends IOption>({
     <div className="flex items-center gap-2 overflow-visible">
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
-          className="ml-0.5 mr-0.5 rounded-full"
+          className="ml-0.5 mr-0.5"
           file={props.data.image_uri}
           id={props.data.id}
           size="xs"
@@ -174,7 +175,11 @@ const MultiValueLabel = <TOption extends IOption>({
           {(props.data.subjects as NonNullable<IOption['subjects']>).map(
             ({ id, image_uri }) => (
               <Avatar
-                className="-mr-2 rounded-full border border-alpha-reverse-2 bg-bg-2"
+                className={twMerge(
+                  '-mr-2',
+                  props.data.subjects.length > 1 &&
+                    'border border-alpha-reverse-1 bg-bg-2',
+                )}
                 file={image_uri}
                 key={id}
                 id={id}
@@ -190,7 +195,7 @@ const MultiValueLabel = <TOption extends IOption>({
 
 const MultiValueRemove = (props: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
-    <div className="-m-1 p-1 pr-2 text-fg-3 transition-colors hover:text-fg-2">
+    <div className="-m-1 p-1 pr-1.5 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </components.MultiValueRemove>
@@ -219,7 +224,11 @@ const Option = <TOption extends IOption>({
         <div className="mr-2 flex">
           {props.data.subjects.map(({ id, image_uri }) => (
             <Avatar
-              className="-mr-2 border border-alpha-reverse-2 bg-bg-2"
+              className={twMerge(
+                '-mr-2',
+                props.data.subjects!.length > 1 &&
+                  'border border-alpha-reverse-1 bg-bg-2',
+              )}
               file={image_uri}
               key={id}
               id={id}
@@ -270,6 +279,7 @@ const Select = <TOption extends IOption>(
     options,
     placeholder,
     tooltip,
+    value,
     ...props
   }: SelectProps<TOption>,
   ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
@@ -305,6 +315,7 @@ const Select = <TOption extends IOption>(
     options,
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,
+    value: value ?? [],
     ...props,
   };
 
@@ -326,7 +337,7 @@ const Select = <TOption extends IOption>(
       </div>
       <div className="hidden px-4 print:block">
         {options?.map((option, i) => (
-          <span key={`${option.label}-label`}>
+          <span key={`${i}-${option.label}-label`}>
             {option.label}
             {i < options.length - 1 && ', '}
           </span>

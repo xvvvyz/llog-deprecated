@@ -41,6 +41,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   loadingText?: string;
   replace?: LinkProps['replace'];
+  scroll?: boolean;
   size?: keyof typeof sizes;
   target?: '_blank';
   variant?: keyof typeof variants;
@@ -59,6 +60,8 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       loadingText,
       size = 'md',
       variant = 'primary',
+      scroll = true,
+      type = 'button',
       ...rest
     },
     ref,
@@ -72,7 +75,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],
       (disabled || loading || pending) && disabledVariants[variant],
-      href && pathname?.startsWith(href) && activeClassName,
+      href && pathname?.startsWith(href.split('?')[0]) && activeClassName,
       className,
     );
 
@@ -84,6 +87,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
           className={cn}
           href={href}
           ref={ref as ForwardedRef<HTMLAnchorElement>}
+          scroll={scroll}
           {...(rest as Omit<LinkProps, 'href'>)}
         >
           {children}
@@ -97,10 +101,10 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         className={cn}
         disabled={disabled || loading || pending}
         ref={ref as ForwardedRef<HTMLButtonElement>}
-        type="button"
+        type={type}
         {...rest}
       >
-        {loading || pending ? (
+        {loading || (type === 'submit' && pending) ? (
           <>
             {variant !== 'link' && (
               <Spinner color={spinnerColorSchemes[colorScheme]} />

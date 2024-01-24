@@ -4,8 +4,7 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
-import { ListInputsData } from '@/_server/list-inputs';
-import forceArray from '@/_utilities/force-array';
+import { ListInputsData } from '@/_queries/list-inputs';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
 import InputListItemMenu from './input-list-item-menu';
@@ -17,6 +16,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useTransition,
 } from 'react';
 
 interface FilterableInputLinkListProps {
@@ -24,6 +24,7 @@ interface FilterableInputLinkListProps {
 }
 
 const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
+  const [, startTransition] = useTransition();
   const ref = useRef<HTMLInputElement>(null);
 
   const [filteredInputs, setFilteredInputs] = useState<
@@ -59,48 +60,42 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
     <div className="space-y-4">
       <div className="px-4">
         <Input
-          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-            if (value) filter(value);
-            else setFilteredInputs(inputs);
-
-            requestAnimationFrame(() => {
-              // stupid fucking bullshit
-              if (ref.current) ref.current.focus();
-            });
-          }}
+          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+            startTransition(() => {
+              if (value) filter(value);
+              else setFilteredInputs(inputs);
+            })
+          }
           placeholder="Filter by label, subject or type…"
           ref={ref}
         />
       </div>
       <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
-        {filteredInputs.map((input) => {
-          const avatars = forceArray(input.subjects);
-
-          return (
-            <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
-              <Button
-                className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug"
-                href={`/inputs/${input.id}`}
-                variant="link"
-              >
-                <div>
-                  {input.label}
-                  <div className="smallcaps pb-0.5 pt-1">
-                    {INPUT_LABELS[input.type]}
-                  </div>
+        {filteredInputs.map((input) => (
+          <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
+            <Button
+              className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug"
+              href={`/inputs/${input.id}`}
+              scroll={false}
+              variant="link"
+            >
+              <div>
+                {input.label}
+                <div className="smallcaps pb-0.5 pt-1 text-fg-4">
+                  {INPUT_LABELS[input.type]}
                 </div>
-                {!!avatars.length && (
-                  <div className="-my-0.5 ml-auto flex shrink-0 gap-1.5">
-                    {avatars.map(({ id, image_uri }) => (
-                      <Avatar file={image_uri} key={id} id={id} size="xs" />
-                    ))}
-                  </div>
-                )}
-              </Button>
-              <InputListItemMenu inputId={input.id} />
-            </li>
-          );
-        })}
+              </div>
+              {!!input.subjects.length && (
+                <div className="-my-0.5 ml-auto flex shrink-0 gap-1.5">
+                  {input.subjects.map(({ id, image_uri }) => (
+                    <Avatar file={image_uri} key={id} id={id} size="xs" />
+                  ))}
+                </div>
+              )}
+            </Button>
+            <InputListItemMenu inputId={input.id} />
+          </li>
+        ))}
       </ul>
     </div>
   );

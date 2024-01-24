@@ -1,27 +1,33 @@
+import listEvents from '@/_actions/list-events';
 import Empty from '@/_components/empty';
 import TimelineEvents from '@/_components/timeline-events';
-import DEFAULT_PAGE_SIZE from '@/_constants/default-page-size';
-import listEvents from '@/_server/list-events';
-import listPublicEvents from '@/_server/list-public-events';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { User } from '@supabase/supabase-js';
 
 interface EventsProps {
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
-  user: User | null;
+  to?: string;
+  user?: User;
 }
 
 const Events = async ({
   isPublic,
   isTeamMember,
   subjectId,
+  to,
   user,
 }: EventsProps) => {
-  const { data: events } = isPublic
-    ? await listPublicEvents(subjectId, { size: DEFAULT_PAGE_SIZE })
-    : await listEvents(subjectId, { size: DEFAULT_PAGE_SIZE });
+  const pageSize = 25;
+  const toNumber = to ? Number(to) : pageSize - 1;
+
+  const { data: events } = await listEvents({
+    from: 0,
+    isPublic,
+    subjectId,
+    to: toNumber,
+  });
 
   if (!events?.length) {
     return (
@@ -41,7 +47,9 @@ const Events = async ({
         events={events}
         isPublic={isPublic}
         isTeamMember={isTeamMember}
+        pageSize={pageSize}
         subjectId={subjectId}
+        to={toNumber}
         user={user}
       />
     </div>

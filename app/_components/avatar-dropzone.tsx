@@ -1,41 +1,45 @@
-import { DropzoneState } from 'react-dropzone';
-import { FieldValues, PathValue, UseFormReturn } from 'react-hook-form';
+'use client';
+
+import { useEffect } from 'react';
+import { useDropzone } from 'react-dropzone';
 import Avatar from './avatar';
 
-interface AvatarDropzoneProps<T extends FieldValues> {
-  dropzone: DropzoneState;
-  form: UseFormReturn<T>;
+interface AvatarDropzoneProps {
+  file?: File | string | null;
+  id?: string;
+  name: string;
+  onDrop: (files: File[]) => void;
 }
 
-const AvatarDropzone = <T extends FieldValues>({
-  dropzone,
-  form,
-}: AvatarDropzoneProps<T>) => (
-  <div
-    className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-4 outline-none ring-accent-2 transition-colors hover:border-alpha-3 focus:ring-1"
-    {...dropzone.getRootProps()}
-  >
-    <Avatar
-      file={form.watch('avatar' as T[string])}
-      id={form.watch('id' as T[string])}
-    />
-    <p>
-      Drag image here or{' '}
-      <span className="text-fg-3 transition-colors group-hover:text-fg-2">
-        browse
-      </span>
-    </p>
-    <input
-      {...dropzone.getInputProps()}
-      onChange={(e) => {
-        form.setValue(
-          'avatar' as T[string],
-          e.target.files?.[0] as PathValue<T, T[string]>,
-          { shouldDirty: true },
-        );
-      }}
-    />
-  </div>
-);
+const AvatarDropzone = ({ file, id, name, onDrop }: AvatarDropzoneProps) => {
+  const dropzone = useDropzone({
+    accept: { 'image/*': ['.png', '.gif', '.jpeg', '.jpg'] },
+    maxSize: 10000000,
+    multiple: false,
+    noClick: true,
+    onDrop,
+  });
+
+  useEffect(() => {
+    if (!dropzone.inputRef.current || file !== null) return;
+    dropzone.inputRef.current.value = '';
+  }, [file, dropzone.inputRef]);
+
+  return (
+    <div
+      className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-4 outline-none ring-accent-2 transition-colors hover:border-alpha-3 focus:ring-1"
+      {...dropzone.getRootProps()}
+    >
+      <Avatar file={file} id={id} />
+      <p>
+        Drag image here or{' '}
+        <span className="text-fg-3 transition-colors group-hover:text-fg-2">
+          browse
+        </span>
+      </p>
+      <input {...dropzone.getInputProps()} name={name} />
+    </div>
+  );
+};
 
 export default AvatarDropzone;

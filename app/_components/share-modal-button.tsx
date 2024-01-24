@@ -1,5 +1,6 @@
 'use client';
 
+import updateSubject from '@/_actions/update-subject';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Switch from '@/_components/switch';
@@ -9,10 +10,8 @@ import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
 import ClipboardDocumentIcon from '@heroicons/react/24/outline/ClipboardDocumentIcon';
 import ShareIcon from '@heroicons/react/24/outline/ShareIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
-import { useRouter } from 'next/navigation';
-import { useOptimistic, useRef } from 'react';
+import { useOptimistic, useRef, useTransition } from 'react';
 
 interface ShareModalButtonProps {
   isPublic: boolean;
@@ -21,11 +20,10 @@ interface ShareModalButtonProps {
 
 const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
+  const [, startTransition] = useTransition();
   const [enabled, toggleEnabled] = useOptimistic(isPublic, (state) => !state);
   const [hasCopiedToClipboard, toggleHasCopiedToClipboard] = useToggle(false);
   const [modal, toggleModal] = useToggle(false);
-  const formRef = useRef<HTMLFormElement>(null);
-  const router = useRouter();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   return (
@@ -35,10 +33,10 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
         Share
       </Button>
       <Dialog className="relative z-10" onClose={toggleModal} open={modal}>
-        <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-3 backdrop-blur-sm" />
+        <Dialog.Backdrop className="fixed inset-0 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <Dialog.Panel className="w-full max-w-sm transform rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg transition-all">
+            <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 shadow-lg">
               <div className="flex items-center justify-between">
                 <Dialog.Title className="text-2xl">Share</Dialog.Title>
                 <IconButton
@@ -46,20 +44,7 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
                   onClick={() => toggleModal(false)}
                 />
               </div>
-              <form
-                action={async () => {
-                  toggleEnabled(null);
-
-                  await createClientComponentClient()
-                    .from('subjects')
-                    .update({ public: !enabled })
-                    .eq('id', subjectId);
-
-                  router.refresh();
-                }}
-                className="pt-8"
-                ref={formRef}
-              >
+              <div className="pt-8">
                 <Switch
                   checked={enabled}
                   description={
@@ -71,9 +56,14 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
                   }
                   label="Public read-only profile"
                   name="share"
-                  onCheckedChange={() => formRef.current?.requestSubmit()}
+                  onCheckedChange={() =>
+                    startTransition(() => {
+                      toggleEnabled(null);
+                      void updateSubject({ id: subjectId, public: !enabled });
+                    })
+                  }
                 />
-              </form>
+              </div>
               {enabled && (
                 <div className="mt-10 space-y-4">
                   <Button
@@ -90,6 +80,7 @@ const ShareModalButton = ({ isPublic, subjectId }: ShareModalButtonProps) => {
                     colorScheme="transparent"
                     onClick={async () => {
                       clearTimeout(timeoutRef.current);
+
                       void copyToClipboard(
                         `${location.origin}/share/${subjectId}`,
                       );

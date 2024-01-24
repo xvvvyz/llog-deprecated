@@ -1,5 +1,6 @@
 import Tooltip from '@/_components/tooltip';
 import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
+import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -10,40 +11,55 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef(
   (
-    { className, id, label, right, type, name, tooltip, ...rest }: InputProps,
+    {
+      className,
+      disabled,
+      id,
+      label,
+      right,
+      type,
+      name,
+      tooltip,
+      ...rest
+    }: InputProps,
     ref: Ref<HTMLInputElement>,
-  ) => (
-    <div className="group relative w-full">
-      <div className="flex justify-between">
-        {label && (
-          <label className="label" htmlFor={id ?? name}>
-            {label}
-          </label>
-        )}
-        {tooltip && (
-          <Tooltip
-            className="relative -top-1 -mr-[0.15rem]"
-            id={`${name}-tip`}
-            tip={tooltip}
-          />
+  ) => {
+    const { pending } = useFormStatus();
+
+    return (
+      <div className="group relative w-full">
+        <div className="flex justify-between">
+          {label && (
+            <label className="label" htmlFor={id ?? name}>
+              {label}
+            </label>
+          )}
+          {tooltip && (
+            <Tooltip
+              className="relative -top-1 -mr-[0.15rem]"
+              id={`${name}-tip`}
+              tip={tooltip}
+            />
+          )}
+        </div>
+        <input
+          autoComplete="off"
+          className={twMerge('input', right && 'pr-[2.4rem]', className)}
+          disabled={disabled || pending}
+          id={id ?? name}
+          name={name}
+          ref={ref}
+          type={type ?? 'text'}
+          {...rest}
+        />
+        {right && (
+          <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
+            {right}
+          </div>
         )}
       </div>
-      <input
-        autoComplete="off"
-        className={twMerge('input', right && 'pr-[2.4rem]', className)}
-        id={id ?? name}
-        name={name}
-        ref={ref}
-        type={type ?? 'text'}
-        {...rest}
-      />
-      {right && (
-        <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
-          {right}
-        </div>
-      )}
-    </div>
-  ),
+    );
+  },
 );
 
 Input.displayName = 'Input';

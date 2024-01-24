@@ -1,139 +1,187 @@
 'use client';
 
+import upsertTemplate from '@/_actions/upsert-template';
 import Button from '@/_components/button';
+import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
+import InputForm from '@/_components/input-form';
+import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
-import CacheKeys from '@/_constants/enum-cache-keys';
-import useBackLink from '@/_hooks/use-back-link';
-import useDefaultValues from '@/_hooks/use-default-values';
-import useSubmitRedirect from '@/_hooks/use-submit-redirect';
-import useSupabase from '@/_hooks/use-supabase';
-import { GetTemplateData } from '@/_server/get-template';
-import { ListInputsData } from '@/_server/list-inputs';
-import { Database, Json } from '@/_types/database';
-import { TemplateDataType } from '@/_types/template';
-import forceArray from '@/_utilities/force-array';
-import formatCacheLink from '@/_utilities/format-cache-link';
-import globalValueCache from '@/_utilities/global-value-cache';
-import sanitizeHtml from '@/_utilities/sanitize-html';
+import useCachedForm from '@/_hooks/use-cached-form';
+import { GetInputData } from '@/_queries/get-input';
+import { GetTemplateData } from '@/_queries/get-template';
+import { ListInputsData } from '@/_queries/list-inputs';
+import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
+import { TemplateDataJson } from '@/_types/template-data-json';
+import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import sortInputs from '@/_utilities/sort-inputs';
-import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { PropsValue } from 'react-select';
+import stopPropagation from '@/_utilities/stop-propagation';
+import { Dialog } from '@headlessui/react';
+import { useState, useTransition } from 'react';
+import { Controller, useFieldArray } from 'react-hook-form';
 
 interface TemplateFormProps {
-  availableInputs: ListInputsData;
-  template?: GetTemplateData;
+  availableInputs: NonNullable<ListInputsData>;
+  back?: string;
+  disableCache?: boolean;
+  isDuplicate?: boolean;
+  onClose?: () => void;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
+  template?: Partial<GetTemplateData>;
 }
 
-type TemplateFormValues = Database['public']['Tables']['templates']['Row'] & {
+type TemplateFormValues = {
   content: string;
-  inputs: Database['public']['Tables']['inputs']['Row'][];
+  inputs: NonNullable<ListInputsData>;
+  name: string;
 };
 
-const TemplateForm = ({ availableInputs, template }: TemplateFormProps) => {
+const TemplateForm = ({
+  availableInputs,
+  back,
+  disableCache,
+  isDuplicate,
+  onClose,
+  subjects,
+  template,
+}: TemplateFormProps) => {
+  const [createInputModal, setCreateInputModal] =
+    useState<Partial<GetInputData>>(null);
+
   const [isTransitioning, startTransition] = useTransition();
-  const [redirect, isRedirecting] = useSubmitRedirect();
-  const backLink = useBackLink({ useCache: true });
-  const router = useRouter();
-  const supabase = useSupabase();
+  const cacheKey = getFormCacheKey.template({ id: template?.id, isDuplicate });
+  const templateData = template?.data as TemplateDataJson;
 
-  // template data is generic JSON in the db, so we need to cast it
-  const templateData = template?.data as unknown as TemplateDataType;
-
-  const defaultValues = useDefaultValues({
-    cacheKey: CacheKeys.TemplateForm,
-    defaultValues: {
-      content: templateData?.content,
-      id: template?.id,
-      inputs: forceArray(availableInputs).filter(({ id }) =>
-        forceArray(templateData?.inputIds).includes(id),
-      ),
-      name: template?.name ?? '',
-      public: template?.public ?? false,
+  const form = useCachedForm<TemplateFormValues>(
+    cacheKey,
+    {
+      defaultValues: {
+        content: templateData?.content ?? '',
+        inputs: availableInputs.filter(({ id }) =>
+          templateData?.inputIds?.includes(id),
+        ),
+        name: template?.name ?? '',
+      },
     },
-  });
+    { disableCache },
+  );
 
-  const form = useForm<TemplateFormValues>({ defaultValues });
+  const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
 
   return (
-    <form
-      className="form"
-      onSubmit={form.handleSubmit(async (values) => {
-        const { error: templateError } = await supabase
-          .from('templates')
-          .upsert({
-            data: {
-              content: sanitizeHtml(values.content),
-              inputIds: values.inputs.map((input) => input.id),
-            } as Json,
-            id: values.id,
-            name: values.name.trim(),
-            public: values.public,
-          });
-
-        if (templateError) {
-          alert(templateError?.message);
-          return;
-        }
-
-        await redirect('/templates');
-      })}
-    >
-      <Input label="Name" maxLength={49} required {...form.register('name')} />
-      <Controller
-        control={form.control}
-        name="content"
-        render={({ field }) => <RichTextarea label="Content" {...field} />}
-      />
-      <Controller
-        control={form.control}
-        name="inputs"
-        render={({ field }) => (
-          <Select
-            formatCreateLabel={(value: string) => `Create "${value}" input`}
-            isCreatable
-            isLoading={isTransitioning}
-            isMulti
-            label="Inputs"
-            name={field.name}
-            noOptionsMessage={() => 'Type to create a new input'}
-            onBlur={field.onBlur}
-            onChange={(value) => field.onChange(value)}
-            onCreateOption={async (value: unknown) => {
-              globalValueCache.set(CacheKeys.InputForm, { label: value });
-              globalValueCache.set(CacheKeys.TemplateForm, form.getValues());
-
-              startTransition(() =>
-                router.push(
-                  formatCacheLink({
-                    backLink,
-                    path: '/inputs/create',
-                    updateCacheKey: CacheKeys.TemplateForm,
-                    updateCachePath: 'inputs',
-                    useCache: true,
-                  }),
-                ),
+    <>
+      <form
+        className="divide-y divide-alpha-1"
+        onSubmit={stopPropagation(
+          form.handleSubmit((values) =>
+            startTransition(async () => {
+              const res = await upsertTemplate(
+                { next: back, templateId: template?.id },
+                values,
               );
-            }}
-            options={forceArray(availableInputs).sort(sortInputs)}
-            placeholder="Select inputs or type to create…"
-            value={field.value as PropsValue<IOption>}
-          />
+
+              if (res?.error) {
+                form.setError('root', { message: res.error, type: 'custom' });
+              } else if (res?.data) {
+                onClose?.();
+              }
+            }),
+          ),
         )}
-      />
-      <Button
-        className="mt-8 w-full"
-        loading={form.formState.isSubmitting || isRedirecting}
-        loadingText="Saving…"
-        type="submit"
       >
-        Save template
-      </Button>
-    </form>
+        {!disableCache && <FormBanner<TemplateFormValues> form={form} />}
+        <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
+          <Input
+            label="Name"
+            maxLength={49}
+            required
+            {...form.register('name')}
+          />
+          <Controller
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <RichTextarea label="Description or instructions" {...field} />
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="inputs"
+            render={({ field }) => (
+              <Select
+                formatCreateLabel={(value) => `Create "${value}" input`}
+                isCreatable
+                isMulti
+                label="Inputs"
+                name={field.name}
+                noOptionsMessage={() => 'Type to create a new input'}
+                onBlur={field.onBlur}
+                onChange={(value) => field.onChange(value)}
+                onCreateOption={(value) =>
+                  setCreateInputModal({ label: value })
+                }
+                options={availableInputs.sort(sortInputs) as IOption[]}
+                placeholder="Select inputs or type to create…"
+                value={field.value as IOption[]}
+              />
+            )}
+          />
+        </div>
+        {form.formState.errors.root && (
+          <div className="px-4 py-8 text-center sm:px-8">
+            {form.formState.errors.root.message}
+          </div>
+        )}
+        <div className="flex gap-4 px-4 py-8 sm:px-8">
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            href={back}
+            onClick={onClose}
+            scroll={false}
+          >
+            Close
+          </Button>
+          <Button
+            className="w-full"
+            loading={isTransitioning}
+            loadingText="Saving…"
+            type="submit"
+          >
+            Save
+          </Button>
+        </div>
+      </form>
+      <Dialog
+        onClose={() => setCreateInputModal(null)}
+        open={!!createInputModal}
+      >
+        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur" />
+        <div className="fixed inset-0 z-30 overflow-y-auto py-16">
+          <div className="flex min-h-full items-start justify-center">
+            <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+              <PageModalHeader
+                onClose={() => setCreateInputModal(null)}
+                title="Create input"
+              />
+              <InputForm
+                disableCache
+                input={createInputModal}
+                onClose={() => setCreateInputModal(null)}
+                onSubmit={(values) => {
+                  inputsArray.append(values);
+                  setCreateInputModal(null);
+                }}
+                subjects={subjects}
+              />
+            </Dialog.Panel>
+          </div>
+        </div>
+      </Dialog>
+    </>
   );
 };
 
+export type { TemplateFormValues };
 export default TemplateForm;

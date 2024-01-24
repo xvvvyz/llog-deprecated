@@ -1,8 +1,9 @@
 import Button from '@/_components/button';
 import EventTypeLinkListItemMenu from '@/_components/event-type-link-list-item-menu';
 import Tooltip from '@/_components/tooltip';
-import listSubjectEventTypes from '@/_server/list-subject-event-types';
-import { ArrowRightIcon, PlusIcon } from '@heroicons/react/24/outline';
+import listSubjectEventTypes from '@/_queries/list-subject-event-types';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
 
 interface EventTypesProps {
@@ -29,11 +30,12 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
                   isTeamMember && 'pr-0',
                 )}
                 href={`/subjects/${subjectId}/event-types/${eventType.id}`}
+                scroll={false}
                 variant="link"
               >
                 {eventType.name}
                 {!isTeamMember && (
-                  <ArrowRightIcon className="ml-auto w-5 shrink-0" />
+                  <ArrowUpRightIcon className="ml-auto w-5 shrink-0" />
                 )}
               </Button>
               {isTeamMember && (
@@ -52,6 +54,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subjectId}/event-types/create`}
+            scroll={false}
             type="button"
           >
             <PlusIcon className="w-5" />
@@ -62,8 +65,9 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
               id="event-types-tip"
               tip={
                 <>
-                  Event types define individual events that can be recorded. For
-                  example: &ldquo;Barking&rdquo; or &ldquo;Vet visit&rdquo;
+                  Event types define the events that can be recorded at any
+                  time. For example: &ldquo;Barking&rdquo; or &ldquo;Vet
+                  visit&rdquo;
                 </>
               }
             />

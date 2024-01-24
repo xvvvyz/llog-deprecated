@@ -9,11 +9,13 @@ const nextConfig = {
         hostname: 'localhost',
       },
       {
-        hostname: 'wclvpnzwnnxesdichytr.supabase.co',
+        // preview
+        hostname: 'dpptopbnpbbqamunlkrd.supabase.co',
         pathname: '/storage/v1/object/public/**',
         protocol: 'https',
       },
       {
+        // production
         hostname: 'cnawksbzwuxsjkzeczyq.supabase.co',
         pathname: '/storage/v1/object/public/**',
         protocol: 'https',

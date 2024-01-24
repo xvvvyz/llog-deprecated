@@ -19,6 +19,7 @@ const IconButton = ({
   loading,
   loadingText,
   spinnerClassName,
+  type,
   ...props
 }: IconButtonProps) => {
   const { pending } = useFormStatus();
@@ -27,10 +28,11 @@ const IconButton = ({
     <Button
       className={twMerge('print:hidden', className)}
       disabled={loading || pending}
+      type={type}
       variant="link"
       {...props}
     >
-      {loading || pending ? (
+      {loading || (type === 'submit' && pending) ? (
         <Spinner className={spinnerClassName} loadingText={loadingText} />
       ) : (
         icon

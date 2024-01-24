@@ -12,13 +12,15 @@ interface EventCommentsProps {
     id: string;
     profile: Database['public']['Tables']['profiles']['Row'];
   }>;
-  isTeamMember: boolean;
+  isPublic?: boolean;
+  isTeamMember?: boolean;
   userId?: string;
 }
 
 const EventComments = ({
   className,
   comments,
+  isPublic,
   isTeamMember,
   userId,
 }: EventCommentsProps) => {
@@ -31,6 +33,7 @@ const EventComments = ({
           content={content}
           createdAt={created_at}
           id={id}
+          isPublic={isPublic}
           isTeamMember={isTeamMember}
           key={id}
           profile={profile}
@@ -41,4 +44,5 @@ const EventComments = ({
   );
 };
 
+export type { EventCommentsProps };
 export default EventComments;

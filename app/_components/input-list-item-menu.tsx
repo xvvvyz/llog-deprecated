@@ -1,56 +1,31 @@
 'use client';
 
+import deleteInput from '@/_actions/delete-input';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
 import MenuButton from '@/_components/menu-button';
 import MenuItem from '@/_components/menu-item';
 import MenuItems from '@/_components/menu-items';
-import useDeleteAlert from '@/_hooks/use-delete-alert';
-import useSupabase from '@/_hooks/use-supabase';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
-import { useRouter } from 'next/navigation';
+import { useToggle } from '@uidotdev/usehooks';
 
 interface InputListItemMenuProps {
   inputId: string;
 }
 
 const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
-  const router = useRouter();
-  const supabase = useSupabase();
-
-  const {
-    deleteAlert,
-    isConfirming,
-    startTransition,
-    toggleDeleteAlert,
-    toggleIsConfirming,
-  } = useDeleteAlert();
+  const [deleteAlert, toggleDeleteAlert] = useToggle(false);
 
   return (
     <>
       <Alert
         confirmText="Delete input"
-        isConfirming={isConfirming}
-        isConfirmingText="Deleting input…"
+        isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={async () => {
-          toggleIsConfirming(true);
-
-          const { error } = await supabase
-            .from('inputs')
-            .delete()
-            .eq('id', inputId);
-
-          if (error) {
-            toggleIsConfirming(false);
-            alert(error.message);
-          } else {
-            startTransition(router.refresh);
-          }
-        }}
+        onConfirm={() => deleteInput(inputId)}
       />
       <Menu className="shrink-0">
         <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
@@ -59,13 +34,16 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/inputs/create/from-template/${inputId}`}>
+          <MenuItem
+            href={`/inputs/create/from-input/${inputId}`}
+            scroll={false}
+          >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate input
+            Duplicate
           </MenuItem>
           <MenuItem onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
-            Delete input
+            Delete
           </MenuItem>
         </MenuItems>
       </Menu>

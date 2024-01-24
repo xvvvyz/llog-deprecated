@@ -1,10 +1,9 @@
 import Button from '@/_components/button';
 import MissionLinkListItemMenu from '@/_components/mission-link-list-item-menu';
 import Tooltip from '@/_components/tooltip';
-import listSubjectMissions from '@/_server/list-subject-missions';
-import { Database } from '@/_types/database';
-import forceArray from '@/_utilities/force-array';
-import { ArrowRightIcon, PlusIcon } from '@heroicons/react/24/outline';
+import listSubjectMissions from '@/_queries/list-subject-missions';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -18,13 +17,8 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
   if (!missions) return null;
 
   const listItems = missions.reduce((acc, mission) => {
-    const sessions = forceArray(mission.sessions);
-
-    const activeSession = sessions.find(({ modules }) =>
-      modules.find(
-        (et: { event: Database['public']['Tables']['events']['Row'][] }) =>
-          !et.event.length,
-      ),
+    const activeSession = mission.sessions.find(({ modules }) =>
+      modules.find((et) => !et.event.length),
     );
 
     if (!isTeamMember && !activeSession) return acc;
@@ -38,21 +32,24 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
             isTeamMember && 'pr-0',
           )}
           href={
-            activeSessionId
-              ? `/subjects/${subjectId}/missions/${mission.id}/sessions/${activeSessionId}`
-              : `/subjects/${subjectId}/missions/${mission.id}/sessions`
+            isTeamMember
+              ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions`
+              : `/subjects/${subjectId}/training-plans/${mission.id}/sessions/${activeSessionId}?back=/subjects/${subjectId}`
           }
+          scroll={false}
           variant="link"
         >
           {mission.name}
-          <div className="ml-auto flex shrink-0 items-center gap-4">
-            {activeSession && (
-              <span className="relative top-px font-mono">
-                Session {activeSession.order + 1}
-              </span>
-            )}
-            {!isTeamMember && <ArrowRightIcon className="w-5" />}
-          </div>
+          {!isTeamMember && (
+            <div className="ml-auto flex shrink-0 items-center gap-4">
+              {activeSession && (
+                <span className="smallcaps text-fg-4">
+                  Session {activeSession.order + 1}
+                </span>
+              )}
+              {!isTeamMember && <ArrowUpRightIcon className="w-5" />}
+            </div>
+          )}
         </Button>
         {isTeamMember && (
           <MissionLinkListItemMenu
@@ -80,20 +77,21 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
           <Button
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}/missions/create`}
+            href={`/subjects/${subjectId}/training-plans/create`}
+            scroll={false}
             type="button"
           >
             <PlusIcon className="w-5" />
-            Create mission
+            Create training plan
           </Button>
           {!listItems.length && (
             <Tooltip
               id="missions-tip"
               tip={
                 <>
-                  Missions are long-term training plans. For example:
-                  &ldquo;Reduce separation anxiety&rdquo; or &ldquo;Stop
-                  barking&rdquo;
+                  Training plans are comprised of sessions to be completed over
+                  time. For example: &ldquo;Reduce separation anxiety&rdquo; or
+                  &ldquo;Stop screaming&rdquo;
                 </>
               }
             />

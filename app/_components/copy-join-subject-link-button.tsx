@@ -1,10 +1,10 @@
 'use client';
 
-import useSupabase from '@/_hooks/use-supabase';
-import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import createShareCode from '@/_actions/create-share-code';
+import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
+import ClipboardDocumentIcon from '@heroicons/react/24/outline/ClipboardDocumentIcon';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
-import { nanoid } from 'nanoid';
-import { useRef } from 'react';
+import { useRef, useTransition } from 'react';
 import Button from './button';
 
 interface CopyJoinSubjectLinkButton {
@@ -18,47 +18,35 @@ const CopyJoinSubjectLinkButton = ({
 }: CopyJoinSubjectLinkButton) => {
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopiedToClipboard, toggleHasCopiedToClipboard] = useToggle(false);
-  const [isCopyingToClipboard, toggleCopyingToClipboard] = useToggle(false);
-  const supabase = useSupabase();
+  const [isTransitioning, startTransition] = useTransition();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   return (
     <Button
       className="whitespace-nowrap"
-      loading={isCopyingToClipboard}
+      loading={isTransitioning}
       loadingText="Generating link…"
-      onClick={async () => {
-        clearTimeout(timeoutRef.current);
-        toggleCopyingToClipboard();
+      onClick={() =>
+        startTransition(async () => {
+          clearTimeout(timeoutRef.current);
 
-        if (!shareCode) {
-          shareCode = nanoid(8);
-
-          const { error: subjectError } = await supabase
-            .from('subjects')
-            .update({ share_code: shareCode })
-            .eq('id', subjectId);
-
-          if (subjectError) {
-            alert(subjectError.message);
-            toggleCopyingToClipboard();
-            return;
+          if (!shareCode) {
+            const { data } = await createShareCode(subjectId);
+            shareCode = data?.share_code as string;
           }
-        }
 
-        await copyToClipboard(
-          `${location.origin}/subjects/${subjectId}/join/${shareCode}`,
-        );
+          await copyToClipboard(
+            `${location.origin}/subjects/${subjectId}/join/${shareCode}`,
+          );
 
-        toggleCopyingToClipboard();
+          toggleHasCopiedToClipboard(true);
 
-        timeoutRef.current = setTimeout(
-          () => toggleHasCopiedToClipboard(false),
-          2000,
-        );
-
-        toggleHasCopiedToClipboard(true);
-      }}
+          timeoutRef.current = setTimeout(
+            () => toggleHasCopiedToClipboard(false),
+            2000,
+          );
+        })
+      }
       variant="link"
     >
       {hasCopiedToClipboard ? (

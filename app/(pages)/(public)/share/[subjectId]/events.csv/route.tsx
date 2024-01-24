@@ -1,7 +1,6 @@
-import listPublicEvents from '@/_server/list-public-events';
+import listEvents from '@/_actions/list-events';
+import Numbers from '@/_constants/enum-numbers';
 import formatTabularEventsCsvResponse from '@/_utilities/format-tabular-events-csv-response';
-
-export const revalidate = 0;
 
 interface GetContext {
   params: {
@@ -9,7 +8,13 @@ interface GetContext {
   };
 }
 
-export const GET = async (req: Request, ctx: GetContext) => {
-  const { data } = await listPublicEvents(ctx.params.subjectId);
+export const GET = async (_: Request, ctx: GetContext) => {
+  const { data } = await listEvents({
+    from: 0,
+    isPublic: true,
+    subjectId: ctx.params.subjectId,
+    to: Numbers.FourByteSignedIntMax - 1,
+  });
+
   return formatTabularEventsCsvResponse(data);
 };

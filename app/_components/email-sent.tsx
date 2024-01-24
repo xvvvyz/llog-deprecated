@@ -1,4 +1,4 @@
-import { EnvelopeOpenIcon } from '@heroicons/react/24/solid';
+import EnvelopeOpenIcon from '@heroicons/react/24/solid/EnvelopeOpenIcon';
 import { ReactNode } from 'react';
 
 interface ConfirmationProps {

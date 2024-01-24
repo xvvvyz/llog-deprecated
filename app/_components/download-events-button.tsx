@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/_components/button';
-import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
 import { useToggle } from '@uidotdev/usehooks';
 
 interface DownloadEventsButtonProps {

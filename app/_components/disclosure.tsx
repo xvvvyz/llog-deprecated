@@ -1,7 +1,7 @@
 'use client';
 
 import DirtyHtml from '@/_components/dirty-html';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { twMerge } from 'tailwind-merge';
 
@@ -17,7 +17,7 @@ const Disclosure = ({ children, className, disabled }: DisclosureProps) => {
   return (
     <div
       className={twMerge(
-        'group relative -mb-8 -mt-9 max-h-24 overflow-hidden px-4 py-8 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-transparent after:via-[hsla(40,5%,13%,0.75)] after:to-[hsl(40,5%,13%)] sm:px-8 print:max-h-none print:after:hidden',
+        'group relative -my-7 max-h-24 overflow-hidden px-4 py-7 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:bg-gradient-to-b after:from-transparent after:via-[hsla(45,5%,16%,0.75)] after:to-[hsl(45,5%,15%)] sm:px-8 print:max-h-none print:after:hidden',
         disclosure && 'max-h-none after:hidden',
         disabled && 'cursor-default',
         className,

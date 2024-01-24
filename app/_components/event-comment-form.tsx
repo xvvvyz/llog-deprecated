@@ -1,13 +1,11 @@
 'use client';
 
+import addComment from '@/_actions/add-comment';
 import IconButton from '@/_components/icon-button';
 import RichTextarea from '@/_components/rich-textarea';
-import useSupabase from '@/_hooks/use-supabase';
-import sanitizeHtml from '@/_utilities/sanitize-html';
-import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import PaperAirplaneIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
+import { useEffect, useRef, useState } from 'react';
+import { useFormState } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
 interface EventCommentFormProps {
@@ -21,50 +19,53 @@ const EventCommentForm = ({
   eventId,
   inputClassName,
 }: EventCommentFormProps) => {
-  const [isTransitioning, startTransition] = useTransition();
-  const supabase = useSupabase();
-  const form = useForm({ defaultValues: { content: '' } });
-  const router = useRouter();
+  const [value, setValue] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+  const valueCache = useRef('');
 
-  const onSubmit = form.handleSubmit(async ({ content }) => {
-    startTransition(async () => {
-      const { error } = await supabase
-        .from('comments')
-        .upsert({ content: sanitizeHtml(content) ?? '', event_id: eventId });
+  const [state, action] = useFormState(
+    addComment.bind(null, { content: value, eventId }),
+    null,
+  );
 
-      if (error) alert(error.message);
-      else router.refresh();
-    });
-
-    form.setValue('content', '');
-  });
+  useEffect(() => {
+    if (!state?.error) return;
+    alert(state.error);
+    setValue(valueCache.current);
+  }, [state]);
 
   return (
-    <div className={className}>
-      <Controller
-        control={form.control}
-        name="content"
-        render={({ field }) => (
-          <RichTextarea
-            aria-label="Comment"
-            className={twMerge('min-h-full pr-12', inputClassName)}
-            onEnter={onSubmit}
-            placeholder="Add comment…"
-            right={
-              <IconButton
-                className="m-0 mt-px px-3 py-2.5"
-                icon={<PaperAirplaneIcon className="w-5" />}
-                label="Add comment"
-                loading={form.formState.isSubmitting || isTransitioning}
-                loadingText="Adding comment…"
-                onClick={onSubmit}
-              />
-            }
-            {...field}
+    <form
+      action={action}
+      className={className}
+      onSubmit={() => {
+        valueCache.current = value;
+        setValue('');
+      }}
+      ref={formRef}
+    >
+      <RichTextarea
+        aria-label="Comment"
+        className={twMerge('min-h-full pr-12', inputClassName)}
+        name="comment"
+        onChange={(e) => setValue(e.target.value)}
+        onEnter={(e) => {
+          e.preventDefault();
+          formRef.current?.requestSubmit();
+        }}
+        placeholder="Add comment…"
+        right={
+          <IconButton
+            className="m-0 mt-px px-3 py-2.5"
+            icon={<PaperAirplaneIcon className="w-5" />}
+            label="Add comment"
+            loadingText="Adding comment…"
+            type="submit"
           />
-        )}
+        }
+        value={value}
       />
-    </div>
+    </form>
   );
 };
 

@@ -4,23 +4,27 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import EventCommentForm from '@/_components/event-comment-form';
-import EventComments from '@/_components/event-comments';
 import InputTypes from '@/_constants/enum-input-types';
-import { ListEventsData } from '@/_server/list-events';
+import { ListEventsData } from '@/_queries/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
 import formatInputValue from '@/_utilities/format-input-value';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import { User } from '@supabase/supabase-js';
 import { useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
+
+import EventComments, {
+  EventCommentsProps,
+} from '@/_components/event-comments';
+import { usePathname } from 'next/navigation';
 
 interface TimelineEventCardProps {
   group: NonNullable<ListEventsData>;
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
-  user: User | null;
+  user?: User;
 }
 
 const TimelineEventCard = ({
@@ -35,6 +39,7 @@ const TimelineEventCard = ({
   const lastEvent = group[group.length - 1];
   const lastEventType = firstIfArray(lastEvent.type);
   const lastEventProfile = firstIfArray(lastEvent.profile);
+  const pathname = usePathname();
   const sessionNumber = (lastEventType?.session?.order ?? 0) + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
@@ -44,9 +49,10 @@ const TimelineEventCard = ({
         className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
         href={
           lastEventType?.session
-            ? `/${shareOrSubjects}/${subjectId}/missions/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}`
+            ? `/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}?back=${pathname}`
             : `/${shareOrSubjects}/${subjectId}/events/${lastEvent.id}`
         }
+        scroll={false}
         variant="link"
       >
         {lastEventType?.session
@@ -54,22 +60,22 @@ const TimelineEventCard = ({
           : lastEventType?.name}
         <div className="ml-auto flex shrink-0 items-center gap-4">
           {lastEventType?.session && (
-            <span className="relative top-px font-mono">
-              Session {sessionNumber}
-            </span>
+            <span className="smallcaps text-fg-4">Session {sessionNumber}</span>
           )}
-          <ArrowRightIcon className="w-5" />
+          <ArrowUpRightIcon className="w-5" />
         </div>
       </Button>
       {!lastEventType?.session && (
-        <div className="smallcaps flex items-center gap-4 whitespace-nowrap border-t border-alpha-1 px-4 py-3">
+        <div className="smallcaps flex items-center gap-4 whitespace-nowrap border-t border-alpha-1 px-4 py-3 text-fg-4">
           <Avatar
             className="-my-[0.15rem]"
             file={lastEventProfile?.image_uri}
             id={lastEventProfile?.id}
             size="xs"
           />
-          {lastEventProfile?.first_name} {lastEventProfile?.last_name}
+          <span className="truncate">
+            {lastEventProfile?.first_name} {lastEventProfile?.last_name}
+          </span>
           <DateTime
             className="ml-auto"
             date={lastEvent.created_at}
@@ -85,9 +91,6 @@ const TimelineEventCard = ({
       >
         {group.map((event, i) => {
           const moduleNumber = (firstIfArray(event.type)?.order ?? 0) + 1;
-          const comments = forceArray(event.comments);
-          const inputs = forceArray(event.inputs);
-          const profile = firstIfArray(event.profile);
           const nextEvent = group[i + 1];
 
           if (compressLast.current) {
@@ -96,9 +99,9 @@ const TimelineEventCard = ({
           }
 
           if (
-            !comments.length &&
-            !inputs.length &&
-            nextEvent?.profile?.id === profile?.id &&
+            !event.comments.length &&
+            !event.inputs.length &&
+            nextEvent?.profile?.id === event.profile?.id &&
             !forceArray(nextEvent?.comments).length &&
             !forceArray(nextEvent?.inputs).length
           ) {
@@ -111,49 +114,56 @@ const TimelineEventCard = ({
           return (
             <li key={event.id}>
               {lastEventType?.session && (
-                <div className="smallcaps flex items-center justify-between px-4 py-3">
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-base leading-none">
-                      {compressLast.current && (
-                        <>{compressStart.current}&nbsp;&ndash;&nbsp;</>
-                      )}
-                      {moduleNumber}
-                    </span>
-                    <Avatar
-                      className="-my-[0.15rem]"
-                      file={profile?.image_uri}
-                      id={profile?.id}
-                      size="xs"
-                    />
-                    {profile?.first_name} {profile?.last_name}{' '}
-                  </div>
-                  <DateTime date={event.created_at} formatter="time" />
+                <div className="smallcaps flex items-center justify-between gap-4 whitespace-nowrap px-4 py-3 text-fg-4">
+                  <span>
+                    {compressLast.current && (
+                      <>{compressStart.current}&nbsp;&ndash;&nbsp;</>
+                    )}
+                    {moduleNumber}
+                  </span>
+                  <Avatar
+                    className="-my-[0.15rem]"
+                    file={event.profile?.image_uri}
+                    id={event.profile?.id}
+                    size="xs"
+                  />
+                  <span className="truncate">
+                    {event.profile?.first_name} {event.profile?.last_name}{' '}
+                  </span>
+                  <DateTime
+                    className="ml-auto"
+                    date={event.created_at}
+                    formatter="time"
+                  />
                 </div>
               )}
-              {!!inputs.length && (
+              {!!event.inputs.length && (
                 <div className="-my-1.5 pb-4 pt-3">
                   <table className="w-full table-fixed">
                     <tbody>
                       {Object.entries(
-                        inputs.reduce<
+                        event.inputs.reduce<
                           Record<
                             string,
                             {
                               label: string;
                               type: InputTypes;
-                              values: { label?: string; value?: string }[];
+                              values: {
+                                label?: string;
+                                value?: string;
+                              }[];
                             }
                           >
                         >((acc, { input, option, value }) => {
                           if (!input) return acc;
                           acc[input.id] = acc[input.id] ?? { values: [] };
                           acc[input.id].label = input.label;
-                          acc[input.id].type = input.type;
+                          acc[input.id].type = input.type as InputTypes;
 
                           if (value || option?.label) {
                             acc[input.id].values.push({
                               label: option?.label,
-                              value,
+                              value: value as string,
                             });
                           }
 
@@ -171,10 +181,11 @@ const TimelineEventCard = ({
                   </table>
                 </div>
               )}
-              {!!comments.length && (
+              {!!event.comments.length && (
                 <div className="space-y-4 px-4 pb-4 pt-3">
                   <EventComments
-                    comments={comments}
+                    comments={event.comments as EventCommentsProps['comments']}
+                    isPublic={isPublic}
                     isTeamMember={isTeamMember}
                     userId={user?.id}
                   />

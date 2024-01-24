@@ -4,7 +4,8 @@ import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Plots from '@/_components/plots';
 import { Dialog } from '@headlessui/react';
-import { ChartBarSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import ChartBarSquareIcon from '@heroicons/react/24/outline/ChartBarSquareIcon';
+import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useToggle } from '@uidotdev/usehooks';
 
 interface InsightsModalButtonProps {

@@ -1,12 +1,10 @@
 # llog
 
-> The ultimate platform for behavior consultants.
-
 ## Development Setup
 
 Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git),
-[Node](https://nodejs.org/en/download), [bun](https://bun.sh/docs/installation) and
-[Docker](https://docs.docker.com/engine/install), then:
+[Node](https://nodejs.org/en/download), [bun](https://bun.sh/docs/installation)
+and [Docker](https://docs.docker.com/engine/install), then:
 
 ```shell
 git clone git@github.com:xvvvyz/llog.git
@@ -47,27 +45,11 @@ bun db:diff -- migration-description
 - Update email templates
 - Update url config
 - Add custom SMTP server
-- Enable realtime
+- Enable realtime (notifications)
+- Remove GraphQL api
 - Github environment secrets:
   - NEXT_PUBLIC_SUPABASE_ANON_KEY
   - NEXT_PUBLIC_SUPABASE_PRO
   - NEXT_PUBLIC_SUPABASE_URL
   - SUPABASE_DB_PASSWORD
   - SUPABASE_PROJECT_ID
-
-### Email Templates
-
-<!-- prettier-ignore -->
-```html
-Hello,<br><br>Here is the link: <a href="{{ .ConfirmationURL }}">reset your password</a>.<br><br>If you did not make this request, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
-```
-
-<!-- prettier-ignore -->
-```html
-Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your email address</a>.<br><br>If you did not sign up for llog, ignore this email.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
-```
-
-<!-- prettier-ignore -->
-```html
-Hello,<br><br>Please <a href="{{ .ConfirmationURL }}">confirm your new email address</a>.<br><br>Best,<br>The llog team<style>div{padding:0!important}#made-with-supabase{display:none!important}</style>
-```

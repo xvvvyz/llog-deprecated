@@ -1,4 +1,4 @@
-import { ListEventsData } from '@/_server/list-events';
+import { ListEventsData } from '@/_queries/list-events';
 import forceArray from '@/_utilities/force-array';
 
 const strip = (str?: string) => (str ? str.replace(/['"\[\]]/g, '') : '');
@@ -38,9 +38,9 @@ const formatTabularEvents = (events: ListEventsData) => {
 
       if (input.input.type === 'multi_select') {
         row[strippedLabel] = row[strippedLabel] ?? [];
-        (row[strippedLabel] as string[]).push(input.option.label);
+        (row[strippedLabel] as string[]).push(input.option?.label as string);
       } else {
-        row[strippedLabel] = input.value ?? input.option.label;
+        row[strippedLabel] = (input.value ?? input.option?.label) as string;
       }
     });
 

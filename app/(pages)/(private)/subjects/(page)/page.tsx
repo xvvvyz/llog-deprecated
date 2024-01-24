@@ -2,18 +2,16 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import SubjectLinkListItemMenu from '@/_components/subject-link-list-item-menu';
-import getCurrentTeamId from '@/_server/get-current-team-id';
-import listSubjects, { ListSubjectsData } from '@/_server/list-subjects';
-import forceArray from '@/_utilities/force-array';
+import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import listSubjects, { ListSubjectsData } from '@/_queries/list-subjects';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 
 export const metadata = { title: 'Subjects' };
-export const revalidate = 0;
 
 const Page = async () => {
+  const user = await getCurrentUserFromSession();
   const { data: subjects } = await listSubjects();
-  const teamId = await getCurrentTeamId();
 
   if (!subjects?.length) {
     return (
@@ -32,9 +30,9 @@ const Page = async () => {
   }: {
     clientSubjects: NonNullable<ListSubjectsData>;
     teamSubjects: NonNullable<ListSubjectsData>;
-  } = forceArray(subjects).reduce(
+  } = subjects.reduce(
     (acc, subject) => {
-      if (subject.team_id === teamId) acc.teamSubjects.push(subject);
+      if (subject.team_id === user?.id) acc.teamSubjects.push(subject);
       else acc.clientSubjects.push(subject);
       return acc;
     },

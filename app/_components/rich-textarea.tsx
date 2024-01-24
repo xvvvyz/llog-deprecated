@@ -53,7 +53,7 @@ const RichTextarea = (
     value,
   }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
     label?: string;
-    onEnter?: () => void;
+    onEnter?: (e: KeyboardEvent) => void;
     right?: ReactNode;
     tooltip?: ReactNode;
     value?: string | null;
@@ -61,13 +61,6 @@ const RichTextarea = (
   ref: Ref<{ focus: () => void }>,
 ) => {
   const editorRef: MutableRefObject<Editor | null> = useRef(null);
-
-  useImperativeHandle(ref, () => ({
-    focus() {
-      // hack to get newly created textarea to focus via react-hook-form
-      setTimeout(() => editorRef.current?.commands.focus('end'), 10);
-    },
-  }));
 
   const editor = useEditor({
     content: value as Content,
@@ -81,7 +74,7 @@ const RichTextarea = (
         ),
         role: 'textbox',
       },
-      handleKeyDown: (view, e) => {
+      handleKeyDown: (view, e: KeyboardEvent) => {
         if (
           onEnter &&
           e.target &&
@@ -91,7 +84,7 @@ const RichTextarea = (
           !e.ctrlKey &&
           !e.metaKey
         ) {
-          onEnter();
+          onEnter(e);
           return true;
         }
       },
@@ -131,19 +124,26 @@ const RichTextarea = (
       if (!onChange) return;
 
       onChange({
-        target: { name, value: editor.getHTML() },
+        target: { name, value: editor.getText() ? editor.getHTML() : '' },
       } as ChangeEvent<HTMLTextAreaElement>);
     },
   });
 
   useEffect(() => {
-    if (!editorRef.current || value === editorRef.current?.getHTML()) return;
-    editorRef.current.commands.setContent(value ?? '');
-  }, [value]);
+    if (!editor || value === editorRef.current?.getHTML()) return;
+    editor.commands.setContent(value ?? '');
+  }, [editor, value]);
 
   useEffect(() => {
     editorRef.current = editor;
   }, [editor]);
+
+  useImperativeHandle(ref, () => ({
+    focus() {
+      // hack to get newly created textarea to focus via react-hook-form
+      setTimeout(() => editorRef.current?.commands.focus('end'), 10);
+    },
+  }));
 
   return (
     <div className="group relative w-full">

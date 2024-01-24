@@ -99,7 +99,7 @@ const Plots = ({ isPublic, subjectId }: PlotsProps) => {
 
   return (
     <div className="flex flex-col items-center gap-16" ref={ref}>
-      {isLoading && <Spinner loadingText="Loading data…" />}
+      {isLoading && <Spinner loadingText="PageModalLoading data…" />}
       {!isLoading && events.length < 2 && (
         <p className="text-fg-4">Record events to see insights.</p>
       )}

@@ -3,7 +3,7 @@
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import useStopwatch from '@/_hooks/use-stopwatch';
-import { InputType } from '@/_types/input';
+import { Database } from '@/_types/database';
 import ArrowUturnLeftIcon from '@heroicons/react/24/outline/ArrowUturnLeftIcon';
 import PauseIcon from '@heroicons/react/24/outline/PauseIcon';
 import PlayIcon from '@heroicons/react/24/outline/PlayIcon';
@@ -13,7 +13,7 @@ import { FieldValues, PathValue, UseFormReturn } from 'react-hook-form';
 
 interface EventStopwatchProps<T extends FieldValues> {
   form: UseFormReturn<T>;
-  input: InputType;
+  input: Pick<Database['public']['Tables']['inputs']['Row'], 'label'>;
   inputIndex: number;
 }
 
@@ -30,6 +30,7 @@ const EventStopwatch = <T extends FieldValues>({
     form.setValue(
       name as T[string],
       String(throttledTime) as PathValue<T, T[string]>,
+      { shouldDirty: true },
     );
   }, [form, name, throttledTime]);
 
