@@ -34,7 +34,13 @@ const SubjectForm = ({ back, subject }: SubjectFormProps) => {
   );
 
   return (
-    <form action={action} className="divide-y divide-alpha-1">
+    <form
+      action={(formData: FormData) => {
+        if (avatar) formData.append('avatar', avatar);
+        action(formData);
+      }}
+      className="divide-y divide-alpha-1"
+    >
       <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
         <Input
           defaultValue={subject?.name}
@@ -49,7 +55,6 @@ const SubjectForm = ({ back, subject }: SubjectFormProps) => {
             <AvatarDropzone
               file={avatar}
               id={subject?.id}
-              name="avatar"
               onDrop={(files) => setAvatar(files[0])}
             />
           </label>

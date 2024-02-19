@@ -24,7 +24,13 @@ const AccountProfileForm = ({ back, user }: AccountProfileFormProps) => {
   );
 
   return (
-    <form action={action} className="divide-y divide-alpha-1">
+    <form
+      action={(formData: FormData) => {
+        if (avatar) formData.append('avatar', avatar);
+        action(formData);
+      }}
+      className="divide-y divide-alpha-1"
+    >
       <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
         <div className="flex gap-6">
           <Input
@@ -46,7 +52,6 @@ const AccountProfileForm = ({ back, user }: AccountProfileFormProps) => {
             <AvatarDropzone
               file={avatar}
               id={user.id}
-              name="avatar"
               onDrop={(files) => setAvatar(files[0])}
             />
           </label>

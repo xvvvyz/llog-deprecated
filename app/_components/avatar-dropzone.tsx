@@ -1,17 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Avatar from './avatar';
 
 interface AvatarDropzoneProps {
   file?: File | string | null;
   id?: string;
-  name: string;
   onDrop: (files: File[]) => void;
 }
 
-const AvatarDropzone = ({ file, id, name, onDrop }: AvatarDropzoneProps) => {
+const AvatarDropzone = ({ file, id, onDrop }: AvatarDropzoneProps) => {
   const dropzone = useDropzone({
     accept: { 'image/*': ['.png', '.gif', '.jpeg', '.jpg'] },
     maxSize: 10000000,
@@ -19,11 +17,6 @@ const AvatarDropzone = ({ file, id, name, onDrop }: AvatarDropzoneProps) => {
     noClick: true,
     onDrop,
   });
-
-  useEffect(() => {
-    if (!dropzone.inputRef.current || file !== null) return;
-    dropzone.inputRef.current.value = '';
-  }, [file, dropzone.inputRef]);
 
   return (
     <div
@@ -37,7 +30,7 @@ const AvatarDropzone = ({ file, id, name, onDrop }: AvatarDropzoneProps) => {
           browse
         </span>
       </p>
-      <input {...dropzone.getInputProps()} name={name} />
+      <input {...dropzone.getInputProps()} />
     </div>
   );
 };

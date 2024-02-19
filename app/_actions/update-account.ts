@@ -6,17 +6,18 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const updateAccount = async (
-  context: { deleteAvatar?: boolean; next: string },
+  context: {
+    avatar?: File | string | null;
+    deleteAvatar?: boolean;
+    next: string;
+  },
   _state: { error: string } | null,
   data: FormData,
 ) => {
   const supabase = createServerSupabaseClient();
   const email = data.get('email');
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.updateUser({
+  const { error } = await supabase.auth.updateUser({
     data: {
       first_name: data.get('first-name') || undefined,
       last_name: data.get('last-name') || undefined,
@@ -27,6 +28,7 @@ const updateAccount = async (
 
   if (error) return { error: error.message };
   const avatar = data.get('avatar') as File | undefined;
+  const user = await getCurrentUserFromSession();
 
   if (context.deleteAvatar) {
     await Promise.all([
@@ -39,7 +41,7 @@ const updateAccount = async (
       .upload(`${user?.id}/avatar`, avatar, { upsert: true });
   }
 
-  if (email && email !== (await getCurrentUserFromSession())?.email) {
+  if (email && email !== user?.email) {
     redirect('/confirmation-sent');
   }
 
