@@ -77,10 +77,12 @@ const upsertEvent = async (
         }
 
         case InputTypes.Duration: {
-          const [{ id: h }, { id: m }, { id: s }] = input as DurationInputType;
+          const [h, m, s] = input as DurationInputType;
 
           payload.value = String(
-            Number(h ?? 0) * 60 * 60 + Number(m ?? 0) * 60 + Number(s ?? 0),
+            Number(h?.id ?? 0) * 60 * 60 +
+              Number(m?.id ?? 0) * 60 +
+              Number(s?.id ?? 0),
           );
 
           acc.eventInputs.push(payload);
