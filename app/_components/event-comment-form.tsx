@@ -21,27 +21,28 @@ const EventCommentForm = ({
 }: EventCommentFormProps) => {
   const [value, setValue] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
-  const valueCache = useRef('');
+  const pendingValue = useRef('');
 
   const [state, action] = useFormState(
-    addComment.bind(null, { content: value, eventId }),
+    addComment.bind(null, { eventId }),
     null,
   );
 
   useEffect(() => {
     if (!state?.error) return;
     alert(state.error);
-    setValue(valueCache.current);
+    setValue(pendingValue.current);
   }, [state]);
 
   return (
     <form
-      action={action}
-      className={className}
-      onSubmit={() => {
-        valueCache.current = value;
+      action={() => {
+        if (!value) return;
+        pendingValue.current = value;
         setValue('');
+        return action({ content: value });
       }}
+      className={className}
       ref={formRef}
     >
       <RichTextarea

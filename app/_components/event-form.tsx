@@ -17,7 +17,7 @@ import SelectInputType from '@/_types/select-input-type';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import parseSeconds from '@/_utilities/parse-seconds';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFormState } from 'react-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { PropsValue } from 'react-select';
@@ -39,7 +39,7 @@ interface EventFormProps {
 }
 
 interface EventFormValues {
-  comment?: string;
+  comment: string;
   completionTime: string;
   inputs: Array<
     | DurationInputType
@@ -59,9 +59,11 @@ const EventForm = ({
   subjectId,
 }: EventFormProps) => {
   const eventInputs = forceArray(event?.inputs);
+  const pendingComment = useRef('');
 
   const form = useForm<EventFormValues>({
     defaultValues: {
+      comment: '',
       completionTime: formatDatetimeLocal(event?.created_at ?? new Date()),
       inputs: eventType.inputs.map(({ input }) => {
         const inputInputs = eventInputs.filter(
@@ -136,10 +138,17 @@ const EventForm = ({
     null,
   );
 
+  useEffect(() => {
+    if (!state?.error) return;
+    form.setValue('comment', pendingComment.current);
+  }, [form, state]);
+
   return (
     <form
       action={() => {
         const data = form.getValues();
+        pendingComment.current = data.comment;
+        form.setValue('comment', '');
         data.completionTime = new Date(data.completionTime).toISOString();
         return action(data);
       }}
