@@ -9,7 +9,6 @@ import MenuItems from '@/_components/menu-items';
 import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
 import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon';
 import { User } from '@supabase/supabase-js';
-import { usePathname } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface AccountMenuProps {
@@ -18,7 +17,6 @@ interface AccountMenuProps {
 
 const AccountMenu = ({ user }: AccountMenuProps) => {
   const [isTransitioning, startTransition] = useTransition();
-  const pathname = usePathname();
 
   return (
     <Menu className="h-full shrink-0">
@@ -26,7 +24,7 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
         <Avatar file={user?.user_metadata?.image_uri} id={user?.id} />
       </MenuButton>
       <MenuItems className="mt-10">
-        <MenuItem href={`/account/profile?back=${pathname}`} scroll={false}>
+        <MenuItem attachBackLink href="/account/profile" scroll={false}>
           <Cog6ToothIcon className="w-5 text-fg-4" />
           Account settings
         </MenuItem>

@@ -1,6 +1,7 @@
 'use client';
 
 import upsertInput from '@/_actions/upsert-input';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import FormBanner from '@/_components/form-banner';
@@ -20,6 +21,7 @@ import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
+import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { PropsValue } from 'react-select';
@@ -34,7 +36,6 @@ const INPUT_TYPE_OPTIONS = [
 ];
 
 interface InputFormProps {
-  back?: string;
   disableCache?: boolean;
   input?: Partial<GetInputData>;
   isDuplicate?: boolean;
@@ -52,7 +53,6 @@ type InputFormValues = {
 };
 
 const InputForm = ({
-  back,
   disableCache,
   input,
   isDuplicate,
@@ -84,6 +84,7 @@ const InputForm = ({
   });
 
   const type = form.watch('type')?.id;
+  const back = useSearchParams().get('back') as string;
 
   return (
     <form
@@ -92,7 +93,10 @@ const InputForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertInput(
-              { inputId: isDuplicate ? undefined : input?.id, next: back },
+              {
+                inputId: isDuplicate ? undefined : input?.id,
+                next: onClose ? undefined : back,
+              },
               values,
             );
 
@@ -330,15 +334,13 @@ const InputForm = ({
         </div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
-        <Button
+        <BackButton
           className="w-full"
           colorScheme="transparent"
-          href={back}
           onClick={onClose}
-          scroll={false}
         >
           Close
-        </Button>
+        </BackButton>
         <Button
           className="w-full"
           loading={isTransitioning}

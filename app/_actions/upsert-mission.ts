@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect, RedirectType } from 'next/navigation';
 
 const upsertMission = async (
-  context: { missionId?: string; subjectId: string },
+  context: { missionId?: string; next?: string; subjectId: string },
   _state: { error: string } | null,
   data: FormData,
 ) => {
@@ -25,10 +25,9 @@ const upsertMission = async (
   revalidatePath('/', 'layout');
 
   redirect(
-    context.missionId
-      ? `/subjects/${context.subjectId}`
-      : `/subjects/${context.subjectId}/training-plans/${mission.id}/sessions`,
-    context.missionId ? RedirectType.push : RedirectType.replace,
+    context.next ??
+      `/subjects/${context.subjectId}/training-plans/${mission.id}/sessions`,
+    context.next ? RedirectType.push : RedirectType.replace,
   );
 };
 

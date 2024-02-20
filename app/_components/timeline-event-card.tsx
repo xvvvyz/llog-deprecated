@@ -17,7 +17,6 @@ import { twMerge } from 'tailwind-merge';
 import EventComments, {
   EventCommentsProps,
 } from '@/_components/event-comments';
-import { usePathname } from 'next/navigation';
 
 interface TimelineEventCardProps {
   group: NonNullable<ListEventsData>;
@@ -37,20 +36,20 @@ const TimelineEventCard = ({
   const compressLast = useRef(false);
   const compressStart = useRef<number | null>(null);
   const lastEvent = group[group.length - 1];
-  const lastEventType = firstIfArray(lastEvent.type);
   const lastEventProfile = firstIfArray(lastEvent.profile);
-  const pathname = usePathname();
+  const lastEventType = firstIfArray(lastEvent.type);
   const sessionNumber = (lastEventType?.session?.order ?? 0) + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
     <article className="rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
+        attachBackLink
         className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
         href={
           lastEventType?.session
-            ? `/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}?back=${pathname}`
-            : `/${shareOrSubjects}/${subjectId}/events/${lastEvent.id}?back=${pathname}`
+            ? `/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}`
+            : `/${shareOrSubjects}/${subjectId}/events/${lastEvent.id}`
         }
         scroll={false}
         variant="link"

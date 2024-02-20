@@ -47,7 +47,7 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title="Create event type" />
+      <PageModalHeader title="Create event type" />
       <EventTypeForm
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}

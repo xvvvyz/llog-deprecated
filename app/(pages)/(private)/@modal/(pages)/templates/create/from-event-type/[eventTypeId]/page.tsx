@@ -34,10 +34,9 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title="Create template" />
+      <PageModalHeader title="Create template" />
       <TemplateForm
         availableInputs={availableInputs}
-        back={back}
         disableCache
         isDuplicate
         subjects={subjects}

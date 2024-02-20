@@ -19,8 +19,8 @@ const Page = async ({ searchParams: { back } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader back={back} title="Create input" />
-      <InputForm back={back} subjects={subjects} />
+      <PageModalHeader title="Create input" />
+      <InputForm subjects={subjects} />
     </>
   );
 };

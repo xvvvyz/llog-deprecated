@@ -42,4 +42,5 @@ const IconButton = ({
   );
 };
 
+export type { IconButtonProps };
 export default IconButton;

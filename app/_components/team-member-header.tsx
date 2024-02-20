@@ -1,8 +1,9 @@
 import Avatar from '@/_components/avatar';
+import Button from '@/_components/button';
 import CopyJoinSubjectLinkButton from '@/_components/copy-join-subject-link-button';
-import EditSubjectButton from '@/_components/edit-subject-button';
 import Tooltip from '@/_components/tooltip';
 import listSubjectManagers from '@/_queries/list-subject-managers';
+import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 
 interface TeamMemberHeaderProps {
   subjectId: string;
@@ -50,7 +51,15 @@ const TeamMemberHeader = async ({
             />
           </div>
         </div>
-        <EditSubjectButton subjectId={subjectId} />
+        <Button
+          attachBackLink
+          href={`/subjects/${subjectId}/edit`}
+          scroll={false}
+          variant="link"
+        >
+          <PencilIcon className="w-5" />
+          Edit
+        </Button>
       </div>
     </div>
   );

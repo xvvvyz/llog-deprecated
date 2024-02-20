@@ -18,7 +18,6 @@ import { useToggle } from '@uidotdev/usehooks';
 import { useTransition } from 'react';
 
 interface SessionLinkListItemMenuProps {
-  back: string;
   highestPublishedOrder: number;
   missionId: string;
   nextSessionOrder: number;
@@ -27,7 +26,6 @@ interface SessionLinkListItemMenuProps {
 }
 
 const SessionLinkListItemMenu = ({
-  back,
   highestPublishedOrder,
   missionId,
   nextSessionOrder,
@@ -48,13 +46,15 @@ const SessionLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit?back=${back}`}
+            attachBackLink
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>
           <MenuItem
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}?back=${back}`}
+            attachBackLink
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}`}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate

@@ -74,8 +74,9 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
         {filteredInputs.map((input) => (
           <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
             <Button
+              attachBackLink
               className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug"
-              href={`/inputs/${input.id}?back=/inputs`}
+              href={`/inputs/${input.id}`}
               scroll={false}
               variant="link"
             >

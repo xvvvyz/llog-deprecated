@@ -61,7 +61,7 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={eventType.name as string} />
+      <PageModalHeader title={eventType.name as string} />
       <EventTypeForm
         availableInputs={availableInputs}
         availableTemplates={availableTemplates}

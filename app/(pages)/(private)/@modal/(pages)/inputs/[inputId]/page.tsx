@@ -34,8 +34,8 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={input.label} />
-      <InputForm back={back} input={input} subjects={subjects} />
+      <PageModalHeader title={input.label} />
+      <InputForm input={input} subjects={subjects} />
     </>
   );
 };

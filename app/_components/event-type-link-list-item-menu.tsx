@@ -11,7 +11,6 @@ import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIc
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
-import { usePathname } from 'next/navigation';
 
 interface EventTypeLinkListItemMenuProps {
   eventTypeId: string;
@@ -23,7 +22,6 @@ const EventTypeLinkListItemMenu = ({
   subjectId,
 }: EventTypeLinkListItemMenuProps) => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
-  const pathname = usePathname();
 
   return (
     <>
@@ -42,14 +40,16 @@ const EventTypeLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            href={`/subjects/${subjectId}/event-types/${eventTypeId}/edit?back=${pathname}`}
+            attachBackLink
+            href={`/subjects/${subjectId}/event-types/${eventTypeId}/edit`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>
           <MenuItem
-            href={`/templates/create/from-event-type/${eventTypeId}?back=${pathname}`}
+            attachBackLink
+            href={`/templates/create/from-event-type/${eventTypeId}`}
             scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />

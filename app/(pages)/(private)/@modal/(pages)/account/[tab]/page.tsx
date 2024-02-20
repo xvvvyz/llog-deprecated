@@ -26,13 +26,14 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader back={back} title="Account settings" />
+      <PageModalHeader title="Account settings" />
       <div className="!border-t-0 px-4 pb-8 sm:px-8">
         <div className="grid w-full grid-cols-3 divide-x divide-alpha-3 rounded border border-alpha-3">
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-l py-1.5 hover:bg-alpha-1"
-            href={`/account/profile?back=${back}`}
+            forwardBackLink
+            href="/account/profile"
             replace
             scroll={false}
             variant="link"
@@ -42,7 +43,8 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center py-1.5 hover:bg-alpha-1"
-            href={`/account/email?back=${back}`}
+            forwardBackLink
+            href="/account/email"
             replace
             scroll={false}
             variant="link"
@@ -52,7 +54,8 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-r py-1.5 hover:bg-alpha-1"
-            href={`/account/password?back=${back}`}
+            forwardBackLink
+            href="/account/password"
             replace
             scroll={false}
             variant="link"
@@ -61,9 +64,9 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           </Button>
         </div>
       </div>
-      {tab === 'profile' && <AccountProfileForm back={back} user={user} />}
-      {tab === 'email' && <AccountEmailForm back={back} user={user} />}
-      {tab === 'password' && <AccountPasswordForm back={back} />}
+      {tab === 'profile' && <AccountProfileForm user={user} />}
+      {tab === 'email' && <AccountEmailForm user={user} />}
+      {tab === 'password' && <AccountPasswordForm />}
     </>
   );
 };

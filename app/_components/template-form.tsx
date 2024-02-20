@@ -1,6 +1,7 @@
 'use client';
 
 import upsertTemplate from '@/_actions/upsert-template';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
@@ -18,12 +19,12 @@ import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import sortInputs from '@/_utilities/sort-inputs';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { Dialog } from '@headlessui/react';
+import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
 interface TemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
-  back?: string;
   disableCache?: boolean;
   isDuplicate?: boolean;
   onClose?: () => void;
@@ -39,7 +40,6 @@ type TemplateFormValues = {
 
 const TemplateForm = ({
   availableInputs,
-  back,
   disableCache,
   isDuplicate,
   onClose,
@@ -68,6 +68,7 @@ const TemplateForm = ({
   );
 
   const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
+  const back = useSearchParams().get('back') as string;
 
   return (
     <>
@@ -77,7 +78,7 @@ const TemplateForm = ({
           form.handleSubmit((values) =>
             startTransition(async () => {
               const res = await upsertTemplate(
-                { next: back, templateId: template?.id },
+                { next: onClose ? undefined : back, templateId: template?.id },
                 values,
               );
 
@@ -134,15 +135,13 @@ const TemplateForm = ({
           </div>
         )}
         <div className="flex gap-4 px-4 py-8 sm:px-8">
-          <Button
+          <BackButton
             className="w-full"
             colorScheme="transparent"
-            href={back}
             onClick={onClose}
-            scroll={false}
           >
             Close
-          </Button>
+          </BackButton>
           <Button
             className="w-full"
             loading={isTransitioning}

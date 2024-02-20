@@ -1,9 +1,10 @@
 import AccountMenu from '@/_components/account-menu';
 import Button from '@/_components/button';
-import NotificationsButton from '@/_components/notifications-button';
+import IconButton from '@/_components/icon-button';
 import Subscriptions from '@/_components/subscriptions';
 import countNotifications from '@/_queries/count-notifications';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import BellIcon from '@heroicons/react/24/outline/BellIcon';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
@@ -44,7 +45,22 @@ const Layout = async ({ children, modal }: LayoutProps) => {
             )}
           </div>
           <div className="relative flex gap-6">
-            <NotificationsButton count={count ?? 0} />
+            <IconButton
+              activeClassName="text-fg-2"
+              attachBackLink
+              href="/notifications/inbox"
+              icon={
+                <div className="relative">
+                  {!!count && (
+                    <span className="absolute -top-1.5 right-7 whitespace-nowrap rounded-sm border border-alpha-4 bg-red-1 px-1.5 py-0.5 text-xs text-fg-1">
+                      {count}
+                    </span>
+                  )}
+                  <BellIcon className="w-7" />
+                </div>
+              }
+              scroll={false}
+            />
             <AccountMenu user={user} />
           </div>
         </nav>

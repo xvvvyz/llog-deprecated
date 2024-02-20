@@ -10,7 +10,6 @@ import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIc
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
-import { usePathname } from 'next/navigation';
 
 interface SubjectLinkListItemMenuItemsProps {
   subjectId: string;
@@ -20,7 +19,6 @@ const SubjectLinkListItemMenu = ({
   subjectId,
 }: SubjectLinkListItemMenuItemsProps) => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
-  const pathname = usePathname();
 
   return (
     <>
@@ -38,7 +36,7 @@ const SubjectLinkListItemMenu = ({
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem href={`/subjects/${subjectId}/edit?back=${pathname}`}>
+          <MenuItem attachBackLink href={`/subjects/${subjectId}/edit`}>
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>

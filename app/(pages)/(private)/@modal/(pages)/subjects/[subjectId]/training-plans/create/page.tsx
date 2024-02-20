@@ -30,7 +30,7 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title="Create training plan" />
+      <PageModalHeader title="Create training plan" />
       <MissionForm subjectId={subjectId} />
     </>
   );

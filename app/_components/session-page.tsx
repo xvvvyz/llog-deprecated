@@ -1,4 +1,4 @@
-import Button from '@/_components/button';
+import BackButton from '@/_components/back-button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import EventCard from '@/_components/event-card';
@@ -49,9 +49,8 @@ const SessionPage = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={mission.name} />
+      <PageModalHeader title={mission.name} />
       <SessionLayout
-        back={back}
         isPublic={isPublic}
         isTeamMember={isTeamMember}
         missionId={missionId}
@@ -112,14 +111,9 @@ const SessionPage = async ({
           </>
         )}
       </SessionLayout>
-      <Button
-        className="m-0 block w-full py-6 text-center"
-        href={back}
-        scroll={false}
-        variant="link"
-      >
+      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
         Close
-      </Button>
+      </BackButton>
     </>
   );
 };

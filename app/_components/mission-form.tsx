@@ -1,9 +1,11 @@
 'use client';
 
 import upsertMission from '@/_actions/upsert-mission';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { GetMissionData } from '@/_queries/get-mission';
+import { useSearchParams } from 'next/navigation';
 import { useFormState } from 'react-dom';
 
 interface MissionFormProps {
@@ -12,8 +14,14 @@ interface MissionFormProps {
 }
 
 const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
+  const back = useSearchParams().get('back') as string;
+
   const [state, action] = useFormState(
-    upsertMission.bind(null, { missionId: mission?.id, subjectId }),
+    upsertMission.bind(null, {
+      missionId: mission?.id,
+      next: mission ? back : undefined,
+      subjectId,
+    }),
     null,
   );
 
@@ -32,13 +40,9 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
         <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
-        <Button
-          className="w-full"
-          colorScheme="transparent"
-          href={`/subjects/${subjectId}`}
-        >
+        <BackButton className="w-full" colorScheme="transparent">
           Close
-        </Button>
+        </BackButton>
         <Button className="w-full" loadingText="Saving…" type="submit">
           {mission ? 'Save' : 'Continue'}
         </Button>

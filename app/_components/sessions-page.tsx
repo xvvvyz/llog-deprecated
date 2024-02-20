@@ -1,3 +1,4 @@
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
@@ -60,13 +61,9 @@ const SessionsPage = async ({
   const nextSessionOrder = highestOrder + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
-  const nextBack = encodeURIComponent(
-    `/subjects/${subjectId}/training-plans/${missionId}/sessions?back=${back}`,
-  );
-
   return (
     <>
-      <PageModalHeader back={back} title={mission.name} />
+      <PageModalHeader title={mission.name} />
       {!sessionsReversed.length && (
         <Empty className="rounded-none border-0 bg-transparent">
           <InformationCircleIcon className="w-7" />
@@ -78,9 +75,10 @@ const SessionsPage = async ({
       {!isPublic && isTeamMember && (
         <div className="px-4 py-8 sm:px-8">
           <Button
+            attachBackLink
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}?back=${nextBack}`}
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
           >
             <PlusIcon className="w-5" />
             Add session
@@ -100,8 +98,9 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
+                  attachBackLink
                   className="m-0 w-full justify-between gap-6 px-4 py-7 leading-snug sm:px-8"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?back=${nextBack}`}
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   variant="link"
                 >
                   <div>
@@ -133,7 +132,6 @@ const SessionsPage = async ({
                 </Button>
                 {!isPublic && isTeamMember && (
                   <SessionLinkListItemMenu
-                    back={nextBack}
                     highestPublishedOrder={highestPublishedOrder}
                     missionId={missionId}
                     nextSessionOrder={nextSessionOrder}
@@ -146,14 +144,13 @@ const SessionsPage = async ({
           })}
         </ul>
       )}
-      <Button
+      <BackButton
         className="m-0 block w-full py-6 text-center"
-        href={back}
         scroll={false}
         variant="link"
       >
         Close
-      </Button>
+      </BackButton>
     </>
   );
 };

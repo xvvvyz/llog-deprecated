@@ -2,24 +2,25 @@
 
 import updateAccount from '@/_actions/update-account';
 import AvatarDropzone from '@/_components/avatar-dropzone';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { User } from '@supabase/supabase-js';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 
 interface AccountProfileFormProps {
-  back: string;
   user: User;
 }
 
-const AccountProfileForm = ({ back, user }: AccountProfileFormProps) => {
+const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
   const [avatar, setAvatar] = useState<File | string | null | undefined>(
     user.user_metadata.image_uri,
   );
 
   const [state, action] = useFormState(
-    updateAccount.bind(null, { next: back }),
+    updateAccount.bind(null, { next: useSearchParams().get('back') as string }),
     null,
   );
 
@@ -70,9 +71,9 @@ const AccountProfileForm = ({ back, user }: AccountProfileFormProps) => {
         <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
-        <Button className="w-full" colorScheme="transparent" href={back}>
+        <BackButton className="w-full" colorScheme="transparent">
           Close
-        </Button>
+        </BackButton>
         <Button className="w-full" loadingText="Saving…" type="submit">
           Save
         </Button>

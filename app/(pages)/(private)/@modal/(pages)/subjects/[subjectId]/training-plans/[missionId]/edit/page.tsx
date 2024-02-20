@@ -41,7 +41,7 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={mission.name} />
+      <PageModalHeader title={mission.name} />
       <MissionForm mission={mission} subjectId={subjectId} />
     </>
   );

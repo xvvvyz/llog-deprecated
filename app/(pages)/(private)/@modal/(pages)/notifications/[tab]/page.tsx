@@ -1,3 +1,4 @@
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Notifications from '@/_components/notifications';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -26,13 +27,14 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader back={back} title="Notifications" />
+      <PageModalHeader title="Notifications" />
       <div className="!border-t-0 px-4 pb-8 sm:px-8">
         <div className="grid w-full grid-cols-2 divide-x divide-alpha-3 rounded border border-alpha-3">
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-l py-1.5 hover:bg-alpha-1"
-            href={`/notifications/inbox?back=${back}`}
+            forwardBackLink
+            href="/notifications/inbox"
             replace
             scroll={false}
             variant="link"
@@ -42,7 +44,8 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-r py-1.5 hover:bg-alpha-1"
-            href={`/notifications/archive?back=${back}`}
+            forwardBackLink
+            href="/notifications/archive"
             replace
             scroll={false}
             variant="link"
@@ -52,14 +55,9 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
         </div>
       </div>
       <Notifications notifications={notifications} />
-      <Button
-        className="m-0 block w-full py-6 text-center"
-        href={back}
-        scroll={false}
-        variant="link"
-      >
+      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
         Close
-      </Button>
+      </BackButton>
     </>
   );
 };

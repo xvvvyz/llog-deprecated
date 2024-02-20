@@ -1,4 +1,4 @@
-import Button from '@/_components/button';
+import BackButton from '@/_components/back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
 import SessionLayout from '@/_components/session-layout';
@@ -86,9 +86,8 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={mission.name} />
+      <PageModalHeader title={mission.name} />
       <SessionLayout
-        back={back}
         isEdit
         isTeamMember
         missionId={missionId}
@@ -105,14 +104,9 @@ const Page = async ({
           subjectId={subjectId}
         />
       </SessionLayout>
-      <Button
-        className="m-0 block w-full py-6 text-center"
-        href={back}
-        scroll={false}
-        variant="link"
-      >
+      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
         Close
-      </Button>
+      </BackButton>
     </>
   );
 };

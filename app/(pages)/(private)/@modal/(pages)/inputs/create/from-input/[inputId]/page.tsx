@@ -31,8 +31,8 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title="Create input" />
-      <InputForm back={back} input={input} isDuplicate subjects={subjects} />
+      <PageModalHeader title="Create input" />
+      <InputForm input={input} isDuplicate subjects={subjects} />
     </>
   );
 };

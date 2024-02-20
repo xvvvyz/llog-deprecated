@@ -2,20 +2,20 @@
 
 import upsertSubject from '@/_actions/upsert-subject';
 import AvatarDropzone from '@/_components/avatar-dropzone';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import RichTextarea from '@/_components/rich-textarea';
 import { GetSubjectData } from '@/_queries/get-subject';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 
 interface SubjectFormProps {
-  back: string;
-  next?: string;
   subject?: NonNullable<GetSubjectData>;
 }
 
-const SubjectForm = ({ back, next, subject }: SubjectFormProps) => {
+const SubjectForm = ({ subject }: SubjectFormProps) => {
   const [avatar, setAvatar] = useState<File | string | null | undefined>(
     subject?.image_uri,
   );
@@ -24,8 +24,14 @@ const SubjectForm = ({ back, next, subject }: SubjectFormProps) => {
     subject?.banner,
   );
 
+  const back = useSearchParams().get('back') as string;
+
   const [state, action] = useFormState(
-    upsertSubject.bind(null, { banner, next, subjectId: subject?.id }),
+    upsertSubject.bind(null, {
+      banner,
+      next: subject ? back : undefined,
+      subjectId: subject?.id,
+    }),
     null,
   );
 
@@ -82,9 +88,9 @@ const SubjectForm = ({ back, next, subject }: SubjectFormProps) => {
         <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
-        <Button className="w-full" colorScheme="transparent" href={back}>
+        <BackButton className="w-full" colorScheme="transparent">
           Close
-        </Button>
+        </BackButton>
         <Button className="w-full" loadingText="Saving…" type="submit">
           Save
         </Button>

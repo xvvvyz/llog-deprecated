@@ -43,7 +43,7 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={eventType.name as string} />
+      <PageModalHeader title={eventType.name as string} />
       <EventCard
         eventType={eventType}
         isTeamMember={subject.team_id === user?.id}

@@ -9,7 +9,6 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
-  back: string;
   children: ReactNode;
   isCreate?: boolean;
   isEdit?: boolean;
@@ -23,7 +22,6 @@ interface SessionLayoutProps {
 }
 
 const SessionLayout = async ({
-  back,
   children,
   isCreate,
   isEdit,
@@ -91,7 +89,8 @@ const SessionLayout = async ({
       <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}?back=${back}`}
+          forwardBackLink
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
@@ -110,7 +109,8 @@ const SessionLayout = async ({
             (isEditOrCreate ? (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}?back=${back}`}
+                forwardBackLink
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
                 replace
                 scroll={false}
                 variant="link"
@@ -121,7 +121,8 @@ const SessionLayout = async ({
             ) : (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit?back=${back}`}
+                forwardBackLink
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
                 replace
                 scroll={false}
                 variant="link"
@@ -135,7 +136,8 @@ const SessionLayout = async ({
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={isCreate}
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}?back=${back}`}
+            forwardBackLink
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative right-1 w-7" />}
             label="Add session"
             replace
@@ -144,7 +146,8 @@ const SessionLayout = async ({
         ) : (
           <IconButton
             disabled={!nextSessionId}
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}?back=${back}`}
+            forwardBackLink
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative right-1 w-7" />}
             label="Next session"
             replace

@@ -16,8 +16,8 @@ const Page = ({ searchParams: { back } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader back={back} title="Create subject" />
-      <SubjectForm back={back} />
+      <PageModalHeader title="Create subject" />
+      <SubjectForm />
     </>
   );
 };

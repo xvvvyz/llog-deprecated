@@ -25,12 +25,8 @@ const Page = async ({ searchParams: { back } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader back={back} title="Create template" />
-      <TemplateForm
-        availableInputs={availableInputs}
-        back={back}
-        subjects={subjects}
-      />
+      <PageModalHeader title="Create template" />
+      <TemplateForm availableInputs={availableInputs} subjects={subjects} />
     </>
   );
 };

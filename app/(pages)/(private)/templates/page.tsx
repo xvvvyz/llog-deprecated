@@ -25,8 +25,9 @@ const Page = async () => {
       {templates.map((template) => (
         <li className="flex items-stretch hover:bg-alpha-1" key={template.id}>
           <Button
+            attachBackLink
             className="m-0 w-full px-4 py-3 pr-0 leading-snug"
-            href={`/templates/${template.id}?back=/templates`}
+            href={`/templates/${template.id}`}
             scroll={false}
             variant="link"
           >

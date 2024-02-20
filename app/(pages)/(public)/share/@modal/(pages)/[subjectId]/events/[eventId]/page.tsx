@@ -1,4 +1,4 @@
-import Button from '@/_components/button';
+import BackButton from '@/_components/back-button';
 import EventCard from '@/_components/event-card';
 import PageModalHeader from '@/_components/page-modal-header';
 import getPublicEvent from '@/_queries/get-public-event';
@@ -42,21 +42,20 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={event.type.name as string} />
+      <PageModalHeader title={event.type.name as string} />
       <EventCard
         event={event}
         eventType={event.type}
         isPublic
         subjectId={subjectId}
       />
-      <Button
+      <BackButton
         className="m-0 block w-full py-6 text-center"
-        href={back}
         scroll={false}
         variant="link"
       >
         Close
-      </Button>
+      </BackButton>
     </>
   );
 };

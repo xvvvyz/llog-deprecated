@@ -30,8 +30,8 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title="Edit subject" />
-      <SubjectForm back={back} next={back} subject={subject} />
+      <PageModalHeader title="Edit subject" />
+      <SubjectForm subject={subject} />
     </>
   );
 };

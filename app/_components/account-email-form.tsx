@@ -1,19 +1,20 @@
 'use client';
 
 import updateAccount from '@/_actions/update-account';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { User } from '@supabase/supabase-js';
+import { useSearchParams } from 'next/navigation';
 import { useFormState } from 'react-dom';
 
 interface AccountEmailFormProps {
-  back: string;
   user: User;
 }
 
-const AccountEmailForm = ({ back, user }: AccountEmailFormProps) => {
+const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
   const [state, action] = useFormState(
-    updateAccount.bind(null, { next: back }),
+    updateAccount.bind(null, { next: useSearchParams().get('back') as string }),
     null,
   );
 
@@ -32,9 +33,9 @@ const AccountEmailForm = ({ back, user }: AccountEmailFormProps) => {
         <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
-        <Button className="w-full" colorScheme="transparent" href={back}>
+        <BackButton className="w-full" colorScheme="transparent">
           Close
-        </Button>
+        </BackButton>
         <Button className="w-full" loadingText="Saving…" type="submit">
           Save
         </Button>

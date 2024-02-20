@@ -39,10 +39,9 @@ const Page = async ({
 
   return (
     <>
-      <PageModalHeader back={back} title={template.name} />
+      <PageModalHeader title={template.name} />
       <TemplateForm
         availableInputs={availableInputs}
-        back={back}
         subjects={subjects}
         template={template}
       />
