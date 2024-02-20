@@ -75,7 +75,7 @@ const TimelineEvents = ({
             className="w-full"
             colorScheme="transparent"
             loading={isTransitioning}
-            loadingText="PageModalLoading…"
+            loadingText="Loading…"
             onClick={() =>
               startTransition(async () => {
                 const to = Number(searchParams.get('to')) || pageSize - 1;
