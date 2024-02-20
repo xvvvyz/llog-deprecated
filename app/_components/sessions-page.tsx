@@ -103,7 +103,6 @@ const SessionsPage = async ({
                 <Button
                   className="m-0 w-full justify-between gap-6 px-4 py-7 leading-snug sm:px-8"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?back=${nextBack}`}
-                  scroll={false}
                   variant="link"
                 >
                   <div>
