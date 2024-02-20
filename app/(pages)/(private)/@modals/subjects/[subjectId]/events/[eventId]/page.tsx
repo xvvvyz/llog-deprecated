@@ -1,3 +1,4 @@
+import Button from '@/_components/button';
 import EventCard from '@/_components/event-card';
 import PageModal from '@/_components/page-modal';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -49,6 +50,13 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
         subjectId={subjectId}
         user={user}
       />
+      <Button
+        className="m-0 block w-full py-6 text-center"
+        href={back}
+        variant="link"
+      >
+        Close
+      </Button>
     </PageModal>
   );
 };
