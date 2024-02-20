@@ -9,7 +9,6 @@ const upsertSubject = async (
   context: {
     avatar?: File | string | null;
     banner: string | null | undefined;
-    deleteAvatar: boolean;
     next?: string | null;
     subjectId?: string;
   },
@@ -29,9 +28,9 @@ const upsertSubject = async (
     .single();
 
   if (error) return { error: error.message };
-  const avatar = data.get('avatar') as File;
+  const avatar = data.get('avatar') as File | null;
 
-  if (context.deleteAvatar) {
+  if (!avatar) {
     await Promise.all([
       supabase.storage.from('subjects').remove([`${subject.id}/avatar`]),
       supabase

@@ -24,12 +24,7 @@ const SubjectForm = ({ back, subject }: SubjectFormProps) => {
   );
 
   const [state, action] = useFormState(
-    upsertSubject.bind(null, {
-      banner,
-      deleteAvatar: avatar === null,
-      next: back,
-      subjectId: subject?.id,
-    }),
+    upsertSubject.bind(null, { banner, next: back, subjectId: subject?.id }),
     null,
   );
 

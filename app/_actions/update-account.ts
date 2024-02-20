@@ -6,11 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const updateAccount = async (
-  context: {
-    avatar?: File | string | null;
-    deleteAvatar?: boolean;
-    next: string;
-  },
+  context: { avatar?: File | string | null; next: string },
   _state: { error: string } | null,
   data: FormData,
 ) => {
@@ -27,15 +23,15 @@ const updateAccount = async (
   });
 
   if (error) return { error: error.message };
-  const avatar = data.get('avatar') as File | undefined;
+  const avatar = data.get('avatar') as File | null;
   const user = await getCurrentUserFromSession();
 
-  if (context.deleteAvatar) {
+  if (!avatar) {
     await Promise.all([
       supabase.storage.from('profiles').remove([`${user?.id}/avatar`]),
       supabase.auth.updateUser({ data: { image_uri: null } }),
     ]);
-  } else if (avatar?.size && avatar.type.startsWith('image/')) {
+  } else if (avatar.size && avatar.type.startsWith('image/')) {
     await supabase.storage
       .from('profiles')
       .upload(`${user?.id}/avatar`, avatar, { upsert: true });

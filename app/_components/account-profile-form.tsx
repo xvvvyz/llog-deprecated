@@ -19,7 +19,7 @@ const AccountProfileForm = ({ back, user }: AccountProfileFormProps) => {
   );
 
   const [state, action] = useFormState(
-    updateAccount.bind(null, { deleteAvatar: avatar === null, next: back }),
+    updateAccount.bind(null, { next: back }),
     null,
   );
 
