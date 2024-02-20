@@ -81,7 +81,6 @@ const SessionsPage = async ({
             className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}?back=${nextBack}`}
-            scroll={false}
           >
             <PlusIcon className="w-5" />
             Add session
