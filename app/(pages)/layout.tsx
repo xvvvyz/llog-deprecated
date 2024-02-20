@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
+import { Viewport } from 'next';
 import { Figtree, Inconsolata } from 'next/font/google';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -15,6 +16,22 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+export const metadata = {
+  description:
+    'Delight your clients with the ultimate collaborative behavior tracking platform.',
+  title: {
+    default: 'llog — behavior tracking platform',
+    template: '%s - llog',
+  },
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  minimumScale: 1,
+  userScalable: false,
+  width: 'device-width',
+};
+
 const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
     <body>
@@ -23,13 +40,5 @@ const Layout = ({ children }: LayoutProps) => (
     </body>
   </html>
 );
-
-export const metadata = {
-  description: '',
-  title: {
-    default: 'llog — behavior consulting platform',
-    template: '%s - llog',
-  },
-};
 
 export default Layout;

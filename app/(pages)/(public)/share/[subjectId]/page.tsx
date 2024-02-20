@@ -17,8 +17,6 @@ export const generateMetadata = async ({
   return { title: subject?.name };
 };
 
-export const revalidate = 60;
-
 const Page = async ({
   params: { subjectId },
   searchParams: { to },
@@ -63,7 +61,7 @@ const Page = async ({
               <span className="text-sm leading-tight text-fg-4">
                 Delight your clients with the ultimate
                 <br />
-                collaborative behavior tracking tool.
+                collaborative behavior tracking platform.
               </span>
               <Button href="/sign-up" size="sm">
                 Sign up
