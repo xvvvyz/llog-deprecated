@@ -1,7 +1,6 @@
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
-import PageModal from '@/_components/page-modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLinkListItemMenu from '@/_components/session-link-list-item-menu';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
@@ -16,16 +15,19 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { notFound } from 'next/navigation';
 
 interface SessionsPageProps {
+  back?: string;
   isPublic?: boolean;
   missionId: string;
   subjectId: string;
 }
 
 const SessionsPage = async ({
+  back,
   isPublic,
   missionId,
   subjectId,
 }: SessionsPageProps) => {
+  if (!back) notFound();
   const user = await getCurrentUserFromSession();
 
   const { data: subject } = await (isPublic
@@ -57,13 +59,13 @@ const SessionsPage = async ({
   const highestPublishedOrder = getHighestPublishedOrder(mission.sessions);
   const nextSessionOrder = highestOrder + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
-  const back = `/${shareOrSubjects}/${subjectId}`;
+
+  const nextBack = encodeURIComponent(
+    `/subjects/${subjectId}/training-plans/${missionId}/sessions?back=${back}`,
+  );
 
   return (
-    <PageModal
-      back={back}
-      temporary_forcePath={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`}
-    >
+    <>
       <PageModalHeader back={back} title={mission.name} />
       {!sessionsReversed.length && (
         <Empty className="rounded-none border-0 bg-transparent">
@@ -78,7 +80,7 @@ const SessionsPage = async ({
           <Button
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}?back=${nextBack}`}
             scroll={false}
           >
             <PlusIcon className="w-5" />
@@ -100,7 +102,7 @@ const SessionsPage = async ({
               >
                 <Button
                   className="m-0 w-full justify-between gap-6 px-4 py-7 leading-snug sm:px-8"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?back=${nextBack}`}
                   scroll={false}
                   variant="link"
                 >
@@ -133,6 +135,7 @@ const SessionsPage = async ({
                 </Button>
                 {!isPublic && isTeamMember && (
                   <SessionLinkListItemMenu
+                    back={nextBack}
                     highestPublishedOrder={highestPublishedOrder}
                     missionId={missionId}
                     nextSessionOrder={nextSessionOrder}
@@ -153,7 +156,7 @@ const SessionsPage = async ({
       >
         Close
       </Button>
-    </PageModal>
+    </>
   );
 };
 

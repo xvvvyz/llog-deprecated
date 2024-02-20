@@ -1,23 +1,20 @@
 'use client';
 
 import { Dialog } from '@headlessui/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 
 interface PageModalProps {
-  // hack to work around: https://github.com/vercel/next.js/issues/61336
-  back?: string;
   children: ReactNode;
-  temporary_forcePath?: string;
 }
 
-const PageModal = ({ back, children, temporary_forcePath }: PageModalProps) => {
-  const pathname = usePathname();
+const PageModal = ({ children }: PageModalProps) => {
   const router = useRouter();
   const scrollContainer = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
 
-  // hack to work around: https://github.com/vercel/next.js/issues/59502
-  if (temporary_forcePath && pathname !== temporary_forcePath) return null;
+  // hack to work around: https://github.com/vercel/next.js/issues/61336
+  const back = searchParams.get('back');
 
   return (
     <Dialog

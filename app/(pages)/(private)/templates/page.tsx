@@ -26,7 +26,7 @@ const Page = async () => {
         <li className="flex items-stretch hover:bg-alpha-1" key={template.id}>
           <Button
             className="m-0 w-full px-4 py-3 pr-0 leading-snug"
-            href={`/templates/${template.id}`}
+            href={`/templates/${template.id}?back=/templates`}
             scroll={false}
             variant="link"
           >

@@ -9,19 +9,17 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
-  back?: string;
+  back: string;
   children: ReactNode;
   isCreate?: boolean;
   isEdit?: boolean;
   isPublic?: boolean;
   isTeamMember: boolean;
   missionId: string;
-  missionName: string;
   order?: string;
   sessionId?: string;
   sessions: NonNullable<GetMissionWithSessionsData>['sessions'];
   subjectId: string;
-  subjectName: string;
 }
 
 const SessionLayout = async ({
@@ -32,35 +30,16 @@ const SessionLayout = async ({
   isPublic,
   isTeamMember,
   missionId,
-  missionName,
   order,
   sessionId,
   sessions,
   subjectId,
-  subjectName,
 }: SessionLayoutProps) => {
   const isEditOrCreate = isCreate || isEdit;
   const currentSession = sessions.find(({ id }) => id === sessionId);
   const sessionOrder = order ? Number(order) : currentSession?.order;
   if (typeof sessionOrder === 'undefined') return null;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
-
-  const breadcrumbs = [
-    [subjectName, `/${shareOrSubjects}/${subjectId}`],
-    [
-      missionName,
-      `/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`,
-    ],
-    [`${sessionOrder + 1}`],
-  ];
-
-  if (isEditOrCreate) {
-    breadcrumbs[3] = ['Edit'];
-
-    if (isEdit && !currentSession?.draft) {
-      breadcrumbs[2][1] = `/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`;
-    }
-  }
 
   // eslint-disable-next-line prefer-const
   let { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
@@ -106,14 +85,13 @@ const SessionLayout = async ({
 
   const editSuffix = isEditOrCreate ? '/edit' : '';
   const nextSessionOrder = highestOrder + 1;
-  const queryParams = back ? `?back=${back}` : '';
 
   return (
     <>
       <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}${queryParams}`}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}?back=${back}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
@@ -132,7 +110,7 @@ const SessionLayout = async ({
             (isEditOrCreate ? (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}?back=${back}`}
                 replace
                 scroll={false}
                 variant="link"
@@ -143,7 +121,7 @@ const SessionLayout = async ({
             ) : (
               <Button
                 className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit?back=${back}`}
                 replace
                 scroll={false}
                 variant="link"
@@ -157,7 +135,7 @@ const SessionLayout = async ({
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={isCreate}
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}?back=${back}`}
             icon={<PlusIcon className="relative right-1 w-7" />}
             label="Add session"
             replace
@@ -166,7 +144,7 @@ const SessionLayout = async ({
         ) : (
           <IconButton
             disabled={!nextSessionId}
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}${queryParams}`}
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}?back=${back}`}
             icon={<ChevronRightIcon className="relative right-1 w-7" />}
             label="Next session"
             replace

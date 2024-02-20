@@ -8,10 +8,10 @@ import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
-  modals: ReactNode;
+  modal: ReactNode;
 }
 
-const Layout = async ({ children, modals }: LayoutProps) => {
+const Layout = async ({ children, modal }: LayoutProps) => {
   const user = await getCurrentUserFromSession();
   const { count } = await countNotifications();
 
@@ -50,7 +50,7 @@ const Layout = async ({ children, modals }: LayoutProps) => {
         </nav>
       )}
       {children}
-      {modals}
+      {modal}
     </div>
   );
 };

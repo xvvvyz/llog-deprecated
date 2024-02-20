@@ -2,7 +2,6 @@ import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import EventCard from '@/_components/event-card';
-import PageModal from '@/_components/page-modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
@@ -31,6 +30,7 @@ const SessionPage = async ({
   sessionId,
   subjectId,
 }: SessionPageProps) => {
+  if (!back) notFound();
   const user = await getCurrentUserFromSession();
 
   const [{ data: subject }, { data: mission }, { data: session }] =
@@ -46,25 +46,18 @@ const SessionPage = async ({
 
   if (!subject || !mission || !session) notFound();
   const isTeamMember = subject.team_id === user?.id;
-  const shareOrSubjects = isPublic ? 'share' : 'subjects';
-  back ??= `/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`;
 
   return (
-    <PageModal
-      back={back}
-      temporary_forcePath={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
-    >
+    <>
       <PageModalHeader back={back} title={mission.name} />
       <SessionLayout
         back={back}
         isPublic={isPublic}
         isTeamMember={isTeamMember}
         missionId={missionId}
-        missionName={mission.name}
         sessionId={sessionId}
         sessions={mission.sessions}
         subjectId={subjectId}
-        subjectName={subject.name}
       >
         {session.scheduled_for &&
         new Date(session.scheduled_for) > new Date() ? (
@@ -127,7 +120,7 @@ const SessionPage = async ({
       >
         Close
       </Button>
-    </PageModal>
+    </>
   );
 };
 

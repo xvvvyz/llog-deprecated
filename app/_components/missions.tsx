@@ -33,7 +33,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
           )}
           href={
             isTeamMember
-              ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions`
+              ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions?back=/subjects/${subjectId}`
               : `/subjects/${subjectId}/training-plans/${mission.id}/sessions/${activeSessionId}?back=/subjects/${subjectId}`
           }
           scroll={false}
@@ -77,7 +77,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
           <Button
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}/training-plans/create`}
+            href={`/subjects/${subjectId}/training-plans/create?back=/subjects/${subjectId}`}
             scroll={false}
             type="button"
           >

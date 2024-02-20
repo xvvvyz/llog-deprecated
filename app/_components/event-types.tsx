@@ -29,7 +29,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
                   'm-0 flex w-full gap-4 px-4 py-3 leading-snug',
                   isTeamMember && 'pr-0',
                 )}
-                href={`/subjects/${subjectId}/event-types/${eventType.id}`}
+                href={`/subjects/${subjectId}/event-types/${eventType.id}?back=/subjects/${subjectId}`}
                 scroll={false}
                 variant="link"
               >
@@ -53,7 +53,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
           <Button
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}/event-types/create`}
+            href={`/subjects/${subjectId}/event-types/create?back=/subjects/${subjectId}`}
             scroll={false}
             type="button"
           >

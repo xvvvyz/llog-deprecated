@@ -11,10 +11,11 @@ import { useFormState } from 'react-dom';
 
 interface SubjectFormProps {
   back: string;
+  next?: string;
   subject?: NonNullable<GetSubjectData>;
 }
 
-const SubjectForm = ({ back, subject }: SubjectFormProps) => {
+const SubjectForm = ({ back, next, subject }: SubjectFormProps) => {
   const [avatar, setAvatar] = useState<File | string | null | undefined>(
     subject?.image_uri,
   );
@@ -24,7 +25,7 @@ const SubjectForm = ({ back, subject }: SubjectFormProps) => {
   );
 
   const [state, action] = useFormState(
-    upsertSubject.bind(null, { banner, next: back, subjectId: subject?.id }),
+    upsertSubject.bind(null, { banner, next, subjectId: subject?.id }),
     null,
   );
 

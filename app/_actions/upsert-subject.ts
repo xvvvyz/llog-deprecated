@@ -9,7 +9,7 @@ const upsertSubject = async (
   context: {
     avatar?: File | string | null;
     banner: string | null | undefined;
-    next?: string | null;
+    next?: string;
     subjectId?: string;
   },
   _state: { error: string } | null,

@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 type State = { data?: { id?: string }; error?: string } | null;
 
 const upsertTemplate = async (
-  context: { next?: string | null; templateId?: string },
+  context: { next?: string; templateId?: string },
   data: TemplateFormValues,
 ): Promise<State> => {
   const supabase = createServerSupabaseClient();

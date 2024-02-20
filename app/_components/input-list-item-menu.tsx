@@ -35,7 +35,7 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            href={`/inputs/create/from-input/${inputId}`}
+            href={`/inputs/create/from-input/${inputId}?back=/inputs`}
             scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />

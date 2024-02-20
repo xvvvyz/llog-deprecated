@@ -87,6 +87,7 @@ const EventCard = ({
         <div className="flex flex-col gap-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
           <EventComments
             comments={comments as EventCommentsProps['comments']}
+            isPublic={isPublic}
             isTeamMember={isTeamMember}
             userId={user?.id}
           />

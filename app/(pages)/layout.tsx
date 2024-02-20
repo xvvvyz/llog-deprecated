@@ -15,7 +15,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => (
+const Layout = ({ children }: LayoutProps) => (
   <html className={twMerge(figtree.variable, inconsolata.variable)} lang="en">
     <body>
       {children}

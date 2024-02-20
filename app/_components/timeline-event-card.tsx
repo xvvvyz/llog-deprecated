@@ -50,7 +50,7 @@ const TimelineEventCard = ({
         href={
           lastEventType?.session
             ? `/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}?back=${pathname}`
-            : `/${shareOrSubjects}/${subjectId}/events/${lastEvent.id}`
+            : `/${shareOrSubjects}/${subjectId}/events/${lastEvent.id}?back=${pathname}`
         }
         scroll={false}
         variant="link"

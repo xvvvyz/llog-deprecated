@@ -39,7 +39,7 @@ const MissionLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
+            href={`/subjects/${subjectId}/training-plans/${missionId}/edit?back=/subjects/${subjectId}`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
