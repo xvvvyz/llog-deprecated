@@ -16,11 +16,13 @@ import { Database } from '@/_types/database';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
+import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Dialog } from '@headlessui/react';
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
+import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
@@ -33,7 +35,6 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 
-import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -74,6 +75,7 @@ const SessionForm = ({
   const [isTransitioning, startTransition] = useTransition();
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
+  const back = useSearchParams().get('back') as string;
   const currentOrder = (isDuplicate ? order : session?.order ?? order) ?? 0;
   const modules = forceArray(session?.modules);
   const sensors = useSensors(useSensor(PointerSensor));
@@ -149,6 +151,7 @@ const SessionForm = ({
               {
                 currentOrder,
                 missionId: mission.id,
+                next: back,
                 publishedOrder: Math.min(
                   currentOrder,
                   getHighestPublishedOrder(mission.sessions) + 1,

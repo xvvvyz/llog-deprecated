@@ -16,19 +16,16 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { notFound } from 'next/navigation';
 
 interface SessionsPageProps {
-  back?: string;
   isPublic?: boolean;
   missionId: string;
   subjectId: string;
 }
 
 const SessionsPage = async ({
-  back,
   isPublic,
   missionId,
   subjectId,
 }: SessionsPageProps) => {
-  if (!back) notFound();
   const user = await getCurrentUserFromSession();
 
   const { data: subject } = await (isPublic

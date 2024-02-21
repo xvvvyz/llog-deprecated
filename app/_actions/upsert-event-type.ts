@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const upsertEventType = async (
-  context: { eventTypeId?: string; subjectId: string },
+  context: { eventTypeId?: string; next: string; subjectId: string },
   data: EventTypeFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
@@ -51,7 +51,7 @@ const upsertEventType = async (
   }
 
   revalidatePath('/', 'layout');
-  redirect(`/subjects/${context.subjectId}`);
+  redirect(context.next);
 };
 
 export default upsertEventType;

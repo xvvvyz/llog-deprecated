@@ -18,6 +18,7 @@ const upsertEvent = async (
     eventTypeId: string;
     eventTypeInputs: NonNullable<GetEventTypeWithInputsAndOptionsData>['inputs'];
     isMission: boolean;
+    next?: string;
     subjectId: string;
   },
   _state: { error: string } | null,
@@ -139,7 +140,7 @@ const upsertEvent = async (
   }
 
   revalidatePath('/', 'layout');
-  if (!context.isMission) redirect(`/subjects/${context.subjectId}`);
+  if (context.next) redirect(context.next);
   return null;
 };
 

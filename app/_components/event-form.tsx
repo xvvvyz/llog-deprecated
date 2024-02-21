@@ -17,6 +17,7 @@ import SelectInputType from '@/_types/select-input-type';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import parseSeconds from '@/_utilities/parse-seconds';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useFormState } from 'react-dom';
 import { Controller, useForm } from 'react-hook-form';
@@ -58,6 +59,7 @@ const EventForm = ({
   isPublic,
   subjectId,
 }: EventFormProps) => {
+  const back = useSearchParams().get('back') as string;
   const eventInputs = forceArray(event?.inputs);
   const pendingComment = useRef('');
 
@@ -133,6 +135,7 @@ const EventForm = ({
       eventTypeId: eventType.id,
       eventTypeInputs: eventType.inputs,
       isMission: !!isMission,
+      next: isMission ? undefined : back,
       subjectId,
     }),
     null,

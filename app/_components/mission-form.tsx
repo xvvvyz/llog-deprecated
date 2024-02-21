@@ -19,7 +19,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
   const [state, action] = useFormState(
     upsertMission.bind(null, {
       missionId: mission?.id,
-      next: mission ? back : undefined,
+      next: back,
       subjectId,
     }),
     null,

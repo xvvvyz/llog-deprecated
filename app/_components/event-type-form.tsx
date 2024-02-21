@@ -16,6 +16,7 @@ import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import { Dialog } from '@headlessui/react';
+import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
@@ -57,6 +58,7 @@ const EventTypeForm = ({
   });
 
   const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
+  const back = useSearchParams().get('back') as string;
 
   return (
     <>
@@ -64,7 +66,7 @@ const EventTypeForm = ({
         onSubmit={form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertEventType(
-              { eventTypeId: eventType?.id, subjectId },
+              { eventTypeId: eventType?.id, next: back, subjectId },
               values,
             );
 

@@ -11,6 +11,7 @@ const upsertSession = async (
   context: {
     currentOrder: number;
     missionId: string;
+    next: string;
     publishedOrder: number;
     sessionId?: string;
     subjectId: string;
@@ -18,10 +19,20 @@ const upsertSession = async (
   data: SessionFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
-
   const finalOrder = data.draft ? context.currentOrder : context.publishedOrder;
+  let wasDraft = !context.sessionId;
 
-  if (!data.draft) {
+  if (context.sessionId) {
+    const { data: existingSession } = await supabase
+      .from('sessions')
+      .select('draft')
+      .eq('id', context.sessionId)
+      .single();
+
+    if (existingSession) wasDraft = existingSession.draft;
+  }
+
+  if (wasDraft && !data.draft) {
     const { data: shiftSessions } = await supabase
       .from('sessions')
       .select('id, order')
@@ -177,10 +188,7 @@ const upsertSession = async (
   }
 
   revalidatePath('/', 'layout');
-
-  redirect(
-    `/subjects/${context.subjectId}/training-plans/${context.missionId}/sessions`,
-  );
+  redirect(context.next);
 };
 
 export default upsertSession;
