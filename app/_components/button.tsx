@@ -88,7 +88,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       const back = forwardBackLink
         ? `?back=${searchParams.get('back')}`
         : attachBackLink
-          ? `?back=${pathname}?${searchParams.toString()}`
+          ? `?back=${pathname}${searchParams.size ? `?${searchParams.toString()}` : ''}`
           : '';
 
       return (
