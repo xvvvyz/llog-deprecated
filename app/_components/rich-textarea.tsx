@@ -124,7 +124,10 @@ const RichTextarea = (
       if (!onChange) return;
 
       onChange({
-        target: { name, value: editor.getText() ? editor.getHTML() : '' },
+        target: {
+          name,
+          value: editor.getHTML() === '<p></p>' ? '' : editor.getHTML(),
+        },
       } as ChangeEvent<HTMLTextAreaElement>);
     },
   });
