@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from '@headlessui/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 
 interface PageModalProps {
@@ -11,17 +11,9 @@ interface PageModalProps {
 const PageModal = ({ children }: PageModalProps) => {
   const router = useRouter();
   const scrollContainer = useRef<HTMLDivElement>(null);
-  const searchParams = useSearchParams();
-
-  // hack to work around: https://github.com/vercel/next.js/issues/61336
-  const back = searchParams.get('back');
 
   return (
-    <Dialog
-      initialFocus={scrollContainer}
-      onClose={() => back && router.push(back, { scroll: false })}
-      open
-    >
+    <Dialog initialFocus={scrollContainer} onClose={router.back} open>
       <Dialog.Backdrop className="fixed inset-0 z-10 bg-alpha-reverse-1 backdrop-blur-sm" />
       <div
         className="fixed inset-0 z-20 overflow-y-auto py-16"
