@@ -54,7 +54,6 @@
     "@zag-js/tooltip": "0.36.3",
     "autoprefixer": "^10.4.17",
     "deep-diff": "^1.0.2",
-    "deepmerge": "^4.3.1",
     "encoding": "^0.1.13",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",

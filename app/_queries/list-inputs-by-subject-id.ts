@@ -19,14 +19,13 @@ const listInputsBySubjectId = async (subjectId: string) => {
     .not('subject_id', 'eq', subjectId);
 
   if (blacklist.error) return blacklist;
-  const blacklistIds = `(${blacklist.data.map((is) => is.input_id).join(',')})`;
 
   return supabase
     .from('inputs')
     .select('id, label, subjects(id, image_uri, name), type')
     .eq('team_id', (await getCurrentUserFromSession())?.id ?? '')
     .eq('archived', false)
-    .not('id', 'in', blacklistIds)
+    .not('id', 'in', `(${blacklist.data.map((is) => is.input_id).join(',')})`)
     .eq('subjects.deleted', false)
     .order('name', { referencedTable: 'subjects' })
     .order('label');

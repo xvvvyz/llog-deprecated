@@ -100,7 +100,7 @@ const upsertSession = async (
   await supabase
     .from('event_types')
     .delete()
-    .not('id', 'in', updateEventTypeIds);
+    .not('id', 'in', `(${updateEventTypeIds.join(',')})`);
 
   if (updateEventTypes.length) {
     const { error } = await supabase

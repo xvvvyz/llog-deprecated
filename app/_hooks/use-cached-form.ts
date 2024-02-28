@@ -1,6 +1,5 @@
 'use client';
 
-import deepmerge from 'deepmerge';
 import debounce from 'lodash/debounce';
 import { useEffect } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
@@ -25,35 +24,9 @@ const useCachedForm = <T extends FieldValues>(
         const cached = localStorage.getItem(key);
 
         if (cached) {
-          form.reset(
-            deepmerge(args.defaultValues, JSON.parse(cached), {
-              arrayMerge: (target, source, options) => {
-                const destination = target.slice();
-
-                source.forEach((item, index) => {
-                  if (typeof destination[index] === 'undefined') {
-                    destination[index] = options?.cloneUnlessOtherwiseSpecified(
-                      item,
-                      options,
-                    );
-                  } else if (options?.isMergeableObject(item)) {
-                    destination[index] = deepmerge(
-                      target[index],
-                      item,
-                      options,
-                    );
-                  } else if (target.indexOf(item) === -1) {
-                    destination.push(item);
-                  }
-                });
-
-                return destination;
-              },
-            }) as DefaultValues<T>,
-            {
-              keepDefaultValues: true,
-            },
-          );
+          form.reset(Object.assign(args.defaultValues, JSON.parse(cached)), {
+            keepDefaultValues: true,
+          });
         }
       } catch (e) {
         // noop
