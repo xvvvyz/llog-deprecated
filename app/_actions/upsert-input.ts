@@ -58,6 +58,7 @@ const upsertInput = async (
     await supabase
       .from('input_options')
       .delete()
+      .eq('input_id', input.id)
       .not('id', 'in', `(${updatedOptionIds.join(',')})`);
 
     if (updatedOptions.length) {
