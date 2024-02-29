@@ -11,9 +11,6 @@ interface PageProps {
   params: {
     subjectId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -23,12 +20,7 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject?.name, 'Create event type']) };
 };
 
-const Page = async ({
-  params: { subjectId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { subjectId } }: PageProps) => {
   const [
     { data: subject },
     { data: availableInputs },

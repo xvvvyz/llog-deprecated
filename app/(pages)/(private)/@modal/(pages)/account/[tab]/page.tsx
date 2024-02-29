@@ -10,17 +10,13 @@ interface PageProps {
   params: {
     tab: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = ({ params: { tab } }: PageProps) => {
   return { title: `Account ${tab}` };
 };
 
-const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
-  if (!back) notFound();
+const Page = async ({ params: { tab } }: PageProps) => {
   const user = await getCurrentUserFromSession();
   if (!user || !['email', 'password', 'profile'].includes(tab)) notFound();
 
@@ -32,7 +28,6 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-l py-1.5 hover:bg-alpha-1"
-            forwardBackLink
             href="/account/profile"
             replace
             scroll={false}
@@ -43,7 +38,6 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center py-1.5 hover:bg-alpha-1"
-            forwardBackLink
             href="/account/email"
             replace
             scroll={false}
@@ -54,7 +48,6 @@ const Page = async ({ params: { tab }, searchParams: { back } }: PageProps) => {
           <Button
             activeClassName="text-fg-2 bg-alpha-1"
             className="m-0 justify-center rounded-r py-1.5 hover:bg-alpha-1"
-            forwardBackLink
             href="/account/password"
             replace
             scroll={false}

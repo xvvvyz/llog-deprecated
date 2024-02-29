@@ -27,7 +27,6 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
     acc.push(
       <li className="flex items-stretch hover:bg-alpha-1" key={mission.id}>
         <Button
-          attachBackLink
           className={twMerge(
             'm-0 w-full items-baseline gap-4 px-4 py-3 leading-snug',
             isTeamMember && 'pr-0',
@@ -76,7 +75,6 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
       {isTeamMember && (
         <div className="mt-4 flex items-center gap-4">
           <Button
-            attachBackLink
             className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subjectId}/training-plans/create`}

@@ -35,7 +35,6 @@ const InputListItemMenu = ({ inputId }: InputListItemMenuProps) => {
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            attachBackLink
             href={`/inputs/create/from-input/${inputId}`}
             scroll={false}
           >

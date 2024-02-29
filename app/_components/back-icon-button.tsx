@@ -1,18 +1,11 @@
 'use client';
 
 import IconButton, { IconButtonProps } from '@/_components/icon-button';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-const BackButton = (props: IconButtonProps) => {
-  const searchParams = useSearchParams();
-
-  return (
-    <IconButton
-      href={props.onClick ? undefined : searchParams.get('back') ?? undefined}
-      scroll={false}
-      {...props}
-    />
-  );
+const BackIconButton = ({ onClick, ...rest }: IconButtonProps) => {
+  const router = useRouter();
+  return <IconButton onClick={onClick ?? router.back} {...rest} />;
 };
 
-export default BackButton;
+export default BackIconButton;

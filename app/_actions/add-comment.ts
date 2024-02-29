@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache';
 
 const addComment = async (
   context: { eventId: string },
-  _state: { error: string } | null,
   data: { content: string },
 ) => {
   const { error } = await createServerSupabaseClient()
@@ -18,7 +17,6 @@ const addComment = async (
 
   if (error) return { error: error.message };
   revalidatePath('/', 'layout');
-  return null;
 };
 
 export default addComment;

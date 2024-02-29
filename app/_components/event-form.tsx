@@ -17,9 +17,8 @@ import SelectInputType from '@/_types/select-input-type';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import parseSeconds from '@/_utilities/parse-seconds';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
-import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { PropsValue } from 'react-select';
 import EventSelect from './event-select';
@@ -59,9 +58,8 @@ const EventForm = ({
   isPublic,
   subjectId,
 }: EventFormProps) => {
-  const back = useSearchParams().get('back') as string;
+  const [isTransitioning, startTransition] = useTransition();
   const eventInputs = forceArray(event?.inputs);
-  const pendingComment = useRef('');
 
   const form = useForm<EventFormValues>({
     defaultValues: {
@@ -114,6 +112,9 @@ const EventForm = ({
     },
   });
 
+  const pendingComment = useRef('');
+  const router = useRouter();
+
   useEffect(() => {
     if (!isMission || event) return;
 
@@ -129,33 +130,39 @@ const EventForm = ({
     return () => clearInterval(interval);
   }, [event, form, isMission]);
 
-  const [state, action] = useFormState(
-    upsertEvent.bind(null, {
-      eventId: event?.id,
-      eventTypeId: eventType.id,
-      eventTypeInputs: eventType.inputs,
-      isMission: !!isMission,
-      next: isMission ? undefined : back,
-      subjectId,
-    }),
-    null,
-  );
-
-  useEffect(() => {
-    if (!state?.error) return;
-    form.setValue('comment', pendingComment.current);
-  }, [form, state]);
-
   return (
     <form
-      action={() => {
-        const data = form.getValues();
-        pendingComment.current = data.comment;
-        form.setValue('comment', '');
-        data.completionTime = new Date(data.completionTime).toISOString();
-        return action(data);
-      }}
+      action={() => {}}
       className="border-t border-alpha-1"
+      onSubmit={form.handleSubmit((values) =>
+        startTransition(async () => {
+          pendingComment.current = values.comment;
+          form.setValue('comment', '');
+          values.completionTime = new Date(values.completionTime).toISOString();
+
+          const res = await upsertEvent(
+            {
+              eventId: event?.id,
+              eventTypeId: eventType.id,
+              eventTypeInputs: eventType.inputs,
+              isMission: !!isMission,
+              subjectId,
+            },
+            values,
+          );
+
+          if (res?.error) {
+            form.setValue('comment', pendingComment.current);
+          }
+
+          if (isMission) {
+            router.refresh();
+          } else {
+            localStorage.setItem('refresh', '1');
+            if (!event) router.back();
+          }
+        }),
+      )}
     >
       <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
         <Input
@@ -292,8 +299,10 @@ const EventForm = ({
           />
         )}
       </div>
-      {state?.error && (
-        <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
+      {form.formState.errors.root && (
+        <div className="px-4 py-8 text-center sm:px-8">
+          {form.formState.errors.root.message}
+        </div>
       )}
       {!isPublic && (
         <div className="flex gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
@@ -311,6 +320,7 @@ const EventForm = ({
             className="w-full"
             colorScheme={event ? 'transparent' : 'accent'}
             disabled={disabled}
+            loading={isTransitioning}
             loadingText="Saving…"
             type="submit"
           >

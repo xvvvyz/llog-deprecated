@@ -9,7 +9,7 @@ const Layout = ({ children }: LayoutProps) => (
   <>
     <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
       <h1 className="text-2xl">Inputs</h1>
-      <Button attachBackLink href="/inputs/create" scroll={false} size="sm">
+      <Button href="/inputs/create" scroll={false} size="sm">
         Create input
       </Button>
     </div>

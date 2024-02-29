@@ -4,6 +4,7 @@ import Empty from '@/_components/empty';
 import EventCard from '@/_components/event-card';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
+import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
 import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getPublicMissionWithSessions from '@/_queries/get-public-mission-with-sessions';
@@ -16,7 +17,6 @@ import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon';
 import { notFound } from 'next/navigation';
 
 interface SessionPageProps {
-  back?: string;
   isPublic?: boolean;
   missionId: string;
   sessionId: string;
@@ -24,13 +24,11 @@ interface SessionPageProps {
 }
 
 const SessionPage = async ({
-  back,
   isPublic,
   missionId,
   sessionId,
   subjectId,
 }: SessionPageProps) => {
-  if (!back) notFound();
   const user = await getCurrentUserFromSession();
 
   const [{ data: subject }, { data: mission }, { data: session }] =
@@ -50,6 +48,13 @@ const SessionPage = async ({
   return (
     <>
       <PageModalHeader title={mission.name} />
+      {isTeamMember && (
+        <ViewAllSessionsButton
+          isPublic={isPublic}
+          missionId={missionId}
+          subjectId={subjectId}
+        />
+      )}
       <SessionLayout
         isPublic={isPublic}
         isTeamMember={isTeamMember}

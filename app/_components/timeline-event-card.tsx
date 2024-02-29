@@ -44,7 +44,6 @@ const TimelineEventCard = ({
   return (
     <article className="rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
-        attachBackLink
         className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
         href={
           lastEventType?.session

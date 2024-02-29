@@ -22,7 +22,7 @@ import { Dialog } from '@headlessui/react';
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
@@ -75,9 +75,9 @@ const SessionForm = ({
   const [isTransitioning, startTransition] = useTransition();
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
-  const back = useSearchParams().get('back') as string;
   const currentOrder = (isDuplicate ? order : session?.order ?? order) ?? 0;
   const modules = forceArray(session?.modules);
+  const router = useRouter();
   const sensors = useSensors(useSensor(PointerSensor));
 
   const cacheKey = getFormCacheKey.session({
@@ -151,7 +151,6 @@ const SessionForm = ({
               {
                 currentOrder,
                 missionId: mission.id,
-                next: back,
                 publishedOrder: Math.min(
                   currentOrder,
                   getHighestPublishedOrder(mission.sessions) + 1,
@@ -164,7 +163,11 @@ const SessionForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
+              return;
             }
+
+            localStorage.setItem('refresh', '1');
+            router.back();
           }),
         )}
       >

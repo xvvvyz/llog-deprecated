@@ -3,13 +3,11 @@
 import { InputFormValues } from '@/_components/input-form';
 import InputTypes from '@/_constants/enum-input-types';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 type State = { error?: string; data?: { id: string; label: string } } | null;
 
 const upsertInput = async (
-  context: { inputId?: string; next?: string },
+  context: { inputId?: string },
   data: InputFormValues,
 ): Promise<State> => {
   const supabase = createServerSupabaseClient();
@@ -109,8 +107,6 @@ const upsertInput = async (
     }
   }
 
-  revalidatePath('/', 'layout');
-  if (context.next) redirect(context.next);
   return { data: input };
 };
 

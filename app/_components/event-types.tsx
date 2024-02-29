@@ -25,7 +25,6 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
               key={eventType.id}
             >
               <Button
-                attachBackLink
                 className={twMerge(
                   'm-0 flex w-full gap-4 px-4 py-3 leading-snug',
                   isTeamMember && 'pr-0',
@@ -52,7 +51,6 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
       {isTeamMember && (
         <div className="mt-4 flex items-center gap-4">
           <Button
-            attachBackLink
             className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subjectId}/event-types/create`}

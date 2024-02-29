@@ -52,7 +52,6 @@ const TeamMemberHeader = async ({
           </div>
         </div>
         <Button
-          attachBackLink
           href={`/subjects/${subjectId}/edit`}
           scroll={false}
           variant="link"

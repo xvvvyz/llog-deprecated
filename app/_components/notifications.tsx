@@ -41,7 +41,6 @@ const Notifications = ({ notifications }: NotificationsProps) => {
         return (
           <li className="relative" key={n.id}>
             <Button
-              attachBackLink
               className="m-0 w-full items-start gap-6 px-4 py-7 text-fg-4 hover:bg-alpha-1 hover:text-fg-4 sm:px-8"
               href={
                 sourceEvent

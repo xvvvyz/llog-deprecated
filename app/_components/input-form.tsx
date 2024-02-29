@@ -21,7 +21,7 @@ import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { PropsValue } from 'react-select';
@@ -83,8 +83,8 @@ const InputForm = ({
     name: 'options',
   });
 
+  const router = useRouter();
   const type = form.watch('type')?.id;
-  const back = useSearchParams().get('back') as string;
 
   return (
     <form
@@ -93,10 +93,7 @@ const InputForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertInput(
-              {
-                inputId: isDuplicate ? undefined : input?.id,
-                next: onClose ? undefined : back,
-              },
+              { inputId: isDuplicate ? undefined : input?.id },
               values,
             );
 
@@ -110,7 +107,13 @@ const InputForm = ({
                 type: values.type.id,
               });
 
-              onClose?.();
+              if (onClose) {
+                router.refresh();
+                onClose();
+              } else {
+                localStorage.setItem('refresh', '1');
+                router.back();
+              }
             }
           }),
         ),

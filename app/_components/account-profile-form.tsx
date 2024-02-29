@@ -5,61 +5,87 @@ import AvatarDropzone from '@/_components/avatar-dropzone';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { User } from '@supabase/supabase-js';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface AccountProfileFormProps {
   user: User;
 }
 
-const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
-  const [avatar, setAvatar] = useState<File | string | null | undefined>(
-    user.user_metadata.image_uri,
-  );
+interface AccountProfileFormValues {
+  avatar: File | string | null;
+  firstName: string;
+  lastName: string;
+}
 
-  const [state, action] = useFormState(
-    updateAccount.bind(null, { next: useSearchParams().get('back') as string }),
-    null,
-  );
+const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
+  const [isTransitioning, startTransition] = useTransition();
+
+  const form = useForm<AccountProfileFormValues>({
+    defaultValues: {
+      avatar: user.user_metadata.image_uri,
+      firstName: user.user_metadata.first_name,
+      lastName: user.user_metadata.last_name,
+    },
+  });
+
+  const router = useRouter();
 
   return (
     <form
-      action={(formData: FormData) => {
-        if (avatar) formData.append('avatar', avatar);
-        action(formData);
-      }}
       className="divide-y divide-alpha-1"
+      onSubmit={form.handleSubmit((values) =>
+        startTransition(async () => {
+          const res = await updateAccount({
+            firstName: values.firstName,
+            lastName: values.lastName,
+          });
+
+          if (res?.error) {
+            form.setError('root', { message: res.error, type: 'custom' });
+            return;
+          }
+
+          const supabase = createBrowserSupabaseClient();
+
+          if (!values.avatar) {
+            await Promise.all([
+              supabase.storage.from('profiles').remove([`${user?.id}/avatar`]),
+              supabase.auth.updateUser({ data: { image_uri: null } }),
+            ]);
+          }
+
+          if (values.avatar instanceof File) {
+            await supabase.storage
+              .from('profiles')
+              .upload(`${user?.id}/avatar`, values.avatar, { upsert: true });
+          }
+
+          router.back();
+        }),
+      )}
     >
       <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
         <div className="flex gap-6">
-          <Input
-            defaultValue={user.user_metadata.first_name}
-            label="First name"
-            name="first-name"
-            required
-          />
-          <Input
-            defaultValue={user.user_metadata.last_name}
-            label="Last name"
-            name="last-name"
-            required
-          />
+          <Input label="First name" required {...form.register('firstName')} />
+          <Input label="Last name" required {...form.register('lastName')} />
         </div>
         <div className="relative">
           <label className="group">
             <span className="label">Profile image</span>
             <AvatarDropzone
-              file={avatar}
+              file={form.watch('avatar')}
               id={user.id}
-              onDrop={(files) => setAvatar(files[0])}
+              onDrop={(files) => form.setValue('avatar', files[0])}
             />
           </label>
-          {avatar && (
+          {form.watch('avatar') && (
             <Button
               className="absolute right-2 top-0"
-              onClick={() => setAvatar(null)}
+              onClick={() => form.setValue('avatar', null)}
               variant="link"
             >
               Remove image
@@ -67,14 +93,21 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
           )}
         </div>
       </div>
-      {state?.error && (
-        <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
+      {form.formState.errors.root && (
+        <div className="px-4 py-8 text-center sm:px-8">
+          {form.formState.errors.root.message}
+        </div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
         <BackButton className="w-full" colorScheme="transparent">
           Close
         </BackButton>
-        <Button className="w-full" loadingText="Saving…" type="submit">
+        <Button
+          className="w-full"
+          loading={isTransitioning}
+          loadingText="Saving…"
+          type="submit"
+        >
           Save
         </Button>
       </div>
@@ -82,4 +115,5 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
   );
 };
 
+export type { AccountProfileFormValues };
 export default AccountProfileForm;

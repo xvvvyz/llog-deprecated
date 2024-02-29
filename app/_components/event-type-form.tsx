@@ -16,7 +16,7 @@ import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import { Dialog } from '@headlessui/react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
@@ -58,7 +58,7 @@ const EventTypeForm = ({
   });
 
   const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
-  const back = useSearchParams().get('back') as string;
+  const router = useRouter();
 
   return (
     <>
@@ -66,13 +66,16 @@ const EventTypeForm = ({
         onSubmit={form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertEventType(
-              { eventTypeId: eventType?.id, next: back, subjectId },
+              { eventTypeId: eventType?.id, subjectId },
               values,
             );
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
             }
+
+            localStorage.setItem('refresh', '1');
+            router.back();
           }),
         )}
         className="divide-y divide-alpha-1"

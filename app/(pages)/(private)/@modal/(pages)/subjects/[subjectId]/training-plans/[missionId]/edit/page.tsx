@@ -10,9 +10,6 @@ interface PageProps {
     missionId: string;
     subjectId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -26,12 +23,7 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject?.name, mission?.name, 'Edit']) };
 };
 
-const Page = async ({
-  params: { missionId, subjectId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
     getMission(missionId),

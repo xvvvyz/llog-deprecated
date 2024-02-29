@@ -1,51 +1,27 @@
 'use server';
 
+import { SubjectFormValues } from '@/_components/subject-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const upsertSubject = async (
-  context: {
-    avatar?: File | string | null;
-    banner: string | null | undefined;
-    next?: string;
-    subjectId?: string;
-  },
-  _state: { error: string } | null,
-  data: FormData,
+  context: { subjectId?: string },
+  data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
   const supabase = createServerSupabaseClient();
 
   const { data: subject, error } = await supabase
     .from('subjects')
     .upsert({
-      banner: sanitizeHtml(context.banner) || null,
+      banner: sanitizeHtml(data.banner) || null,
       id: context.subjectId,
-      name: (data.get('name') as string).trim(),
+      name: data.name.trim(),
     })
     .select('id')
     .single();
 
   if (error) return { error: error.message };
-  const avatar = data.get('avatar') as File | null;
-
-  if (!avatar) {
-    await Promise.all([
-      supabase.storage.from('subjects').remove([`${subject.id}/avatar`]),
-      supabase
-        .from('subjects')
-        .update({ image_uri: null })
-        .eq('id', subject.id),
-    ]);
-  } else if (avatar.size && avatar.type.startsWith('image/')) {
-    await supabase.storage
-      .from('subjects')
-      .upload(`${subject.id}/avatar`, avatar, { upsert: true });
-  }
-
-  revalidatePath('/', 'layout');
-  redirect(context.next ?? `/subjects/${subject.id}`);
+  return { data: subject };
 };
 
 export default upsertSubject;

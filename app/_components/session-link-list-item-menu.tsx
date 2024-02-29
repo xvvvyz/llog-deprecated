@@ -46,14 +46,12 @@ const SessionLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            attachBackLink
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>
           <MenuItem
-            attachBackLink
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}`}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />

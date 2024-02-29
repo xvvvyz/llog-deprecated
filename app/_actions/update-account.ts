@@ -1,49 +1,30 @@
 'use server';
 
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import { AccountEmailFormValues } from '@/_components/account-email-form';
+import { AccountPasswordFormValues } from '@/_components/account-password-form';
+import { AccountProfileFormValues } from '@/_components/account-profile-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const updateAccount = async (
-  context: { avatar?: File | string | null; next: string },
-  _state: { error: string } | null,
-  data: FormData,
+  data: Partial<
+    Omit<AccountProfileFormValues, 'avatar'> &
+      AccountPasswordFormValues &
+      AccountEmailFormValues
+  >,
 ) => {
   const supabase = createServerSupabaseClient();
-  const email = data.get('email');
 
   const { error } = await supabase.auth.updateUser({
     data: {
-      first_name: data.get('first-name') || undefined,
-      last_name: data.get('last-name') || undefined,
+      first_name: data.firstName || undefined,
+      last_name: data.lastName || undefined,
     },
-    email: (email as string) || undefined,
-    password: (data.get('password') as string) || undefined,
+    email: data.email || undefined,
+    password: data.password || undefined,
   });
 
   if (error) return { error: error.message };
-  const avatar = data.get('avatar') as File | null;
-  const user = await getCurrentUserFromSession();
-
-  if (!avatar) {
-    await Promise.all([
-      supabase.storage.from('profiles').remove([`${user?.id}/avatar`]),
-      supabase.auth.updateUser({ data: { image_uri: null } }),
-    ]);
-  } else if (avatar.size && avatar.type.startsWith('image/')) {
-    await supabase.storage
-      .from('profiles')
-      .upload(`${user?.id}/avatar`, avatar, { upsert: true });
-  }
-
-  if (email && email !== user?.email) {
-    redirect('/confirmation-sent');
-  }
-
   await supabase.auth.refreshSession();
-  revalidatePath('/', 'layout');
-  redirect(context.next);
 };
 
 export default updateAccount;

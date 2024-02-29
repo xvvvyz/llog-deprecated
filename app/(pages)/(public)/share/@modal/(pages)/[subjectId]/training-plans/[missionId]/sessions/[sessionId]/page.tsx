@@ -10,9 +10,6 @@ interface PageProps {
     sessionId: string;
     subjectId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -37,10 +34,8 @@ export const generateMetadata = async ({
 
 const Page = async ({
   params: { missionId, sessionId, subjectId },
-  searchParams: { back },
 }: PageProps) => (
   <SessionPage
-    back={back}
     isPublic
     missionId={missionId}
     sessionId={sessionId}

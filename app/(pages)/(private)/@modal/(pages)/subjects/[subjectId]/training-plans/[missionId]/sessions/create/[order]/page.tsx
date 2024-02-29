@@ -17,9 +17,6 @@ interface PageProps {
     order: string;
     subjectId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -40,11 +37,7 @@ export const generateMetadata = async ({
   };
 };
 
-const Page = async ({
-  params: { missionId, order, subjectId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
+const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
   const user = await getCurrentUserFromSession();
 
   const [

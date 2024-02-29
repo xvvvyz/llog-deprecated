@@ -11,9 +11,6 @@ interface PageProps {
     eventTypeId: string;
     subjectId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -27,11 +24,7 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject?.name, eventType?.name]) };
 };
 
-const Page = async ({
-  params: { eventTypeId, subjectId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
+const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   const user = await getCurrentUserFromSession();
 
   const [{ data: subject }, { data: eventType }] = await Promise.all([

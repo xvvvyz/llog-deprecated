@@ -72,7 +72,6 @@ const SessionsPage = async ({
       {!isPublic && isTeamMember && (
         <div className="px-4 py-8 sm:px-8">
           <Button
-            attachBackLink
             className="w-full"
             colorScheme="transparent"
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
@@ -95,7 +94,6 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
-                  attachBackLink
                   className="m-0 w-full justify-between gap-6 px-4 py-7 leading-snug sm:px-8"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   variant="link"

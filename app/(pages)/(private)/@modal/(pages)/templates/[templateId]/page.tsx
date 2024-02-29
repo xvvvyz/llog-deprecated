@@ -10,9 +10,6 @@ interface PageProps {
   params: {
     templateId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({
@@ -22,12 +19,7 @@ export const generateMetadata = async ({
   return { title: formatTitle(['Templates', template?.name]) };
 };
 
-const Page = async ({
-  params: { templateId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { templateId } }: PageProps) => {
   const [{ data: template }, { data: availableInputs }, { data: subjects }] =
     await Promise.all([
       getTemplate(templateId),

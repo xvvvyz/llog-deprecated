@@ -9,9 +9,6 @@ interface PageProps {
   params: {
     inputId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
@@ -19,12 +16,7 @@ export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
   return { title: formatTitle(['Inputs', input?.label]) };
 };
 
-const Page = async ({
-  params: { inputId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { inputId } }: PageProps) => {
   const [{ data: input }, { data: subjects }] = await Promise.all([
     getInput(inputId),
     listSubjectsByTeamId(),

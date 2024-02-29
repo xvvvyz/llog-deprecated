@@ -36,7 +36,7 @@ const SubjectLinkListItemMenu = ({
           </div>
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
-          <MenuItem attachBackLink href={`/subjects/${subjectId}/edit`}>
+          <MenuItem href={`/subjects/${subjectId}/edit`}>
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>

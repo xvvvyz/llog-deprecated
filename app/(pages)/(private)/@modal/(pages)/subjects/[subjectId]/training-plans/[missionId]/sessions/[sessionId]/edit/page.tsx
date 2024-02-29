@@ -2,6 +2,7 @@ import BackButton from '@/_components/back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
 import SessionLayout from '@/_components/session-layout';
+import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
 import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getSession from '@/_queries/get-session';
@@ -19,9 +20,6 @@ interface PageProps {
     order: string;
     sessionId: string;
     subjectId: string;
-  };
-  searchParams: {
-    back?: string;
   };
 }
 
@@ -49,9 +47,7 @@ export const generateMetadata = async ({
 
 const Page = async ({
   params: { missionId, sessionId, subjectId },
-  searchParams: { back },
 }: PageProps) => {
-  if (!back) notFound();
   const user = await getCurrentUserFromSession();
 
   const [
@@ -87,6 +83,7 @@ const Page = async ({
   return (
     <>
       <PageModalHeader title={mission.name} />
+      <ViewAllSessionsButton missionId={missionId} subjectId={subjectId} />
       <SessionLayout
         isEdit
         isTeamMember

@@ -4,11 +4,9 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { revalidatePath } from 'next/cache';
 
 const deleteSubject = async (id: string) => {
-  await createServerSupabaseClient()
-    .from('subjects')
-    .update({ deleted: true })
-    .eq('id', id);
-
+  const supabase = createServerSupabaseClient();
+  await supabase.from('subjects').update({ deleted: true }).eq('id', id);
+  await supabase.from('input_subjects').delete().eq('subject_id', id);
   revalidatePath('/', 'layout');
 };
 

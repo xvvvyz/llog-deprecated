@@ -1,18 +1,11 @@
 'use client';
 
 import Button, { ButtonProps } from '@/_components/button';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-const BackButton = (props: ButtonProps) => {
-  const searchParams = useSearchParams();
-
-  return (
-    <Button
-      href={props.onClick ? undefined : searchParams.get('back') ?? undefined}
-      scroll={false}
-      {...props}
-    />
-  );
+const BackButton = ({ onClick, ...rest }: ButtonProps) => {
+  const router = useRouter();
+  return <Button onClick={onClick ?? router.back} {...rest} />;
 };
 
 export default BackButton;

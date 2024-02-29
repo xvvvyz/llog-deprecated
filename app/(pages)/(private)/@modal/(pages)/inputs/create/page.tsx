@@ -4,16 +4,9 @@ import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  searchParams: {
-    back?: string;
-  };
-}
-
 export const metadata = { title: formatTitle(['Inputs', 'Create']) };
 
-const Page = async ({ searchParams: { back } }: PageProps) => {
-  if (!back) notFound();
+const Page = async () => {
   const { data: subjects } = await listSubjectsByTeamId();
   if (!subjects) notFound();
 

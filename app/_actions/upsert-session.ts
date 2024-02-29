@@ -4,14 +4,11 @@ import { SessionFormValues } from '@/_components/session-form';
 import { Database } from '@/_types/database';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const upsertSession = async (
   context: {
     currentOrder: number;
     missionId: string;
-    next: string;
     publishedOrder: number;
     sessionId?: string;
     subjectId: string;
@@ -187,9 +184,6 @@ const upsertSession = async (
       return { error: error.message };
     }
   }
-
-  revalidatePath('/', 'layout');
-  redirect(context.next);
 };
 
 export default upsertSession;

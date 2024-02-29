@@ -9,19 +9,11 @@ interface PageProps {
   params: {
     inputId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const metadata = { title: formatTitle(['Inputs', 'Create']) };
 
-const Page = async ({
-  params: { inputId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { inputId } }: PageProps) => {
   const [{ data: subjects }, { data: input }] = await Promise.all([
     listSubjectsByTeamId(),
     getInput(inputId),

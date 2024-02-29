@@ -39,7 +39,6 @@ const MissionLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            attachBackLink
             href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
             scroll={false}
           >

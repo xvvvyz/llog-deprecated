@@ -5,38 +5,67 @@ import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import { User } from '@supabase/supabase-js';
-import { useSearchParams } from 'next/navigation';
-import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface AccountEmailFormProps {
   user: User;
 }
 
+interface AccountEmailFormValues {
+  email: string;
+}
+
 const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
-  const [state, action] = useFormState(
-    updateAccount.bind(null, { next: useSearchParams().get('back') as string }),
-    null,
-  );
+  const [isTransitioning, startTransition] = useTransition();
+
+  const form = useForm<AccountEmailFormValues>({
+    defaultValues: { email: user.email },
+  });
+
+  const router = useRouter();
 
   return (
-    <form action={action} className="divide-y divide-alpha-1">
+    <form
+      className="divide-y divide-alpha-1"
+      onSubmit={form.handleSubmit((values) =>
+        startTransition(async () => {
+          const res = await updateAccount({ email: values.email });
+
+          if (res?.error) {
+            form.setError('root', { message: res.error, type: 'custom' });
+            return;
+          }
+
+          if (form.formState.isDirty) router.push('/confirmation-sent');
+          else router.back();
+        }),
+      )}
+    >
       <div className="px-4 py-8 sm:px-8">
         <Input
-          defaultValue={user.email}
           label="Email address"
-          name="email"
           required
           type="email"
+          {...form.register('email')}
         />
       </div>
-      {state?.error && (
-        <div className="px-4 py-8 text-center sm:px-8">{state.error}</div>
+      {form.formState.errors.root && (
+        <div className="px-4 py-8 text-center sm:px-8">
+          {form.formState.errors.root.message}
+        </div>
       )}
       <div className="flex gap-4 px-4 py-8 sm:px-8">
         <BackButton className="w-full" colorScheme="transparent">
           Close
         </BackButton>
-        <Button className="w-full" loadingText="Saving…" type="submit">
+        <Button
+          className="w-full"
+          loading={isTransitioning}
+          loadingText="Saving…"
+          type="submit"
+        >
           Save
         </Button>
       </div>
@@ -44,4 +73,5 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
   );
 };
 
+export type { AccountEmailFormValues };
 export default AccountEmailForm;

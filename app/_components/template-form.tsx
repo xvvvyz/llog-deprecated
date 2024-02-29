@@ -19,7 +19,7 @@ import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import sortInputs from '@/_utilities/sort-inputs';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { Dialog } from '@headlessui/react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
@@ -51,6 +51,7 @@ const TemplateForm = ({
 
   const [isTransitioning, startTransition] = useTransition();
   const cacheKey = getFormCacheKey.template({ id: template?.id, isDuplicate });
+  const router = useRouter();
   const templateData = template?.data as TemplateDataJson;
 
   const form = useCachedForm<TemplateFormValues>(
@@ -68,7 +69,6 @@ const TemplateForm = ({
   );
 
   const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
-  const back = useSearchParams().get('back') as string;
 
   return (
     <>
@@ -78,14 +78,20 @@ const TemplateForm = ({
           form.handleSubmit((values) =>
             startTransition(async () => {
               const res = await upsertTemplate(
-                { next: onClose ? undefined : back, templateId: template?.id },
+                { templateId: template?.id },
                 values,
               );
 
               if (res?.error) {
                 form.setError('root', { message: res.error, type: 'custom' });
               } else if (res?.data) {
-                onClose?.();
+                if (onClose) {
+                  router.refresh();
+                  onClose();
+                } else {
+                  localStorage.setItem('refresh', '1');
+                  router.back();
+                }
               }
             }),
           ),

@@ -10,19 +10,11 @@ interface PageProps {
   params: {
     eventTypeId: string;
   };
-  searchParams: {
-    back?: string;
-  };
 }
 
 export const metadata = { title: formatTitle(['Templates', 'Create']) };
 
-const Page = async ({
-  params: { eventTypeId },
-  searchParams: { back },
-}: PageProps) => {
-  if (!back) notFound();
-
+const Page = async ({ params: { eventTypeId } }: PageProps) => {
   const [{ data: eventType }, { data: availableInputs }, { data: subjects }] =
     await Promise.all([
       getEventTypeWithInputs(eventTypeId),

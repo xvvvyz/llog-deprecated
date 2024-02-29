@@ -47,7 +47,6 @@ const Layout = async ({ children, modal }: LayoutProps) => {
           <div className="relative flex gap-6">
             <IconButton
               activeClassName="text-fg-2"
-              attachBackLink
               href="/notifications/inbox"
               icon={
                 <div className="relative">

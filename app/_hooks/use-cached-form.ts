@@ -35,8 +35,12 @@ const useCachedForm = <T extends FieldValues>(
       form.watch(
         debounce((values) => {
           ignoreValues.forEach((key) => delete values[key]);
-          if (!form.formState.isDirty) localStorage.removeItem(key);
-          else localStorage.setItem(key, JSON.stringify(values));
+
+          if (!form.formState.isDirty || form.formState.isSubmitSuccessful) {
+            localStorage.removeItem(key);
+          } else {
+            localStorage.setItem(key, JSON.stringify(values));
+          }
         }, 500),
       );
     });

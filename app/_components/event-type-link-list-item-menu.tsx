@@ -40,7 +40,6 @@ const EventTypeLinkListItemMenu = ({
         </MenuButton>
         <MenuItems className="mr-2 mt-2">
           <MenuItem
-            attachBackLink
             href={`/subjects/${subjectId}/event-types/${eventTypeId}/edit`}
             scroll={false}
           >
@@ -48,7 +47,6 @@ const EventTypeLinkListItemMenu = ({
             Edit
           </MenuItem>
           <MenuItem
-            attachBackLink
             href={`/templates/create/from-event-type/${eventTypeId}`}
             scroll={false}
           >

@@ -9,8 +9,6 @@ import MultiSelectInputType from '@/_types/multi-select-input-type';
 import SelectInputType from '@/_types/select-input-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const upsertEvent = async (
   context: {
@@ -18,10 +16,8 @@ const upsertEvent = async (
     eventTypeId: string;
     eventTypeInputs: NonNullable<GetEventTypeWithInputsAndOptionsData>['inputs'];
     isMission: boolean;
-    next?: string;
     subjectId: string;
   },
-  _state: { error: string } | null,
   data: EventFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
@@ -138,10 +134,6 @@ const upsertEvent = async (
       return { error: error.message };
     }
   }
-
-  revalidatePath('/', 'layout');
-  if (context.next) redirect(context.next);
-  return null;
 };
 
 export default upsertEvent;

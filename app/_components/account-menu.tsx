@@ -24,7 +24,7 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
         <Avatar file={user?.user_metadata?.image_uri} id={user?.id} />
       </MenuButton>
       <MenuItems className="mt-10">
-        <MenuItem attachBackLink href="/account/profile" scroll={false}>
+        <MenuItem href="/account/profile" scroll={false}>
           <Cog6ToothIcon className="w-5 text-fg-4" />
           Account settings
         </MenuItem>

@@ -3,11 +3,9 @@
 import { EventTypeFormValues } from '@/_components/event-type-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const upsertEventType = async (
-  context: { eventTypeId?: string; next: string; subjectId: string },
+  context: { eventTypeId?: string; subjectId: string },
   data: EventTypeFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
@@ -49,9 +47,6 @@ const upsertEventType = async (
       return { error: error.message };
     }
   }
-
-  revalidatePath('/', 'layout');
-  redirect(context.next);
 };
 
 export default upsertEventType;
