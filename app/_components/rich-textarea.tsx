@@ -107,7 +107,7 @@ const RichTextarea = (
       Text,
       Typography,
       Underline,
-      Youtube.configure({ modestBranding: true }),
+      Youtube.configure({ disableKBcontrols: true, modestBranding: true }),
       Extension.create({
         addKeyboardShortcuts() {
           const handleEnter: KeyboardShortcutCommand = ({ editor }) => {
