@@ -319,7 +319,7 @@ const InputForm = ({
                   tooltip={
                     <>
                       Step is the interval between values. For example, if you
-                      set the step to 0.01, you can only select values that are
+                      set the step to 5, you can only enter values that are
                       multiples of 5 (5, 10, 15, etc).
                     </>
                   }
