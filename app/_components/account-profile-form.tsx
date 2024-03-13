@@ -1,6 +1,5 @@
 'use client';
 
-import updateAccount from '@/_actions/update-account';
 import AvatarDropzone from '@/_components/avatar-dropzone';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
@@ -39,17 +38,20 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
       className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const res = await updateAccount({
-            firstName: values.firstName,
-            lastName: values.lastName,
+          const supabase = createBrowserSupabaseClient();
+
+          const res = await supabase.auth.updateUser({
+            data: { first_name: values.firstName, last_name: values.lastName },
           });
 
           if (res?.error) {
-            form.setError('root', { message: res.error, type: 'custom' });
+            form.setError('root', {
+              message: res.error.message,
+              type: 'custom',
+            });
+
             return;
           }
-
-          const supabase = createBrowserSupabaseClient();
 
           if (!values.avatar) {
             await Promise.all([
@@ -64,6 +66,7 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
               .upload(`${user?.id}/avatar`, values.avatar, { upsert: true });
           }
 
+          localStorage.setItem('refresh', '1');
           router.back();
         }),
       )}
@@ -115,5 +118,4 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
   );
 };
 
-export type { AccountProfileFormValues };
 export default AccountProfileForm;

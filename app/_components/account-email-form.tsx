@@ -1,9 +1,9 @@
 'use client';
 
-import updateAccount from '@/_actions/update-account';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -31,10 +31,15 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
       className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const res = await updateAccount({ email: values.email });
+          const supabase = createBrowserSupabaseClient();
+          const res = await supabase.auth.updateUser({ email: values.email });
 
           if (res?.error) {
-            form.setError('root', { message: res.error, type: 'custom' });
+            form.setError('root', {
+              message: res.error.message,
+              type: 'custom',
+            });
+
             return;
           }
 
@@ -73,5 +78,4 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
   );
 };
 
-export type { AccountEmailFormValues };
 export default AccountEmailForm;

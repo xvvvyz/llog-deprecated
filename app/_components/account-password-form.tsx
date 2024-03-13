@@ -1,9 +1,9 @@
 'use client';
 
-import updateAccount from '@/_actions/update-account';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -26,10 +26,18 @@ const AccountPasswordForm = () => {
       className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const res = await updateAccount({ password: values.password });
+          const supabase = createBrowserSupabaseClient();
+
+          const res = await supabase.auth.updateUser({
+            email: values.password,
+          });
 
           if (res?.error) {
-            form.setError('root', { message: res.error, type: 'custom' });
+            form.setError('root', {
+              message: res.error.message,
+              type: 'custom',
+            });
+
             return;
           }
 
@@ -68,5 +76,4 @@ const AccountPasswordForm = () => {
   );
 };
 
-export type { AccountPasswordFormValues };
 export default AccountPasswordForm;
