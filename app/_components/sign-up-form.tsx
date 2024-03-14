@@ -26,6 +26,7 @@ const SignUpForm = ({ next }: SignUpFormProps) => {
         required
         type="password"
       />
+      {state?.error && <p className="text-center">{state.error}</p>}
       <Button
         className="mt-8 w-full"
         loadingText="Creating account…"
@@ -33,7 +34,6 @@ const SignUpForm = ({ next }: SignUpFormProps) => {
       >
         Create account
       </Button>
-      {state?.error && <p className="text-center">{state.error}</p>}
     </form>
   );
 };

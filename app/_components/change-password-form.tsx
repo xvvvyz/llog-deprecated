@@ -17,6 +17,7 @@ const ChangePasswordForm = () => {
         required
         type="password"
       />
+      {state?.error && <p className="text-center">{state.error}</p>}
       <Button
         className="mt-8 w-full"
         loadingText="Changing password…"
@@ -24,7 +25,6 @@ const ChangePasswordForm = () => {
       >
         Change password
       </Button>
-      {state?.error && <p className="text-center">{state.error}</p>}
     </form>
   );
 };

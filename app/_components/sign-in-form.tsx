@@ -31,10 +31,10 @@ const SignInForm = ({ next }: SignInFormProps) => {
           Forgot password?
         </Button>
       </div>
+      {state?.error && <p className="text-center">{state.error}</p>}
       <Button className="mt-8 w-full" loadingText="Signing in…" type="submit">
         Sign in
       </Button>
-      {state?.error && <p className="text-center">{state.error}</p>}
     </form>
   );
 };

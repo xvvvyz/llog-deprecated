@@ -11,10 +11,10 @@ const ForgotPasswordForm = () => {
   return (
     <form action={action} className="flex flex-col gap-6">
       <Input label="Email address" name="email" required type="email" />
+      {state?.error && <p className="text-center">{state.error}</p>}
       <Button className="mt-8 w-full" loadingText="Sending link…" type="submit">
         Send reset link
       </Button>
-      {state?.error && <p className="text-center">{state.error}</p>}
     </form>
   );
 };
