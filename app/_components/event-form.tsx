@@ -1,6 +1,7 @@
 'use client';
 
 import upsertEvent from '@/_actions/upsert-event';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import Input from '@/_components/input';
@@ -307,14 +308,9 @@ const EventForm = ({
       {!isPublic && (
         <div className="flex gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
           {!event && !isMission && (
-            <Button
-              className="w-full"
-              colorScheme="transparent"
-              href={`/${isPublic ? 'share' : 'subjects'}/${subjectId}`}
-              scroll={false}
-            >
+            <BackButton className="w-full" colorScheme="transparent">
               Close
-            </Button>
+            </BackButton>
           )}
           <Button
             className="w-full"
