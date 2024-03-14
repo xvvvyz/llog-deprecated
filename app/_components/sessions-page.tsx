@@ -14,6 +14,7 @@ import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { notFound } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
 interface SessionsPageProps {
   isPublic?: boolean;
@@ -95,7 +96,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="m-0 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 py-1">
+        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,
@@ -107,13 +108,21 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
-                  className="m-0 w-full justify-between gap-6 px-4 py-7 leading-snug"
+                  className="m-0 w-full justify-between gap-6 px-4 py-3 leading-snug"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   scroll={false}
                   variant="link"
                 >
                   <div>
-                    <div className="smallcaps flex gap-4">
+                    {session.title && (
+                      <div className="mb-2">{session.title}</div>
+                    )}
+                    <div
+                      className={twMerge(
+                        'smallcaps flex gap-4 pb-0.5',
+                        !session.title && 'py-[0.187rem]',
+                      )}
+                    >
                       Session {session.order + 1}
                       <span className="text-fg-4">
                         {session.draft ? (
@@ -131,9 +140,6 @@ const SessionsPage = async ({
                         )}
                       </span>
                     </div>
-                    {session.title && (
-                      <div className="mt-1.5">{session.title}</div>
-                    )}
                   </div>
                   {!isTeamMember && (
                     <ArrowRightIcon className="mr-2 w-5 shrink-0" />
