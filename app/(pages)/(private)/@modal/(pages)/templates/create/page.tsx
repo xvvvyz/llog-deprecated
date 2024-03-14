@@ -3,7 +3,6 @@ import TemplateForm from '@/_components/template-form';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 export const metadata = { title: formatTitle(['Templates', 'Create']) };
 
@@ -13,7 +12,7 @@ const Page = async () => {
     listSubjectsByTeamId(),
   ]);
 
-  if (!availableInputs || !subjects) notFound();
+  if (!availableInputs || !subjects) return null;
 
   return (
     <>

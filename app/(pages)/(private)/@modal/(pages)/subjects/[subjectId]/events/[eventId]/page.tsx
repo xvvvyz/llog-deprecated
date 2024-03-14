@@ -5,7 +5,6 @@ import getCurrentUserFromSession from '@/_queries/get-current-user-from-session'
 import getEvent from '@/_queries/get-event';
 import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -33,7 +32,7 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
     getEvent(eventId),
   ]);
 
-  if (!subject || !event || !event.type) notFound();
+  if (!subject || !event || !event.type) return null;
 
   return (
     <>

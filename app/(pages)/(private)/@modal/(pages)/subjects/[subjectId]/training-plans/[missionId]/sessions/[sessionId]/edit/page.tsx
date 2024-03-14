@@ -12,7 +12,6 @@ import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
 import forceArray from '@/_utilities/force-array';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -77,7 +76,7 @@ const Page = async ({
     !subjects ||
     !isTeamMember
   ) {
-    notFound();
+    return null;
   }
 
   return (

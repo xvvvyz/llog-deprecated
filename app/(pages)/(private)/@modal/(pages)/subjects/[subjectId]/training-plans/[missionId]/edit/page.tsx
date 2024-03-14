@@ -3,7 +3,6 @@ import PageModalHeader from '@/_components/page-modal-header';
 import getMission from '@/_queries/get-mission';
 import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -29,7 +28,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
     getMission(missionId),
   ]);
 
-  if (!subject || !mission) notFound();
+  if (!subject || !mission) return null;
 
   return (
     <>

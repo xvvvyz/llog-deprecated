@@ -3,7 +3,6 @@ import PageModalHeader from '@/_components/page-modal-header';
 import getInput from '@/_queries/get-input';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -19,7 +18,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
     getInput(inputId),
   ]);
 
-  if (!input || !subjects) notFound();
+  if (!input || !subjects) return null;
 
   return (
     <>

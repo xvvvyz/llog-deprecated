@@ -13,7 +13,6 @@ import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
-import { notFound } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
 interface SessionsPageProps {
@@ -33,14 +32,14 @@ const SessionsPage = async ({
     ? getPublicSubject(subjectId)
     : getSubject(subjectId));
 
-  if (!subject) notFound();
+  if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;
 
   const { data: mission } = isPublic
     ? await getPublicMissionWithSessionsAndEvents(missionId)
     : await getMissionWithSessionsAndEvents(missionId, { draft: isTeamMember });
 
-  if (!mission) notFound();
+  if (!mission) return null;
 
   const { highestOrder, sessionsReversed } = mission.sessions.reduce(
     (acc, session, i) => {

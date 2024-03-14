@@ -4,7 +4,6 @@ import getCurrentUserFromSession from '@/_queries/get-current-user-from-session'
 import getEventTypeWithInputsAndOptions from '@/_queries/get-event-type-with-inputs-and-options';
 import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -32,7 +31,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
     getEventTypeWithInputsAndOptions(eventTypeId),
   ]);
 
-  if (!subject || !eventType) notFound();
+  if (!subject || !eventType) return null;
 
   return (
     <>

@@ -14,7 +14,6 @@ import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
 import firstIfArray from '@/_utilities/first-if-array';
 import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon';
-import { notFound } from 'next/navigation';
 
 interface SessionPageProps {
   isPublic?: boolean;
@@ -42,7 +41,7 @@ const SessionPage = async ({
         : getSessionWithDetails(sessionId),
     ]);
 
-  if (!subject || !mission || !session) notFound();
+  if (!subject || !mission || !session) return null;
   const isTeamMember = subject.team_id === user?.id;
 
   return (

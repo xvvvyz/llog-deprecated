@@ -12,7 +12,6 @@ import getCurrentUserFromSession from '@/_queries/get-current-user-from-session'
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
-import { notFound } from 'next/navigation';
 
 interface SubjectPageProps {
   eventsTo?: string;
@@ -31,7 +30,7 @@ const SubjectPage = async ({
     ? getPublicSubject(subjectId)
     : getSubject(subjectId));
 
-  if (!subject) notFound();
+  if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;
 
   return (

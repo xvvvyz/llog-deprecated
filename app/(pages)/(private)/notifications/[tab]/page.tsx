@@ -1,6 +1,5 @@
 import Notifications from '@/_components/notifications';
 import listNotifications from '@/_queries/list-notifications';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -13,7 +12,7 @@ export const generateMetadata = ({ params: { tab } }: PageProps) => {
 };
 
 const Page = async ({ params: { tab } }: PageProps) => {
-  if (!['archive', 'inbox'].includes(tab)) notFound();
+  if (!['archive', 'inbox'].includes(tab)) return null;
 
   const { data: notifications } = await listNotifications({
     archived: tab === 'archive',

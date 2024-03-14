@@ -4,7 +4,6 @@ import PageModalHeader from '@/_components/page-modal-header';
 import getPublicEvent from '@/_queries/get-public-event';
 import getPublicSubject from '@/_queries/get-public-subject';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -30,7 +29,7 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
     getPublicEvent(eventId),
   ]);
 
-  if (!subject || !event || !event?.type) notFound();
+  if (!subject || !event || !event?.type) return null;
 
   return (
     <>

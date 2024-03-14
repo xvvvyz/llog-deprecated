@@ -4,7 +4,6 @@ import getEventTypeWithInputs from '@/_queries/get-event-type-with-inputs';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -22,7 +21,7 @@ const Page = async ({ params: { eventTypeId } }: PageProps) => {
       listSubjectsByTeamId(),
     ]);
 
-  if (!eventType || !availableInputs || !subjects) notFound();
+  if (!eventType || !availableInputs || !subjects) return null;
 
   return (
     <>

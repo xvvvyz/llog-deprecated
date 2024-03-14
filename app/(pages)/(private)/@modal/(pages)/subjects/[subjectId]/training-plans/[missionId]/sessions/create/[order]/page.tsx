@@ -9,7 +9,6 @@ import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -64,7 +63,7 @@ const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
     !availableTemplates ||
     !isTeamMember
   ) {
-    notFound();
+    return null;
   }
 
   return (

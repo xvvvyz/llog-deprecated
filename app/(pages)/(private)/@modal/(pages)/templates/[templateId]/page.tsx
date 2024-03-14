@@ -4,7 +4,6 @@ import getTemplate from '@/_queries/get-template';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
@@ -27,7 +26,7 @@ const Page = async ({ params: { templateId } }: PageProps) => {
       listSubjectsByTeamId(),
     ]);
 
-  if (!template || !availableInputs || !subjects) notFound();
+  if (!template || !availableInputs || !subjects) return null;
 
   return (
     <>
