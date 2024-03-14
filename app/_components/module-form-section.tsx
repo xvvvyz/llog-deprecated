@@ -27,6 +27,7 @@ import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -88,6 +89,8 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
     control: form.control,
     name: `modules[${eventTypeIndex}].inputs` as ArrayPath<T>,
   });
+
+  const router = useRouter();
 
   return (
     <li
@@ -250,6 +253,10 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                 availableInputs={availableInputs}
                 disableCache
                 onClose={() => setCreateTemplateModal(null)}
+                onSubmit={() => {
+                  setCreateTemplateModal(null);
+                  router.refresh();
+                }}
                 subjects={subjects}
                 template={createTemplateModal}
               />
@@ -282,6 +289,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                 onSubmit={(values) => {
                   inputsArray.append(values as FieldValue<T>);
                   setCreateInputModal(null);
+                  router.refresh();
                 }}
                 subjects={subjects}
               />

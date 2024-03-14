@@ -28,6 +28,7 @@ interface TemplateFormProps {
   disableCache?: boolean;
   isDuplicate?: boolean;
   onClose?: () => void;
+  onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
 }
@@ -43,6 +44,7 @@ const TemplateForm = ({
   disableCache,
   isDuplicate,
   onClose,
+  onSubmit,
   subjects,
   template,
 }: TemplateFormProps) => {
@@ -85,10 +87,9 @@ const TemplateForm = ({
               if (res?.error) {
                 form.setError('root', { message: res.error, type: 'custom' });
               } else if (res?.data) {
-                if (onClose) {
-                  router.refresh();
-                  onClose();
-                } else {
+                onSubmit?.();
+
+                if (!onClose) {
                   localStorage.setItem('refresh', '1');
                   router.back();
                 }
@@ -177,6 +178,7 @@ const TemplateForm = ({
                 onSubmit={(values) => {
                   inputsArray.append(values);
                   setCreateInputModal(null);
+                  router.refresh();
                 }}
                 subjects={subjects}
               />

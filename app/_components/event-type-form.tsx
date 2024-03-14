@@ -176,6 +176,7 @@ const EventTypeForm = ({
                 onSubmit={(values) => {
                   inputsArray.append(values, { shouldFocus: true });
                   setCreateInputModal(null);
+                  router.refresh();
                 }}
                 subjects={subjects}
               />

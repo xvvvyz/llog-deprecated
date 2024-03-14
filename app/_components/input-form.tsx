@@ -107,10 +107,7 @@ const InputForm = ({
                 type: values.type.id,
               });
 
-              if (onClose) {
-                router.refresh();
-                onClose();
-              } else {
+              if (!onClose) {
                 localStorage.setItem('refresh', '1');
                 router.back();
               }
