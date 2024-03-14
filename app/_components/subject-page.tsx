@@ -54,9 +54,7 @@ const SubjectPage = async ({
         />
       )}
       {!isPublic && subject.banner && (
-        <DirtyHtml className="mx-auto mt-12 max-w-sm text-center text-fg-4">
-          {subject.banner}
-        </DirtyHtml>
+        <DirtyHtml className="mt-14 text-fg-4">{subject.banner}</DirtyHtml>
       )}
       {!isPublic && !!user && (
         <div className="mt-16 space-y-4">

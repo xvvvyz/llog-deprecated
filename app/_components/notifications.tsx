@@ -104,7 +104,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                 )}
               </div>
             </Button>
-            <div className="absolute right-6 top-6 flex gap-6 sm:right-10">
+            <div className="absolute right-6 top-6 flex gap-6 sm:right-8">
               <form
                 action={updateNotification.bind(null, {
                   archived: !n.archived,

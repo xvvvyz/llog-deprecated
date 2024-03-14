@@ -106,7 +106,6 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           name="banner"
           render={({ field }) => (
             <RichTextarea
-              className="px-0 text-center text-fg-4 [&>*]:mx-auto [&>*]:max-w-sm [&>*]:px-4"
               label="Text banner"
               tooltip={
                 <>

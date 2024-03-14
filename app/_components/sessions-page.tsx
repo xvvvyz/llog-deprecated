@@ -96,7 +96,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
+        <ul className="m-0 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 py-1">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,
@@ -108,7 +108,7 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
-                  className="m-0 w-full justify-between gap-6 px-4 py-3 leading-snug"
+                  className="m-0 w-full justify-between gap-6 p-4 leading-snug"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   scroll={false}
                   variant="link"
