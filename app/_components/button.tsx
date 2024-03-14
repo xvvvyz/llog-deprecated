@@ -2,7 +2,7 @@
 
 import Spinner from '@/_components/spinner';
 import Link, { LinkProps } from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { ButtonHTMLAttributes, ForwardedRef, forwardRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
@@ -37,6 +37,7 @@ const disabledVariants = {
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   activeClassName?: string;
   colorScheme?: keyof typeof colorSchemes;
+  forwardSearchParams?: boolean;
   href?: string;
   loading?: boolean;
   loadingText?: string;
@@ -55,6 +56,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       className,
       colorScheme = 'accent',
       disabled = false,
+      forwardSearchParams = false,
       href,
       loading = false,
       loadingText,
@@ -67,6 +69,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     ref,
   ) => {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const { pending } = useFormStatus();
 
     const cn = twMerge(
@@ -80,12 +83,14 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     );
 
     if (href) {
+      const search = forwardSearchParams ? searchParams.toString() : '';
+
       return (
         <Link
           aria-busy={loading || pending}
           aria-disabled={disabled}
           className={cn}
-          href={href}
+          href={`${href}${search ? `${href.includes('?') ? '&' : '?'}${search}` : ''}`}
           ref={ref as ForwardedRef<HTMLAnchorElement>}
           scroll={scroll}
           {...(rest as Omit<LinkProps, 'href'>)}

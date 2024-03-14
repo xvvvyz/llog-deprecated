@@ -89,6 +89,7 @@ const SessionLayout = async ({
       <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
+          forwardSearchParams
           href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
@@ -108,6 +109,7 @@ const SessionLayout = async ({
             (isEditOrCreate ? (
               <Button
                 className="-my-4 items-baseline"
+                forwardSearchParams
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
                 replace
                 scroll={false}
@@ -119,6 +121,7 @@ const SessionLayout = async ({
             ) : (
               <Button
                 className="-my-4 items-baseline"
+                forwardSearchParams
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
                 replace
                 scroll={false}
@@ -133,6 +136,7 @@ const SessionLayout = async ({
         {isEditOrCreate && !nextSessionId ? (
           <IconButton
             disabled={isCreate}
+            forwardSearchParams
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative right-1 w-7" />}
             label="Add session"
@@ -142,6 +146,7 @@ const SessionLayout = async ({
         ) : (
           <IconButton
             disabled={!nextSessionId}
+            forwardSearchParams
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative right-1 w-7" />}
             label="Next session"

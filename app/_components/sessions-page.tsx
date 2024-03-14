@@ -108,7 +108,7 @@ const SessionsPage = async ({
               >
                 <Button
                   className="m-0 w-full justify-between gap-6 p-4 leading-snug"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?fromSessions=1`}
                   scroll={false}
                   variant="link"
                 >

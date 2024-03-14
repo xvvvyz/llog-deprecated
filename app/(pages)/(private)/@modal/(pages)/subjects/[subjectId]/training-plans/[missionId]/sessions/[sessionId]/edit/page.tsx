@@ -2,7 +2,6 @@ import BackButton from '@/_components/back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
 import SessionLayout from '@/_components/session-layout';
-import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
 import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getSession from '@/_queries/get-session';
@@ -82,7 +81,6 @@ const Page = async ({
   return (
     <>
       <PageModalHeader title={mission.name} />
-      <ViewAllSessionsButton missionId={missionId} subjectId={subjectId} />
       <SessionLayout
         isEdit
         isTeamMember

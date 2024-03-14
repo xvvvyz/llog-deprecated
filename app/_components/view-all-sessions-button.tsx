@@ -2,6 +2,7 @@
 
 import Button from '@/_components/button';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import { useSearchParams } from 'next/navigation';
 
 interface ViewAllSessionsButtonProps {
   isPublic?: boolean;
@@ -14,6 +15,8 @@ const ViewAllSessionsButton = ({
   missionId,
   subjectId,
 }: ViewAllSessionsButtonProps) => {
+  const searchParams = useSearchParams();
+  if (searchParams.get('fromSessions')) return null;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
