@@ -5,6 +5,7 @@ import { EventFormValues } from '@/_components/event-form';
 import Select, { IOption } from '@/_components/select';
 import { Database } from '@/_types/database';
 import { InputSettingsJson } from '@/_types/input-settings-json';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { PropsValue } from 'react-select';
@@ -32,6 +33,8 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
   const placeholder = inputSettings?.isCreatable
     ? `Select ${optionOrOptions} or create your own…`
     : `Select ${optionOrOptions}…`;
+
+  const router = useRouter();
 
   return (
     <Select
@@ -65,6 +68,8 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
           } else {
             field.onChange(data);
           }
+
+          router.refresh();
         })
       }
       options={input.options}
