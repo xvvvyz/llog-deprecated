@@ -36,7 +36,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
               ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions`
               : `/subjects/${subjectId}/training-plans/${mission.id}/sessions/${activeSessionId}`
           }
-          scroll={false}
+          scroll={isTeamMember}
           variant="link"
         >
           {mission.name}
@@ -67,13 +67,8 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
 
   return (
     <div>
-      {!!listItems.length && (
-        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
-          {listItems}
-        </ul>
-      )}
       {isTeamMember && (
-        <div className="mt-4 flex items-center gap-4">
+        <div className="mb-4 flex items-center gap-4">
           <Button
             className="w-full"
             colorScheme="transparent"
@@ -97,6 +92,11 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
             />
           )}
         </div>
+      )}
+      {!!listItems.length && (
+        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
+          {listItems}
+        </ul>
       )}
     </div>
   );

@@ -39,7 +39,7 @@ const SessionLinkListItemMenu = ({
   return (
     <>
       <Menu className="shrink-0">
-        <MenuButton className="group flex h-full items-center justify-center pr-4 text-fg-3 hover:text-fg-2 sm:pr-8">
+        <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
           <div className="rounded-full p-2 group-hover:bg-alpha-1">
             <EllipsisVerticalIcon className="w-5" />
           </div>
@@ -47,12 +47,14 @@ const SessionLinkListItemMenu = ({
         <MenuItems className="mr-2 mt-2">
           <MenuItem
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
+            scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </MenuItem>
           <MenuItem
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}`}
+            scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate

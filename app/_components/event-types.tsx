@@ -17,6 +17,32 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
 
   return (
     <div>
+      {isTeamMember && (
+        <div className="mb-4 flex items-center gap-4">
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            href={`/subjects/${subjectId}/event-types/create`}
+            scroll={false}
+            type="button"
+          >
+            <PlusIcon className="w-5" />
+            Create event type
+          </Button>
+          {!eventTypes.length && (
+            <Tooltip
+              id="event-types-tip"
+              tip={
+                <>
+                  Event types define the events that can be recorded at any
+                  time. For example: &ldquo;Barking&rdquo; or &ldquo;Vet
+                  visit&rdquo;
+                </>
+              }
+            />
+          )}
+        </div>
+      )}
       {!!eventTypes.length && (
         <ul className="rounded border border-alpha-1 bg-bg-2 py-1">
           {eventTypes.map((eventType) => (
@@ -47,32 +73,6 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             </li>
           ))}
         </ul>
-      )}
-      {isTeamMember && (
-        <div className="mt-4 flex items-center gap-4">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            href={`/subjects/${subjectId}/event-types/create`}
-            scroll={false}
-            type="button"
-          >
-            <PlusIcon className="w-5" />
-            Create event type
-          </Button>
-          {!eventTypes.length && (
-            <Tooltip
-              id="event-types-tip"
-              tip={
-                <>
-                  Event types define the events that can be recorded at any
-                  time. For example: &ldquo;Barking&rdquo; or &ldquo;Vet
-                  visit&rdquo;
-                </>
-              }
-            />
-          )}
-        </div>
       )}
     </div>
   );
