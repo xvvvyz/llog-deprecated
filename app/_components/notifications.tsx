@@ -47,7 +47,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                   ? sourceEvent.type?.session
                     ? `/subjects/${n?.subject?.id}/training-plans/${sourceEvent.type.session.mission?.id}/sessions/${sourceEvent.type.session.id}`
                     : `/subjects/${n?.subject?.id}/events/${sourceEvent.id}`
-                  : `/subjects/${n?.subject?.id}`
+                  : `/subjects/${n?.subject?.id}/events`
               }
               scroll={!sourceEvent}
               variant="link"

@@ -32,7 +32,7 @@ const Layout = async ({
                   </span>
                   <Button
                     className="text-sm"
-                    href={`/subjects/${subjectId}`}
+                    href={`/subjects/${subjectId}/events`}
                     variant="link"
                   >
                     View full profile

@@ -5,9 +5,6 @@ import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import InputForm from '@/_components/input-form';
 import Menu from '@/_components/menu';
-import MenuButton from '@/_components/menu-button';
-import MenuItem from '@/_components/menu-item';
-import MenuItems from '@/_components/menu-items';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -117,17 +114,17 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         />
         <div className="smallcaps text-fg-4">Module {eventTypeIndex + 1}</div>
         <Menu>
-          <MenuButton className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
+          <Menu.Button className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2">
             <div className="rounded-full p-2 group-hover:bg-alpha-1">
               <EllipsisHorizontalIcon className="w-5" />
             </div>
-          </MenuButton>
-          <MenuItems className="mr-2 mt-2">
-            <MenuItem onClick={() => toggleUseTemplateModal()}>
+          </Menu.Button>
+          <Menu.Items className="mr-2 mt-2">
+            <Menu.Item onClick={() => toggleUseTemplateModal()}>
               <DocumentTextIcon className="w-5 text-fg-4" />
               Use template
-            </MenuItem>
-            <MenuItem
+            </Menu.Item>
+            <Menu.Item
               onClick={() => {
                 const { content, inputs } = form.getValues(
                   `modules[${eventTypeIndex}]` as Path<T>,
@@ -143,15 +140,15 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
             >
               <DocumentDuplicateIcon className="w-5 text-fg-4" />
               Create template
-            </MenuItem>
-            <MenuItem
+            </Menu.Item>
+            <Menu.Item
               disabled={hasOnlyOne}
               onClick={() => toggleDeleteAlert(true)}
             >
               <TrashIcon className="w-5 text-fg-4" />
               Delete
-            </MenuItem>
-          </MenuItems>
+            </Menu.Item>
+          </Menu.Items>
         </Menu>
       </div>
       <Controller

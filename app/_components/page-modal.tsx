@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 
 interface PageModalProps {
@@ -9,8 +9,12 @@ interface PageModalProps {
 }
 
 const PageModal = ({ children }: PageModalProps) => {
+  const pathname = usePathname();
   const router = useRouter();
   const scrollContainer = useRef<HTMLDivElement>(null);
+
+  // hack: https://github.com/vercel/next.js/issues/62948
+  if (pathname.endsWith('/sessions')) return null;
 
   return (
     <Dialog initialFocus={scrollContainer} onClose={router.back} open>

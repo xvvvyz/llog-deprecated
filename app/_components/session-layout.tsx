@@ -1,5 +1,5 @@
-import Button from '@/_components/button';
-import IconButton from '@/_components/icon-button';
+import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
+import ForwardSearchParamsIconButton from '@/_components/forward-search-params-icon-button';
 import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
@@ -87,9 +87,8 @@ const SessionLayout = async ({
   return (
     <>
       <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
-        <IconButton
+        <ForwardSearchParamsIconButton
           disabled={!previousSessionId}
-          forwardSearchParams
           href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
@@ -107,9 +106,8 @@ const SessionLayout = async ({
             !isPublic &&
             isTeamMember &&
             (isEditOrCreate ? (
-              <Button
+              <ForwardSearchParamsButton
                 className="-my-4 items-baseline"
-                forwardSearchParams
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
                 replace
                 scroll={false}
@@ -117,11 +115,10 @@ const SessionLayout = async ({
               >
                 <EyeIcon className="relative top-1 w-5" />
                 View
-              </Button>
+              </ForwardSearchParamsButton>
             ) : (
-              <Button
+              <ForwardSearchParamsButton
                 className="-my-4 items-baseline"
-                forwardSearchParams
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
                 replace
                 scroll={false}
@@ -129,24 +126,22 @@ const SessionLayout = async ({
               >
                 <PencilIcon className="relative top-1 w-5" />
                 Edit
-              </Button>
+              </ForwardSearchParamsButton>
             ))
           )}
         </div>
         {isEditOrCreate && !nextSessionId ? (
-          <IconButton
+          <ForwardSearchParamsIconButton
             disabled={isCreate}
-            forwardSearchParams
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative right-1 w-7" />}
-            label="Add session"
+            label="Create session"
             replace
             scroll={false}
           />
         ) : (
-          <IconButton
+          <ForwardSearchParamsIconButton
             disabled={!nextSessionId}
-            forwardSearchParams
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative right-1 w-7" />}
             label="Next session"

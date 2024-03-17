@@ -49,7 +49,7 @@ const TimelineEvents = ({
         const firstEvent = dayGroup[0][0];
 
         return (
-          <div className="space-y-4" key={firstEvent.created_at}>
+          <div className="mt-4 space-y-4" key={firstEvent.created_at}>
             <DateTime
               className="smallcaps mx-4 flex h-14 items-end justify-end border-l-2 border-dashed border-alpha-2 text-fg-4"
               date={firstEvent.created_at}
@@ -69,7 +69,7 @@ const TimelineEvents = ({
         );
       })}
       {hasMore && !!eventsState.length && (
-        <div>
+        <div className="mt-4">
           <div className="mx-4 mb-4 h-12 w-full border-l-2 border-dashed border-alpha-2" />
           <Button
             className="w-full"

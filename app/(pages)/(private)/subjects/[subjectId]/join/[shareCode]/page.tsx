@@ -18,7 +18,7 @@ const Page = async ({ params: { shareCode, subjectId } }: PageProps) => {
     });
   }
 
-  redirect(`/subjects/${subjectId}`);
+  redirect(`/subjects/${subjectId}/events`);
 };
 
 export default Page;

@@ -2,9 +2,6 @@
 
 import Button from '@/_components/button';
 import Menu from '@/_components/menu';
-import MenuButton from '@/_components/menu-button';
-import MenuItem from '@/_components/menu-item';
-import MenuItems from '@/_components/menu-items';
 import Select from '@/_components/select';
 import Tooltip from '@/_components/tooltip';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
@@ -54,26 +51,26 @@ const FormBanner = <T extends FieldValues>({
         </span>
       </div>
       <Menu>
-        <MenuButton className="group flex h-full items-center justify-center text-fg-3 hover:text-fg-2">
+        <Menu.Button className="group flex h-full items-center justify-center text-fg-3 hover:text-fg-2">
           <div className="rounded-full p-2 group-hover:bg-alpha-1">
             <EllipsisHorizontalIcon className="w-5" />
           </div>
-        </MenuButton>
-        <MenuItems className="mr-2 mt-2">
+        </Menu.Button>
+        <Menu.Items className="mr-2 mt-2">
           {useTemplateEnabled && (
-            <MenuItem onClick={() => toggleUseTemplateModal()}>
+            <Menu.Item onClick={() => toggleUseTemplateModal()}>
               <DocumentTextIcon className="w-5 text-fg-4" />
               Use template
-            </MenuItem>
+            </Menu.Item>
           )}
-          <MenuItem
+          <Menu.Item
             disabled={!form.formState.isDirty}
             onClick={() => form.reset()}
           >
             <XCircleIcon className="w-5 text-fg-4" />
             Discard changes
-          </MenuItem>
-        </MenuItems>
+          </Menu.Item>
+        </Menu.Items>
       </Menu>
       {useTemplateEnabled && (
         <Dialog onClose={toggleUseTemplateModal} open={useTemplateModal}>

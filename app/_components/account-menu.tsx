@@ -3,10 +3,8 @@
 import signOut from '@/_actions/sign-out';
 import Avatar from '@/_components/avatar';
 import Menu from '@/_components/menu';
-import MenuButton from '@/_components/menu-button';
-import MenuItem from '@/_components/menu-item';
-import MenuItems from '@/_components/menu-items';
 import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
+import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon';
 import { User } from '@supabase/supabase-js';
 import { useTransition } from 'react';
@@ -20,15 +18,20 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
 
   return (
     <Menu className="h-full shrink-0">
-      <MenuButton>
-        <Avatar file={user?.user_metadata?.image_uri} id={user?.id} />
-      </MenuButton>
-      <MenuItems className="mt-10">
-        <MenuItem href="/account/profile" scroll={false}>
+      <Menu.Button className="gap-2 rounded-sm border border-alpha-3 pl-2 hover:bg-alpha-1">
+        <Bars3Icon className="w-5" />
+        <Avatar
+          className="-m-px"
+          file={user?.user_metadata?.image_uri}
+          id={user?.id}
+        />
+      </Menu.Button>
+      <Menu.Items className="mt-10">
+        <Menu.Item href="/account/profile" scroll={false}>
           <Cog6ToothIcon className="w-5 text-fg-4" />
           Account settings
-        </MenuItem>
-        <MenuItem
+        </Menu.Item>
+        <Menu.Item
           loading={isTransitioning}
           loadingText="Signing out…"
           onClick={(e) => {
@@ -38,8 +41,8 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
         >
           <ArrowLeftStartOnRectangleIcon className="w-5 text-fg-4" />
           Sign out
-        </MenuItem>
-      </MenuItems>
+        </Menu.Item>
+      </Menu.Items>
     </Menu>
   );
 };

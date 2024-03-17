@@ -70,7 +70,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           }
 
           localStorage.setItem('refresh', '1');
-          if (!subject?.id) router.push(`/subjects/${subjectId}`);
+          if (!subject?.id) router.push(`/subjects/${subjectId}/events`);
           else router.back();
         }),
       )}
@@ -106,6 +106,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           name="banner"
           render={({ field }) => (
             <RichTextarea
+              className="text-center"
               label="Text banner"
               tooltip={
                 <>

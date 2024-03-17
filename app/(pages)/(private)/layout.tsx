@@ -21,7 +21,7 @@ const Layout = async ({ children, modal }: LayoutProps) => {
       <Subscriptions />
       {user && (
         <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8">
-          <div className="flex flex-wrap gap-4 sm:gap-6">
+          <div className="flex flex-wrap gap-4">
             <Button activeClassName="text-fg-2" href="/subjects" variant="link">
               Subjects
             </Button>
@@ -44,7 +44,7 @@ const Layout = async ({ children, modal }: LayoutProps) => {
               </>
             )}
           </div>
-          <div className="relative flex gap-6">
+          <div className="relative flex gap-3">
             <IconButton
               activeClassName="text-fg-2"
               href="/notifications/inbox"

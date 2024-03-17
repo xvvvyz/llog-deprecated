@@ -6,9 +6,6 @@ import Avatar from '@/_components/avatar';
 import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
 import Menu from '@/_components/menu';
-import MenuButton from '@/_components/menu-button';
-import MenuItem from '@/_components/menu-item';
-import MenuItems from '@/_components/menu-items';
 import { Database } from '@/_types/database';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
@@ -59,15 +56,15 @@ const EventComment = ({
           </div>
           {!isPublic && (userId === profile.id || isTeamMember) && (
             <Menu className="-mr-2 -mt-2.5">
-              <MenuButton className="rounded-full p-2 hover:bg-alpha-1">
+              <Menu.Button className="rounded-full p-2 hover:bg-alpha-1">
                 <EllipsisVerticalIcon className="w-5" />
-              </MenuButton>
-              <MenuItems>
-                <MenuItem onClick={() => toggleDeleteAlert(true)}>
+              </Menu.Button>
+              <Menu.Items>
+                <Menu.Item onClick={() => toggleDeleteAlert(true)}>
                   <TrashIcon className="w-5 text-fg-4" />
                   Delete comment
-                </MenuItem>
-              </MenuItems>
+                </Menu.Item>
+              </Menu.Items>
             </Menu>
           )}
         </div>

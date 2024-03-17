@@ -143,7 +143,7 @@ const EventTypeForm = ({
           <Button
             className="w-full"
             colorScheme="transparent"
-            href={`/subjects/${subjectId}`}
+            href={`/subjects/${subjectId}/events`}
           >
             Close
           </Button>

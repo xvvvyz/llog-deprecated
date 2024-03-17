@@ -1,7 +1,7 @@
+import BackIconButton from '@/_components/back-icon-button';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
-import IconButton from '@/_components/icon-button';
 import SessionLinkListItemMenu from '@/_components/session-link-list-item-menu';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
 import getMissionWithSessionsAndEvents from '@/_queries/get-mission-with-sessions-and-events';
@@ -12,7 +12,6 @@ import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
 import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
-import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
 
 interface SessionsPageProps {
@@ -60,26 +59,24 @@ const SessionsPage = async ({
 
   return (
     <div className="px-4">
-      <div className="my-16 flex h-8 items-center justify-between gap-8">
-        <IconButton
-          href={`/${shareOrSubjects}/${subjectId}`}
-          icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
-          label="Back"
-        />
-        <h1 className="truncate text-2xl">{mission.name}</h1>
-      </div>
-      {!isPublic && isTeamMember && (
-        <div className="pb-4">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
-          >
-            <PlusIcon className="w-5" />
-            Add session
-          </Button>
+      <div className="my-16 flex h-8 items-center justify-between gap-6">
+        <div className="flex min-w-0 items-center gap-6">
+          <BackIconButton
+            icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
+            label="Back"
+          />
+          <h1 className="truncate text-2xl">{mission.name}</h1>
         </div>
-      )}
+        {!isPublic && isTeamMember && (
+          <Button
+            className="shrink-0"
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            size="sm"
+          >
+            Create session
+          </Button>
+        )}
+      </div>
       {!sessionsReversed.length && (
         <Empty>
           <InformationCircleIcon className="w-7" />

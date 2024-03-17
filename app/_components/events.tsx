@@ -42,17 +42,15 @@ const Events = async ({
   }
 
   return (
-    <div className="space-y-4">
-      <TimelineEvents
-        events={events}
-        isPublic={isPublic}
-        isTeamMember={isTeamMember}
-        pageSize={pageSize}
-        subjectId={subjectId}
-        to={toNumber}
-        user={user}
-      />
-    </div>
+    <TimelineEvents
+      events={events}
+      isPublic={isPublic}
+      isTeamMember={isTeamMember}
+      pageSize={pageSize}
+      subjectId={subjectId}
+      to={toNumber}
+      user={user}
+    />
   );
 };
 
