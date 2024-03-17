@@ -163,7 +163,7 @@ const TemplateForm = ({
         onClose={() => setCreateInputModal(null)}
         open={!!createInputModal}
       >
-        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur" />
+        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
             <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
