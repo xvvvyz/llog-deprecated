@@ -1,8 +1,8 @@
 'use client';
 
-import createInputOption from '@/_actions/create-input-option';
 import { EventFormValues } from '@/_components/event-form';
 import Select, { IOption } from '@/_components/select';
+import createInputOption from '@/_mutations/create-input-option';
 import { Database } from '@/_types/database';
 import { InputSettingsJson } from '@/_types/input-settings-json';
 import { useRouter } from 'next/navigation';

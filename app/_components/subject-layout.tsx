@@ -13,7 +13,7 @@ import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import { ReactNode } from 'react';
 
-interface SubjectPageProps {
+interface SubjectLayoutProps {
   children: ReactNode;
   isPublic?: boolean;
   subjectId: string;
@@ -23,12 +23,12 @@ const SubjectLayout = async ({
   children,
   isPublic,
   subjectId,
-}: SubjectPageProps) => {
+}: SubjectLayoutProps) => {
   const user = await getCurrentUserFromSession();
 
-  const { data: subject } = await (isPublic
-    ? getPublicSubject(subjectId)
-    : getSubject(subjectId));
+  const { data: subject } = isPublic
+    ? await getPublicSubject(subjectId)
+    : await getSubject(subjectId);
 
   if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;

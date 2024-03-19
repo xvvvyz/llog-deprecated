@@ -1,12 +1,12 @@
 'use client';
 
-import upsertSession from '@/_actions/upsert-session';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
 import ModuleFormSection from '@/_components/module-form-section';
 import useCachedForm from '@/_hooks/use-cached-form';
+import upsertSession from '@/_mutations/upsert-session';
 import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
 import { GetSessionData } from '@/_queries/get-session';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';

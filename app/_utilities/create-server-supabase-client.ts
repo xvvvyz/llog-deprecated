@@ -16,14 +16,14 @@ const createServerSupabaseClient = () => {
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options });
-          } finally {
+          } catch (e) {
             // noop
           }
         },
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } finally {
+          } catch (e) {
             // noop
           }
         },

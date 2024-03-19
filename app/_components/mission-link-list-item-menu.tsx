@@ -1,8 +1,8 @@
 'use client';
 
-import deleteMission from '@/_actions/delete-mission';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
+import deleteMission from '@/_mutations/delete-mission';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';

@@ -1,8 +1,8 @@
 'use client';
 
-import deleteInput from '@/_actions/delete-input';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
+import deleteInput from '@/_mutations/delete-input';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';

@@ -1,8 +1,8 @@
 'use client';
 
-import signOut from '@/_actions/sign-out';
 import Avatar from '@/_components/avatar';
 import Menu from '@/_components/menu';
+import signOut from '@/_mutations/sign-out';
 import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon';

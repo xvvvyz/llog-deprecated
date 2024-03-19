@@ -1,14 +1,14 @@
 'use client';
 
-import createShareCode from '@/_actions/create-share-code';
-import deleteSubject from '@/_actions/delete-subject';
-import updateSubject from '@/_actions/update-subject';
 import Alert from '@/_components/alert';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Menu from '@/_components/menu';
 import Switch from '@/_components/switch';
 import Tooltip from '@/_components/tooltip';
+import createShareCode from '@/_mutations/create-share-code';
+import deleteSubject from '@/_mutations/delete-subject';
+import updateSubject from '@/_mutations/update-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import { ListSubjectsData } from '@/_queries/list-subjects';
 import { Dialog } from '@headlessui/react';
@@ -58,7 +58,7 @@ const SubjectMenu = ({
         <Menu.Items className={itemsClassName}>
           <Menu.Item href={`/subjects/${subject.id}/edit`} scroll={false}>
             <PencilIcon className="w-5 text-fg-4" />
-            Edit
+            Edit profile
           </Menu.Item>
           <div className="relative">
             <Menu.Item
@@ -181,10 +181,7 @@ const SubjectMenu = ({
                   onCheckedChange={() =>
                     startPublicTransition(() => {
                       toggleOpPublic(null);
-                      void updateSubject({
-                        id: subject.id,
-                        public: !opPublic,
-                      });
+                      void updateSubject({ id: subject.id, public: !opPublic });
                     })
                   }
                 />

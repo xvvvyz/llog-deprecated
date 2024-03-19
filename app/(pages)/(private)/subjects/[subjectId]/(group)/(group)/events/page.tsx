@@ -4,7 +4,7 @@ import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: { subjectId: string };
-  searchParams: { to?: string };
+  searchParams: { from?: string; limit?: string; to?: string };
 }
 
 export const generateMetadata = async ({
@@ -14,9 +14,11 @@ export const generateMetadata = async ({
   return { title: formatTitle([subject?.name, 'Events']) };
 };
 
-const Page = async ({
+const Page = ({
   params: { subjectId },
-  searchParams: { to },
-}: PageProps) => <SubjectEventsPage eventsTo={to} subjectId={subjectId} />;
+  searchParams: { from, limit, to },
+}: PageProps) => (
+  <SubjectEventsPage from={from} limit={limit} subjectId={subjectId} to={to} />
+);
 
 export default Page;

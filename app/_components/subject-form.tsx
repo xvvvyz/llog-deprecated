@@ -1,11 +1,11 @@
 'use client';
 
-import upsertSubject from '@/_actions/upsert-subject';
 import AvatarDropzone from '@/_components/avatar-dropzone';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import RichTextarea from '@/_components/rich-textarea';
+import upsertSubject from '@/_mutations/upsert-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { useRouter } from 'next/navigation';

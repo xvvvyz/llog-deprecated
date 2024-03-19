@@ -1,9 +1,9 @@
 'use client';
 
-import upsertMission from '@/_actions/upsert-mission';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import upsertMission from '@/_mutations/upsert-mission';
 import { GetMissionData } from '@/_queries/get-mission';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';

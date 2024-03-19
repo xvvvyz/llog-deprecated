@@ -1,8 +1,8 @@
 'use client';
 
-import forgotPassword from '@/_actions/forgot-password';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import forgotPassword from '@/_mutations/forgot-password';
 import { useFormState } from 'react-dom';
 
 const ForgotPasswordForm = () => {

@@ -1,8 +1,8 @@
 'use client';
 
-import signUp from '@/_actions/sign-up';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import signUp from '@/_mutations/sign-up';
 import { useFormState } from 'react-dom';
 
 interface SignUpFormProps {

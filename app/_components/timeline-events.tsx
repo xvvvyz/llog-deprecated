@@ -1,43 +1,48 @@
 'use client';
 
-import listEvents from '@/_actions/list-events';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
-import { ListEventsData } from '@/_queries/list-events';
+import listEvents, { ListEventsData } from '@/_queries/list-events';
+import listPublicEvents from '@/_queries/list-public-events';
+import EventFilters from '@/_types/event-filters';
 import formatTimelineEvents from '@/_utilities/format-timeline-events';
 import { User } from '@supabase/supabase-js';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import TimelineEventCard from './timeline-event-card';
 
 interface TimelineEventsProps {
   events: NonNullable<ListEventsData>;
+  filters: EventFilters;
   isPublic?: boolean;
   isTeamMember: boolean;
-  pageSize: number;
   subjectId: string;
-  to: number;
   user?: User;
 }
 
 const TimelineEvents = ({
   events,
+  filters,
   isPublic,
   isTeamMember,
-  pageSize,
   subjectId,
-  to,
   user,
 }: TimelineEventsProps) => {
-  const [eventsState, setEventsState] = useState<typeof events>([]);
-  const [hasMore, setHasMore] = useState(events.length - 1 === to);
+  const [eventsState, setEventsState] = useState(events);
   const [isTransitioning, startTransition] = useTransition();
+  const [verifiedEnd, setVerifiedEnd] = useState(false);
   const formattedEvents = formatTimelineEvents(eventsState);
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const limit = Number(searchParams.get('limit')) || filters.pageSize - 1;
+  const hasMore = eventsState.length > limit && !verifiedEnd;
+
+  // handle router.refresh()
   useEffect(() => {
     setEventsState(events);
-  }, [events, setEventsState]);
+    setVerifiedEnd(false);
+  }, [events]);
 
   return (
     <>
@@ -78,27 +83,25 @@ const TimelineEvents = ({
             loadingText="Loading…"
             onClick={() =>
               startTransition(async () => {
-                const to = Number(searchParams.get('to')) || pageSize - 1;
-                const newTo = to + pageSize;
+                filters.from = limit + 1;
+                filters.to = limit + filters.pageSize;
 
-                const { data: newEvents } = await listEvents({
-                  from: to + 1,
-                  isPublic,
-                  subjectId,
-                  to: newTo,
-                });
+                const { data: newEvents } = isPublic
+                  ? await listPublicEvents(subjectId, filters)
+                  : await listEvents(subjectId, filters);
 
-                if (!newEvents) {
-                  setHasMore(false);
-                  return;
-                }
-
-                if (newEvents.length < pageSize) {
-                  setHasMore(false);
+                if (!newEvents || newEvents.length < filters.pageSize) {
+                  setVerifiedEnd(true);
+                  if (!newEvents) return;
                 }
 
                 setEventsState((state) => [...state, ...newEvents]);
-                window.history.replaceState(null, '', `?to=${newTo}`);
+                const newSearchParams = new URLSearchParams(searchParams);
+                newSearchParams.set('limit', String(filters.to));
+                const searchString = newSearchParams.toString();
+                const delimiter = searchString ? '?' : '';
+                const url = `${pathname}${delimiter}${searchString}`;
+                window.history.replaceState(null, '', url);
               })
             }
           >

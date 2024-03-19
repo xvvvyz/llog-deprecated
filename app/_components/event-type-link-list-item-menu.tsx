@@ -1,8 +1,8 @@
 'use client';
 
-import deleteEventType from '@/_actions/delete-event-type';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
+import deleteEventType from '@/_mutations/delete-event-type';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';

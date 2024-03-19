@@ -1,8 +1,8 @@
 'use client';
 
-import addComment from '@/_actions/add-comment';
 import IconButton from '@/_components/icon-button';
 import RichTextarea from '@/_components/rich-textarea';
+import addComment from '@/_mutations/add-comment';
 import PaperAirplaneIcon from '@heroicons/react/24/outline/PaperAirplaneIcon';
 import { useRef, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';

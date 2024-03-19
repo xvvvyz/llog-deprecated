@@ -1,6 +1,5 @@
 'use client';
 
-import upsertTemplate from '@/_actions/upsert-template';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import FormBanner from '@/_components/form-banner';
@@ -10,6 +9,7 @@ import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import useCachedForm from '@/_hooks/use-cached-form';
+import upsertTemplate from '@/_mutations/upsert-template';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';

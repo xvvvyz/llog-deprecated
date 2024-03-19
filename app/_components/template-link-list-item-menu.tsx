@@ -1,8 +1,8 @@
 'use client';
 
-import deleteTemplate from '@/_actions/delete-template';
 import Alert from '@/_components/alert';
 import Menu from '@/_components/menu';
+import deleteTemplate from '@/_mutations/delete-template';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';

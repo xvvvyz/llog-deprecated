@@ -1,6 +1,5 @@
 'use client';
 
-import upsertInput from '@/_actions/upsert-input';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
@@ -11,6 +10,7 @@ import Select, { IOption } from '@/_components/select';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
 import InputTypes from '@/_constants/enum-input-types';
 import useCachedForm from '@/_hooks/use-cached-form';
+import upsertInput from '@/_mutations/upsert-input';
 import { GetInputData } from '@/_queries/get-input';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';

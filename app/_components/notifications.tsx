@@ -1,5 +1,3 @@
-import deleteNotification from '@/_actions/delete-notification';
-import updateNotification from '@/_actions/update-notification';
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
@@ -7,6 +5,8 @@ import DirtyHtml from '@/_components/dirty-html';
 import Empty from '@/_components/empty';
 import IconButton from '@/_components/icon-button';
 import NotificationTypes from '@/_constants/enum-notification-types';
+import deleteNotification from '@/_mutations/delete-notification';
+import updateNotification from '@/_mutations/update-notification';
 import { ListNotificationsData } from '@/_queries/list-notifications';
 import { Database } from '@/_types/database';
 import ArchiveBoxArrowDownIcon from '@heroicons/react/24/outline/ArchiveBoxArrowDownIcon';

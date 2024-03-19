@@ -25,6 +25,7 @@ const PopoverContent = forwardRef<
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 const Popover = Object.assign(PopoverPrimitive.Root, {
+  Close: PopoverPrimitive.Close,
   Content: PopoverContent,
   Trigger: PopoverPrimitive.Trigger,
 });

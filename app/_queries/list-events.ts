@@ -1,10 +1,13 @@
+'use server';
+
+import EventFilters from '@/_types/event-filters';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listEvents = (
   subjectId: string,
-  { from, to }: { from: number; to: number },
-) =>
-  createServerSupabaseClient()
+  filters: Omit<EventFilters, 'pageSize'>,
+) => {
+  let q = createServerSupabaseClient()
     .from('events')
     .select(
       `
@@ -33,11 +36,17 @@ const listEvents = (
         order
       )`,
     )
-    .eq('subject_id', subjectId)
+    .eq('subject_id', subjectId);
+
+  if (filters.startDate) q = q.gte('created_at', filters.startDate);
+  if (filters.endDate) q = q.lt('created_at', filters.endDate);
+
+  return q
     .order('created_at', { ascending: false })
     .order('created_at', { referencedTable: 'comments' })
     .order('order', { referencedTable: 'inputs' })
-    .range(from, to);
+    .range(filters.from, filters.to);
+};
 
 export type ListEventsData = Awaited<ReturnType<typeof listEvents>>['data'];
 

@@ -1,11 +1,11 @@
 'use client';
 
-import deleteComment from '@/_actions/delete-comment';
 import Alert from '@/_components/alert';
 import Avatar from '@/_components/avatar';
 import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
 import Menu from '@/_components/menu';
+import deleteComment from '@/_mutations/delete-comment';
 import { Database } from '@/_types/database';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';

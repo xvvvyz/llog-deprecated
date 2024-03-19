@@ -1,8 +1,8 @@
 'use client';
 
-import updatePassword from '@/_actions/update-password';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import updatePassword from '@/_mutations/update-password';
 import { useFormState } from 'react-dom';
 
 const ChangePasswordForm = () => {

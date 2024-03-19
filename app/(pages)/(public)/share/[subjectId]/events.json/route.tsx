@@ -1,5 +1,5 @@
-import listEvents from '@/_actions/list-events';
 import Numbers from '@/_constants/enum-numbers';
+import listPublicEvents from '@/_queries/list-public-events';
 import formatTabularEventsJsonResponse from '@/_utilities/format-tabular-events-json-response';
 
 interface GetContext {
@@ -9,10 +9,8 @@ interface GetContext {
 }
 
 export const GET = async (_: Request, ctx: GetContext) => {
-  const { data } = await listEvents({
+  const { data } = await listPublicEvents(ctx.params.subjectId, {
     from: 0,
-    isPublic: true,
-    subjectId: ctx.params.subjectId,
     to: Numbers.FourByteSignedIntMax - 1,
   });
 

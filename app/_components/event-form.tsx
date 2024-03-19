@@ -1,6 +1,5 @@
 'use client';
 
-import upsertEvent from '@/_actions/upsert-event';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
@@ -8,6 +7,7 @@ import Input from '@/_components/input';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import InputTypes from '@/_constants/enum-input-types';
+import upsertEvent from '@/_mutations/upsert-event';
 import { GetEventData } from '@/_queries/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';

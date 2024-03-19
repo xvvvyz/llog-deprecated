@@ -200,7 +200,6 @@ create or replace function public.list_public_events(public_subject_id uuid, fro
   end;
   $$;
 
-
 create or replace function public.get_public_mission_with_sessions(public_mission_id uuid)
   returns json
   language plpgsql

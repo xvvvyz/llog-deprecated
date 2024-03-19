@@ -1,6 +1,5 @@
 'use client';
 
-import upsertEventType from '@/_actions/upsert-event-type';
 import Button from '@/_components/button';
 import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
@@ -9,6 +8,7 @@ import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import useCachedForm from '@/_hooks/use-cached-form';
+import upsertEventType from '@/_mutations/upsert-event-type';
 import { GetEventTypeWithInputsData } from '@/_queries/get-event-type-with-inputs';
 import { GetInputData } from '@/_queries/get-input';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
