@@ -4,6 +4,7 @@ import DirtyHtml from '@/_components/dirty-html';
 import EventTypes from '@/_components/event-types';
 import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
 import Missions from '@/_components/missions';
+import ScrollToTopHack from '@/_components/scroll-to-top-hack';
 import SubjectEventsDateFilter from '@/_components/subject-events-date-filter';
 import SubjectMenu from '@/_components/subject-menu';
 import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
@@ -36,6 +37,7 @@ const SubjectLayout = async ({
 
   return (
     <div className="px-4 pb-[calc(100vh-8rem)]">
+      <ScrollToTopHack />
       <div className="mt-16 flex h-8 items-center justify-between gap-6">
         <div className="flex min-w-0 items-center gap-6">
           {!isPublic && (
