@@ -55,7 +55,7 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
 
           if (!values.avatar) {
             await Promise.all([
-              supabase.storage.from('profiles').remove([`${user?.id}/avatar`]),
+              supabase.storage.from('profiles').remove([`${user.id}/avatar`]),
               supabase.auth.updateUser({ data: { image_uri: null } }),
             ]);
           }
@@ -63,9 +63,10 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
           if (values.avatar instanceof File) {
             await supabase.storage
               .from('profiles')
-              .upload(`${user?.id}/avatar`, values.avatar, { upsert: true });
+              .upload(`${user.id}/avatar`, values.avatar, { upsert: true });
           }
 
+          await supabase.auth.refreshSession();
           localStorage.setItem('refresh', '1');
           router.back();
         }),
