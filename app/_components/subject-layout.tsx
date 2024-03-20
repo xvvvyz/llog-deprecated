@@ -37,7 +37,7 @@ const SubjectLayout = async ({
 
   return (
     <div className="px-4 pb-[calc(100vh-8rem)]">
-      <ScrollToTopHack />
+      <ScrollToTopHack subjectId={subjectId} />
       <div className="mt-16 flex h-8 items-center justify-between gap-6">
         <div className="flex min-w-0 items-center gap-6">
           {!isPublic && (
