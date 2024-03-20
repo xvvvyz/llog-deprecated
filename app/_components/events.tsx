@@ -21,10 +21,9 @@ const Events = async ({
   subjectId,
   user,
 }: EventsProps) => {
-  const { data: events, error } = isPublic
+  const { data: events } = isPublic
     ? await listPublicEvents(subjectId, filters)
     : await listEvents(subjectId, filters);
-  console.log(error);
 
   if (!events?.length) {
     return (
