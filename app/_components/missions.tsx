@@ -74,7 +74,6 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
             colorScheme="transparent"
             href={`/subjects/${subjectId}/training-plans/create`}
             scroll={false}
-            type="button"
           >
             <PlusIcon className="w-5" />
             Create training plan

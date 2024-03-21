@@ -266,7 +266,6 @@ const InputForm = ({
                         order: optionsArray.fields.length,
                       })
                     }
-                    type="button"
                   >
                     <PlusIcon className="w-5" />
                     Add option

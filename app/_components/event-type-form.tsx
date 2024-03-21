@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
@@ -140,13 +141,9 @@ const EventTypeForm = ({
           </div>
         )}
         <div className="flex gap-4 px-4 py-8 sm:px-8">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            href={`/subjects/${subjectId}/events`}
-          >
+          <BackButton className="w-full" colorScheme="transparent">
             Close
-          </Button>
+          </BackButton>
           <Button
             className="w-full"
             loading={isTransitioning}

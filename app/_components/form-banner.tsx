@@ -39,7 +39,7 @@ const FormBanner = <T extends FieldValues>({
         className,
       )}
     >
-      <div className="flex items-center gap-2 pl-2">
+      <div className="flex items-center gap-2">
         <Tooltip
           id="form-changed-banner-tip"
           placement="bottom-start"

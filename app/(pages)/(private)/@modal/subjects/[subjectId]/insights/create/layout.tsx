@@ -5,6 +5,8 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => <PageModal>{children}</PageModal>;
+const Layout = ({ children }: LayoutProps) => (
+  <PageModal className="max-w-3xl">{children}</PageModal>
+);
 
 export default Layout;

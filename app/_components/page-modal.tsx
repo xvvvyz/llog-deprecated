@@ -3,12 +3,14 @@
 import { Dialog } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface PageModalProps {
   children: ReactNode;
+  className?: string;
 }
 
-const PageModal = ({ children }: PageModalProps) => {
+const PageModal = ({ children, className }: PageModalProps) => {
   const router = useRouter();
   const scrollContainer = useRef<HTMLDivElement>(null);
 
@@ -20,7 +22,12 @@ const PageModal = ({ children }: PageModalProps) => {
         ref={scrollContainer}
       >
         <div className="flex min-h-full items-start justify-center">
-          <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+          <Dialog.Panel
+            className={twMerge(
+              'relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x',
+              className,
+            )}
+          >
             {children}
           </Dialog.Panel>
         </div>

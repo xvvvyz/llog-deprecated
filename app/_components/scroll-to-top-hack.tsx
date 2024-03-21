@@ -27,7 +27,7 @@ const ScrollToTopHack = ({ subjectId }: ScrollToTopHackProps) => {
     const delimiter = searchString ? '?' : '';
     const url = `${pathname}${delimiter}${searchString}`;
     window.history.replaceState(null, '', url);
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, subjectId]);
 
   return null;
 };

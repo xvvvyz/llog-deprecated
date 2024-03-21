@@ -3,6 +3,8 @@ const getFormCacheKey = {
     `subject-${subjectId}-event-type-${id ?? 'create'}`,
   input: ({ id, isDuplicate }: { id?: string; isDuplicate?: boolean } = {}) =>
     `input-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
+  insight: ({ id, subjectId }: { id?: string; subjectId: string }) =>
+    `subject-${subjectId}-insight-${id ?? 'create'}`,
   session: ({
     id,
     isDuplicate,

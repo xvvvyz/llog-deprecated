@@ -24,7 +24,6 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             colorScheme="transparent"
             href={`/subjects/${subjectId}/event-types/create`}
             scroll={false}
-            type="button"
           >
             <PlusIcon className="w-5" />
             Create event type
