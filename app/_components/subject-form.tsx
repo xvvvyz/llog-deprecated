@@ -70,7 +70,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           }
 
           localStorage.setItem('refresh', '1');
-          if (!subject?.id) router.push(`/subjects/${subjectId}/events`);
+          if (!subject?.id) router.replace(`/subjects/${subjectId}/events`);
           else router.back();
         }),
       )}
