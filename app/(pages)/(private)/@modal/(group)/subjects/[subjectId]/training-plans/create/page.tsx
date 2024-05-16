@@ -9,11 +9,8 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { subjectId },
-}: PageProps) => {
-  const { data: subject } = await getSubject(subjectId);
-  return { title: formatTitle([subject?.name, 'Create training plan']) };
+export const metadata = {
+  title: formatTitle(['Subjects', 'Training plans', 'Create']),
 };
 
 const Page = async ({ params: { subjectId } }: PageProps) => {

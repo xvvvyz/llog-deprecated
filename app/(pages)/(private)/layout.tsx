@@ -3,7 +3,7 @@ import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Subscriptions from '@/_components/subscriptions';
 import countNotifications from '@/_queries/count-notifications';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import BellIcon from '@heroicons/react/24/outline/BellIcon';
 import { ReactNode } from 'react';
 
@@ -13,8 +13,10 @@ interface LayoutProps {
 }
 
 const Layout = async ({ children, modal }: LayoutProps) => {
-  const user = await getCurrentUserFromSession();
-  const { count } = await countNotifications();
+  const [{ count }, user] = await Promise.all([
+    countNotifications(),
+    getCurrentUser(),
+  ]);
 
   return (
     <div className="mx-auto max-w-lg pb-20">

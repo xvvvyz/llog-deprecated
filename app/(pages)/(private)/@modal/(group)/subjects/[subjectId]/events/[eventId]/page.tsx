@@ -1,7 +1,7 @@
 import BackButton from '@/_components/back-button';
 import EventCard from '@/_components/event-card';
 import PageModalHeader from '@/_components/page-modal-header';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getEvent from '@/_queries/get-event';
 import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
@@ -13,23 +13,13 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { eventId, subjectId },
-}: PageProps) => {
-  const [{ data: subject }, { data: event }] = await Promise.all([
-    getSubject(subjectId),
-    getEvent(eventId),
-  ]);
-
-  return { title: formatTitle([subject?.name, event?.type?.name]) };
-};
+export const metadata = { title: formatTitle(['Subjects', 'Event']) };
 
 const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
-  const user = await getCurrentUserFromSession();
-
-  const [{ data: subject }, { data: event }] = await Promise.all([
+  const [{ data: subject }, { data: event }, user] = await Promise.all([
     getSubject(subjectId),
     getEvent(eventId),
+    getCurrentUser(),
   ]);
 
   if (!subject || !event || !event.type) return null;

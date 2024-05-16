@@ -5,7 +5,7 @@ import EventCard from '@/_components/event-card';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getPublicMissionWithSessions from '@/_queries/get-public-mission-with-sessions';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
@@ -28,9 +28,7 @@ const SessionPage = async ({
   sessionId,
   subjectId,
 }: SessionPageProps) => {
-  const user = await getCurrentUserFromSession();
-
-  const [{ data: subject }, { data: mission }, { data: session }] =
+  const [{ data: subject }, { data: mission }, { data: session }, user] =
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic
@@ -39,6 +37,7 @@ const SessionPage = async ({
       isPublic
         ? getPublicSessionWithDetails(sessionId)
         : getSessionWithDetails(sessionId),
+      getCurrentUser(),
     ]);
 
   if (!subject || !mission || !session) return null;

@@ -11,7 +11,7 @@ interface EventsProps {
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
-  user?: User;
+  user: User | null;
 }
 
 const Events = async ({

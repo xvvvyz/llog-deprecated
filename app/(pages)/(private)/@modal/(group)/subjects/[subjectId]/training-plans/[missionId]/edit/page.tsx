@@ -11,15 +11,8 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { missionId, subjectId },
-}: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
-    getSubject(subjectId),
-    getMission(missionId),
-  ]);
-
-  return { title: formatTitle([subject?.name, mission?.name, 'Edit']) };
+export const metadata = {
+  title: formatTitle(['Subjects', 'Training plans', 'Edit']),
 };
 
 const Page = async ({ params: { missionId, subjectId } }: PageProps) => {

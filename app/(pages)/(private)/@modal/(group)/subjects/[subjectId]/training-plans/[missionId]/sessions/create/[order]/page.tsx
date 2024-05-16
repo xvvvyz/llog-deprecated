@@ -2,7 +2,7 @@ import BackButton from '@/_components/back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
 import SessionLayout from '@/_components/session-layout';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
@@ -18,39 +18,25 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { missionId, order, subjectId },
-}: PageProps) => {
-  const [{ data: subject }, { data: mission }] = await Promise.all([
-    getSubject(subjectId),
-    getMissionWithSessions(missionId, { draft: true }),
-  ]);
-
-  return {
-    title: formatTitle([
-      subject?.name,
-      mission?.name,
-      String(Number(order) + 1),
-      'Create',
-    ]),
-  };
+export const metadata = {
+  title: formatTitle(['Subjects', 'Training plans', 'Sessions', 'Create']),
 };
 
 const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
-  const user = await getCurrentUserFromSession();
-
   const [
     { data: subject },
     { data: mission },
     { data: subjects },
     { data: availableInputs },
     { data: availableTemplates },
+    user,
   ] = await Promise.all([
     getSubject(subjectId),
     getMissionWithSessions(missionId, { draft: true }),
     listSubjectsByTeamId(),
     listInputsBySubjectId(subjectId),
     listTemplatesWithData(),
+    getCurrentUser(),
   ]);
 
   const isTeamMember = subject?.team_id === user?.id;

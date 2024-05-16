@@ -7,7 +7,7 @@ import Missions from '@/_components/missions';
 import ScrollToTopHack from '@/_components/scroll-to-top-hack';
 import SubjectEventsDateFilter from '@/_components/subject-events-date-filter';
 import SubjectMenu from '@/_components/subject-menu';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
@@ -25,11 +25,10 @@ const SubjectLayout = async ({
   isPublic,
   subjectId,
 }: SubjectLayoutProps) => {
-  const user = await getCurrentUserFromSession();
-
-  const { data: subject } = isPublic
-    ? await getPublicSubject(subjectId)
-    : await getSubject(subjectId);
+  const [{ data: subject }, user] = await Promise.all([
+    isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
+    getCurrentUser(),
+  ]);
 
   if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;

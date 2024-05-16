@@ -2,7 +2,7 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import SubjectMenu from '@/_components/subject-menu';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import listSubjects, { ListSubjectsData } from '@/_queries/list-subjects';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
@@ -11,8 +11,10 @@ import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircle
 export const metadata = { title: 'Subjects' };
 
 const Page = async () => {
-  const user = await getCurrentUserFromSession();
-  const { data: subjects } = await listSubjects();
+  const [{ data: subjects }, user] = await Promise.all([
+    listSubjects(),
+    getCurrentUser(),
+  ]);
 
   if (!subjects?.length) {
     return (

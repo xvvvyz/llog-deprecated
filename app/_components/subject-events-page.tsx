@@ -1,5 +1,5 @@
 import Events from '@/_components/events';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import add24Hours from '@/_utilities/add-24-hours';
@@ -20,11 +20,10 @@ const SubjectEventsPage = async ({
   subjectId,
   to,
 }: SubjectPageProps) => {
-  const user = await getCurrentUserFromSession();
-
-  const { data: subject } = isPublic
-    ? await getPublicSubject(subjectId)
-    : await getSubject(subjectId);
+  const [{ data: subject }, user] = await Promise.all([
+    isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
+    getCurrentUser(),
+  ]);
 
   if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;

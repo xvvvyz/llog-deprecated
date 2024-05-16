@@ -184,7 +184,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         )}
       />
       <Dialog onClose={toggleUseTemplateModal} open={useTemplateModal}>
-        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
             <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
@@ -238,7 +238,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         onClose={() => setCreateTemplateModal(null)}
         open={!!createTemplateModal}
       >
-        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
             <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
@@ -271,7 +271,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         onClose={() => setCreateInputModal(null)}
         open={!!createInputModal}
       >
-        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
             <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">

@@ -3,14 +3,14 @@
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import signUp from '@/_mutations/sign-up';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 
 interface SignUpFormProps {
   next?: string;
 }
 
 const SignUpForm = ({ next }: SignUpFormProps) => {
-  const [state, action] = useFormState(signUp.bind(null, { next }), null);
+  const [state, action] = useActionState(signUp.bind(null, { next }), null);
 
   return (
     <form action={action} className="flex flex-col gap-6">

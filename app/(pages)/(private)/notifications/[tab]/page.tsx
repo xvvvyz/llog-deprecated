@@ -7,9 +7,7 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = ({ params: { tab } }: PageProps) => {
-  return { title: `Notifications ${tab}` };
-};
+export const metadata = { title: 'Notifications' };
 
 const Page = async ({ params: { tab } }: PageProps) => {
   if (!['archive', 'inbox'].includes(tab)) return null;

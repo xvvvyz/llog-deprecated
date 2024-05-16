@@ -11,12 +11,7 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { templateId },
-}: PageProps) => {
-  const { data: template } = await getTemplate(templateId);
-  return { title: formatTitle(['Templates', template?.name]) };
-};
+export const metadata = { title: formatTitle(['Templates', 'Edit']) };
 
 const Page = async ({ params: { templateId } }: PageProps) => {
   const [{ data: template }, { data: availableInputs }, { data: subjects }] =

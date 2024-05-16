@@ -1,5 +1,4 @@
 import SubjectEventsPage from '@/_components/subject-events-page';
-import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -7,12 +6,7 @@ interface PageProps {
   searchParams: { from?: string; limit?: string; to?: string };
 }
 
-export const generateMetadata = async ({
-  params: { subjectId },
-}: PageProps) => {
-  const { data: subject } = await getSubject(subjectId);
-  return { title: formatTitle([subject?.name, 'Events']) };
-};
+export const metadata = { title: formatTitle(['Subjects', 'Events']) };
 
 const Page = ({
   params: { subjectId },

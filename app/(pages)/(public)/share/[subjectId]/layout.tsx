@@ -1,5 +1,5 @@
 import Button from '@/_components/button';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getSubject from '@/_queries/get-subject';
 import ExclamationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
 import { ReactNode } from 'react';
@@ -15,8 +15,10 @@ const Layout = async ({
   modal,
   params: { subjectId },
 }: LayoutProps) => {
-  const user = await getCurrentUserFromSession();
-  const { data: subject } = await getSubject(subjectId);
+  const [{ data: subject }, user] = await Promise.all([
+    getSubject(subjectId),
+    getCurrentUser(),
+  ]);
 
   return (
     <>

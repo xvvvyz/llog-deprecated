@@ -10,6 +10,8 @@ const formatTabularEvents = (events: ListEventsData) => {
 
   events.reverse().forEach((event) => {
     const row: Row = {
+      EventId: event.type?.id as string,
+      Id: event.id,
       Name: strip(event.type?.name ?? event.type?.session?.mission?.name),
       'Recorded by': strip(
         `${event.profile?.first_name} ${event.profile?.last_name}`,
@@ -40,7 +42,10 @@ const formatTabularEvents = (events: ListEventsData) => {
         row[strippedLabel] = row[strippedLabel] ?? [];
         (row[strippedLabel] as string[]).push(input.option?.label as string);
       } else {
-        row[strippedLabel] = (input.value ?? input.option?.label) as string;
+        const number = Number(input.value);
+        row[strippedLabel] = (
+          Number.isNaN(number) ? input.option?.label : number
+        ) as number | string;
       }
     });
 

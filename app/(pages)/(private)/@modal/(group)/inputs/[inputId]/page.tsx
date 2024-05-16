@@ -10,10 +10,7 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({ params: { inputId } }: PageProps) => {
-  const { data: input } = await getInput(inputId);
-  return { title: formatTitle(['Inputs', input?.label]) };
-};
+export const metadata = { title: formatTitle(['Inputs', 'Edit']) };
 
 const Page = async ({ params: { inputId } }: PageProps) => {
   const [{ data: input }, { data: subjects }] = await Promise.all([

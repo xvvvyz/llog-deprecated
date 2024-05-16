@@ -2,11 +2,11 @@ import Button from '@/_components/button';
 import PageModalHeader from '@/_components/page-modal-header';
 import { ReactNode } from 'react';
 
-interface PageProps {
+interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: PageProps) => (
+const Layout = async ({ children }: LayoutProps) => (
   <>
     <PageModalHeader title="Account settings" />
     <div className="!border-t-0 px-4 pb-8 sm:px-8">

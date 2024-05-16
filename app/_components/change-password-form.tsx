@@ -3,10 +3,10 @@
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import updatePassword from '@/_mutations/update-password';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 
 const ChangePasswordForm = () => {
-  const [state, action] = useFormState(updatePassword, null);
+  const [state, action] = useActionState(updatePassword, null);
 
   return (
     <form action={action} className="flex flex-col gap-6">

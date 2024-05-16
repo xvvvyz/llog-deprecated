@@ -155,7 +155,7 @@ const SubjectMenu = ({
         onConfirm={() => deleteSubject(subject.id)}
       />
       <Dialog onClose={toggleShareModal} open={shareModal}>
-        <Dialog.Backdrop className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
             <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 shadow-lg">

@@ -1,7 +1,7 @@
 'use server';
 
 import { SubjectFormValues } from '@/_components/subject-form';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
 
@@ -10,7 +10,7 @@ const upsertSubject = async (
   data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
   const supabase = createServerSupabaseClient();
-  const user = await getCurrentUserFromSession();
+  const user = await getCurrentUser();
 
   const { data: subject, error } = await supabase
     .from('subjects')

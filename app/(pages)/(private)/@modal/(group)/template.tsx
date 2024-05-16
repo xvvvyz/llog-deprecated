@@ -5,6 +5,8 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => <PageModal>{children}</PageModal>;
+const Template = ({ children }: LayoutProps) => (
+  <PageModal>{children}</PageModal>
+);
 
-export default Layout;
+export default Template;

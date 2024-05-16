@@ -3,7 +3,7 @@ import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import SessionLinkListItemMenu from '@/_components/session-link-list-item-menu';
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import getMissionWithSessionsAndEvents from '@/_queries/get-mission-with-sessions-and-events';
 import getPublicMissionWithSessionsAndEvents from '@/_queries/get-public-mission-with-sessions-and-events';
 import getPublicSubject from '@/_queries/get-public-subject';
@@ -26,11 +26,10 @@ const SessionsPage = async ({
   missionId,
   subjectId,
 }: SessionsPageProps) => {
-  const user = await getCurrentUserFromSession();
-
-  const { data: subject } = await (isPublic
-    ? getPublicSubject(subjectId)
-    : getSubject(subjectId));
+  const [{ data: subject }, user] = await Promise.all([
+    isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
+    getCurrentUser(),
+  ]);
 
   if (!subject) return null;
   const isTeamMember = subject.team_id === user?.id;

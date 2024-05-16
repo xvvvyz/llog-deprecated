@@ -1,37 +1,33 @@
 'use client';
 
+import { useParentSize } from '@cutting/use-get-parent-size';
 import { plot, PlotOptions } from '@observablehq/plot';
 import { useEffect, useRef } from 'react';
 
 const PlotFigure = ({
-  options: { color, x, y, ...options },
+  onClick,
+  options,
 }: {
+  onClick?: (p: ReturnType<typeof plot>) => void;
   options: PlotOptions;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const { width } = useParentSize(parentRef);
 
   useEffect(() => {
     if (!containerRef.current) return;
-
-    const p = plot({
-      color: { scheme: 'spectral', ...color },
-      grid: true,
-      insetBottom: 5,
-      insetLeft: 10,
-      marginBottom: 60,
-      marginLeft: 110,
-      marginRight: 0,
-      marginTop: 20,
-      x: { padding: 0, tickSize: 0, ...x },
-      y: { padding: 0, tickSize: 0, ...y },
-      ...options,
-    });
-
+    const p = plot({ width, ...options });
+    p.addEventListener('click', () => onClick?.(p));
     containerRef.current.append(p);
     return () => p.remove();
-  }, [color, options, x, y]);
+  }, [onClick, options, width]);
 
-  return <div ref={containerRef} />;
+  return (
+    <div className="aspect-video bg-alpha-reverse-1" ref={parentRef}>
+      <div ref={containerRef} />
+    </div>
+  );
 };
 
 export default PlotFigure;

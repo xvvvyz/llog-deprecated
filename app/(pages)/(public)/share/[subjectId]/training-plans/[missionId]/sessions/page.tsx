@@ -1,6 +1,4 @@
 import SessionsPage from '@/_components/sessions-page';
-import getPublicMissionWithSessionsAndEvents from '@/_queries/get-public-mission-with-sessions-and-events';
-import getPublicSubject from '@/_queries/get-public-subject';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -10,16 +8,7 @@ interface PageProps {
   };
 }
 
-export const generateMetadata = async ({
-  params: { missionId, subjectId },
-}: PageProps) => {
-  const { data: subject } = await getPublicSubject(subjectId);
-
-  const { data: mission } =
-    await getPublicMissionWithSessionsAndEvents(missionId);
-
-  return { title: formatTitle([subject?.name, mission?.name]) };
-};
+export const metadata = { title: formatTitle(['Subjects', 'Training plans']) };
 
 const Page = ({ params: { missionId, subjectId } }: PageProps) => (
   <SessionsPage isPublic missionId={missionId} subjectId={subjectId} />

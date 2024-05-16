@@ -3,10 +3,10 @@
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import forgotPassword from '@/_mutations/forgot-password';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 
 const ForgotPasswordForm = () => {
-  const [state, action] = useFormState(forgotPassword, null);
+  const [state, action] = useActionState(forgotPassword, null);
 
   return (
     <form action={action} className="flex flex-col gap-6">

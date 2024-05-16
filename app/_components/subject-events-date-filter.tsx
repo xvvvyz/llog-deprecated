@@ -49,7 +49,7 @@ const SubjectEventsDateFilter = () => {
           ) : opDate?.from ? (
             formatDate(opDate.from, { weekday: undefined })
           ) : (
-            'Filter by date'
+            'Date range'
           )}
         </Button>
       </Popover.Trigger>

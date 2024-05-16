@@ -1,7 +1,7 @@
-import getCurrentUserFromSession from '@/_queries/get-current-user-from-session';
+import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listInputsForTeamBySubjectId = async (subjectId: string) => {
+const listInputsBySubjectId = async (subjectId: string) => {
   const supabase = createServerSupabaseClient();
 
   const whitelist = await supabase
@@ -22,7 +22,7 @@ const listInputsForTeamBySubjectId = async (subjectId: string) => {
   return supabase
     .from('inputs')
     .select('id, label, subjects(id, image_uri, name), type')
-    .eq('team_id', (await getCurrentUserFromSession())?.id ?? '')
+    .eq('team_id', (await getCurrentUser())?.id ?? '')
     .eq('archived', false)
     .not('id', 'in', `(${blacklist.data.map((is) => is.input_id).join(',')})`)
     .eq('subjects.deleted', false)
@@ -31,7 +31,7 @@ const listInputsForTeamBySubjectId = async (subjectId: string) => {
 };
 
 export type ListInputsBySubjectIdData = Awaited<
-  ReturnType<typeof listInputsForTeamBySubjectId>
+  ReturnType<typeof listInputsBySubjectId>
 >['data'];
 
-export default listInputsForTeamBySubjectId;
+export default listInputsBySubjectId;

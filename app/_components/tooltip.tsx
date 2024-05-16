@@ -38,11 +38,10 @@ const Tooltip = ({
         {...api.triggerProps}
         className={twMerge('-m-3 p-3', className)}
         type="button"
-        onClick={api.open}
       >
         <InformationCircleIcon className="w-5 text-fg-3" />
       </button>
-      {api.isOpen && (
+      {api.open && (
         <div
           className="rounded border border-alpha-1 bg-bg-3 px-6 py-5 text-fg-1 shadow-lg"
           {...api.positionerProps}

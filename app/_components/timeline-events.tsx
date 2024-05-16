@@ -17,7 +17,7 @@ interface TimelineEventsProps {
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
-  user?: User;
+  user: User | null;
 }
 
 const TimelineEvents = ({
