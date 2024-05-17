@@ -120,8 +120,8 @@ const InsightForm = ({
         Array<{ Time: Date }> = [];
 
       const filtered = [];
-      let maxY = 0;
-      let minY = 0;
+      let maxY;
+      let minY;
 
       for (const event of events) {
         const f = { ...event, Time: new Date(event.Time as string) };
@@ -129,12 +129,11 @@ const InsightForm = ({
 
         if (typeof event[y] === 'number') {
           filtered.push(f);
-          maxY = Math.max(maxY, event[y] as number);
-          minY = Math.min(minY, event[y] as number);
+          const value = event[y] as number;
+          maxY = typeof maxY === 'number' ? Math.max(maxY, value) : value;
+          minY = typeof minY === 'number' ? Math.min(minY, value) : value;
         }
       }
-
-      const twoPercentY = (maxY - minY) * 0.02;
 
       marks.push(
         P.axisX({
@@ -190,7 +189,10 @@ const InsightForm = ({
           eventMarkers.some((e) => e.id === d.EventId),
         );
 
-        const y = maxY + twoPercentY;
+        const y =
+          typeof minY === 'number' && typeof maxY === 'number'
+            ? maxY + (maxY - minY) * 0.1
+            : 0;
 
         marks.push(
           P.dot(filtered, {
@@ -389,16 +391,16 @@ const InsightForm = ({
         <Checkbox label="Y axis ticks" {...form.register('showYAxisTicks')} />
         <Checkbox label="Y axis label" {...form.register('showYAxisLabel')} />
         {type === ChartType.TimeSeries && (
-          <Checkbox
-            label="Regression"
-            {...form.register('showLinearRegression')}
-          />
-        )}
-        {type === ChartType.TimeSeries && (
           <Checkbox label="Dots" {...form.register('showDots')} />
         )}
         {type === ChartType.TimeSeries && (
           <Checkbox label="Line" {...form.register('showLine')} />
+        )}
+        {type === ChartType.TimeSeries && (
+          <Checkbox
+            label="Trend line"
+            {...form.register('showLinearRegression')}
+          />
         )}
       </div>
       {showLine && type === ChartType.TimeSeries && (
