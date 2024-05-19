@@ -8,6 +8,8 @@ import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
 import InputTypes from '@/_constants/enum-input-types';
 import useCachedForm from '@/_hooks/use-cached-form';
+import upsertInsight from '@/_mutations/upsert-insight';
+import { GetInsightData } from '@/_queries/get-insight';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectEventTypesData } from '@/_queries/list-subject-event-types';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
@@ -44,12 +46,13 @@ interface InsightFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
   eventTypes: NonNullable<ListSubjectEventTypesData>;
   events: ReturnType<typeof formatTabularEvents>;
+  insight?: NonNullable<GetInsightData>;
   subjectId: string;
 }
 
 type InsightFormValues = {
-  curveFunction: (typeof CURVE_FUNCTION_OPTIONS)[0];
-  eventMarkers: IOption[];
+  curveFunction: string;
+  eventMarkers: string[];
   marginBottom: number;
   marginLeft: number;
   marginRight: number;
@@ -62,15 +65,16 @@ type InsightFormValues = {
   showXAxisTicks: boolean;
   showYAxisLabel: boolean;
   showYAxisTicks: boolean;
-  type: (typeof CHART_TYPE_OPTIONS)[0];
-  x: NonNullable<ListInputsBySubjectIdData>[0];
-  y: NonNullable<ListInputsBySubjectIdData>[0];
+  type: string;
+  x: string;
+  y: string;
 };
 
 const InsightForm = ({
   availableInputs,
   eventTypes,
   events,
+  insight,
   subjectId,
 }: InsightFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
@@ -79,7 +83,7 @@ const InsightForm = ({
 
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
-      curveFunction: CURVE_FUNCTION_OPTIONS[0],
+      curveFunction: CURVE_FUNCTION_OPTIONS[0].id,
       eventMarkers: [],
       marginBottom: 60,
       marginLeft: 60,
@@ -93,11 +97,11 @@ const InsightForm = ({
       showXAxisTicks: true,
       showYAxisLabel: true,
       showYAxisTicks: true,
-      type: CHART_TYPE_OPTIONS[0],
+      type: CHART_TYPE_OPTIONS[0].id,
     },
   });
 
-  const curveFunction = form.watch('curveFunction')?.id;
+  const curveFunction = form.watch('curveFunction');
   const eventMarkers = form.watch('eventMarkers');
   const showDots = form.watch('showDots');
   const showLine = form.watch('showLine');
@@ -106,15 +110,30 @@ const InsightForm = ({
   const showXAxisTicks = form.watch('showXAxisTicks');
   const showYAxisLabel = form.watch('showYAxisLabel');
   const showYAxisTicks = form.watch('showYAxisTicks');
-  const type = form.watch('type')?.id;
+  const type = form.watch('type');
 
   const marks = [];
   let yOptions: IOption[] = [];
 
+  const eventTypeOptions = eventTypes.map((e) => ({
+    id: e.id,
+    label: e.name,
+  }));
+
   switch (type) {
     case ChartType.TimeSeries: {
-      const x = 'Time';
-      const y = form.watch('y')?.label ?? '';
+      yOptions = availableInputs
+        .filter(
+          (i) =>
+            i.type === InputTypes.Duration ||
+            i.type === InputTypes.Number ||
+            i.type === InputTypes.Stopwatch,
+        )
+        .sort(sortInputs) as IOption[];
+
+      const y = form.watch('y');
+      const xLabel = 'Time';
+      const yLabel = yOptions.find((o) => o.id === y)?.label ?? '';
 
       const formatted: ReturnType<typeof formatTabularEvents> &
         Array<{ Time: Date }> = [];
@@ -127,9 +146,9 @@ const InsightForm = ({
         const f = { ...event, Time: new Date(event.Time as string) };
         formatted.push(f);
 
-        if (typeof event[y] === 'number') {
+        if (typeof event[yLabel] === 'number') {
           filtered.push(f);
-          const value = event[y] as number;
+          const value = event[yLabel] as number;
           maxY = typeof maxY === 'number' ? Math.max(maxY, value) : value;
           minY = typeof minY === 'number' ? Math.min(minY, value) : value;
         }
@@ -137,7 +156,7 @@ const InsightForm = ({
 
       marks.push(
         P.axisX({
-          label: showXAxisLabel ? x : null,
+          label: showXAxisLabel ? xLabel : null,
           stroke: 'hsla(0, 0%, 100%, 20%)',
           ticks: showXAxisTicks ? undefined : [],
         }),
@@ -145,7 +164,7 @@ const InsightForm = ({
 
       marks.push(
         P.axisY({
-          label: showYAxisLabel ? y : null,
+          label: showYAxisLabel ? yLabel : null,
           stroke: 'hsla(0, 0%, 100%, 20%)',
           ticks: showYAxisTicks ? undefined : [],
         }),
@@ -156,8 +175,8 @@ const InsightForm = ({
           P.linearRegressionY(filtered, {
             ci: 0,
             stroke: 'hsl(5, 85%, 40%)',
-            x,
-            y,
+            x: xLabel,
+            y: yLabel,
           }),
         );
       }
@@ -166,8 +185,8 @@ const InsightForm = ({
         marks.push(
           P.line(filtered, {
             curve: curveFunction,
-            x,
-            y,
+            x: xLabel,
+            y: yLabel,
           }),
         );
       }
@@ -178,15 +197,15 @@ const InsightForm = ({
             fill: 'hsla(0, 0%, 100%, 75%)',
             opacity: 0.5,
             r: 3,
-            x,
-            y,
+            x: xLabel,
+            y: yLabel,
           }),
         );
       }
 
       if (eventMarkers.length) {
         const filtered = formatted.filter((d) =>
-          eventMarkers.some((e) => e.id === d.EventId),
+          eventMarkers.some((e) => e === d.EventId),
         );
 
         const y =
@@ -197,7 +216,7 @@ const InsightForm = ({
         marks.push(
           P.dot(filtered, {
             fill: 'Name',
-            x,
+            x: xLabel,
             y,
           }),
         );
@@ -210,7 +229,7 @@ const InsightForm = ({
               stroke: 'Name',
               strokeWidth: 5,
               title: (d) => d.Id,
-              x,
+              x: xLabel,
               y,
             }),
           ),
@@ -222,7 +241,7 @@ const InsightForm = ({
             P.pointer({
               maxRadius: 20,
               title: (d) => d.Name,
-              x,
+              x: xLabel,
               y,
             }),
           ),
@@ -237,8 +256,8 @@ const InsightForm = ({
           textFill: 'white',
           textStroke: '#1A1917',
           textStrokeWidth: 10,
-          x,
-          y,
+          x: xLabel,
+          y: yLabel,
         }),
       );
 
@@ -250,20 +269,11 @@ const InsightForm = ({
             maxRadius: 100,
             r: 3,
             title: (d) => d.Id,
-            x,
-            y,
+            x: xLabel,
+            y: yLabel,
           }),
         ),
       );
-
-      yOptions = availableInputs
-        .filter(
-          (i) =>
-            i.type === InputTypes.Duration ||
-            i.type === InputTypes.Number ||
-            i.type === InputTypes.Stopwatch,
-        )
-        .sort(sortInputs) as IOption[];
     }
   }
 
@@ -271,57 +281,61 @@ const InsightForm = ({
     <form
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          console.log(values);
-          // const res = await upsertInsight(
-          //   { insightId: insight?.id, subjectId },
-          //   values,
-          // );
-          //
-          // if (res?.error) {
-          //   form.setError('root', { message: res.error, type: 'custom' });
-          // }
-          //
-          // localStorage.setItem('refresh', '1');
-          // router.back();
+          const res = await upsertInsight(
+            { insightId: insight?.id, subjectId },
+            values,
+          );
+
+          if (res?.error) {
+            form.setError('root', { message: res.error, type: 'custom' });
+            return;
+          }
+
+          localStorage.setItem('refresh', '1');
+          router.back();
         }),
       )}
       className="divide-y divide-alpha-1"
     >
-      <div className="grid grid-cols-2 gap-4 px-4 py-8 sm:px-8">
+      <div className="grid gap-6 px-4 py-8 sm:px-8 md:grid-cols-2 md:gap-4">
+        <Input label="Name" required {...form.register('name')} />
         <Controller
           control={form.control}
           name="type"
           render={({ field }) => (
             <Select
               isClearable={false}
-              label="Type"
+              label="Chart type"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange(value)}
+              onChange={(value) => field.onChange((value as IOption).id)}
               options={CHART_TYPE_OPTIONS}
               placeholder="Select a chart type…"
-              value={field.value as IOption}
+              value={CHART_TYPE_OPTIONS.find((o) => o.id === field.value)}
             />
           )}
         />
+      </div>
+      <div className="grid gap-6 px-4 py-8 sm:px-8 md:grid-cols-2 md:gap-4">
         {type === ChartType.TimeSeries && (
           <Controller
             control={form.control}
             name="y"
             render={({ field }) => (
               <Select
-                label="Y"
+                isClearable={false}
+                label="Y value"
                 name={field.name}
                 onBlur={field.onBlur}
-                onChange={(value) => field.onChange(value)}
+                onChange={(value) => field.onChange((value as IOption).id)}
                 options={yOptions}
                 placeholder="Select a data point…"
-                value={field.value as IOption}
+                value={yOptions.find((o) => o.id === field.value)}
               />
             )}
           />
         )}
-        <div className="col-span-2">
+        {type === ChartType.TimeSeries && (
           <Controller
             control={form.control}
             name="eventMarkers"
@@ -331,19 +345,20 @@ const InsightForm = ({
                 label="Event markers"
                 name={field.name}
                 onBlur={field.onBlur}
-                onChange={(value) => field.onChange(value)}
-                options={
-                  eventTypes.map((e) => ({
-                    id: e.id,
-                    label: e.name,
-                  })) as IOption[]
+                onChange={(values) =>
+                  field.onChange((values as IOption[]).map((v) => v.id))
                 }
+                options={eventTypeOptions as IOption[]}
                 placeholder="Select event markers…"
-                value={field.value}
+                value={
+                  eventTypeOptions.filter((o) =>
+                    field.value.includes(o.id),
+                  ) as IOption[]
+                }
               />
             )}
           />
-        </div>
+        )}
       </div>
       <PlotFigure
         onClick={(plot) => {
@@ -359,7 +374,7 @@ const InsightForm = ({
           title: form.watch('name'),
         }}
       />
-      <div className="grid grid-cols-4 gap-4 px-4 py-8 sm:px-8">
+      <div className="grid grid-cols-2 gap-4 px-4 py-8 sm:px-8 md:grid-cols-4">
         <Input
           label="Space top"
           min={0}
@@ -404,19 +419,19 @@ const InsightForm = ({
         )}
       </div>
       {showLine && type === ChartType.TimeSeries && (
-        <div className="grid grid-cols-3 gap-4 px-4 py-8 sm:px-8">
+        <div className="grid gap-4 px-4 py-8 sm:px-8 md:grid-cols-3">
           <Controller
             control={form.control}
             name="curveFunction"
             render={({ field }) => (
               <Select
                 isClearable={false}
-                label="Curve"
+                label="Curve function"
                 name={field.name}
                 onBlur={field.onBlur}
-                onChange={(value) => field.onChange(value)}
+                onChange={(value) => field.onChange((value as IOption).id)}
                 options={CURVE_FUNCTION_OPTIONS as IOption[]}
-                value={field.value as IOption}
+                value={CURVE_FUNCTION_OPTIONS.find((o) => o.id === field.value)}
               />
             )}
           />

@@ -73,6 +73,7 @@ const EventTypeForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
+              return;
             }
 
             localStorage.setItem('refresh', '1');

@@ -2,7 +2,7 @@ create table "public"."insights" (
   "id" uuid not null default gen_random_uuid (),
   "subject_id" uuid not null,
   "config" jsonb not null,
-  "name" text not null,
+  "name" text not null
 );
 
 alter table "public"."insights" enable row level security;
