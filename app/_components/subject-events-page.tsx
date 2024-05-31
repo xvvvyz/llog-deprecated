@@ -1,11 +1,14 @@
-import Events from '@/_components/events';
+import Empty from '@/_components/empty';
+import TimelineEvents from '@/_components/timeline-events';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
-import add24Hours from '@/_utilities/add-24-hours';
-import parseShortIso from '@/_utilities/parse-short-iso';
+import listEvents from '@/_queries/list-events';
+import listPublicEvents from '@/_queries/list-public-events';
+import formatEventFilters from '@/_utilities/format-event-filters';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 
-interface SubjectPageProps {
+interface SubjectEventsPageProps {
   from?: string;
   limit?: string;
   isPublic?: boolean;
@@ -19,26 +22,37 @@ const SubjectEventsPage = async ({
   isPublic,
   subjectId,
   to,
-}: SubjectPageProps) => {
-  const [{ data: subject }, user] = await Promise.all([
+}: SubjectEventsPageProps) => {
+  const filters = formatEventFilters({ from, limit, to });
+
+  const [{ data: subject }, { data: events }, user] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
+    isPublic
+      ? await listPublicEvents(subjectId, filters)
+      : await listEvents(subjectId, filters),
     getCurrentUser(),
   ]);
 
   if (!subject) return null;
-  const isTeamMember = subject.team_id === user?.id;
+
+  if (!events?.length) {
+    return (
+      <>
+        <div className="mx-4 h-16 border-l-2 border-dashed border-alpha-2" />
+        <Empty className="mt-4">
+          <InformationCircleIcon className="w-7" />
+          No events
+        </Empty>
+      </>
+    );
+  }
 
   return (
-    <Events
-      filters={{
-        endDate: add24Hours(parseShortIso(to ?? from)),
-        from: 0,
-        pageSize: 25,
-        startDate: parseShortIso(from),
-        to: limit ? Number(limit) : 24,
-      }}
+    <TimelineEvents
+      events={events}
+      filters={filters}
       isPublic={isPublic}
-      isTeamMember={isTeamMember}
+      isTeamMember={!!user && subject.team_id === user.id}
       subjectId={subjectId}
       user={user}
     />

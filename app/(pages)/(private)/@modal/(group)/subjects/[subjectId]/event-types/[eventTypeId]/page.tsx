@@ -28,7 +28,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
       <PageModalHeader title={eventType.name as string} />
       <EventCard
         eventType={eventType}
-        isTeamMember={subject.team_id === user?.id}
+        isTeamMember={!!user && subject.team_id === user.id}
         subjectId={subjectId}
         user={user}
       />

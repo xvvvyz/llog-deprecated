@@ -41,7 +41,7 @@ const SessionPage = async ({
     ]);
 
   if (!subject || !mission || !session) return null;
-  const isTeamMember = subject.team_id === user?.id;
+  const isTeamMember = !!user && subject.team_id === user.id;
 
   return (
     <>

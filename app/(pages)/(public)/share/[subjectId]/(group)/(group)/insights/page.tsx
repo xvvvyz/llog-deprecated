@@ -1,14 +1,19 @@
-import Empty from '@/_components/empty';
+import SubjectInsightsPage from '@/_components/subject-insights-page';
 import formatTitle from '@/_utilities/format-title';
-import InformationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
+
+interface PageProps {
+  params: { subjectId: string };
+  searchParams: { foo?: string; from?: string; limit?: string; to?: string };
+}
 
 export const metadata = { title: formatTitle(['Subjects', 'Insights']) };
 
-const Page = () => (
-  <Empty className="mt-16">
-    <InformationCircleIcon className="w-7" />
-    Insights coming soon.
-  </Empty>
+const Page = async ({ params: { subjectId }, searchParams }: PageProps) => (
+  <SubjectInsightsPage
+    isPublic
+    searchParams={searchParams}
+    subjectId={subjectId}
+  />
 );
 
 export default Page;

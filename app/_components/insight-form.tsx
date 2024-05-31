@@ -6,30 +6,27 @@ import Checkbox from '@/_components/checkbox';
 import Input from '@/_components/input';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
+import ChartType from '@/_constants/enum-chart-type';
 import InputTypes from '@/_constants/enum-input-types';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInsight from '@/_mutations/upsert-insight';
 import { GetInsightData } from '@/_queries/get-insight';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectEventTypesData } from '@/_queries/list-subject-event-types';
+import { InsightConfigJson } from '@/_types/insight-config-json';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import sortInputs from '@/_utilities/sort-inputs';
-import * as P from '@observablehq/plot';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller } from 'react-hook-form';
-
-enum ChartType {
-  TimeSeries = 'time-series',
-}
 
 const CHART_TYPE_LABELS = {
   [ChartType.TimeSeries]: 'Time series',
 };
 
 const CHART_TYPE_OPTIONS = Object.entries(CHART_TYPE_LABELS).map(
-  ([id, label]) => ({ id, label }),
+  ([id, label]) => ({ id, label }) as { id: ChartType; label: string },
 );
 
 const CURVE_FUNCTION_OPTIONS = [
@@ -50,24 +47,8 @@ interface InsightFormProps {
   subjectId: string;
 }
 
-type InsightFormValues = {
-  curveFunction: string;
-  eventMarkers: string[];
-  marginBottom: number;
-  marginLeft: number;
-  marginRight: number;
-  marginTop: number;
+type InsightFormValues = InsightConfigJson & {
   name: string;
-  showDots: boolean;
-  showLine: boolean;
-  showLinearRegression: boolean;
-  showXAxisLabel: boolean;
-  showXAxisTicks: boolean;
-  showYAxisLabel: boolean;
-  showYAxisTicks: boolean;
-  type: string;
-  x: string;
-  y: string;
 };
 
 const InsightForm = ({
@@ -79,203 +60,48 @@ const InsightForm = ({
 }: InsightFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const cacheKey = getFormCacheKey.insight({ id: undefined, subjectId });
+  const config = insight?.config as InsightConfigJson;
   const router = useRouter();
 
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
-      curveFunction: CURVE_FUNCTION_OPTIONS[0].id,
-      eventMarkers: [],
-      marginBottom: 60,
-      marginLeft: 60,
-      marginRight: 60,
-      marginTop: 60,
-      name: '',
-      showDots: true,
-      showLine: true,
-      showLinearRegression: true,
-      showXAxisLabel: true,
-      showXAxisTicks: true,
-      showYAxisLabel: true,
-      showYAxisTicks: true,
-      type: CHART_TYPE_OPTIONS[0].id,
+      curveFunction: config?.curveFunction ?? CURVE_FUNCTION_OPTIONS[0].id,
+      eventMarkers: config?.eventMarkers ?? [],
+      marginBottom: config?.marginBottom ?? 60,
+      marginLeft: config?.marginLeft ?? 60,
+      marginRight: config?.marginRight ?? 60,
+      marginTop: config?.marginTop ?? 60,
+      name: insight?.name ?? '',
+      showDots: config?.showDots ?? true,
+      showLine: config?.showLine ?? true,
+      showLinearRegression: config?.showLinearRegression ?? false,
+      showXAxisLabel: config?.showXAxisLabel ?? true,
+      showXAxisTicks: config?.showXAxisTicks ?? true,
+      showYAxisLabel: config?.showYAxisLabel ?? true,
+      showYAxisTicks: config?.showYAxisTicks ?? true,
+      type: config?.type ?? CHART_TYPE_OPTIONS[0].id,
+      x: config?.x,
+      y: config?.y,
     },
   });
 
-  const curveFunction = form.watch('curveFunction');
-  const eventMarkers = form.watch('eventMarkers');
-  const showDots = form.watch('showDots');
   const showLine = form.watch('showLine');
-  const showLinearRegression = form.watch('showLinearRegression');
-  const showXAxisLabel = form.watch('showXAxisLabel');
-  const showXAxisTicks = form.watch('showXAxisTicks');
-  const showYAxisLabel = form.watch('showYAxisLabel');
-  const showYAxisTicks = form.watch('showYAxisTicks');
   const type = form.watch('type');
-
-  const marks = [];
-  let yOptions: IOption[] = [];
+  const y = form.watch('y');
 
   const eventTypeOptions = eventTypes.map((e) => ({
     id: e.id,
     label: e.name,
-  }));
+  })) as IOption[];
 
-  switch (type) {
-    case ChartType.TimeSeries: {
-      yOptions = availableInputs
-        .filter(
-          (i) =>
-            i.type === InputTypes.Duration ||
-            i.type === InputTypes.Number ||
-            i.type === InputTypes.Stopwatch,
-        )
-        .sort(sortInputs) as IOption[];
-
-      const y = form.watch('y');
-      const xLabel = 'Time';
-      const yLabel = yOptions.find((o) => o.id === y)?.label ?? '';
-
-      const formatted: ReturnType<typeof formatTabularEvents> &
-        Array<{ Time: Date }> = [];
-
-      const filtered = [];
-      let maxY;
-      let minY;
-
-      for (const event of events) {
-        const f = { ...event, Time: new Date(event.Time as string) };
-        formatted.push(f);
-
-        if (typeof event[yLabel] === 'number') {
-          filtered.push(f);
-          const value = event[yLabel] as number;
-          maxY = typeof maxY === 'number' ? Math.max(maxY, value) : value;
-          minY = typeof minY === 'number' ? Math.min(minY, value) : value;
-        }
-      }
-
-      marks.push(
-        P.axisX({
-          label: showXAxisLabel ? xLabel : null,
-          stroke: 'hsla(0, 0%, 100%, 20%)',
-          ticks: showXAxisTicks ? undefined : [],
-        }),
-      );
-
-      marks.push(
-        P.axisY({
-          label: showYAxisLabel ? yLabel : null,
-          stroke: 'hsla(0, 0%, 100%, 20%)',
-          ticks: showYAxisTicks ? undefined : [],
-        }),
-      );
-
-      if (showLinearRegression) {
-        marks.push(
-          P.linearRegressionY(filtered, {
-            ci: 0,
-            stroke: 'hsl(5, 85%, 40%)',
-            x: xLabel,
-            y: yLabel,
-          }),
-        );
-      }
-
-      if (showLine) {
-        marks.push(
-          P.line(filtered, {
-            curve: curveFunction,
-            x: xLabel,
-            y: yLabel,
-          }),
-        );
-      }
-
-      if (showDots) {
-        marks.push(
-          P.dot(filtered, {
-            fill: 'hsla(0, 0%, 100%, 75%)',
-            opacity: 0.5,
-            r: 3,
-            x: xLabel,
-            y: yLabel,
-          }),
-        );
-      }
-
-      if (eventMarkers.length) {
-        const filtered = formatted.filter((d) =>
-          eventMarkers.some((e) => e === d.EventId),
-        );
-
-        const y =
-          typeof minY === 'number' && typeof maxY === 'number'
-            ? maxY + (maxY - minY) * 0.1
-            : 0;
-
-        marks.push(
-          P.dot(filtered, {
-            fill: 'Name',
-            x: xLabel,
-            y,
-          }),
-        );
-
-        marks.push(
-          P.dot(
-            filtered,
-            P.pointer({
-              maxRadius: 20,
-              stroke: 'Name',
-              strokeWidth: 5,
-              title: (d) => d.Id,
-              x: xLabel,
-              y,
-            }),
-          ),
-        );
-
-        marks.push(
-          P.tip(
-            filtered,
-            P.pointer({
-              maxRadius: 20,
-              title: (d) => d.Name,
-              x: xLabel,
-              y,
-            }),
-          ),
-        );
-      }
-
-      marks.push(
-        P.crosshairX(filtered, {
-          maxRadius: 100,
-          ruleStroke: 'hsla(0, 0%, 100%, 20%)',
-          ruleStrokeOpacity: 1,
-          textFill: 'white',
-          textStroke: '#1A1917',
-          textStrokeWidth: 10,
-          x: xLabel,
-          y: yLabel,
-        }),
-      );
-
-      marks.push(
-        P.dot(
-          filtered,
-          P.pointerX({
-            fill: 'hsla(0, 0%, 100%, 75%)',
-            maxRadius: 100,
-            r: 3,
-            title: (d) => d.Id,
-            x: xLabel,
-            y: yLabel,
-          }),
-        ),
-      );
-    }
-  }
+  const yOptions = availableInputs
+    .filter(
+      (i) =>
+        i.type === InputTypes.Duration ||
+        i.type === InputTypes.Number ||
+        i.type === InputTypes.Stopwatch,
+    )
+    .sort(sortInputs) as IOption[];
 
   return (
     <form
@@ -348,32 +174,41 @@ const InsightForm = ({
                 onChange={(values) =>
                   field.onChange((values as IOption[]).map((v) => v.id))
                 }
-                options={eventTypeOptions as IOption[]}
+                options={eventTypeOptions}
                 placeholder="Select event markers…"
-                value={
-                  eventTypeOptions.filter((o) =>
-                    field.value.includes(o.id),
-                  ) as IOption[]
-                }
+                value={eventTypeOptions.filter((o) =>
+                  field.value.includes(o.id),
+                )}
               />
             )}
           />
         )}
       </div>
-      <PlotFigure
-        onClick={(plot) => {
-          const eventId = plot.querySelector('title')?.innerHTML ?? '';
-          if (eventId) router.push(`/subjects/${subjectId}/events/${eventId}`);
-        }}
-        options={{
-          marginBottom: form.watch('marginBottom'),
-          marginLeft: form.watch('marginLeft'),
-          marginRight: form.watch('marginRight'),
-          marginTop: form.watch('marginTop'),
-          marks,
-          title: form.watch('name'),
-        }}
-      />
+      <div className="aspect-video bg-alpha-reverse-1">
+        <PlotFigure
+          options={{
+            curveFunction: form.watch('curveFunction'),
+            eventMarkers: form.watch('eventMarkers'),
+            events,
+            marginBottom: form.watch('marginBottom'),
+            marginLeft: form.watch('marginLeft'),
+            marginRight: form.watch('marginRight'),
+            marginTop: form.watch('marginTop'),
+            showDots: form.watch('showDots'),
+            showLine,
+            showLinearRegression: form.watch('showLinearRegression'),
+            showXAxisLabel: form.watch('showXAxisLabel'),
+            showXAxisTicks: form.watch('showXAxisTicks'),
+            showYAxisLabel: form.watch('showYAxisLabel'),
+            showYAxisTicks: form.watch('showYAxisTicks'),
+            title: form.watch('name'),
+            type,
+            xLabel: 'Time',
+            yLabel: yOptions.find((o) => o.id === y)?.label ?? '',
+          }}
+          subjectId={subjectId}
+        />
+      </div>
       <div className="grid grid-cols-2 gap-4 px-4 py-8 sm:px-8 md:grid-cols-4">
         <Input
           label="Space top"

@@ -18,7 +18,7 @@ import { TemplateDataJson } from '@/_types/template-data-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import sortInputs from '@/_utilities/sort-inputs';
 import stopPropagation from '@/_utilities/stop-propagation';
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
@@ -166,7 +166,7 @@ const TemplateForm = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <Dialog.Panel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateInputModal(null)}
                 title="Create input"
@@ -182,7 +182,7 @@ const TemplateForm = ({
                 }}
                 subjects={subjects}
               />
-            </Dialog.Panel>
+            </DialogPanel>
           </div>
         </div>
       </Dialog>

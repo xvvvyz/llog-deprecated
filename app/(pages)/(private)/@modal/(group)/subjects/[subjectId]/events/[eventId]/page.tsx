@@ -4,6 +4,7 @@ import PageModalHeader from '@/_components/page-modal-header';
 import getCurrentUser from '@/_queries/get-current-user';
 import getEvent from '@/_queries/get-event';
 import getSubject from '@/_queries/get-subject';
+import firstIfArray from '@/_utilities/first-if-array';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -26,11 +27,11 @@ const Page = async ({ params: { eventId, subjectId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title={event.type.name as string} />
+      <PageModalHeader title={firstIfArray(event.type).name as string} />
       <EventCard
         event={event}
         eventType={event.type}
-        isTeamMember={subject.team_id === user?.id}
+        isTeamMember={!!user && subject.team_id === user.id}
         subjectId={subjectId}
         user={user}
       />

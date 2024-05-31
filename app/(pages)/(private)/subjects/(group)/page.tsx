@@ -35,7 +35,7 @@ const Page = async () => {
     teamSubjects: NonNullable<ListSubjectsData>;
   } = subjects.reduce(
     (acc, subject) => {
-      if (subject.team_id === user?.id) acc.teamSubjects.push(subject);
+      if (!!user && subject.team_id === user.id) acc.teamSubjects.push(subject);
       else acc.clientSubjects.push(subject);
       return acc;
     },

@@ -32,7 +32,7 @@ const SessionsPage = async ({
   ]);
 
   if (!subject) return null;
-  const isTeamMember = subject.team_id === user?.id;
+  const isTeamMember = !!user && subject.team_id === user.id;
 
   const { data: mission } = isPublic
     ? await getPublicMissionWithSessionsAndEvents(missionId)

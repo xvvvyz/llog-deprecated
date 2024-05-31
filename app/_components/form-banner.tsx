@@ -8,13 +8,19 @@ import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id'
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import { TemplateDataJson } from '@/_types/template-data-json';
 import forceArray from '@/_utilities/force-array';
-import { Dialog } from '@headlessui/react';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon';
 import XCircleIcon from '@heroicons/react/24/outline/XCircleIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/react';
 
 interface FormChangedBannerProps<T extends FieldValues> {
   availableInputs?: NonNullable<ListInputsBySubjectIdData>;
@@ -77,12 +83,12 @@ const FormBanner = <T extends FieldValues>({
           <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
           <div className="fixed inset-0 z-30 overflow-y-auto p-4">
             <div className="flex min-h-full items-center justify-center">
-              <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
-                <Dialog.Title className="text-2xl">Use template</Dialog.Title>
-                <Dialog.Description className="mt-4 px-4 text-fg-4">
+              <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
+                <DialogTitle className="text-2xl">Use template</DialogTitle>
+                <Description className="mt-4 px-4 text-fg-4">
                   Selecting a template will overwrite any existing event type
                   values.
-                </Dialog.Description>
+                </Description>
                 <Select
                   className="mt-16 text-left"
                   instanceId="template-select"
@@ -121,7 +127,7 @@ const FormBanner = <T extends FieldValues>({
                 >
                   Close
                 </Button>
-              </Dialog.Panel>
+              </DialogPanel>
             </div>
           </div>
         </Dialog>

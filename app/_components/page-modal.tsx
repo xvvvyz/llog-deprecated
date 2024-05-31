@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -22,14 +22,14 @@ const PageModal = ({ children, className }: PageModalProps) => {
         ref={scrollContainer}
       >
         <div className="flex min-h-full items-start justify-center">
-          <Dialog.Panel
+          <DialogPanel
             className={twMerge(
               'relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x',
               className,
             )}
           >
             {children}
-          </Dialog.Panel>
+          </DialogPanel>
         </div>
       </div>
     </Dialog>

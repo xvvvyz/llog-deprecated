@@ -60,6 +60,11 @@
     @apply aspect-video h-auto w-full rounded;
   }
 
+  /* hack to style observable plot tooltip */
+  g[aria-label='tip'] {
+    @apply fill-bg-2 stroke-0;
+  }
+
   @media print {
     html,
     body {

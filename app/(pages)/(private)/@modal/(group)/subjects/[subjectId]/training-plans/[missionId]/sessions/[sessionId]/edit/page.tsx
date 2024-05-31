@@ -45,8 +45,6 @@ const Page = async ({
     getCurrentUser(),
   ]);
 
-  const isTeamMember = subject?.team_id === user?.id;
-
   if (
     !subject ||
     !mission ||
@@ -54,7 +52,8 @@ const Page = async ({
     !availableInputs ||
     !availableTemplates ||
     !subjects ||
-    !isTeamMember
+    !user ||
+    subject.team_id !== user.id
   ) {
     return null;
   }

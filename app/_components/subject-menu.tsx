@@ -11,7 +11,7 @@ import deleteSubject from '@/_mutations/delete-subject';
 import updateSubject from '@/_mutations/update-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import { ListSubjectsData } from '@/_queries/list-subjects';
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
@@ -158,7 +158,7 @@ const SubjectMenu = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <Dialog.Panel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 shadow-lg">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 shadow-lg">
               <div className="flex items-center justify-between">
                 <Dialog.Title className="text-2xl">Share</Dialog.Title>
                 <IconButton
@@ -229,7 +229,7 @@ const SubjectMenu = ({
                   </Button>
                 </div>
               )}
-            </Dialog.Panel>
+            </DialogPanel>
           </div>
         </div>
       </Dialog>

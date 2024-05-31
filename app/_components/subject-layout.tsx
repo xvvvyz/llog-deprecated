@@ -31,7 +31,7 @@ const SubjectLayout = async ({
   ]);
 
   if (!subject) return null;
-  const isTeamMember = subject.team_id === user?.id;
+  const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (

@@ -39,15 +39,14 @@ const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
     getCurrentUser(),
   ]);
 
-  const isTeamMember = subject?.team_id === user?.id;
-
   if (
     !subject ||
     !mission ||
     !subjects ||
     !availableInputs ||
     !availableTemplates ||
-    !isTeamMember
+    !user ||
+    subject.team_id !== user.id
   ) {
     return null;
   }
