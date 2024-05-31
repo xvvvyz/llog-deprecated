@@ -2,6 +2,7 @@ import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import InsightCardMenu from '@/_components/insight-card-menu';
 import PlotFigure from '@/_components/plot-figure';
+import Numbers from '@/_constants/enum-numbers';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
@@ -22,11 +23,7 @@ import { twMerge } from 'tailwind-merge';
 
 interface SubjectInsightsPageProps {
   isPublic?: boolean;
-  searchParams: {
-    from?: string;
-    limit?: string;
-    to?: string;
-  };
+  searchParams: { from?: string; to?: string };
   subjectId: string;
 }
 
@@ -35,7 +32,11 @@ const SubjectInsightsPage = async ({
   searchParams,
   subjectId,
 }: SubjectInsightsPageProps) => {
-  const f = formatEventFilters(searchParams);
+  const f = formatEventFilters({
+    from: searchParams.from,
+    limit: String(Numbers.FourByteSignedIntMax - 1),
+    to: searchParams.to,
+  });
 
   const [{ data: subject }, { data: rawEvents }, { data: insights }, user] =
     await Promise.all([

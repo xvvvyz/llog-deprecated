@@ -3,8 +3,8 @@
 import ChartType from '@/_constants/enum-chart-type';
 import formatMarks from '@/_utilities/format-marks';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
-import { useParentSize } from '@cutting/use-get-parent-size';
 import { plot } from '@observablehq/plot';
+import { useParentSize } from '@visx/responsive';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
@@ -37,9 +37,8 @@ const PlotFigure = ({
   subjectId: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const parentRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { height, width } = useParentSize(parentRef);
+  const { parentRef, width, height } = useParentSize();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -80,7 +79,7 @@ const PlotFigure = ({
 
     containerRef.current.append(p);
     return () => p.remove();
-  }, [height, options, router, subjectId, width]);
+  }, [height, isPublic, options, router, subjectId, width]);
 
   return (
     <div className="h-full w-full" ref={parentRef}>

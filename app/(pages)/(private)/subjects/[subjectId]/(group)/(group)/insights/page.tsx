@@ -3,7 +3,7 @@ import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: { subjectId: string };
-  searchParams: { from?: string; limit?: string; to?: string };
+  searchParams: { from?: string; to?: string };
 }
 
 export const metadata = { title: formatTitle(['Subjects', 'Insights']) };

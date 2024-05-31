@@ -23,13 +23,13 @@ const SubjectEventsPage = async ({
   subjectId,
   to,
 }: SubjectEventsPageProps) => {
-  const filters = formatEventFilters({ from, limit, to });
+  const f = formatEventFilters({ from, limit, to });
 
   const [{ data: subject }, { data: events }, user] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
     isPublic
-      ? await listPublicEvents(subjectId, filters)
-      : await listEvents(subjectId, filters),
+      ? await listPublicEvents(subjectId, f)
+      : await listEvents(subjectId, f),
     getCurrentUser(),
   ]);
 
@@ -50,7 +50,7 @@ const SubjectEventsPage = async ({
   return (
     <TimelineEvents
       events={events}
-      filters={filters}
+      filters={f}
       isPublic={isPublic}
       isTeamMember={!!user && subject.team_id === user.id}
       subjectId={subjectId}

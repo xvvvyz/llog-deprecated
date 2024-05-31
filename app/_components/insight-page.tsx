@@ -1,5 +1,6 @@
 import PageModalHeader from '@/_components/page-modal-header';
 import PlotFigure from '@/_components/plot-figure';
+import Numbers from '@/_constants/enum-numbers';
 import getInsight from '@/_queries/get-insight';
 import getPublicInsight from '@/_queries/get-public-insight';
 import getPublicSubject from '@/_queries/get-public-subject';
@@ -17,7 +18,6 @@ interface InsightPageProps {
   from?: string;
   insightId: string;
   isPublic?: boolean;
-  limit?: string;
   subjectId: string;
   to?: string;
 }
@@ -26,11 +26,14 @@ const InsightPage = async ({
   from,
   insightId,
   isPublic,
-  limit,
   subjectId,
   to,
 }: InsightPageProps) => {
-  const f = formatEventFilters({ from, limit, to });
+  const f = formatEventFilters({
+    from,
+    limit: String(Numbers.FourByteSignedIntMax - 1),
+    to,
+  });
 
   const [{ data: subject }, { data: rawEvents }, { data: insight }] =
     await Promise.all([

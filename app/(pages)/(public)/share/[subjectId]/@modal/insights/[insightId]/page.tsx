@@ -3,7 +3,7 @@ import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: { insightId: string; subjectId: string };
-  searchParams: { from?: string; limit?: string; to?: string };
+  searchParams: { from?: string; to?: string };
 }
 
 export const metadata = {
@@ -12,13 +12,12 @@ export const metadata = {
 
 const Page = async ({
   params: { insightId, subjectId },
-  searchParams: { from, limit, to },
+  searchParams: { from, to },
 }: PageProps) => (
   <InsightPage
     from={from}
     insightId={insightId}
     isPublic
-    limit={limit}
     subjectId={subjectId}
     to={to}
   />
