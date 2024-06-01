@@ -57,6 +57,7 @@ interface ModuleFormSectionProps<
   eventTypeKey: string;
   form: UseFormReturn<T>;
   hasOnlyOne?: boolean;
+  subjectId: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
@@ -68,6 +69,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
   eventTypeKey,
   form,
   hasOnlyOne,
+  subjectId,
   subjects,
 }: ModuleFormSectionProps<T, U>) => {
   const {
@@ -182,7 +184,12 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
             noOptionsMessage={() => 'Type to create a new input'}
             onBlur={field.onBlur}
             onChange={field.onChange}
-            onCreateOption={(value) => setCreateInputModal({ label: value })}
+            onCreateOption={(value) =>
+              setCreateInputModal({
+                label: value,
+                subjects_for: [{ subject_id: subjectId }],
+              })
+            }
             options={availableInputs as IOption[]}
             placeholder="Select inputs or type to create…"
             value={field.value}

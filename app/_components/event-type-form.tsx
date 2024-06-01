@@ -119,7 +119,10 @@ const EventTypeForm = ({
                 onBlur={field.onBlur}
                 onChange={field.onChange}
                 onCreateOption={(value) =>
-                  setCreateInputModal({ label: value })
+                  setCreateInputModal({
+                    label: value,
+                    subjects_for: [{ subject_id: subjectId }],
+                  })
                 }
                 options={availableInputs as IOption[]}
                 placeholder="Select inputs or type to create…"

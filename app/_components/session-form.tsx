@@ -228,6 +228,7 @@ const SessionForm = ({
                   form={form}
                   hasOnlyOne={modulesArray.fields.length === 1}
                   key={module.key}
+                  subjectId={subjectId}
                   subjects={subjects}
                 />
               ))}
