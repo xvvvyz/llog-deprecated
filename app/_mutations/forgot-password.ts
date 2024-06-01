@@ -5,19 +5,19 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const forgotPassword = async (
-  _state: { error: string } | null,
+  _state: { defaultValues: { email: string }; error: string },
   data: FormData,
 ) => {
   const proto = headers().get('x-forwarded-proto');
   const host = headers().get('host');
+  const email = data.get('email') as string;
 
   const { error } =
-    await createServerSupabaseClient().auth.resetPasswordForEmail(
-      data.get('email') as string,
-      { redirectTo: `${proto}://${host}/change-password` },
-    );
+    await createServerSupabaseClient().auth.resetPasswordForEmail(email, {
+      redirectTo: `${proto}://${host}/change-password`,
+    });
 
-  if (error) return { error: error.message };
+  if (error) return { defaultValues: { email }, error: error.message };
   redirect('/forgot-password/email-sent');
 };
 

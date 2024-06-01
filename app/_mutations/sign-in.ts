@@ -5,15 +5,21 @@ import { redirect } from 'next/navigation';
 
 const signIn = async (
   context: { next?: string },
-  _state: { error: string } | null,
+  _state: { defaultValues: { email: string; password: string }; error: string },
   data: FormData,
 ) => {
+  const email = data.get('email') as string;
+  const password = data.get('password') as string;
+
   const { error } = await createServerSupabaseClient().auth.signInWithPassword({
-    email: data.get('email') as string,
-    password: data.get('password') as string,
+    email,
+    password,
   });
 
-  if (error) return { error: error.message };
+  if (error) {
+    return { defaultValues: { email, password }, error: error.message };
+  }
+
   redirect(context.next ?? '/subjects');
 };
 

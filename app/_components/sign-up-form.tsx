@@ -10,23 +10,43 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ next }: SignUpFormProps) => {
-  const [state, action] = useActionState(signUp.bind(null, { next }), null);
+  const [state, action] = useActionState(signUp.bind(null, { next }), {
+    defaultValues: { email: '', firstName: '', lastName: '', password: '' },
+    error: '',
+  });
 
   return (
     <form action={action} className="flex flex-col gap-6">
       <div className="flex gap-6">
-        <Input label="First name" name="firstName" required />
-        <Input label="Last name" name="lastName" required />
+        <Input
+          defaultValue={state.defaultValues.firstName}
+          label="First name"
+          name="firstName"
+          required
+        />
+        <Input
+          defaultValue={state.defaultValues.lastName}
+          label="Last name"
+          name="lastName"
+          required
+        />
       </div>
-      <Input label="Email address" name="email" required type="email" />
       <Input
+        defaultValue={state.defaultValues.email}
+        label="Email address"
+        name="email"
+        required
+        type="email"
+      />
+      <Input
+        defaultValue={state.defaultValues.password}
         label="Password"
         minLength={6}
         name="password"
         required
         type="password"
       />
-      {state?.error && <p className="text-center">{state.error}</p>}
+      {state.error && <p className="text-center">{state.error}</p>}
       <Button
         className="mt-8 w-full"
         loadingText="Creating account…"
