@@ -1,8 +1,10 @@
 import InputTypes from '@/_constants/enum-input-types';
 import { ListEventsData } from '@/_queries/list-events';
 import forceArray from '@/_utilities/force-array';
+import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
+import formatFullName from '@/_utilities/format-full-name';
+import strip from '@/_utilities/strip';
 
-const strip = (str?: string) => (str ? str.replace(/['"\[\]]/g, '') : '');
 type Row = Record<string, string | string[] | number>;
 
 const formatTabularEvents = (events: ListEventsData) => {
@@ -11,12 +13,9 @@ const formatTabularEvents = (events: ListEventsData) => {
 
   events.reverse().forEach((event) => {
     const row: Row = {
-      EventId: event.type?.id as string,
       Id: event.id,
       Name: strip(event.type?.name ?? event.type?.session?.mission?.name),
-      'Recorded by': strip(
-        `${event.profile?.first_name} ${event.profile?.last_name}`,
-      ),
+      'Recorded by': strip(formatFullName(event?.profile)),
       Time: event.created_at,
     };
 
@@ -29,7 +28,7 @@ const formatTabularEvents = (events: ListEventsData) => {
       row.Comments = event.comments.map((comment) => {
         const strippedComment = comment.content.replace(/<[^>]+>/g, ' ');
 
-        return `${comment.profile?.first_name} ${comment.profile?.last_name}: ${strippedComment}`
+        return `${formatFullName(comment.profile)}: ${strippedComment}`
           .replace(/\s+/g, ' ')
           .replace(/ $/, '');
       });
@@ -37,19 +36,15 @@ const formatTabularEvents = (events: ListEventsData) => {
 
     forceArray(event.inputs).forEach((input) => {
       if (!input.input) return;
-      const strippedLabel = strip(input.input?.label);
+      const column = formatDirtyColumnHeader(input.input?.label);
 
       if (input.input.type === InputTypes.MultiSelect) {
-        row[strippedLabel] = row[strippedLabel] ?? [];
-        (row[strippedLabel] as string[]).push(input.option?.label as string);
+        row[column] = row[column] ?? [];
+        (row[column] as string[]).push(strip(input.option?.label));
       } else if (input.input.type === InputTypes.Select) {
-        (row[strippedLabel] as string) = input.option?.label as string;
+        (row[column] as string) = strip(input.option?.label);
       } else {
-        const number = Number(input.value);
-
-        row[strippedLabel] = (
-          Number.isNaN(number) ? input.option?.label : number
-        ) as number | string;
+        row[column] = Number(input.value);
       }
     });
 

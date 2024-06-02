@@ -79,9 +79,9 @@ const SubjectLayout = async ({
         </>
       )}
       <div className="mt-16 flex h-8 items-center justify-between">
-        <div className="flex divide-x divide-alpha-2 rounded-sm border border-alpha-3">
+        <div className="flex divide-x divide-alpha-3 rounded-sm border border-alpha-3">
           <ForwardSearchParamsButton
-            activeClassName="text-fg-2 bg-alpha-2"
+            activeClassName="text-fg-2 bg-alpha-1"
             colorScheme="transparent"
             className="rounded-r-none border-0"
             href={`/${shareOrSubjects}/${subjectId}/events`}
@@ -92,7 +92,7 @@ const SubjectLayout = async ({
             Events
           </ForwardSearchParamsButton>
           <ForwardSearchParamsButton
-            activeClassName="text-fg-2 bg-alpha-2"
+            activeClassName="text-fg-2 bg-alpha-1"
             colorScheme="transparent"
             className="rounded-l-none border-0"
             href={`/${shareOrSubjects}/${subjectId}/insights`}

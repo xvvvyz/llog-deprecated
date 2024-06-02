@@ -61,6 +61,7 @@ const InsightPage = async ({
         <PlotFigure
           isPublic={isPublic}
           options={{
+            columns: config.inputs.map((i) => idLabelMap[i]),
             curveFunction: config.curveFunction,
             events,
             marginBottom: config.marginBottom,
@@ -76,8 +77,6 @@ const InsightPage = async ({
             showYAxisTicks: config.showYAxisTicks,
             title: insight.name,
             type: config.type,
-            xLabel: 'Time',
-            yLabel: idLabelMap[config.inputs?.[0]],
           }}
           subjectId={subjectId}
         />

@@ -48,7 +48,7 @@ const InsightForm = ({
   subjectId,
 }: InsightFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
-  const cacheKey = getFormCacheKey.insight({ id: undefined, subjectId });
+  const cacheKey = getFormCacheKey.insight({ id: insight?.id, subjectId });
   const config = insight?.config as InsightConfigJson;
   const router = useRouter();
 
@@ -96,31 +96,36 @@ const InsightForm = ({
       )}
       className="divide-y divide-alpha-1"
     >
-      <div className="grid gap-6 px-4 py-8 sm:px-8 md:grid-cols-2 md:gap-4">
+      <div className="grid gap-6 px-4 py-8 sm:px-8 md:grid-cols-3 md:gap-4">
         <Input label="Name" required {...form.register('name')} />
-        <Controller
-          control={form.control}
-          name="inputs"
-          render={({ field }) => (
-            <Select
-              isClearable={false}
-              isMulti
-              label="Inputs"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) =>
-                field.onChange((value as IOption[]).map((o) => o.id))
-              }
-              options={inputOptions}
-              placeholder="Select a data point…"
-              value={inputOptions.filter((o) => field.value.includes(o.id))}
-            />
-          )}
-        />
+        <div className="md:col-span-2">
+          <Controller
+            control={form.control}
+            name="inputs"
+            render={({ field }) => (
+              <Select
+                isClearable={false}
+                isMulti
+                label="Inputs"
+                name={field.name}
+                onBlur={field.onBlur}
+                onChange={(value) =>
+                  field.onChange((value as IOption[]).map((o) => o.id))
+                }
+                options={inputOptions}
+                placeholder="Select a data point…"
+                value={inputOptions.filter((o) => field.value.includes(o.id))}
+              />
+            )}
+          />
+        </div>
       </div>
       <div className="bg-alpha-reverse-1">
         <PlotFigure
           options={{
+            columns: inputs.map(
+              (i) => inputOptions.find((o) => o.id === i)?.label as string,
+            ),
             curveFunction: form.watch('curveFunction'),
             events,
             marginBottom: form.watch('marginBottom'),
@@ -136,9 +141,6 @@ const InsightForm = ({
             showYAxisTicks: form.watch('showYAxisTicks'),
             title: form.watch('name'),
             type: form.watch('type'),
-            xLabel: 'Time',
-            yLabel:
-              inputOptions.find((o) => inputs?.includes(o.id))?.label ?? '',
           }}
           subjectId={subjectId}
         />

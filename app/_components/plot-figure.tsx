@@ -1,6 +1,7 @@
 'use client';
 
 import ChartType from '@/_constants/enum-chart-type';
+import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatMarks from '@/_utilities/format-marks';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import { plot } from '@observablehq/plot';
@@ -16,6 +17,7 @@ const PlotFigure = ({
 }: {
   isPublic?: boolean;
   options: {
+    columns: string[];
     curveFunction: string;
     events: ReturnType<typeof formatTabularEvents>;
     marginBottom: string;
@@ -31,8 +33,6 @@ const PlotFigure = ({
     showYAxisTicks: boolean;
     title: string;
     type: ChartType;
-    xLabel: string;
-    yLabel: string;
   };
   quantitativeYHeight?: number;
   subjectId: string;
@@ -43,9 +43,10 @@ const PlotFigure = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
+    const column = formatDirtyColumnHeader(options.columns[0]);
 
     const p = plot({
-      height: options.events.some((e) => typeof e[options.yLabel] === 'number')
+      height: options.events.some((e) => typeof e[column] === 'number')
         ? quantitativeYHeight
         : undefined,
       marginBottom: Number(options.marginBottom),
@@ -53,6 +54,7 @@ const PlotFigure = ({
       marginRight: Number(options.marginRight),
       marginTop: Number(options.marginTop),
       marks: formatMarks({
+        columns: options.columns,
         curveFunction: options.curveFunction,
         events: options.events,
         showDots: options.showDots,
@@ -63,8 +65,6 @@ const PlotFigure = ({
         showYAxisLabel: options.showYAxisLabel,
         showYAxisTicks: options.showYAxisTicks,
         type: options.type,
-        xLabel: options.xLabel,
-        yLabel: options.yLabel,
       }),
       width,
     });
