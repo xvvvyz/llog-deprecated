@@ -107,12 +107,11 @@ const SubjectInsightsPage = async ({
                   />
                 )}
               </div>
-              <div className="aspect-video rounded-b bg-alpha-reverse-1">
+              <div className="rounded-b bg-alpha-reverse-1">
                 <PlotFigure
                   isPublic={isPublic}
                   options={{
                     curveFunction: config.curveFunction,
-                    eventMarkers: config.eventMarkers,
                     events,
                     marginBottom: config.marginBottom,
                     marginLeft: config.marginLeft,
@@ -128,8 +127,9 @@ const SubjectInsightsPage = async ({
                     title: insight.name,
                     type: config.type,
                     xLabel: 'Time',
-                    yLabel: idLabelMap[config.y],
+                    yLabel: idLabelMap[config.inputs?.[0]],
                   }}
+                  quantitativeYHeight={250}
                   subjectId={subjectId}
                 />
               </div>

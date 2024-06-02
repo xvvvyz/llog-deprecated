@@ -7,12 +7,11 @@ import Input from '@/_components/input';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
 import ChartType from '@/_constants/enum-chart-type';
-import InputTypes from '@/_constants/enum-input-types';
+import CurveFunction from '@/_constants/enum-curve-function';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInsight from '@/_mutations/upsert-insight';
 import { GetInsightData } from '@/_queries/get-insight';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
-import { ListSubjectEventTypesData } from '@/_queries/list-subject-event-types';
 import { InsightConfigJson } from '@/_types/insight-config-json';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
@@ -21,27 +20,18 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller } from 'react-hook-form';
 
-const CHART_TYPE_LABELS = {
-  [ChartType.TimeSeries]: 'Time series',
-};
-
-const CHART_TYPE_OPTIONS = Object.entries(CHART_TYPE_LABELS).map(
-  ([id, label]) => ({ id, label }) as { id: ChartType; label: string },
-);
-
 const CURVE_FUNCTION_OPTIONS = [
-  { id: 'basis', label: 'Basis' },
-  { id: 'bundle', label: 'Bundle' },
-  { id: 'cardinal', label: 'Cardinal' },
-  { id: 'catmull-rom', label: 'Catmull-rom' },
-  { id: 'linear', label: 'Linear' },
-  { id: 'natural', label: 'Natural' },
-  { id: 'step', label: 'Step' },
+  { id: CurveFunction.Linear, label: 'Linear' },
+  { id: CurveFunction.Basis, label: 'Basis' },
+  { id: CurveFunction.Bundle, label: 'Bundle' },
+  { id: CurveFunction.Cardinal, label: 'Cardinal' },
+  { id: CurveFunction.CatmullRom, label: 'Catmull-rom' },
+  { id: CurveFunction.Natural, label: 'Natural' },
+  { id: CurveFunction.Step, label: 'Step' },
 ];
 
 interface InsightFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
-  eventTypes: NonNullable<ListSubjectEventTypesData>;
   events: ReturnType<typeof formatTabularEvents>;
   insight?: NonNullable<GetInsightData>;
   subjectId: string;
@@ -53,7 +43,6 @@ type InsightFormValues = InsightConfigJson & {
 
 const InsightForm = ({
   availableInputs,
-  eventTypes,
   events,
   insight,
   subjectId,
@@ -65,43 +54,27 @@ const InsightForm = ({
 
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
-      curveFunction: config?.curveFunction ?? CURVE_FUNCTION_OPTIONS[0].id,
-      eventMarkers: config?.eventMarkers ?? [],
-      marginBottom: config?.marginBottom ?? 60,
-      marginLeft: config?.marginLeft ?? 60,
-      marginRight: config?.marginRight ?? 60,
-      marginTop: config?.marginTop ?? 60,
+      curveFunction: config?.curveFunction ?? CurveFunction.Linear,
+      inputs: config?.inputs ?? [],
+      marginBottom: config?.marginBottom ?? '60',
+      marginLeft: config?.marginLeft ?? '60',
+      marginRight: config?.marginRight ?? '60',
+      marginTop: config?.marginTop ?? '60',
       name: insight?.name ?? '',
       showDots: config?.showDots ?? true,
-      showLine: config?.showLine ?? true,
+      showLine: config?.showLine ?? false,
       showLinearRegression: config?.showLinearRegression ?? false,
       showXAxisLabel: config?.showXAxisLabel ?? true,
       showXAxisTicks: config?.showXAxisTicks ?? true,
       showYAxisLabel: config?.showYAxisLabel ?? true,
       showYAxisTicks: config?.showYAxisTicks ?? true,
-      type: config?.type ?? CHART_TYPE_OPTIONS[0].id,
-      x: config?.x,
-      y: config?.y,
+      type: config?.type ?? ChartType.TimeSeries,
     },
   });
 
   const showLine = form.watch('showLine');
-  const type = form.watch('type');
-  const y = form.watch('y');
-
-  const eventTypeOptions = eventTypes.map((e) => ({
-    id: e.id,
-    label: e.name,
-  })) as IOption[];
-
-  const yOptions = availableInputs
-    .filter(
-      (i) =>
-        i.type === InputTypes.Duration ||
-        i.type === InputTypes.Number ||
-        i.type === InputTypes.Stopwatch,
-    )
-    .sort(sortInputs) as IOption[];
+  const inputs = form.watch('inputs');
+  const inputOptions = availableInputs.sort(sortInputs) as IOption[];
 
   return (
     <form
@@ -127,68 +100,28 @@ const InsightForm = ({
         <Input label="Name" required {...form.register('name')} />
         <Controller
           control={form.control}
-          name="type"
+          name="inputs"
           render={({ field }) => (
             <Select
               isClearable={false}
-              label="Chart type"
+              isMulti
+              label="Inputs"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption).id)}
-              options={CHART_TYPE_OPTIONS}
-              placeholder="Select a chart type…"
-              value={CHART_TYPE_OPTIONS.find((o) => o.id === field.value)}
+              onChange={(value) =>
+                field.onChange((value as IOption[]).map((o) => o.id))
+              }
+              options={inputOptions}
+              placeholder="Select a data point…"
+              value={inputOptions.filter((o) => field.value.includes(o.id))}
             />
           )}
         />
       </div>
-      <div className="grid gap-6 px-4 py-8 sm:px-8 md:grid-cols-2 md:gap-4">
-        {type === ChartType.TimeSeries && (
-          <Controller
-            control={form.control}
-            name="y"
-            render={({ field }) => (
-              <Select
-                isClearable={false}
-                label="Y value"
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={(value) => field.onChange((value as IOption).id)}
-                options={yOptions}
-                placeholder="Select a data point…"
-                value={yOptions.find((o) => o.id === field.value)}
-              />
-            )}
-          />
-        )}
-        {type === ChartType.TimeSeries && (
-          <Controller
-            control={form.control}
-            name="eventMarkers"
-            render={({ field }) => (
-              <Select
-                isMulti
-                label="Event markers"
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={(values) =>
-                  field.onChange((values as IOption[]).map((v) => v.id))
-                }
-                options={eventTypeOptions}
-                placeholder="Select event markers…"
-                value={eventTypeOptions.filter((o) =>
-                  field.value.includes(o.id),
-                )}
-              />
-            )}
-          />
-        )}
-      </div>
-      <div className="aspect-video bg-alpha-reverse-1">
+      <div className="bg-alpha-reverse-1">
         <PlotFigure
           options={{
             curveFunction: form.watch('curveFunction'),
-            eventMarkers: form.watch('eventMarkers'),
             events,
             marginBottom: form.watch('marginBottom'),
             marginLeft: form.watch('marginLeft'),
@@ -202,9 +135,10 @@ const InsightForm = ({
             showYAxisLabel: form.watch('showYAxisLabel'),
             showYAxisTicks: form.watch('showYAxisTicks'),
             title: form.watch('name'),
-            type,
+            type: form.watch('type'),
             xLabel: 'Time',
-            yLabel: yOptions.find((o) => o.id === y)?.label ?? '',
+            yLabel:
+              inputOptions.find((o) => inputs?.includes(o.id))?.label ?? '',
           }}
           subjectId={subjectId}
         />
@@ -240,20 +174,14 @@ const InsightForm = ({
         <Checkbox label="X axis label" {...form.register('showXAxisLabel')} />
         <Checkbox label="Y axis ticks" {...form.register('showYAxisTicks')} />
         <Checkbox label="Y axis label" {...form.register('showYAxisLabel')} />
-        {type === ChartType.TimeSeries && (
-          <Checkbox label="Dots" {...form.register('showDots')} />
-        )}
-        {type === ChartType.TimeSeries && (
-          <Checkbox label="Line" {...form.register('showLine')} />
-        )}
-        {type === ChartType.TimeSeries && (
-          <Checkbox
-            label="Trend line"
-            {...form.register('showLinearRegression')}
-          />
-        )}
+        <Checkbox label="Dots" {...form.register('showDots')} />
+        <Checkbox label="Line" {...form.register('showLine')} />
+        <Checkbox
+          label="Trend line"
+          {...form.register('showLinearRegression')}
+        />
       </div>
-      {showLine && type === ChartType.TimeSeries && (
+      {showLine && (
         <div className="grid gap-4 px-4 py-8 sm:px-8 md:grid-cols-3">
           <Controller
             control={form.control}

@@ -2,11 +2,11 @@ import ChartType from '@/_constants/enum-chart-type';
 
 export type InsightConfigJson = {
   curveFunction: string;
-  eventMarkers: string[];
-  marginBottom: number;
-  marginLeft: number;
-  marginRight: number;
-  marginTop: number;
+  inputs: string[];
+  marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
+  marginTop: string;
   showDots: boolean;
   showLine: boolean;
   showLinearRegression: boolean;
@@ -15,6 +15,4 @@ export type InsightConfigJson = {
   showYAxisLabel: boolean;
   showYAxisTicks: boolean;
   type: ChartType;
-  x: string;
-  y: string;
 };

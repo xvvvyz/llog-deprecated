@@ -1,3 +1,4 @@
+import InputTypes from '@/_constants/enum-input-types';
 import { ListEventsData } from '@/_queries/list-events';
 import forceArray from '@/_utilities/force-array';
 
@@ -38,11 +39,14 @@ const formatTabularEvents = (events: ListEventsData) => {
       if (!input.input) return;
       const strippedLabel = strip(input.input?.label);
 
-      if (input.input.type === 'multi_select') {
+      if (input.input.type === InputTypes.MultiSelect) {
         row[strippedLabel] = row[strippedLabel] ?? [];
         (row[strippedLabel] as string[]).push(input.option?.label as string);
+      } else if (input.input.type === InputTypes.Select) {
+        (row[strippedLabel] as string) = input.option?.label as string;
       } else {
         const number = Number(input.value);
+
         row[strippedLabel] = (
           Number.isNaN(number) ? input.option?.label : number
         ) as number | string;

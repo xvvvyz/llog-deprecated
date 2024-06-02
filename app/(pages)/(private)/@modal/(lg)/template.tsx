@@ -6,9 +6,7 @@ interface LayoutProps {
 }
 
 const Template = ({ children }: LayoutProps) => (
-  <PageModal className="fixed bottom-0 left-0 right-0 top-0 flex max-w-full flex-col rounded-none border-0">
-    {children}
-  </PageModal>
+  <PageModal className="max-w-4xl">{children}</PageModal>
 );
 
 export default Template;

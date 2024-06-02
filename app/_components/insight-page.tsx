@@ -54,15 +54,14 @@ const InsightPage = async ({
   return (
     <>
       <PageModalHeader
-        className="shrink-0 border-b border-alpha-1"
+        className="border-b border-alpha-1"
         title={insight.name}
       />
-      <div className="h-full bg-alpha-reverse-1">
+      <div className="rounded-b bg-alpha-reverse-1">
         <PlotFigure
           isPublic={isPublic}
           options={{
             curveFunction: config.curveFunction,
-            eventMarkers: config.eventMarkers,
             events,
             marginBottom: config.marginBottom,
             marginLeft: config.marginLeft,
@@ -78,7 +77,7 @@ const InsightPage = async ({
             title: insight.name,
             type: config.type,
             xLabel: 'Time',
-            yLabel: idLabelMap[config.y],
+            yLabel: idLabelMap[config.inputs?.[0]],
           }}
           subjectId={subjectId}
         />

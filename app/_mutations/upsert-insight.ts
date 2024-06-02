@@ -10,7 +10,7 @@ const upsertInsight = async (
   const { error } = await createServerSupabaseClient().from('insights').upsert({
     config,
     id: context.insightId,
-    name,
+    name: name.trim(),
     subject_id: context.subjectId,
   });
 

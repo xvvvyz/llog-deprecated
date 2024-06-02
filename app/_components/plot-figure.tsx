@@ -11,17 +11,17 @@ import { useEffect, useRef } from 'react';
 const PlotFigure = ({
   isPublic,
   options,
+  quantitativeYHeight,
   subjectId,
 }: {
   isPublic?: boolean;
   options: {
     curveFunction: string;
-    eventMarkers: string[];
     events: ReturnType<typeof formatTabularEvents>;
-    marginBottom: number;
-    marginLeft: number;
-    marginRight: number;
-    marginTop: number;
+    marginBottom: string;
+    marginLeft: string;
+    marginRight: string;
+    marginTop: string;
     showDots: boolean;
     showLine: boolean;
     showLinearRegression: boolean;
@@ -34,24 +34,26 @@ const PlotFigure = ({
     xLabel: string;
     yLabel: string;
   };
+  quantitativeYHeight?: number;
   subjectId: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { parentRef, width, height } = useParentSize();
+  const { parentRef, width } = useParentSize();
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const p = plot({
-      height,
-      marginBottom: options.marginBottom,
-      marginLeft: options.marginLeft,
-      marginRight: options.marginRight,
-      marginTop: options.marginTop,
+      height: options.events.some((e) => typeof e[options.yLabel] === 'number')
+        ? quantitativeYHeight
+        : undefined,
+      marginBottom: Number(options.marginBottom),
+      marginLeft: Number(options.marginLeft),
+      marginRight: Number(options.marginRight),
+      marginTop: Number(options.marginTop),
       marks: formatMarks({
         curveFunction: options.curveFunction,
-        eventMarkers: options.eventMarkers,
         events: options.events,
         showDots: options.showDots,
         showLine: options.showLine,
@@ -79,7 +81,7 @@ const PlotFigure = ({
 
     containerRef.current.append(p);
     return () => p.remove();
-  }, [height, isPublic, options, router, subjectId, width]);
+  }, [isPublic, options, router, quantitativeYHeight, subjectId, width]);
 
   return (
     <div className="h-full w-full" ref={parentRef}>
