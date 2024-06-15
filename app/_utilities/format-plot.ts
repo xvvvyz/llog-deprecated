@@ -3,10 +3,15 @@ import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import * as P from '@observablehq/plot';
 
-const formatMarks = ({
+const formatPlot = ({
   columns,
   curveFunction,
   events,
+  defaultHeight,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  marginTop,
   showDots,
   showLine,
   showLinearRegression,
@@ -15,10 +20,16 @@ const formatMarks = ({
   showYAxisLabel,
   showYAxisTicks,
   type,
+  width,
 }: {
   columns: string[];
   curveFunction: string;
+  defaultHeight?: number;
   events: ReturnType<typeof formatTabularEvents>;
+  marginBottom: number | string;
+  marginLeft: number | string;
+  marginRight: number | string;
+  marginTop: number | string;
   showDots: boolean;
   showLine: boolean;
   showLinearRegression: boolean;
@@ -27,13 +38,15 @@ const formatMarks = ({
   showYAxisLabel: boolean;
   showYAxisTicks: boolean;
   type: ChartType;
+  width: number;
 }) => {
+  const column = formatDirtyColumnHeader(columns[0]);
   const marks = [];
 
   switch (type) {
     case ChartType.TimeSeries: {
       const x = 'Time';
-      const y = formatDirtyColumnHeader(columns[0]) ?? '';
+      const y = column;
 
       const formatted: ReturnType<typeof formatTabularEvents> &
         Array<{ Time: Date }> = [];
@@ -41,11 +54,15 @@ const formatMarks = ({
       for (const event of events) {
         const f = { ...event, Time: new Date(event.Time as string) };
 
-        if (typeof event[y] !== 'undefined') {
-          if (Array.isArray(event[y])) {
-            (event[y] as string[]).forEach((value) => {
-              formatted.push({ ...f, [y]: value });
-            });
+        for (const dirtyColumn of columns) {
+          const column = formatDirtyColumnHeader(dirtyColumn);
+          if (typeof event[column] === 'undefined') continue;
+          if (typeof event[column] !== 'number') defaultHeight = undefined;
+
+          if (Array.isArray(event[column])) {
+            (event[column] as string[]).forEach((value) =>
+              formatted.push({ ...f, [column]: value }),
+            );
           } else {
             formatted.push(f);
           }
@@ -86,7 +103,17 @@ const formatMarks = ({
       }
 
       if (showDots) {
-        marks.push(P.dot(formatted, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
+        for (const column of columns) {
+          const y = formatDirtyColumnHeader(column);
+
+          marks.push(
+            P.dot(formatted, {
+              fill: 'hsla(0, 0%, 100%, 50%)',
+              x,
+              y,
+            }),
+          );
+        }
       }
 
       marks.push(
@@ -117,7 +144,16 @@ const formatMarks = ({
     }
   }
 
-  return marks;
+  return {
+    height: defaultHeight,
+    inset: 10,
+    marginBottom: Number(marginBottom),
+    marginLeft: Number(marginLeft),
+    marginRight: Number(marginRight),
+    marginTop: Number(marginTop),
+    marks,
+    width,
+  };
 };
 
-export default formatMarks;
+export default formatPlot;

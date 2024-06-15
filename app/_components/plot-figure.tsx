@@ -1,8 +1,7 @@
 'use client';
 
 import ChartType from '@/_constants/enum-chart-type';
-import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
-import formatMarks from '@/_utilities/format-marks';
+import formatPlot from '@/_utilities/format-plot';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import { plot } from '@observablehq/plot';
 import { useParentSize } from '@visx/responsive';
@@ -10,11 +9,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 const PlotFigure = ({
+  defaultHeight,
   isPublic,
   options,
-  quantitativeYHeight,
   subjectId,
 }: {
+  defaultHeight?: number;
   isPublic?: boolean;
   options: {
     columns: string[];
@@ -34,7 +34,6 @@ const PlotFigure = ({
     title: string;
     type: ChartType;
   };
-  quantitativeYHeight?: number;
   subjectId: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,20 +42,17 @@ const PlotFigure = ({
 
   useEffect(() => {
     if (!containerRef.current) return;
-    const column = formatDirtyColumnHeader(options.columns[0]);
 
-    const p = plot({
-      height: options.events.some((e) => typeof e[column] === 'number')
-        ? quantitativeYHeight
-        : undefined,
-      marginBottom: Number(options.marginBottom),
-      marginLeft: Number(options.marginLeft),
-      marginRight: Number(options.marginRight),
-      marginTop: Number(options.marginTop),
-      marks: formatMarks({
+    const p = plot(
+      formatPlot({
         columns: options.columns,
         curveFunction: options.curveFunction,
+        defaultHeight,
         events: options.events,
+        marginBottom: options.marginBottom,
+        marginLeft: options.marginLeft,
+        marginRight: options.marginRight,
+        marginTop: options.marginTop,
         showDots: options.showDots,
         showLine: options.showLine,
         showLinearRegression: options.showLinearRegression,
@@ -65,9 +61,9 @@ const PlotFigure = ({
         showYAxisLabel: options.showYAxisLabel,
         showYAxisTicks: options.showYAxisTicks,
         type: options.type,
+        width,
       }),
-      width,
-    });
+    );
 
     p.addEventListener('click', () => {
       const eventId = p.querySelector('title')?.innerHTML ?? '';
@@ -81,7 +77,7 @@ const PlotFigure = ({
 
     containerRef.current.append(p);
     return () => p.remove();
-  }, [isPublic, options, router, quantitativeYHeight, subjectId, width]);
+  }, [isPublic, options, router, defaultHeight, subjectId, width]);
 
   return (
     <div className="h-full w-full" ref={parentRef}>

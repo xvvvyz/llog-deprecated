@@ -109,6 +109,7 @@ const SubjectInsightsPage = async ({
               </div>
               <div className="rounded-b bg-alpha-reverse-1">
                 <PlotFigure
+                  defaultHeight={250}
                   isPublic={isPublic}
                   options={{
                     columns: config.inputs.map((i) => idLabelMap[i]),
@@ -128,7 +129,6 @@ const SubjectInsightsPage = async ({
                     title: insight.name,
                     type: config.type,
                   }}
-                  quantitativeYHeight={250}
                   subjectId={subjectId}
                 />
               </div>

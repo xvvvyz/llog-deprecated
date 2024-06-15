@@ -122,6 +122,7 @@ const InsightForm = ({
       </div>
       <div className="bg-alpha-reverse-1">
         <PlotFigure
+          defaultHeight={250}
           options={{
             columns: inputs.map(
               (i) => inputOptions.find((o) => o.id === i)?.label as string,
