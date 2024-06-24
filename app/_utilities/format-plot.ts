@@ -6,8 +6,8 @@ import * as P from '@observablehq/plot';
 const formatPlot = ({
   column: rawColumn,
   curveFunction,
-  events,
   defaultHeight,
+  events,
   marginBottom,
   marginLeft,
   marginRight,
@@ -19,6 +19,7 @@ const formatPlot = ({
   showXAxisTicks,
   showYAxisLabel,
   showYAxisTicks,
+  syncDate,
   type,
   width,
 }: {
@@ -37,6 +38,7 @@ const formatPlot = ({
   showXAxisTicks: boolean;
   showYAxisLabel: boolean;
   showYAxisTicks: boolean;
+  syncDate?: Date | null;
   type: ChartType;
   width: number;
 }) => {
@@ -69,7 +71,7 @@ const formatPlot = ({
         P.axisX({
           fill: '#C3C3C2',
           label: showXAxisLabel ? x : null,
-          stroke: 'hsla(0, 0%, 100%, 10%)',
+          stroke: 'hsla(0, 0%, 100%, 25%)',
           ticks: showXAxisTicks ? undefined : [],
         }),
       );
@@ -78,7 +80,7 @@ const formatPlot = ({
         P.axisY({
           fill: '#C3C3C2',
           label: showYAxisLabel ? y : null,
-          stroke: 'hsla(0, 0%, 100%, 10%)',
+          stroke: 'hsla(0, 0%, 100%, 25%)',
           ticks: showYAxisTicks ? undefined : [],
         }),
       );
@@ -87,7 +89,7 @@ const formatPlot = ({
         marks.push(
           P.linearRegressionY(formatted, {
             ci: 0,
-            stroke: 'hsl(5, 85%, 40%)',
+            stroke: 'hsl(5, 85%, 50%)',
             x,
             y,
           }),
@@ -111,7 +113,7 @@ const formatPlot = ({
       marks.push(
         P.crosshairX(formatted, {
           maxRadius: 100,
-          ruleStroke: 'hsla(0, 0%, 100%, 20%)',
+          ruleStroke: 'hsla(0, 0%, 100%, 25%)',
           ruleStrokeOpacity: 1,
           textFill: '#fff',
           textStroke: '#1A1917',
@@ -127,12 +129,21 @@ const formatPlot = ({
           P.pointerX({
             fill: '#fff',
             maxRadius: 100,
-            title: (d) => d.Id,
+            title: (d) => JSON.stringify(d),
             x,
             y,
           }),
         ),
       );
+
+      if (syncDate) {
+        marks.push(
+          P.ruleX([0], {
+            stroke: 'hsla(0, 0%, 100%, 25%)',
+            x: syncDate,
+          }),
+        );
+      }
     }
   }
 

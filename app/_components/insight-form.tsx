@@ -119,26 +119,24 @@ const InsightForm = ({
       </div>
       <div className="bg-alpha-reverse-1">
         <PlotFigure
+          column={inputOptions.find((o) => o.id === input)?.label as string}
+          curveFunction={form.watch('curveFunction')}
           defaultHeight={250}
-          options={{
-            column: inputOptions.find((o) => o.id === input)?.label as string,
-            curveFunction: form.watch('curveFunction'),
-            events,
-            marginBottom: form.watch('marginBottom'),
-            marginLeft: form.watch('marginLeft'),
-            marginRight: form.watch('marginRight'),
-            marginTop: form.watch('marginTop'),
-            showDots: form.watch('showDots'),
-            showLine,
-            showLinearRegression: form.watch('showLinearRegression'),
-            showXAxisLabel: form.watch('showXAxisLabel'),
-            showXAxisTicks: form.watch('showXAxisTicks'),
-            showYAxisLabel: form.watch('showYAxisLabel'),
-            showYAxisTicks: form.watch('showYAxisTicks'),
-            title: form.watch('name'),
-            type: form.watch('type'),
-          }}
+          events={events}
+          marginBottom={form.watch('marginBottom')}
+          marginLeft={form.watch('marginLeft')}
+          marginRight={form.watch('marginRight')}
+          marginTop={form.watch('marginTop')}
+          showDots={form.watch('showDots')}
+          showLine={showLine}
+          showLinearRegression={form.watch('showLinearRegression')}
+          showXAxisLabel={form.watch('showXAxisLabel')}
+          showXAxisTicks={form.watch('showXAxisTicks')}
+          showYAxisLabel={form.watch('showYAxisLabel')}
+          showYAxisTicks={form.watch('showYAxisTicks')}
           subjectId={subjectId}
+          title={form.watch('name')}
+          type={form.watch('type')}
         />
       </div>
       <div className="grid grid-cols-2 gap-4 px-4 py-8 sm:px-8 md:grid-cols-4">

@@ -5,36 +5,57 @@ import formatPlot from '@/_utilities/format-plot';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import { plot } from '@observablehq/plot';
 import { useParentSize } from '@visx/responsive';
+import { throttle } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 
 const PlotFigure = ({
+  column,
+  curveFunction,
   defaultHeight,
+  events,
+  id,
   isPublic,
-  options,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  marginTop,
+  setActiveId,
+  setSyncDate,
+  showDots,
+  showLine,
+  showLinearRegression,
+  showXAxisLabel,
+  showXAxisTicks,
+  showYAxisLabel,
+  showYAxisTicks,
   subjectId,
+  syncDate,
+  type,
 }: {
+  column: string;
+  curveFunction: string;
   defaultHeight?: number;
+  events: ReturnType<typeof formatTabularEvents>;
+  id?: string;
   isPublic?: boolean;
-  options: {
-    column: string;
-    curveFunction: string;
-    events: ReturnType<typeof formatTabularEvents>;
-    marginBottom: string;
-    marginLeft: string;
-    marginRight: string;
-    marginTop: string;
-    showDots: boolean;
-    showLine: boolean;
-    showLinearRegression: boolean;
-    showXAxisLabel: boolean;
-    showXAxisTicks: boolean;
-    showYAxisLabel: boolean;
-    showYAxisTicks: boolean;
-    title: string;
-    type: ChartType;
-  };
+  marginBottom: string;
+  marginLeft: string;
+  marginRight: string;
+  marginTop: string;
+  setActiveId?: Dispatch<SetStateAction<string | null>>;
+  setSyncDate?: Dispatch<SetStateAction<Date | null>>;
+  showDots: boolean;
+  showLine: boolean;
+  showLinearRegression: boolean;
+  showXAxisLabel: boolean;
+  showXAxisTicks: boolean;
+  showYAxisLabel: boolean;
+  showYAxisTicks: boolean;
   subjectId: string;
+  syncDate?: Date | null;
+  title: string;
+  type: ChartType;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -45,39 +66,84 @@ const PlotFigure = ({
 
     const p = plot(
       formatPlot({
-        column: options.column,
-        curveFunction: options.curveFunction,
+        column,
+        curveFunction,
         defaultHeight,
-        events: options.events,
-        marginBottom: options.marginBottom,
-        marginLeft: options.marginLeft,
-        marginRight: options.marginRight,
-        marginTop: options.marginTop,
-        showDots: options.showDots,
-        showLine: options.showLine,
-        showLinearRegression: options.showLinearRegression,
-        showXAxisLabel: options.showXAxisLabel,
-        showXAxisTicks: options.showXAxisTicks,
-        showYAxisLabel: options.showYAxisLabel,
-        showYAxisTicks: options.showYAxisTicks,
-        type: options.type,
+        events,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        marginTop,
+        showDots,
+        showLine,
+        showLinearRegression,
+        showXAxisLabel,
+        showXAxisTicks,
+        showYAxisLabel,
+        showYAxisTicks,
+        syncDate,
+        type,
         width,
       }),
     );
 
-    p.addEventListener('click', () => {
-      const eventId = p.querySelector('title')?.innerHTML ?? '';
-      if (!eventId) return;
+    const onClick = () => {
+      const datum = p.querySelector('title')?.innerHTML ?? '';
+      if (!datum) return;
+      const { Id } = JSON.parse(datum);
+      if (!Id) return;
       const shareOrSubjects = isPublic ? 'share' : 'subjects';
+      const href = `/${shareOrSubjects}/${subjectId}/events/${Id}`;
+      router.push(href, { scroll: false });
+    };
 
-      router.push(`/${shareOrSubjects}/${subjectId}/events/${eventId}`, {
-        scroll: false,
-      });
-    });
+    const onEnd = () => {
+      setActiveId?.(null);
+      setSyncDate?.(null);
+    };
 
+    const onMove = throttle(() => {
+      const datum = p.querySelector('title')?.innerHTML ?? '';
+      if (!datum) return;
+      const { Time } = JSON.parse(datum);
+      setActiveId?.(id ?? null);
+      setSyncDate?.(Time ? new Date(Time) : null);
+    }, 50);
+
+    p.addEventListener('click', onClick);
+    p.addEventListener('mouseleave', onEnd);
+    p.addEventListener('mousemove', onMove);
+    p.addEventListener('touchcancel', onEnd);
+    p.addEventListener('touchend', onEnd);
+    p.addEventListener('touchmove', onMove);
     containerRef.current.append(p);
     return () => p.remove();
-  }, [isPublic, options, router, defaultHeight, subjectId, width]);
+  }, [
+    column,
+    curveFunction,
+    defaultHeight,
+    events,
+    id,
+    isPublic,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    marginTop,
+    router,
+    setActiveId,
+    setSyncDate,
+    showDots,
+    showLine,
+    showLinearRegression,
+    showXAxisLabel,
+    showXAxisTicks,
+    showYAxisLabel,
+    showYAxisTicks,
+    subjectId,
+    syncDate,
+    type,
+    width,
+  ]);
 
   return (
     <div className="h-full w-full" ref={parentRef}>

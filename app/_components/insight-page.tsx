@@ -59,26 +59,24 @@ const InsightPage = async ({
       />
       <div className="rounded-b bg-alpha-reverse-1">
         <PlotFigure
+          column={idLabelMap[config.input]}
+          curveFunction={config.curveFunction}
+          events={events}
           isPublic={isPublic}
-          options={{
-            column: idLabelMap[config.input],
-            curveFunction: config.curveFunction,
-            events,
-            marginBottom: config.marginBottom,
-            marginLeft: config.marginLeft,
-            marginRight: config.marginRight,
-            marginTop: config.marginTop,
-            showDots: config.showDots,
-            showLine: config.showLine,
-            showLinearRegression: config.showLinearRegression,
-            showXAxisLabel: config.showXAxisLabel,
-            showXAxisTicks: config.showXAxisTicks,
-            showYAxisLabel: config.showYAxisLabel,
-            showYAxisTicks: config.showYAxisTicks,
-            title: insight.name,
-            type: config.type,
-          }}
+          marginBottom={config.marginBottom}
+          marginLeft={config.marginLeft}
+          marginRight={config.marginRight}
+          marginTop={config.marginTop}
+          showDots={config.showDots}
+          showLine={config.showLine}
+          showLinearRegression={config.showLinearRegression}
+          showXAxisLabel={config.showXAxisLabel}
+          showXAxisTicks={config.showXAxisTicks}
+          showYAxisLabel={config.showYAxisLabel}
+          showYAxisTicks={config.showYAxisTicks}
           subjectId={subjectId}
+          title={insight.name}
+          type={config.type}
         />
       </div>
     </>
