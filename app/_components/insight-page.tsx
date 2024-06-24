@@ -61,7 +61,7 @@ const InsightPage = async ({
         <PlotFigure
           isPublic={isPublic}
           options={{
-            columns: config.inputs.map((i) => idLabelMap[i]),
+            column: idLabelMap[config.input],
             curveFunction: config.curveFunction,
             events,
             marginBottom: config.marginBottom,

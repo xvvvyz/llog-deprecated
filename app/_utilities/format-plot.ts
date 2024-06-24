@@ -4,7 +4,7 @@ import formatTabularEvents from '@/_utilities/format-tabular-events';
 import * as P from '@observablehq/plot';
 
 const formatPlot = ({
-  columns,
+  column: rawColumn,
   curveFunction,
   events,
   defaultHeight,
@@ -22,7 +22,7 @@ const formatPlot = ({
   type,
   width,
 }: {
-  columns: string[];
+  column: string;
   curveFunction: string;
   defaultHeight?: number;
   events: ReturnType<typeof formatTabularEvents>;
@@ -40,34 +40,30 @@ const formatPlot = ({
   type: ChartType;
   width: number;
 }) => {
-  const column = formatDirtyColumnHeader(columns[0]);
+  const column = formatDirtyColumnHeader(rawColumn);
   const marks = [];
+
+  const formatted: ReturnType<typeof formatTabularEvents> &
+    Array<{ Time: Date }> = [];
+
+  for (const event of events) {
+    const f = { ...event, Time: new Date(event.Time as string) };
+    if (typeof event[column] === 'undefined') continue;
+    if (typeof event[column] !== 'number') defaultHeight = undefined;
+
+    if (Array.isArray(event[column])) {
+      (event[column] as string[]).forEach((value) =>
+        formatted.push({ ...f, [column]: value }),
+      );
+    } else {
+      formatted.push(f);
+    }
+  }
 
   switch (type) {
     case ChartType.TimeSeries: {
       const x = 'Time';
       const y = column;
-
-      const formatted: ReturnType<typeof formatTabularEvents> &
-        Array<{ Time: Date }> = [];
-
-      for (const event of events) {
-        const f = { ...event, Time: new Date(event.Time as string) };
-
-        for (const dirtyColumn of columns) {
-          const column = formatDirtyColumnHeader(dirtyColumn);
-          if (typeof event[column] === 'undefined') continue;
-          if (typeof event[column] !== 'number') defaultHeight = undefined;
-
-          if (Array.isArray(event[column])) {
-            (event[column] as string[]).forEach((value) =>
-              formatted.push({ ...f, [column]: value }),
-            );
-          } else {
-            formatted.push(f);
-          }
-        }
-      }
 
       marks.push(
         P.axisX({
@@ -103,23 +99,19 @@ const formatPlot = ({
       }
 
       if (showDots) {
-        for (const column of columns) {
-          const y = formatDirtyColumnHeader(column);
-
-          marks.push(
-            P.dot(formatted, {
-              fill: 'hsla(0, 0%, 100%, 50%)',
-              x,
-              y,
-            }),
-          );
-        }
+        marks.push(
+          P.dot(formatted, {
+            fill: 'hsla(0, 0%, 100%, 50%)',
+            x,
+            y,
+          }),
+        );
       }
 
       marks.push(
         P.crosshairX(formatted, {
           maxRadius: 100,
-          ruleStroke: 'hsla(0, 0%, 100%, 10%)',
+          ruleStroke: 'hsla(0, 0%, 100%, 20%)',
           ruleStrokeOpacity: 1,
           textFill: '#fff',
           textStroke: '#1A1917',

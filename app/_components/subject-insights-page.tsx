@@ -112,7 +112,7 @@ const SubjectInsightsPage = async ({
                   defaultHeight={250}
                   isPublic={isPublic}
                   options={{
-                    columns: config.inputs.map((i) => idLabelMap[i]),
+                    column: idLabelMap[config.input],
                     curveFunction: config.curveFunction,
                     events,
                     marginBottom: config.marginBottom,

@@ -55,7 +55,7 @@ const InsightForm = ({
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
       curveFunction: config?.curveFunction ?? CurveFunction.Linear,
-      inputs: config?.inputs ?? [],
+      input: config?.input,
       marginBottom: config?.marginBottom ?? '60',
       marginLeft: config?.marginLeft ?? '60',
       marginRight: config?.marginRight ?? '60',
@@ -73,7 +73,7 @@ const InsightForm = ({
   });
 
   const showLine = form.watch('showLine');
-  const inputs = form.watch('inputs');
+  const input = form.watch('input');
   const inputOptions = availableInputs.sort(sortInputs) as IOption[];
 
   return (
@@ -101,20 +101,17 @@ const InsightForm = ({
         <div className="md:col-span-2">
           <Controller
             control={form.control}
-            name="inputs"
+            name="input"
             render={({ field }) => (
               <Select
                 isClearable={false}
-                isMulti
-                label="Inputs"
+                label="Input"
                 name={field.name}
                 onBlur={field.onBlur}
-                onChange={(value) =>
-                  field.onChange((value as IOption[]).map((o) => o.id))
-                }
+                onChange={(value) => field.onChange((value as IOption).id)}
                 options={inputOptions}
                 placeholder="Select a data point…"
-                value={inputOptions.filter((o) => field.value.includes(o.id))}
+                value={inputOptions.find((o) => field.value === o.id)}
               />
             )}
           />
@@ -124,9 +121,7 @@ const InsightForm = ({
         <PlotFigure
           defaultHeight={250}
           options={{
-            columns: inputs.map(
-              (i) => inputOptions.find((o) => o.id === i)?.label as string,
-            ),
+            column: inputOptions.find((o) => o.id === input)?.label as string,
             curveFunction: form.watch('curveFunction'),
             events,
             marginBottom: form.watch('marginBottom'),

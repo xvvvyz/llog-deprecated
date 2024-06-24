@@ -2,7 +2,7 @@ import ChartType from '@/_constants/enum-chart-type';
 
 export type InsightConfigJson = {
   curveFunction: string;
-  inputs: string[];
+  input: string;
   marginBottom: string;
   marginLeft: string;
   marginRight: string;

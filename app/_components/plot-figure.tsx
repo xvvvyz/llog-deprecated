@@ -17,7 +17,7 @@ const PlotFigure = ({
   defaultHeight?: number;
   isPublic?: boolean;
   options: {
-    columns: string[];
+    column: string;
     curveFunction: string;
     events: ReturnType<typeof formatTabularEvents>;
     marginBottom: string;
@@ -45,7 +45,7 @@ const PlotFigure = ({
 
     const p = plot(
       formatPlot({
-        columns: options.columns,
+        column: options.column,
         curveFunction: options.curveFunction,
         defaultHeight,
         events: options.events,
