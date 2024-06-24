@@ -1,7 +1,6 @@
 'use client';
 
 import Spinner from '@/_components/spinner';
-import Tooltip from '@/_components/tooltip';
 import forceArray from '@/_utilities/force-array';
 import ChevronUpDownIcon from '@heroicons/react/24/outline/ChevronUpDownIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -11,6 +10,7 @@ import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 
+import Tip from '@/_components/tip';
 import ReactSelect, {
   ClearIndicatorProps,
   components,
@@ -328,11 +328,7 @@ const Select = <TOption extends IOption>(
           </label>
         )}
         {tooltip && (
-          <Tooltip
-            className="relative -top-1 -mr-[0.15rem]"
-            id={`${name}-tip`}
-            tip={tooltip}
-          />
+          <Tip className="relative -top-1 -mr-[0.15rem]">{tooltip}</Tip>
         )}
       </div>
       <div className="hidden px-4 print:block">

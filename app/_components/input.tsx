@@ -1,4 +1,4 @@
-import Tooltip from '@/_components/tooltip';
+import Tip from '@/_components/tip';
 import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
@@ -35,11 +35,7 @@ const Input = forwardRef(
             </label>
           )}
           {tooltip && (
-            <Tooltip
-              className="relative -top-1 -mr-[0.15rem]"
-              id={`${name}-tip`}
-              tip={tooltip}
-            />
+            <Tip className="relative -top-1 -mr-[0.15rem]">{tooltip}</Tip>
           )}
         </div>
         <input

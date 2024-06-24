@@ -3,7 +3,6 @@
 import Button from '@/_components/button';
 import Menu from '@/_components/menu';
 import Select from '@/_components/select';
-import Tooltip from '@/_components/tooltip';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import { TemplateDataJson } from '@/_types/template-data-json';
@@ -15,6 +14,7 @@ import { useToggle } from '@uidotdev/usehooks';
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
+import Tip from '@/_components/tip';
 import {
   Description,
   Dialog,
@@ -46,12 +46,10 @@ const FormBanner = <T extends FieldValues>({
       )}
     >
       <div className="flex items-center gap-2">
-        <Tooltip
-          id="form-changed-banner-tip"
-          placement="bottom-start"
-          tip="Unsaved changes are stored locally on your device until you save or discard them."
-          tipClassName="max-w-[14rem]"
-        />
+        <Tip align="center" tipClassName="max-w-[18rem]" side="right">
+          Unsaved changes are stored locally on your device until you save or
+          discard them.
+        </Tip>
         <span className="smallcaps text-fg-4">
           {form.formState.isDirty ? 'Unsaved changes' : 'No unsaved changes'}
         </span>

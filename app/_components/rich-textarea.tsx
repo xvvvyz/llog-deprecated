@@ -1,6 +1,5 @@
 'use client';
 
-import Tooltip from '@/_components/tooltip';
 import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
@@ -27,6 +26,7 @@ import {
   useEditor,
 } from '@tiptap/react';
 
+import Tip from '@/_components/tip';
 import {
   ChangeEvent,
   forwardRef,
@@ -160,11 +160,7 @@ const RichTextarea = (
           </label>
         )}
         {tooltip && (
-          <Tooltip
-            className="relative -top-1 -mr-[0.15rem]"
-            id={`${name}-tip`}
-            tip={tooltip}
-          />
+          <Tip className="relative -top-1 -mr-[0.15rem]">{tooltip}</Tip>
         )}
       </div>
       {editor ? (

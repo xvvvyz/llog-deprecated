@@ -1,4 +1,4 @@
-import Tooltip from '@/_components/tooltip';
+import Tip from '@/_components/tip';
 import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
 import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -31,9 +31,7 @@ const Checkbox = forwardRef(
           <CheckIcon className="invisible h-5 w-5" />
         </span>
       </label>
-      {tooltip && (
-        <Tooltip className="-mr-[0.15rem]" id={`${name}-tip`} tip={tooltip} />
-      )}
+      {tooltip && <Tip className="-mr-[0.15rem]">{tooltip}</Tip>}
     </div>
   ),
 );

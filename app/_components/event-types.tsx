@@ -1,6 +1,6 @@
 import Button from '@/_components/button';
 import EventTypeLinkListItemMenu from '@/_components/event-type-link-list-item-menu';
-import Tooltip from '@/_components/tooltip';
+import Tip from '@/_components/tip';
 import listSubjectEventTypes from '@/_queries/list-subject-event-types';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -29,16 +29,10 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             Create event type
           </Button>
           {!eventTypes.length && (
-            <Tooltip
-              id="event-types-tip"
-              tip={
-                <>
-                  Event types define the events that can be recorded at any
-                  time. For example: &ldquo;Barking&rdquo; or &ldquo;Vet
-                  visit&rdquo;
-                </>
-              }
-            />
+            <Tip>
+              Event types define the events that can be recorded at any time.
+              For example: &ldquo;Barking&rdquo; or &ldquo;Vet visit&rdquo;
+            </Tip>
           )}
         </div>
       )}

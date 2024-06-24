@@ -5,7 +5,7 @@ import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Menu from '@/_components/menu';
 import Switch from '@/_components/switch';
-import Tooltip from '@/_components/tooltip';
+import Tip from '@/_components/tip';
 import createShareCode from '@/_mutations/create-share-code';
 import deleteSubject from '@/_mutations/delete-subject';
 import updateSubject from '@/_mutations/update-subject';
@@ -101,17 +101,10 @@ const SubjectMenu = ({
                 </>
               )}
             </Menu.Item>
-            <Tooltip
-              className="absolute right-3 top-2.5"
-              id="clients-tip"
-              placement="left"
-              tip={
-                <>
-                  Clients can complete training plans, record events
-                  and&nbsp;comment.
-                </>
-              }
-            />
+            <Tip className="absolute right-3 top-2.5" side="left">
+              Clients can complete training plans, record events
+              and&nbsp;comment.
+            </Tip>
           </div>
           <Menu.Item onClick={() => toggleShareModal(true)}>
             <ShareIcon className="w-5 text-fg-4" />

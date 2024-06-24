@@ -1,6 +1,6 @@
 import Button from '@/_components/button';
 import MissionLinkListItemMenu from '@/_components/mission-link-list-item-menu';
-import Tooltip from '@/_components/tooltip';
+import Tip from '@/_components/tip';
 import listSubjectMissions from '@/_queries/list-subject-missions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -79,16 +79,11 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
             Create training plan
           </Button>
           {!listItems.length && (
-            <Tooltip
-              id="missions-tip"
-              tip={
-                <>
-                  Training plans are comprised of sessions to be completed over
-                  time. For example: &ldquo;Reduce separation anxiety&rdquo; or
-                  &ldquo;Stop screaming&rdquo;
-                </>
-              }
-            />
+            <Tip>
+              Training plans are comprised of sessions to be completed over
+              time. For example: &ldquo;Reduce separation anxiety&rdquo; or
+              &ldquo;Stop screaming&rdquo;
+            </Tip>
           )}
         </div>
       )}
