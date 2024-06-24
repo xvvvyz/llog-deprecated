@@ -74,7 +74,7 @@ const SubjectInsightsPage = async ({
       {!events?.length || !insights?.length ? (
         <Empty className="mt-4">
           <InformationCircleIcon className="w-7" />
-          No insights
+          No insights.
         </Empty>
       ) : (
         insights.map((insight) => {

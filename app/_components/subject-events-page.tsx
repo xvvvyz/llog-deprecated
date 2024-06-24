@@ -41,7 +41,7 @@ const SubjectEventsPage = async ({
         <div className="mx-4 h-16 border-l-2 border-dashed border-alpha-2" />
         <Empty className="mt-4">
           <InformationCircleIcon className="w-7" />
-          No events
+          No events.
         </Empty>
       </>
     );
