@@ -1,3 +1,5 @@
+'use client';
+
 import Popover from '@/_components/popover';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { PopoverContentProps } from '@radix-ui/react-popover';
