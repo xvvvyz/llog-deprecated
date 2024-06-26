@@ -213,6 +213,7 @@ const Option = <TOption extends IOption>({
     <div
       className={twMerge(
         'flex items-center gap-4 px-4 py-2 leading-snug text-fg-3 transition-colors hover:cursor-pointer',
+        props.isDisabled && 'disabled',
         props.isFocused && 'bg-alpha-1 text-fg-2',
       )}
     >

@@ -21,7 +21,7 @@ begin
 end;
 $$;
 
-create or replace function public.list_input_labels_by_id(ids uuid[])
+create or replace function public.list_inputs_by_id(ids uuid[])
   returns jsonb
   language plpgsql
   security definer
@@ -29,10 +29,11 @@ create or replace function public.list_input_labels_by_id(ids uuid[])
 declare
   result jsonb;
 begin
-  select jsonb_agg( -- Use JSONB functions
+  select jsonb_agg(
     jsonb_build_object(
       'id', i.id,
-      'label', i.label
+      'label', i.label,
+      'type', i.type
     )
   )
   into result

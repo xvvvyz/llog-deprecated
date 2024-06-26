@@ -1,17 +1,16 @@
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import Insights from '@/_components/insights';
-import Numbers from '@/_constants/enum-numbers';
+import Number from '@/_constants/enum-number';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import listEvents from '@/_queries/list-events';
-import listInputLabelsById from '@/_queries/list-input-labels-by-id';
+import listInputsByIds from '@/_queries/list-inputs-by-ids';
 import listInsights from '@/_queries/list-insights';
 import listPublicEvents from '@/_queries/list-public-events';
 import listPublicInsights from '@/_queries/list-public-insights';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import formatInputIdLabelMap from '@/_utilities/format-input-id-label-map';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getInputIdsFromInsightConfigs from '@/_utilities/get-input-ids-from-insight-configs';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
@@ -31,7 +30,7 @@ const SubjectInsightsPage = async ({
 }: SubjectInsightsPageProps) => {
   const f = formatEventFilters({
     from: searchParams.from,
-    limit: String(Numbers.FourByteSignedIntMax - 1),
+    limit: String(Number.FourByteSignedIntMax - 1),
     to: searchParams.to,
   });
 
@@ -46,10 +45,8 @@ const SubjectInsightsPage = async ({
   if (!subject) return null;
 
   const inputIds = getInputIdsFromInsightConfigs(insights);
-  const { data: inputs } = await listInputLabelsById(inputIds);
-
+  const { data: inputs } = await listInputsByIds(inputIds);
   const events = formatTabularEvents(rawEvents);
-  const idLabelMap = formatInputIdLabelMap(inputs);
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const searchObject = new URLSearchParams(searchParams);
@@ -76,7 +73,7 @@ const SubjectInsightsPage = async ({
       ) : (
         <Insights
           events={events}
-          idLabelMap={idLabelMap}
+          inputs={inputs}
           insights={insights}
           isPublic={isPublic}
           isTeamMember={isTeamMember}

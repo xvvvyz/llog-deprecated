@@ -11,10 +11,24 @@ interface CheckboxProps
 
 const Checkbox = forwardRef(
   (
-    { className, label, name, tooltip, value, ...rest }: CheckboxProps,
+    {
+      disabled,
+      className,
+      label,
+      name,
+      tooltip,
+      value,
+      ...rest
+    }: CheckboxProps,
     ref: Ref<HTMLInputElement>,
   ) => (
-    <div className={twMerge('flex items-center gap-4', className)}>
+    <div
+      className={twMerge(
+        'flex items-center gap-4',
+        disabled && 'disabled',
+        className,
+      )}
+    >
       <label className="input group flex select-none items-center justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1">
         <input
           className="peer absolute h-6 w-6 opacity-0"

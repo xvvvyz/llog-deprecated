@@ -1,5 +1,5 @@
-enum Numbers {
+enum Number {
   FourByteSignedIntMax = 2147483647,
 }
 
-export default Numbers;
+export default Number;

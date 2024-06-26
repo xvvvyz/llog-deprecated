@@ -1,7 +1,7 @@
-enum NotificationTypes {
+enum NotificationType {
   Comment = 'comment',
   Event = 'event',
   JoinSubject = 'join_subject',
 }
 
-export default NotificationTypes;
+export default NotificationType;

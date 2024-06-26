@@ -1,16 +1,17 @@
 import PageModalHeader from '@/_components/page-modal-header';
 import PlotFigure from '@/_components/plot-figure';
-import Numbers from '@/_constants/enum-numbers';
+import NOMINAL_INPUT_TYPES from '@/_constants/constant-nominal-input-types';
+import InputType from '@/_constants/enum-input-type';
+import Number from '@/_constants/enum-number';
 import getInsight from '@/_queries/get-insight';
 import getPublicInsight from '@/_queries/get-public-insight';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import listEvents from '@/_queries/list-events';
-import listInputLabelsById from '@/_queries/list-input-labels-by-id';
+import listInputsByIds from '@/_queries/list-inputs-by-ids';
 import listPublicEvents from '@/_queries/list-public-events';
 import { InsightConfigJson } from '@/_types/insight-config-json';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import formatInputIdLabelMap from '@/_utilities/format-input-id-label-map';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getInputIdsFromInsightConfigs from '@/_utilities/get-input-ids-from-insight-configs';
 
@@ -31,7 +32,7 @@ const InsightPage = async ({
 }: InsightPageProps) => {
   const f = formatEventFilters({
     from,
-    limit: String(Numbers.FourByteSignedIntMax - 1),
+    limit: String(Number.FourByteSignedIntMax - 1),
     to,
   });
 
@@ -43,13 +44,13 @@ const InsightPage = async ({
     ]);
 
   if (!subject || !insight) return null;
-
   const inputIds = getInputIdsFromInsightConfigs(insight ? [insight] : []);
-  const { data: inputs } = await listInputLabelsById(inputIds);
-
+  const { data: inputs } = await listInputsByIds(inputIds);
   const config = insight.config as InsightConfigJson;
   const events = formatTabularEvents(rawEvents);
-  const idLabelMap = formatInputIdLabelMap(inputs);
+  const input = inputs?.find((i) => i.id === config.input);
+  if (!input) return null;
+  const inputIsNominal = NOMINAL_INPUT_TYPES.includes(input.type as InputType);
 
   return (
     <>
@@ -59,21 +60,21 @@ const InsightPage = async ({
       />
       <div className="rounded-b bg-alpha-reverse-1">
         <PlotFigure
-          column={idLabelMap[config.input]}
-          curveFunction={config.curveFunction}
+          barInterval={config.barInterval}
+          barReducer={config.barReducer}
           events={events}
+          input={input.label}
+          inputIsNominal={inputIsNominal}
           isPublic={isPublic}
+          lineCurveFunction={config.lineCurveFunction}
           marginBottom={config.marginBottom}
           marginLeft={config.marginLeft}
           marginRight={config.marginRight}
           marginTop={config.marginTop}
+          showBars={config.showBars}
           showDots={config.showDots}
           showLine={config.showLine}
           showLinearRegression={config.showLinearRegression}
-          showXAxisLabel={config.showXAxisLabel}
-          showXAxisTicks={config.showXAxisTicks}
-          showYAxisLabel={config.showYAxisLabel}
-          showYAxisTicks={config.showYAxisTicks}
           subjectId={subjectId}
           title={insight.name}
           type={config.type}

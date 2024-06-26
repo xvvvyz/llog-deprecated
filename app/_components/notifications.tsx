@@ -4,7 +4,7 @@ import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
 import Empty from '@/_components/empty';
 import IconButton from '@/_components/icon-button';
-import NotificationTypes from '@/_constants/enum-notification-types';
+import NotificationType from '@/_constants/enum-notification-type';
 import deleteNotification from '@/_mutations/delete-notification';
 import updateNotification from '@/_mutations/update-notification';
 import { ListNotificationsData } from '@/_queries/list-notifications';
@@ -67,12 +67,12 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                   <span className="text-fg-2">
                     {profile?.first_name} {profile?.last_name}
                   </span>{' '}
-                  {n.type === NotificationTypes.JoinSubject ? (
+                  {n.type === NotificationType.JoinSubject ? (
                     <>joined {n?.subject?.name}</>
                   ) : (
                     <>
-                      {n.type === NotificationTypes.Comment && 'commented on'}
-                      {n.type === NotificationTypes.Event &&
+                      {n.type === NotificationType.Comment && 'commented on'}
+                      {n.type === NotificationType.Event &&
                         (sourceEvent?.type?.session
                           ? 'completed a'
                           : 'recorded')}{' '}
@@ -85,7 +85,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                           {' '}
                           session&nbsp;{sourceEvent.type.session.order + 1}
                           &nbsp;
-                          {n.type === NotificationTypes.Comment ? (
+                          {n.type === NotificationType.Comment ? (
                             <>
                               module&nbsp;{(sourceEvent.type?.order ?? 0) + 1}
                             </>

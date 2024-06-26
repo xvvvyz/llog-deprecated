@@ -10,7 +10,7 @@ const sortInputs = (
   const bSubjectName =
     Array.isArray(b.subjects) && b.subjects.length ? b.subjects[0].name : '';
 
-  return aSubjectName.localeCompare(bSubjectName);
+  return bSubjectName.localeCompare(aSubjectName);
 };
 
 export default sortInputs;

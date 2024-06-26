@@ -1,7 +1,7 @@
 'use server';
 
 import { EventFormValues } from '@/_components/event-form';
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
 import { Database, Json } from '@/_types/database';
 import DurationInputType from '@/_types/duration-input';
@@ -65,15 +65,15 @@ const upsertEvent = async (
       };
 
       switch (eventTypeInput.type) {
-        case InputTypes.Checkbox:
-        case InputTypes.Number:
-        case InputTypes.Stopwatch: {
+        case InputType.Checkbox:
+        case InputType.Number:
+        case InputType.Stopwatch: {
           payload.value = input as Json;
           acc.eventInputs.push(payload);
           return acc;
         }
 
-        case InputTypes.Duration: {
+        case InputType.Duration: {
           const [h, m, s] = input as DurationInputType;
 
           payload.value = String(
@@ -86,7 +86,7 @@ const upsertEvent = async (
           return acc;
         }
 
-        case InputTypes.MultiSelect: {
+        case InputType.MultiSelect: {
           (input as MultiSelectInputType).forEach(({ id }, order) =>
             acc.eventInputs.push({ ...payload, input_option_id: id, order }),
           );
@@ -94,7 +94,7 @@ const upsertEvent = async (
           return acc;
         }
 
-        case InputTypes.Select: {
+        case InputType.Select: {
           payload.input_option_id = (input as SelectInputType)?.id;
           acc.eventInputs.push(payload);
           return acc;

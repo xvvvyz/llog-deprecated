@@ -8,7 +8,7 @@ import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import Select, { IOption } from '@/_components/select';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInput from '@/_mutations/upsert-input';
 import { GetInputData } from '@/_queries/get-input';
@@ -27,12 +27,12 @@ import { Controller, useFieldArray } from 'react-hook-form';
 import { PropsValue } from 'react-select';
 
 const INPUT_TYPE_OPTIONS = [
-  { id: InputTypes.Select, label: INPUT_LABELS[InputTypes.Select] },
-  { id: InputTypes.MultiSelect, label: INPUT_LABELS[InputTypes.MultiSelect] },
-  { id: InputTypes.Number, label: INPUT_LABELS[InputTypes.Number] },
-  { id: InputTypes.Duration, label: INPUT_LABELS[InputTypes.Duration] },
-  { id: InputTypes.Checkbox, label: INPUT_LABELS[InputTypes.Checkbox] },
-  { id: InputTypes.Stopwatch, label: INPUT_LABELS[InputTypes.Stopwatch] },
+  { id: InputType.Select, label: INPUT_LABELS[InputType.Select] },
+  { id: InputType.MultiSelect, label: INPUT_LABELS[InputType.MultiSelect] },
+  { id: InputType.Number, label: INPUT_LABELS[InputType.Number] },
+  { id: InputType.Duration, label: INPUT_LABELS[InputType.Duration] },
+  { id: InputType.Checkbox, label: INPUT_LABELS[InputType.Checkbox] },
+  { id: InputType.Stopwatch, label: INPUT_LABELS[InputType.Stopwatch] },
 ];
 
 interface InputFormProps {
@@ -160,7 +160,7 @@ const InputForm = ({
                 form.setValue('settings', null, { shouldDirty: true });
 
                 switch ((option as InputFormValues['options'][0])?.id) {
-                  case InputTypes.Number: {
+                  case InputType.Number: {
                     form.setValue(
                       'settings',
                       { max: '100', min: '0', step: '1' },
@@ -170,8 +170,8 @@ const InputForm = ({
                     return;
                   }
 
-                  case InputTypes.MultiSelect:
-                  case InputTypes.Select: {
+                  case InputType.MultiSelect:
+                  case InputType.Select: {
                     form.setValue(
                       'settings',
                       { isCreatable: false },
@@ -194,11 +194,11 @@ const InputForm = ({
           )}
         />
       </div>
-      {(type === InputTypes.Select ||
-        type === InputTypes.MultiSelect ||
-        type === InputTypes.Number) && (
+      {(type === InputType.Select ||
+        type === InputType.MultiSelect ||
+        type === InputType.Number) && (
         <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
-          {(type === InputTypes.Select || type === InputTypes.MultiSelect) && (
+          {(type === InputType.Select || type === InputType.MultiSelect) && (
             <>
               <fieldset className="group">
                 <span className="label">Options</span>
@@ -285,7 +285,7 @@ const InputForm = ({
               />
             </>
           )}
-          {type === InputTypes.Number && (
+          {type === InputType.Number && (
             <>
               <fieldset className="flex gap-4">
                 <Input

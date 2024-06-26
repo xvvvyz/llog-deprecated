@@ -1,7 +1,7 @@
 'use server';
 
 import { InputFormValues } from '@/_components/input-form';
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 type State = { error?: string; data?: { id: string; label: string } } | null;
@@ -26,7 +26,7 @@ const upsertInput = async (
 
   if (error) return { error: error.message };
 
-  if (type === InputTypes.Select || type === InputTypes.MultiSelect) {
+  if (type === InputType.Select || type === InputType.MultiSelect) {
     const { insertedOptions, updatedOptionIds, updatedOptions } =
       data.options.reduce<{
         insertedOptions: InputFormValues['options'];

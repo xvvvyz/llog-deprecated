@@ -1,11 +1,10 @@
-enum CurveFunction {
+enum LineCurveFunction {
   Basis = 'basis',
   Bundle = 'bundle',
   Cardinal = 'cardinal',
   CatmullRom = 'catmull-rom',
   Linear = 'linear',
-  Natural = 'natural',
   Step = 'step',
 }
 
-export default CurveFunction;
+export default LineCurveFunction;

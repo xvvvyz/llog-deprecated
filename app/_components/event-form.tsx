@@ -6,7 +6,7 @@ import Checkbox from '@/_components/checkbox';
 import Input from '@/_components/input';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import upsertEvent from '@/_mutations/upsert-event';
 import { GetEventData } from '@/_queries/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
@@ -72,11 +72,11 @@ const EventForm = ({
         );
 
         switch (input?.type) {
-          case InputTypes.Checkbox: {
+          case InputType.Checkbox: {
             return Boolean(inputInputs[0]?.value ?? false);
           }
 
-          case InputTypes.Duration: {
+          case InputType.Duration: {
             if (!inputInputs[0]?.value) return [];
 
             const { hours, minutes, seconds } = parseSeconds(
@@ -90,18 +90,18 @@ const EventForm = ({
             ];
           }
 
-          case InputTypes.Number:
-          case InputTypes.Stopwatch: {
+          case InputType.Number:
+          case InputType.Stopwatch: {
             return inputInputs[0]?.value ?? '';
           }
 
-          case InputTypes.MultiSelect: {
+          case InputType.MultiSelect: {
             return inputInputs.map(({ input_option_id }) =>
               input.options.find(({ id }) => input_option_id === id),
             );
           }
 
-          case InputTypes.Select: {
+          case InputType.Select: {
             return (
               input.options.find(
                 ({ id }) => id === inputInputs[0]?.input_option_id,
@@ -189,13 +189,13 @@ const EventForm = ({
 
           return (
             <div key={id}>
-              {input?.type === InputTypes.Checkbox && (
+              {input?.type === InputType.Checkbox && (
                 <Checkbox
                   label={input.label}
                   {...form.register(`inputs.${i}`)}
                 />
               )}
-              {input?.type === InputTypes.Duration && (
+              {input?.type === InputType.Duration && (
                 <fieldset>
                   <legend className="label">{input.label}</legend>
                   <div className="grid grid-cols-3">
@@ -262,7 +262,7 @@ const EventForm = ({
                   </div>
                 </fieldset>
               )}
-              {input?.type === InputTypes.Number && (
+              {input?.type === InputType.Number && (
                 <Input
                   label={input.label}
                   max={(input.settings as InputSettingsJson)?.max}
@@ -272,8 +272,8 @@ const EventForm = ({
                   {...form.register(`inputs.${i}`)}
                 />
               )}
-              {(input?.type === InputTypes.MultiSelect ||
-                input?.type === InputTypes.Select) && (
+              {(input?.type === InputType.MultiSelect ||
+                input?.type === InputType.Select) && (
                 <Controller
                   control={form.control}
                   name={`inputs.${i}`}
@@ -282,7 +282,7 @@ const EventForm = ({
                   )}
                 />
               )}
-              {input?.type === InputTypes.Stopwatch && (
+              {input?.type === InputType.Stopwatch && (
                 <EventStopwatch<EventFormValues>
                   form={form}
                   input={input}

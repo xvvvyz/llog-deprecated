@@ -1,4 +1,4 @@
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import { ListEventsData } from '@/_queries/list-events';
 import forceArray from '@/_utilities/force-array';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
@@ -38,10 +38,10 @@ const formatTabularEvents = (events: ListEventsData) => {
       if (!input.input) return;
       const column = formatDirtyColumnHeader(input.input?.label);
 
-      if (input.input.type === InputTypes.MultiSelect) {
+      if (input.input.type === InputType.MultiSelect) {
         row[column] = row[column] ?? [];
         (row[column] as string[]).push(strip(input.option?.label));
-      } else if (input.input.type === InputTypes.Select) {
+      } else if (input.input.type === InputType.Select) {
         (row[column] as string) = strip(input.option?.label);
       } else {
         row[column] = Number(input.value);

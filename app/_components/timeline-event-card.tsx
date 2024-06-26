@@ -4,7 +4,7 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import EventCommentForm from '@/_components/event-comment-form';
-import InputTypes from '@/_constants/enum-input-types';
+import InputType from '@/_constants/enum-input-type';
 import { ListEventsData } from '@/_queries/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import forceArray from '@/_utilities/force-array';
@@ -145,7 +145,7 @@ const TimelineEventCard = ({
                             string,
                             {
                               label: string;
-                              type: InputTypes;
+                              type: InputType;
                               values: {
                                 label?: string;
                                 value?: string;
@@ -156,7 +156,7 @@ const TimelineEventCard = ({
                           if (!input) return acc;
                           acc[input.id] = acc[input.id] ?? { values: [] };
                           acc[input.id].label = input.label;
-                          acc[input.id].type = input.type as InputTypes;
+                          acc[input.id].type = input.type as InputType;
 
                           if (value || option?.label) {
                             acc[input.id].values.push({
@@ -171,7 +171,7 @@ const TimelineEventCard = ({
                         <tr key={id}>
                           <td className="truncate px-4 text-fg-4">{label}</td>
                           <td className="truncate pr-4">
-                            {formatInputValue[type as InputTypes](values)}
+                            {formatInputValue[type as InputType](values)}
                           </td>
                         </tr>
                       ))}

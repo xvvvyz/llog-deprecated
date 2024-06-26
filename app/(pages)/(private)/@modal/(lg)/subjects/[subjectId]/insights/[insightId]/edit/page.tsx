@@ -1,6 +1,6 @@
 import InsightForm from '@/_components/insight-form';
 import PageModalHeader from '@/_components/page-modal-header';
-import Numbers from '@/_constants/enum-numbers';
+import Number from '@/_constants/enum-number';
 import getInsight from '@/_queries/get-insight';
 import listEvents from '@/_queries/list-events';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
@@ -21,7 +21,7 @@ export const metadata = {
 const Page = async ({ params: { insightId, subjectId } }: PageProps) => {
   const [{ data: events }, { data: availableInputs }, { data: insight }] =
     await Promise.all([
-      listEvents(subjectId, { from: 0, to: Numbers.FourByteSignedIntMax - 1 }),
+      listEvents(subjectId, { from: 0, to: Number.FourByteSignedIntMax - 1 }),
       listInputsBySubjectId(subjectId),
       getInsight(insightId),
     ]);

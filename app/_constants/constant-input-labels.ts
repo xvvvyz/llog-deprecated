@@ -1,12 +1,12 @@
-import InputTypes from './enum-input-types';
+import InputType from './enum-input-type';
 
 const INPUT_LABELS = {
-  [InputTypes.Checkbox]: 'Checkbox',
-  [InputTypes.Duration]: 'Duration',
-  [InputTypes.MultiSelect]: 'Multi-select',
-  [InputTypes.Number]: 'Number',
-  [InputTypes.Select]: 'Select',
-  [InputTypes.Stopwatch]: 'Stopwatch',
+  [InputType.Checkbox]: 'Checkbox',
+  [InputType.Duration]: 'Duration',
+  [InputType.MultiSelect]: 'Multi-select',
+  [InputType.Number]: 'Number',
+  [InputType.Select]: 'Select',
+  [InputType.Stopwatch]: 'Stopwatch',
 };
 
 export default INPUT_LABELS;

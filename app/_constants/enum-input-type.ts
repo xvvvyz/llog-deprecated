@@ -1,4 +1,4 @@
-enum InputTypes {
+enum InputType {
   Checkbox = 'checkbox',
   Duration = 'duration',
   MultiSelect = 'multi_select',
@@ -7,4 +7,4 @@ enum InputTypes {
   Stopwatch = 'stopwatch',
 }
 
-export default InputTypes;
+export default InputType;
