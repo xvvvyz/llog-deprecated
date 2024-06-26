@@ -28,7 +28,6 @@ const LINE_CURVE_FUNCTION_OPTIONS = [
   { id: LineCurveFunction.Linear, label: 'Linear' },
   { id: LineCurveFunction.Basis, label: 'Basis' },
   { id: LineCurveFunction.Bundle, label: 'Bundle' },
-  { id: LineCurveFunction.Cardinal, label: 'Cardinal' },
   { id: LineCurveFunction.CatmullRom, label: 'Catmull-rom' },
   { id: LineCurveFunction.Step, label: 'Step' },
 ];
