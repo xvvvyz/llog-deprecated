@@ -3,19 +3,15 @@
 import Button from '@/_components/button';
 import InsightCardMenu from '@/_components/insight-card-menu';
 import PlotFigure from '@/_components/plot-figure';
-import NOMINAL_INPUT_TYPES from '@/_constants/constant-nominal-input-types';
-import { ListInputLabelsByIdData } from '@/_queries/list-inputs-by-ids';
+import { ListEventsData } from '@/_queries/list-events';
 import { ListInsightsData } from '@/_queries/list-insights';
 import { InsightConfigJson } from '@/_types/insight-config-json';
-import formatTabularEvents from '@/_utilities/format-tabular-events';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
-import { keyBy } from 'lodash';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface InsightsProps {
-  events: ReturnType<typeof formatTabularEvents>;
-  inputs: ListInputLabelsByIdData;
+  events: NonNullable<ListEventsData>;
   insights: NonNullable<ListInsightsData>;
   isPublic?: boolean;
   isTeamMember: boolean;
@@ -26,7 +22,6 @@ interface InsightsProps {
 
 const Insights = ({
   events,
-  inputs,
   insights,
   isPublic,
   isTeamMember,
@@ -36,12 +31,9 @@ const Insights = ({
 }: InsightsProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [syncDate, setSyncDate] = useState<Date | null>(null);
-  const idInputMap = keyBy(inputs, 'id');
 
   return insights.map((insight) => {
     const config = insight.config as InsightConfigJson;
-    const input = idInputMap[config.input];
-    if (!input) return null;
 
     return (
       <article
@@ -77,8 +69,7 @@ const Insights = ({
             showBars={config.showBars}
             events={events}
             id={insight.id}
-            input={input.label}
-            inputIsNominal={NOMINAL_INPUT_TYPES.includes(input.type)}
+            inputId={config.input}
             isPublic={isPublic}
             lineCurveFunction={config.lineCurveFunction}
             marginBottom={config.marginBottom}

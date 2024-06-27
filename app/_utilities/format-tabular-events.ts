@@ -5,18 +5,27 @@ import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatFullName from '@/_utilities/format-full-name';
 import strip from '@/_utilities/strip';
 
-type Row = Record<string, string | string[] | number>;
+type Row = Record<string, string | string[] | number | Date>;
 
-const formatTabularEvents = (events: ListEventsData) => {
+const formatTabularEvents = (
+  events: ListEventsData,
+  options?: {
+    filterByInputId?: string;
+    flattenInputs?: boolean;
+    parseTime?: boolean;
+  },
+) => {
   if (!events) return [];
   const table: Row[] = [];
 
-  events.reverse().forEach((event) => {
+  for (const event of events.reverse()) {
+    const inputs = forceArray(event.inputs);
+
     const row: Row = {
       Id: event.id,
       Name: strip(event.type?.name ?? event.type?.session?.mission?.name),
       'Recorded by': strip(formatFullName(event?.profile)),
-      Time: event.created_at,
+      Time: options?.parseTime ? new Date(event.created_at) : event.created_at,
     };
 
     if (event?.type?.session) {
@@ -34,22 +43,48 @@ const formatTabularEvents = (events: ListEventsData) => {
       });
     }
 
-    forceArray(event.inputs).forEach((input) => {
-      if (!input.input) return;
+    const flattenColumns: Set<string> = new Set();
+    let hasFilteredInputId = false;
+
+    for (const input of inputs) {
+      if (
+        !input.input ||
+        (options?.filterByInputId && input.input.id !== options.filterByInputId)
+      ) {
+        continue;
+      }
+
       const column = formatDirtyColumnHeader(input.input?.label);
 
       if (input.input.type === InputType.MultiSelect) {
         row[column] = row[column] ?? [];
-        (row[column] as string[]).push(strip(input.option?.label));
+        (row[column] as Array<string>).push(strip(input.option?.label));
+        if (options?.flattenInputs) flattenColumns.add(column);
       } else if (input.input.type === InputType.Select) {
         (row[column] as string) = strip(input.option?.label);
       } else {
         row[column] = Number(input.value);
       }
-    });
 
-    table.push(row);
-  });
+      hasFilteredInputId = !!options?.filterByInputId;
+    }
+
+    if (options?.filterByInputId && !hasFilteredInputId) {
+      continue;
+    }
+
+    if (!options?.flattenInputs || !flattenColumns.size) {
+      table.push(row);
+      continue;
+    }
+
+    for (const column of Array.from(flattenColumns)) {
+      for (const value of row[column] as Array<string>) {
+        row[column] = value;
+        table.push(row);
+      }
+    }
+  }
 
   return table;
 };

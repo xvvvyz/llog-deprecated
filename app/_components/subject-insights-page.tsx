@@ -6,13 +6,10 @@ import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import listEvents from '@/_queries/list-events';
-import listInputsByIds from '@/_queries/list-inputs-by-ids';
 import listInsights from '@/_queries/list-insights';
 import listPublicEvents from '@/_queries/list-public-events';
 import listPublicInsights from '@/_queries/list-public-insights';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import formatTabularEvents from '@/_utilities/format-tabular-events';
-import getInputIdsFromInsightConfigs from '@/_utilities/get-input-ids-from-insight-configs';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives';
@@ -34,7 +31,7 @@ const SubjectInsightsPage = async ({
     to: searchParams.to,
   });
 
-  const [{ data: subject }, { data: rawEvents }, { data: insights }, user] =
+  const [{ data: subject }, { data: events }, { data: insights }, user] =
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic ? listPublicEvents(subjectId, f) : listEvents(subjectId, f),
@@ -43,10 +40,6 @@ const SubjectInsightsPage = async ({
     ]);
 
   if (!subject) return null;
-
-  const inputIds = getInputIdsFromInsightConfigs(insights);
-  const { data: inputs } = await listInputsByIds(inputIds);
-  const events = formatTabularEvents(rawEvents);
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const searchObject = new URLSearchParams(searchParams);
@@ -73,7 +66,6 @@ const SubjectInsightsPage = async ({
       ) : (
         <Insights
           events={events}
-          inputs={inputs}
           insights={insights}
           isPublic={isPublic}
           isTeamMember={isTeamMember}

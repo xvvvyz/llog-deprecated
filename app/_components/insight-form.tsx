@@ -6,20 +6,18 @@ import Checkbox from '@/_components/checkbox';
 import Input from '@/_components/input';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
-import NOMINAL_INPUT_TYPES from '@/_constants/constant-nominal-input-types';
 import BarInterval from '@/_constants/enum-bar-interval';
 import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
-import InputType from '@/_constants/enum-input-type';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInsight from '@/_mutations/upsert-insight';
 import { GetInsightData } from '@/_queries/get-insight';
-import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
+import { ListEventsData } from '@/_queries/list-events';
 import { InsightConfigJson } from '@/_types/insight-config-json';
-import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
-import sortInputs from '@/_utilities/sort-inputs';
+import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
+import getInsightOptionsFromEvents from '@/_utilities/get-insight-options-from-events';
 import { useRouter } from 'next/navigation';
 import { useEffect, useTransition } from 'react';
 import { Controller } from 'react-hook-form';
@@ -50,8 +48,7 @@ const BAR_REDUCER_OPTIONS = [
 ];
 
 interface InsightFormProps {
-  availableInputs: NonNullable<ListInputsBySubjectIdData>;
-  events: ReturnType<typeof formatTabularEvents>;
+  events: NonNullable<ListEventsData>;
   insight?: NonNullable<GetInsightData>;
   subjectId: string;
 }
@@ -60,12 +57,7 @@ type InsightFormValues = InsightConfigJson & {
   name: string;
 };
 
-const InsightForm = ({
-  availableInputs,
-  events,
-  insight,
-  subjectId,
-}: InsightFormProps) => {
+const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const cacheKey = getFormCacheKey.insight({ id: insight?.id, subjectId });
   const config = insight?.config as InsightConfigJson;
@@ -94,14 +86,13 @@ const InsightForm = ({
   const showBars = form.watch('showBars');
   const showLine = form.watch('showLine');
 
-  const inputOptions = availableInputs.sort(sortInputs) as IOption[];
-  const input = availableInputs.find((i) => i.id === inputId);
-  const inputIsNominal = NOMINAL_INPUT_TYPES.includes(input?.type as InputType);
+  const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
+  const { inputOptions } = getInsightOptionsFromEvents(events);
 
   useEffect(() => {
     if (!showBars) return;
 
-    if (inputIsNominal) {
+    if (isInputNominal) {
       form.setValue('barReducer', BarReducer.Count);
       form.setValue('showDots', false);
       form.setValue('showLine', false);
@@ -109,7 +100,7 @@ const InsightForm = ({
     } else {
       form.setValue('barReducer', BarReducer.Mean);
     }
-  }, [form, inputIsNominal, showBars]);
+  }, [form, isInputNominal, showBars]);
 
   return (
     <form
@@ -157,8 +148,7 @@ const InsightForm = ({
           barReducer={form.watch('barReducer')}
           defaultHeight={250}
           events={events}
-          input={input?.label as string}
-          inputIsNominal={inputIsNominal}
+          inputId={inputId}
           lineCurveFunction={form.watch('lineCurveFunction')}
           marginBottom={form.watch('marginBottom')}
           marginLeft={form.watch('marginLeft')}
@@ -246,7 +236,7 @@ const InsightForm = ({
               onBlur={field.onBlur}
               onChange={(value) => field.onChange((value as IOption).id)}
               options={BAR_REDUCER_OPTIONS.map((o) => {
-                o.isDisabled = inputIsNominal
+                o.isDisabled = isInputNominal
                   ? o.id !== BarReducer.Count
                   : o.id === BarReducer.Count;
 
@@ -259,18 +249,18 @@ const InsightForm = ({
       </div>
       <div className="grid grid-cols-2 gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
         <Checkbox
-          disabled={showBars && inputIsNominal}
+          disabled={showBars && isInputNominal}
           label="Dots"
           {...form.register('showDots')}
         />
         <Checkbox
-          disabled={showBars && inputIsNominal}
+          disabled={showBars && isInputNominal}
           label="Line"
           {...form.register('showLine')}
         />
         <Checkbox label="Bars" {...form.register('showBars')} />
         <Checkbox
-          disabled={showBars && inputIsNominal}
+          disabled={showBars && isInputNominal}
           label="Trend line"
           {...form.register('showLinearRegression')}
         />

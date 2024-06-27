@@ -3,8 +3,6 @@ import PageModalHeader from '@/_components/page-modal-header';
 import Number from '@/_constants/enum-number';
 import getInsight from '@/_queries/get-insight';
 import listEvents from '@/_queries/list-events';
-import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
-import formatTabularEvents from '@/_utilities/format-tabular-events';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -19,24 +17,17 @@ export const metadata = {
 };
 
 const Page = async ({ params: { insightId, subjectId } }: PageProps) => {
-  const [{ data: events }, { data: availableInputs }, { data: insight }] =
-    await Promise.all([
-      listEvents(subjectId, { from: 0, to: Number.FourByteSignedIntMax - 1 }),
-      listInputsBySubjectId(subjectId),
-      getInsight(insightId),
-    ]);
+  const [{ data: events }, { data: insight }] = await Promise.all([
+    listEvents(subjectId, { from: 0, to: Number.FourByteSignedIntMax - 1 }),
+    getInsight(insightId),
+  ]);
 
-  if (!availableInputs || !insight) return null;
+  if (!events || !insight) return null;
 
   return (
     <>
       <PageModalHeader title="Create insight" />
-      <InsightForm
-        availableInputs={availableInputs}
-        events={formatTabularEvents(events)}
-        insight={insight}
-        subjectId={subjectId}
-      />
+      <InsightForm events={events} insight={insight} subjectId={subjectId} />
     </>
   );
 };

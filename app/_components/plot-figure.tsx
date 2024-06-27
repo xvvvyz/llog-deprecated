@@ -4,10 +4,11 @@ import BarInterval from '@/_constants/enum-bar-interval';
 import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
+import { ListEventsData } from '@/_queries/list-events';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
+import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
 import * as P from '@observablehq/plot';
-import { plot, RectYOptions } from '@observablehq/plot';
 import { useParentSize } from '@visx/responsive';
 import { throttle } from 'lodash';
 import { useRouter } from 'next/navigation';
@@ -19,8 +20,7 @@ const PlotFigure = ({
   defaultHeight,
   events,
   id,
-  input,
-  inputIsNominal,
+  inputId,
   isPublic,
   lineCurveFunction,
   marginBottom,
@@ -40,10 +40,9 @@ const PlotFigure = ({
   barInterval: BarInterval;
   barReducer: BarReducer;
   defaultHeight?: number;
-  events: ReturnType<typeof formatTabularEvents>;
+  events: NonNullable<ListEventsData>;
   id?: string;
-  input: string;
-  inputIsNominal: boolean;
+  inputId: string;
   isPublic?: boolean;
   lineCurveFunction: LineCurveFunction;
   marginBottom: string;
@@ -68,29 +67,23 @@ const PlotFigure = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const { input, isInputNominal } = getInputDetailsFromEvents({
+      events,
+      inputId,
+    });
+
     const marks = [];
-    const column = formatDirtyColumnHeader(input);
-
-    const formatted: ReturnType<typeof formatTabularEvents> &
-      Array<{ Time: Date }> = [];
-
-    for (const event of events) {
-      const f = { ...event, Time: new Date(event.Time as string) };
-      if (typeof event[column] === 'undefined') continue;
-
-      if (Array.isArray(event[column])) {
-        (event[column] as string[]).forEach((value) => {
-          formatted.push({ ...f, [column]: value });
-        });
-      } else {
-        formatted.push(f);
-      }
-    }
 
     switch (type) {
       case ChartType.TimeSeries: {
+        const rows = formatTabularEvents(events, {
+          filterByInputId: inputId,
+          flattenInputs: true,
+          parseTime: true,
+        });
+
         const x = 'Time';
-        const y = column;
+        const y = formatDirtyColumnHeader(input?.label);
 
         marks.push(
           P.axisX({ fill: '#C3C3C2', stroke: 'hsla(0, 0%, 100%, 10%)' }),
@@ -103,16 +96,16 @@ const PlotFigure = ({
         if (showBars) {
           marks.push(
             P.rectY(
-              formatted,
-              P.binX<RectYOptions>(
+              rows,
+              P.binX<P.RectYOptions>(
                 { y: barReducer },
                 {
-                  fill: inputIsNominal ? y : 'hsl(45, 5%, 20%)',
+                  fill: isInputNominal ? y : 'hsl(45, 5%, 20%)',
                   inset: 1,
                   interval: barInterval as P.LiteralTimeInterval,
-                  tip: inputIsNominal,
+                  tip: isInputNominal,
                   x,
-                  y: inputIsNominal ? undefined : y,
+                  y: isInputNominal ? undefined : y,
                 },
               ),
             ),
@@ -120,18 +113,16 @@ const PlotFigure = ({
         }
 
         if (showLine) {
-          marks.push(P.line(formatted, { curve: lineCurveFunction, x, y }));
+          marks.push(P.line(rows, { curve: lineCurveFunction, x, y }));
         }
 
         if (showDots) {
-          marks.push(
-            P.dot(formatted, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }),
-          );
+          marks.push(P.dot(rows, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
         }
 
         if (showLinearRegression) {
           marks.push(
-            P.linearRegressionY(formatted, {
+            P.linearRegressionY(rows, {
               ci: 0,
               stroke: 'hsla(5, 85%, 50%, 75%)',
               x,
@@ -140,9 +131,9 @@ const PlotFigure = ({
           );
         }
 
-        if (!showBars || !inputIsNominal) {
+        if (!showBars || !isInputNominal) {
           marks.push(
-            P[inputIsNominal ? 'crosshairY' : 'crosshairX'](formatted, {
+            P[isInputNominal ? 'crosshairY' : 'crosshairX'](rows, {
               maxRadius: 100,
               ruleStroke: 'hsla(0, 0%, 100%, 25%)',
               ruleStrokeOpacity: 1,
@@ -156,8 +147,8 @@ const PlotFigure = ({
 
           marks.push(
             P.dot(
-              formatted,
-              P[inputIsNominal ? 'pointerY' : 'pointerX']({
+              rows,
+              P[isInputNominal ? 'pointerY' : 'pointerX']({
                 fill: '#fff',
                 maxRadius: 100,
                 title: (d) => JSON.stringify(d),
@@ -170,17 +161,14 @@ const PlotFigure = ({
 
         if (syncDate) {
           marks.push(
-            P.ruleX([0], {
-              stroke: 'hsla(0, 0%, 100%, 25%)',
-              x: syncDate,
-            }),
+            P.ruleX([0], { stroke: 'hsla(0, 0%, 100%, 25%)', x: syncDate }),
           );
         }
       }
     }
 
-    const p = plot({
-      height: inputIsNominal && !showBars ? undefined : defaultHeight,
+    const plot = P.plot({
+      height: isInputNominal && !showBars ? undefined : defaultHeight,
       inset: 10,
       marginBottom: Number(marginBottom),
       marginLeft: Number(marginLeft),
@@ -192,7 +180,7 @@ const PlotFigure = ({
 
     const onClick = () => {
       try {
-        const datum = p.querySelector('title')?.innerHTML ?? '';
+        const datum = plot.querySelector('title')?.innerHTML ?? '';
         if (!datum) return;
         const { Id } = JSON.parse(datum);
         if (!Id) return;
@@ -211,7 +199,7 @@ const PlotFigure = ({
 
     const onMove = throttle(() => {
       try {
-        const datum = p.querySelector('title')?.innerHTML ?? '';
+        const datum = plot.querySelector('title')?.innerHTML ?? '';
         if (!datum) return;
         const { Time } = JSON.parse(datum);
         setActiveId?.(id ?? null);
@@ -221,22 +209,21 @@ const PlotFigure = ({
       }
     }, 50);
 
-    p.addEventListener('click', onClick);
-    p.addEventListener('mouseleave', onEnd);
-    p.addEventListener('mousemove', onMove);
-    p.addEventListener('touchcancel', onEnd);
-    p.addEventListener('touchend', onEnd);
-    p.addEventListener('touchmove', onMove);
-    containerRef.current.append(p);
-    return () => p.remove();
+    plot.addEventListener('click', onClick);
+    plot.addEventListener('mouseleave', onEnd);
+    plot.addEventListener('mousemove', onMove);
+    plot.addEventListener('touchcancel', onEnd);
+    plot.addEventListener('touchend', onEnd);
+    plot.addEventListener('touchmove', onMove);
+    containerRef.current.append(plot);
+    return () => plot.remove();
   }, [
     barInterval,
     barReducer,
     defaultHeight,
     events,
     id,
-    input,
-    inputIsNominal,
+    inputId,
     isPublic,
     lineCurveFunction,
     marginBottom,
