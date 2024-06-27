@@ -127,7 +127,7 @@ const InputForm = ({
               isMulti
               label="For"
               name={field.name}
-              noOptionsMessage={() => 'No subjects'}
+              noOptionsMessage={() => 'No subjects.'}
               onBlur={field.onBlur}
               onChange={(value) => field.onChange(value)}
               options={subjects as IOption[]}

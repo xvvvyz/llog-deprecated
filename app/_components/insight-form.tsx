@@ -132,6 +132,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                 isClearable={false}
                 label="Input"
                 name={field.name}
+                noOptionsMessage={() => 'No inputs have been recorded.'}
                 onBlur={field.onBlur}
                 onChange={(value) => field.onChange((value as IOption).id)}
                 options={inputOptions}

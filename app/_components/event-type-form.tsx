@@ -115,7 +115,7 @@ const EventTypeForm = ({
                 isMulti
                 label="Inputs"
                 name={field.name}
-                noOptionsMessage={() => 'Type to create a new input'}
+                noOptionsMessage={() => 'Type to create a new input.'}
                 onBlur={field.onBlur}
                 onChange={field.onChange}
                 onCreateOption={(value) =>

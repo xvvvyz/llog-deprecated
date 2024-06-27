@@ -39,7 +39,7 @@ const SubjectInsightsPage = async ({
       getCurrentUser(),
     ]);
 
-  if (!subject) return null;
+  if (!subject || !events) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const searchObject = new URLSearchParams(searchParams);
@@ -58,7 +58,7 @@ const SubjectInsightsPage = async ({
           Create insight
         </Button>
       )}
-      {!events?.length || !insights?.length ? (
+      {!insights?.length ? (
         <Empty className="mt-4">
           <InformationCircleIcon className="w-7" />
           No insights.

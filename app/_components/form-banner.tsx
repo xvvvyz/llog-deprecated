@@ -90,7 +90,7 @@ const FormBanner = <T extends FieldValues>({
                 <Select
                   className="mt-16 text-left"
                   instanceId="template-select"
-                  noOptionsMessage={() => 'No templates'}
+                  noOptionsMessage={() => 'No templates.'}
                   onChange={(t) => {
                     const template = (
                       t as NonNullable<ListTemplatesWithDataData>[0]
