@@ -10,6 +10,7 @@ import BarInterval from '@/_constants/enum-bar-interval';
 import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
+import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInsight from '@/_mutations/upsert-insight';
 import { GetInsightData } from '@/_queries/get-insight';
@@ -19,8 +20,16 @@ import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
 import getInsightOptionsFromEvents from '@/_utilities/get-insight-options-from-events';
 import { useRouter } from 'next/navigation';
-import { useEffect, useTransition } from 'react';
+import { useTransition } from 'react';
 import { Controller } from 'react-hook-form';
+
+const INCLUDE_EVENTS_SINCE_OPTIONS = [
+  { id: TimeSinceMilliseconds.Week, label: '1 week ago' },
+  { id: TimeSinceMilliseconds.Month, label: '1 month ago' },
+  { id: TimeSinceMilliseconds.Quarter, label: '3 months ago' },
+  { id: TimeSinceMilliseconds.Half, label: '6 months ago' },
+  { id: TimeSinceMilliseconds.Year, label: '1 year ago' },
+];
 
 const LINE_CURVE_FUNCTION_OPTIONS = [
   { id: LineCurveFunction.Linear, label: 'Linear' },
@@ -67,6 +76,8 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     defaultValues: {
       barInterval: config?.barInterval ?? BarInterval.Week,
       barReducer: config?.barReducer ?? BarReducer.Mean,
+      includeEventsFrom: config?.includeEventsFrom ?? null,
+      includeEventsSince: config?.includeEventsSince ?? null,
       input: config?.input,
       lineCurveFunction: config?.lineCurveFunction ?? LineCurveFunction.Linear,
       marginBottom: config?.marginBottom ?? '60',
@@ -87,9 +98,23 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
   const showLine = form.watch('showLine');
 
   const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
-  const { inputOptions } = getInsightOptionsFromEvents(events);
 
-  useEffect(() => {
+  const { eventTypeOptions, inputOptions, trainingPlanOptions } =
+    getInsightOptionsFromEvents({ events, inputId });
+
+  const eventTypeOrTrainingPlanOptions = [
+    { label: 'Event types', options: eventTypeOptions },
+    { label: 'Training plans', options: trainingPlanOptions },
+  ];
+
+  const onShowBarsOrInputChange = ({
+    showBars,
+    inputId,
+  }: {
+    showBars: boolean;
+    inputId: string;
+  }) => {
+    const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
     if (!showBars) return;
 
     if (isInputNominal) {
@@ -100,7 +125,13 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     } else {
       form.setValue('barReducer', BarReducer.Mean);
     }
-  }, [form, isInputNominal, showBars]);
+  };
+
+  const onInputChange = (inputId: string) => {
+    form.setValue('includeEventsFrom', null);
+    form.setValue('includeEventsSince', null);
+    onShowBarsOrInputChange({ inputId, showBars });
+  };
 
   return (
     <form
@@ -134,7 +165,11 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                 name={field.name}
                 noOptionsMessage={() => 'No inputs have been recorded.'}
                 onBlur={field.onBlur}
-                onChange={(value) => field.onChange((value as IOption).id)}
+                onChange={(value) => {
+                  const inputId = (value as IOption).id;
+                  field.onChange(inputId);
+                  onInputChange(inputId);
+                }}
                 options={inputOptions}
                 placeholder="Select an input…"
                 value={inputOptions.find((o) => field.value === o.id)}
@@ -143,12 +178,59 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           />
         </div>
       </div>
+      <div className="grid gap-4 border-b border-alpha-1 px-4 py-8 sm:px-8 md:grid-cols-2">
+        <Controller
+          control={form.control}
+          name="includeEventsFrom"
+          render={({ field }) => {
+            let value;
+
+            if (field.value) {
+              for (const group of eventTypeOrTrainingPlanOptions) {
+                value = group.options.find((o) => o.id === field.value);
+                if (value) break;
+              }
+            }
+
+            return (
+              <Select
+                label="Include events from"
+                name={field.name}
+                onBlur={field.onBlur}
+                onChange={(value) => field.onChange((value as IOption)?.id)}
+                options={eventTypeOrTrainingPlanOptions}
+                placeholder="All event types/training plans…"
+                value={value}
+              />
+            );
+          }}
+        />
+        <Controller
+          control={form.control}
+          name="includeEventsSince"
+          render={({ field }) => (
+            <Select
+              label="Include events since"
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={(value) => field.onChange((value as IOption)?.id)}
+              options={INCLUDE_EVENTS_SINCE_OPTIONS}
+              placeholder="The beginning of time…"
+              value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
+                (o) => field.value === o.id,
+              )}
+            />
+          )}
+        />
+      </div>
       <div className="bg-alpha-reverse-1">
         <PlotFigure
           barInterval={form.watch('barInterval')}
           barReducer={form.watch('barReducer')}
           defaultHeight={250}
           events={events}
+          includeEventsFrom={form.watch('includeEventsFrom')}
+          includeEventsSince={form.watch('includeEventsSince')}
           inputId={inputId}
           lineCurveFunction={form.watch('lineCurveFunction')}
           marginBottom={form.watch('marginBottom')}
@@ -201,7 +283,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               label="Line function"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption).id)}
+              onChange={(value) => field.onChange((value as IOption)?.id)}
               options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
               value={LINE_CURVE_FUNCTION_OPTIONS.find(
                 (o) => o.id === field.value,
@@ -219,7 +301,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               label="Bar interval"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption).id)}
+              onChange={(value) => field.onChange((value as IOption)?.id)}
               options={BAR_INTERVAL_OPTIONS as IOption[]}
               value={BAR_INTERVAL_OPTIONS.find((o) => o.id === field.value)}
             />
@@ -235,7 +317,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               label="Bar reducer"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption).id)}
+              onChange={(value) => field.onChange((value as IOption)?.id)}
               options={BAR_REDUCER_OPTIONS.map((o) => {
                 o.isDisabled = isInputNominal
                   ? o.id !== BarReducer.Count
@@ -259,7 +341,13 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           label="Line"
           {...form.register('showLine')}
         />
-        <Checkbox label="Bars" {...form.register('showBars')} />
+        <Checkbox
+          label="Bars"
+          {...form.register('showBars', {
+            onChange: (e) =>
+              onShowBarsOrInputChange({ inputId, showBars: e.target.checked }),
+          })}
+        />
         <Checkbox
           disabled={showBars && isInputNominal}
           label="Trend line"

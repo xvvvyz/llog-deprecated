@@ -1,21 +1,48 @@
 import { IOption } from '@/_components/select';
 import { ListEventsData } from '@/_queries/list-events';
+import firstIfArray from '@/_utilities/first-if-array';
+import { sortBy } from 'lodash';
 
-const getInsightOptionsFromEvents = (events: NonNullable<ListEventsData>) => {
+const getInsightOptionsFromEvents = ({
+  events,
+  inputId,
+}: {
+  events: NonNullable<ListEventsData>;
+  inputId: string;
+}) => {
+  const eventTypeOptions: Array<IOption> = [];
   const inputOptions: Array<IOption> = [];
+  const trainingPlanOptions: Array<IOption> = [];
 
   for (const event of events) {
-    for (const i of event.inputs) {
-      if (!inputOptions.some((o) => o.id === i.input?.id)) {
-        inputOptions.push(i.input as IOption);
+    const et = firstIfArray(event.type);
+    if (!et) continue;
+    let inputIdMatch = false;
+
+    for (const { input } of event.inputs) {
+      if (input?.id && !inputOptions.some((o) => o.id === input?.id)) {
+        inputOptions.push({ id: input.id, label: input.label });
       }
+
+      if (input?.id === inputId) {
+        inputIdMatch = true;
+      }
+    }
+
+    if (!inputIdMatch) continue;
+    const tp = et.session?.mission;
+
+    if (et.name && !eventTypeOptions.some((o) => o.id === et.id)) {
+      eventTypeOptions.push({ id: et.id, label: et.name });
+    } else if (tp?.name && !trainingPlanOptions.some((o) => o.id === tp?.id)) {
+      trainingPlanOptions.push({ id: tp.id, label: tp.name });
     }
   }
 
   return {
-    inputOptions: inputOptions.sort((a, b) =>
-      (a.label as string).localeCompare(b.label as string),
-    ),
+    eventTypeOptions: sortBy(eventTypeOptions, 'label'),
+    inputOptions: sortBy(inputOptions, 'label'),
+    trainingPlanOptions: sortBy(trainingPlanOptions, 'label'),
   };
 };
 

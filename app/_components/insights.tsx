@@ -63,12 +63,13 @@ const Insights = ({
         </div>
         <div className="rounded-b bg-alpha-reverse-1">
           <PlotFigure
-            defaultHeight={250}
             barInterval={config.barInterval}
             barReducer={config.barReducer}
-            showBars={config.showBars}
+            defaultHeight={250}
             events={events}
             id={insight.id}
+            includeEventsFrom={config.includeEventsFrom}
+            includeEventsSince={config.includeEventsSince}
             inputId={config.input}
             isPublic={isPublic}
             lineCurveFunction={config.lineCurveFunction}
@@ -78,6 +79,7 @@ const Insights = ({
             marginTop={config.marginTop}
             setActiveId={setActiveId}
             setSyncDate={setSyncDate}
+            showBars={config.showBars}
             showDots={config.showDots}
             showLine={config.showLine}
             showLinearRegression={config.showLinearRegression}

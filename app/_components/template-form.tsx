@@ -16,9 +16,9 @@ import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { TemplateDataJson } from '@/_types/template-data-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
-import sortInputs from '@/_utilities/sort-inputs';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { Dialog, DialogPanel } from '@headlessui/react';
+import { sortBy } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
@@ -129,7 +129,9 @@ const TemplateForm = ({
                 onCreateOption={(value) =>
                   setCreateInputModal({ label: value })
                 }
-                options={availableInputs.sort(sortInputs) as IOption[]}
+                options={
+                  sortBy(availableInputs, 'subjects[0].name') as IOption[]
+                }
                 placeholder="Select inputs or type to create…"
                 value={field.value as IOption[]}
               />

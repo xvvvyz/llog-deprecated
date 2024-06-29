@@ -1,6 +1,6 @@
 'use client';
 
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import { useEffect } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import { FieldValues, UseFormProps } from 'react-hook-form/dist/types';

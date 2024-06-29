@@ -11,15 +11,13 @@ const getInputDetailsFromEvents = ({
 }) => {
   let input = null;
 
-  for (const event of events) {
+  eventsLoop: for (const event of events) {
     for (const i of event.inputs) {
       if (i.input?.id === inputId) {
         input = i.input;
-        break;
+        break eventsLoop;
       }
     }
-
-    if (input) break;
   }
 
   return {

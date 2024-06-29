@@ -1,4 +1,5 @@
 import InputType from '@/_constants/enum-input-type';
+import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 import { ListEventsData } from '@/_queries/list-events';
 import forceArray from '@/_utilities/force-array';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
@@ -12,6 +13,8 @@ const formatTabularEvents = (
   options?: {
     filterByInputId?: string;
     flattenInputs?: boolean;
+    includeEventsFrom?: string | null;
+    includeEventsSince?: TimeSinceMilliseconds | null;
     parseTime?: boolean;
   },
 ) => {
@@ -19,7 +22,18 @@ const formatTabularEvents = (
   const table: Row[] = [];
 
   for (const event of events.reverse()) {
-    const inputs = forceArray(event.inputs);
+    if (
+      (options?.includeEventsSince &&
+        new Date(event.created_at) <
+          new Date(
+            new Date().getTime() - Number(options.includeEventsSince),
+          )) ||
+      (options?.includeEventsFrom &&
+        event.type?.id !== options.includeEventsFrom &&
+        event.type?.session?.mission?.id !== options.includeEventsFrom)
+    ) {
+      continue;
+    }
 
     const row: Row = {
       Id: event.id,
@@ -44,6 +58,7 @@ const formatTabularEvents = (
     }
 
     const flattenColumns: Set<string> = new Set();
+    const inputs = forceArray(event.inputs);
     let hasFilteredInputId = false;
 
     for (const input of inputs) {

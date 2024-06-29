@@ -1,6 +1,7 @@
 'use client';
 
 import Spinner from '@/_components/spinner';
+import Tip from '@/_components/tip';
 import forceArray from '@/_utilities/force-array';
 import ChevronUpDownIcon from '@heroicons/react/24/outline/ChevronUpDownIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -10,12 +11,12 @@ import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
 import Avatar from './avatar';
 
-import Tip from '@/_components/tip';
 import ReactSelect, {
   ClearIndicatorProps,
   components,
   ControlProps,
   GroupBase,
+  GroupHeadingProps,
   InputProps,
   MenuProps,
   MultiValueGenericProps,
@@ -90,6 +91,10 @@ const Control = <TOption extends IOption>({
 const DropdownIndicator = () => (
   <ChevronUpDownIcon className="mx-1 w-5 text-fg-3 transition-colors group-hover:text-fg-2" />
 );
+
+const GroupHeading = <TOption extends IOption>(
+  props: GroupHeadingProps<TOption>,
+) => <components.GroupHeading className="smallcaps p-4 text-fg-4" {...props} />;
 
 const Input = <TOption extends IOption>({
   children,
@@ -291,6 +296,7 @@ const Select = <TOption extends IOption>(
       ClearIndicator,
       Control,
       DropdownIndicator,
+      GroupHeading,
       Input,
       LoadingIndicator,
       LoadingMessage,
@@ -312,7 +318,7 @@ const Select = <TOption extends IOption>(
     isLoading,
     name,
     noOptionsMessage: () =>
-      isCreatable ? 'Type to create an option' : 'No options',
+      isCreatable ? 'Type to create an option.' : 'No options.',
     options,
     placeholder: placeholder ?? <>&nbsp;</>,
     unstyled: true,

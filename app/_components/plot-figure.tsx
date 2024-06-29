@@ -4,6 +4,7 @@ import BarInterval from '@/_constants/enum-bar-interval';
 import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
+import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 import { ListEventsData } from '@/_queries/list-events';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
@@ -19,6 +20,8 @@ const PlotFigure = ({
   barReducer,
   defaultHeight,
   events,
+  includeEventsFrom,
+  includeEventsSince,
   id,
   inputId,
   isPublic,
@@ -41,6 +44,8 @@ const PlotFigure = ({
   barReducer: BarReducer;
   defaultHeight?: number;
   events: NonNullable<ListEventsData>;
+  includeEventsFrom: string | null;
+  includeEventsSince: TimeSinceMilliseconds | null;
   id?: string;
   inputId: string;
   isPublic?: boolean;
@@ -79,6 +84,8 @@ const PlotFigure = ({
         const rows = formatTabularEvents(events, {
           filterByInputId: inputId,
           flattenInputs: true,
+          includeEventsFrom,
+          includeEventsSince,
           parseTime: true,
         });
 
@@ -222,6 +229,8 @@ const PlotFigure = ({
     barReducer,
     defaultHeight,
     events,
+    includeEventsFrom,
+    includeEventsSince,
     id,
     inputId,
     isPublic,
