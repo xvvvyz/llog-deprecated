@@ -28,7 +28,11 @@ const getEvent = (eventId: string) =>
           )
         ),
         name,
-        order
+        order,
+        session:sessions(
+          id,
+          mission:missions(id)
+        )
       )`,
     )
     .eq('id', eventId)

@@ -45,14 +45,18 @@ const SessionPage = async ({
 
   return (
     <>
-      <PageModalHeader title={mission.name} />
-      {isTeamMember && (
-        <ViewAllSessionsButton
-          isPublic={isPublic}
-          missionId={missionId}
-          subjectId={subjectId}
-        />
-      )}
+      <PageModalHeader
+        link={
+          isTeamMember && (
+            <ViewAllSessionsButton
+              isPublic={isPublic}
+              missionId={missionId}
+              subjectId={subjectId}
+            />
+          )
+        }
+        title={mission.name}
+      />
       <SessionLayout
         isPublic={isPublic}
         isTeamMember={isTeamMember}

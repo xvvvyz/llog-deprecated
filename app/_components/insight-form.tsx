@@ -194,6 +194,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
             return (
               <Select
+                isSearchable={false}
                 label="Include events from"
                 name={field.name}
                 onBlur={field.onBlur}
@@ -210,6 +211,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           name="includeEventsSince"
           render={({ field }) => (
             <Select
+              isSearchable={false}
               label="Include events since"
               name={field.name}
               onBlur={field.onBlur}
@@ -280,6 +282,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             <Select
               isDisabled={!showLine}
               isClearable={false}
+              isSearchable={false}
               label="Line function"
               name={field.name}
               onBlur={field.onBlur}
@@ -298,6 +301,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             <Select
               isDisabled={!showBars}
               isClearable={false}
+              isSearchable={false}
               label="Bar interval"
               name={field.name}
               onBlur={field.onBlur}
@@ -314,6 +318,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             <Select
               isDisabled={!showBars}
               isClearable={false}
+              isSearchable={false}
               label="Bar reducer"
               name={field.name}
               onBlur={field.onBlur}
