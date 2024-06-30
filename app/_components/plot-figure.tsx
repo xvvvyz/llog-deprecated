@@ -6,9 +6,11 @@ import ChartType from '@/_constants/enum-chart-type';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
 import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 import { ListEventsData } from '@/_queries/list-events';
+import formatDateTime from '@/_utilities/format-date-time';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
+import humanizeDurationShort from '@/_utilities/humanize-duration-short';
 import * as P from '@observablehq/plot';
 import { useParentSize } from '@visx/responsive';
 import { throttle } from 'lodash';
@@ -72,7 +74,7 @@ const PlotFigure = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const { input, isInputNominal } = getInputDetailsFromEvents({
+    const { input, isDuration, isInputNominal } = getInputDetailsFromEvents({
       events,
       inputId,
     });
@@ -93,11 +95,20 @@ const PlotFigure = ({
         const y = formatDirtyColumnHeader(input?.label);
 
         marks.push(
-          P.axisX({ fill: '#C3C3C2', stroke: 'hsla(0, 0%, 100%, 10%)' }),
+          P.axisX({
+            fill: '#C3C3C2',
+            stroke: 'hsla(0, 0%, 100%, 10%)',
+          }),
         );
 
         marks.push(
-          P.axisY({ fill: '#C3C3C2', stroke: 'hsla(0, 0%, 100%, 10%)' }),
+          P.axisY({
+            fill: '#C3C3C2',
+            stroke: 'hsla(0, 0%, 100%, 10%)',
+            tickFormat: isDuration
+              ? (t) => `${humanizeDurationShort(t * 1000)}`
+              : undefined,
+          }),
         );
 
         if (showBars) {
@@ -139,27 +150,76 @@ const PlotFigure = ({
         }
 
         if (!showBars || !isInputNominal) {
-          marks.push(
-            P[isInputNominal ? 'crosshairY' : 'crosshairX'](rows, {
-              maxRadius: 100,
-              ruleStroke: 'hsla(0, 0%, 100%, 25%)',
-              ruleStrokeOpacity: 1,
-              textFill: '#fff',
-              textStroke: '#1A1917',
-              textStrokeWidth: 10,
-              x,
-              y,
-            }),
-          );
+          const pointer = P[isInputNominal ? 'pointerY' : 'pointerX'];
 
           marks.push(
             P.dot(
               rows,
-              P[isInputNominal ? 'pointerY' : 'pointerX']({
+              pointer({
                 fill: '#fff',
                 maxRadius: 100,
                 title: (d) => JSON.stringify(d),
                 x,
+                y,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.ruleX(
+              rows,
+              pointer({
+                maxRadius: 100,
+                py: y,
+                stroke: 'hsla(0, 0%, 100%, 25%)',
+                x,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.ruleY(
+              rows,
+              pointer({
+                maxRadius: 100,
+                px: x,
+                stroke: 'hsla(0, 0%, 100%, 25%)',
+                y,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.text(
+              rows,
+              pointer({
+                dy: 16,
+                fill: '#fff',
+                frameAnchor: 'bottom',
+                maxRadius: 100,
+                stroke: '#1A1917',
+                strokeWidth: 10,
+                text: (d) => formatDateTime(d[x], { month: 'long' }),
+                textAnchor: 'middle',
+                x,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.text(
+              rows,
+              pointer({
+                dx: -9,
+                fill: '#fff',
+                frameAnchor: 'left',
+                maxRadius: 100,
+                px: x,
+                stroke: '#1A1917',
+                strokeWidth: 10,
+                text: (d) =>
+                  isDuration ? `${humanizeDurationShort(d[y] * 1000)}` : d[y],
+                textAnchor: 'end',
                 y,
               }),
             ),

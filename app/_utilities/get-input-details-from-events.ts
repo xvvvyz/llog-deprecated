@@ -22,6 +22,7 @@ const getInputDetailsFromEvents = ({
 
   return {
     input,
+    isDuration: input?.type === InputType.Duration,
     isInputNominal: NOMINAL_INPUT_TYPES.includes(input?.type as InputType),
   };
 };

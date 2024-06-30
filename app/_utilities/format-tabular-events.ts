@@ -77,6 +77,8 @@ const formatTabularEvents = (
         if (options?.flattenInputs) flattenColumns.add(column);
       } else if (input.input.type === InputType.Select) {
         (row[column] as string) = strip(input.option?.label);
+      } else if (input.input.type === InputType.Checkbox) {
+        (row[column] as string) = input.value ? 'Yes' : 'No';
       } else {
         row[column] = Number(input.value);
       }

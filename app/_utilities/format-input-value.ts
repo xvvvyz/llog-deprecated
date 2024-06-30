@@ -1,4 +1,4 @@
-import parseSeconds from './parse-seconds';
+import humanizeDuration from 'humanize-duration';
 
 interface Value {
   label?: string;
@@ -7,13 +7,8 @@ interface Value {
 
 const formatInputValue = {
   checkbox: (values: Value[]) => (values[0]?.value == true ? 'Yes' : 'No'),
-  duration: (values: Value[]) => {
-    const value = values[0]?.value;
-    const t = parseSeconds(value as string);
-    let s = '';
-    if (t.hasHours) s += `${t.hours}:`;
-    return `${s}${t.minutes}:${t.seconds}`;
-  },
+  duration: (values: Value[]) =>
+    humanizeDuration(Number(values[0]?.value ?? '0') * 1000, { largest: 2 }),
   multi_select: (values: Value[]) =>
     values
       .map(({ label }) => label)
@@ -21,15 +16,11 @@ const formatInputValue = {
       .replace(/, ([^,]+$)/, ', $1'),
   number: (values: Value[]) => values[0]?.value,
   select: (values: Value[]) => values[0]?.label,
-  stopwatch: (values: Value[]) => {
-    const t = parseSeconds(
-      (values.find(({ label }) => !label)?.value as string) ?? '0',
-    );
-
-    let s = '';
-    if (t.hasHours) s += `${t.hours}:`;
-    return `${s}${t.minutes}:${t.seconds}`;
-  },
+  stopwatch: (values: Value[]) =>
+    humanizeDuration(
+      Number(values.find(({ label }) => !label)?.value ?? '0') * 1000,
+      { largest: 2 },
+    ),
 };
 
 export default formatInputValue;
