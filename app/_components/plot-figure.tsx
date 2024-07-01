@@ -150,12 +150,10 @@ const PlotFigure = ({
         }
 
         if (!showBars || !isInputNominal) {
-          const pointer = P[isInputNominal ? 'pointerY' : 'pointerX'];
-
           marks.push(
             P.dot(
               rows,
-              pointer({
+              P.pointerX({
                 fill: '#fff',
                 maxRadius: 100,
                 title: (d) => JSON.stringify(d),
@@ -168,7 +166,7 @@ const PlotFigure = ({
           marks.push(
             P.ruleX(
               rows,
-              pointer({
+              P.pointerX({
                 maxRadius: 100,
                 py: y,
                 stroke: 'hsla(0, 0%, 100%, 25%)',
@@ -180,7 +178,7 @@ const PlotFigure = ({
           marks.push(
             P.ruleY(
               rows,
-              pointer({
+              P.pointerX({
                 maxRadius: 100,
                 px: x,
                 stroke: 'hsla(0, 0%, 100%, 25%)',
@@ -192,7 +190,7 @@ const PlotFigure = ({
           marks.push(
             P.text(
               rows,
-              pointer({
+              P.pointerX({
                 dy: 16,
                 fill: '#fff',
                 frameAnchor: 'bottom',
@@ -209,7 +207,7 @@ const PlotFigure = ({
           marks.push(
             P.text(
               rows,
-              pointer({
+              P.pointerX({
                 dx: -9,
                 fill: '#fff',
                 frameAnchor: 'left',

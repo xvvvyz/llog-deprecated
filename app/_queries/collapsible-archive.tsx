@@ -1,4 +1,5 @@
 'use client';
+
 import Button from '@/_components/button';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon';
@@ -32,4 +33,5 @@ const CollapsibleArchive = ({ children }: CollapsibleArchiveProps) => {
     </Collapsible.Collapsible>
   );
 };
+
 export default CollapsibleArchive;

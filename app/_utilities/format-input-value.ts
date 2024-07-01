@@ -8,7 +8,10 @@ interface Value {
 const formatInputValue = {
   checkbox: (values: Value[]) => (values[0]?.value == true ? 'Yes' : 'No'),
   duration: (values: Value[]) =>
-    humanizeDuration(Number(values[0]?.value ?? '0') * 1000, { largest: 2 }),
+    humanizeDuration(Number(values[0]?.value ?? '0') * 1000, {
+      largest: 2,
+      round: true,
+    }),
   multi_select: (values: Value[]) =>
     values
       .map(({ label }) => label)
@@ -19,7 +22,7 @@ const formatInputValue = {
   stopwatch: (values: Value[]) =>
     humanizeDuration(
       Number(values.find(({ label }) => !label)?.value ?? '0') * 1000,
-      { largest: 2 },
+      { largest: 2, round: true },
     ),
 };
 

@@ -16,6 +16,7 @@ const humanizeDurationShort = humanizeDuration.humanizer({
     },
   },
   largest: 2,
+  round: true,
   spacer: '',
 });
 
