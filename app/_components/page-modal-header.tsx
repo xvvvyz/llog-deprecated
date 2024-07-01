@@ -22,7 +22,7 @@ const PageModalHeader = ({
       className,
     )}
   >
-    <div>
+    <div className="min-w-0">
       {title && <h1 className="truncate text-xl">{title}</h1>}
       {link}
     </div>
