@@ -47,7 +47,7 @@ const SubjectInsightsPage = async ({
 
   return (
     <div className="mt-16 space-y-4">
-      {isTeamMember && (
+      {isTeamMember && !subject.archived && (
         <Button
           className="w-full"
           colorScheme="transparent"
@@ -67,6 +67,7 @@ const SubjectInsightsPage = async ({
         <Insights
           events={events}
           insights={insights}
+          isArchived={subject.archived}
           isPublic={isPublic}
           isTeamMember={isTeamMember}
           searchString={searchString}

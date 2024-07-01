@@ -66,7 +66,7 @@ const SessionsPage = async ({
         />
         <h1 className="truncate text-2xl">{mission.name}</h1>
       </div>
-      {!isPublic && isTeamMember && (
+      {!isPublic && !subject.archived && isTeamMember && (
         <Button
           className="mb-4 w-full"
           colorScheme="transparent"
@@ -80,7 +80,7 @@ const SessionsPage = async ({
       {!sessionsReversed.length && (
         <Empty>
           <InformationCircleIcon className="w-7" />
-          {isPublic ? (
+          {isPublic || subject.archived ? (
             'No training sessions.'
           ) : (
             <>
@@ -137,11 +137,11 @@ const SessionsPage = async ({
                       </span>
                     </div>
                   </div>
-                  {!isTeamMember && (
+                  {(subject.archived || !isTeamMember) && (
                     <ArrowRightIcon className="mr-2 w-5 shrink-0" />
                   )}
                 </Button>
-                {!isPublic && isTeamMember && (
+                {!isPublic && !subject.archived && isTeamMember && (
                   <SessionLinkListItemMenu
                     highestPublishedOrder={highestPublishedOrder}
                     missionId={missionId}

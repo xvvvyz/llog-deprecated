@@ -70,7 +70,7 @@ const InputForm = ({
         options: input?.options ?? [],
         settings: input?.settings as InputSettingsJson,
         subjects: forceArray(subjects).filter(({ id }) =>
-          input?.subjects_for?.some(({ subject_id }) => subject_id === id),
+          input?.subjects?.some((sf) => sf.id === id),
         ),
         type: INPUT_TYPE_OPTIONS.find(({ id }) => id === input?.type),
       },

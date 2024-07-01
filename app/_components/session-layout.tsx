@@ -10,6 +10,7 @@ import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
   children: ReactNode;
+  isArchived?: boolean;
   isCreate?: boolean;
   isEdit?: boolean;
   isPublic?: boolean;
@@ -23,6 +24,7 @@ interface SessionLayoutProps {
 
 const SessionLayout = async ({
   children,
+  isArchived,
   isCreate,
   isEdit,
   isPublic,
@@ -104,6 +106,7 @@ const SessionLayout = async ({
             <span className="smallcaps text-fg-4">Draft</span>
           ) : (
             !isPublic &&
+            !isArchived &&
             isTeamMember &&
             (isEditOrCreate ? (
               <ForwardSearchParamsButton

@@ -14,6 +14,7 @@ import TimelineEventCard from './timeline-event-card';
 interface TimelineEventsProps {
   events: NonNullable<ListEventsData>;
   filters: EventFilters;
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
@@ -23,6 +24,7 @@ interface TimelineEventsProps {
 const TimelineEvents = ({
   events,
   filters,
+  isArchived,
   isPublic,
   isTeamMember,
   subjectId,
@@ -63,6 +65,7 @@ const TimelineEvents = ({
             {dayGroup.map((eventGroup) => (
               <TimelineEventCard
                 group={eventGroup}
+                isArchived={isArchived}
                 isPublic={isPublic}
                 isTeamMember={isTeamMember}
                 key={eventGroup[0].id}

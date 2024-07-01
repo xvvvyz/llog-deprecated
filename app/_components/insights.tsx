@@ -13,6 +13,7 @@ import { twMerge } from 'tailwind-merge';
 interface InsightsProps {
   events: NonNullable<ListEventsData>;
   insights: NonNullable<ListInsightsData>;
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember: boolean;
   searchString: string;
@@ -23,6 +24,7 @@ interface InsightsProps {
 const Insights = ({
   events,
   insights,
+  isArchived,
   isPublic,
   isTeamMember,
   searchString,
@@ -34,6 +36,7 @@ const Insights = ({
 
   return insights.map((insight) => {
     const config = insight.config as InsightConfigJson;
+    const isReadOnly = !isTeamMember || isArchived;
 
     return (
       <article
@@ -45,18 +48,18 @@ const Insights = ({
             <Button
               className={twMerge(
                 'm-0 flex w-full gap-4 px-4 py-3 leading-snug',
-                isTeamMember && 'pr-0',
+                !isReadOnly && 'pr-0',
               )}
               href={`/${shareOrSubjects}/${subjectId}/insights/${insight.id}${searchString}`}
               scroll={false}
               variant="link"
             >
               {insight.name}
-              {!isTeamMember && (
+              {isReadOnly && (
                 <ArrowUpRightIcon className="ml-auto w-5 shrink-0" />
               )}
             </Button>
-            {isTeamMember && (
+            {!isReadOnly && (
               <InsightCardMenu insightId={insight.id} subjectId={subjectId} />
             )}
           </div>

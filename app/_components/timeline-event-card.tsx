@@ -20,6 +20,7 @@ import EventComments, {
 
 interface TimelineEventCardProps {
   group: NonNullable<ListEventsData>;
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember: boolean;
   subjectId: string;
@@ -28,6 +29,7 @@ interface TimelineEventCardProps {
 
 const TimelineEventCard = ({
   group,
+  isArchived,
   isPublic,
   isTeamMember,
   subjectId,
@@ -183,11 +185,12 @@ const TimelineEventCard = ({
                 <div className="space-y-4 px-4 pb-4 pt-3">
                   <EventComments
                     comments={event.comments as EventCommentsProps['comments']}
+                    isArchived={isArchived}
                     isPublic={isPublic}
                     isTeamMember={isTeamMember}
                     userId={user?.id}
                   />
-                  {!isPublic && (
+                  {!isPublic && !isArchived && (
                     <EventCommentForm
                       eventId={event.id}
                       inputClassName="rounded-sm"

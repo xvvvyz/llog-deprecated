@@ -12,6 +12,7 @@ interface EventCommentsProps {
     id: string;
     profile: Database['public']['Tables']['profiles']['Row'];
   }>;
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
   userId?: string;
@@ -20,6 +21,7 @@ interface EventCommentsProps {
 const EventComments = ({
   className,
   comments,
+  isArchived,
   isPublic,
   isTeamMember,
   userId,
@@ -33,6 +35,7 @@ const EventComments = ({
           content={content}
           createdAt={created_at}
           id={id}
+          isArchived={isArchived}
           isPublic={isPublic}
           isTeamMember={isTeamMember}
           key={id}

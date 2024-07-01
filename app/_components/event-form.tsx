@@ -34,6 +34,7 @@ interface EventFormProps {
     | NonNullable<NonNullable<GetEventData>['type']>
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<GetSessionWithDetailsData>['modules'][0];
+  isArchived?: boolean;
   isMission?: boolean;
   isPublic?: boolean;
   subjectId: string;
@@ -55,6 +56,7 @@ const EventForm = ({
   disabled,
   event,
   eventType,
+  isArchived,
   isMission,
   isPublic,
   subjectId,
@@ -305,7 +307,7 @@ const EventForm = ({
           {form.formState.errors.root.message}
         </div>
       )}
-      {!isPublic && (
+      {!isPublic && !isArchived && (
         <div className="flex gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
           {!event && !isMission && (
             <BackButton className="w-full" colorScheme="transparent">

@@ -8,6 +8,7 @@ const listInputs = async () =>
     .eq('team_id', (await getCurrentUser())?.id ?? '')
     .eq('archived', false)
     .eq('subjects.deleted', false)
+    .not('subjects.archived', 'is', null)
     .order('name', { referencedTable: 'subjects' })
     .order('label');
 

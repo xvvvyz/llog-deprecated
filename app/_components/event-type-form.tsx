@@ -121,7 +121,7 @@ const EventTypeForm = ({
                 onCreateOption={(value) =>
                   setCreateInputModal({
                     label: value,
-                    subjects_for: [{ subject_id: subjectId }],
+                    subjects: [{ id: subjectId }],
                   })
                 }
                 options={availableInputs as IOption[]}

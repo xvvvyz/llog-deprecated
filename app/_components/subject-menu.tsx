@@ -7,11 +7,12 @@ import Menu from '@/_components/menu';
 import Switch from '@/_components/switch';
 import Tip from '@/_components/tip';
 import createShareCode from '@/_mutations/create-share-code';
-import deleteSubject from '@/_mutations/delete-subject';
 import updateSubject from '@/_mutations/update-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import { ListSubjectsData } from '@/_queries/list-subjects';
 import { Dialog, DialogPanel } from '@headlessui/react';
+import ArchiveBoxIcon from '@heroicons/react/24/outline/ArchiveBoxIcon';
+import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
@@ -43,6 +44,7 @@ const SubjectMenu = ({
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
   const [hasCopiedClientLink, toggleHasCopiedClientLink] = useToggle(false);
   const [hasCopiedPublicLink, toggleHasCopiedPublicLink] = useToggle(false);
+  const [isArchiveTransitioning, startIsArchiveTransition] = useTransition();
   const [isDownloadTransitioning, startIsDownloadTransition] = useTransition();
   const [isGenerateTransitioning, startGenerateTransition] = useTransition();
   const [opPublic, toggleOpPublic] = useOptimistic(subject.public, (s) => !s);
@@ -134,6 +136,27 @@ const SubjectMenu = ({
             <ArrowDownTrayIcon className="w-5 text-fg-4" />
             Export events
           </Menu.Item>
+          <Menu.Item
+            loading={isArchiveTransitioning}
+            loadingText={subject.archived ? 'Unarchiving…' : 'Archiving…'}
+            onClick={(e) =>
+              startIsArchiveTransition(async () => {
+                e.preventDefault();
+
+                await updateSubject({
+                  archived: !subject.archived,
+                  id: subject.id,
+                });
+              })
+            }
+          >
+            {subject.archived ? (
+              <ArchiveBoxXMarkIcon className="w-5 text-fg-4" />
+            ) : (
+              <ArchiveBoxIcon className="w-5 text-fg-4" />
+            )}
+            {subject.archived ? 'Unarchive' : 'Archive'}
+          </Menu.Item>
           <Menu.Item onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
             Delete
@@ -145,7 +168,7 @@ const SubjectMenu = ({
         isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={() => deleteSubject(subject.id)}
+        onConfirm={() => updateSubject({ deleted: true, id: subject.id })}
       />
       <Dialog onClose={toggleShareModal} open={shareModal}>
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />

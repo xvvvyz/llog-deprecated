@@ -51,6 +51,7 @@ const SubjectEventsPage = async ({
     <TimelineEvents
       events={events}
       filters={f}
+      isArchived={subject.archived}
       isPublic={isPublic}
       isTeamMember={!!user && subject.team_id === user.id}
       subjectId={subjectId}

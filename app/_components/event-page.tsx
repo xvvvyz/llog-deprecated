@@ -44,6 +44,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
       <EventCard
         event={event}
         eventType={event.type}
+        isArchived={subject.archived}
         isPublic={isPublic}
         isTeamMember={!!user && subject.team_id === user.id}
         subjectId={subjectId}

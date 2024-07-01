@@ -16,6 +16,7 @@ interface EventCommentProps {
   createdAt: string;
   id: string;
   profile: Database['public']['Tables']['profiles']['Row'];
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
   userId?: string;
@@ -26,6 +27,7 @@ const EventComment = ({
   createdAt,
   id,
   profile,
+  isArchived,
   isPublic,
   isTeamMember,
   userId,
@@ -54,19 +56,21 @@ const EventComment = ({
               formatter="date-time"
             />
           </div>
-          {!isPublic && (userId === profile.id || isTeamMember) && (
-            <Menu className="-mr-2 -mt-2.5">
-              <Menu.Button className="rounded-full p-2 hover:bg-alpha-1">
-                <EllipsisVerticalIcon className="w-5" />
-              </Menu.Button>
-              <Menu.Items>
-                <Menu.Item onClick={() => toggleDeleteAlert(true)}>
-                  <TrashIcon className="w-5 text-fg-4" />
-                  Delete comment
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
-          )}
+          {!isPublic &&
+            !isArchived &&
+            (userId === profile.id || isTeamMember) && (
+              <Menu className="-mr-2 -mt-2.5">
+                <Menu.Button className="rounded-full p-2 hover:bg-alpha-1">
+                  <EllipsisVerticalIcon className="w-5" />
+                </Menu.Button>
+                <Menu.Items>
+                  <Menu.Item onClick={() => toggleDeleteAlert(true)}>
+                    <TrashIcon className="w-5 text-fg-4" />
+                    Delete comment
+                  </Menu.Item>
+                </Menu.Items>
+              </Menu>
+            )}
         </div>
         <DirtyHtml className="mt-1">{content}</DirtyHtml>
       </div>

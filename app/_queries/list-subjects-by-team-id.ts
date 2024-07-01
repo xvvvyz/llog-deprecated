@@ -4,9 +4,10 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const listSubjectsByTeamId = async () =>
   createServerSupabaseClient()
     .from('subjects')
-    .select('id, image_uri, name, team_id')
+    .select('archived, id, image_uri, name, team_id')
     .eq('team_id', (await getCurrentUser())?.id ?? '')
     .eq('deleted', false)
+    .not('archived', 'is', null)
     .order('name');
 
 export type ListSubjectsByTeamIdData = Awaited<

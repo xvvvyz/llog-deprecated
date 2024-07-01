@@ -72,10 +72,12 @@ const SubjectLayout = async ({
               {subject.banner}
             </DirtyHtml>
           )}
-          <div className="mt-16 space-y-4">
-            <Missions isTeamMember={isTeamMember} subjectId={subjectId} />
-            <EventTypes isTeamMember={isTeamMember} subjectId={subjectId} />
-          </div>
+          {!subject.archived && (
+            <div className="mt-16 space-y-4">
+              <Missions isTeamMember={isTeamMember} subjectId={subjectId} />
+              <EventTypes isTeamMember={isTeamMember} subjectId={subjectId} />
+            </div>
+          )}
         </>
       )}
       <div className="mt-16 flex h-8 items-center justify-between">

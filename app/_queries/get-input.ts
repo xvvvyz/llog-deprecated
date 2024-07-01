@@ -9,10 +9,11 @@ const getInput = (inputId: string) =>
       label,
       options:input_options(id, label),
       settings,
-      subjects_for:input_subjects(subject_id),
+      subjects(id),
       type`,
     )
     .eq('id', inputId)
+    .eq('subjects.deleted', false)
     .order('order', { referencedTable: 'options' })
     .single();
 

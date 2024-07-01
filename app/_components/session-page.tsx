@@ -58,6 +58,7 @@ const SessionPage = async ({
         title={mission.name}
       />
       <SessionLayout
+        isArchived={subject.archived}
         isPublic={isPublic}
         isTeamMember={isTeamMember}
         missionId={missionId}
@@ -105,6 +106,7 @@ const SessionPage = async ({
                       }
                       event={event}
                       eventType={module}
+                      isArchived={subject.archived}
                       isPublic={isPublic}
                       isTeamMember={isTeamMember}
                       mission={mission}

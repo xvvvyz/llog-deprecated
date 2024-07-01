@@ -20,6 +20,7 @@ interface EventCardProps {
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<GetSessionWithDetailsData>['modules'][0];
   hideContent?: boolean;
+  isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
   mission?: NonNullable<GetMissionWithSessionsData>;
@@ -32,6 +33,7 @@ const EventCard = ({
   event,
   eventType,
   hideContent,
+  isArchived,
   isPublic,
   isTeamMember,
   mission,
@@ -39,7 +41,6 @@ const EventCard = ({
   user,
 }: EventCardProps) => {
   const comments = forceArray(event?.comments);
-  const showComments = event && (!isPublic || !!comments.length);
   const showDescription = !hideContent && !!eventType.content;
   const showModule = mission && typeof eventType.order === 'number';
 
@@ -73,25 +74,27 @@ const EventCard = ({
           )}
         </div>
       )}
-      {(!isPublic || event) && (
+      {(event || (!isPublic && !isArchived)) && (
         <EventForm
           disabled={disabled}
           event={event}
           eventType={eventType}
+          isArchived={isArchived}
           isMission={!!mission}
           isPublic={isPublic}
           subjectId={subjectId}
         />
       )}
-      {showComments && (
+      {event && (!!comments.length || (!isPublic && !isArchived)) && (
         <div className="flex flex-col gap-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
           <EventComments
             comments={comments as EventCommentsProps['comments']}
+            isArchived={isArchived}
             isPublic={isPublic}
             isTeamMember={isTeamMember}
             userId={user?.id}
           />
-          {!isPublic && <EventCommentForm eventId={event.id} />}
+          {!isPublic && !isArchived && <EventCommentForm eventId={event.id} />}
         </div>
       )}
     </>
