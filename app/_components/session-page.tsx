@@ -68,7 +68,7 @@ const SessionPage = async ({
       >
         {session.scheduled_for &&
         new Date(session.scheduled_for) > new Date() ? (
-          <Empty className="mt-7 rounded-none border-0">
+          <Empty className="mt-7 border-0">
             <CalendarIcon className="w-7" />
             <p>
               Scheduled for{' '}
@@ -83,11 +83,9 @@ const SessionPage = async ({
           <>
             <div className="!border-b !border-t-0 border-alpha-1 pb-7">
               {session.title && (
-                <div className="px-4 pt-3">
-                  <p className="mx-auto max-w-sm text-center">
-                    {session.title}
-                  </p>
-                </div>
+                <p className="smallcaps mx-auto max-w-xs px-4 pt-1 text-center">
+                  {session.title}
+                </p>
               )}
             </div>
             <ul className="space-y-4 !border-t-0 bg-alpha-reverse-2 py-4">
@@ -111,6 +109,7 @@ const SessionPage = async ({
                       isTeamMember={isTeamMember}
                       mission={mission}
                       subjectId={subjectId}
+                      totalModules={session.modules.length}
                       user={user}
                     />
                   </li>

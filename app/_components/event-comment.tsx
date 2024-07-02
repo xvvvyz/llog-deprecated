@@ -4,7 +4,7 @@ import Alert from '@/_components/alert';
 import Avatar from '@/_components/avatar';
 import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
-import Menu from '@/_components/menu';
+import DropdownMenu from '@/_components/dropdown-menu';
 import deleteComment from '@/_mutations/delete-comment';
 import { Database } from '@/_types/database';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
@@ -59,17 +59,22 @@ const EventComment = ({
           {!isPublic &&
             !isArchived &&
             (userId === profile.id || isTeamMember) && (
-              <Menu className="-mr-2 -mt-2.5">
-                <Menu.Button className="rounded-full p-2 hover:bg-alpha-1">
-                  <EllipsisVerticalIcon className="w-5" />
-                </Menu.Button>
-                <Menu.Items>
-                  <Menu.Item onClick={() => toggleDeleteAlert(true)}>
+              <DropdownMenu
+                trigger={
+                  <div className="-mr-2 -mt-[0.7rem]">
+                    <div className="rounded-full p-2 text-fg-3 transition-colors hover:bg-alpha-1 hover:text-fg-2">
+                      <EllipsisVerticalIcon className="w-5" />
+                    </div>
+                  </div>
+                }
+              >
+                <DropdownMenu.Content className="-mt-8 mr-1.5">
+                  <DropdownMenu.Button onClick={() => toggleDeleteAlert(true)}>
                     <TrashIcon className="w-5 text-fg-4" />
                     Delete comment
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
+                  </DropdownMenu.Button>
+                </DropdownMenu.Content>
+              </DropdownMenu>
             )}
         </div>
         <DirtyHtml className="mt-1">{content}</DirtyHtml>

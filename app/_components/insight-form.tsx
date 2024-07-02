@@ -83,7 +83,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       marginBottom: config?.marginBottom ?? '60',
       marginLeft: config?.marginLeft ?? '60',
       marginRight: config?.marginRight ?? '40',
-      marginTop: config?.marginTop ?? '40',
+      marginTop: config?.marginTop ?? '25',
       name: insight?.name ?? '',
       showBars: config?.showBars ?? false,
       showDots: config?.showDots ?? true,

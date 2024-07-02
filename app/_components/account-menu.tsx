@@ -1,7 +1,7 @@
 'use client';
 
 import Avatar from '@/_components/avatar';
-import Menu from '@/_components/menu';
+import DropdownMenu from '@/_components/dropdown-menu';
 import signOut from '@/_mutations/sign-out';
 import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
@@ -17,21 +17,24 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
   const [isTransitioning, startTransition] = useTransition();
 
   return (
-    <Menu className="h-full shrink-0">
-      <Menu.Button className="gap-2 rounded-sm border border-alpha-3 pl-2 hover:bg-alpha-1">
-        <Bars3Icon className="w-5" />
-        <Avatar
-          className="-m-px"
-          file={user?.user_metadata?.image_uri}
-          id={user?.id}
-        />
-      </Menu.Button>
-      <Menu.Items className="mt-10">
-        <Menu.Item href="/account/profile" scroll={false}>
+    <DropdownMenu
+      trigger={
+        <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
+          <Bars3Icon className="w-5" />
+          <Avatar
+            className="-m-px"
+            file={user?.user_metadata?.image_uri}
+            id={user?.id}
+          />
+        </div>
+      }
+    >
+      <DropdownMenu.Content className="mt-0.5">
+        <DropdownMenu.Button href="/account/profile" scroll={false}>
           <Cog6ToothIcon className="w-5 text-fg-4" />
           Account settings
-        </Menu.Item>
-        <Menu.Item
+        </DropdownMenu.Button>
+        <DropdownMenu.Button
           loading={isTransitioning}
           loadingText="Signing out…"
           onClick={(e) => {
@@ -41,9 +44,9 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
         >
           <ArrowLeftStartOnRectangleIcon className="w-5 text-fg-4" />
           Sign out
-        </Menu.Item>
-      </Menu.Items>
-    </Menu>
+        </DropdownMenu.Button>
+      </DropdownMenu.Content>
+    </DropdownMenu>
   );
 };
 

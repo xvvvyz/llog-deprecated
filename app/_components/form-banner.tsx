@@ -1,8 +1,8 @@
 'use client';
 
 import Button from '@/_components/button';
-import Menu from '@/_components/menu';
 import Select from '@/_components/select';
+import Tip from '@/_components/tip';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import { TemplateDataJson } from '@/_types/template-data-json';
@@ -14,7 +14,7 @@ import { useToggle } from '@uidotdev/usehooks';
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-import Tip from '@/_components/tip';
+import DropdownMenu from '@/_components/dropdown-menu';
 import {
   Description,
   Dialog,
@@ -54,28 +54,31 @@ const FormBanner = <T extends FieldValues>({
           {form.formState.isDirty ? 'Unsaved changes' : 'No unsaved changes'}
         </span>
       </div>
-      <Menu>
-        <Menu.Button className="group flex h-full items-center justify-center text-fg-3 hover:text-fg-2">
-          <div className="rounded-full p-2 group-hover:bg-alpha-1">
-            <EllipsisHorizontalIcon className="w-5" />
+      <DropdownMenu
+        trigger={
+          <div className="group flex h-full items-center justify-center text-fg-3 hover:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1">
+              <EllipsisHorizontalIcon className="w-5" />
+            </div>
           </div>
-        </Menu.Button>
-        <Menu.Items className="mr-2 mt-2">
+        }
+      >
+        <DropdownMenu.Content className="-mt-10">
           {useTemplateEnabled && (
-            <Menu.Item onClick={() => toggleUseTemplateModal()}>
+            <DropdownMenu.Button onClick={() => toggleUseTemplateModal()}>
               <DocumentTextIcon className="w-5 text-fg-4" />
               Use template
-            </Menu.Item>
+            </DropdownMenu.Button>
           )}
-          <Menu.Item
+          <DropdownMenu.Button
             disabled={!form.formState.isDirty}
             onClick={() => form.reset()}
           >
             <XCircleIcon className="w-5 text-fg-4" />
             Discard changes
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
+          </DropdownMenu.Button>
+        </DropdownMenu.Content>
+      </DropdownMenu>
       {useTemplateEnabled && (
         <Dialog onClose={toggleUseTemplateModal} open={useTemplateModal}>
           <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />

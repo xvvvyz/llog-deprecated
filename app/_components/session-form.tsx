@@ -182,7 +182,10 @@ const SessionForm = ({
           form={form}
         />
         <div className="flex items-center gap-6 px-4 py-8 sm:px-8">
-          <Input placeholder="Session title" {...form.register('title')} />
+          <Input
+            placeholder={`Session ${currentOrder + 1}`}
+            {...form.register('title')}
+          />
           <Button
             className="shrink-0"
             disabled={hasEvents}

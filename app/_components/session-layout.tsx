@@ -88,7 +88,7 @@ const SessionLayout = async ({
 
   return (
     <>
-      <nav className="flex w-full items-center justify-between px-4 pt-7 sm:px-8">
+      <nav className="flex w-full items-center justify-between !border-t-0 px-4 sm:px-8">
         <ForwardSearchParamsIconButton
           disabled={!previousSessionId}
           href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
@@ -97,10 +97,10 @@ const SessionLayout = async ({
           replace
           scroll={false}
         />
-        <div className="flex items-baseline gap-6">
+        <div className="flex items-baseline gap-4">
           <span className="smallcaps text-fg-4">
             Session {sessionOrder + 1}
-            {!isEditOrCreate && <> of {highestOrder + 1}</>}
+            {!isEditOrCreate && <> / {highestOrder + 1}</>}
           </span>
           {currentSession?.draft || order ? (
             <span className="smallcaps text-fg-4">Draft</span>

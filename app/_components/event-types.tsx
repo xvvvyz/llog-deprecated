@@ -1,5 +1,5 @@
 import Button from '@/_components/button';
-import EventTypeLinkListItemMenu from '@/_components/event-type-link-list-item-menu';
+import EventTypeMenu from '@/_components/event-type-menu';
 import Tip from '@/_components/tip';
 import listSubjectEventTypes from '@/_queries/list-subject-event-types';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
@@ -58,7 +58,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
                 )}
               </Button>
               {isTeamMember && (
-                <EventTypeLinkListItemMenu
+                <EventTypeMenu
                   eventTypeId={eventType.id}
                   subjectId={subjectId}
                 />

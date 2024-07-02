@@ -7,7 +7,7 @@ import INPUT_LABELS from '@/_constants/constant-input-labels';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
-import InputListItemMenu from './input-list-item-menu';
+import InputMenu from './input-menu';
 
 import {
   ChangeEvent,
@@ -74,13 +74,13 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
         {filteredInputs.map((input) => (
           <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
             <Button
-              className="m-0 w-full gap-6 px-4 py-3 pr-0 leading-snug"
+              className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
               href={`/inputs/${input.id}`}
               scroll={false}
               variant="link"
             >
-              <div>
-                {input.label}
+              <div className="min-w-0">
+                <div className="truncate">{input.label}</div>
                 <div className="smallcaps pb-0.5 pt-1 text-fg-4">
                   {INPUT_LABELS[input.type]}
                 </div>
@@ -93,7 +93,7 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
                 </div>
               )}
             </Button>
-            <InputListItemMenu inputId={input.id} />
+            <InputMenu inputId={input.id} />
           </li>
         ))}
       </ul>

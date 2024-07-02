@@ -104,6 +104,7 @@ const PlotFigure = ({
         marks.push(
           P.axisY({
             fill: '#C3C3C2',
+            label: null,
             stroke: 'hsla(0, 0%, 100%, 10%)',
             tickFormat: isDuration
               ? (t) => `${humanizeDurationShort(t * 1000)}`

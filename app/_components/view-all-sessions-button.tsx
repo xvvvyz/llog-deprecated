@@ -22,6 +22,7 @@ const ViewAllSessionsButton = ({
   return (
     <Button
       href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`}
+      scroll={false}
       variant="link"
     >
       View all sessions

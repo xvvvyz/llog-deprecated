@@ -1,19 +1,18 @@
-import BackIconButton from '@/_components/back-icon-button';
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
-import SessionLinkListItemMenu from '@/_components/session-link-list-item-menu';
+import PageModalHeader from '@/_components/page-modal-header';
+import SessionMenu from '@/_components/session-menu';
 import getCurrentUser from '@/_queries/get-current-user';
 import getMissionWithSessionsAndEvents from '@/_queries/get-mission-with-sessions-and-events';
 import getPublicMissionWithSessionsAndEvents from '@/_queries/get-public-mission-with-sessions-and-events';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
 import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
-import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
-import { twMerge } from 'tailwind-merge';
 
 interface SessionsPageProps {
   isPublic?: boolean;
@@ -58,27 +57,23 @@ const SessionsPage = async ({
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
-    <div className="px-4">
-      <div className="my-16 flex h-8 items-center gap-6">
-        <BackIconButton
-          icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
-          label="Back"
-        />
-        <h1 className="truncate text-2xl">{mission.name}</h1>
-      </div>
+    <>
+      <PageModalHeader title={mission.name} />
       {!isPublic && !subject.archived && isTeamMember && (
-        <Button
-          className="mb-4 w-full"
-          colorScheme="transparent"
-          href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
-          scroll={false}
-        >
-          <PlusIcon className="w-5" />
-          Create session
-        </Button>
+        <div className="!border-t-0 px-4 pb-8 sm:px-8">
+          <Button
+            colorScheme="transparent"
+            className="w-full"
+            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            scroll={false}
+          >
+            <PlusIcon className="w-5" />
+            Add session
+          </Button>
+        </div>
       )}
       {!sessionsReversed.length && (
-        <Empty>
+        <Empty className="border-0">
           <InformationCircleIcon className="w-7" />
           {isPublic || subject.archived ? (
             'No training sessions.'
@@ -92,7 +87,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="m-0 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 py-1">
+        <ul className="m-0 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,
@@ -100,49 +95,46 @@ const SessionsPage = async ({
 
             return (
               <li
-                className="flex items-stretch hover:bg-alpha-1"
+                className="flex items-stretch gap-2 hover:bg-alpha-1"
                 key={session.id}
               >
                 <Button
-                  className="m-0 w-full justify-between gap-6 p-4 leading-snug"
+                  className="smallcaps m-0 w-full min-w-0 gap-6 py-4 pl-4 pr-0 sm:pl-8"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?fromSessions=1`}
                   scroll={false}
                   variant="link"
                 >
-                  <div>
-                    {session.title && (
-                      <div className="mb-2">{session.title}</div>
-                    )}
-                    <div
-                      className={twMerge(
-                        'smallcaps flex gap-4 pb-0.5',
-                        !session.title && 'py-[0.187rem]',
-                      )}
-                    >
-                      Session {session.order + 1}
-                      <span className="text-fg-4">
-                        {session.draft ? (
-                          'Draft'
-                        ) : new Date(session.scheduled_for ?? '') >
-                          new Date() ? (
-                          <DateTime
-                            date={session.scheduled_for ?? ''}
-                            formatter="date"
-                          />
-                        ) : completedModules.length ? (
-                          `${completedModules.length} of ${session.modules.length} completed`
+                  <div className="flex w-full min-w-0 justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="truncate">
+                        {session.title ? (
+                          session.title
                         ) : (
-                          'Not started'
+                          <>Session {session.order + 1}</>
                         )}
-                      </span>
+                      </div>
+                    </div>
+                    <div className="shrink-0 text-fg-4">
+                      {session.draft ? (
+                        'Draft'
+                      ) : new Date(session.scheduled_for ?? '') > new Date() ? (
+                        <DateTime
+                          date={session.scheduled_for ?? ''}
+                          formatter="date"
+                        />
+                      ) : completedModules.length ? (
+                        `${completedModules.length} / ${session.modules.length}`
+                      ) : (
+                        'Not started'
+                      )}
                     </div>
                   </div>
                   {(subject.archived || !isTeamMember) && (
-                    <ArrowRightIcon className="mr-2 w-5 shrink-0" />
+                    <ArrowRightIcon className="-my-1 mr-6 w-5 shrink-0 sm:mr-10" />
                   )}
                 </Button>
                 {!isPublic && !subject.archived && isTeamMember && (
-                  <SessionLinkListItemMenu
+                  <SessionMenu
                     highestPublishedOrder={highestPublishedOrder}
                     missionId={missionId}
                     nextSessionOrder={nextSessionOrder}
@@ -155,7 +147,10 @@ const SessionsPage = async ({
           })}
         </ul>
       )}
-    </div>
+      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+        Close
+      </BackButton>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import Button from '@/_components/button';
-import MissionLinkListItemMenu from '@/_components/mission-link-list-item-menu';
+import MissionMenu from '@/_components/mission-menu';
 import Tip from '@/_components/tip';
 import listSubjectMissions from '@/_queries/list-subject-missions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
@@ -36,7 +36,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
               ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions`
               : `/subjects/${subjectId}/training-plans/${mission.id}/sessions/${activeSessionId}`
           }
-          scroll={isTeamMember}
+          scroll={false}
           variant="link"
         >
           {mission.name}
@@ -52,10 +52,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
           )}
         </Button>
         {isTeamMember && (
-          <MissionLinkListItemMenu
-            missionId={mission.id}
-            subjectId={subjectId}
-          />
+          <MissionMenu missionId={mission.id} subjectId={subjectId} />
         )}
       </li>,
     );

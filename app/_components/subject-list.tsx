@@ -69,13 +69,11 @@ const SubjectList = async ({ archived = false }: SubjectListProps) => {
                 />
                 {subject.name}
               </Button>
-              <SubjectMenu
-                className="group flex h-full items-center justify-center px-2 text-fg-3 hover:text-fg-2"
-                itemsClassName="mr-2 mt-2"
-                subject={subject}
-              >
-                <div className="rounded-full p-2 group-hover:bg-alpha-1">
-                  <EllipsisVerticalIcon className="w-5" />
+              <SubjectMenu contentClassName="-mt-12 mr-1.5" subject={subject}>
+                <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
+                  <div className="rounded-full p-2 group-hover:bg-alpha-1">
+                    <EllipsisVerticalIcon className="w-5" />
+                  </div>
                 </div>
               </SubjectMenu>
             </li>

@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/_components/button';
-import InsightCardMenu from '@/_components/insight-card-menu';
+import InsightMenu from '@/_components/insight-menu';
 import PlotFigure from '@/_components/plot-figure';
 import { ListEventsData } from '@/_queries/list-events';
 import { ListInsightsData } from '@/_queries/list-insights';
@@ -60,7 +60,7 @@ const Insights = ({
               )}
             </Button>
             {!isReadOnly && (
-              <InsightCardMenu insightId={insight.id} subjectId={subjectId} />
+              <InsightMenu insightId={insight.id} subjectId={subjectId} />
             )}
           </div>
         </div>

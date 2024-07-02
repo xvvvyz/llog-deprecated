@@ -2,15 +2,15 @@
 
 import Alert from '@/_components/alert';
 import Button from '@/_components/button';
+import DropdownMenu from '@/_components/dropdown-menu';
 import IconButton from '@/_components/icon-button';
-import Menu from '@/_components/menu';
 import Switch from '@/_components/switch';
 import Tip from '@/_components/tip';
 import createShareCode from '@/_mutations/create-share-code';
 import updateSubject from '@/_mutations/update-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import { ListSubjectsData } from '@/_queries/list-subjects';
-import { Dialog, DialogPanel } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import ArchiveBoxIcon from '@heroicons/react/24/outline/ArchiveBoxIcon';
 import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
@@ -26,17 +26,15 @@ import { ReactNode, useOptimistic, useRef, useTransition } from 'react';
 
 interface SubjectMenuProps {
   children: ReactNode;
-  className?: string;
   isPublic?: boolean;
-  itemsClassName?: string;
+  contentClassName?: string;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
 const SubjectMenu = ({
   children,
-  className,
   isPublic,
-  itemsClassName,
+  contentClassName,
   subject,
 }: SubjectMenuProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
@@ -55,16 +53,18 @@ const SubjectMenu = ({
 
   return (
     <>
-      <Menu className="shrink-0">
-        <Menu.Button className={className}>{children}</Menu.Button>
-        <Menu.Items className={itemsClassName}>
-          <Menu.Item href={`/subjects/${subject.id}/edit`} scroll={false}>
+      <DropdownMenu trigger={children}>
+        <DropdownMenu.Content className={contentClassName}>
+          <DropdownMenu.Button
+            href={`/subjects/${subject.id}/edit`}
+            scroll={false}
+          >
             <PencilIcon className="w-5 text-fg-4" />
             Edit profile
-          </Menu.Item>
+          </DropdownMenu.Button>
+          <DropdownMenu.Separator />
           <div className="relative">
-            <Menu.Item
-              className="whitespace-nowrap"
+            <DropdownMenu.Button
               loading={isGenerateTransitioning}
               loadingText="Generating link…"
               onClick={(e) =>
@@ -102,17 +102,17 @@ const SubjectMenu = ({
                   Copy client link
                 </>
               )}
-            </Menu.Item>
+            </DropdownMenu.Button>
             <Tip className="absolute right-3 top-2.5" side="left">
               Clients can complete training plans, record events
               and&nbsp;comment.
             </Tip>
           </div>
-          <Menu.Item onClick={() => toggleShareModal(true)}>
+          <DropdownMenu.Button onClick={() => toggleShareModal(true)}>
             <ShareIcon className="w-5 text-fg-4" />
             Share profile
-          </Menu.Item>
-          <Menu.Item
+          </DropdownMenu.Button>
+          <DropdownMenu.Button
             loading={isDownloadTransitioning}
             loadingText="Exporting…"
             onClick={(e) =>
@@ -135,8 +135,9 @@ const SubjectMenu = ({
           >
             <ArrowDownTrayIcon className="w-5 text-fg-4" />
             Export events
-          </Menu.Item>
-          <Menu.Item
+          </DropdownMenu.Button>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Button
             loading={isArchiveTransitioning}
             loadingText={subject.archived ? 'Unarchiving…' : 'Archiving…'}
             onClick={(e) =>
@@ -156,13 +157,13 @@ const SubjectMenu = ({
               <ArchiveBoxIcon className="w-5 text-fg-4" />
             )}
             {subject.archived ? 'Unarchive' : 'Archive'}
-          </Menu.Item>
-          <Menu.Item onClick={() => toggleDeleteAlert(true)}>
+          </DropdownMenu.Button>
+          <DropdownMenu.Button onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />
             Delete
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
+          </DropdownMenu.Button>
+        </DropdownMenu.Content>
+      </DropdownMenu>
       <Alert
         confirmText="Delete subject"
         isConfirmingText="Deleting…"
@@ -176,7 +177,7 @@ const SubjectMenu = ({
           <div className="flex min-h-full items-center justify-center">
             <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 shadow-lg">
               <div className="flex items-center justify-between">
-                <Dialog.Title className="text-2xl">Share</Dialog.Title>
+                <DialogTitle className="text-2xl">Share</DialogTitle>
                 <IconButton
                   icon={<XMarkIcon className="relative -right-[0.16em] w-7" />}
                   onClick={() => toggleShareModal(false)}

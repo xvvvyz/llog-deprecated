@@ -25,6 +25,7 @@ interface EventCardProps {
   isTeamMember?: boolean;
   mission?: NonNullable<GetMissionWithSessionsData>;
   subjectId: string;
+  totalModules?: number;
   user?: User | null;
 }
 
@@ -38,6 +39,7 @@ const EventCard = ({
   isTeamMember,
   mission,
   subjectId,
+  totalModules,
   user,
 }: EventCardProps) => {
   const comments = forceArray(event?.comments);
@@ -50,7 +52,11 @@ const EventCard = ({
         <div className="flex flex-col gap-6 py-7">
           {(showModule || event) && (
             <div className="smallcaps flex justify-between gap-4 whitespace-nowrap px-4 align-baseline text-fg-4 sm:px-8">
-              {showModule && <>Module {(eventType.order as number) + 1}</>}
+              {showModule && (
+                <>
+                  Module {(eventType.order as number) + 1} / {totalModules}
+                </>
+              )}
               {event && (
                 <div className="flex min-w-0 flex-row items-center gap-4">
                   <span>{mission ? 'Completed' : 'Recorded'} by</span>

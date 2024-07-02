@@ -1,6 +1,6 @@
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
-import TemplateLinkListItemMenu from '@/_components/template-link-list-item-menu';
+import TemplateMenu from '@/_components/template-menu';
 import listTemplates from '@/_queries/list-templates';
 import InformationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
 
@@ -32,7 +32,7 @@ const Page = async () => {
           >
             {template.name}
           </Button>
-          <TemplateLinkListItemMenu templateId={template.id} />
+          <TemplateMenu templateId={template.id} />
         </li>
       ))}
     </ul>

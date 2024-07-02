@@ -49,17 +49,18 @@ const SubjectLayout = async ({
         </div>
         {isTeamMember ? (
           <SubjectMenu
-            className="gap-2 rounded-sm border border-alpha-3 pl-2 hover:bg-alpha-1"
+            contentClassName="mt-0.5"
             isPublic={isPublic}
-            itemsClassName="mt-10"
             subject={subject}
           >
-            <Bars3Icon className="w-5" />
-            <Avatar
-              className="-m-px"
-              file={subject.image_uri}
-              id={subject.id}
-            />
+            <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
+              <Bars3Icon className="w-5" />
+              <Avatar
+                className="-m-px"
+                file={subject.image_uri}
+                id={subject.id}
+              />
+            </div>
           </SubjectMenu>
         ) : (
           <Avatar file={subject.image_uri} id={subject.id} />
