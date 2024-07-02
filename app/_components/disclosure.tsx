@@ -31,7 +31,7 @@ const Disclosure = ({ children, className, disabled }: DisclosureProps) => {
     >
       <DirtyHtml>{children}</DirtyHtml>
       {!disclosure && (
-        <ChevronDownIcon className="absolute bottom-4 left-1/2 z-10 w-7 -translate-x-1/2 text-fg-3 transition-colors group-hover:text-fg-2" />
+        <ChevronDownIcon className="absolute bottom-4 left-1/2 z-10 w-7 -translate-x-1/2 text-fg-3 transition-colors group-hover:text-fg-2 group-active:text-fg-2" />
       )}
     </div>
   );

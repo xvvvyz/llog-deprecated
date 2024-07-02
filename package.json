@@ -71,7 +71,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "canary",
     "react-dropzone": "^14.2.3",
-    "react-hook-form": "^7.52.0",
+    "react-hook-form": "^7.52.1",
     "react-select": "^5.8.0",
     "supabase": "^1.178.2",
     "tailwind-merge": "^2.3.0",

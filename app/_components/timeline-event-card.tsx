@@ -46,7 +46,7 @@ const TimelineEventCard = ({
   return (
     <article className="rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
-        className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1"
+        className="m-0 mb-1 w-full gap-6 p-0 px-4 py-3 leading-snug hover:bg-alpha-1 active:bg-alpha-1"
         href={
           lastEventType?.session
             ? `/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType.session?.mission?.id}/sessions/${lastEventType.session.id}`

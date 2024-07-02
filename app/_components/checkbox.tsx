@@ -29,7 +29,7 @@ const Checkbox = forwardRef(
         className,
       )}
     >
-      <label className="input group flex select-none items-center justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1">
+      <label className="input group flex select-none items-center justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1 active:bg-alpha-1">
         <input
           className="peer absolute h-6 w-6 opacity-0"
           defaultChecked={Boolean(value)}

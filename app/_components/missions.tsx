@@ -25,7 +25,10 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
     const activeSessionId = activeSession?.id || '';
 
     acc.push(
-      <li className="flex items-stretch hover:bg-alpha-1" key={mission.id}>
+      <li
+        className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
+        key={mission.id}
+      >
         <Button
           className={twMerge(
             'm-0 w-full items-baseline gap-4 px-4 py-3 leading-snug',

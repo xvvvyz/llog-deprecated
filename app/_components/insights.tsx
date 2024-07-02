@@ -44,7 +44,7 @@ const Insights = ({
         key={insight.id}
       >
         <div className="border-b border-alpha-1 pb-1">
-          <div className="flex items-stretch hover:bg-alpha-1">
+          <div className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1">
             <Button
               className={twMerge(
                 'm-0 flex w-full gap-4 px-4 py-3 leading-snug',

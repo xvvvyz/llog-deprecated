@@ -53,7 +53,7 @@ const SubjectLayout = async ({
             isPublic={isPublic}
             subject={subject}
           >
-            <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
+            <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
               <Bars3Icon className="w-5" />
               <Avatar
                 className="-m-px"

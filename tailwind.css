@@ -80,7 +80,7 @@
   }
 
   .label {
-    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-3 transition-colors group-focus-within:text-fg-2 group-hover:text-fg-2 print:pt-8 print:font-bold print:text-fg-1;
+    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-3 transition-colors group-focus-within:text-fg-2 group-hover:text-fg-2 group-active:text-fg-2 print:pt-8 print:font-bold print:text-fg-1;
   }
 }
 

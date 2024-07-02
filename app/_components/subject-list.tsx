@@ -52,7 +52,7 @@ const SubjectList = async ({ archived = false }: SubjectListProps) => {
         <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
           {teamSubjects.map((subject) => (
             <li
-              className="flex items-stretch hover:bg-alpha-1"
+              className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
               key={subject.id}
             >
               <Button
@@ -70,8 +70,8 @@ const SubjectList = async ({ archived = false }: SubjectListProps) => {
                 {subject.name}
               </Button>
               <SubjectMenu contentClassName="-mt-12 mr-1.5" subject={subject}>
-                <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
-                  <div className="rounded-full p-2 group-hover:bg-alpha-1">
+                <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
+                  <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
                     <EllipsisVerticalIcon className="w-5" />
                   </div>
                 </div>
@@ -85,7 +85,7 @@ const SubjectList = async ({ archived = false }: SubjectListProps) => {
           {clientSubjects.map((subject) => (
             <li key={subject.id}>
               <Button
-                className="m-0 w-full gap-6 px-4 py-3 leading-snug hover:bg-alpha-1"
+                className="m-0 w-full gap-6 px-4 py-3 leading-snug hover:bg-alpha-1 active:bg-alpha-1"
                 href={`/subjects/${subject.id}/events`}
                 variant="link"
               >

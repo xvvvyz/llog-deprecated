@@ -41,7 +41,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
         return (
           <li className="relative" key={n.id}>
             <Button
-              className="m-0 w-full items-start gap-6 px-4 py-7 text-fg-4 hover:bg-alpha-1 hover:text-fg-4 sm:px-8"
+              className="m-0 w-full items-start gap-6 px-4 py-7 text-fg-4 hover:bg-alpha-1 hover:text-fg-4 active:bg-alpha-1 sm:px-8"
               href={
                 sourceEvent
                   ? `/subjects/${n?.subject?.id}/events/${sourceEvent.id}`
@@ -110,7 +110,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                 })}
               >
                 <IconButton
-                  className="rounded-full hover:bg-alpha-1"
+                  className="rounded-full hover:bg-alpha-1 active:bg-alpha-1"
                   icon={
                     n.archived ? (
                       <ArchiveBoxXMarkIcon className="w-5" />
@@ -123,7 +123,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
               </form>
               <form action={deleteNotification.bind(null, n.id)}>
                 <IconButton
-                  className="rounded-full hover:bg-alpha-1"
+                  className="rounded-full hover:bg-alpha-1 active:bg-alpha-1"
                   icon={<TrashIcon className="w-5" />}
                   type="submit"
                 />

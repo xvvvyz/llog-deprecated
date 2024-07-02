@@ -19,8 +19,8 @@ const InputMenu = ({ inputId }: InputMenuProps) => {
     <>
       <DropdownMenu
         trigger={
-          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
-            <div className="rounded-full p-2 group-hover:bg-alpha-1">
+          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>

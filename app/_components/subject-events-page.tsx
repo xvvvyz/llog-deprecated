@@ -38,7 +38,7 @@ const SubjectEventsPage = async ({
   if (!events?.length) {
     return (
       <>
-        <div className="mx-4 h-16 border-l-2 border-dashed border-alpha-2" />
+        <div className="mx-4 mt-4 h-14 border-l-2 border-dashed border-alpha-2" />
         <Empty className="mt-4">
           <InformationCircleIcon className="w-7" />
           No events.

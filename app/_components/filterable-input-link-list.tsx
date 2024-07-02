@@ -72,7 +72,10 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
       </div>
       <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
         {filteredInputs.map((input) => (
-          <li className="flex items-stretch hover:bg-alpha-1" key={input.id}>
+          <li
+            className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
+            key={input.id}
+          >
             <Button
               className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
               href={`/inputs/${input.id}`}
