@@ -1,5 +1,3 @@
-import Spinner from '@/_components/spinner';
-
-const Loading = () => <Spinner className="mx-auto my-16" />;
+const Loading = () => null;
 
 export default Loading;

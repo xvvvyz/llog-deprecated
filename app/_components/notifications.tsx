@@ -41,7 +41,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
         return (
           <li className="relative" key={n.id}>
             <Button
-              className="m-0 w-full items-start gap-6 px-4 py-7 text-fg-4 hover:bg-alpha-1 hover:text-fg-4 active:bg-alpha-1 sm:px-8"
+              className="m-0 w-full items-start gap-6 px-4 py-7 text-fg-4 hover:bg-alpha-1 hover:text-fg-4 active:bg-alpha-1 active:text-fg-4 sm:px-8"
               href={
                 sourceEvent
                   ? `/subjects/${n?.subject?.id}/events/${sourceEvent.id}`
