@@ -17,7 +17,7 @@ const Calendar = ({
     classNames={{
       caption: 'flex justify-center pt-1 relative items-center',
       cell: 'p-0 group',
-      day: 'h-9 w-9 rounded-sm transition-colors hover:bg-alpha-2 border border-transparent focus:ring-1 focus:ring-accent-2 focus:outline-none font-normal',
+      day: 'h-9 w-9 rounded-sm font-mono transition-colors hover:bg-alpha-2 border border-transparent focus:ring-1 focus:ring-accent-2 focus:outline-none font-normal',
       day_disabled: 'disabled',
       day_hidden: 'invisible',
       day_outside: 'text-fg-4',

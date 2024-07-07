@@ -22,10 +22,24 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { PropsValue } from 'react-select';
+import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
 import EventStopwatch from './event-stopwatch';
 
+interface EventFormValues {
+  comment: string;
+  completionTime: string;
+  inputs: Array<
+    | DurationInputType
+    | MultiSelectInputType
+    | SelectInputType
+    | boolean
+    | string
+  >;
+}
+
 interface EventFormProps {
+  className?: string;
   disabled?: boolean;
   event?:
     | NonNullable<GetEventData>
@@ -40,19 +54,8 @@ interface EventFormProps {
   subjectId: string;
 }
 
-interface EventFormValues {
-  comment: string;
-  completionTime: string;
-  inputs: Array<
-    | DurationInputType
-    | MultiSelectInputType
-    | SelectInputType
-    | boolean
-    | string
-  >;
-}
-
 const EventForm = ({
+  className,
   disabled,
   event,
   eventType,
@@ -136,7 +139,7 @@ const EventForm = ({
   return (
     <form
       action={() => {}}
-      className="border-t border-alpha-1"
+      className={twMerge('flex flex-col gap-6 px-4 sm:px-8', className)}
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           pendingComment.current = values.comment;
@@ -167,163 +170,158 @@ const EventForm = ({
         }),
       )}
     >
-      <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
-        <Input
-          id={`${eventType.id}-completionTime`}
-          label={
-            isMission ? 'When was this completed?' : 'When did this happen?'
-          }
-          max={formatDatetimeLocal(
-            (() => {
-              const today = new Date();
-              const tomorrow = new Date(today);
-              tomorrow.setDate(tomorrow.getDate() + 1);
-              return tomorrow;
-            })(),
-          )}
-          required
-          step="any"
-          type="datetime-local"
-          {...form.register('completionTime')}
-        />
-        {eventType.inputs.map(({ input }, i) => {
-          const id = `${eventType.id}-inputs-${i}`;
-
-          return (
-            <div key={id}>
-              {input?.type === InputType.Checkbox && (
-                <Checkbox
-                  label={input.label}
-                  {...form.register(`inputs.${i}`)}
-                />
-              )}
-              {input?.type === InputType.Duration && (
-                <fieldset>
-                  <legend className="label">{input.label}</legend>
-                  <div className="grid grid-cols-3">
-                    <Controller
-                      control={form.control}
-                      name={`inputs.${i}.0`}
-                      render={({ field }) => (
-                        <Select
-                          className="rounded-r-none border-r-0"
-                          inputType="number"
-                          isClearable={false}
-                          name={field.name}
-                          onBlur={field.onBlur}
-                          onChange={(value) => field.onChange(value)}
-                          options={Array.from({ length: 24 }, (_, i) => ({
-                            id: String(i),
-                            label: `${i}h`,
-                          }))}
-                          placeholder="Hours"
-                          value={field.value as PropsValue<IOption>}
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={form.control}
-                      name={`inputs.${i}.1`}
-                      render={({ field }) => (
-                        <Select
-                          className="rounded-none"
-                          inputType="number"
-                          isClearable={false}
-                          name={field.name}
-                          onBlur={field.onBlur}
-                          onChange={(value) => field.onChange(value)}
-                          options={Array.from({ length: 60 }, (_, i) => ({
-                            id: String(i),
-                            label: `${i}m`,
-                          }))}
-                          placeholder="Minutes"
-                          value={field.value as PropsValue<IOption>}
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={form.control}
-                      name={`inputs.${i}.2`}
-                      render={({ field }) => (
-                        <Select
-                          className="rounded-l-none border-l-0"
-                          inputType="number"
-                          isClearable={false}
-                          name={field.name}
-                          onBlur={field.onBlur}
-                          onChange={(value) => field.onChange(value)}
-                          options={Array.from({ length: 60 }, (_, i) => ({
-                            id: String(i),
-                            label: `${i}s`,
-                          }))}
-                          placeholder="Seconds"
-                          value={field.value as PropsValue<IOption>}
-                        />
-                      )}
-                    />
-                  </div>
-                </fieldset>
-              )}
-              {input?.type === InputType.Number && (
-                <Input
-                  label={input.label}
-                  max={(input.settings as InputSettingsJson)?.max}
-                  min={(input.settings as InputSettingsJson)?.min}
-                  step={(input.settings as InputSettingsJson)?.step}
-                  type="number"
-                  {...form.register(`inputs.${i}`)}
-                />
-              )}
-              {(input?.type === InputType.MultiSelect ||
-                input?.type === InputType.Select) && (
-                <Controller
-                  control={form.control}
-                  name={`inputs.${i}`}
-                  render={({ field }) => (
-                    <EventSelect field={field} input={input} />
-                  )}
-                />
-              )}
-              {input?.type === InputType.Stopwatch && (
-                <EventStopwatch<EventFormValues>
-                  form={form}
-                  input={input}
-                  inputIndex={i}
-                />
-              )}
-            </div>
-          );
-        })}
-        {!event && (
-          <Controller
-            control={form.control}
-            name="comment"
-            render={({ field }) => <RichTextarea label="Comment" {...field} />}
-          />
+      <Input
+        id={`${eventType.id}-completionTime`}
+        label={isMission ? 'Completion time' : 'Event time'}
+        max={formatDatetimeLocal(
+          (() => {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow;
+          })(),
         )}
-      </div>
+        required
+        step="any"
+        type="datetime-local"
+        {...form.register('completionTime')}
+      />
+      {eventType.inputs.map(({ input }, i) => {
+        const id = `${eventType.id}-inputs-${i}`;
+
+        return (
+          <div key={id}>
+            {input?.type === InputType.Checkbox && (
+              <Checkbox label={input.label} {...form.register(`inputs.${i}`)} />
+            )}
+            {input?.type === InputType.Duration && (
+              <fieldset>
+                <legend className="label">{input.label}</legend>
+                <div className="grid grid-cols-3">
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.0`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-r-none border-r-0"
+                        inputType="number"
+                        isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value)}
+                        options={Array.from({ length: 24 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}h`,
+                        }))}
+                        placeholder="Hours"
+                        value={field.value as PropsValue<IOption>}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.1`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-none"
+                        inputType="number"
+                        isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value)}
+                        options={Array.from({ length: 60 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}m`,
+                        }))}
+                        placeholder="Minutes"
+                        value={field.value as PropsValue<IOption>}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={form.control}
+                    name={`inputs.${i}.2`}
+                    render={({ field }) => (
+                      <Select
+                        className="rounded-l-none border-l-0"
+                        inputType="number"
+                        isClearable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) => field.onChange(value)}
+                        options={Array.from({ length: 60 }, (_, i) => ({
+                          id: String(i),
+                          label: `${i}s`,
+                        }))}
+                        placeholder="Seconds"
+                        value={field.value as PropsValue<IOption>}
+                      />
+                    )}
+                  />
+                </div>
+              </fieldset>
+            )}
+            {input?.type === InputType.Number && (
+              <Input
+                label={input.label}
+                max={(input.settings as InputSettingsJson)?.max}
+                min={(input.settings as InputSettingsJson)?.min}
+                step={(input.settings as InputSettingsJson)?.step}
+                type="number"
+                {...form.register(`inputs.${i}`)}
+              />
+            )}
+            {(input?.type === InputType.MultiSelect ||
+              input?.type === InputType.Select) && (
+              <Controller
+                control={form.control}
+                name={`inputs.${i}`}
+                render={({ field }) => (
+                  <EventSelect field={field} input={input} />
+                )}
+              />
+            )}
+            {input?.type === InputType.Stopwatch && (
+              <EventStopwatch<EventFormValues>
+                form={form}
+                input={input}
+                inputIndex={i}
+              />
+            )}
+          </div>
+        );
+      })}
+      {!event && (
+        <Controller
+          control={form.control}
+          name="comment"
+          render={({ field }) => <RichTextarea label="Comment" {...field} />}
+        />
+      )}
       {form.formState.errors.root && (
-        <div className="px-4 py-8 text-center sm:px-8">
+        <div className="py-8 text-center">
           {form.formState.errors.root.message}
         </div>
       )}
-      {!isPublic && !isArchived && (
-        <div className="flex gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
+      {!isPublic && !isArchived && (!event || form.formState.isDirty) && (
+        <div className="flex gap-4 pt-10">
           {!event && !isMission && (
             <BackButton className="w-full" colorScheme="transparent">
               Close
             </BackButton>
           )}
-          <Button
-            className="w-full"
-            colorScheme={event ? 'transparent' : 'accent'}
-            disabled={disabled}
-            loading={isTransitioning}
-            loadingText="Saving…"
-            type="submit"
-          >
-            {event ? 'Save' : isMission ? 'Complete' : 'Record'}
-          </Button>
+          {(!event || form.formState.isDirty) && (
+            <Button
+              className="w-full"
+              colorScheme={event ? 'transparent' : 'accent'}
+              disabled={disabled}
+              loading={isTransitioning}
+              loadingText="Saving…"
+              type="submit"
+            >
+              {event ? 'Save' : isMission ? 'Complete' : 'Record'}
+            </Button>
+          )}
         </div>
       )}
     </form>

@@ -29,7 +29,6 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
 
   return (
     <form
-      className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertMission(

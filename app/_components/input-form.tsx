@@ -3,10 +3,10 @@
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
-import FormBanner from '@/_components/form-banner';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import Select, { IOption } from '@/_components/select';
+import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
 import InputType from '@/_constants/enum-input-type';
 import useCachedForm from '@/_hooks/use-cached-form';
@@ -88,7 +88,7 @@ const InputForm = ({
 
   return (
     <form
-      className="divide-y divide-alpha-1"
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={stopPropagation(
         form.handleSubmit((values) =>
           startTransition(async () => {
@@ -116,223 +116,208 @@ const InputForm = ({
         ),
       )}
     >
-      {!disableCache && <FormBanner<InputFormValues> form={form} />}
-      <div className="px-4 py-8 sm:px-8">
-        <Controller
-          control={form.control}
-          name="subjects"
-          render={({ field }) => (
-            <Select
-              hasAvatar
-              isMulti
-              label="For"
-              name={field.name}
-              noOptionsMessage={() => 'No subjects.'}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange(value)}
-              options={subjects as IOption[]}
-              placeholder="All subjects…"
+      <Controller
+        control={form.control}
+        name="subjects"
+        render={({ field }) => (
+          <Select
+            hasAvatar
+            isMulti
+            label="For"
+            name={field.name}
+            noOptionsMessage={() => 'No subjects.'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value)}
+            options={subjects as IOption[]}
+            placeholder="All subjects…"
+            tooltip={
+              <>
+                If this input isn&rsquo;t applicable to all of your subjects,
+                you can specify the relevant subjects here.
+              </>
+            }
+            value={field.value as PropsValue<IOption>}
+          />
+        )}
+      />
+      <Input label="Label" required {...form.register('label')} />
+      <Controller
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+          <Select
+            isClearable={false}
+            isSearchable={false}
+            label="Type"
+            name={field.name}
+            onBlur={field.onBlur}
+            onChange={(option) => {
+              field.onChange(option);
+              form.setValue('settings', null, { shouldDirty: true });
+
+              switch ((option as InputFormValues['options'][0])?.id) {
+                case InputType.Number: {
+                  form.setValue(
+                    'settings',
+                    { max: '100', min: '0', step: '1' },
+                    { shouldDirty: true },
+                  );
+
+                  return;
+                }
+
+                case InputType.MultiSelect:
+                case InputType.Select: {
+                  form.setValue(
+                    'settings',
+                    { isCreatable: false },
+                    { shouldDirty: true },
+                  );
+
+                  return;
+                }
+
+                default: {
+                  // noop
+                }
+              }
+            }}
+            options={INPUT_TYPE_OPTIONS}
+            placeholder="Select type…"
+            required
+            value={field.value as PropsValue<IOption>}
+          />
+        )}
+      />
+      {(type === InputType.Select || type === InputType.MultiSelect) && (
+        <>
+          <fieldset className="group">
+            <span className="label">Options</span>
+            <div className="space-y-2">
+              {!!optionsArray.fields.length && (
+                <ul className="flex flex-col gap-2">
+                  {optionsArray.fields.map((option, optionIndex) => (
+                    <li key={option.id}>
+                      <Controller
+                        control={form.control}
+                        name={`options.${optionIndex}.label`}
+                        render={({ field }) => (
+                          <Input
+                            onKeyDown={(e) => {
+                              if (e.key === 'Backspace' && !field.value) {
+                                e.preventDefault();
+                                optionsArray.remove(optionIndex);
+
+                                form.setFocus(
+                                  `options.${optionIndex - 1}.label`,
+                                  {
+                                    shouldSelect: true,
+                                  },
+                                );
+                              }
+
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+
+                                optionsArray.insert(optionIndex + 1, {
+                                  input_id: input?.id ?? '',
+                                  label: '',
+                                  order: optionIndex + 1,
+                                });
+                              }
+                            }}
+                            placeholder="Label…"
+                            required
+                            right={
+                              <IconButton
+                                className="m-0 h-full w-full justify-center p-0"
+                                icon={<XMarkIcon className="w-5" />}
+                                label="Delete option"
+                                onClick={() => optionsArray.remove(optionIndex)}
+                                tabIndex={-1}
+                              />
+                            }
+                            {...field}
+                          />
+                        )}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <Button
+                className="w-full"
+                colorScheme="transparent"
+                onClick={() =>
+                  optionsArray.append({
+                    input_id: input?.id ?? '',
+                    label: '',
+                    order: optionsArray.fields.length,
+                  })
+                }
+              >
+                <PlusIcon className="w-5" />
+                Add option
+              </Button>
+            </div>
+          </fieldset>
+          <Checkbox
+            className="mt-2"
+            label="Allow options to be created"
+            tooltip={
+              <>
+                Enable this when you don&rsquo;t know all possible options in
+                advance.
+              </>
+            }
+            {...form.register('settings.isCreatable')}
+          />
+        </>
+      )}
+      {type === InputType.Number && (
+        <>
+          <fieldset className="flex gap-4">
+            <Input
+              label="Min value"
+              max={form.watch('settings.max')}
+              required
+              step={form.watch('settings.step')}
+              type="number"
+              {...form.register('settings.min')}
+            />
+            <Input
+              label="Max value"
+              min={form.watch('settings.min')}
+              required
+              step={form.watch('settings.step')}
+              type="number"
+              {...form.register('settings.max')}
+            />
+          </fieldset>
+          <fieldset>
+            <Input
+              label="Step"
+              min={0}
+              required
+              step="any"
+              // explain html number input step so it's not confusing
               tooltip={
                 <>
-                  If this input isn&rsquo;t applicable to all of your subjects,
-                  you can specify the relevant subjects here.
+                  Step is the interval between values. For example, if you set
+                  the step to 5, you can only enter values that are multiples of
+                  5 (5, 10, 15, etc).
                 </>
               }
-              value={field.value as PropsValue<IOption>}
+              type="number"
+              {...form.register('settings.step')}
             />
-          )}
-        />
-      </div>
-      <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
-        <Input label="Label" required {...form.register('label')} />
-        <Controller
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <Select
-              isClearable={false}
-              isSearchable={false}
-              label="Type"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(option) => {
-                field.onChange(option);
-                form.setValue('settings', null, { shouldDirty: true });
-
-                switch ((option as InputFormValues['options'][0])?.id) {
-                  case InputType.Number: {
-                    form.setValue(
-                      'settings',
-                      { max: '100', min: '0', step: '1' },
-                      { shouldDirty: true },
-                    );
-
-                    return;
-                  }
-
-                  case InputType.MultiSelect:
-                  case InputType.Select: {
-                    form.setValue(
-                      'settings',
-                      { isCreatable: false },
-                      { shouldDirty: true },
-                    );
-
-                    return;
-                  }
-
-                  default: {
-                    // noop
-                  }
-                }
-              }}
-              options={INPUT_TYPE_OPTIONS}
-              placeholder="Select type…"
-              required
-              value={field.value as PropsValue<IOption>}
-            />
-          )}
-        />
-      </div>
-      {(type === InputType.Select ||
-        type === InputType.MultiSelect ||
-        type === InputType.Number) && (
-        <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
-          {(type === InputType.Select || type === InputType.MultiSelect) && (
-            <>
-              <fieldset className="group">
-                <span className="label">Options</span>
-                <div className="space-y-2">
-                  {!!optionsArray.fields.length && (
-                    <ul className="flex flex-col gap-2">
-                      {optionsArray.fields.map((option, optionIndex) => (
-                        <li key={option.id}>
-                          <Controller
-                            control={form.control}
-                            name={`options.${optionIndex}.label`}
-                            render={({ field }) => (
-                              <Input
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Backspace' && !field.value) {
-                                    e.preventDefault();
-                                    optionsArray.remove(optionIndex);
-
-                                    form.setFocus(
-                                      `options.${optionIndex - 1}.label`,
-                                      {
-                                        shouldSelect: true,
-                                      },
-                                    );
-                                  }
-
-                                  if (e.key === 'Enter') {
-                                    e.preventDefault();
-
-                                    optionsArray.insert(optionIndex + 1, {
-                                      input_id: input?.id ?? '',
-                                      label: '',
-                                      order: optionIndex + 1,
-                                    });
-                                  }
-                                }}
-                                placeholder="Label…"
-                                required
-                                right={
-                                  <IconButton
-                                    className="m-0 h-full w-full justify-center p-0"
-                                    icon={<XMarkIcon className="w-5" />}
-                                    label="Delete option"
-                                    onClick={() =>
-                                      optionsArray.remove(optionIndex)
-                                    }
-                                    tabIndex={-1}
-                                  />
-                                }
-                                {...field}
-                              />
-                            )}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <Button
-                    className="w-full"
-                    colorScheme="transparent"
-                    onClick={() =>
-                      optionsArray.append({
-                        input_id: input?.id ?? '',
-                        label: '',
-                        order: optionsArray.fields.length,
-                      })
-                    }
-                  >
-                    <PlusIcon className="w-5" />
-                    Add option
-                  </Button>
-                </div>
-              </fieldset>
-              <Checkbox
-                className="mt-2"
-                label="Allow options to be created"
-                tooltip={
-                  <>
-                    Enable this when you don&rsquo;t know all possible options
-                    in advance.
-                  </>
-                }
-                {...form.register('settings.isCreatable')}
-              />
-            </>
-          )}
-          {type === InputType.Number && (
-            <>
-              <fieldset className="flex gap-4">
-                <Input
-                  label="Min value"
-                  max={form.watch('settings.max')}
-                  required
-                  step={form.watch('settings.step')}
-                  type="number"
-                  {...form.register('settings.min')}
-                />
-                <Input
-                  label="Max value"
-                  min={form.watch('settings.min')}
-                  required
-                  step={form.watch('settings.step')}
-                  type="number"
-                  {...form.register('settings.max')}
-                />
-              </fieldset>
-              <fieldset>
-                <Input
-                  label="Step"
-                  min={0}
-                  required
-                  step="any"
-                  // explain html number input step so it's not confusing
-                  tooltip={
-                    <>
-                      Step is the interval between values. For example, if you
-                      set the step to 5, you can only enter values that are
-                      multiples of 5 (5, 10, 15, etc).
-                    </>
-                  }
-                  type="number"
-                  {...form.register('settings.step')}
-                />
-              </fieldset>
-            </>
-          )}
-        </div>
+          </fieldset>
+        </>
       )}
       {form.formState.errors.root && (
-        <div className="px-4 py-8 text-center sm:px-8">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex gap-4 px-4 py-8 sm:px-8">
+      <div className="flex gap-4 pt-8">
         <BackButton
           className="w-full"
           colorScheme="transparent"
@@ -349,6 +334,7 @@ const InputForm = ({
           Save
         </Button>
       </div>
+      {!disableCache && <UnsavedChangesBanner<InputFormValues> form={form} />}
     </form>
   );
 };

@@ -16,7 +16,7 @@ const PageModal = ({ children, className }: PageModalProps) => {
 
   return (
     <Dialog initialFocus={scrollContainer} onClose={router.back} open>
-      <div className="fixed left-0 top-0 z-10 h-dvh w-dvw bg-alpha-reverse-1 backdrop-blur-sm" />
+      <div className="fixed -inset-4 z-10 bg-alpha-reverse-1 backdrop-blur" />
       <div
         className="fixed left-0 top-0 z-20 h-dvh w-dvw overflow-y-auto py-16"
         ref={scrollContainer}
@@ -24,7 +24,7 @@ const PageModal = ({ children, className }: PageModalProps) => {
         <div className="flex min-h-full items-start justify-center">
           <DialogPanel
             className={twMerge(
-              'relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x',
+              'relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x',
               className,
             )}
           >

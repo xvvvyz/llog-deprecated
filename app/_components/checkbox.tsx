@@ -45,7 +45,11 @@ const Checkbox = forwardRef(
           <CheckIcon className="invisible h-5 w-5" />
         </span>
       </label>
-      {tooltip && <Tip className="-mr-[0.15rem]">{tooltip}</Tip>}
+      {tooltip && (
+        <Tip className="-mr-[0.2rem]" side="left">
+          {tooltip}
+        </Tip>
+      )}
     </div>
   ),
 );

@@ -2,12 +2,12 @@
 
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
-import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
+import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertTemplate from '@/_mutations/upsert-template';
 import { GetInputData } from '@/_queries/get-input';
@@ -75,7 +75,7 @@ const TemplateForm = ({
   return (
     <>
       <form
-        className="divide-y divide-alpha-1"
+        className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
         onSubmit={stopPropagation(
           form.handleSubmit((values) =>
             startTransition(async () => {
@@ -98,52 +98,45 @@ const TemplateForm = ({
           ),
         )}
       >
-        {!disableCache && <FormBanner<TemplateFormValues> form={form} />}
-        <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
-          <Input
-            label="Name"
-            maxLength={49}
-            required
-            {...form.register('name')}
-          />
-          <Controller
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <RichTextarea label="Description or instructions" {...field} />
-            )}
-          />
-          <Controller
-            control={form.control}
-            name="inputs"
-            render={({ field }) => (
-              <Select
-                formatCreateLabel={(value) => `Create "${value}" input`}
-                isCreatable
-                isMulti
-                label="Inputs"
-                name={field.name}
-                noOptionsMessage={() => 'Type to create a new input.'}
-                onBlur={field.onBlur}
-                onChange={(value) => field.onChange(value)}
-                onCreateOption={(value) =>
-                  setCreateInputModal({ label: value })
-                }
-                options={
-                  sortBy(availableInputs, 'subjects[0].name') as IOption[]
-                }
-                placeholder="Select inputs or type to create…"
-                value={field.value as IOption[]}
-              />
-            )}
-          />
-        </div>
+        <Input
+          label="Name"
+          maxLength={49}
+          required
+          {...form.register('name')}
+        />
+        <Controller
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <RichTextarea label="Description or instructions" {...field} />
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="inputs"
+          render={({ field }) => (
+            <Select
+              formatCreateLabel={(value) => `Create "${value}" input`}
+              isCreatable
+              isMulti
+              label="Inputs"
+              name={field.name}
+              noOptionsMessage={() => 'Type to create a new input.'}
+              onBlur={field.onBlur}
+              onChange={(value) => field.onChange(value)}
+              onCreateOption={(value) => setCreateInputModal({ label: value })}
+              options={sortBy(availableInputs, 'subjects[0].name') as IOption[]}
+              placeholder="Select inputs or type to create…"
+              value={field.value as IOption[]}
+            />
+          )}
+        />
         {form.formState.errors.root && (
-          <div className="px-4 py-8 text-center sm:px-8">
+          <div className="py-8 text-center">
             {form.formState.errors.root.message}
           </div>
         )}
-        <div className="flex gap-4 px-4 py-8 sm:px-8">
+        <div className="flex gap-4 pt-8">
           <BackButton
             className="w-full"
             colorScheme="transparent"
@@ -160,6 +153,9 @@ const TemplateForm = ({
             Save
           </Button>
         </div>
+        {!disableCache && (
+          <UnsavedChangesBanner<TemplateFormValues> form={form} />
+        )}
       </form>
       <Dialog
         onClose={() => setCreateInputModal(null)}
@@ -168,10 +164,10 @@ const TemplateForm = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateInputModal(null)}
-                title="Create input"
+                title="New input"
               />
               <InputForm
                 disableCache

@@ -10,7 +10,7 @@ interface PageProps {
   };
 }
 
-export const metadata = { title: formatTitle(['Inputs', 'Create']) };
+export const metadata = { title: formatTitle(['Inputs', 'New']) };
 
 const Page = async ({ params: { inputId } }: PageProps) => {
   const [{ data: subjects }, { data: input }] = await Promise.all([
@@ -22,7 +22,7 @@ const Page = async ({ params: { inputId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create input" />
+      <PageModalHeader title="New input" />
       <InputForm input={input} isDuplicate subjects={subjects} />
     </>
   );

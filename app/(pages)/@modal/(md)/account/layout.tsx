@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout = async ({ children }: LayoutProps) => (
   <>
     <PageModalHeader title="Account settings" />
-    <div className="!border-t-0 px-4 pb-8 sm:px-8">
+    <div className="px-4 pb-8 sm:px-8">
       <div className="grid w-full grid-cols-3 divide-x divide-alpha-3 rounded border border-alpha-3">
         <Button
           activeClassName="text-fg-2 bg-alpha-1"

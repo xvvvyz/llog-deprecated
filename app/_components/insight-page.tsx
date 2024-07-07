@@ -42,12 +42,9 @@ const InsightPage = async ({
   const config = insight.config as InsightConfigJson;
 
   return (
-    <>
-      <PageModalHeader
-        className="border-b border-alpha-1"
-        title={insight.name}
-      />
-      <div className="rounded-b bg-alpha-reverse-1">
+    <div className="rounded bg-bg-2">
+      <div className="rounded bg-alpha-reverse-1">
+        <PageModalHeader className="-mb-8" title={insight.name} />
         <PlotFigure
           barInterval={config.barInterval}
           barReducer={config.barReducer}
@@ -70,7 +67,7 @@ const InsightPage = async ({
           type={config.type}
         />
       </div>
-    </>
+    </div>
   );
 };
 

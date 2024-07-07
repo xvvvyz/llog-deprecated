@@ -2,9 +2,9 @@
 
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
-import FormBanner from '@/_components/form-banner';
 import Input from '@/_components/input';
 import ModuleFormSection from '@/_components/module-form-section';
+import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
 import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
@@ -146,7 +146,7 @@ const SessionForm = ({
   return (
     <>
       <form
-        className="!border-t-0"
+        className="flex flex-col gap-8 px-4 py-8 sm:px-8"
         onSubmit={form.handleSubmit((values) =>
           startTransition(async () => {
             values.scheduledFor = values.scheduledFor
@@ -172,16 +172,11 @@ const SessionForm = ({
               return;
             }
 
-            localStorage.setItem('refresh', '1');
             router.back();
           }),
         )}
       >
-        <FormBanner<SessionFormValues>
-          className="mt-7 border-y border-alpha-1"
-          form={form}
-        />
-        <div className="flex items-center gap-6 px-4 py-8 sm:px-8">
+        <div className="flex items-center gap-6">
           <Input
             placeholder={`Session ${currentOrder + 1}`}
             {...form.register('title')}
@@ -200,7 +195,7 @@ const SessionForm = ({
             )}
           </Button>
         </div>
-        <ul className="space-y-4 px-4 sm:px-8">
+        <ul className="space-y-4">
           <DndContext
             collisionDetection={closestCenter}
             id="modules"
@@ -238,22 +233,20 @@ const SessionForm = ({
             </SortableContext>
           </DndContext>
         </ul>
-        <div className="px-4 py-8 sm:px-8">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={() => modulesArray.append({ content: '', inputs: [] })}
-          >
-            <PlusIcon className="w-5" />
-            Add module
-          </Button>
-        </div>
+        <Button
+          className="w-full"
+          colorScheme="transparent"
+          onClick={() => modulesArray.append({ content: '', inputs: [] })}
+        >
+          <PlusIcon className="w-5" />
+          Add module
+        </Button>
         {form.formState.errors.root && (
-          <div className="px-4 py-8 text-center sm:px-8">
+          <div className="text-center">
             {form.formState.errors.root.message}
           </div>
         )}
-        <div className="flex flex-row gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
+        <div className="flex flex-row gap-4 pt-8">
           {draft && (
             <Button
               className="w-full"
@@ -275,12 +268,13 @@ const SessionForm = ({
             {draft ? <>Save &amp; publish</> : <>Save</>}
           </Button>
         </div>
+        <UnsavedChangesBanner<SessionFormValues> form={form} />
       </form>
       <Dialog onClose={cancelScheduleModal} open={scheduleModal}>
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow">
               <DialogTitle className="text-2xl">Schedule session</DialogTitle>
               <Description className="mt-4 px-4 text-fg-4">
                 Scheduled sessions are not visible to clients until the

@@ -101,7 +101,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
     <li
       className={twMerge(
         'relative rounded bg-bg-2',
-        isDragging && 'z-10 shadow-2xl',
+        isDragging && 'z-10 drop-shadow',
       )}
       ref={setNodeRef}
       style={{
@@ -150,7 +150,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
               }}
             >
               <DocumentDuplicateIcon className="w-5 text-fg-4" />
-              Create template
+              New template
             </DropdownMenu.Button>
             <DropdownMenu.Button
               disabled={hasOnlyOne}
@@ -203,7 +203,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center shadow-lg">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow">
               <DialogTitle className="text-2xl">Use template</DialogTitle>
               <Description className="mt-4 px-4 text-fg-4">
                 Selecting a template will overwrite any existing module values.
@@ -257,10 +257,10 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateTemplateModal(null)}
-                title="Create template"
+                title="New template"
               />
               <TemplateForm
                 availableInputs={availableInputs}
@@ -290,10 +290,10 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg divide-y divide-alpha-1 rounded border-y border-alpha-1 bg-bg-2 shadow-lg sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateInputModal(null)}
-                title="Create input"
+                title="New input"
               />
               <InputForm
                 disableCache

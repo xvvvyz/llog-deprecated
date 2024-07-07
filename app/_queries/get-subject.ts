@@ -3,9 +3,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const getSubject = (subjectId: string) =>
   createServerSupabaseClient()
     .from('subjects')
-    .select(
-      'archived, banner, id, image_uri, name, public, share_code, team_id',
-    )
+    .select('archived, data, id, image_uri, name, public, share_code, team_id')
     .eq('id', subjectId)
     .eq('deleted', false)
     .single();

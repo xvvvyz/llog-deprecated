@@ -40,14 +40,14 @@ const Insights = ({
 
     return (
       <article
-        className="rounded border border-alpha-1 bg-bg-2 pt-1"
+        className="rounded border border-alpha-1 bg-bg-2"
         key={insight.id}
       >
-        <div className="border-b border-alpha-1 pb-1">
-          <div className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1">
+        <div className="min-h-12 rounded bg-alpha-reverse-1">
+          <div className="-mb-5 flex items-stretch rounded-t">
             <Button
               className={twMerge(
-                'm-0 flex w-full gap-4 px-4 py-3 leading-snug',
+                'm-0 flex w-full gap-4 px-4 pt-3 leading-snug',
                 !isReadOnly && 'pr-0',
               )}
               href={`/${shareOrSubjects}/${subjectId}/insights/${insight.id}${searchString}`}
@@ -63,8 +63,6 @@ const Insights = ({
               <InsightMenu insightId={insight.id} subjectId={subjectId} />
             )}
           </div>
-        </div>
-        <div className="rounded-b bg-alpha-reverse-1">
           <PlotFigure
             barInterval={config.barInterval}
             barReducer={config.barReducer}

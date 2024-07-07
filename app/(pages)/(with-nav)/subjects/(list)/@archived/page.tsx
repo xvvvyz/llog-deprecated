@@ -1,5 +1,5 @@
+import CollapsibleArchive from '@/_components/collapsible-archive';
 import SubjectList from '@/_components/subject-list';
-import CollapsibleArchive from '@/_queries/collapsible-archive';
 import countArchivedSubjects from '@/_queries/count-archived-subjects';
 
 const Page = async () => {

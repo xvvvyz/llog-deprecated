@@ -26,7 +26,7 @@ const Page = async ({ params: { insightId, subjectId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create insight" />
+      <PageModalHeader title="New insight" />
       <InsightForm events={events} insight={insight} subjectId={subjectId} />
     </>
   );

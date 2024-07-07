@@ -21,7 +21,7 @@ interface PageProps {
 }
 
 export const metadata = {
-  title: formatTitle(['Subjects', 'Training plans', 'Sessions', 'Create']),
+  title: formatTitle(['Subjects', 'Training plans', 'Sessions', 'New']),
 };
 
 const Page = async ({

@@ -1,7 +1,7 @@
 import BackButton from '@/_components/back-button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
-import EventCard from '@/_components/event-card';
+import ModuleCard from '@/_components/module-card';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
@@ -13,7 +13,7 @@ import getPublicSubject from '@/_queries/get-public-subject';
 import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
 import firstIfArray from '@/_utilities/first-if-array';
-import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon';
+import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
 
 interface SessionPageProps {
   isPublic?: boolean;
@@ -46,14 +46,12 @@ const SessionPage = async ({
   return (
     <>
       <PageModalHeader
-        link={
-          isTeamMember && (
-            <ViewAllSessionsButton
-              isPublic={isPublic}
-              missionId={missionId}
-              subjectId={subjectId}
-            />
-          )
+        subtitle={
+          <ViewAllSessionsButton
+            isPublic={isPublic}
+            missionId={missionId}
+            subjectId={subjectId}
+          />
         }
         title={mission.name}
       />
@@ -68,8 +66,8 @@ const SessionPage = async ({
       >
         {session.scheduled_for &&
         new Date(session.scheduled_for) > new Date() ? (
-          <Empty className="mt-7 border-0">
-            <CalendarIcon className="w-7" />
+          <Empty className="border-0 pb-12">
+            <CalendarDaysIcon className="w-7" />
             <p>
               Scheduled for{' '}
               <DateTime
@@ -81,14 +79,12 @@ const SessionPage = async ({
           </Empty>
         ) : (
           <>
-            <div className="!border-b !border-t-0 border-alpha-1 pb-7">
-              {session.title && (
-                <p className="smallcaps mx-auto max-w-xs px-4 pt-1 text-center">
-                  {session.title}
-                </p>
-              )}
-            </div>
-            <ul className="space-y-4 !border-t-0 bg-alpha-reverse-2 py-4">
+            {session.title && (
+              <p className="mx-auto -mt-8 max-w-xs px-4 pb-8 text-center">
+                {session.title}
+              </p>
+            )}
+            <ul className="space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
               {session.modules.map((module, i) => {
                 const event = firstIfArray(module.event);
                 const previousModule = session.modules[i - 1];
@@ -98,9 +94,9 @@ const SessionPage = async ({
                     className="border-y border-alpha-1 bg-bg-2"
                     key={module.id}
                   >
-                    <EventCard
+                    <ModuleCard
                       disabled={
-                        !!previousModule && !previousModule.event.length
+                        !!previousModule?.event && !previousModule.event.length
                       }
                       event={event}
                       eventType={module}
@@ -109,7 +105,6 @@ const SessionPage = async ({
                       isTeamMember={isTeamMember}
                       mission={mission}
                       subjectId={subjectId}
-                      totalModules={session.modules.length}
                       user={user}
                     />
                   </li>

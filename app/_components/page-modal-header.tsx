@@ -5,29 +5,29 @@ import { twMerge } from 'tailwind-merge';
 
 interface PageModalHeaderProps {
   className?: string;
-  link?: ReactNode;
   onClose?: () => void;
-  title: string | null;
+  subtitle?: ReactNode;
+  title?: ReactNode;
 }
 
 const PageModalHeader = ({
   className,
-  link,
   onClose,
+  subtitle,
   title,
 }: PageModalHeaderProps) => (
   <div
     className={twMerge(
-      'flex h-20 items-center justify-between gap-8 px-4 sm:px-8',
+      'flex items-start justify-between gap-8 px-4 pb-6 pt-8 sm:px-8',
       className,
     )}
   >
     <div className="min-w-0">
-      {title && <h1 className="truncate text-xl">{title}</h1>}
-      {link}
+      {title && <h1 className="-my-1 truncate text-xl">{title}</h1>}
+      {subtitle}
     </div>
     <BackIconButton
-      className="relative right-1 shrink-0"
+      className="relative -top-1 right-1 shrink-0"
       icon={<XMarkIcon className="w-7" />}
       onClick={onClose}
     />

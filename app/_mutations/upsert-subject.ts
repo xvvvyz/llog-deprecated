@@ -15,7 +15,13 @@ const upsertSubject = async (
   const { data: subject, error } = await supabase
     .from('subjects')
     .upsert({
-      banner: sanitizeHtml(data.banner) || null,
+      data: {
+        banner: sanitizeHtml(data.data?.banner),
+        links: data.data?.links?.map((l) => ({
+          label: l.label.trim(),
+          url: l.url.trim(),
+        })),
+      },
       id: context.subjectId,
       name: data.name.trim(),
     })

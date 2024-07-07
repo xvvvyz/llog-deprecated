@@ -1,9 +1,7 @@
 import Button from '@/_components/button';
 import MissionMenu from '@/_components/mission-menu';
-import Tip from '@/_components/tip';
 import listSubjectMissions from '@/_queries/list-subject-missions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
-import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -63,36 +61,12 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
     return acc;
   }, [] as ReactElement[]);
 
-  if (!listItems.length && !isTeamMember) return null;
+  if (!listItems.length) return null;
 
   return (
-    <div>
-      {isTeamMember && (
-        <div className="mb-4 flex items-center gap-4">
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            href={`/subjects/${subjectId}/training-plans/create`}
-            scroll={false}
-          >
-            <PlusIcon className="w-5" />
-            Create training plan
-          </Button>
-          {!listItems.length && (
-            <Tip>
-              Training plans are comprised of sessions to be completed over
-              time. For example: &ldquo;Reduce separation anxiety&rdquo; or
-              &ldquo;Stop screaming&rdquo;
-            </Tip>
-          )}
-        </div>
-      )}
-      {!!listItems.length && (
-        <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
-          {listItems}
-        </ul>
-      )}
-    </div>
+    <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
+      {listItems}
+    </ul>
   );
 };
 

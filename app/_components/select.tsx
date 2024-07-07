@@ -132,7 +132,7 @@ const Menu = <TOption extends IOption>({
   ...props
 }: MenuProps<TOption>) => (
   <components.Menu
-    className="overflow-hidden rounded-b bg-bg-2 shadow-lg"
+    className="overflow-hidden rounded-b bg-bg-2 drop-shadow"
     {...props}
   >
     <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-2">
@@ -336,7 +336,9 @@ const Select = <TOption extends IOption>(
           </label>
         )}
         {tooltip && (
-          <Tip className="relative -top-1 -mr-[0.15rem]">{tooltip}</Tip>
+          <Tip className="relative -top-1 -mr-[0.2rem]" side="left">
+            {tooltip}
+          </Tip>
         )}
       </div>
       <div className="hidden px-4 print:block">

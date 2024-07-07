@@ -23,7 +23,6 @@ const AccountPasswordForm = () => {
 
   return (
     <form
-      className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const supabase = createBrowserSupabaseClient();
@@ -45,7 +44,7 @@ const AccountPasswordForm = () => {
         }),
       )}
     >
-      <div className="px-4 py-8 sm:px-8">
+      <div className="px-4 pb-8 pt-6 sm:px-8">
         <Input
           label="New password"
           minLength={6}

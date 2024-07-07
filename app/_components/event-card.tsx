@@ -1,9 +1,6 @@
-import Avatar from '@/_components/avatar';
-import Disclosure from '@/_components/disclosure';
+import DirtyHtml from '@/_components/dirty-html';
 import { GetEventData } from '@/_queries/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
-import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
-import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
 import forceArray from '@/_utilities/force-array';
 import { User } from '@supabase/supabase-js';
 import EventCommentForm from './event-comment-form';
@@ -11,88 +8,46 @@ import EventComments, { EventCommentsProps } from './event-comments';
 import EventForm from './event-form';
 
 interface EventCardProps {
-  disabled?: boolean;
-  event?:
-    | NonNullable<GetEventData>
-    | NonNullable<GetSessionWithDetailsData>['modules'][0]['event'][0];
+  event?: NonNullable<GetEventData>;
   eventType:
     | NonNullable<NonNullable<GetEventData>['type']>
-    | NonNullable<GetEventTypeWithInputsAndOptionsData>
-    | NonNullable<GetSessionWithDetailsData>['modules'][0];
-  hideContent?: boolean;
+    | NonNullable<GetEventTypeWithInputsAndOptionsData>;
   isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
-  mission?: NonNullable<GetMissionWithSessionsData>;
   subjectId: string;
-  totalModules?: number;
   user?: User | null;
 }
 
 const EventCard = ({
-  disabled,
   event,
   eventType,
-  hideContent,
   isArchived,
   isPublic,
   isTeamMember,
-  mission,
   subjectId,
-  totalModules,
   user,
 }: EventCardProps) => {
   const comments = forceArray(event?.comments);
-  const showDescription = !hideContent && !!eventType.content;
-  const showModule = mission && typeof eventType.order === 'number';
 
   return (
-    <>
-      {(showModule || event || showDescription) && (
-        <div className="flex flex-col gap-6 py-7">
-          {(showModule || event) && (
-            <div className="smallcaps flex justify-between gap-4 whitespace-nowrap px-4 align-baseline text-fg-4 sm:px-8">
-              {showModule && (
-                <>
-                  Module {(eventType.order as number) + 1} / {totalModules}
-                </>
-              )}
-              {event && (
-                <div className="flex min-w-0 flex-row items-center gap-4">
-                  <span>{mission ? 'Completed' : 'Recorded'} by</span>
-                  <Avatar
-                    className="-my-[0.15rem]"
-                    file={event.profile?.image_uri}
-                    id={event.profile?.id}
-                    size="xs"
-                  />
-                  <span className="truncate">
-                    {event.profile?.first_name} {event.profile?.last_name}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
-          {showDescription && (
-            <Disclosure disabled={!event}>
-              {eventType.content as string}
-            </Disclosure>
-          )}
-        </div>
+    <div className="space-y-16 py-8">
+      {eventType.content && (
+        <DirtyHtml className="-my-1 px-4 sm:px-8">
+          {eventType.content}
+        </DirtyHtml>
       )}
       {(event || (!isPublic && !isArchived)) && (
         <EventForm
-          disabled={disabled}
           event={event}
           eventType={eventType}
           isArchived={isArchived}
-          isMission={!!mission}
           isPublic={isPublic}
           subjectId={subjectId}
         />
       )}
       {event && (!!comments.length || (!isPublic && !isArchived)) && (
-        <div className="flex flex-col gap-8 border-t border-alpha-1 px-4 py-8 sm:px-8">
+        <div className="flex flex-col gap-8 px-4 sm:px-8">
           <EventComments
             comments={comments as EventCommentsProps['comments']}
             isArchived={isArchived}
@@ -103,7 +58,7 @@ const EventCard = ({
           {!isPublic && !isArchived && <EventCommentForm eventId={event.id} />}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

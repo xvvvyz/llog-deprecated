@@ -11,7 +11,7 @@ interface PageProps {
   };
 }
 
-export const metadata = { title: formatTitle(['Templates', 'Create']) };
+export const metadata = { title: formatTitle(['Templates', 'New']) };
 
 const Page = async ({ params: { eventTypeId } }: PageProps) => {
   const [{ data: eventType }, { data: availableInputs }, { data: subjects }] =
@@ -25,7 +25,7 @@ const Page = async ({ params: { eventTypeId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create template" />
+      <PageModalHeader title="New template" />
       <TemplateForm
         availableInputs={availableInputs}
         disableCache

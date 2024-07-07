@@ -1,3 +1,4 @@
+import Avatar from '@/_components/avatar';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import EventCard from '@/_components/event-card';
@@ -28,18 +29,43 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
   return (
     <>
       <PageModalHeader
-        link={
-          event.type.session?.id && (
-            <Button
-              href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.mission?.id}/sessions/${event.type.session.id}`}
-              variant="link"
-            >
-              View full session
-              <ArrowUpRightIcon className="w-5" />
-            </Button>
-          )
+        subtitle={
+          <>
+            {event && (
+              <div className="smallcaps flex items-center gap-2 pt-3 text-fg-4">
+                {event.type.session ? 'Completed' : 'Recorded'} by
+                <Avatar
+                  className="-my-[0.15rem]"
+                  file={event.profile?.image_uri}
+                  id={event.profile?.id}
+                  size="xs"
+                />
+                <span className="truncate">
+                  {event.profile?.first_name} {event.profile?.last_name}
+                </span>
+              </div>
+            )}
+            {event.type.session && (
+              <div className="-mr-12 flex items-baseline gap-4 pt-1.5">
+                <span className="smallcaps text-fg-4">
+                  Session {Number(event.type.session.order) + 1}
+                </span>
+                <span className="smallcaps text-fg-4">
+                  Module {Number(event.type.order) + 1}
+                </span>
+                <Button
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.mission?.id}/sessions/${event.type.session.id}`}
+                  scroll={false}
+                  variant="link"
+                >
+                  View full session
+                  <ArrowUpRightIcon className="w-5" />
+                </Button>
+              </div>
+            )}
+          </>
         }
-        title={event.type.name}
+        title={event.type.name ?? event.type.session?.mission?.name}
       />
       <EventCard
         event={event}

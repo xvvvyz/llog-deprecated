@@ -4,7 +4,6 @@ import getEventTypeWithInputs from '@/_queries/get-event-type-with-inputs';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -23,23 +22,15 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
     { data: subject },
     { data: eventType },
     { data: availableInputs },
-    { data: availableTemplates },
     { data: subjects },
   ] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputs(eventTypeId),
     listInputsBySubjectId(subjectId),
-    listTemplatesWithData(),
     listSubjectsByTeamId(),
   ]);
 
-  if (
-    !subject ||
-    !eventType ||
-    !availableInputs ||
-    !availableTemplates ||
-    !subjects
-  ) {
+  if (!subject || !eventType || !availableInputs || !subjects) {
     return null;
   }
 
@@ -48,7 +39,6 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
       <PageModalHeader title={eventType.name as string} />
       <EventTypeForm
         availableInputs={availableInputs}
-        availableTemplates={availableTemplates}
         eventType={eventType}
         subjects={subjects}
         subjectId={subjectId}

@@ -20,14 +20,14 @@ const InsightMenu = ({ insightId, subjectId }: InsightMenuProps) => {
     <>
       <DropdownMenu
         trigger={
-          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
+          <div className="group mt-1 flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
             <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>
         }
       >
-        <DropdownMenu.Content className="-mt-12 mr-1.5">
+        <DropdownMenu.Content className="-mt-11 mr-1.5">
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/insights/${insightId}/edit`}
             scroll={false}

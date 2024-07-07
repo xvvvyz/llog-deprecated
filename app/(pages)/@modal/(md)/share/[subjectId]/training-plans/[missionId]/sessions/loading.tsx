@@ -1,3 +1,5 @@
-import SessionsLoading from '@/_components/sessions-loading';
+import PageModalLoading from '@/_components/page-modal-loading';
 
-export default SessionsLoading;
+const Loading = PageModalLoading;
+
+export default Loading;

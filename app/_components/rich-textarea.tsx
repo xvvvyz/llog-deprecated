@@ -160,7 +160,9 @@ const RichTextarea = (
           </label>
         )}
         {tooltip && (
-          <Tip className="relative -top-1 -mr-[0.15rem]">{tooltip}</Tip>
+          <Tip className="relative -top-1 -mr-[0.2rem]" side="left">
+            {tooltip}
+          </Tip>
         )}
       </div>
       {editor ? (

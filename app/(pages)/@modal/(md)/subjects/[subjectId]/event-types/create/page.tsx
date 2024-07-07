@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 export const metadata = {
-  title: formatTitle(['Subjects', 'Event types', 'Create']),
+  title: formatTitle(['Subjects', 'Event types', 'New']),
 };
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
@@ -35,10 +35,9 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create event type" />
+      <PageModalHeader title="New event type" />
       <EventTypeForm
         availableInputs={availableInputs}
-        availableTemplates={availableTemplates}
         subjects={subjects}
         subjectId={subjectId}
       />

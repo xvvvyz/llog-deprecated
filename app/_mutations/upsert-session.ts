@@ -4,6 +4,7 @@ import { SessionFormValues } from '@/_components/session-form';
 import { Database } from '@/_types/database';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
+import { revalidatePath } from 'next/cache';
 
 const upsertSession = async (
   context: {
@@ -184,6 +185,8 @@ const upsertSession = async (
       return { error: error.message };
     }
   }
+
+  revalidatePath('/', 'layout');
 };
 
 export default upsertSession;

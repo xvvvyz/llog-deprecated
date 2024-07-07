@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 export const metadata = {
-  title: formatTitle(['Subjects', 'Training plans', 'Create']),
+  title: formatTitle(['Subjects', 'Training plans', 'New']),
 };
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
@@ -19,7 +19,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create training plan" />
+      <PageModalHeader title="New training plan" />
       <MissionForm subjectId={subjectId} />
     </>
   );

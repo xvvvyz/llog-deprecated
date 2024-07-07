@@ -4,7 +4,7 @@ import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
 
-export const metadata = { title: formatTitle(['Templates', 'Create']) };
+export const metadata = { title: formatTitle(['Templates', 'New']) };
 
 const Page = async () => {
   const [{ data: availableInputs }, { data: subjects }] = await Promise.all([
@@ -16,7 +16,7 @@ const Page = async () => {
 
   return (
     <>
-      <PageModalHeader title="Create template" />
+      <PageModalHeader title="New template" />
       <TemplateForm availableInputs={availableInputs} subjects={subjects} />
     </>
   );

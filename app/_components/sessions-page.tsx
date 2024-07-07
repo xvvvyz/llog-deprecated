@@ -60,7 +60,7 @@ const SessionsPage = async ({
     <>
       <PageModalHeader title={mission.name} />
       {!isPublic && !subject.archived && isTeamMember && (
-        <div className="!border-t-0 px-4 pb-8 sm:px-8">
+        <div className="px-4 pb-8 sm:px-8">
           <Button
             colorScheme="transparent"
             className="w-full"
@@ -87,7 +87,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="m-0 py-4">
+        <ul className="border-y border-alpha-1 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,
@@ -99,12 +99,12 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
-                  className="smallcaps m-0 w-full min-w-0 gap-6 py-4 pl-4 pr-0 sm:pl-8"
+                  className="m-0 w-full min-w-0 gap-6 py-3 pl-4 pr-0 sm:pl-8"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?fromSessions=1`}
                   scroll={false}
                   variant="link"
                 >
-                  <div className="flex w-full min-w-0 justify-between gap-4">
+                  <div className="flex w-full min-w-0 items-baseline justify-between gap-6">
                     <div className="min-w-0">
                       <div className="truncate">
                         {session.title ? (
@@ -114,7 +114,7 @@ const SessionsPage = async ({
                         )}
                       </div>
                     </div>
-                    <div className="shrink-0 text-fg-4">
+                    <div className="smallcaps shrink-0 text-fg-4">
                       {session.draft ? (
                         'Draft'
                       ) : new Date(session.scheduled_for ?? '') > new Date() ? (
@@ -123,7 +123,7 @@ const SessionsPage = async ({
                           formatter="date"
                         />
                       ) : completedModules.length ? (
-                        `${completedModules.length} / ${session.modules.length}`
+                        `${completedModules.length} of ${session.modules.length} completed`
                       ) : (
                         'Not started'
                       )}

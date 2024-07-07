@@ -31,7 +31,8 @@ const getEvent = (eventId: string) =>
         order,
         session:sessions(
           id,
-          mission:missions(id)
+          mission:missions(id, name),
+          order
         )
       )`,
     )

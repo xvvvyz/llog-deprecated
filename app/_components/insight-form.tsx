@@ -3,9 +3,11 @@
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
+import CollapsibleSection from '@/_components/collapsible-section';
 import Input from '@/_components/input';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
+import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import BarInterval from '@/_constants/enum-bar-interval';
 import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
@@ -74,7 +76,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
-      barInterval: config?.barInterval ?? BarInterval.Week,
+      barInterval: config?.barInterval ?? BarInterval.Day,
       barReducer: config?.barReducer ?? BarReducer.Mean,
       includeEventsFrom: config?.includeEventsFrom ?? null,
       includeEventsSince: config?.includeEventsSince ?? null,
@@ -83,7 +85,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       marginBottom: config?.marginBottom ?? '60',
       marginLeft: config?.marginLeft ?? '60',
       marginRight: config?.marginRight ?? '40',
-      marginTop: config?.marginTop ?? '25',
+      marginTop: config?.marginTop ?? '30',
       name: insight?.name ?? '',
       showBars: config?.showBars ?? false,
       showDots: config?.showDots ?? true,
@@ -135,6 +137,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   return (
     <form
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertInsight(
@@ -152,7 +155,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
         }),
       )}
     >
-      <div className="grid gap-4 border-b border-alpha-1 px-4 py-8 sm:px-8 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3 md:gap-4">
         <Input label="Name" required {...form.register('name')} />
         <div className="md:col-span-2">
           <Controller
@@ -178,103 +181,34 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           />
         </div>
       </div>
-      <div className="grid gap-4 border-b border-alpha-1 px-4 py-8 sm:px-8 md:grid-cols-2">
-        <Controller
-          control={form.control}
-          name="includeEventsFrom"
-          render={({ field }) => {
-            let value;
-
-            if (field.value) {
-              for (const group of eventTypeOrTrainingPlanOptions) {
-                value = group.options.find((o) => o.id === field.value);
-                if (value) break;
-              }
-            }
-
-            return (
-              <Select
-                isSearchable={false}
-                label="Include events from"
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={(value) => field.onChange((value as IOption)?.id)}
-                options={eventTypeOrTrainingPlanOptions}
-                placeholder="All event types/training plans…"
-                value={value}
-              />
-            );
-          }}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <Checkbox
+          disabled={showBars && isInputNominal}
+          label="Dots"
+          {...form.register('showDots')}
         />
-        <Controller
-          control={form.control}
-          name="includeEventsSince"
-          render={({ field }) => (
-            <Select
-              isSearchable={false}
-              label="Include events since"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption)?.id)}
-              options={INCLUDE_EVENTS_SINCE_OPTIONS}
-              placeholder="The beginning of time…"
-              value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
-                (o) => field.value === o.id,
-              )}
-            />
-          )}
+        <Checkbox
+          disabled={showBars && isInputNominal}
+          label="Line"
+          {...form.register('showLine')}
+        />
+        <Checkbox
+          label="Bars"
+          {...form.register('showBars', {
+            onChange: (e) =>
+              onShowBarsOrInputChange({ inputId, showBars: e.target.checked }),
+          })}
+        />
+        <Checkbox
+          disabled={showBars && isInputNominal}
+          label="Trend"
+          {...form.register('showLinearRegression')}
         />
       </div>
-      <div className="bg-alpha-reverse-1">
-        <PlotFigure
-          barInterval={form.watch('barInterval')}
-          barReducer={form.watch('barReducer')}
-          defaultHeight={250}
-          events={events}
-          includeEventsFrom={form.watch('includeEventsFrom')}
-          includeEventsSince={form.watch('includeEventsSince')}
-          inputId={inputId}
-          lineCurveFunction={form.watch('lineCurveFunction')}
-          marginBottom={form.watch('marginBottom')}
-          marginLeft={form.watch('marginLeft')}
-          marginRight={form.watch('marginRight')}
-          marginTop={form.watch('marginTop')}
-          showBars={showBars}
-          showDots={form.watch('showDots')}
-          showLine={showLine}
-          showLinearRegression={form.watch('showLinearRegression')}
-          subjectId={subjectId}
-          title={form.watch('name')}
-          type={form.watch('type')}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8 md:grid-cols-4">
-        <Input
-          label="Space top"
-          min={0}
-          type="number"
-          {...form.register('marginTop')}
-        />
-        <Input
-          label="Space bottom"
-          min={0}
-          type="number"
-          {...form.register('marginBottom')}
-        />
-        <Input
-          label="Space left"
-          min={0}
-          type="number"
-          {...form.register('marginLeft')}
-        />
-        <Input
-          label="Space right"
-          min={0}
-          type="number"
-          {...form.register('marginRight')}
-        />
-      </div>
-      <div className="grid gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8 md:grid-cols-3">
+      <CollapsibleSection
+        className="grid gap-6 pt-6 md:grid-cols-3 md:gap-4"
+        title="Additional options"
+      >
         <Controller
           control={form.control}
           name="lineCurveFunction"
@@ -334,53 +268,134 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             />
           )}
         />
-      </div>
-      <div className="grid grid-cols-2 gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
-        <Checkbox
-          disabled={showBars && isInputNominal}
-          label="Dots"
-          {...form.register('showDots')}
+      </CollapsibleSection>
+      <CollapsibleSection
+        className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4"
+        title="Filter events"
+      >
+        <Controller
+          control={form.control}
+          name="includeEventsFrom"
+          render={({ field }) => {
+            let value;
+
+            if (field.value) {
+              for (const group of eventTypeOrTrainingPlanOptions) {
+                value = group.options.find((o) => o.id === field.value);
+                if (value) break;
+              }
+            }
+
+            return (
+              <Select
+                isSearchable={false}
+                label="Events from"
+                name={field.name}
+                onBlur={field.onBlur}
+                onChange={(value) => field.onChange((value as IOption)?.id)}
+                options={eventTypeOrTrainingPlanOptions}
+                placeholder="All event types/training plans…"
+                value={value}
+              />
+            );
+          }}
         />
-        <Checkbox
-          disabled={showBars && isInputNominal}
-          label="Line"
-          {...form.register('showLine')}
+        <Controller
+          control={form.control}
+          name="includeEventsSince"
+          render={({ field }) => (
+            <Select
+              isSearchable={false}
+              label="Events since"
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={(value) => field.onChange((value as IOption)?.id)}
+              options={INCLUDE_EVENTS_SINCE_OPTIONS}
+              placeholder="The beginning of time…"
+              value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
+                (o) => field.value === o.id,
+              )}
+            />
+          )}
         />
-        <Checkbox
-          label="Bars"
-          {...form.register('showBars', {
-            onChange: (e) =>
-              onShowBarsOrInputChange({ inputId, showBars: e.target.checked }),
-          })}
+      </CollapsibleSection>
+      <CollapsibleSection
+        className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
+        title="Margins"
+      >
+        <Input
+          label="Top"
+          min={0}
+          type="number"
+          {...form.register('marginTop')}
         />
-        <Checkbox
-          disabled={showBars && isInputNominal}
-          label="Trend line"
-          {...form.register('showLinearRegression')}
+        <Input
+          label="Bottom"
+          min={0}
+          type="number"
+          {...form.register('marginBottom')}
         />
+        <Input
+          label="Left"
+          min={0}
+          type="number"
+          {...form.register('marginLeft')}
+        />
+        <Input
+          label="Right"
+          min={0}
+          type="number"
+          {...form.register('marginRight')}
+        />
+      </CollapsibleSection>
+      <div className="rounded border border-alpha-1">
+        <div className="rounded bg-alpha-reverse-1">
+          <PlotFigure
+            barInterval={form.watch('barInterval')}
+            barReducer={form.watch('barReducer')}
+            defaultHeight={250}
+            events={events}
+            includeEventsFrom={form.watch('includeEventsFrom')}
+            includeEventsSince={form.watch('includeEventsSince')}
+            inputId={inputId}
+            lineCurveFunction={form.watch('lineCurveFunction')}
+            marginBottom={form.watch('marginBottom')}
+            marginLeft={form.watch('marginLeft')}
+            marginRight={form.watch('marginRight')}
+            marginTop={form.watch('marginTop')}
+            showBars={showBars}
+            showDots={form.watch('showDots')}
+            showLine={showLine}
+            showLinearRegression={form.watch('showLinearRegression')}
+            subjectId={subjectId}
+            title={form.watch('name')}
+            type={form.watch('type')}
+          />
+        </div>
       </div>
       {form.formState.errors.root && (
-        <div className="border-t border-alpha-1 px-4 py-8 text-center sm:px-8">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex justify-end gap-4 border-t border-alpha-1 px-4 py-8 sm:px-8">
-        <BackButton
-          className="w-36 shrink-0"
-          colorScheme="transparent"
-          size="sm"
-        >
-          Close
-        </BackButton>
-        <Button
-          className="w-36 shrink-0"
-          loading={isTransitioning}
-          loadingText="Saving…"
-          size="sm"
-          type="submit"
-        >
-          Save
-        </Button>
+      <div className="flex flex-col-reverse justify-between gap-8 pt-8 align-baseline sm:flex-row">
+        <UnsavedChangesBanner<InsightFormValues> form={form} />
+        <div className="flex justify-center gap-4">
+          <BackButton
+            className="w-36 shrink-0"
+            colorScheme="transparent"
+            size="sm"
+          >
+            Close
+          </BackButton>
+          <Button
+            className="w-36 shrink-0"
+            loading={isTransitioning}
+            loadingText="Saving…"
+            size="sm"
+            type="submit"
+          >
+            Save
+          </Button>
+        </div>
       </div>
     </form>
   );

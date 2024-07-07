@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 export const metadata = {
-  title: formatTitle(['Subjects', 'Insights', 'Create']),
+  title: formatTitle(['Subjects', 'Insights', 'New']),
 };
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
@@ -24,7 +24,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
 
   return (
     <>
-      <PageModalHeader title="Create insight" />
+      <PageModalHeader title="New insight" />
       <InsightForm events={events} subjectId={subjectId} />
     </>
   );

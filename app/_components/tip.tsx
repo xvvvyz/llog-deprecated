@@ -22,7 +22,7 @@ const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
     </Popover.Trigger>
     <Popover.Content
       className={twMerge(
-        'z-30 max-w-[20rem] rounded border border-alpha-1 bg-bg-3 px-6 py-4 text-fg-1 shadow-lg',
+        'z-30 max-w-[20rem] rounded border border-alpha-2 bg-bg-2 px-6 py-4 text-center drop-shadow-xl',
         tipClassName,
       )}
       sideOffset={0}

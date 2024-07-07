@@ -48,7 +48,7 @@ const EventTypeMenu = ({ eventTypeId, subjectId }: EventTypeMenuProps) => {
             scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Create template
+            New template
           </DropdownMenu.Button>
           <DropdownMenu.Button onClick={() => toggleDeleteAlert(true)}>
             <TrashIcon className="w-5 text-fg-4" />

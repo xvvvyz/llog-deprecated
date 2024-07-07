@@ -35,7 +35,6 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
 
   return (
     <form
-      className="divide-y divide-alpha-1"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const supabase = createBrowserSupabaseClient();
@@ -72,7 +71,7 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
         }),
       )}
     >
-      <div className="flex flex-col gap-6 px-4 py-8 sm:px-8">
+      <div className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8">
         <div className="flex gap-6">
           <Input label="First name" required {...form.register('firstName')} />
           <Input label="Last name" required {...form.register('lastName')} />
