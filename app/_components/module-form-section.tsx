@@ -101,7 +101,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
     <li
       className={twMerge(
         'relative rounded bg-bg-2',
-        isDragging && 'z-10 drop-shadow',
+        isDragging && 'z-10 drop-shadow-2xl',
       )}
       ref={setNodeRef}
       style={{
@@ -203,7 +203,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow-2xl">
               <DialogTitle className="text-2xl">Use template</DialogTitle>
               <Description className="mt-4 px-4 text-fg-4">
                 Selecting a template will overwrite any existing module values.
@@ -257,7 +257,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateTemplateModal(null)}
                 title="New template"
@@ -290,7 +290,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateInputModal(null)}
                 title="New input"

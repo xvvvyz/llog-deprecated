@@ -79,7 +79,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           }
 
           localStorage.setItem('refresh', '1');
-          if (!subject?.id) router.replace(`/subjects/${subjectId}/events`);
+          if (!subject?.id) router.replace(`/subjects/${subjectId}`);
           else router.back();
         }),
       )}
@@ -89,6 +89,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           label="Name"
           maxLength={49}
           required
+          tooltip="Who or what are you tracking?"
           {...form.register('name')}
         />
         <div className="relative">
@@ -118,8 +119,8 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
               label="Note"
               tooltip={
                 <>
-                  Add an optional note to be displayed at the top of the
-                  subject&rsquo;s profile.
+                  An optional note displayed at the top of the subject&rsquo;s
+                  profile.
                 </>
               }
               {...field}
@@ -130,7 +131,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           <div className="flex justify-between">
             <span className="label">Links</span>
             <Tip className="relative -top-1 -mr-[0.2rem]" side="left">
-              Add optional links to be listed at the top of the subject&rsquo;s
+              Optional links displayed at the top of&nbsp;the subject&rsquo;s
               profile.
             </Tip>
           </div>

@@ -29,7 +29,7 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
                   </span>
                   <Button
                     className="text-sm"
-                    href={`/subjects/${subjectId}/events`}
+                    href={`/subjects/${subjectId}`}
                     variant="link"
                   >
                     View full profile

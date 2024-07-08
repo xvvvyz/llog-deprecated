@@ -4,8 +4,12 @@ import BackIconButton from '@/_components/back-icon-button';
 import Spinner from '@/_components/spinner';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 
-const PageModalLoading = () => (
-  <>
+interface PageModalLoadingProps {
+  className?: string;
+}
+
+const PageModalLoading = ({ className }: PageModalLoadingProps) => (
+  <div className={className}>
     <div className="align-start flex justify-between px-4 py-8 sm:px-8">
       <div className="h-6 w-32 animate-pulse rounded-sm bg-alpha-3" />
       <BackIconButton
@@ -13,10 +17,10 @@ const PageModalLoading = () => (
         icon={<XMarkIcon className="w-7" />}
       />
     </div>
-    <div className="py-24">
+    <div className="pb-24 pt-16">
       <Spinner className="mx-auto" />
     </div>
-  </>
+  </div>
 );
 
 export default PageModalLoading;

@@ -1,6 +1,6 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listSubjectMissions = (subjectId: string) =>
+const listSubjectTrainingPlans = (subjectId: string) =>
   createServerSupabaseClient()
     .from('missions')
     .select(
@@ -16,8 +16,8 @@ const listSubjectMissions = (subjectId: string) =>
     })
     .eq('sessions.modules.archived', false);
 
-export type ListSubjectMissionsData = Awaited<
-  ReturnType<typeof listSubjectMissions>
+export type ListSubjectTrainingPlansData = Awaited<
+  ReturnType<typeof listSubjectTrainingPlans>
 >['data'];
 
-export default listSubjectMissions;
+export default listSubjectTrainingPlans;

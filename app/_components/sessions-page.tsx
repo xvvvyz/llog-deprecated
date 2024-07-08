@@ -5,10 +5,10 @@ import Empty from '@/_components/empty';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionMenu from '@/_components/session-menu';
 import getCurrentUser from '@/_queries/get-current-user';
-import getMissionWithSessionsAndEvents from '@/_queries/get-mission-with-sessions-and-events';
-import getPublicMissionWithSessionsAndEvents from '@/_queries/get-public-mission-with-sessions-and-events';
 import getPublicSubject from '@/_queries/get-public-subject';
+import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-training-plan-with-sessions-and-events';
 import getSubject from '@/_queries/get-subject';
+import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
 import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
 import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
@@ -34,8 +34,10 @@ const SessionsPage = async ({
   const isTeamMember = !!user && subject.team_id === user.id;
 
   const { data: mission } = isPublic
-    ? await getPublicMissionWithSessionsAndEvents(missionId)
-    : await getMissionWithSessionsAndEvents(missionId, { draft: isTeamMember });
+    ? await getPublicTrainingPlanWithSessionsAndEvents(missionId)
+    : await getTrainingPlanWithSessionsAndEvents(missionId, {
+        draft: isTeamMember,
+      });
 
   if (!mission) return null;
 
@@ -68,7 +70,7 @@ const SessionsPage = async ({
             scroll={false}
           >
             <PlusIcon className="w-5" />
-            Add session
+            New session
           </Button>
         </div>
       )}
@@ -87,7 +89,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="border-y border-alpha-1 py-4">
+        <ul className="border-y border-alpha-1 bg-bg-3 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,

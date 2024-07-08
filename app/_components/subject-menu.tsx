@@ -26,14 +26,12 @@ import { ReactNode, useOptimistic, useRef, useTransition } from 'react';
 
 interface SubjectMenuProps {
   children: ReactNode;
-  isPublic?: boolean;
   contentClassName?: string;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
 const SubjectMenu = ({
   children,
-  isPublic,
   contentClassName,
   subject,
 }: SubjectMenuProps) => {
@@ -49,7 +47,6 @@ const SubjectMenu = ({
   const [shareModal, toggleShareModal] = useToggle(false);
   const clientLinkTimeoutRef = useRef<NodeJS.Timeout>();
   const publicLinkTimeoutRef = useRef<NodeJS.Timeout>();
-  const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
     <>
@@ -121,7 +118,7 @@ const SubjectMenu = ({
                 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
                 const r = await fetch(
-                  `/${shareOrSubjects}/${subject.id}/events.csv?tz=${tz}`,
+                  `/subjects/${subject.id}/events.csv?tz=${tz}`,
                 );
 
                 const blob = await r.blob();
@@ -175,7 +172,7 @@ const SubjectMenu = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 drop-shadow">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 drop-shadow-2xl">
               <div className="flex items-center justify-between">
                 <DialogTitle className="text-2xl">Share</DialogTitle>
                 <IconButton
@@ -208,7 +205,7 @@ const SubjectMenu = ({
                   <Button
                     className="w-full justify-between"
                     colorScheme="transparent"
-                    href={`/share/${subject.id}/events`}
+                    href={`/share/${subject.id}`}
                     target="_blank"
                   >
                     View public profile
@@ -221,7 +218,7 @@ const SubjectMenu = ({
                       clearTimeout(publicLinkTimeoutRef.current);
 
                       void copyToClipboard(
-                        `${location.origin}/share/${subject.id}/events`,
+                        `${location.origin}/share/${subject.id}`,
                       );
 
                       publicLinkTimeoutRef.current = setTimeout(

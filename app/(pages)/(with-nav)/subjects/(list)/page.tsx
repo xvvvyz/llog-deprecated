@@ -45,21 +45,23 @@ const Page = async () => {
       {!clientSubjects.length && !teamSubjects.length && (
         <Empty className="mx-4">
           <InformationCircleIcon className="w-7" />
-          Subjects can be dogs, cats, humans or
+          Add a subject to start collaboratively
           <br />
-          anything else you want to track.
+          tracking and improving behavior.
         </Empty>
       )}
       <SubjectList
         clientSubjects={clientSubjects}
         teamSubjects={teamSubjects}
       />
-      <CollapsibleArchive>
-        <SubjectList
-          clientSubjects={archivedClientSubjects}
-          teamSubjects={archivedTeamSubjects}
-        />
-      </CollapsibleArchive>
+      {(!!archivedTeamSubjects.length || !!archivedClientSubjects.length) && (
+        <CollapsibleArchive>
+          <SubjectList
+            clientSubjects={archivedClientSubjects}
+            teamSubjects={archivedTeamSubjects}
+          />
+        </CollapsibleArchive>
+      )}
     </>
   );
 };

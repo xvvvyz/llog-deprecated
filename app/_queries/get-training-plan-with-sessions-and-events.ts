@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getMissionWithSessionsAndEvents = (
-  missionId: string,
+const getTrainingPlanWithSessionsAndEvents = (
+  trainingPlanId: string,
   { draft } = { draft: false },
 ) =>
   createServerSupabaseClient()
@@ -22,15 +22,15 @@ const getMissionWithSessionsAndEvents = (
         title
       )`,
     )
-    .eq('id', missionId)
+    .eq('id', trainingPlanId)
     .order('order', { referencedTable: 'sessions' })
     .not('sessions.draft', 'is', draft ? null : true)
     .order('draft', { ascending: false, referencedTable: 'sessions' })
     .eq('sessions.modules.archived', false)
     .single();
 
-export type GetMissionWithSessionsAndEventsData = Awaited<
-  ReturnType<typeof getMissionWithSessionsAndEvents>
+export type GetTrainingPlanWithSessionsAndEventsData = Awaited<
+  ReturnType<typeof getTrainingPlanWithSessionsAndEvents>
 >['data'];
 
-export default getMissionWithSessionsAndEvents;
+export default getTrainingPlanWithSessionsAndEvents;

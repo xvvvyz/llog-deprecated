@@ -2,18 +2,18 @@
 
 import Alert from '@/_components/alert';
 import DropdownMenu from '@/_components/dropdown-menu';
-import deleteMission from '@/_mutations/delete-mission';
+import deleteTrainingPlan from '@/_mutations/delete-training-plan';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
 
-interface MissionMenuProps {
+interface TrainingPlanMenuProps {
   missionId: string;
   subjectId: string;
 }
 
-const MissionMenu = ({ missionId, subjectId }: MissionMenuProps) => {
+const TrainingPlanMenu = ({ missionId, subjectId }: TrainingPlanMenuProps) => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
 
   return (
@@ -46,10 +46,10 @@ const MissionMenu = ({ missionId, subjectId }: MissionMenuProps) => {
         isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={() => deleteMission(missionId)}
+        onConfirm={() => deleteTrainingPlan(missionId)}
       />
     </>
   );
 };
 
-export default MissionMenu;
+export default TrainingPlanMenu;

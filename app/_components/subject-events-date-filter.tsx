@@ -49,11 +49,11 @@ const SubjectEventsDateFilter = () => {
           ) : opDate?.from ? (
             formatDate(opDate.from, { weekday: undefined })
           ) : (
-            'Date range'
+            'Filter by date range'
           )}
         </Button>
       </Popover.Trigger>
-      <Popover.Content align="end" className="my-2" sideOffset={0}>
+      <Popover.Content align="start" className="my-2" sideOffset={0}>
         <Calendar
           defaultMonth={opDate?.to ?? opDate?.from}
           disabled={{ after: new Date() }}

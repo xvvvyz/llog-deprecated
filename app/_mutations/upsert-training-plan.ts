@@ -1,11 +1,11 @@
 'use server';
 
-import { MissionFormValues } from '@/_components/mission-form';
+import { TrainingPlanFormValues } from '@/_components/training-plan-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const upsertMission = async (
+const upsertTrainingPlan = async (
   context: { missionId?: string; subjectId: string },
-  data: MissionFormValues,
+  data: TrainingPlanFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
 
@@ -23,4 +23,4 @@ const upsertMission = async (
   return { data: mission };
 };
 
-export default upsertMission;
+export default upsertTrainingPlan;

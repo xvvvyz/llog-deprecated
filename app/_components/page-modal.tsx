@@ -16,7 +16,7 @@ const PageModal = ({ children, className }: PageModalProps) => {
 
   return (
     <Dialog initialFocus={scrollContainer} onClose={router.back} open>
-      <div className="fixed -inset-4 z-10 bg-alpha-reverse-1 backdrop-blur" />
+      <div className="fixed inset-0 z-10 bg-alpha-reverse-1 backdrop-blur" />
       <div
         className="fixed left-0 top-0 z-20 h-dvh w-dvw overflow-y-auto py-16"
         ref={scrollContainer}

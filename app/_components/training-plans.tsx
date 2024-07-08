@@ -1,6 +1,6 @@
 import Button from '@/_components/button';
-import MissionMenu from '@/_components/mission-menu';
-import listSubjectMissions from '@/_queries/list-subject-missions';
+import TrainingPlanMenu from '@/_components/training-plan-menu';
+import listSubjectTrainingPlans from '@/_queries/list-subject-training-plans';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -10,8 +10,8 @@ interface MissionsProps {
   subjectId: string;
 }
 
-const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
-  const { data: missions } = await listSubjectMissions(subjectId);
+const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
+  const { data: missions } = await listSubjectTrainingPlans(subjectId);
   if (!missions) return null;
 
   const listItems = missions.reduce((acc, mission) => {
@@ -53,7 +53,7 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
           )}
         </Button>
         {isTeamMember && (
-          <MissionMenu missionId={mission.id} subjectId={subjectId} />
+          <TrainingPlanMenu missionId={mission.id} subjectId={subjectId} />
         )}
       </li>,
     );
@@ -70,4 +70,4 @@ const Missions = async ({ isTeamMember, subjectId }: MissionsProps) => {
   );
 };
 
-export default Missions;
+export default TrainingPlans;

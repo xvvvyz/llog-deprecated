@@ -107,7 +107,10 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
         {loading || (type === 'submit' && pending) ? (
           <>
             {variant !== 'link' && (
-              <Spinner color={spinnerColorSchemes[colorScheme]} />
+              <Spinner
+                className="-ml-0.5"
+                color={spinnerColorSchemes[colorScheme]}
+              />
             )}
             {loadingText ?? children}
           </>

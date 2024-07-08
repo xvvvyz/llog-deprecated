@@ -150,7 +150,6 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             return;
           }
 
-          localStorage.setItem('refresh', '1');
           router.back();
         }),
       )}
@@ -180,6 +179,29 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             )}
           />
         </div>
+      </div>
+      <div className="rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl">
+        <PlotFigure
+          barInterval={form.watch('barInterval')}
+          barReducer={form.watch('barReducer')}
+          defaultHeight={200}
+          events={events}
+          includeEventsFrom={form.watch('includeEventsFrom')}
+          includeEventsSince={form.watch('includeEventsSince')}
+          inputId={inputId}
+          lineCurveFunction={form.watch('lineCurveFunction')}
+          marginBottom={form.watch('marginBottom')}
+          marginLeft={form.watch('marginLeft')}
+          marginRight={form.watch('marginRight')}
+          marginTop={form.watch('marginTop')}
+          showBars={showBars}
+          showDots={form.watch('showDots')}
+          showLine={showLine}
+          showLinearRegression={form.watch('showLinearRegression')}
+          subjectId={subjectId}
+          title={form.watch('name')}
+          type={form.watch('type')}
+        />
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Checkbox
@@ -351,31 +373,6 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           {...form.register('marginRight')}
         />
       </CollapsibleSection>
-      <div className="rounded border border-alpha-1">
-        <div className="rounded bg-alpha-reverse-1">
-          <PlotFigure
-            barInterval={form.watch('barInterval')}
-            barReducer={form.watch('barReducer')}
-            defaultHeight={250}
-            events={events}
-            includeEventsFrom={form.watch('includeEventsFrom')}
-            includeEventsSince={form.watch('includeEventsSince')}
-            inputId={inputId}
-            lineCurveFunction={form.watch('lineCurveFunction')}
-            marginBottom={form.watch('marginBottom')}
-            marginLeft={form.watch('marginLeft')}
-            marginRight={form.watch('marginRight')}
-            marginTop={form.watch('marginTop')}
-            showBars={showBars}
-            showDots={form.watch('showDots')}
-            showLine={showLine}
-            showLinearRegression={form.watch('showLinearRegression')}
-            subjectId={subjectId}
-            title={form.watch('name')}
-            type={form.watch('type')}
-          />
-        </div>
-      </div>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

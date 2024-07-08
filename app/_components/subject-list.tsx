@@ -24,7 +24,7 @@ const SubjectList = async ({
           >
             <Button
               className="m-0 w-full gap-4 px-4 py-3 pr-0 leading-snug"
-              href={`/subjects/${subject.id}/events`}
+              href={`/subjects/${subject.id}`}
               variant="link"
             >
               <Avatar
@@ -53,7 +53,7 @@ const SubjectList = async ({
           <li key={subject.id}>
             <Button
               className="m-0 w-full gap-6 px-4 py-3 leading-snug hover:bg-alpha-1 active:bg-alpha-1"
-              href={`/subjects/${subject.id}/events`}
+              href={`/subjects/${subject.id}`}
               variant="link"
             >
               <Avatar

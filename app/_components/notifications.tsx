@@ -45,7 +45,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
               href={
                 sourceEvent
                   ? `/subjects/${n?.subject?.id}/events/${sourceEvent.id}`
-                  : `/subjects/${n?.subject?.id}/events`
+                  : `/subjects/${n?.subject?.id}`
               }
               scroll={!sourceEvent}
               variant="link"

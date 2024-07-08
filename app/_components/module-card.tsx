@@ -1,8 +1,8 @@
 import Avatar from '@/_components/avatar';
 import CollapsibleSection from '@/_components/collapsible-section';
 import DirtyHtml from '@/_components/dirty-html';
-import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
+import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import forceArray from '@/_utilities/force-array';
 import { User } from '@supabase/supabase-js';
 import EventCommentForm from './event-comment-form';
@@ -16,7 +16,7 @@ interface ModuleCardProps {
   isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
-  mission: NonNullable<GetMissionWithSessionsData>;
+  mission: NonNullable<GetTrainingPlanWithSessionsData>;
   subjectId: string;
   user?: User | null;
 }
@@ -40,11 +40,11 @@ const ModuleCard = ({
       defaultOpen={!event && !disabled}
       title={
         <div className="py-2 text-left">
-          <div className="leading-none">
+          <div className="-mt-0.5">
             Module {(eventType.order as number) + 1}
           </div>
           {event && (
-            <div className="smallcaps flex items-center gap-2 pt-2 text-fg-4">
+            <div className="smallcaps flex items-center gap-2 pt-1 text-fg-4">
               Completed by
               <Avatar
                 className="-my-[0.15rem]"

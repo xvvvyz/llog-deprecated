@@ -7,8 +7,8 @@ import ModuleFormSection from '@/_components/module-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
-import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
 import { GetSessionData } from '@/_queries/get-session';
+import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
@@ -41,6 +41,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 
+import Tip from '@/_components/tip';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -50,7 +51,7 @@ interface SessionFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
   availableTemplates: NonNullable<ListTemplatesWithDataData>;
   isDuplicate?: boolean;
-  mission: NonNullable<GetMissionWithSessionsData>;
+  mission: NonNullable<GetTrainingPlanWithSessionsData>;
   order?: number;
   session?: NonNullable<GetSessionData>;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
@@ -146,7 +147,7 @@ const SessionForm = ({
   return (
     <>
       <form
-        className="flex flex-col gap-8 px-4 py-8 sm:px-8"
+        className="flex flex-col gap-8 px-4 pb-8 pt-16 sm:px-8"
         onSubmit={form.handleSubmit((values) =>
           startTransition(async () => {
             values.scheduledFor = values.scheduledFor
@@ -233,14 +234,20 @@ const SessionForm = ({
             </SortableContext>
           </DndContext>
         </ul>
-        <Button
-          className="w-full"
-          colorScheme="transparent"
-          onClick={() => modulesArray.append({ content: '', inputs: [] })}
-        >
-          <PlusIcon className="w-5" />
-          Add module
-        </Button>
+        <div className="flex items-center gap-4">
+          <Tip side="right">
+            Modules break up your session and allow you to capture inputs at
+            different points. You can add as many modules as you need.
+          </Tip>
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            onClick={() => modulesArray.append({ content: '', inputs: [] })}
+          >
+            <PlusIcon className="w-5" />
+            Add module
+          </Button>
+        </div>
         {form.formState.errors.root && (
           <div className="text-center">
             {form.formState.errors.root.message}
@@ -274,7 +281,7 @@ const SessionForm = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">
           <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow">
+            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow-2xl">
               <DialogTitle className="text-2xl">Schedule session</DialogTitle>
               <Description className="mt-4 px-4 text-fg-4">
                 Scheduled sessions are not visible to clients until the

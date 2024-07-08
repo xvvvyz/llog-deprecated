@@ -1,6 +1,6 @@
 import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
 import ForwardSearchParamsIconButton from '@/_components/forward-search-params-icon-button';
-import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
+import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
 import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
@@ -18,7 +18,7 @@ interface SessionLayoutProps {
   missionId: string;
   order?: string;
   sessionId?: string;
-  sessions: NonNullable<GetMissionWithSessionsData>['sessions'];
+  sessions: NonNullable<GetTrainingPlanWithSessionsData>['sessions'];
   subjectId: string;
 }
 

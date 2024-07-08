@@ -119,9 +119,8 @@ const EventTypeForm = ({
               placeholder="Select inputs or type to create…"
               tooltip={
                 <>
-                  Define the specific data points you are interested in tracking
-                  for this event type. For example: &ldquo;Duration&rdquo;,
-                  &ldquo;Rating&rdquo;, &ldquo;Body language&rdquo;, etc.
+                  Define the specific data points you are interested in
+                  tracking.
                 </>
               }
               value={field.value as IOption[]}
@@ -155,7 +154,7 @@ const EventTypeForm = ({
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto py-16">
           <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow sm:border-x">
+            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x">
               <PageModalHeader
                 onClose={() => setCreateInputModal(null)}
                 title="New input"

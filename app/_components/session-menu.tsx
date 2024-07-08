@@ -4,7 +4,7 @@ import Alert from '@/_components/alert';
 import DropdownMenu from '@/_components/dropdown-menu';
 import deleteSession from '@/_mutations/delete-session';
 import moveSession from '@/_mutations/move-session';
-import { GetMissionWithSessionsData } from '@/_queries/get-mission-with-sessions';
+import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/outline/ArrowUpIcon';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
@@ -18,7 +18,7 @@ interface SessionMenuProps {
   highestPublishedOrder: number;
   missionId: string;
   nextSessionOrder: number;
-  session: NonNullable<GetMissionWithSessionsData>['sessions'][0];
+  session: NonNullable<GetTrainingPlanWithSessionsData>['sessions'][0];
   subjectId: string;
 }
 

@@ -26,7 +26,7 @@ const Content = React.forwardRef<
     ref={ref}
     sideOffset={4}
     className={twMerge(
-      'z-10 w-60 rounded border border-alpha-1 bg-bg-3 py-1 drop-shadow-xl',
+      'z-10 w-60 rounded border border-alpha-2 bg-bg-3 py-1 drop-shadow',
       className,
     )}
     {...props}

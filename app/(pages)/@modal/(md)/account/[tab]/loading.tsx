@@ -1,7 +1,7 @@
 import Spinner from '@/_components/spinner';
 
 const Loading = () => (
-  <div className="py-24">
+  <div className="pb-24 pt-16">
     <Spinner className="mx-auto" />
   </div>
 );

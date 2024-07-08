@@ -11,7 +11,7 @@ const Layout = async ({ children }: LayoutProps) => (
     <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
       <h1 className="text-2xl">Subjects</h1>
       <Button href="/subjects/create" scroll={false} size="sm">
-        <PlusIcon className="w-5" />
+        <PlusIcon className="-ml-0.5 w-5" />
         New subject
       </Button>
     </div>

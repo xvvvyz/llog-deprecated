@@ -6,12 +6,12 @@ import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUser from '@/_queries/get-current-user';
-import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
-import getPublicMissionWithSessions from '@/_queries/get-public-mission-with-sessions';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
 import getPublicSubject from '@/_queries/get-public-subject';
+import getPublicTrainingPlanWithSessions from '@/_queries/get-public-training-plan-with-sessions';
 import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
+import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import firstIfArray from '@/_utilities/first-if-array';
 import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
 
@@ -32,8 +32,8 @@ const SessionPage = async ({
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic
-        ? getPublicMissionWithSessions(missionId)
-        : getMissionWithSessions(missionId),
+        ? getPublicTrainingPlanWithSessions(missionId)
+        : getTrainingPlanWithSessions(missionId),
       isPublic
         ? getPublicSessionWithDetails(sessionId)
         : getSessionWithDetails(sessionId),

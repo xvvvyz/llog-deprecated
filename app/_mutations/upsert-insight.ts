@@ -2,6 +2,7 @@
 
 import { InsightFormValues } from '@/_components/insight-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
+import { revalidatePath } from 'next/cache';
 
 const upsertInsight = async (
   context: { insightId?: string; subjectId: string },
@@ -15,6 +16,7 @@ const upsertInsight = async (
   });
 
   if (error) return { error: error.message };
+  revalidatePath('/', 'layout');
 };
 
 export default upsertInsight;

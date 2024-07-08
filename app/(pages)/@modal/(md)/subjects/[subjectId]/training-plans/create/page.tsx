@@ -1,5 +1,5 @@
-import MissionForm from '@/_components/mission-form';
 import PageModalHeader from '@/_components/page-modal-header';
+import TrainingPlanForm from '@/_components/training-plan-form';
 import getSubject from '@/_queries/get-subject';
 import formatTitle from '@/_utilities/format-title';
 
@@ -20,7 +20,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   return (
     <>
       <PageModalHeader title="New training plan" />
-      <MissionForm subjectId={subjectId} />
+      <TrainingPlanForm subjectId={subjectId} />
     </>
   );
 };

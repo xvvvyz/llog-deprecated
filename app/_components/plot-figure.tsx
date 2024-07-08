@@ -45,7 +45,7 @@ const PlotFigure = ({
   barInterval: BarInterval;
   barReducer: BarReducer;
   defaultHeight?: number;
-  events: NonNullable<ListEventsData>;
+  events: ListEventsData;
   includeEventsFrom: string | null;
   includeEventsSince: TimeSinceMilliseconds | null;
   id?: string;
@@ -72,7 +72,7 @@ const PlotFigure = ({
   const { parentRef, width } = useParentSize();
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !events) return;
 
     const { input, isDuration, isInputNominal } = getInputDetailsFromEvents({
       events,
@@ -119,7 +119,7 @@ const PlotFigure = ({
               P.binX<P.RectYOptions>(
                 { y: barReducer },
                 {
-                  fill: isInputNominal ? y : 'hsl(45, 5%, 20%)',
+                  fill: isInputNominal ? y : 'hsla(0, 0%, 100%, 10%)',
                   inset: 1,
                   interval: barInterval as P.LiteralTimeInterval,
                   tip: isInputNominal,
@@ -196,7 +196,7 @@ const PlotFigure = ({
                 fill: '#fff',
                 frameAnchor: 'bottom',
                 maxRadius: 100,
-                stroke: '#1A1917',
+                stroke: 'hsl(0, 0%, 16%)',
                 strokeWidth: 10,
                 text: (d) => formatDateTime(d[x], { month: 'long' }),
                 textAnchor: 'middle',
@@ -214,7 +214,7 @@ const PlotFigure = ({
                 frameAnchor: 'left',
                 maxRadius: 100,
                 px: x,
-                stroke: '#1A1917',
+                stroke: 'hsl(0, 0%, 16%)',
                 strokeWidth: 10,
                 text: (d) =>
                   isDuration ? `${humanizeDurationShort(d[y] * 1000)}` : d[y],

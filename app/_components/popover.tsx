@@ -13,7 +13,7 @@ const PopoverContent = forwardRef<
       ref={ref}
       align={align}
       className={twMerge(
-        'rounded border border-alpha-1 bg-bg-3 drop-shadow',
+        'rounded border border-alpha-2 bg-bg-3 drop-shadow',
         className,
       )}
       onOpenAutoFocus={(e) => e.preventDefault()}

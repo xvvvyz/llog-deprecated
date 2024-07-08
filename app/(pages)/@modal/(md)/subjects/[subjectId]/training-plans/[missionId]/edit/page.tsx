@@ -1,7 +1,7 @@
-import MissionForm from '@/_components/mission-form';
 import PageModalHeader from '@/_components/page-modal-header';
-import getMission from '@/_queries/get-mission';
+import TrainingPlanForm from '@/_components/training-plan-form';
 import getSubject from '@/_queries/get-subject';
+import getTrainingPlan from '@/_queries/get-training-plan';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -18,7 +18,7 @@ export const metadata = {
 const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getMission(missionId),
+    getTrainingPlan(missionId),
   ]);
 
   if (!subject || !mission) return null;
@@ -26,7 +26,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   return (
     <>
       <PageModalHeader title={mission.name} />
-      <MissionForm mission={mission} subjectId={subjectId} />
+      <TrainingPlanForm mission={mission} subjectId={subjectId} />
     </>
   );
 };

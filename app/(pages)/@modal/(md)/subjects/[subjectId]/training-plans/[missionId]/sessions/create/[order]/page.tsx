@@ -3,8 +3,8 @@ import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
 import SessionLayout from '@/_components/session-layout';
 import getCurrentUser from '@/_queries/get-current-user';
-import getMissionWithSessions from '@/_queries/get-mission-with-sessions';
 import getSubject from '@/_queries/get-subject';
+import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
@@ -32,7 +32,7 @@ const Page = async ({ params: { missionId, order, subjectId } }: PageProps) => {
     user,
   ] = await Promise.all([
     getSubject(subjectId),
-    getMissionWithSessions(missionId, { draft: true }),
+    getTrainingPlanWithSessions(missionId, { draft: true }),
     listSubjectsByTeamId(),
     listInputsBySubjectId(subjectId),
     listTemplatesWithData(),

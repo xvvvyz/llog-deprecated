@@ -42,31 +42,29 @@ const InsightPage = async ({
   const config = insight.config as InsightConfigJson;
 
   return (
-    <div className="rounded bg-bg-2">
-      <div className="rounded bg-alpha-reverse-1">
-        <PageModalHeader className="-mb-8" title={insight.name} />
-        <PlotFigure
-          barInterval={config.barInterval}
-          barReducer={config.barReducer}
-          events={events}
-          includeEventsFrom={config.includeEventsFrom}
-          includeEventsSince={config.includeEventsSince}
-          inputId={config.input}
-          isPublic={isPublic}
-          lineCurveFunction={config.lineCurveFunction}
-          marginBottom={config.marginBottom}
-          marginLeft={config.marginLeft}
-          marginRight={config.marginRight}
-          marginTop={config.marginTop}
-          showBars={config.showBars}
-          showDots={config.showDots}
-          showLine={config.showLine}
-          showLinearRegression={config.showLinearRegression}
-          subjectId={subjectId}
-          title={insight.name}
-          type={config.type}
-        />
-      </div>
+    <div className="rounded bg-bg-3">
+      <PageModalHeader className="-mb-8" title={insight.name} />
+      <PlotFigure
+        barInterval={config.barInterval}
+        barReducer={config.barReducer}
+        events={events}
+        includeEventsFrom={config.includeEventsFrom}
+        includeEventsSince={config.includeEventsSince}
+        inputId={config.input}
+        isPublic={isPublic}
+        lineCurveFunction={config.lineCurveFunction}
+        marginBottom={config.marginBottom}
+        marginLeft={config.marginLeft}
+        marginRight={config.marginRight}
+        marginTop={config.marginTop}
+        showBars={config.showBars}
+        showDots={config.showDots}
+        showLine={config.showLine}
+        showLinearRegression={config.showLinearRegression}
+        subjectId={subjectId}
+        title={insight.name}
+        type={config.type}
+      />
     </div>
   );
 };

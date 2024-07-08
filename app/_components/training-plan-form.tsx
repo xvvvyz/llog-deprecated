@@ -3,25 +3,25 @@
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
-import upsertMission from '@/_mutations/upsert-mission';
-import { GetMissionData } from '@/_queries/get-mission';
+import upsertTrainingPlan from '@/_mutations/upsert-training-plan';
+import { GetTrainingPlanData } from '@/_queries/get-training-plan';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
-interface MissionFormProps {
-  mission?: NonNullable<GetMissionData>;
+interface TrainingPlanFormProps {
+  mission?: NonNullable<GetTrainingPlanData>;
   subjectId: string;
 }
 
-interface MissionFormValues {
+interface TrainingPlanFormValues {
   name: string;
 }
 
-const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
+const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
 
-  const form = useForm<MissionFormValues>({
+  const form = useForm<TrainingPlanFormValues>({
     defaultValues: { name: mission?.name },
   });
 
@@ -31,7 +31,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
     <form
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const res = await upsertMission(
+          const res = await upsertTrainingPlan(
             { missionId: mission?.id, subjectId },
             values,
           );
@@ -58,6 +58,7 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
           label="Name"
           maxLength={49}
           required
+          tooltip="Succinctly describe the goal or purpose of the training plan."
           {...form.register('name')}
         />
       </div>
@@ -83,5 +84,5 @@ const MissionForm = ({ mission, subjectId }: MissionFormProps) => {
   );
 };
 
-export type { MissionFormValues };
-export default MissionForm;
+export type { TrainingPlanFormValues };
+export default TrainingPlanForm;

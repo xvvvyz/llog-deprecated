@@ -1,6 +1,8 @@
+import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import Insights from '@/_components/insights';
+import PageModalHeader from '@/_components/page-modal-header';
 import Number from '@/_constants/enum-number';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
@@ -14,17 +16,17 @@ import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircle
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives';
 
-interface SubjectInsightsPageProps {
+interface InsightsPageProps {
   isPublic?: boolean;
   searchParams: { from?: string; to?: string };
   subjectId: string;
 }
 
-const SubjectInsightsPage = async ({
+const InsightsPage = async ({
   isPublic,
   searchParams,
   subjectId,
-}: SubjectInsightsPageProps) => {
+}: InsightsPageProps) => {
   const f = formatEventFilters({
     from: searchParams.from,
     limit: String(Number.FourByteSignedIntMax - 1),
@@ -39,44 +41,50 @@ const SubjectInsightsPage = async ({
       getCurrentUser(),
     ]);
 
-  if (!subject || !events) return null;
+  if (!subject) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const searchObject = new URLSearchParams(searchParams);
   const searchString = searchObject.size ? `?${searchObject.toString()}` : '';
 
   return (
-    <div className="mt-16 space-y-4">
-      {isTeamMember && !subject.archived && (
-        <Button
-          className="w-full"
-          colorScheme="transparent"
-          href={`/subjects/${subjectId}/insights/create`}
-          scroll={false}
-        >
-          <PlusIcon className="w-5" />
-          Create insight
-        </Button>
-      )}
-      {!insights?.length ? (
-        <Empty className="mt-4">
-          <InformationCircleIcon className="w-7" />
-          No insights.
-        </Empty>
-      ) : (
-        <Insights
-          events={events}
-          insights={insights}
-          isArchived={subject.archived}
-          isPublic={isPublic}
-          isTeamMember={isTeamMember}
-          searchString={searchString}
-          shareOrSubjects={shareOrSubjects}
-          subjectId={subjectId}
-        />
-      )}
-    </div>
+    <>
+      <PageModalHeader title="Insights" />
+      <div className="space-y-4 px-4 sm:px-8">
+        {isTeamMember && !subject.archived && (
+          <Button
+            className="mb-4 w-full"
+            colorScheme="transparent"
+            href={`/subjects/${subjectId}/insights/create`}
+            scroll={false}
+          >
+            <PlusIcon className="w-5" />
+            New insight
+          </Button>
+        )}
+        {!insights?.length ? (
+          <Empty className="border-0">
+            <InformationCircleIcon className="w-7" />
+            No insights.
+          </Empty>
+        ) : (
+          <Insights
+            events={events}
+            insights={insights}
+            isArchived={subject.archived}
+            isPublic={isPublic}
+            isTeamMember={isTeamMember}
+            searchString={searchString}
+            shareOrSubjects={shareOrSubjects}
+            subjectId={subjectId}
+          />
+        )}
+      </div>
+      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+        Close
+      </BackButton>
+    </>
   );
 };
 
-export default SubjectInsightsPage;
+export default InsightsPage;

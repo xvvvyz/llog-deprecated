@@ -1,3 +1,3 @@
-const Loading = () => null;
+import SubjectLoading from '@/_components/subject-loading';
 
-export default Loading;
+export default SubjectLoading;
