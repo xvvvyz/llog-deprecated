@@ -21,7 +21,7 @@ const Layout = async ({ children }: LayoutProps) => {
     <div className="mx-auto max-w-lg pb-20">
       <Subscriptions />
       {user && (
-        <nav className="-mb-3 flex items-center justify-between gap-4 px-4 pt-8">
+        <nav className="flex items-center justify-between gap-4 px-4 pt-8">
           <div className="flex flex-wrap gap-4">
             <Button activeClassName="text-fg-2" href="/subjects" variant="link">
               Subjects

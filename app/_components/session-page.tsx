@@ -80,11 +80,11 @@ const SessionPage = async ({
         ) : (
           <>
             {session.title && (
-              <p className="mx-auto -mt-8 max-w-xs px-4 pb-8 text-center">
+              <p className="mx-auto max-w-xs px-4 text-center">
                 {session.title}
               </p>
             )}
-            <ul className="space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
+            <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
               {session.modules.map((module, i) => {
                 const event = firstIfArray(module.event);
                 const previousModule = session.modules[i - 1];

@@ -88,7 +88,7 @@ const SessionLayout = async ({
 
   return (
     <>
-      <nav className="flex w-full items-center justify-between px-4 pb-8 sm:px-8">
+      <nav className="flex w-full items-center justify-between px-4 sm:px-8">
         <ForwardSearchParamsIconButton
           disabled={!previousSessionId}
           href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
