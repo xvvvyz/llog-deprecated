@@ -3,11 +3,10 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
-  archived: ReactNode;
   children: ReactNode;
 }
 
-const Layout = async ({ archived, children }: LayoutProps) => (
+const Layout = async ({ children }: LayoutProps) => (
   <>
     <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
       <h1 className="text-2xl">Subjects</h1>
@@ -16,10 +15,7 @@ const Layout = async ({ archived, children }: LayoutProps) => (
         New subject
       </Button>
     </div>
-    <div className="space-y-4">
-      {children}
-      {archived}
-    </div>
+    <div className="space-y-4">{children}</div>
   </>
 );
 

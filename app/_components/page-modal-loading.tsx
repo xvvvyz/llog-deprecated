@@ -9,7 +9,7 @@ const PageModalLoading = () => (
     <div className="align-start flex justify-between px-4 py-8 sm:px-8">
       <div className="h-6 w-32 animate-pulse rounded-sm bg-alpha-3" />
       <BackIconButton
-        className="relative -top-1 right-1 shrink-0"
+        className="relative -top-0.5 right-1 shrink-0"
         icon={<XMarkIcon className="w-7" />}
       />
     </div>
