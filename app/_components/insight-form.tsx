@@ -208,6 +208,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       <CollapsibleSection
         className="grid gap-6 pt-6 md:grid-cols-3 md:gap-4"
         title="Additional options"
+        titleClassName="smallcaps"
       >
         <Controller
           control={form.control}
@@ -272,6 +273,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       <CollapsibleSection
         className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4"
         title="Filter events"
+        titleClassName="smallcaps"
       >
         <Controller
           control={form.control}
@@ -322,6 +324,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       <CollapsibleSection
         className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
         title="Margins"
+        titleClassName="smallcaps"
       >
         <Input
           label="Top"

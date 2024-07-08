@@ -33,9 +33,7 @@ const EventCard = ({
   return (
     <div className="space-y-16 py-8">
       {eventType.content && (
-        <DirtyHtml className="-my-1 px-4 sm:px-8">
-          {eventType.content}
-        </DirtyHtml>
+        <DirtyHtml className="px-4 sm:px-8">{eventType.content}</DirtyHtml>
       )}
       {(event || (!isPublic && !isArchived)) && (
         <EventForm

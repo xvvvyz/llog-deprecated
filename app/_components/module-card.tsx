@@ -36,11 +36,11 @@ const ModuleCard = ({
 
   return (
     <CollapsibleSection
-      className="space-y-16 py-8"
+      className="space-y-16 pb-8 pt-10"
       defaultOpen={!event && !disabled}
       title={
-        <div className="py-4 text-left">
-          <div className="text-xl leading-none">
+        <div className="py-2 text-left">
+          <div className="leading-none">
             Module {(eventType.order as number) + 1}
           </div>
           {event && (
@@ -62,9 +62,7 @@ const ModuleCard = ({
       titleClassName="sm:pl-8 border-0 my-0 pr-6 sm:pr-10"
     >
       {eventType.content && (
-        <DirtyHtml className="-my-1 px-4 sm:px-8">
-          {eventType.content}
-        </DirtyHtml>
+        <DirtyHtml className="px-4 sm:px-8">{eventType.content}</DirtyHtml>
       )}
       {(event || (!isPublic && !isArchived)) && (
         <EventForm
