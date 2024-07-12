@@ -82,10 +82,10 @@ create or replace function public.list_public_events(
               'mission', (select json_build_object(
                 'id', m.id,
                 'name', m.name
-              ),
-              'title', s.title
+              )
               from missions m
-              where m.id = s.mission_id)
+              where m.id = s.mission_id),
+              'title', s.title
             )
             from sessions s
             where s.id = et.session_id)

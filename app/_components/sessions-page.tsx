@@ -10,7 +10,7 @@ import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-tr
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
 import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
-import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 
@@ -101,7 +101,7 @@ const SessionsPage = async ({
                 key={session.id}
               >
                 <Button
-                  className="m-0 w-full min-w-0 gap-6 py-3 pl-4 pr-0 sm:pl-8"
+                  className="m-0 w-full min-w-0 justify-between gap-6 py-3 pl-4 pr-0 sm:pl-8"
                   href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?fromSessions=1`}
                   scroll={false}
                   variant="link"
@@ -127,7 +127,7 @@ const SessionsPage = async ({
                     </div>
                   </div>
                   {(subject.archived || !isTeamMember) && (
-                    <ArrowRightIcon className="-my-1 mr-6 w-5 shrink-0 sm:mr-10" />
+                    <ArrowUpRightIcon className="-my-1 mr-6 w-5 shrink-0 sm:mr-10" />
                   )}
                 </Button>
                 {!isPublic && !subject.archived && isTeamMember && (
