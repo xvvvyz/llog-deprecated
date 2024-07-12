@@ -10,8 +10,10 @@ import { Database } from '@/_types/database';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
+import { twMerge } from 'tailwind-merge';
 
 interface EventCommentProps {
+  clamp?: boolean;
   content: string;
   createdAt: string;
   hideCommentTimestamp?: boolean;
@@ -24,6 +26,7 @@ interface EventCommentProps {
 }
 
 const EventComment = ({
+  clamp,
   content,
   createdAt,
   hideCommentTimestamp,
@@ -81,7 +84,9 @@ const EventComment = ({
               </DropdownMenu>
             )}
         </div>
-        <DirtyHtml className="mt-1">{content}</DirtyHtml>
+        <DirtyHtml className={twMerge('mt-1', clamp && 'line-clamp-5')}>
+          {content}
+        </DirtyHtml>
       </div>
     </div>
   );

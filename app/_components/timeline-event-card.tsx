@@ -7,11 +7,11 @@ import EventMenu from '@/_components/event-menu';
 import TimelineEventInputsTable from '@/_components/timeline-event-inputs-table';
 import { ListEventsData } from '@/_queries/list-events';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import { twMerge } from 'tailwind-merge';
 
 import EventComments, {
   EventCommentsProps,
 } from '@/_components/event-comments';
-import { twMerge } from 'tailwind-merge';
 
 interface TimelineEventCardProps {
   event: NonNullable<ListEventsData>[0];
@@ -77,6 +77,7 @@ const TimelineEventCard = ({
         {!!event.comments.length && (
           <div className="space-y-4 pt-4">
             <EventComments
+              clamp
               comments={event.comments as EventCommentsProps['comments']}
               hideCommentTimestamp
               isArchived={isArchived}
