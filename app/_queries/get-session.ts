@@ -13,6 +13,7 @@ const getSession = (sessionId: string) =>
         event:events(id),
         id,
         inputs:event_type_inputs(input_id),
+        name,
         order
       ),
       scheduled_for,

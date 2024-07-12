@@ -15,7 +15,7 @@ const upsertEventType = async (
     .upsert({
       content: sanitizeHtml(data.content) || null,
       id: context.eventTypeId,
-      name: data.name?.trim(),
+      name: data.name?.trim() || null,
       subject_id: context.subjectId,
     })
     .select('id')

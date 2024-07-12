@@ -30,7 +30,8 @@ const listEvents = (
         session:sessions(
           id,
           mission:missions(id, name),
-          order
+          order,
+          title
         ),
         name,
         order

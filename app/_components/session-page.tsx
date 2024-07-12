@@ -66,7 +66,7 @@ const SessionPage = async ({
       >
         {session.scheduled_for &&
         new Date(session.scheduled_for) > new Date() ? (
-          <Empty className="border-0 pb-12">
+          <Empty className="mt-6 border-0">
             <CalendarDaysIcon className="w-7" />
             <p>
               Scheduled for{' '}
@@ -80,7 +80,7 @@ const SessionPage = async ({
         ) : (
           <>
             {session.title && (
-              <p className="mx-auto max-w-xs px-4 text-center">
+              <p className="mx-auto max-w-xs px-4 text-center leading-snug">
                 {session.title}
               </p>
             )}

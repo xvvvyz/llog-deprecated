@@ -1,4 +1,5 @@
 import Button from '@/_components/button';
+import getCurrentUser from '@/_queries/get-current-user';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
@@ -6,17 +7,24 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => (
-  <>
-    <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
-      <h1 className="text-2xl">Subjects</h1>
-      <Button href="/subjects/create" scroll={false} size="sm">
-        <PlusIcon className="-ml-0.5 w-5" />
-        New subject
-      </Button>
-    </div>
-    <div className="space-y-4">{children}</div>
-  </>
-);
+const Layout = async ({ children }: LayoutProps) => {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  return (
+    <>
+      {!user.user_metadata.is_client && (
+        <div className="mt-16 flex h-8 items-center justify-between gap-8 px-4">
+          <h1 className="text-2xl">Subjects</h1>
+          <Button href="/subjects/create" scroll={false} size="sm">
+            <PlusIcon className="-ml-0.5 w-5" />
+            New subject
+          </Button>
+        </div>
+      )}
+      <div className="mt-16 space-y-4">{children}</div>
+    </>
+  );
+};
 
 export default Layout;

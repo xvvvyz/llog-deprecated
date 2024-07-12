@@ -77,6 +77,7 @@ const upsertSession = async (
       (acc, module, order) => {
         const payload: Database['public']['Tables']['event_types']['Insert'] = {
           content: sanitizeHtml(module.content),
+          name: module.name?.trim() || null,
           order,
           session_id: session.id,
           subject_id: context.subjectId,

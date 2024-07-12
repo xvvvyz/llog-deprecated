@@ -39,12 +39,13 @@ const ModuleCard = ({
       className="space-y-16 pb-8 pt-10"
       defaultOpen={!event && !disabled}
       title={
-        <div className="py-2 text-left">
-          <div className="-mt-0.5">
+        <div className="min-w-0 py-2 text-left">
+          <div className="truncate leading-snug">
             Module {(eventType.order as number) + 1}
+            {eventType.name ? `: ${eventType.name}` : ''}
           </div>
           {event && (
-            <div className="smallcaps flex items-center gap-2 pt-1 text-fg-4">
+            <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
               Completed by
               <Avatar
                 className="-my-[0.15rem]"
@@ -59,7 +60,7 @@ const ModuleCard = ({
           )}
         </div>
       }
-      titleClassName="sm:pl-8 border-0 my-0 pr-6 sm:pr-10"
+      titleClassName="sm:pl-8 border-0 my-0 pr-6 sm:pr-10 hover:bg-alpha-1 active:bg-alpha-1"
     >
       {eventType.content && (
         <DirtyHtml className="px-4 sm:px-8">{eventType.content}</DirtyHtml>

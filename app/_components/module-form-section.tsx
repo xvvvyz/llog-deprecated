@@ -34,6 +34,7 @@ import {
 } from '@headlessui/react';
 
 import DropdownMenu from '@/_components/dropdown-menu';
+import Input from '@/_components/input';
 import {
   ArrayPath,
   Controller,
@@ -100,8 +101,8 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
   return (
     <li
       className={twMerge(
-        'relative rounded bg-bg-2',
-        isDragging && 'z-10 drop-shadow-2xl',
+        'bg-bg-2',
+        isDragging && 'relative z-10 drop-shadow-2xl',
       )}
       ref={setNodeRef}
       style={{
@@ -162,6 +163,12 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
           </DropdownMenu.Content>
         </DropdownMenu>
       </div>
+      <Input
+        className="rounded-none border-t-0"
+        maxLength={49}
+        placeholder="Module title"
+        {...form.register(`modules[${eventTypeIndex}].name` as Path<T>)}
+      />
       <Controller
         control={form.control}
         name={`modules[${eventTypeIndex}].content` as T[string]}
@@ -213,17 +220,24 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                 instanceId="template-select"
                 noOptionsMessage={() => 'No templates.'}
                 onChange={(t) => {
-                  const template = (
-                    t as NonNullable<ListTemplatesWithDataData>[0]
-                  )?.data as TemplateDataJson;
+                  const template =
+                    t as NonNullable<ListTemplatesWithDataData>[0];
+
+                  const data = template?.data as TemplateDataJson;
 
                   const inputs = availableInputs.filter(({ id }) =>
-                    forceArray(template?.inputIds).includes(id),
+                    forceArray(data?.inputIds).includes(id),
                   ) as PathValue<T, T[string]>;
 
                   form.setValue(
+                    `modules[${eventTypeIndex}].name` as Path<T>,
+                    template?.name as PathValue<T, Path<T>>,
+                    { shouldDirty: true },
+                  );
+
+                  form.setValue(
                     `modules[${eventTypeIndex}].content` as Path<T>,
-                    template?.content as PathValue<T, Path<T>>,
+                    data?.content as PathValue<T, Path<T>>,
                     { shouldDirty: true },
                   );
 

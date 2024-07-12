@@ -64,9 +64,10 @@ type SessionFormValues = {
     content: string;
     id?: string;
     inputs: Array<Database['public']['Tables']['inputs']['Row']>;
+    name?: string | null;
   }>;
   scheduledFor: string | null;
-  title: string;
+  title?: string | null;
 };
 
 const SessionForm = ({
@@ -106,6 +107,7 @@ const SessionForm = ({
               inputs: availableInputs.filter((input) =>
                 module.inputs.some(({ input_id }) => input_id === input.id),
               ),
+              name: module.name,
             }))
           : [{ content: '', inputs: [] }],
         scheduledFor:
@@ -114,7 +116,7 @@ const SessionForm = ({
             new Date(session.scheduled_for) < new Date())
             ? null
             : formatDatetimeLocal(session.scheduled_for, { seconds: false }),
-        title: session?.title ?? '',
+        title: session?.title,
       },
     },
     { ignoreValues: ['draft', 'order'] },
@@ -179,7 +181,8 @@ const SessionForm = ({
       >
         <div className="flex items-center gap-6">
           <Input
-            placeholder={`Session ${currentOrder + 1}`}
+            placeholder="Session title"
+            maxLength={49}
             {...form.register('title')}
           />
           <Button

@@ -143,7 +143,7 @@ const SubjectPage = async ({
                           target="_blank"
                         >
                           {link.label}
-                          <ArrowTopRightOnSquareIcon className="w-5" />
+                          <ArrowTopRightOnSquareIcon className="mr-0.5 w-5" />
                         </Button>
                       </li>
                     ))}
@@ -179,11 +179,9 @@ const SubjectPage = async ({
         <TimelineEvents
           events={events}
           filters={f}
-          isArchived={subject.archived}
           isPublic={isPublic}
-          isTeamMember={!!user && subject.team_id === user.id}
+          isTeamMember={isTeamMember}
           subjectId={subjectId}
-          user={user}
         />
       ) : (
         <>

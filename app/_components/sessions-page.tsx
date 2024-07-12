@@ -89,7 +89,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="border-y border-alpha-1 bg-bg-3 py-4">
+        <ul className="border-y border-alpha-1 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event?.length,
@@ -106,17 +106,12 @@ const SessionsPage = async ({
                   scroll={false}
                   variant="link"
                 >
-                  <div className="flex w-full min-w-0 items-baseline justify-between gap-6">
-                    <div className="min-w-0">
-                      <div className="truncate">
-                        {session.title ? (
-                          session.title
-                        ) : (
-                          <>Session {session.order + 1}</>
-                        )}
-                      </div>
+                  <div className="min-w-0">
+                    <div className="truncate leading-snug">
+                      Session {session.order + 1}
+                      {session.title && `: ${session.title}`}
                     </div>
-                    <div className="smallcaps shrink-0 text-fg-4">
+                    <div className="smallcaps pb-0.5 pt-1.5 text-fg-4">
                       {session.draft ? (
                         'Draft'
                       ) : new Date(session.scheduled_for ?? '') > new Date() ? (

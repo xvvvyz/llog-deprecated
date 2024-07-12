@@ -17,6 +17,8 @@ const Layout = async ({ children }: LayoutProps) => {
     getCurrentUser(),
   ]);
 
+  if (!user) return null;
+
   return (
     <div className="mx-auto max-w-lg pb-20">
       <Subscriptions />
@@ -26,7 +28,7 @@ const Layout = async ({ children }: LayoutProps) => {
             <Button activeClassName="text-fg-2" href="/subjects" variant="link">
               Subjects
             </Button>
-            {!user?.user_metadata?.is_client && (
+            {!user.user_metadata.is_client && (
               <>
                 <Button
                   activeClassName="text-fg-2"

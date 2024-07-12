@@ -32,7 +32,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
         subtitle={
           <>
             {event && (
-              <div className="smallcaps flex items-center gap-2 pt-3 text-fg-4">
+              <div className="smallcaps flex items-center gap-2 pt-2 text-fg-4">
                 {event.type.session ? 'Completed' : 'Recorded'} by
                 <Avatar
                   className="-my-[0.15rem]"
@@ -46,26 +46,23 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
               </div>
             )}
             {event.type.session && (
-              <div className="-mr-12 flex items-baseline gap-4 pt-1.5">
-                <span className="smallcaps text-fg-4">
-                  Session {Number(event.type.session.order) + 1}
-                </span>
-                <span className="smallcaps text-fg-4">
-                  Module {Number(event.type.order) + 1}
-                </span>
-                <Button
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.mission?.id}/sessions/${event.type.session.id}`}
-                  scroll={false}
-                  variant="link"
-                >
-                  View full session
-                  <ArrowUpRightIcon className="w-5" />
-                </Button>
-              </div>
+              <Button
+                className="pt-4"
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.mission?.id}/sessions/${event.type.session.id}`}
+                scroll={false}
+                variant="link"
+              >
+                View full session
+                <ArrowUpRightIcon className="w-5" />
+              </Button>
             )}
           </>
         }
-        title={event.type.name ?? event.type.session?.mission?.name}
+        title={
+          event.type.session
+            ? `Module ${Number(event.type.order) + 1}${event.type.name ? `: ${event.type.name}` : ''}`
+            : event.type.name
+        }
       />
       <EventCard
         event={event}

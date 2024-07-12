@@ -14,6 +14,7 @@ import { useToggle } from '@uidotdev/usehooks';
 interface EventCommentProps {
   content: string;
   createdAt: string;
+  hideCommentTimestamp?: boolean;
   id: string;
   profile: Database['public']['Tables']['profiles']['Row'];
   isArchived?: boolean;
@@ -25,6 +26,7 @@ interface EventCommentProps {
 const EventComment = ({
   content,
   createdAt,
+  hideCommentTimestamp,
   id,
   profile,
   isArchived,
@@ -50,11 +52,13 @@ const EventComment = ({
             <span className="w-0 flex-1 truncate">
               {profile.first_name} {profile.last_name}
             </span>
-            <DateTime
-              className="flex-shrink-0 whitespace-nowrap"
-              date={createdAt}
-              formatter="date-time"
-            />
+            {!hideCommentTimestamp && (
+              <DateTime
+                className="flex-shrink-0 whitespace-nowrap"
+                date={createdAt}
+                formatter="date-time"
+              />
+            )}
           </div>
           {!isPublic &&
             !isArchived &&
