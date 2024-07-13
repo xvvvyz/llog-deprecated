@@ -29,6 +29,7 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
 
   return (
     <form
+      className="px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertTrainingPlan(
@@ -53,21 +54,17 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
         }),
       )}
     >
-      <div className="px-4 py-8 sm:px-8">
-        <Input
-          label="Name"
-          maxLength={49}
-          required
-          tooltip="Succinctly describe the goal or purpose of the training plan."
-          {...form.register('name')}
-        />
-      </div>
+      <Input
+        label="Name"
+        maxLength={49}
+        required
+        tooltip="Succinctly describe the goal or purpose of the training plan."
+        {...form.register('name')}
+      />
       {form.formState.errors.root && (
-        <div className="px-4 py-8 text-center sm:px-8">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex gap-4 px-4 py-8 sm:px-8">
+      <div className="flex gap-4 pt-8">
         <BackButton className="w-full" colorScheme="transparent">
           Close
         </BackButton>

@@ -9,7 +9,7 @@ const ChangePasswordForm = () => {
   const [state, action] = useActionState(updatePassword, null);
 
   return (
-    <form action={action} className="flex flex-col gap-6">
+    <form action={action} className="flex flex-col gap-8">
       <Input
         label="New password"
         minLength={6}

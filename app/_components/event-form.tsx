@@ -139,7 +139,7 @@ const EventForm = ({
   return (
     <form
       action={() => {}}
-      className={twMerge('flex flex-col gap-6 px-4 sm:px-8', className)}
+      className={twMerge('flex flex-col gap-8 px-4 sm:px-8', className)}
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           pendingComment.current = values.comment;
@@ -299,12 +299,10 @@ const EventForm = ({
         />
       )}
       {form.formState.errors.root && (
-        <div className="py-8 text-center">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       {!isPublic && !isArchived && (!event || form.formState.isDirty) && (
-        <div className="flex gap-4 pt-10">
+        <div className="flex gap-4 pt-8">
           {!event && !isMission && (
             <BackButton className="w-full" colorScheme="transparent">
               Close

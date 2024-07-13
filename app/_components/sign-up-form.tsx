@@ -16,7 +16,7 @@ const SignUpForm = ({ next }: SignUpFormProps) => {
   });
 
   return (
-    <form action={action} className="flex flex-col gap-6">
+    <form action={action} className="flex flex-col gap-8">
       <div className="flex gap-6">
         <Input
           defaultValue={state.defaultValues.firstName}

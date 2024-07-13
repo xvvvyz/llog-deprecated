@@ -28,6 +28,7 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
 
   return (
     <form
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const supabase = createBrowserSupabaseClient();
@@ -47,20 +48,16 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
         }),
       )}
     >
-      <div className="px-4 pb-8 pt-6 sm:px-8">
-        <Input
-          label="Email address"
-          required
-          type="email"
-          {...form.register('email')}
-        />
-      </div>
+      <Input
+        label="Email address"
+        required
+        type="email"
+        {...form.register('email')}
+      />
       {form.formState.errors.root && (
-        <div className="px-4 py-8 text-center sm:px-8">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex gap-4 px-4 py-8 sm:px-8">
+      <div className="flex gap-4 pt-8">
         <BackButton className="w-full" colorScheme="transparent">
           Close
         </BackButton>

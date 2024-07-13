@@ -128,7 +128,7 @@ const EventTypeForm = ({
           )}
         />
         {form.formState.errors.root && (
-          <div className="py-8 text-center">
+          <div className="text-center">
             {form.formState.errors.root.message}
           </div>
         )}

@@ -35,6 +35,7 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
 
   return (
     <form
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const supabase = createBrowserSupabaseClient();
@@ -71,37 +72,33 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
         }),
       )}
     >
-      <div className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8">
-        <div className="flex gap-6">
-          <Input label="First name" required {...form.register('firstName')} />
-          <Input label="Last name" required {...form.register('lastName')} />
-        </div>
-        <div className="relative">
-          <label className="group">
-            <span className="label">Profile image</span>
-            <AvatarDropzone
-              file={form.watch('avatar')}
-              id={user.id}
-              onDrop={(files) => form.setValue('avatar', files[0])}
-            />
-          </label>
-          {form.watch('avatar') && (
-            <Button
-              className="absolute right-2 top-0"
-              onClick={() => form.setValue('avatar', null)}
-              variant="link"
-            >
-              Remove image
-            </Button>
-          )}
-        </div>
+      <div className="flex gap-6">
+        <Input label="First name" required {...form.register('firstName')} />
+        <Input label="Last name" required {...form.register('lastName')} />
+      </div>
+      <div className="relative">
+        <label className="group">
+          <span className="label">Profile image</span>
+          <AvatarDropzone
+            file={form.watch('avatar')}
+            id={user.id}
+            onDrop={(files) => form.setValue('avatar', files[0])}
+          />
+        </label>
+        {form.watch('avatar') && (
+          <Button
+            className="absolute right-2 top-0"
+            onClick={() => form.setValue('avatar', null)}
+            variant="link"
+          >
+            Remove image
+          </Button>
+        )}
       </div>
       {form.formState.errors.root && (
-        <div className="px-4 py-8 text-center sm:px-8">
-          {form.formState.errors.root.message}
-        </div>
+        <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex gap-4 px-4 py-8 sm:px-8">
+      <div className="flex gap-4 pt-8">
         <BackButton className="w-full" colorScheme="transparent">
           Close
         </BackButton>

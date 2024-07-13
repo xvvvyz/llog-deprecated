@@ -39,7 +39,7 @@ const ModuleCard = ({
       className="space-y-16 pb-8 pt-10"
       defaultOpen={!event && !disabled}
       title={
-        <div className="min-w-0 py-2 text-left">
+        <div className="min-w-0 text-left">
           <div className="truncate leading-snug">
             Module {(eventType.order as number) + 1}
             {eventType.name ? `: ${eventType.name}` : ''}

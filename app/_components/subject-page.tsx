@@ -42,14 +42,13 @@ const SubjectPage = async ({
 }: SubjectPageProps) => {
   const f = formatEventFilters({ from, limit, to });
 
-  const [{ data: subject }, { data: events, error }, user] = await Promise.all([
+  const [{ data: subject }, { data: events }, user] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
     isPublic
       ? await listPublicEvents(subjectId, f)
       : await listEvents(subjectId, f),
     getCurrentUser(),
   ]);
-  console.log(error);
 
   if (!subject) return null;
   const isTeamMember = !!user && subject.team_id === user.id;

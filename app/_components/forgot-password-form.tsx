@@ -12,7 +12,7 @@ const ForgotPasswordForm = () => {
   });
 
   return (
-    <form action={action} className="flex flex-col gap-6">
+    <form action={action} className="flex flex-col gap-8">
       <Input
         defaultValue={state.defaultValues.email}
         label="Email address"
