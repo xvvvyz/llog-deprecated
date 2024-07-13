@@ -35,7 +35,7 @@ If you modify the database schema:
 
 ```shell
 bun db:types
-bun db:diff -- migration-description
+bun db:diff -- -f migration-description
 ```
 
 ## Production Notes
