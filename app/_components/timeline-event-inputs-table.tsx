@@ -12,7 +12,7 @@ const TimelineEventInputsTable = ({
   className,
   inputs,
 }: TimelineEventInputsTableProps) => (
-  <table className={twMerge('w-full table-fixed leading-snug', className)}>
+  <table className={twMerge('w-full table-fixed', className)}>
     <tbody>
       {Object.entries(
         inputs.reduce<

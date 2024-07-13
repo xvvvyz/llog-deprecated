@@ -17,6 +17,7 @@ interface EventCommentsProps {
   isArchived?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
+  limit?: number;
   userId?: string;
 }
 
@@ -28,13 +29,16 @@ const EventComments = ({
   isArchived,
   isPublic,
   isTeamMember,
+  limit = Infinity,
   userId,
 }: EventCommentsProps) => {
   if (!comments.length) return null;
+  const clone = [...comments];
+  const hidden = clone.splice(limit);
 
   return (
     <div className={twMerge('space-y-4', className)}>
-      {comments.map(({ content, created_at, id, profile }) => (
+      {clone.map(({ content, created_at, id, profile }) => (
         <EventComment
           clamp={clamp}
           content={content}
@@ -49,6 +53,11 @@ const EventComments = ({
           userId={userId}
         />
       ))}
+      {!!hidden.length && (
+        <div className="!mt-2 text-right text-fg-4">
+          +{hidden.length} comment{hidden.length > 1 ? 's' : ''}
+        </div>
+      )}
     </div>
   );
 };

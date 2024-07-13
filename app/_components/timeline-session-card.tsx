@@ -121,6 +121,7 @@ const TimelineSessionCard = ({
                     hideCommentTimestamp
                     isArchived={isArchived}
                     isPublic={isPublic}
+                    limit={1}
                   />
                 </div>
               )}
