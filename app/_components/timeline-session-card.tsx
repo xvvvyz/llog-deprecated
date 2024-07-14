@@ -51,7 +51,7 @@ const TimelineSessionCard = ({
             </div>
             <ArrowUpRightIcon className="-mt-1.5 w-5 shrink-0" />
           </div>
-          <div className="pb-0.5 text-fg-4">
+          <div className="pb-0.5 text-fg-4 truncate">
             Session {sessionNumber}
             {lastEventType?.session?.title
               ? `: ${lastEventType.session.title}`
