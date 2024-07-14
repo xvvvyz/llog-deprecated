@@ -50,7 +50,7 @@ const TimelineEventCard = ({
                 formatter="time"
               />
               <ArrowUpRightIcon
-                className={twMerge('-mt-1.5 w-5', isTeamMember && 'invisible')}
+                className={twMerge('-mt-0.5 w-5', isTeamMember && 'invisible')}
               />
             </div>
           </div>

@@ -84,7 +84,7 @@ const EventComment = ({
               </DropdownMenu>
             )}
         </div>
-        <DirtyHtml className={twMerge('mt-1', clamp && 'line-clamp-5')}>
+        <DirtyHtml className={twMerge(clamp && 'line-clamp-5')}>
           {content}
         </DirtyHtml>
       </div>

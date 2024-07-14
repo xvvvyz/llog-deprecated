@@ -80,7 +80,7 @@ const SessionPage = async ({
         ) : (
           <>
             {session.title && (
-              <p className="mx-auto max-w-xs px-4 text-center leading-snug">
+              <p className="mx-auto max-w-xs px-4 text-center">
                 {session.title}
               </p>
             )}

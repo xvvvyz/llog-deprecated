@@ -57,7 +57,7 @@
 
   /* hack to style tip tap youtube videos */
   div[data-youtube-video] > iframe {
-    @apply aspect-video h-auto w-full rounded;
+    @apply my-1.5 aspect-video h-auto w-full rounded;
   }
 
   /* hack to style observable plot tooltip */

@@ -29,7 +29,7 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
       >
         <Button
           className={twMerge(
-            'm-0 w-full items-baseline gap-4 px-4 py-3 leading-snug',
+            'm-0 w-full min-w-0 gap-4 px-4 py-3 leading-snug',
             isTeamMember && 'pr-0',
           )}
           href={
@@ -40,17 +40,20 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
           scroll={false}
           variant="link"
         >
-          {mission.name}
-          {!isTeamMember && (
-            <div className="ml-auto flex shrink-0 items-center gap-4">
-              {activeSession && (
-                <span className="smallcaps text-fg-4">
-                  Session {activeSession.order + 1}
-                </span>
-              )}
-              {!isTeamMember && <ArrowUpRightIcon className="w-5" />}
+          <div className="w-full min-w-0">
+            <div className="flex w-full justify-between gap-4">
+              <div className="min-w-0">
+                <div className="truncate">{mission.name}</div>
+              </div>
+              {!isTeamMember && <ArrowUpRightIcon className="w-5 shrink-0" />}
             </div>
-          )}
+            {!isTeamMember && activeSession && (
+              <div className="truncate text-fg-4">
+                Session {activeSession.order + 1}
+                {activeSession.title ? `: ${activeSession.title}` : ''}
+              </div>
+            )}
+          </div>
         </Button>
         {isTeamMember && (
           <TrainingPlanMenu missionId={mission.id} subjectId={subjectId} />

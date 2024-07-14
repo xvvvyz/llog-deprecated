@@ -1,10 +1,10 @@
 import Avatar from '@/_components/avatar';
-import BackIconButton from '@/_components/back-icon-button';
 import Button from '@/_components/button';
 import DirtyHtml from '@/_components/dirty-html';
 import Empty from '@/_components/empty';
 import EventTypes from '@/_components/event-types';
 import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
+import IconButton from '@/_components/icon-button';
 import SubjectEventsDateFilter from '@/_components/subject-events-date-filter';
 import SubjectMenu from '@/_components/subject-menu';
 import TimelineEvents from '@/_components/timeline-events';
@@ -60,7 +60,8 @@ const SubjectPage = async ({
       <div className="mt-16 flex h-8 items-center justify-between gap-6">
         <div className="flex min-w-0 items-center gap-6">
           {!isPublic && (
-            <BackIconButton
+            <IconButton
+              href="/subjects"
               icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
               label="Back"
             />

@@ -4,7 +4,7 @@ const listSubjectTrainingPlans = (subjectId: string) =>
   createServerSupabaseClient()
     .from('missions')
     .select(
-      'id, name, sessions(id, modules:event_types(event:events(id)), order)',
+      'id, name, sessions(id, modules:event_types(event:events(id)), order, title)',
     )
     .eq('subject_id', subjectId)
     .eq('archived', false)

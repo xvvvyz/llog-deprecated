@@ -43,15 +43,15 @@ const TimelineSessionCard = ({
         variant="link"
       >
         <div>
-          <div className="flex items-baseline justify-between gap-4">
+          <div className="flex justify-between gap-4">
             <div className="min-w-0">
               <div className="truncate">
                 {lastEventType?.session?.mission?.name}
               </div>
             </div>
-            <ArrowUpRightIcon className="-mt-1.5 w-5 shrink-0" />
+            <ArrowUpRightIcon className="w-5 shrink-0" />
           </div>
-          <div className="pb-0.5 text-fg-4 truncate">
+          <div className="truncate text-fg-4">
             Session {sessionNumber}
             {lastEventType?.session?.title
               ? `: ${lastEventType.session.title}`
@@ -84,7 +84,7 @@ const TimelineSessionCard = ({
                     />
                     <ArrowUpRightIcon
                       className={twMerge(
-                        '-mt-1.5 w-5',
+                        '-mt-0.5 w-5',
                         isTeamMember && 'invisible',
                       )}
                     />

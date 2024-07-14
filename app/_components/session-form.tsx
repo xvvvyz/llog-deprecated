@@ -83,7 +83,7 @@ const SessionForm = ({
   const [isTransitioning, startTransition] = useTransition();
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
-  const currentOrder = (isDuplicate ? order : session?.order ?? order) ?? 0;
+  const currentOrder = (isDuplicate ? order : (session?.order ?? order)) ?? 0;
   const modules = forceArray(session?.modules);
   const router = useRouter();
   const sensors = useSensors(useSensor(PointerSensor));
@@ -99,7 +99,7 @@ const SessionForm = ({
     cacheKey,
     {
       defaultValues: {
-        draft: isDuplicate ? true : session?.draft ?? true,
+        draft: isDuplicate ? true : (session?.draft ?? true),
         modules: modules.length
           ? modules.map((module) => ({
               content: module.content ?? '',
