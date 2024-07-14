@@ -29,7 +29,7 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
 
   return (
     <form
-      className="px-4 pb-8 pt-6 sm:px-8"
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertTrainingPlan(
