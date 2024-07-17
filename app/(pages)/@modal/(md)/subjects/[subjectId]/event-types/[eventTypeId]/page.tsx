@@ -1,4 +1,5 @@
 import EventCard from '@/_components/event-card';
+import EventTypeMenu from '@/_components/event-type-menu';
 import PageModalHeader from '@/_components/page-modal-header';
 import getCurrentUser from '@/_queries/get-current-user';
 import getEventTypeWithInputsAndOptions from '@/_queries/get-event-type-with-inputs-and-options';
@@ -22,14 +23,26 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   ]);
 
   if (!subject || !eventType) return null;
+  const isTeamMember = !!user && subject.team_id === user.id;
 
   return (
     <>
-      <PageModalHeader title={eventType.name as string} />
+      <PageModalHeader
+        menu={
+          isTeamMember && (
+            <EventTypeMenu
+              eventTypeId={eventType.id}
+              isView
+              subjectId={subjectId}
+            />
+          )
+        }
+        title={eventType.name as string}
+      />
       <EventCard
         eventType={eventType}
         isArchived={subject.archived}
-        isTeamMember={!!user && subject.team_id === user.id}
+        isTeamMember={isTeamMember}
         subjectId={subjectId}
         user={user}
       />

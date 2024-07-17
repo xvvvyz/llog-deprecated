@@ -1,7 +1,4 @@
-import BackButton from '@/_components/back-button';
-import PageModalHeader from '@/_components/page-modal-header';
 import SessionForm from '@/_components/session-form';
-import SessionLayout from '@/_components/session-layout';
 import getCurrentUser from '@/_queries/get-current-user';
 import getSession from '@/_queries/get-session';
 import getSubject from '@/_queries/get-subject';
@@ -59,29 +56,14 @@ const Page = async ({
   }
 
   return (
-    <>
-      <PageModalHeader title={mission.name} />
-      <SessionLayout
-        isEdit
-        isTeamMember
-        missionId={missionId}
-        sessionId={sessionId}
-        sessions={mission.sessions}
-        subjectId={subjectId}
-      >
-        <SessionForm
-          availableInputs={availableInputs}
-          availableTemplates={availableTemplates}
-          mission={mission}
-          session={session}
-          subjects={subjects}
-          subjectId={subjectId}
-        />
-      </SessionLayout>
-      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
-        Close
-      </BackButton>
-    </>
+    <SessionForm
+      availableInputs={availableInputs}
+      availableTemplates={availableTemplates}
+      mission={mission}
+      session={session}
+      subjects={subjects}
+      subjectId={subjectId}
+    />
   );
 };
 

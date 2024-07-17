@@ -2,6 +2,7 @@
 
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
+import EventTypeMenu from '@/_components/event-type-menu';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -14,6 +15,7 @@ import { GetEventTypeWithInputsData } from '@/_queries/get-event-type-with-input
 import { GetInputData } from '@/_queries/get-input';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
+import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
@@ -22,9 +24,10 @@ import { Controller, useFieldArray } from 'react-hook-form';
 
 interface EventTypeFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
+  availableTemplates?: NonNullable<ListTemplatesWithDataData>;
   eventType?: NonNullable<GetEventTypeWithInputsData>;
-  subjects: NonNullable<ListSubjectsByTeamIdData>;
   subjectId: string;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
 type EventTypeFormValues = {
@@ -35,9 +38,10 @@ type EventTypeFormValues = {
 
 const EventTypeForm = ({
   availableInputs,
+  availableTemplates,
   eventType,
-  subjects,
   subjectId,
+  subjects,
 }: EventTypeFormProps) => {
   const [createInputModal, setCreateInputModal] =
     useState<Partial<GetInputData>>(null);
@@ -60,6 +64,19 @@ const EventTypeForm = ({
 
   return (
     <>
+      <PageModalHeader
+        menu={
+          <EventTypeMenu<EventTypeFormValues>
+            availableInputs={availableInputs}
+            availableTemplates={availableTemplates}
+            eventTypeId={eventType?.id}
+            form={form}
+            subjectId={subjectId}
+            subjects={subjects}
+          />
+        }
+        title={(eventType?.name as string) ?? 'New event type'}
+      />
       <form
         className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
         onSubmit={form.handleSubmit((values) =>

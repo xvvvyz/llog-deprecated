@@ -4,6 +4,7 @@ import Empty from '@/_components/empty';
 import ModuleCard from '@/_components/module-card';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
+import SessionMenu from '@/_components/session-menu';
 import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
@@ -13,6 +14,7 @@ import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import firstIfArray from '@/_utilities/first-if-array';
+import parseSessions from '@/_utilities/parse-sessions';
 import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
 
 interface SessionPageProps {
@@ -28,7 +30,7 @@ const SessionPage = async ({
   sessionId,
   subjectId,
 }: SessionPageProps) => {
-  const [{ data: subject }, { data: mission }, { data: session }, user] =
+  const [{ data: subject }, { data: trainingPlan }, { data: session }, user] =
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic
@@ -40,12 +42,35 @@ const SessionPage = async ({
       getCurrentUser(),
     ]);
 
-  if (!subject || !mission || !session) return null;
+  if (!subject || !trainingPlan || !session) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
+
+  const {
+    highestOrder,
+    highestPublishedOrder,
+    nextSessionId,
+    previousSessionId,
+  } = parseSessions({
+    currentSession: session,
+    sessionOrder: session.order,
+    sessions: trainingPlan.sessions,
+  });
 
   return (
     <>
       <PageModalHeader
+        menu={
+          isTeamMember && (
+            <SessionMenu
+              highestPublishedOrder={highestPublishedOrder}
+              isView
+              missionId={missionId}
+              nextSessionOrder={highestOrder + 1}
+              session={session}
+              subjectId={subjectId}
+            />
+          )
+        }
         subtitle={
           <ViewAllSessionsButton
             isPublic={isPublic}
@@ -53,15 +78,18 @@ const SessionPage = async ({
             subjectId={subjectId}
           />
         }
-        title={mission.name}
+        title={trainingPlan.name}
       />
       <SessionLayout
+        highestOrder={highestOrder}
         isArchived={subject.archived}
         isPublic={isPublic}
         isTeamMember={isTeamMember}
         missionId={missionId}
+        nextSessionId={nextSessionId}
+        previousSessionId={previousSessionId}
         sessionId={sessionId}
-        sessions={mission.sessions}
+        sessions={trainingPlan.sessions}
         subjectId={subjectId}
       >
         {session.scheduled_for &&
@@ -103,7 +131,7 @@ const SessionPage = async ({
                       isArchived={subject.archived}
                       isPublic={isPublic}
                       isTeamMember={isTeamMember}
-                      mission={mission}
+                      mission={trainingPlan}
                       subjectId={subjectId}
                       user={user}
                     />

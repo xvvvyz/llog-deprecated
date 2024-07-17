@@ -1,5 +1,4 @@
 import EventTypeForm from '@/_components/event-type-form';
-import PageModalHeader from '@/_components/page-modal-header';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
@@ -20,28 +19,26 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   const [
     { data: subject },
     { data: availableInputs },
-    { data: availableTemplates },
     { data: subjects },
+    { data: availableTemplates },
   ] = await Promise.all([
     getSubject(subjectId),
     listInputsBySubjectId(subjectId),
-    listTemplatesWithData(),
     listSubjectsByTeamId(),
+    listTemplatesWithData(),
   ]);
 
-  if (!subject || !availableInputs || !availableTemplates || !subjects) {
+  if (!subject || !availableInputs || !subjects || !availableTemplates) {
     return null;
   }
 
   return (
-    <>
-      <PageModalHeader title="New event type" />
-      <EventTypeForm
-        availableInputs={availableInputs}
-        subjects={subjects}
-        subjectId={subjectId}
-      />
-    </>
+    <EventTypeForm
+      availableInputs={availableInputs}
+      availableTemplates={availableTemplates}
+      subjects={subjects}
+      subjectId={subjectId}
+    />
   );
 };
 

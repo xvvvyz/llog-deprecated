@@ -4,12 +4,13 @@ import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionMenu from '@/_components/session-menu';
+import TrainingPlanMenu from '@/_components/training-plan-menu';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-training-plan-with-sessions-and-events';
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
-import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
+import parseSessions from '@/_utilities/parse-sessions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -41,26 +42,26 @@ const SessionsPage = async ({
 
   if (!mission) return null;
 
-  const { highestOrder, sessionsReversed } = mission.sessions.reduce(
-    (acc, session, i) => {
-      acc.highestOrder = Math.max(acc.highestOrder, session.order);
+  const { highestOrder, highestPublishedOrder, sessionsReversed } =
+    parseSessions({ sessions: mission.sessions });
 
-      acc.sessionsReversed.push(
-        mission.sessions[mission.sessions.length - i - 1],
-      );
-
-      return acc;
-    },
-    { highestOrder: -1, sessionsReversed: [] as typeof mission.sessions },
-  );
-
-  const highestPublishedOrder = getHighestPublishedOrder(mission.sessions);
   const nextSessionOrder = highestOrder + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
     <>
-      <PageModalHeader title={mission.name} />
+      <PageModalHeader
+        menu={
+          isTeamMember && (
+            <TrainingPlanMenu
+              isView
+              missionId={mission.id}
+              subjectId={subjectId}
+            />
+          )
+        }
+        title={mission.name}
+      />
       {!isPublic && !subject.archived && isTeamMember && (
         <div className="px-4 pb-8 sm:px-8">
           <Button

@@ -1,9 +1,9 @@
 import EventTypeForm from '@/_components/event-type-form';
-import PageModalHeader from '@/_components/page-modal-header';
 import getEventTypeWithInputs from '@/_queries/get-event-type-with-inputs';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
+import listTemplatesWithData from '@/_queries/list-templates-with-data';
 import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
@@ -23,27 +23,33 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
     { data: eventType },
     { data: availableInputs },
     { data: subjects },
+    { data: availableTemplates },
   ] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputs(eventTypeId),
     listInputsBySubjectId(subjectId),
     listSubjectsByTeamId(),
+    listTemplatesWithData(),
   ]);
 
-  if (!subject || !eventType || !availableInputs || !subjects) {
+  if (
+    !subject ||
+    !eventType ||
+    !availableInputs ||
+    !subjects ||
+    !availableTemplates
+  ) {
     return null;
   }
 
   return (
-    <>
-      <PageModalHeader title={eventType.name as string} />
-      <EventTypeForm
-        availableInputs={availableInputs}
-        eventType={eventType}
-        subjects={subjects}
-        subjectId={subjectId}
-      />
-    </>
+    <EventTypeForm
+      availableInputs={availableInputs}
+      availableTemplates={availableTemplates}
+      eventType={eventType}
+      subjectId={subjectId}
+      subjects={subjects}
+    />
   );
 };
 

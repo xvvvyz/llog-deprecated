@@ -2,8 +2,10 @@
 
 import Alert from '@/_components/alert';
 import DropdownMenu from '@/_components/dropdown-menu';
+import IconButton from '@/_components/icon-button';
 import deleteSession from '@/_mutations/delete-session';
 import moveSession from '@/_mutations/move-session';
+import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
 import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/outline/ArrowUpIcon';
@@ -12,46 +14,63 @@ import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIc
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
-interface SessionMenuProps {
+interface SessionMenuProps<T extends FieldValues> {
+  form?: UseFormReturn<T>;
   highestPublishedOrder: number;
+  isView?: boolean;
   missionId: string;
   nextSessionOrder: number;
-  session: NonNullable<GetTrainingPlanWithSessionsData>['sessions'][0];
+  session:
+    | NonNullable<GetTrainingPlanWithSessionsData>['sessions'][0]
+    | NonNullable<GetSessionWithDetailsData>;
   subjectId: string;
 }
 
-const SessionMenu = ({
+const SessionMenu = <T extends FieldValues>({
+  form,
   highestPublishedOrder,
+  isView,
   missionId,
   nextSessionOrder,
   session,
   subjectId,
-}: SessionMenuProps) => {
+}: SessionMenuProps<T>) => {
   const [deleteAlert, toggleDeleteAlert] = useToggle(false);
   const [isMoveLeftTransitioning, startMoveLeftTransition] = useTransition();
   const [isMoveRightTransitioning, startMoveRightTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <>
       <DropdownMenu
         trigger={
-          <div className="group mr-1.5 flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2 sm:mr-6">
-            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
-              <EllipsisVerticalIcon className="w-5" />
+          form || isView ? (
+            <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
+          ) : (
+            <div className="group mr-1.5 flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2 sm:mr-6">
+              <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+                <EllipsisVerticalIcon className="w-5" />
+              </div>
             </div>
-          </div>
+          )
         }
       >
-        <DropdownMenu.Content className="-mt-12 mr-1.5">
-          <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
-            scroll={false}
-          >
-            <PencilIcon className="w-5 text-fg-4" />
-            Edit
-          </DropdownMenu.Button>
+        <DropdownMenu.Content
+          className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
+        >
+          {!form && (
+            <DropdownMenu.Button
+              href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
+              scroll={false}
+            >
+              <PencilIcon className="w-5 text-fg-4" />
+              Edit
+            </DropdownMenu.Button>
+          )}
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}`}
             scroll={false}
@@ -112,13 +131,19 @@ const SessionMenu = ({
       <Alert
         confirmText="Delete session"
         isConfirmingText="Deleting…"
-        onConfirm={() =>
-          deleteSession({
+        onConfirm={async () => {
+          await deleteSession({
             currentOrder: session.order,
             missionId: missionId,
             sessionId: session.id,
-          })
-        }
+          });
+
+          if (form || isView) {
+            router.replace(
+              `/subjects/${subjectId}/training-plans/${missionId}`,
+            );
+          }
+        }}
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
       />

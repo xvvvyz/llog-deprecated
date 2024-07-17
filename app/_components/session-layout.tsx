@@ -10,27 +10,33 @@ import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
   children: ReactNode;
+  highestOrder: number;
   isArchived?: boolean;
   isCreate?: boolean;
   isEdit?: boolean;
   isPublic?: boolean;
   isTeamMember: boolean;
   missionId: string;
+  nextSessionId: string | null;
   order?: string;
+  previousSessionId: string | null;
   sessionId?: string;
   sessions: NonNullable<GetTrainingPlanWithSessionsData>['sessions'];
   subjectId: string;
 }
 
-const SessionLayout = async ({
+const SessionLayout = ({
   children,
+  highestOrder,
   isArchived,
   isCreate,
   isEdit,
   isPublic,
   isTeamMember,
   missionId,
+  nextSessionId,
   order,
+  previousSessionId,
   sessionId,
   sessions,
   subjectId,
@@ -40,32 +46,6 @@ const SessionLayout = async ({
   const sessionOrder = order ? Number(order) : currentSession?.order;
   if (typeof sessionOrder === 'undefined') return null;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
-
-  // eslint-disable-next-line prefer-const
-  let { highestOrder, nextSessionId, previousSessionId } = sessions.reduce(
-    (acc, session, i) => {
-      acc.highestOrder = Math.max(acc.highestOrder, session.order);
-
-      if (currentSession) {
-        if (currentSession.id === session.id) {
-          acc.nextSessionId = sessions[i + 1]?.id;
-          acc.previousSessionId = sessions[i - 1]?.id;
-        }
-      } else {
-        if (session.order === sessionOrder) {
-          acc.nextSessionId = sessions[i + 1]?.id;
-          acc.previousSessionId = sessions[i]?.id;
-        }
-      }
-
-      return acc;
-    },
-    { highestOrder: -1, nextSessionId: null, previousSessionId: null } as {
-      highestOrder: number;
-      nextSessionId: string | null;
-      previousSessionId: string | null;
-    },
-  );
 
   if (
     isEditOrCreate &&
@@ -112,7 +92,6 @@ const SessionLayout = async ({
               <ForwardSearchParamsButton
                 className="-my-4 items-baseline"
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
-                replace
                 scroll={false}
                 variant="link"
               >
@@ -123,7 +102,6 @@ const SessionLayout = async ({
               <ForwardSearchParamsButton
                 className="-my-4 items-baseline"
                 href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
-                replace
                 scroll={false}
                 variant="link"
               >

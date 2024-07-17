@@ -4,6 +4,10 @@ import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Input from '@/_components/input';
 import ModuleFormSection from '@/_components/module-form-section';
+import PageModalHeader from '@/_components/page-modal-header';
+import SessionLayout from '@/_components/session-layout';
+import SessionMenu from '@/_components/session-menu';
+import Tip from '@/_components/tip';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
@@ -16,7 +20,7 @@ import { Database } from '@/_types/database';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
-import getHighestPublishedOrder from '@/_utilities/get-highest-published-order';
+import parseSessions from '@/_utilities/parse-sessions';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
@@ -24,13 +28,6 @@ import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useFieldArray } from 'react-hook-form';
-
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from '@headlessui/react';
 
 import {
   closestCenter,
@@ -41,18 +38,24 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 
-import Tip from '@/_components/tip';
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/react';
 
 interface SessionFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
   availableTemplates: NonNullable<ListTemplatesWithDataData>;
   isDuplicate?: boolean;
   mission: NonNullable<GetTrainingPlanWithSessionsData>;
-  order?: number;
+  order?: string;
   session?: NonNullable<GetSessionData>;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   subjectId: string;
@@ -83,10 +86,13 @@ const SessionForm = ({
   const [isTransitioning, startTransition] = useTransition();
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
-  const currentOrder = (isDuplicate ? order : (session?.order ?? order)) ?? 0;
   const modules = forceArray(session?.modules);
   const router = useRouter();
   const sensors = useSensors(useSensor(PointerSensor));
+
+  const currentOrder = Number(
+    (isDuplicate ? order : (session?.order ?? order)) ?? 0,
+  );
 
   const cacheKey = getFormCacheKey.session({
     id: session?.id,
@@ -146,140 +152,181 @@ const SessionForm = ({
     toggleScheduleModal(true);
   };
 
+  const {
+    highestOrder,
+    highestPublishedOrder,
+    nextSessionId,
+    previousSessionId,
+  } = parseSessions({
+    currentSession: session,
+    sessionOrder: currentOrder,
+    sessions: mission.sessions,
+  });
+
   return (
     <>
-      <form
-        className="flex flex-col gap-8 px-4 pb-8 pt-16 sm:px-8"
-        onSubmit={form.handleSubmit((values) =>
-          startTransition(async () => {
-            values.scheduledFor = values.scheduledFor
-              ? new Date(values.scheduledFor).toISOString()
-              : null;
-
-            const res = await upsertSession(
-              {
-                currentOrder,
-                missionId: mission.id,
-                publishedOrder: Math.min(
-                  currentOrder,
-                  getHighestPublishedOrder(mission.sessions) + 1,
-                ),
-                sessionId: isDuplicate ? undefined : session?.id,
-                subjectId,
-              },
-              values,
-            );
-
-            if (res?.error) {
-              form.setError('root', { message: res.error, type: 'custom' });
-              return;
-            }
-
-            router.back();
-          }),
-        )}
+      <PageModalHeader
+        menu={
+          session &&
+          !isDuplicate && (
+            <SessionMenu<SessionFormValues>
+              form={form}
+              highestPublishedOrder={highestPublishedOrder}
+              missionId={mission.id}
+              nextSessionOrder={highestOrder + 1}
+              session={session}
+              subjectId={subjectId}
+            />
+          )
+        }
+        title={mission.name}
+      />
+      <SessionLayout
+        highestOrder={highestOrder}
+        isCreate={!session}
+        isEdit={!!session}
+        isTeamMember
+        missionId={mission.id}
+        nextSessionId={nextSessionId}
+        order={order}
+        previousSessionId={previousSessionId}
+        sessionId={session?.id}
+        sessions={mission.sessions}
+        subjectId={subjectId}
       >
-        <div className="flex items-center gap-6">
-          <Input
-            placeholder="Session title"
-            maxLength={49}
-            {...form.register('title')}
-          />
-          <Button
-            className="shrink-0"
-            disabled={hasEvents}
-            onClick={openScheduleModal}
-            variant="link"
-          >
-            <ClockIcon className="w-5" />
-            {scheduledFor ? (
-              <DateTime date={scheduledFor} formatter="date-time" />
-            ) : (
-              'Schedule'
-            )}
-          </Button>
-        </div>
-        <ul className="space-y-4">
-          <DndContext
-            collisionDetection={closestCenter}
-            id="modules"
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={(event: DragEndEvent) => {
-              const { active, over } = event;
+        <form
+          className="flex flex-col gap-8 px-4 pb-8 pt-16 sm:px-8"
+          onSubmit={form.handleSubmit((values) =>
+            startTransition(async () => {
+              values.scheduledFor = values.scheduledFor
+                ? new Date(values.scheduledFor).toISOString()
+                : null;
 
-              if (over && active.id !== over.id) {
-                modulesArray.move(
-                  modulesArray.fields.findIndex((f) => f.key === active.id),
-                  modulesArray.fields.findIndex((f) => f.key === over.id),
-                );
+              const res = await upsertSession(
+                {
+                  currentOrder,
+                  missionId: mission.id,
+                  publishedOrder: Math.min(
+                    currentOrder,
+                    highestPublishedOrder + 1,
+                  ),
+                  sessionId: isDuplicate ? undefined : session?.id,
+                  subjectId,
+                },
+                values,
+              );
+
+              if (res?.error) {
+                form.setError('root', { message: res.error, type: 'custom' });
+                return;
               }
-            }}
-            sensors={sensors}
-          >
-            <SortableContext
-              items={modulesArray.fields.map((eventType) => eventType.key)}
-              strategy={verticalListSortingStrategy}
+
+              router.back();
+            }),
+          )}
+        >
+          <div className="flex items-center gap-6">
+            <Input
+              placeholder="Session title"
+              maxLength={49}
+              {...form.register('title')}
+            />
+            <Button
+              className="shrink-0"
+              disabled={hasEvents}
+              onClick={openScheduleModal}
+              variant="link"
             >
-              {modulesArray.fields.map((module, eventTypeIndex) => (
-                <ModuleFormSection<SessionFormValues, 'modules'>
-                  availableInputs={availableInputs}
-                  availableTemplates={availableTemplates}
-                  eventTypeArray={modulesArray}
-                  eventTypeIndex={eventTypeIndex}
-                  eventTypeKey={module.key}
-                  form={form}
-                  hasOnlyOne={modulesArray.fields.length === 1}
-                  key={module.key}
-                  subjectId={subjectId}
-                  subjects={subjects}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
-        </ul>
-        <div className="flex items-center gap-4">
-          <Tip side="right">
-            Modules break up your session and allow you to capture inputs at
-            different points. You can add as many modules as you need.
-          </Tip>
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={() => modulesArray.append({ content: '', inputs: [] })}
-          >
-            <PlusIcon className="w-5" />
-            Add module
-          </Button>
-        </div>
-        {form.formState.errors.root && (
-          <div className="text-center">
-            {form.formState.errors.root.message}
+              <ClockIcon className="w-5" />
+              {scheduledFor ? (
+                <DateTime date={scheduledFor} formatter="date-time" />
+              ) : (
+                'Schedule'
+              )}
+            </Button>
           </div>
-        )}
-        <div className="flex flex-row gap-4 pt-8">
-          {draft && (
+          <ul className="space-y-4">
+            <DndContext
+              collisionDetection={closestCenter}
+              id="modules"
+              modifiers={[restrictToVerticalAxis]}
+              onDragEnd={(event: DragEndEvent) => {
+                const { active, over } = event;
+
+                if (over && active.id !== over.id) {
+                  modulesArray.move(
+                    modulesArray.fields.findIndex((f) => f.key === active.id),
+                    modulesArray.fields.findIndex((f) => f.key === over.id),
+                  );
+                }
+              }}
+              sensors={sensors}
+            >
+              <SortableContext
+                items={modulesArray.fields.map((eventType) => eventType.key)}
+                strategy={verticalListSortingStrategy}
+              >
+                {modulesArray.fields.map((module, eventTypeIndex) => (
+                  <ModuleFormSection<SessionFormValues, 'modules'>
+                    availableInputs={availableInputs}
+                    availableTemplates={availableTemplates}
+                    eventTypeArray={modulesArray}
+                    eventTypeIndex={eventTypeIndex}
+                    eventTypeKey={module.key}
+                    form={form}
+                    hasOnlyOne={modulesArray.fields.length === 1}
+                    key={module.key}
+                    subjectId={subjectId}
+                    subjects={subjects}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ul>
+          <div className="flex items-center gap-4">
+            <Tip side="right">
+              Modules break up your session and allow you to capture inputs at
+              different points. You can add as many modules as you need.
+            </Tip>
             <Button
               className="w-full"
               colorScheme="transparent"
-              loading={isTransitioning}
+              onClick={() => modulesArray.append({ content: '', inputs: [] })}
+            >
+              <PlusIcon className="w-5" />
+              Add module
+            </Button>
+          </div>
+          {form.formState.errors.root && (
+            <div className="text-center">
+              {form.formState.errors.root.message}
+            </div>
+          )}
+          <div className="flex flex-row gap-4 pt-8">
+            {draft && (
+              <Button
+                className="w-full"
+                colorScheme="transparent"
+                loading={isTransitioning}
+                loadingText="Saving…"
+                type="submit"
+              >
+                Save as draft
+              </Button>
+            )}
+            <Button
+              className="w-full"
+              loading={!draft && isTransitioning}
               loadingText="Saving…"
+              onClick={() => form.setValue('draft', false)}
               type="submit"
             >
-              Save as draft
+              {draft ? <>Save &amp; publish</> : <>Save</>}
             </Button>
-          )}
-          <Button
-            className="w-full"
-            loading={!draft && isTransitioning}
-            loadingText="Saving…"
-            onClick={() => form.setValue('draft', false)}
-            type="submit"
-          >
-            {draft ? <>Save &amp; publish</> : <>Save</>}
-          </Button>
-        </div>
-        <UnsavedChangesBanner<SessionFormValues> form={form} />
-      </form>
+          </div>
+          <UnsavedChangesBanner<SessionFormValues> form={form} />
+        </form>
+      </SessionLayout>
       <Dialog onClose={cancelScheduleModal} open={scheduleModal}>
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
         <div className="fixed inset-0 z-30 overflow-y-auto p-4">

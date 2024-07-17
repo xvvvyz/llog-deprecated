@@ -138,7 +138,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
             </DropdownMenu.Button>
             <DropdownMenu.Button
               onClick={() => {
-                const { content, inputs } = form.getValues(
+                const { content, inputs, name } = form.getValues(
                   `modules[${eventTypeIndex}]` as Path<T>,
                 );
 
@@ -147,6 +147,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                     content,
                     inputIds: inputs.map(({ id }: { id: string }) => id),
                   },
+                  name,
                 });
               }}
             >
@@ -215,44 +216,45 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
               <Description className="mt-4 px-4 text-fg-4">
                 Selecting a template will overwrite any existing module values.
               </Description>
-              <Select
-                className="mt-16 text-left"
-                instanceId="template-select"
-                noOptionsMessage={() => 'No templates.'}
-                onChange={(t) => {
-                  const template =
-                    t as NonNullable<ListTemplatesWithDataData>[0];
+              <div className="pt-16 text-left">
+                <Select
+                  instanceId="template-select"
+                  noOptionsMessage={() => 'No templates.'}
+                  onChange={(t) => {
+                    const template =
+                      t as NonNullable<ListTemplatesWithDataData>[0];
 
-                  const data = template?.data as TemplateDataJson;
+                    const data = template?.data as TemplateDataJson;
 
-                  const inputs = availableInputs.filter(({ id }) =>
-                    forceArray(data?.inputIds).includes(id),
-                  ) as PathValue<T, T[string]>;
+                    const inputs = availableInputs.filter(({ id }) =>
+                      forceArray(data?.inputIds).includes(id),
+                    ) as PathValue<T, T[string]>;
 
-                  form.setValue(
-                    `modules[${eventTypeIndex}].name` as Path<T>,
-                    template?.name as PathValue<T, Path<T>>,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      `modules[${eventTypeIndex}].name` as Path<T>,
+                      template?.name as PathValue<T, Path<T>>,
+                      { shouldDirty: true },
+                    );
 
-                  form.setValue(
-                    `modules[${eventTypeIndex}].content` as Path<T>,
-                    data?.content as PathValue<T, Path<T>>,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      `modules[${eventTypeIndex}].content` as Path<T>,
+                      data?.content as PathValue<T, Path<T>>,
+                      { shouldDirty: true },
+                    );
 
-                  form.setValue(
-                    `modules[${eventTypeIndex}].inputs` as Path<T>,
-                    inputs as PathValue<T, Path<T>>,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      `modules[${eventTypeIndex}].inputs` as Path<T>,
+                      inputs as PathValue<T, Path<T>>,
+                      { shouldDirty: true },
+                    );
 
-                  toggleUseTemplateModal();
-                }}
-                options={availableTemplates}
-                placeholder="Select a template…"
-                value={null}
-              />
+                    toggleUseTemplateModal();
+                  }}
+                  options={availableTemplates}
+                  placeholder="Select a template…"
+                  value={null}
+                />
+              </div>
               <Button
                 className="-mb-3 mt-14 w-full justify-center p-0 py-3"
                 onClick={() => toggleUseTemplateModal()}
