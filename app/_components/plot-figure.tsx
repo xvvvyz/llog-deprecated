@@ -117,11 +117,15 @@ const PlotFigure = ({
             P.rectY(
               rows,
               P.binX<P.RectYOptions>(
-                { y: barReducer },
+                {
+                  title: (d: typeof rows) => `${d[0][y]}: ${d.length}`,
+                  y: barReducer,
+                },
                 {
                   fill: isInputNominal ? y : 'hsla(0, 0%, 100%, 10%)',
                   inset: 1,
-                  interval: barInterval as P.LiteralTimeInterval,
+                  interval: P.timeInterval(barInterval),
+                  order: isInputNominal ? '-sum' : undefined,
                   tip: isInputNominal,
                   x,
                   y: isInputNominal ? undefined : y,
@@ -234,6 +238,7 @@ const PlotFigure = ({
     }
 
     const plot = P.plot({
+      color: { legend: true },
       height: isInputNominal && !showBars ? undefined : defaultHeight,
       inset: 10,
       marginBottom: Number(marginBottom),

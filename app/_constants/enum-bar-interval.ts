@@ -4,7 +4,7 @@ enum BarInterval {
   Month = 'month',
   Quarter = 'quarter',
   Week = 'week',
-  Year = 'Year',
+  Year = 'year',
 }
 
 export default BarInterval;

@@ -52,17 +52,16 @@
 
   /* hack to style observable plot tooltips */
   figure[class^='plot-'] svg [aria-label='tip'] {
-    @apply fill-bg-3 stroke-0 text-fg-1;
+    @apply fill-bg-1 stroke-0 text-fg-1;
+  }
+
+  figure[class^='plot-'] div[class$='-swatches-wrap'] {
+    @apply gap-1 px-4 pt-4;
   }
 
   /* hack to style tip tap youtube videos */
   div[data-youtube-video] > iframe {
     @apply my-1.5 aspect-video h-auto w-full rounded;
-  }
-
-  /* hack to style observable plot tooltip */
-  g[aria-label='tip'] {
-    @apply fill-bg-2 stroke-0;
   }
 
   @media print {

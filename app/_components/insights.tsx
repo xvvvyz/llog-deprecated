@@ -43,7 +43,7 @@ const Insights = ({
         className="min-h-12 rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl"
         key={insight.id}
       >
-        <div className="-mb-5 flex items-stretch">
+        <div className="-mb-4 flex items-stretch">
           <Button
             className={twMerge(
               'm-0 flex w-full gap-4 px-4 pt-3 leading-snug',
