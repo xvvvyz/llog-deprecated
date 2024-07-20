@@ -97,7 +97,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   const inputId = form.watch('input');
   const showBars = form.watch('showBars');
+  const showDots = form.watch('showDots');
   const showLine = form.watch('showLine');
+  const showLinearRegression = form.watch('showLinearRegression');
 
   const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
 
@@ -109,30 +111,48 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     { label: 'Training plans', options: trainingPlanOptions },
   ];
 
-  const onShowBarsOrInputChange = ({
-    showBars,
+  const onMarkOrInputChange = ({
     inputId,
+    showBars,
+    showDots,
+    showLine,
+    showLinearRegression,
   }: {
-    showBars: boolean;
     inputId: string;
+    showBars?: boolean;
+    showDots?: boolean;
+    showLine?: boolean;
+    showLinearRegression?: boolean;
   }) => {
     const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
-    if (!showBars) return;
 
     if (isInputNominal) {
-      form.setValue('barReducer', BarReducer.Count);
-      form.setValue('showDots', false);
-      form.setValue('showLine', false);
-      form.setValue('showLinearRegression', false);
+      if (showDots || showLine || showLinearRegression) {
+        form.setValue('showBars', false);
+      } else if (showBars) {
+        form.setValue('barReducer', BarReducer.Count);
+        form.setValue('showDots', false);
+        form.setValue('showLine', false);
+        form.setValue('showLinearRegression', false);
+      }
     } else {
-      form.setValue('barReducer', BarReducer.Mean);
+      if (showBars) {
+        form.setValue('barReducer', BarReducer.Mean);
+      }
     }
   };
 
   const onInputChange = (inputId: string) => {
     form.setValue('includeEventsFrom', null);
     form.setValue('includeEventsSince', null);
-    onShowBarsOrInputChange({ inputId, showBars });
+
+    onMarkOrInputChange({
+      inputId,
+      showBars,
+      showDots,
+      showLine,
+      showLinearRegression,
+    });
   };
 
   return (
@@ -205,26 +225,35 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Checkbox
-          disabled={showBars && isInputNominal}
           label="Dots"
-          {...form.register('showDots')}
+          {...form.register('showDots', {
+            onChange: (e) =>
+              onMarkOrInputChange({ inputId, showDots: e.target.checked }),
+          })}
         />
         <Checkbox
-          disabled={showBars && isInputNominal}
           label="Line"
-          {...form.register('showLine')}
+          {...form.register('showLine', {
+            onChange: (e) =>
+              onMarkOrInputChange({ inputId, showLine: e.target.checked }),
+          })}
         />
         <Checkbox
           label="Bars"
           {...form.register('showBars', {
             onChange: (e) =>
-              onShowBarsOrInputChange({ inputId, showBars: e.target.checked }),
+              onMarkOrInputChange({ inputId, showBars: e.target.checked }),
           })}
         />
         <Checkbox
-          disabled={showBars && isInputNominal}
           label="Trend"
-          {...form.register('showLinearRegression')}
+          {...form.register('showLinearRegression', {
+            onChange: (e) =>
+              onMarkOrInputChange({
+                inputId,
+                showLinearRegression: e.target.checked,
+              }),
+          })}
         />
       </div>
       <CollapsibleSection
