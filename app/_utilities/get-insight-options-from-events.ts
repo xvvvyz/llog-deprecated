@@ -32,8 +32,8 @@ const getInsightOptionsFromEvents = ({
     if (!inputIdMatch) continue;
     const tp = et.session?.mission;
 
-    if (et.name && !eventTypeOptions.some((o) => o.id === et.id)) {
-      eventTypeOptions.push({ id: et.id, label: et.name });
+    if (!et.session && !eventTypeOptions.some((o) => o.id === et.id)) {
+      eventTypeOptions.push({ id: et.id, label: et.name as string });
     } else if (tp?.name && !trainingPlanOptions.some((o) => o.id === tp?.id)) {
       trainingPlanOptions.push({ id: tp.id, label: tp.name });
     }
