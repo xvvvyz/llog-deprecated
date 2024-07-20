@@ -89,12 +89,13 @@ const SubjectPage = async ({
             <div className="flex justify-end gap-4">
               <Tip align="start" side="bottom" tipClassName="space-y-4">
                 <p>
-                  Event types define the individual events that you want to
-                  track.
+                  Use event types to track individual behaviors, activities etc.
+                  For example: &ldquo;Barking&rdquo; or
+                  &ldquo;Medication&rdquo;.
                 </p>
                 <p>
-                  Training plans are structured, long-term modification
-                  programs.
+                  Use training plans to teach new behaviors, skills etc. For
+                  example: &ldquo;Reduce separation anxiety&rdquo;.
                 </p>
               </Tip>
               <Button
@@ -189,7 +190,9 @@ const SubjectPage = async ({
           <div className="mx-4 mt-4 h-14 border-l-2 border-dashed border-alpha-2" />
           <Empty className="mt-4">
             <InformationCircleIcon className="w-7" />
-            No events.
+            Create an event type or training plan
+            <br />
+            to start recording events.
           </Empty>
         </>
       )}

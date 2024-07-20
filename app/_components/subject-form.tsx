@@ -131,8 +131,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         <div className="flex justify-between">
           <span className="label">Links</span>
           <Tip className="relative -top-1 -mr-[0.2rem]" side="left">
-            Optional links displayed at the top of&nbsp;the subject&rsquo;s
-            profile.
+            Optional links displayed at the top of the subject&rsquo;s profile.
           </Tip>
         </div>
         <div className="space-y-2">

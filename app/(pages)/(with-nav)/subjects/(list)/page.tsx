@@ -45,9 +45,7 @@ const Page = async () => {
       {!clientSubjects.length && !teamSubjects.length && (
         <Empty className="mx-4">
           <InformationCircleIcon className="w-7" />
-          Add a subject to start collaboratively
-          <br />
-          tracking and improving behavior.
+          Create a subject to get started.
         </Empty>
       )}
       <SubjectList
