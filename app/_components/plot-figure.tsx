@@ -247,6 +247,7 @@ const PlotFigure = ({
       marginTop: Number(marginTop),
       marks,
       width,
+      x: { type: 'time' },
     });
 
     const onClick = () => {
