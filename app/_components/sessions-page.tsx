@@ -134,6 +134,7 @@ const SessionsPage = async ({
                 {!isPublic && !subject.archived && isTeamMember && (
                   <SessionMenu
                     highestPublishedOrder={highestPublishedOrder}
+                    isList
                     missionId={missionId}
                     nextSessionOrder={nextSessionOrder}
                     session={session}

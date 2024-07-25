@@ -11,6 +11,7 @@ import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/outline/ArrowUpIcon';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
+import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useToggle } from '@uidotdev/usehooks';
@@ -21,6 +22,8 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 interface SessionMenuProps<T extends FieldValues> {
   form?: UseFormReturn<T>;
   highestPublishedOrder: number;
+  isDraft?: boolean;
+  isList?: boolean;
   isView?: boolean;
   missionId: string;
   nextSessionOrder: number;
@@ -33,6 +36,8 @@ interface SessionMenuProps<T extends FieldValues> {
 const SessionMenu = <T extends FieldValues>({
   form,
   highestPublishedOrder,
+  isDraft,
+  isList,
   isView,
   missionId,
   nextSessionOrder,
@@ -62,14 +67,24 @@ const SessionMenu = <T extends FieldValues>({
         <DropdownMenu.Content
           className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
         >
-          {!form && (
-            <DropdownMenu.Button
-              href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit`}
+          {form ? (
+            !isDraft && (
+              <DropdownMenu.ForwardSearchParamsButton
+                href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}`}
+                scroll={false}
+              >
+                <EyeIcon className="w-5 text-fg-4" />
+                View
+              </DropdownMenu.ForwardSearchParamsButton>
+            )
+          ) : (
+            <DropdownMenu.ForwardSearchParamsButton
+              href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${session.id}/edit${isList ? '?fromSessions=1' : ''}`}
               scroll={false}
             >
               <PencilIcon className="w-5 text-fg-4" />
               Edit
-            </DropdownMenu.Button>
+            </DropdownMenu.ForwardSearchParamsButton>
           )}
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${session.id}`}

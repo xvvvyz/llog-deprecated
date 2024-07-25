@@ -82,9 +82,7 @@ const SessionPage = async ({
       />
       <SessionLayout
         highestOrder={highestOrder}
-        isArchived={subject.archived}
         isPublic={isPublic}
-        isTeamMember={isTeamMember}
         missionId={missionId}
         nextSessionId={nextSessionId}
         previousSessionId={previousSessionId}

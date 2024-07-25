@@ -1,6 +1,7 @@
 'use client';
 
 import ButtonPrimitive from '@/_components/button';
+import ForwardSearchParamsButtonPrimitive from '@/_components/forward-search-params-button';
 import * as Primitive from '@radix-ui/react-dropdown-menu';
 import { useToggle } from '@uidotdev/usehooks';
 import * as React from 'react';
@@ -34,6 +35,18 @@ const Content = React.forwardRef<
 ));
 
 Content.displayName = Primitive.Content.displayName;
+
+const ForwardSearchParamsButton = React.forwardRef<
+  React.ElementRef<typeof Primitive.Item>,
+  React.ComponentPropsWithoutRef<typeof ForwardSearchParamsButtonPrimitive>
+>((props, ref) => (
+  <Item asChild ref={ref}>
+    <ForwardSearchParamsButtonPrimitive colorScheme="transparent" {...props} />
+  </Item>
+));
+
+ForwardSearchParamsButton.displayName =
+  ForwardSearchParamsButtonPrimitive.displayName;
 
 const Item = React.forwardRef<
   React.ElementRef<typeof Primitive.Item>,
@@ -111,6 +124,7 @@ Separator.displayName = Primitive.Separator.displayName;
 export default Object.assign(Root, {
   Button,
   Content,
+  ForwardSearchParamsButton,
   Group: Primitive.Group,
   Item,
   Label,

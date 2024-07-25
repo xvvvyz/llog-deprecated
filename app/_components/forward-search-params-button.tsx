@@ -7,4 +7,5 @@ const ForwardSearchParamsButton = ({ href, ...rest }: ButtonProps) => (
   <Button {...rest} href={useForwardSearchString(href)} />
 );
 
+ForwardSearchParamsButton.displayName = 'ForwardSearchParamsButton';
 export default ForwardSearchParamsButton;

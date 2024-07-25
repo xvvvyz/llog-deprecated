@@ -1,21 +1,16 @@
-import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
 import ForwardSearchParamsIconButton from '@/_components/forward-search-params-icon-button';
 import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
-import EyeIcon from '@heroicons/react/24/outline/EyeIcon';
-import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface SessionLayoutProps {
   children: ReactNode;
   highestOrder: number;
-  isArchived?: boolean;
   isCreate?: boolean;
   isEdit?: boolean;
   isPublic?: boolean;
-  isTeamMember: boolean;
   missionId: string;
   nextSessionId: string | null;
   order?: string;
@@ -28,11 +23,9 @@ interface SessionLayoutProps {
 const SessionLayout = ({
   children,
   highestOrder,
-  isArchived,
   isCreate,
   isEdit,
   isPublic,
-  isTeamMember,
   missionId,
   nextSessionId,
   order,
@@ -82,33 +75,8 @@ const SessionLayout = ({
             Session {sessionOrder + 1}
             {!isEditOrCreate && <> of {highestOrder + 1}</>}
           </span>
-          {currentSession?.draft || order ? (
+          {(currentSession?.draft || order) && (
             <span className="smallcaps text-fg-4">Draft</span>
-          ) : (
-            !isPublic &&
-            !isArchived &&
-            isTeamMember &&
-            (isEditOrCreate ? (
-              <ForwardSearchParamsButton
-                className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
-                scroll={false}
-                variant="link"
-              >
-                <EyeIcon className="relative top-1 w-5" />
-                View
-              </ForwardSearchParamsButton>
-            ) : (
-              <ForwardSearchParamsButton
-                className="-my-4 items-baseline"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
-                scroll={false}
-                variant="link"
-              >
-                <PencilIcon className="relative top-1 w-5" />
-                Edit
-              </ForwardSearchParamsButton>
-            ))
           )}
         </div>
         {isEditOrCreate && !nextSessionId ? (

@@ -172,6 +172,7 @@ const SessionForm = ({
             <SessionMenu<SessionFormValues>
               form={form}
               highestPublishedOrder={highestPublishedOrder}
+              isDraft={draft}
               missionId={mission.id}
               nextSessionOrder={highestOrder + 1}
               session={session}
@@ -185,7 +186,6 @@ const SessionForm = ({
         highestOrder={highestOrder}
         isCreate={!session}
         isEdit={!!session}
-        isTeamMember
         missionId={mission.id}
         nextSessionId={nextSessionId}
         order={order}
