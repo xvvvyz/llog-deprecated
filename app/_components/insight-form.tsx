@@ -142,19 +142,6 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     }
   };
 
-  const onInputChange = (inputId: string) => {
-    form.setValue('includeEventsFrom', null);
-    form.setValue('includeEventsSince', null);
-
-    onMarkOrInputChange({
-      inputId,
-      showBars,
-      showDots,
-      showLine,
-      showLinearRegression,
-    });
-  };
-
   return (
     <form
       className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
@@ -190,7 +177,16 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                 onChange={(value) => {
                   const inputId = (value as IOption).id;
                   field.onChange(inputId);
-                  onInputChange(inputId);
+                  form.setValue('includeEventsFrom', null);
+                  form.setValue('includeEventsSince', null);
+
+                  onMarkOrInputChange({
+                    inputId,
+                    showBars,
+                    showDots,
+                    showLine,
+                    showLinearRegression,
+                  });
                 }}
                 options={inputOptions}
                 placeholder="Select an input…"
@@ -345,7 +341,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                 label="Events from"
                 name={field.name}
                 onBlur={field.onBlur}
-                onChange={(value) => field.onChange((value as IOption)?.id)}
+                onChange={(value) =>
+                  field.onChange((value as IOption)?.id ?? null)
+                }
                 options={eventTypeOrTrainingPlanOptions}
                 placeholder="All event types/training plans…"
                 value={value}
@@ -362,7 +360,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               label="Events since"
               name={field.name}
               onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption)?.id)}
+              onChange={(value) =>
+                field.onChange((value as IOption)?.id ?? null)
+              }
               options={INCLUDE_EVENTS_SINCE_OPTIONS}
               placeholder="The beginning of time…"
               value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
