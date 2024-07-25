@@ -60,8 +60,8 @@ const TrainingPlanMenu = ({
         isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={async () => {
-          await deleteTrainingPlan(missionId);
+        onConfirm={() => {
+          void deleteTrainingPlan(missionId);
           if (isView) router.replace(`/subjects/${subjectId}`);
         }}
       />

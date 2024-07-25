@@ -226,8 +226,8 @@ const EventTypeMenu = <T extends FieldValues>({
           isConfirmingText="Deleting…"
           isOpen={deleteAlert}
           onClose={toggleDeleteAlert}
-          onConfirm={async () => {
-            await deleteEventType(eventTypeId);
+          onConfirm={() => {
+            void deleteEventType(eventTypeId);
             if (form || isView) router.replace(`/subjects/${subjectId}`);
           }}
         />

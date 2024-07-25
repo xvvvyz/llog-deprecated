@@ -131,8 +131,8 @@ const SessionMenu = <T extends FieldValues>({
       <Alert
         confirmText="Delete session"
         isConfirmingText="Deleting…"
-        onConfirm={async () => {
-          await deleteSession({
+        onConfirm={() => {
+          void deleteSession({
             currentOrder: session.order,
             missionId: missionId,
             sessionId: session.id,

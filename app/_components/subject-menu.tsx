@@ -22,6 +22,7 @@ import ShareIcon from '@heroicons/react/24/outline/ShareIcon';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useOptimistic, useRef, useTransition } from 'react';
 
 interface SubjectMenuProps {
@@ -47,6 +48,7 @@ const SubjectMenu = ({
   const [shareModal, toggleShareModal] = useToggle(false);
   const clientLinkTimeoutRef = useRef<NodeJS.Timeout>();
   const publicLinkTimeoutRef = useRef<NodeJS.Timeout>();
+  const router = useRouter();
 
   return (
     <>
@@ -166,7 +168,10 @@ const SubjectMenu = ({
         isConfirmingText="Deleting…"
         isOpen={deleteAlert}
         onClose={toggleDeleteAlert}
-        onConfirm={() => updateSubject({ deleted: true, id: subject.id })}
+        onConfirm={() => {
+          void updateSubject({ deleted: true, id: subject.id });
+          router.replace('/subjects');
+        }}
       />
       <Dialog onClose={toggleShareModal} open={shareModal}>
         <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
