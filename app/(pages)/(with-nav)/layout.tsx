@@ -4,6 +4,7 @@ import IconButton from '@/_components/icon-button';
 import Subscriptions from '@/_components/subscriptions';
 import countNotifications from '@/_queries/count-notifications';
 import getCurrentUser from '@/_queries/get-current-user';
+import getCustomer from '@/_queries/get-customer';
 import BellIcon from '@heroicons/react/24/outline/BellIcon';
 import { ReactNode } from 'react';
 
@@ -12,9 +13,10 @@ interface LayoutProps {
 }
 
 const Layout = async ({ children }: LayoutProps) => {
-  const [{ count }, user] = await Promise.all([
+  const [{ count }, user, { data: customer }] = await Promise.all([
     countNotifications(),
     getCurrentUser(),
+    getCustomer(),
   ]);
 
   if (!user) return null;
@@ -63,7 +65,7 @@ const Layout = async ({ children }: LayoutProps) => {
               }
               scroll={false}
             />
-            <AccountMenu user={user} />
+            <AccountMenu customer={customer} user={user} />
           </div>
         </nav>
       )}

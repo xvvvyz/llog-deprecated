@@ -2,19 +2,30 @@
 
 import Avatar from '@/_components/avatar';
 import DropdownMenu from '@/_components/dropdown-menu';
+import createCustomerCheckout from '@/_mutations/create-customer-checkout';
 import signOut from '@/_mutations/sign-out';
+import { GetCustomerData } from '@/_queries/get-customer';
+import getCustomerBillingPortal from '@/_queries/get-customer-billing-portal';
 import ArrowLeftStartOnRectangleIcon from '@heroicons/react/24/outline/ArrowLeftStartOnRectangleIcon';
+import ArrowUpCircleIcon from '@heroicons/react/24/outline/ArrowUpCircleIcon';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import Cog6ToothIcon from '@heroicons/react/24/outline/Cog6ToothIcon';
+import CreditCardIcon from '@heroicons/react/24/outline/CreditCardIcon';
 import { User } from '@supabase/supabase-js';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 interface AccountMenuProps {
+  customer: GetCustomerData;
   user: User | null;
 }
 
-const AccountMenu = ({ user }: AccountMenuProps) => {
-  const [isTransitioning, startTransition] = useTransition();
+const AccountMenu = ({ customer, user }: AccountMenuProps) => {
+  const [isSignOutTransitioning, startSignOutTransition] = useTransition();
+
+  const [isBillingRedirectLoading, setIsBillingRedirectLoading] =
+    useState(false);
+
+  const isSubscribed = customer?.subscription_status === 'active';
 
   return (
     <DropdownMenu
@@ -35,11 +46,39 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
           Account settings
         </DropdownMenu.Button>
         <DropdownMenu.Button
-          loading={isTransitioning}
+          loading={isBillingRedirectLoading}
+          loadingText="Redirecting…"
+          onClick={async (e) => {
+            e.preventDefault();
+            setIsBillingRedirectLoading(true);
+
+            const { url } = await (isSubscribed
+              ? getCustomerBillingPortal()
+              : createCustomerCheckout());
+
+            if (url) location.href = url;
+            else setIsBillingRedirectLoading(false);
+          }}
+        >
+          {isSubscribed ? (
+            <>
+              <CreditCardIcon className="w-5 text-fg-4" />
+              Manage subscription
+            </>
+          ) : (
+            <>
+              <ArrowUpCircleIcon className="w-5 text-fg-4" />
+              Upgrade to pro
+            </>
+          )}
+        </DropdownMenu.Button>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Button
+          loading={isSignOutTransitioning}
           loadingText="Signing out…"
           onClick={(e) => {
             e.preventDefault();
-            startTransition(signOut);
+            startSignOutTransition(signOut);
           }}
         >
           <ArrowLeftStartOnRectangleIcon className="w-5 text-fg-4" />

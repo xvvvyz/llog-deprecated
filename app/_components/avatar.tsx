@@ -1,7 +1,6 @@
 'use client';
 
 import formatImageUrl from '@/_utilities/format-image-url';
-import generateImageLoader from '@/_utilities/generate-image-loader';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 
@@ -34,7 +33,6 @@ const Avatar = ({ className, file, id = '', size = 'md' }: AvatarProps) => {
           alt=""
           className="object-cover object-center"
           fill
-          loader={generateImageLoader({ aspectRatio: '1:1' })}
           sizes={sizes[size].imgSizes}
           src={
             src ??

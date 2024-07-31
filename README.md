@@ -16,12 +16,8 @@ bun db:start # outputs supabase url & key
 Add the following to your `.env` file:
 
 ```dotenv
-# required
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<SUPABASE_ANON_KEY>
 NEXT_PUBLIC_SUPABASE_URL=<SUPABSE_API_URL>
-
-# optional
-NEXT_PUBLIC_SUPABASE_PRO=1
 ```
 
 Generate types and start the dev server:
@@ -40,16 +36,40 @@ bun db:diff -- -f migration-description
 
 ## Production Notes
 
-- Update next.config.js remotePatterns
+Vercel common secrets:
+
+- LEMON_SQUEEZY_STORE_ID
+
+Vercel environment secrets:
+
+- LEMON_SQUEEZY_API_KEY
+- LEMON_SQUEEZY_VARIANT_ID
+- LEMON_SQUEEZY_WEBHOOK_SECRET
+- SUPABASE_SERVICE_KEY
+
+GitHub repo secrets:
+
+- SUPABASE_ACCESS_TOKEN
+- VERCEL_ORG_ID
+- VERCEL_PROJECT_ID
+- VERCEL_TOKEN
+
+GitHub environment secrets:
+
+- NEXT_PUBLIC_SUPABASE_ANON_KEY
+- NEXT_PUBLIC_SUPABASE_URL
+- SUPABASE_DB_PASSWORD
+- SUPABASE_PROJECT_ID
+
+Supabase settings:
+
+- Add custom SMTP server
 - Update auth providers
 - Update email templates
 - Update url config
-- Add custom SMTP server
-- Enable realtime (notifications)
+- Enable realtime (notifications table)
 - Remove GraphQL api
-- Github environment secrets:
-  - NEXT_PUBLIC_SUPABASE_ANON_KEY
-  - NEXT_PUBLIC_SUPABASE_PRO
-  - NEXT_PUBLIC_SUPABASE_URL
-  - SUPABASE_DB_PASSWORD
-  - SUPABASE_PROJECT_ID
+
+Other settings:
+
+- Update next.config.js remotePatterns
