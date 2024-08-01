@@ -34,7 +34,7 @@ const Page = async () => {
               <td className="py-2 text-center">✓</td>
             </tr>
             <tr>
-              <td className="py-2 text-fg-4">Support our team</td>
+              <td className="py-2 text-fg-4">Support our mission</td>
               <td className="py-2 text-center text-fg-4">x</td>
               <td className="py-2 text-center">✓</td>
             </tr>

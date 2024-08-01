@@ -9,7 +9,10 @@ const upsertSubject = async (
   context: { subjectId?: string },
   data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
-  const { data: subject, error } = await createServerSupabaseClient()
+  const supabase = createServerSupabaseClient();
+  await supabase.auth.refreshSession();
+
+  const { data: subject, error } = await supabase
     .from('subjects')
     .upsert({
       data: {

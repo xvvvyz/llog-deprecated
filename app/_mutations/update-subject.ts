@@ -7,11 +7,9 @@ import { revalidatePath } from 'next/cache';
 const updateSubject = async (
   subject: Database['public']['Tables']['subjects']['Update'] & { id: string },
 ) => {
-  await createServerSupabaseClient()
-    .from('subjects')
-    .update(subject)
-    .eq('id', subject.id);
-
+  const supabase = createServerSupabaseClient();
+  await supabase.auth.refreshSession();
+  await supabase.from('subjects').update(subject).eq('id', subject.id);
   revalidatePath('/', 'layout');
 };
 
