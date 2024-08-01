@@ -4,7 +4,7 @@ import AvatarDropzone from '@/_components/avatar-dropzone';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
-import revalidatePath from '@/_mutations/revalidate-path';
+import updateUser from '@/_mutations/update-user';
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
@@ -41,19 +41,6 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
         startTransition(async () => {
           const supabase = createBrowserSupabaseClient();
 
-          const res = await supabase.auth.updateUser({
-            data: { first_name: values.firstName, last_name: values.lastName },
-          });
-
-          if (res?.error) {
-            form.setError('root', {
-              message: res.error.message,
-              type: 'custom',
-            });
-
-            return;
-          }
-
           if (!values.avatar) {
             await Promise.all([
               supabase.storage.from('profiles').remove([`${user.id}/avatar`]),
@@ -67,8 +54,16 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
               .upload(`${user.id}/avatar`, values.avatar, { upsert: true });
           }
 
-          await supabase.auth.refreshSession();
-          await revalidatePath();
+          const res = await updateUser({
+            first_name: values.firstName,
+            last_name: values.lastName,
+          });
+
+          if (res?.error) {
+            form.setError('root', { message: res.error, type: 'custom' });
+            return;
+          }
+
           router.back();
         }),
       )}

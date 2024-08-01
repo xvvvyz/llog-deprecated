@@ -29,7 +29,7 @@ const AccountPasswordForm = () => {
           const supabase = createBrowserSupabaseClient();
 
           const res = await supabase.auth.updateUser({
-            email: values.password,
+            password: values.password,
           });
 
           if (res?.error) {

@@ -1,18 +1,14 @@
 'use server';
 
 import getCurrentUser from '@/_queries/get-current-user';
-
-import {
-  createCheckout,
-  lemonSqueezySetup,
-} from '@lemonsqueezy/lemonsqueezy.js';
+import * as ls from '@lemonsqueezy/lemonsqueezy.js';
 
 const createCustomerCheckout = async () => {
   const user = await getCurrentUser();
   if (!user) return { url: null };
-  lemonSqueezySetup({ apiKey: process.env.LEMON_SQUEEZY_API_KEY! });
+  ls.lemonSqueezySetup({ apiKey: process.env.LEMON_SQUEEZY_API_KEY! });
 
-  const res = await createCheckout(
+  const res = await ls.createCheckout(
     process.env.LEMON_SQUEEZY_STORE_ID!,
     process.env.LEMON_SQUEEZY_VARIANT_ID!,
     {

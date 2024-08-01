@@ -3,7 +3,7 @@
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
-import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
+import updateUser from '@/_mutations/update-user';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -31,19 +31,14 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
       className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const supabase = createBrowserSupabaseClient();
-          const res = await supabase.auth.updateUser({ email: values.email });
+          const res = await updateUser({ email: values.email });
 
           if (res?.error) {
-            form.setError('root', {
-              message: res.error.message,
-              type: 'custom',
-            });
-
+            form.setError('root', { message: res.error, type: 'custom' });
             return;
           }
 
-          if (form.formState.isDirty) router.push('/confirmation-sent');
+          if (values.email !== user.email) router.push('/confirmation-sent');
           else router.back();
         }),
       )}
