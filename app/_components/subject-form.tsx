@@ -102,7 +102,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         </label>
         {form.watch('avatar') && (
           <Button
-            className="absolute right-2 top-0"
+            className="absolute right-4 top-0"
             onClick={() => form.setValue('avatar', null)}
             variant="link"
           >

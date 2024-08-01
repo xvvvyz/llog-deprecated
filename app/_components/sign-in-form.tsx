@@ -34,7 +34,7 @@ const SignInForm = ({ next }: SignInFormProps) => {
           type="password"
         />
         <Button
-          className="absolute right-2 top-0"
+          className="absolute right-4 top-0"
           href="/forgot-password"
           variant="link"
         >
