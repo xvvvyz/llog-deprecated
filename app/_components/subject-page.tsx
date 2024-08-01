@@ -84,6 +84,7 @@ const SubjectPage = async ({
               (unarchivedTeamSubjectsCount ?? 0) < 2
             }
             contentClassName="mt-0.5"
+            disableOnPointerDown={false}
             subject={subject}
           >
             <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">

@@ -65,7 +65,7 @@ const SessionMenu = <T extends FieldValues>({
         }
       >
         <DropdownMenu.Content
-          className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
+          className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-20 mr-2'}
         >
           {form ? (
             !isDraft && (

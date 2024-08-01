@@ -3,8 +3,8 @@
 import ButtonPrimitive from '@/_components/button';
 import ForwardSearchParamsButtonPrimitive from '@/_components/forward-search-params-button';
 import * as Primitive from '@radix-ui/react-dropdown-menu';
-import { useToggle } from '@uidotdev/usehooks';
 import * as React from 'react';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Button = React.forwardRef<
@@ -80,23 +80,28 @@ Label.displayName = Primitive.Label.displayName;
 const Root = React.forwardRef<
   React.ElementRef<typeof Primitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof Primitive.Root> & {
+    disableOnPointerDown?: boolean;
     trigger: React.ReactNode;
   }
->(({ children, trigger, ...props }, ref) => {
-  const [open, toggleOpen] = useToggle(false);
+>(({ children, disableOnPointerDown = true, trigger, ...props }, ref) => {
+  const [open, setOpen] = useState(false);
 
   return (
     <Primitive.Root
       modal={false}
-      onOpenChange={toggleOpen}
-      open={open}
+      onOpenChange={disableOnPointerDown ? setOpen : undefined}
+      open={disableOnPointerDown ? open : undefined}
       {...props}
     >
       <Primitive.Trigger
         asChild
         className="cursor-pointer outline-none"
-        onClick={() => toggleOpen()}
-        onPointerDown={(e) => e.preventDefault()}
+        onClick={
+          disableOnPointerDown ? () => setOpen((state) => !state) : undefined
+        }
+        onPointerDown={
+          disableOnPointerDown ? (e) => e.preventDefault() : undefined
+        }
         ref={ref}
       >
         {trigger}

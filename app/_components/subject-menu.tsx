@@ -29,6 +29,7 @@ interface SubjectMenuProps {
   canUnarchive?: boolean;
   children: ReactNode;
   contentClassName?: string;
+  disableOnPointerDown?: boolean;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
@@ -36,6 +37,7 @@ const SubjectMenu = ({
   canUnarchive,
   children,
   contentClassName,
+  disableOnPointerDown,
   subject,
 }: SubjectMenuProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
@@ -54,7 +56,10 @@ const SubjectMenu = ({
 
   return (
     <>
-      <DropdownMenu trigger={children}>
+      <DropdownMenu
+        disableOnPointerDown={disableOnPointerDown}
+        trigger={children}
+      >
         <DropdownMenu.Content className={contentClassName}>
           <DropdownMenu.Button
             href={`/subjects/${subject.id}/edit`}
