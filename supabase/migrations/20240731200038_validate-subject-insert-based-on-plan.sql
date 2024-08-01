@@ -25,7 +25,7 @@ create or replace function public.is_client ()
   language plpgsql
   as $$
   begin
-    return coalesce((select auth.jwt() -> 'user_metadata' ->> 'is_client'), false);
+    return coalesce((select auth.jwt() -> 'user_metadata' ->> 'is_client')::boolean, false);
   end;
 $$;
 
