@@ -207,15 +207,7 @@ const SubjectPage = async ({
           <div className="mx-4 mt-4 h-14 border-l-2 border-dashed border-alpha-2" />
           <Empty className="mt-4">
             <InformationCircleIcon className="w-7" />
-            {!isTeamMember || subject.archived ? (
-              <>No events.</>
-            ) : (
-              <>
-                Create an event type or training plan
-                <br />
-                to start recording events.
-              </>
-            )}
+            No events.
           </Empty>
         </>
       )}
