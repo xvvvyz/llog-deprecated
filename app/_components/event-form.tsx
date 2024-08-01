@@ -199,6 +199,7 @@ const EventForm = ({
                         className="rounded-r-none border-r-0"
                         inputType="number"
                         isClearable={false}
+                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
@@ -219,6 +220,7 @@ const EventForm = ({
                         className="rounded-none"
                         inputType="number"
                         isClearable={false}
+                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
@@ -239,6 +241,7 @@ const EventForm = ({
                         className="rounded-l-none border-l-0"
                         inputType="number"
                         isClearable={false}
+                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
