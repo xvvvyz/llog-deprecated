@@ -14,7 +14,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
   if (!eventTypes?.length) return null;
 
   return (
-    <ul className="rounded border border-alpha-1 bg-bg-2 py-1">
+    <ul className="overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {eventTypes.map((eventType) => (
         <li
           className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"

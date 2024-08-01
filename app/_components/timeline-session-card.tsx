@@ -35,7 +35,7 @@ const TimelineSessionCard = ({
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
-    <div className="rounded border border-alpha-1 bg-bg-2 py-1">
+    <div className="overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       <Button
         className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1 active:bg-alpha-1"
         href={`/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType?.session?.mission?.id}/sessions/${lastEventType?.session?.id}`}

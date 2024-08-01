@@ -70,7 +70,7 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
           ref={ref}
         />
       </div>
-      <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
+      <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
         {filteredInputs.map((input) => (
           <li
             className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"

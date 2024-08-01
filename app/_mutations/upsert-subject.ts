@@ -8,9 +8,7 @@ const upsertSubject = async (
   context: { subjectId?: string },
   data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
-  const supabase = createServerSupabaseClient();
-
-  const { data: subject, error } = await supabase
+  const { data: subject, error } = await createServerSupabaseClient()
     .from('subjects')
     .upsert({
       data: {

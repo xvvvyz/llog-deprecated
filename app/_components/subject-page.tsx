@@ -10,6 +10,8 @@ import SubjectMenu from '@/_components/subject-menu';
 import TimelineEvents from '@/_components/timeline-events';
 import Tip from '@/_components/tip';
 import TrainingPlans from '@/_components/training-plans';
+import SubscriptionStatus from '@/_constants/enum-subscription-status';
+import countUnarchivedTeamSubjects from '@/_queries/count-unarchived-team-subjects';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSubject from '@/_queries/get-public-subject';
 import getSubject from '@/_queries/get-subject';
@@ -42,12 +44,18 @@ const SubjectPage = async ({
 }: SubjectPageProps) => {
   const f = formatEventFilters({ from, limit, to });
 
-  const [{ data: subject }, { data: events }, user] = await Promise.all([
+  const [
+    { data: subject },
+    { data: events },
+    user,
+    { count: unarchivedTeamSubjectsCount },
+  ] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
     isPublic
       ? await listPublicEvents(subjectId, f)
       : await listEvents(subjectId, f),
     getCurrentUser(),
+    isPublic ? Promise.resolve({ count: 0 }) : countUnarchivedTeamSubjects(),
   ]);
 
   if (!subject) return null;
@@ -69,7 +77,15 @@ const SubjectPage = async ({
           <h1 className="truncate text-2xl">{subject.name}</h1>
         </div>
         {isTeamMember && !isPublic ? (
-          <SubjectMenu contentClassName="mt-0.5" subject={subject}>
+          <SubjectMenu
+            canUnarchive={
+              user.app_metadata.subscription_status ===
+                SubscriptionStatus.Active ||
+              (unarchivedTeamSubjectsCount ?? 0) < 2
+            }
+            contentClassName="mt-0.5"
+            subject={subject}
+          >
             <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
               <Bars3Icon className="w-5" />
               <Avatar
@@ -190,9 +206,15 @@ const SubjectPage = async ({
           <div className="mx-4 mt-4 h-14 border-l-2 border-dashed border-alpha-2" />
           <Empty className="mt-4">
             <InformationCircleIcon className="w-7" />
-            Create an event type or training plan
-            <br />
-            to start recording events.
+            {!isTeamMember || subject.archived ? (
+              <>No events.</>
+            ) : (
+              <>
+                Create an event type or training plan
+                <br />
+                to start recording events.
+              </>
+            )}
           </Empty>
         </>
       )}

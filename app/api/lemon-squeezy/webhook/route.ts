@@ -30,13 +30,12 @@ const POST = async (request: Request) => {
     case 'subscription_expired': {
       await createServerSupabaseClient({
         apiKey: process.env.SUPABASE_SERVICE_KEY!,
-      })
-        .from('customers')
-        .upsert({
+      }).auth.admin.updateUserById(userId, {
+        app_metadata: {
           customer_id: customerId,
-          id: userId,
           subscription_status: subscriptionStatus,
-        });
+        },
+      });
 
       return new Response('OK', { status: 200 });
     }

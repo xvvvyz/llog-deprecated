@@ -22,8 +22,8 @@
     --color-red-1: hsl(5, 85%, 40%);
     --font-weight-bold: 700;
     --font-weight-normal: 400;
-    --radius-default: 0.8rem;
-    --radius-sm: 0.4rem;
+    --radius-default: 1rem;
+    --radius-sm: 0.5rem;
   }
 
   html {

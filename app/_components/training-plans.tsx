@@ -67,7 +67,7 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
   if (!listItems.length) return null;
 
   return (
-    <ul className="m-0 rounded border border-alpha-1 bg-bg-2 py-1">
+    <ul className="m-0 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {listItems}
     </ul>
   );

@@ -21,7 +21,7 @@ const Page = async () => {
   }
 
   return (
-    <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
+    <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {templates.map((template) => (
         <li
           className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"

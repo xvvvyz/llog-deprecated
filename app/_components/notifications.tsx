@@ -29,7 +29,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
   }
 
   return (
-    <ul className="m-0 divide-y divide-alpha-1 rounded border border-alpha-1 bg-bg-2 py-1">
+    <ul className="m-0 divide-y divide-alpha-1 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {notifications.map((n) => {
         const sourceEvent = n.comment?.event ?? n.event;
 

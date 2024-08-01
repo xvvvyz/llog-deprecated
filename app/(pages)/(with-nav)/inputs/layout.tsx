@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => (
     <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
       <h1 className="text-2xl">Inputs</h1>
       <Button href="/inputs/create" scroll={false} size="sm">
-        <PlusIcon className="-ml-0.5 w-5" />
+        <PlusIcon className="-ml-0.5 w-5 stroke-2" />
         New input
       </Button>
     </div>

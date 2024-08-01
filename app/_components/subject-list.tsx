@@ -6,17 +6,19 @@ import ArrowRightIcon from '@heroicons/react/24/outline/ArrowRightIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 
 interface SubjectListProps {
+  canUnarchive?: boolean;
   clientSubjects: NonNullable<ListSubjectsData>;
   teamSubjects: NonNullable<ListSubjectsData>;
 }
 
 const SubjectList = async ({
+  canUnarchive,
   clientSubjects,
   teamSubjects,
 }: SubjectListProps) => (
   <>
     {!!teamSubjects.length && (
-      <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
+      <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
         {teamSubjects.map((subject) => (
           <li
             className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
@@ -36,7 +38,11 @@ const SubjectList = async ({
               />
               {subject.name}
             </Button>
-            <SubjectMenu contentClassName="-mt-12 mr-1.5" subject={subject}>
+            <SubjectMenu
+              canUnarchive={canUnarchive}
+              contentClassName="-mt-12 mr-1.5"
+              subject={subject}
+            >
               <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
                 <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
                   <EllipsisVerticalIcon className="w-5" />
@@ -48,7 +54,7 @@ const SubjectList = async ({
       </ul>
     )}
     {!!clientSubjects.length && (
-      <ul className="mx-4 rounded border border-alpha-1 bg-bg-2 py-1">
+      <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
         {clientSubjects.map((subject) => (
           <li key={subject.id}>
             <Button

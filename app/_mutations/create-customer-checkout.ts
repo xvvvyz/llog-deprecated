@@ -24,7 +24,7 @@ const createCustomerCheckout = async () => {
     },
   );
 
-  return { url: res.data?.data.attributes.url ?? null };
+  return { url: res.data?.data?.attributes?.url ?? null };
 };
 
 export default createCustomerCheckout;

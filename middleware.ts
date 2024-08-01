@@ -53,6 +53,7 @@ export const middleware = async (req: NextRequest) => {
       '/notifications',
       '/subjects',
       '/templates',
+      '/upgrade',
     ];
 
     if (

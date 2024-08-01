@@ -12,7 +12,7 @@ interface PageProps {
 const Page = ({ searchParams: { next } }: PageProps) => (
   <>
     <div className="sm:rounded sm:border sm:border-alpha-1 sm:bg-bg-2 sm:p-8">
-      <h1 className="mb-10 text-2xl">Create your account</h1>
+      <h1 className="mb-12 text-2xl">Create your account</h1>
       <SignUpForm next={next} />
     </div>
     <p className="flex gap-4">

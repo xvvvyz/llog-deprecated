@@ -26,12 +26,14 @@ import { useRouter } from 'next/navigation';
 import { ReactNode, useOptimistic, useRef, useTransition } from 'react';
 
 interface SubjectMenuProps {
+  canUnarchive?: boolean;
   children: ReactNode;
   contentClassName?: string;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
 const SubjectMenu = ({
+  canUnarchive,
   children,
   contentClassName,
   subject,
@@ -111,6 +113,7 @@ const SubjectMenu = ({
             <ShareIcon className="w-5 text-fg-4" />
             Share profile
           </DropdownMenu.Button>
+          <DropdownMenu.Separator />
           <DropdownMenu.Button
             loading={isDownloadTransitioning}
             loadingText="Exporting…"
@@ -137,17 +140,21 @@ const SubjectMenu = ({
           </DropdownMenu.Button>
           <DropdownMenu.Separator />
           <DropdownMenu.Button
+            href={!subject.archived || canUnarchive ? undefined : '/upgrade'}
             loading={isArchiveTransitioning}
             loadingText={subject.archived ? 'Unarchiving…' : 'Archiving…'}
-            onClick={(e) =>
-              startIsArchiveTransition(async () => {
-                e.preventDefault();
+            onClick={
+              !subject.archived || canUnarchive
+                ? (e) =>
+                    startIsArchiveTransition(async () => {
+                      e.preventDefault();
 
-                await updateSubject({
-                  archived: !subject.archived,
-                  id: subject.id,
-                });
-              })
+                      await updateSubject({
+                        archived: !subject.archived,
+                        id: subject.id,
+                      });
+                    })
+                : undefined
             }
           >
             {subject.archived ? (
