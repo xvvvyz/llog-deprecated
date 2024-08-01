@@ -30,6 +30,7 @@ interface SubjectMenuProps {
   children: ReactNode;
   contentClassName?: string;
   disableOnPointerDown?: boolean;
+  isList?: boolean;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
@@ -38,6 +39,7 @@ const SubjectMenu = ({
   children,
   contentClassName,
   disableOnPointerDown,
+  isList,
   subject,
 }: SubjectMenuProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
@@ -182,7 +184,7 @@ const SubjectMenu = ({
         onClose={toggleDeleteAlert}
         onConfirm={() => {
           void updateSubject({ deleted: true, id: subject.id });
-          router.replace('/subjects');
+          if (!isList) router.replace('/subjects');
         }}
       />
       <Dialog onClose={toggleShareModal} open={shareModal}>

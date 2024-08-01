@@ -41,6 +41,7 @@ const SubjectList = async ({
             <SubjectMenu
               canUnarchive={canUnarchive}
               contentClassName="-mt-12 mr-1.5"
+              isList
               subject={subject}
             >
               <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
