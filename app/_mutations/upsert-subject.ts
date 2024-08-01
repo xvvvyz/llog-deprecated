@@ -10,6 +10,8 @@ const upsertSubject = async (
   data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
   const supabase = createServerSupabaseClient();
+
+  // get the latest app_metadata for rls validation
   await supabase.auth.refreshSession();
 
   const { data: subject, error } = await supabase
