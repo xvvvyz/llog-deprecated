@@ -3,6 +3,7 @@
 import { InputFormValues } from '@/_components/input-form';
 import InputType from '@/_constants/enum-input-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
+import { revalidatePath } from 'next/cache';
 
 type State = { error?: string; data?: { id: string; label: string } } | null;
 
@@ -107,6 +108,7 @@ const upsertInput = async (
     }
   }
 
+  revalidatePath('/', 'layout');
   return { data: input };
 };
 

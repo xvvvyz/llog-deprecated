@@ -3,6 +3,7 @@
 import { TemplateFormValues } from '@/_components/template-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
+import { revalidatePath } from 'next/cache';
 
 type State = { data?: { id?: string }; error?: string } | null;
 
@@ -27,6 +28,7 @@ const upsertTemplate = async (
     .single();
 
   if (error) return { error: error.message };
+  revalidatePath('/', 'layout');
   return { data: template };
 };
 

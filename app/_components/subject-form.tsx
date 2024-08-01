@@ -79,7 +79,6 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
               .upload(`${subjectId}/avatar`, values.avatar, { upsert: true });
           }
 
-          localStorage.setItem('refresh', '1');
           if (!subject?.id) router.replace(`/subjects/${subjectId}`);
           else router.back();
         }),

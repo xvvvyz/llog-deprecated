@@ -42,8 +42,6 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
             return;
           }
 
-          localStorage.setItem('refresh', '1');
-
           if (mission) {
             router.back();
           } else if (res.data) {

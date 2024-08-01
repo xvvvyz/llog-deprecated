@@ -107,10 +107,7 @@ const InputForm = ({
                 type: values.type.id,
               });
 
-              if (!onClose) {
-                localStorage.setItem('refresh', '1');
-                router.back();
-              }
+              if (!onClose) router.back();
             }
           }),
         ),

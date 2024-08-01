@@ -91,7 +91,6 @@ const EventTypeForm = ({
               return;
             }
 
-            localStorage.setItem('refresh', '1');
             router.back();
           }),
         )}

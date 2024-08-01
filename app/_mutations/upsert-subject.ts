@@ -3,6 +3,7 @@
 import { SubjectFormValues } from '@/_components/subject-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
+import { revalidatePath } from 'next/cache';
 
 const upsertSubject = async (
   context: { subjectId?: string },
@@ -25,6 +26,7 @@ const upsertSubject = async (
     .single();
 
   if (error) return { error: error.message };
+  revalidatePath('/', 'layout');
   return { data: subject };
 };
 

@@ -157,16 +157,9 @@ const EventForm = ({
             values,
           );
 
-          if (res?.error) {
-            form.setValue('comment', pendingComment.current);
-          }
-
-          if (isMission) {
-            router.refresh();
-          } else {
-            localStorage.setItem('refresh', '1');
-            if (!event) router.back();
-          }
+          if (res?.error) form.setValue('comment', pendingComment.current);
+          if (isMission) router.refresh();
+          else if (!event) router.back();
         }),
       )}
     >

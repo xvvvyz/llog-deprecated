@@ -3,6 +3,7 @@
 import { EventTypeFormValues } from '@/_components/event-type-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
+import { revalidatePath } from 'next/cache';
 
 const upsertEventType = async (
   context: { eventTypeId?: string; subjectId: string },
@@ -47,6 +48,8 @@ const upsertEventType = async (
       return { error: error.message };
     }
   }
+
+  revalidatePath('/', 'layout');
 };
 
 export default upsertEventType;

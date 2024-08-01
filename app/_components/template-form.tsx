@@ -88,11 +88,7 @@ const TemplateForm = ({
                 form.setError('root', { message: res.error, type: 'custom' });
               } else if (res?.data) {
                 onSubmit?.();
-
-                if (!onClose) {
-                  localStorage.setItem('refresh', '1');
-                  router.back();
-                }
+                if (!onClose) router.back();
               }
             }),
           ),

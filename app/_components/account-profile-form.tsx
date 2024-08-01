@@ -4,6 +4,7 @@ import AvatarDropzone from '@/_components/avatar-dropzone';
 import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import revalidatePath from '@/_mutations/revalidate-path';
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
@@ -67,7 +68,7 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
           }
 
           await supabase.auth.refreshSession();
-          localStorage.setItem('refresh', '1');
+          await revalidatePath();
           router.back();
         }),
       )}

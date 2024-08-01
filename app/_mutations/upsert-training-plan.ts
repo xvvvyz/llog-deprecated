@@ -2,6 +2,7 @@
 
 import { TrainingPlanFormValues } from '@/_components/training-plan-form';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
+import { revalidatePath } from 'next/cache';
 
 const upsertTrainingPlan = async (
   context: { missionId?: string; subjectId: string },
@@ -20,6 +21,7 @@ const upsertTrainingPlan = async (
     .single();
 
   if (error) return { error: error.message };
+  revalidatePath('/', 'layout');
   return { data: mission };
 };
 

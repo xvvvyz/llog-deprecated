@@ -9,6 +9,7 @@ import MultiSelectInputType from '@/_types/multi-select-input-type';
 import SelectInputType from '@/_types/select-input-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
+import { revalidatePath } from 'next/cache';
 
 const upsertEvent = async (
   context: {
@@ -134,6 +135,8 @@ const upsertEvent = async (
       return { error: error.message };
     }
   }
+
+  revalidatePath('/', 'layout');
 };
 
 export default upsertEvent;
