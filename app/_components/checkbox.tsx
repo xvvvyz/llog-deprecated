@@ -11,42 +11,27 @@ interface CheckboxProps
 
 const Checkbox = forwardRef(
   (
-    {
-      disabled,
-      className,
-      label,
-      name,
-      tooltip,
-      value,
-      ...rest
-    }: CheckboxProps,
+    { className, label, name, tooltip, ...rest }: CheckboxProps,
     ref: Ref<HTMLInputElement>,
   ) => (
-    <div
-      className={twMerge(
-        'flex items-center gap-4',
-        disabled && 'disabled',
-        className,
-      )}
-    >
-      <label className="input group flex select-none items-center justify-between gap-4 bg-transparent py-4 hover:bg-alpha-1 active:bg-alpha-1">
-        <input
-          className="peer absolute h-6 w-6 opacity-0"
-          defaultChecked={Boolean(value)}
-          id={name}
-          name={name}
-          ref={ref}
-          type="checkbox"
-          value={value}
-          {...rest}
-        />
-        <span className="label p-0 peer-checked:text-fg-2">{label}</span>
-        <span className="box-content inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-alpha-2 bg-alpha-3 text-bg-1 transition-colors peer-checked:bg-accent-1 peer-hover:border-alpha-3 peer-hover:bg-alpha-4 peer-checked:peer-hover:bg-accent-2 peer-checked:[&>svg]:visible">
-          <CheckIcon className="invisible h-5 w-5" />
-        </span>
+    <div className={twMerge('relative', className)}>
+      <label className="group w-full cursor-pointer">
+        {label && <span className="label">{label}</span>}
+        <div className="group flex select-none items-center justify-between gap-4 rounded border border-alpha-3 p-2 pl-4 transition-colors active:bg-alpha-1 has-[:checked]:bg-alpha-1">
+          <input
+            className="peer absolute h-6 w-6 opacity-0"
+            id={name}
+            name={name}
+            ref={ref}
+            type="checkbox"
+            {...rest}
+          />
+          <span className="text-fg-4 transition-colors after:content-['No'] peer-checked:text-fg-2 peer-checked:after:content-['Yes']" />
+          <CheckIcon className="h-5 w-5 stroke-fg-2 opacity-0 transition-opacity group-hover:opacity-100 peer-checked:opacity-100" />
+        </div>
       </label>
       {tooltip && (
-        <Tip className="-mr-[0.2rem]" side="left">
+        <Tip className="absolute right-[0.55rem] top-px" side="left">
           {tooltip}
         </Tip>
       )}

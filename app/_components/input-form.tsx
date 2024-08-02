@@ -259,7 +259,6 @@ const InputForm = ({
             </div>
           </fieldset>
           <Checkbox
-            className="mt-2"
             label="Allow options to be created"
             tooltip={
               <>
