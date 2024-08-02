@@ -198,7 +198,6 @@ const EventForm = ({
                       <Select
                         className="rounded-r-none border-r-0"
                         inputType="number"
-                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
@@ -218,7 +217,6 @@ const EventForm = ({
                       <Select
                         className="rounded-none"
                         inputType="number"
-                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
@@ -238,7 +236,6 @@ const EventForm = ({
                       <Select
                         className="rounded-l-none border-l-0"
                         inputType="number"
-                        isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) => field.onChange(value)}
