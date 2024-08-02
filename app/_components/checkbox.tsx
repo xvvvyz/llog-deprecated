@@ -17,7 +17,7 @@ const Checkbox = forwardRef(
     <div className={twMerge('relative', className)}>
       <label className="group w-full cursor-pointer">
         {label && <span className="label">{label}</span>}
-        <div className="group flex select-none items-center justify-between gap-4 rounded border border-alpha-3 p-2 pl-4 transition-colors active:bg-alpha-1 has-[:checked]:bg-alpha-1">
+        <div className="input group flex select-none items-center justify-between gap-4 pr-2">
           <input
             className="peer absolute h-6 w-6 opacity-0"
             id={name}
@@ -27,7 +27,7 @@ const Checkbox = forwardRef(
             {...rest}
           />
           <span className="text-fg-4 transition-colors after:content-['No'] peer-checked:text-fg-2 peer-checked:after:content-['Yes']" />
-          <CheckIcon className="h-5 w-5 stroke-fg-2 opacity-0 transition-opacity group-hover:opacity-100 peer-checked:opacity-100" />
+          <CheckIcon className="h-5 w-5 stroke-fg-2 opacity-0 transition-opacity peer-checked:opacity-100" />
         </div>
       </label>
       {tooltip && (
