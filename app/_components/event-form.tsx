@@ -82,7 +82,7 @@ const EventForm = ({
           }
 
           case InputType.Duration: {
-            if (!inputInputs[0]?.value) return [];
+            if (!inputInputs[0]?.value) return [null, null, null];
 
             const { hours, minutes, seconds } = parseSeconds(
               inputInputs[0].value as string,
@@ -198,7 +198,6 @@ const EventForm = ({
                       <Select
                         className="rounded-r-none border-r-0"
                         inputType="number"
-                        isClearable={false}
                         isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
@@ -219,7 +218,6 @@ const EventForm = ({
                       <Select
                         className="rounded-none"
                         inputType="number"
-                        isClearable={false}
                         isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
@@ -240,7 +238,6 @@ const EventForm = ({
                       <Select
                         className="rounded-l-none border-l-0"
                         inputType="number"
-                        isClearable={false}
                         isSearchable={false}
                         name={field.name}
                         onBlur={field.onBlur}
