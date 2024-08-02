@@ -1,9 +1,9 @@
 import InputType from './enum-input-type';
 
 const INPUT_LABELS = {
-  [InputType.Checkbox]: 'Checkbox',
+  [InputType.Checkbox]: 'Yes / no',
   [InputType.Duration]: 'Duration',
-  [InputType.MultiSelect]: 'Multi-select',
+  [InputType.MultiSelect]: 'Select multiple',
   [InputType.Number]: 'Number',
   [InputType.Select]: 'Select',
   [InputType.Stopwatch]: 'Stopwatch',

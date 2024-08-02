@@ -30,8 +30,8 @@ const INPUT_TYPE_OPTIONS = [
   { id: InputType.Select, label: INPUT_LABELS[InputType.Select] },
   { id: InputType.MultiSelect, label: INPUT_LABELS[InputType.MultiSelect] },
   { id: InputType.Number, label: INPUT_LABELS[InputType.Number] },
-  { id: InputType.Duration, label: INPUT_LABELS[InputType.Duration] },
   { id: InputType.Checkbox, label: INPUT_LABELS[InputType.Checkbox] },
+  { id: InputType.Duration, label: INPUT_LABELS[InputType.Duration] },
   { id: InputType.Stopwatch, label: INPUT_LABELS[InputType.Stopwatch] },
 ];
 
