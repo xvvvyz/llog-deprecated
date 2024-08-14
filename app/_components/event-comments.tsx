@@ -5,7 +5,6 @@ import { twMerge } from 'tailwind-merge';
 import EventComment from './event-comment';
 
 interface EventCommentsProps {
-  clamp?: boolean;
   className?: string;
   comments: Array<{
     content: string;
@@ -22,7 +21,6 @@ interface EventCommentsProps {
 }
 
 const EventComments = ({
-  clamp,
   className,
   comments,
   hideCommentTimestamp,
@@ -40,7 +38,6 @@ const EventComments = ({
     <div className={twMerge('space-y-4', className)}>
       {clone.map(({ content, created_at, id, profile }) => (
         <EventComment
-          clamp={clamp}
           content={content}
           createdAt={created_at}
           hideCommentTimestamp={hideCommentTimestamp}

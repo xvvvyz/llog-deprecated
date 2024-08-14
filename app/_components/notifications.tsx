@@ -96,7 +96,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                   )}
                 </p>
                 {n?.comment && (
-                  <DirtyHtml className="line-clamp-2 text-fg-2">
+                  <DirtyHtml className="text-fg-2">
                     {n?.comment.content}
                   </DirtyHtml>
                 )}

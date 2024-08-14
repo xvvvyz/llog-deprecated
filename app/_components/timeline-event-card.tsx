@@ -76,7 +76,6 @@ const TimelineEventCard = ({
         {!!event.comments.length && (
           <div className="space-y-4 pt-4">
             <EventComments
-              clamp
               comments={event.comments as EventCommentsProps['comments']}
               hideCommentTimestamp
               isArchived={isArchived}
