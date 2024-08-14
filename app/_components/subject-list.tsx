@@ -30,11 +30,10 @@ const SubjectList = async ({
               variant="link"
             >
               <Avatar
-                className="-my-0.5"
+                className="-my-0.5 size-6"
                 file={subject.image_uri}
                 key={subject.id}
                 id={subject.id}
-                size="sm"
               />
               {subject.name}
             </Button>
@@ -64,10 +63,9 @@ const SubjectList = async ({
               variant="link"
             >
               <Avatar
-                className="-my-0.5 -mr-2"
+                className="-my-0.5 -mr-2 size-6"
                 file={subject.image_uri}
                 id={subject.id}
-                size="sm"
               />
               {subject.name}
               <ArrowRightIcon className="ml-auto w-5 shrink-0" />

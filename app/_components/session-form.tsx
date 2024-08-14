@@ -3,6 +3,7 @@
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Input from '@/_components/input';
+import Modal from '@/_components/modal';
 import ModuleFormSection from '@/_components/module-form-section';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
@@ -42,13 +43,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from '@headlessui/react';
 
 interface SessionFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
@@ -327,63 +321,62 @@ const SessionForm = ({
           <UnsavedChangesBanner<SessionFormValues> form={form} />
         </form>
       </SessionLayout>
-      <Dialog onClose={cancelScheduleModal} open={scheduleModal}>
-        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
-        <div className="fixed inset-0 z-30 overflow-y-auto p-4">
-          <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow-2xl">
-              <DialogTitle className="text-2xl">Schedule session</DialogTitle>
-              <Description className="mt-4 px-4 text-fg-4">
-                Scheduled sessions are not visible to clients until the
-                specified time.
-              </Description>
-              <div className="mt-16 flex flex-col gap-4">
-                <Input
-                  min={formatDatetimeLocal(new Date(), { seconds: false })}
-                  onKeyDown={(e) => {
-                    if (e.key !== 'Enter') return;
-                    e.preventDefault();
-                    toggleScheduleModal(false);
-                  }}
-                  step={60}
-                  type="datetime-local"
-                  {...form.register('scheduledFor')}
-                />
-                <div className="flex gap-4">
-                  <Button
-                    className="w-full"
-                    colorScheme="transparent"
-                    disabled={!scheduledFor}
-                    onClick={() => {
-                      form.setValue('scheduledFor', null, {
-                        shouldDirty: true,
-                      });
+      <Modal
+        className="max-w-sm p-8 text-center"
+        onOpenChange={cancelScheduleModal}
+        open={scheduleModal}
+      >
+        <h1 className="text-2xl">Schedule session</h1>
+        <p className="mt-4 px-4 text-fg-4">
+          Scheduled sessions are not visible to clients until the specified
+          time.
+        </p>
+        <div className="mt-16 flex flex-col gap-4">
+          <Input
+            // hack to keep height on ios when input is empty
+            className="h-[2.625em]"
+            min={formatDatetimeLocal(new Date(), { seconds: false })}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return;
+              e.preventDefault();
+              toggleScheduleModal(false);
+            }}
+            step={60}
+            type="datetime-local"
+            {...form.register('scheduledFor')}
+          />
+          <div className="flex gap-4">
+            <Button
+              className="w-full"
+              colorScheme="transparent"
+              disabled={!scheduledFor}
+              onClick={() => {
+                form.setValue('scheduledFor', null, {
+                  shouldDirty: true,
+                });
 
-                      toggleScheduleModal(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
-                  <Button
-                    className="w-full"
-                    disabled={!scheduledFor}
-                    onClick={() => toggleScheduleModal(false)}
-                  >
-                    Schedule
-                  </Button>
-                </div>
-                <Button
-                  className="m-0 -mb-3 w-full justify-center p-0 py-3"
-                  onClick={cancelScheduleModal}
-                  variant="link"
-                >
-                  Close
-                </Button>
-              </div>
-            </DialogPanel>
+                toggleScheduleModal(false);
+              }}
+            >
+              Clear
+            </Button>
+            <Button
+              className="w-full"
+              disabled={!scheduledFor}
+              onClick={() => toggleScheduleModal(false)}
+            >
+              Schedule
+            </Button>
           </div>
+          <Button
+            className="m-0 -mb-3 w-full justify-center p-0 py-3"
+            onClick={cancelScheduleModal}
+            variant="link"
+          >
+            Close
+          </Button>
         </div>
-      </Dialog>
+      </Modal>
     </>
   );
 };

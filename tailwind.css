@@ -40,6 +40,11 @@
     @apply inline;
   }
 
+  /* hack to left align ios date inputs */
+  input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+
   /* hack to style observable plot titles */
   figure[class^='plot-'] h2 {
     @apply smallcaps;

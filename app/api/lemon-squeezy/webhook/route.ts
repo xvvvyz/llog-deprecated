@@ -21,7 +21,7 @@ const POST = async (request: Request) => {
     eventName = json.meta.event_name;
     subscriptionStatus = json.data.attributes.status;
     userId = json.meta.custom_data.user_id;
-  } catch (e) {
+  } catch {
     return new Response('Invalid payload', { status: 400 });
   }
 

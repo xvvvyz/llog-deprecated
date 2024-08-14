@@ -28,7 +28,7 @@ const useCachedForm = <T extends FieldValues>(
             keepDefaultValues: true,
           });
         }
-      } catch (e) {
+      } catch {
         // noop
       }
 

@@ -5,6 +5,7 @@ import Button from '@/_components/button';
 import EventTypeMenu from '@/_components/event-type-menu';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
+import Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -17,7 +18,6 @@ import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id'
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
-import { Dialog, DialogPanel } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
@@ -163,33 +163,26 @@ const EventTypeForm = ({
         </div>
         <UnsavedChangesBanner<EventTypeFormValues> form={form} />
       </form>
-      <Dialog
-        onClose={() => setCreateInputModal(null)}
+      <Modal
+        onOpenChange={() => setCreateInputModal(null)}
         open={!!createInputModal}
       >
-        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
-        <div className="fixed inset-0 z-30 overflow-y-auto py-16">
-          <div className="flex min-h-full items-start justify-center">
-            <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x">
-              <PageModalHeader
-                onClose={() => setCreateInputModal(null)}
-                title="New input"
-              />
-              <InputForm
-                disableCache
-                input={createInputModal}
-                onClose={() => setCreateInputModal(null)}
-                onSubmit={(values) => {
-                  inputsArray.append(values, { shouldFocus: true });
-                  setCreateInputModal(null);
-                  router.refresh();
-                }}
-                subjects={subjects}
-              />
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
+        <PageModalHeader
+          onClose={() => setCreateInputModal(null)}
+          title="New input"
+        />
+        <InputForm
+          disableCache
+          input={createInputModal}
+          onClose={() => setCreateInputModal(null)}
+          onSubmit={(values) => {
+            inputsArray.append(values, { shouldFocus: true });
+            setCreateInputModal(null);
+            router.refresh();
+          }}
+          subjects={subjects}
+        />
+      </Modal>
     </>
   );
 };

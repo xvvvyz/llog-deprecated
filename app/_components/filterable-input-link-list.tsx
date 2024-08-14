@@ -91,7 +91,12 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
               {!!input.subjects.length && (
                 <div className="-my-0.5 ml-auto flex shrink-0 gap-1.5">
                   {input.subjects.map(({ id, image_uri }) => (
-                    <Avatar file={image_uri} key={id} id={id} size="xs" />
+                    <Avatar
+                      className="size-5"
+                      file={image_uri}
+                      key={id}
+                      id={id}
+                    />
                   ))}
                 </div>
               )}

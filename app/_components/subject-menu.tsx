@@ -4,13 +4,13 @@ import Alert from '@/_components/alert';
 import Button from '@/_components/button';
 import DropdownMenu from '@/_components/dropdown-menu';
 import IconButton from '@/_components/icon-button';
+import Modal from '@/_components/modal';
 import Switch from '@/_components/switch';
 import Tip from '@/_components/tip';
 import createShareCode from '@/_mutations/create-share-code';
 import updateSubject from '@/_mutations/update-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
 import { ListSubjectsData } from '@/_queries/list-subjects';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import ArchiveBoxIcon from '@heroicons/react/24/outline/ArchiveBoxIcon';
 import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
@@ -187,85 +187,80 @@ const SubjectMenu = ({
           if (!isList) router.replace('/subjects');
         }}
       />
-      <Dialog onClose={toggleShareModal} open={shareModal}>
-        <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
-        <div className="fixed inset-0 z-30 overflow-y-auto p-4">
-          <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 pt-5 drop-shadow-2xl">
-              <div className="flex items-center justify-between">
-                <DialogTitle className="text-2xl">Share</DialogTitle>
-                <IconButton
-                  icon={<XMarkIcon className="relative -right-[0.16em] w-7" />}
-                  onClick={() => toggleShareModal(false)}
-                />
-              </div>
-              <div className="pt-8">
-                <Switch
-                  checked={opPublic}
-                  description={
-                    <>
-                      Anyone with the link can access.
-                      <br />
-                      Clients are anonymized.
-                    </>
-                  }
-                  label="Public read-only profile"
-                  name="share"
-                  onCheckedChange={() =>
-                    startPublicTransition(() => {
-                      toggleOpPublic(null);
-                      void updateSubject({ id: subject.id, public: !opPublic });
-                    })
-                  }
-                />
-              </div>
-              {opPublic && (
-                <div className="mt-10 space-y-4">
-                  <Button
-                    className="w-full justify-between"
-                    colorScheme="transparent"
-                    href={`/share/${subject.id}`}
-                    target="_blank"
-                  >
-                    View public profile
-                    <ArrowTopRightOnSquareIcon className="w-5" />
-                  </Button>
-                  <Button
-                    className="w-full justify-between"
-                    colorScheme="transparent"
-                    onClick={async () => {
-                      clearTimeout(publicLinkTimeoutRef.current);
-
-                      void copyToClipboard(
-                        `${location.origin}/share/${subject.id}`,
-                      );
-
-                      publicLinkTimeoutRef.current = setTimeout(
-                        () => toggleHasCopiedPublicLink(false),
-                        2000,
-                      );
-
-                      toggleHasCopiedPublicLink(true);
-                    }}
-                  >
-                    {hasCopiedPublicLink ? (
-                      <>
-                        Copied, share it!
-                        <CheckIcon className="w-5" />
-                      </>
-                    ) : (
-                      <>
-                        Copy share link
-                        <ClipboardDocumentIcon className="w-5" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-              )}
-            </DialogPanel>
-          </div>
+      <Modal
+        className="max-w-sm p-8 pt-5"
+        onOpenChange={toggleShareModal}
+        open={shareModal}
+      >
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl">Share</h1>
+          <IconButton
+            icon={<XMarkIcon className="relative -right-[0.16em] w-7" />}
+            onClick={() => toggleShareModal(false)}
+          />
         </div>
-      </Dialog>
+        <div className="pt-8">
+          <Switch
+            checked={opPublic}
+            description={
+              <>
+                Anyone with the link can access.
+                <br />
+                Clients are anonymized.
+              </>
+            }
+            label="Public read-only profile"
+            name="share"
+            onCheckedChange={() =>
+              startPublicTransition(() => {
+                toggleOpPublic(null);
+                void updateSubject({ id: subject.id, public: !opPublic });
+              })
+            }
+          />
+        </div>
+        {opPublic && (
+          <div className="mt-10 space-y-4">
+            <Button
+              className="w-full justify-between"
+              colorScheme="transparent"
+              href={`/share/${subject.id}`}
+              target="_blank"
+            >
+              View public profile
+              <ArrowTopRightOnSquareIcon className="w-5" />
+            </Button>
+            <Button
+              className="w-full justify-between"
+              colorScheme="transparent"
+              onClick={async () => {
+                clearTimeout(publicLinkTimeoutRef.current);
+
+                void copyToClipboard(`${location.origin}/share/${subject.id}`);
+
+                publicLinkTimeoutRef.current = setTimeout(
+                  () => toggleHasCopiedPublicLink(false),
+                  2000,
+                );
+
+                toggleHasCopiedPublicLink(true);
+              }}
+            >
+              {hasCopiedPublicLink ? (
+                <>
+                  Copied, share it!
+                  <CheckIcon className="w-5" />
+                </>
+              ) : (
+                <>
+                  Copy share link
+                  <ClipboardDocumentIcon className="w-5" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

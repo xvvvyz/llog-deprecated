@@ -29,7 +29,7 @@ const SubjectEventsDateFilter = () => {
         to: to ? new Date(parseShortIso(to)) : undefined,
       };
     }
-  } catch (e) {
+  } catch {
     // noop
   }
 

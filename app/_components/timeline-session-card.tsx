@@ -94,10 +94,9 @@ const TimelineSessionCard = ({
                   <div className="flex min-w-0 items-center gap-2">
                     <div className="whitespace-nowrap">Completed by</div>
                     <Avatar
-                      className="-my-[0.15rem]"
+                      className="-my-[0.15rem] size-5"
                       file={event.profile?.image_uri}
                       id={event.profile?.id}
-                      size="xs"
                     />
                     <div className="min-w-0">
                       <div className="truncate">

@@ -48,10 +48,9 @@ const ModuleCard = ({
             <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
               Completed by
               <Avatar
-                className="-my-[0.15rem]"
+                className="-my-[0.15rem] size-5"
                 file={event.profile?.image_uri}
                 id={event.profile?.id}
-                size="xs"
               />
               <span className="truncate">
                 {event.profile?.first_name} {event.profile?.last_name}

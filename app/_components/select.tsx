@@ -26,6 +26,7 @@ import ReactSelect, {
   Props as ReactSelectProps,
   SelectInstance,
   SingleValueProps,
+  ValueContainerProps,
 } from 'react-select';
 
 type IOption = {
@@ -72,7 +73,7 @@ const Control = <TOption extends IOption>({
   return (
     <components.Control
       className={twMerge(
-        'input !min-h-0 p-1 group-hover:bg-alpha-2',
+        'input p-1 group-hover:bg-alpha-2',
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
@@ -142,7 +143,7 @@ const MultiValueContainer = ({
   children,
   ...props
 }: MultiValueGenericProps) => (
-  <div className="-my-px max-w-[calc(100%-2em)]">
+  <div className="-m-px max-w-[calc(100%-2em)]">
     <components.MultiValueContainer {...props}>
       <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded-sm border border-alpha-1 bg-alpha-2 text-sm leading-6">
         {children}
@@ -159,10 +160,9 @@ const MultiValueLabel = <TOption extends IOption>({
     <div className="flex items-center gap-2 overflow-visible">
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
-          className="ml-0.5 mr-0.5"
+          className="ml-0.5 mr-0.5 size-5"
           file={props.data.image_uri}
           id={props.data.id}
-          size="xs"
         />
       )}
       <span
@@ -179,14 +179,13 @@ const MultiValueLabel = <TOption extends IOption>({
             ({ id, image_uri }) => (
               <Avatar
                 className={twMerge(
-                  '-mr-2',
+                  '-mr-2 size-5',
                   props.data.subjects.length > 1 &&
                     'border border-alpha-reverse-1 bg-bg-2',
                 )}
                 file={image_uri}
                 key={id}
                 id={id}
-                size="xs"
               />
             ),
           )}
@@ -221,7 +220,11 @@ const Option = <TOption extends IOption>({
       )}
     >
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
-        <Avatar file={props.data.image_uri} id={props.data.id} size="sm" />
+        <Avatar
+          className="size-6"
+          file={props.data.image_uri}
+          id={props.data.id}
+        />
       )}
       <span>{children}</span>
       {props.data.subjects && !!props.data.subjects.length && (
@@ -229,14 +232,13 @@ const Option = <TOption extends IOption>({
           {props.data.subjects.map(({ id, image_uri }) => (
             <Avatar
               className={twMerge(
-                '-mr-2',
+                '-mr-2 size-6',
                 props.data.subjects!.length > 1 &&
                   'border border-alpha-reverse-1 bg-bg-2',
               )}
               file={image_uri}
               key={id}
               id={id}
-              size="sm"
             />
           ))}
         </div>
@@ -262,14 +264,31 @@ const SingleValue = <TOption extends IOption>({
   ...props
 }: SingleValueProps<TOption>) => (
   <components.SingleValue
-    className="m-1 flex items-center gap-4 px-2"
+    className="m-1 flex items-center gap-4 !whitespace-normal px-2"
     {...props}
   >
     {(props.selectProps as SelectProps<TOption>).hasAvatar && (
-      <Avatar file={props.data.image_uri} id={props.data.id} size="sm" />
+      <Avatar
+        className="size-6"
+        file={props.data.image_uri}
+        id={props.data.id}
+      />
     )}
     {children}
   </components.SingleValue>
+);
+
+const ValueContainer = <TOption extends IOption>({
+  children,
+  ...props
+}: ValueContainerProps<TOption>) => (
+  <components.ValueContainer
+    // hack to fix select values not showing up on ios
+    className="!overflow-visible"
+    {...props}
+  >
+    {children}
+  </components.ValueContainer>
 );
 
 const Select = <TOption extends IOption>(
@@ -306,6 +325,7 @@ const Select = <TOption extends IOption>(
       Option,
       Placeholder,
       SingleValue,
+      ValueContainer,
     },
     formatCreateLabel: (value: string) => `Save "${value}" option`,
     getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',

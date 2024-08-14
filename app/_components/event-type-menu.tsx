@@ -4,6 +4,7 @@ import Alert from '@/_components/alert';
 import Button from '@/_components/button';
 import DropdownMenu from '@/_components/dropdown-menu';
 import IconButton from '@/_components/icon-button';
+import Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import Select from '@/_components/select';
 import TemplateForm from '@/_components/template-form';
@@ -23,13 +24,6 @@ import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
-
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from '@headlessui/react';
 
 interface EventTypeMenuProps<T extends FieldValues> {
   availableInputs?: NonNullable<ListInputsBySubjectIdData>;
@@ -131,93 +125,83 @@ const EventTypeMenu = <T extends FieldValues>({
       </DropdownMenu>
       {form && availableInputs && availableTemplates && subjects && (
         <>
-          <Dialog onClose={toggleUseTemplateModal} open={useTemplateModal}>
-            <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
-            <div className="fixed inset-0 z-30 overflow-y-auto p-4">
-              <div className="flex min-h-full items-center justify-center">
-                <DialogPanel className="w-full max-w-sm rounded border border-alpha-1 bg-bg-2 p-8 text-center drop-shadow-2xl">
-                  <DialogTitle className="text-2xl">Use template</DialogTitle>
-                  <Description className="mt-4 px-4 text-fg-4">
-                    Selecting a template will overwrite any existing event type
-                    values.
-                  </Description>
-                  <div className="pt-16 text-left">
-                    <Select
-                      instanceId="template-select"
-                      noOptionsMessage={() => 'No templates.'}
-                      onChange={(t) => {
-                        const template =
-                          t as NonNullable<ListTemplatesWithDataData>[0];
+          <Modal
+            className="max-w-sm p-8 text-center"
+            onOpenChange={toggleUseTemplateModal}
+            open={useTemplateModal}
+          >
+            <h1 className="text-2xl">Use template</h1>
+            <p className="mt-4 px-4 text-fg-4">
+              Selecting a template will overwrite any existing event type
+              values.
+            </p>
+            <div className="pt-16 text-left">
+              <Select
+                instanceId="template-select"
+                noOptionsMessage={() => 'No templates.'}
+                onChange={(t) => {
+                  const template =
+                    t as NonNullable<ListTemplatesWithDataData>[0];
 
-                        const data = template?.data as TemplateDataJson;
+                  const data = template?.data as TemplateDataJson;
 
-                        const inputs = availableInputs.filter(({ id }) =>
-                          forceArray(data?.inputIds).includes(id),
-                        ) as PathValue<T, T[string]>;
+                  const inputs = availableInputs.filter(({ id }) =>
+                    forceArray(data?.inputIds).includes(id),
+                  ) as PathValue<T, T[string]>;
 
-                        form.setValue(
-                          'name' as Path<T>,
-                          template?.name as PathValue<T, Path<T>>,
-                          { shouldDirty: true },
-                        );
+                  form.setValue(
+                    'name' as Path<T>,
+                    template?.name as PathValue<T, Path<T>>,
+                    { shouldDirty: true },
+                  );
 
-                        form.setValue(
-                          'content' as Path<T>,
-                          data?.content as PathValue<T, Path<T>>,
-                          { shouldDirty: true },
-                        );
+                  form.setValue(
+                    'content' as Path<T>,
+                    data?.content as PathValue<T, Path<T>>,
+                    { shouldDirty: true },
+                  );
 
-                        form.setValue(
-                          'inputs' as Path<T>,
-                          inputs as PathValue<T, Path<T>>,
-                          { shouldDirty: true },
-                        );
+                  form.setValue(
+                    'inputs' as Path<T>,
+                    inputs as PathValue<T, Path<T>>,
+                    { shouldDirty: true },
+                  );
 
-                        toggleUseTemplateModal();
-                      }}
-                      options={availableTemplates}
-                      placeholder="Select a template…"
-                      value={null}
-                    />
-                  </div>
-                  <Button
-                    className="-mb-3 mt-14 w-full justify-center p-0 py-3"
-                    onClick={() => toggleUseTemplateModal()}
-                    variant="link"
-                  >
-                    Close
-                  </Button>
-                </DialogPanel>
-              </div>
+                  toggleUseTemplateModal();
+                }}
+                options={availableTemplates}
+                placeholder="Select a template…"
+                value={null}
+              />
             </div>
-          </Dialog>
-          <Dialog
-            onClose={() => setCreateTemplateModal(null)}
+            <Button
+              className="-mb-3 mt-14 w-full justify-center p-0 py-3"
+              onClick={() => toggleUseTemplateModal()}
+              variant="link"
+            >
+              Close
+            </Button>
+          </Modal>
+          <Modal
+            onOpenChange={() => setCreateTemplateModal(null)}
             open={!!createTemplateModal}
           >
-            <div className="fixed inset-0 z-20 bg-alpha-reverse-1 backdrop-blur-sm" />
-            <div className="fixed inset-0 z-30 overflow-y-auto py-16">
-              <div className="flex min-h-full items-start justify-center">
-                <DialogPanel className="relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 drop-shadow-2xl sm:border-x">
-                  <PageModalHeader
-                    onClose={() => setCreateTemplateModal(null)}
-                    title="New template"
-                  />
-                  <TemplateForm
-                    availableInputs={availableInputs}
-                    disableCache
-                    onClose={() => setCreateTemplateModal(null)}
-                    onSubmit={() => {
-                      setCreateTemplateModal(null);
-                      router.refresh();
-                    }}
-                    subjects={subjects}
-                    template={createTemplateModal}
-                  />
-                </DialogPanel>
-              </div>
-            </div>
-          </Dialog>
+            <PageModalHeader
+              onClose={() => setCreateTemplateModal(null)}
+              title="New template"
+            />
+            <TemplateForm
+              availableInputs={availableInputs}
+              disableCache
+              onClose={() => setCreateTemplateModal(null)}
+              onSubmit={() => {
+                setCreateTemplateModal(null);
+                router.refresh();
+              }}
+              subjects={subjects}
+              template={createTemplateModal}
+            />
+          </Modal>
         </>
       )}
       {eventTypeId && (

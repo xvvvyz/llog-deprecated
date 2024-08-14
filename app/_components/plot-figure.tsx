@@ -259,7 +259,7 @@ const PlotFigure = ({
         const shareOrSubjects = isPublic ? 'share' : 'subjects';
         const href = `/${shareOrSubjects}/${subjectId}/events/${Id}`;
         router.push(href, { scroll: false });
-      } catch (e) {
+      } catch {
         // noop
       }
     };
@@ -276,7 +276,7 @@ const PlotFigure = ({
         const { Time } = JSON.parse(datum);
         setActiveId?.(id ?? null);
         setSyncDate?.(Time ? new Date(Time) : null);
-      } catch (e) {
+      } catch {
         // noop
       }
     }, 50);
