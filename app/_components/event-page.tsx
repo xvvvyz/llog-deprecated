@@ -1,7 +1,8 @@
 import Avatar from '@/_components/avatar';
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import EventCard from '@/_components/event-card';
+import * as Modal from '@/_components/modal';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import getCurrentUser from '@/_queries/get-current-user';
 import getEvent from '@/_queries/get-event';
@@ -27,7 +28,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
-    <>
+    <Modal.Content>
       <PageModalHeader
         subtitle={
           <>
@@ -72,10 +73,13 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
         subjectId={subjectId}
         user={user}
       />
-      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+      <PageModalBackButton
+        className="m-0 block w-full py-6 text-center"
+        variant="link"
+      >
         Close
-      </BackButton>
-    </>
+      </PageModalBackButton>
+    </Modal.Content>
   );
 };
 

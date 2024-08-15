@@ -34,7 +34,7 @@ const disabledVariants = {
   primary: 'disabled ring-transparent',
 };
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   activeClassName?: string;
   colorScheme?: keyof typeof colorSchemes;
   href?: string;
@@ -70,7 +70,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     const { pending } = useFormStatus();
 
     const cn = twMerge(
-      'outline-none border [overflow-wrap:anywhere] border-alpha-3 items-center inline-flex gap-2 transition-colors',
+      'outline-none border select-none [overflow-wrap:anywhere] border-alpha-3 items-center inline-flex gap-2 transition-colors',
       variant !== 'link' && sizes[size],
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],
@@ -120,5 +120,5 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
-export type { ButtonProps };
+
 export default Button;

@@ -29,7 +29,7 @@ import ReactSelect, {
   ValueContainerProps,
 } from 'react-select';
 
-type IOption = {
+export type IOption = {
   id: string;
   image_uri?: string;
   label?: string;
@@ -378,5 +378,5 @@ const Select = <TOption extends IOption>(
 };
 
 Select.displayName = 'Select';
-export type { IOption };
+
 export default forwardRef(Select);

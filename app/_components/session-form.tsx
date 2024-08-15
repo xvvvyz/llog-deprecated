@@ -3,8 +3,9 @@
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Input from '@/_components/input';
-import Modal from '@/_components/modal';
+import * as Modal from '@/_components/modal';
 import ModuleFormSection from '@/_components/module-form-section';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import SessionMenu from '@/_components/session-menu';
@@ -22,27 +23,15 @@ import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import parseSessions from '@/_utilities/parse-sessions';
+import * as DndCore from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import * as DndSortable from '@dnd-kit/sortable';
 import ClockIcon from '@heroicons/react/24/outline/ClockIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useFieldArray } from 'react-hook-form';
-
-import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
 
 interface SessionFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
@@ -55,7 +44,7 @@ interface SessionFormProps {
   subjectId: string;
 }
 
-type SessionFormValues = {
+export type SessionFormValues = {
   draft: boolean;
   modules: Array<{
     content: string;
@@ -82,7 +71,7 @@ const SessionForm = ({
   const [scheduleModal, toggleScheduleModal] = useToggle(false);
   const modules = forceArray(session?.modules);
   const router = useRouter();
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = DndCore.useSensors(DndCore.useSensor(DndCore.PointerSensor));
 
   const currentOrder = Number(
     (isDuplicate ? order : (session?.order ?? order)) ?? 0,
@@ -109,14 +98,14 @@ const SessionForm = ({
               ),
               name: module.name,
             }))
-          : [{ content: '', inputs: [] }],
+          : [{ content: '', inputs: [], name: '' }],
         scheduledFor:
           !session?.scheduled_for ||
           (session.scheduled_for &&
             new Date(session.scheduled_for) < new Date())
             ? null
             : formatDatetimeLocal(session.scheduled_for, { seconds: false }),
-        title: session?.title,
+        title: session?.title ?? '',
       },
     },
     { ignoreValues: ['draft', 'order'] },
@@ -158,7 +147,7 @@ const SessionForm = ({
   });
 
   return (
-    <>
+    <Modal.Content>
       <PageModalHeader
         menu={
           session &&
@@ -225,26 +214,92 @@ const SessionForm = ({
               maxLength={49}
               {...form.register('title')}
             />
-            <Button
-              className="shrink-0"
-              disabled={hasEvents}
-              onClick={openScheduleModal}
-              variant="link"
-            >
-              <ClockIcon className="w-5" />
-              {scheduledFor ? (
-                <DateTime date={scheduledFor} formatter="date-time" />
-              ) : (
-                'Schedule'
-              )}
-            </Button>
+            <Modal.Root onOpenChange={cancelScheduleModal} open={scheduleModal}>
+              <Modal.Trigger asChild onClick={(e) => e.preventDefault()}>
+                <Button
+                  className="shrink-0"
+                  disabled={hasEvents}
+                  onClick={openScheduleModal}
+                  variant="link"
+                >
+                  <ClockIcon className="w-5" />
+                  {scheduledFor ? (
+                    <DateTime date={scheduledFor} formatter="date-time" />
+                  ) : (
+                    'Schedule'
+                  )}
+                </Button>
+              </Modal.Trigger>
+              <Modal.Portal>
+                <Modal.Overlay>
+                  <Modal.Content className="max-w-sm p-8 text-center">
+                    <Modal.Title className="text-2xl">
+                      Schedule session
+                    </Modal.Title>
+                    <Modal.Description className="mt-4 px-4 text-fg-4">
+                      Scheduled sessions are not visible to clients until the
+                      specified time.
+                    </Modal.Description>
+                    <div className="mt-16 flex flex-col gap-4">
+                      <Input
+                        // hack to keep height on ios when input is empty
+                        className="h-[2.625em]"
+                        min={formatDatetimeLocal(new Date(), {
+                          seconds: false,
+                        })}
+                        onKeyDown={(e) => {
+                          if (e.key !== 'Enter') return;
+                          e.preventDefault();
+                          toggleScheduleModal(false);
+                        }}
+                        step={60}
+                        type="datetime-local"
+                        {...form.register('scheduledFor')}
+                      />
+                      <div className="flex gap-4">
+                        <Button
+                          className="w-full"
+                          colorScheme="transparent"
+                          disabled={!scheduledFor}
+                          onClick={() => {
+                            form.setValue('scheduledFor', null, {
+                              shouldDirty: true,
+                            });
+
+                            toggleScheduleModal(false);
+                          }}
+                        >
+                          Clear
+                        </Button>
+                        <Button
+                          className="w-full"
+                          disabled={!scheduledFor}
+                          onClick={() => toggleScheduleModal(false)}
+                        >
+                          Schedule
+                        </Button>
+                      </div>
+                      <Modal.Close asChild onClick={(e) => e.preventDefault()}>
+                        <Button
+                          className="m-0 -mb-3 w-full justify-center p-0 py-3"
+                          onClick={cancelScheduleModal}
+                          variant="link"
+                        >
+                          Close
+                        </Button>
+                      </Modal.Close>
+                    </div>
+                  </Modal.Content>
+                </Modal.Overlay>
+              </Modal.Portal>
+            </Modal.Root>
           </div>
           <ul className="space-y-4">
-            <DndContext
-              collisionDetection={closestCenter}
+            <DndCore.DndContext
+              collisionDetection={DndCore.closestCenter}
               id="modules"
               modifiers={[restrictToVerticalAxis]}
-              onDragEnd={(event: DragEndEvent) => {
+              onDragEnd={(event: DndCore.DragEndEvent) => {
                 const { active, over } = event;
 
                 if (over && active.id !== over.id) {
@@ -256,9 +311,9 @@ const SessionForm = ({
               }}
               sensors={sensors}
             >
-              <SortableContext
+              <DndSortable.SortableContext
                 items={modulesArray.fields.map((eventType) => eventType.key)}
-                strategy={verticalListSortingStrategy}
+                strategy={DndSortable.verticalListSortingStrategy}
               >
                 {modulesArray.fields.map((module, eventTypeIndex) => (
                   <ModuleFormSection<SessionFormValues, 'modules'>
@@ -274,8 +329,8 @@ const SessionForm = ({
                     subjects={subjects}
                   />
                 ))}
-              </SortableContext>
-            </DndContext>
+              </DndSortable.SortableContext>
+            </DndCore.DndContext>
           </ul>
           <div className="flex items-center gap-4">
             <Tip side="right">
@@ -321,65 +376,14 @@ const SessionForm = ({
           <UnsavedChangesBanner<SessionFormValues> form={form} />
         </form>
       </SessionLayout>
-      <Modal
-        className="max-w-sm p-8 text-center"
-        onOpenChange={cancelScheduleModal}
-        open={scheduleModal}
+      <PageModalBackButton
+        className="m-0 block w-full py-6 text-center"
+        variant="link"
       >
-        <h1 className="text-2xl">Schedule session</h1>
-        <p className="mt-4 px-4 text-fg-4">
-          Scheduled sessions are not visible to clients until the specified
-          time.
-        </p>
-        <div className="mt-16 flex flex-col gap-4">
-          <Input
-            // hack to keep height on ios when input is empty
-            className="h-[2.625em]"
-            min={formatDatetimeLocal(new Date(), { seconds: false })}
-            onKeyDown={(e) => {
-              if (e.key !== 'Enter') return;
-              e.preventDefault();
-              toggleScheduleModal(false);
-            }}
-            step={60}
-            type="datetime-local"
-            {...form.register('scheduledFor')}
-          />
-          <div className="flex gap-4">
-            <Button
-              className="w-full"
-              colorScheme="transparent"
-              disabled={!scheduledFor}
-              onClick={() => {
-                form.setValue('scheduledFor', null, {
-                  shouldDirty: true,
-                });
-
-                toggleScheduleModal(false);
-              }}
-            >
-              Clear
-            </Button>
-            <Button
-              className="w-full"
-              disabled={!scheduledFor}
-              onClick={() => toggleScheduleModal(false)}
-            >
-              Schedule
-            </Button>
-          </div>
-          <Button
-            className="m-0 -mb-3 w-full justify-center p-0 py-3"
-            onClick={cancelScheduleModal}
-            variant="link"
-          >
-            Close
-          </Button>
-        </div>
-      </Modal>
-    </>
+        Close
+      </PageModalBackButton>
+    </Modal.Content>
   );
 };
 
-export type { SessionFormValues };
 export default SessionForm;

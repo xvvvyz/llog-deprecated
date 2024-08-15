@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/_components/button';
-import Popover from '@/_components/popover';
+import * as Popover from '@/_components/popover';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { PopoverContentProps } from '@radix-ui/react-popover';
 import { ReactNode } from 'react';
@@ -14,7 +14,7 @@ interface TipProps extends PopoverContentProps {
 }
 
 const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
-  <Popover>
+  <Popover.Root>
     <Popover.Trigger asChild>
       <Button className={className} variant="link">
         <InformationCircleIcon className="w-5" />
@@ -30,7 +30,7 @@ const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
     >
       {children}
     </Popover.Content>
-  </Popover>
+  </Popover.Root>
 );
 
 export default Tip;

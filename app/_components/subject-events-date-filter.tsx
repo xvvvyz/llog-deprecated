@@ -2,7 +2,7 @@
 
 import Button from '@/_components/button';
 import Calendar from '@/_components/calendar';
-import Popover from '@/_components/popover';
+import * as Popover from '@/_components/popover';
 import formatDate from '@/_utilities/format-date';
 import formatShortIso from '@/_utilities/format-short-iso';
 import parseShortIso from '@/_utilities/parse-short-iso';
@@ -36,7 +36,7 @@ const SubjectEventsDateFilter = () => {
   const [opDate, setOpDate] = useOptimistic<DateRange | undefined>(date);
 
   return (
-    <Popover>
+    <Popover.Root>
       <Popover.Trigger asChild>
         <Button colorScheme="transparent" loading={isTransitioning} size="sm">
           {!isTransitioning && <CalendarDaysIcon className="-ml-0.5 w-5" />}
@@ -104,7 +104,7 @@ const SubjectEventsDateFilter = () => {
           </Button>
         </div>
       </Popover.Content>
-    </Popover>
+    </Popover.Root>
   );
 };
 

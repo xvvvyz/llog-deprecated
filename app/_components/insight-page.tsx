@@ -1,3 +1,4 @@
+import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import PlotFigure from '@/_components/plot-figure';
 import Number from '@/_constants/enum-number';
@@ -42,7 +43,7 @@ const InsightPage = async ({
   const config = insight.config as InsightConfigJson;
 
   return (
-    <div className="rounded bg-bg-3">
+    <Modal.Content className="max-w-4xl bg-bg-3">
       <PageModalHeader className="-mb-8" title={insight.name} />
       <PlotFigure
         barInterval={config.barInterval}
@@ -65,7 +66,7 @@ const InsightPage = async ({
         title={insight.name}
         type={config.type}
       />
-    </div>
+    </Modal.Content>
   );
 };
 

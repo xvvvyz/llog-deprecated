@@ -1,10 +1,10 @@
 'use client';
 
 import AvatarDropzone from '@/_components/avatar-dropzone';
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import RichTextarea from '@/_components/rich-textarea';
 import Tip from '@/_components/tip';
 import upsertSubject from '@/_mutations/upsert-subject';
@@ -21,7 +21,7 @@ interface SubjectFormProps {
   subject?: NonNullable<GetSubjectData>;
 }
 
-type SubjectFormValues = {
+export type SubjectFormValues = {
   avatar: File | string | null;
   data: SubjectDataJson;
   name: string;
@@ -190,9 +190,9 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <BackButton className="w-full" colorScheme="transparent">
+        <PageModalBackButton className="w-full" colorScheme="transparent">
           Close
-        </BackButton>
+        </PageModalBackButton>
         <Button
           className="w-full"
           loading={isTransitioning}
@@ -206,5 +206,4 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
   );
 };
 
-export type { SubjectFormValues };
 export default SubjectForm;

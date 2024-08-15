@@ -2,13 +2,12 @@
 
 import ButtonPrimitive from '@/_components/button';
 import ForwardSearchParamsButtonPrimitive from '@/_components/forward-search-params-button';
-import * as Primitive from '@radix-ui/react-dropdown-menu';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as React from 'react';
-import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Button = React.forwardRef<
-  React.ElementRef<typeof Primitive.Item>,
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ButtonPrimitive>
 >((props, ref) => (
   <Item asChild ref={ref}>
@@ -19,10 +18,10 @@ const Button = React.forwardRef<
 Button.displayName = ButtonPrimitive.displayName;
 
 const Content = React.forwardRef<
-  React.ElementRef<typeof Primitive.Content>,
-  React.ComponentPropsWithoutRef<typeof Primitive.Content>
+  React.ElementRef<typeof DropdownMenuPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <Primitive.Content
+  <DropdownMenuPrimitive.Content
     align="end"
     ref={ref}
     sideOffset={4}
@@ -34,10 +33,10 @@ const Content = React.forwardRef<
   />
 ));
 
-Content.displayName = Primitive.Content.displayName;
+Content.displayName = DropdownMenuPrimitive.Content.displayName;
 
 const ForwardSearchParamsButton = React.forwardRef<
-  React.ElementRef<typeof Primitive.Item>,
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ForwardSearchParamsButtonPrimitive>
 >((props, ref) => (
   <Item asChild ref={ref}>
@@ -45,55 +44,57 @@ const ForwardSearchParamsButton = React.forwardRef<
   </Item>
 ));
 
-ForwardSearchParamsButton.displayName =
-  ForwardSearchParamsButtonPrimitive.displayName;
+ForwardSearchParamsButton.displayName = 'ForwardSearchParamsButton';
+
+const Group = DropdownMenuPrimitive.Group;
 
 const Item = React.forwardRef<
-  React.ElementRef<typeof Primitive.Item>,
-  React.ComponentPropsWithoutRef<typeof Primitive.Item>
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <Primitive.Item
+  <DropdownMenuPrimitive.Item
     ref={ref}
     className={twMerge(
       'h-10 w-full justify-start gap-4 rounded-none border-0 bg-transparent ring-transparent ring-offset-0 focus:bg-alpha-1 focus:text-fg-2',
       className,
     )}
+    onSelect={(e) => e.preventDefault()}
     {...props}
   />
 ));
 
-Item.displayName = Primitive.Item.displayName;
+Item.displayName = DropdownMenuPrimitive.Item.displayName;
 
 const Label = React.forwardRef<
-  React.ElementRef<typeof Primitive.Label>,
-  React.ComponentPropsWithoutRef<typeof Primitive.Label>
+  React.ElementRef<typeof DropdownMenuPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <Primitive.Label
+  <DropdownMenuPrimitive.Label
     ref={ref}
     className={twMerge('smallcaps px-2 py-1.5', className)}
     {...props}
   />
 ));
 
-Label.displayName = Primitive.Label.displayName;
+Label.displayName = DropdownMenuPrimitive.Label.displayName;
 
 const Root = React.forwardRef<
-  React.ElementRef<typeof Primitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof Primitive.Root> & {
+  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root> & {
     disableOnPointerDown?: boolean;
     trigger: React.ReactNode;
   }
 >(({ children, disableOnPointerDown = true, trigger, ...props }, ref) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Primitive.Root
+    <DropdownMenuPrimitive.Root
       modal={false}
       onOpenChange={disableOnPointerDown ? setOpen : undefined}
       open={disableOnPointerDown ? open : undefined}
       {...props}
     >
-      <Primitive.Trigger
+      <DropdownMenuPrimitive.Trigger
         asChild
         className="cursor-pointer outline-none"
         onClick={
@@ -105,34 +106,34 @@ const Root = React.forwardRef<
         ref={ref}
       >
         {trigger}
-      </Primitive.Trigger>
-      {children}
-    </Primitive.Root>
+      </DropdownMenuPrimitive.Trigger>
+      <DropdownMenuPrimitive.Portal>{children}</DropdownMenuPrimitive.Portal>
+    </DropdownMenuPrimitive.Root>
   );
 });
 
-Root.displayName = Primitive.Root.displayName;
+Root.displayName = DropdownMenuPrimitive.Root.displayName;
 
 const Separator = React.forwardRef<
-  React.ElementRef<typeof Primitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof Primitive.Separator>
+  React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-  <Primitive.Separator
+  <DropdownMenuPrimitive.Separator
     ref={ref}
     className={twMerge('my-1 h-px bg-alpha-1', className)}
     {...props}
   />
 ));
 
-Separator.displayName = Primitive.Separator.displayName;
+Separator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-export default Object.assign(Root, {
+export {
   Button,
   Content,
   ForwardSearchParamsButton,
-  Group: Primitive.Group,
+  Group,
   Item,
   Label,
-  Portal: Primitive.Portal,
+  Root,
   Separator,
-});
+};

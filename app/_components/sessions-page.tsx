@@ -1,7 +1,8 @@
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
+import * as Modal from '@/_components/modal';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionMenu from '@/_components/session-menu';
 import TrainingPlanMenu from '@/_components/training-plan-menu';
@@ -49,7 +50,7 @@ const SessionsPage = async ({
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (
-    <>
+    <Modal.Content>
       <PageModalHeader
         menu={
           isTeamMember && (
@@ -146,10 +147,13 @@ const SessionsPage = async ({
           })}
         </ul>
       )}
-      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+      <PageModalBackButton
+        className="m-0 block w-full py-6 text-center"
+        variant="link"
+      >
         Close
-      </BackButton>
-    </>
+      </PageModalBackButton>
+    </Modal.Content>
   );
 };
 

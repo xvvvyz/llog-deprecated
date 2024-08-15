@@ -1,10 +1,10 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
-import Modal from '@/_components/modal';
+import * as Modal from '@/_components/modal';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -33,7 +33,7 @@ interface TemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-type TemplateFormValues = {
+export type TemplateFormValues = {
   content: string;
   inputs: NonNullable<ListInputsData>;
   name: string;
@@ -73,40 +73,38 @@ const TemplateForm = ({
   const inputsArray = useFieldArray({ control: form.control, name: 'inputs' });
 
   return (
-    <>
-      <form
-        className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
-        onSubmit={stopPropagation(
-          form.handleSubmit((values) =>
-            startTransition(async () => {
-              const res = await upsertTemplate(
-                { templateId: template?.id },
-                values,
-              );
+    <form
+      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
+      onSubmit={stopPropagation(
+        form.handleSubmit((values) =>
+          startTransition(async () => {
+            const res = await upsertTemplate(
+              { templateId: template?.id },
+              values,
+            );
 
-              if (res?.error) {
-                form.setError('root', { message: res.error, type: 'custom' });
-              } else if (res?.data) {
-                onSubmit?.();
-                if (!onClose) router.back();
-              }
-            }),
-          ),
+            if (res?.error) {
+              form.setError('root', { message: res.error, type: 'custom' });
+            } else if (res?.data) {
+              onSubmit?.();
+              if (!onClose) router.back();
+            }
+          }),
+        ),
+      )}
+    >
+      <Input label="Name" maxLength={49} required {...form.register('name')} />
+      <Controller
+        control={form.control}
+        name="content"
+        render={({ field }) => (
+          <RichTextarea label="Description or instructions" {...field} />
         )}
+      />
+      <Modal.Root
+        onOpenChange={() => setCreateInputModal(null)}
+        open={!!createInputModal}
       >
-        <Input
-          label="Name"
-          maxLength={49}
-          required
-          {...form.register('name')}
-        />
-        <Controller
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <RichTextarea label="Description or instructions" {...field} />
-          )}
-        />
         <Controller
           control={form.control}
           name="inputs"
@@ -127,55 +125,53 @@ const TemplateForm = ({
             />
           )}
         />
-        {form.formState.errors.root && (
-          <div className="text-center">
-            {form.formState.errors.root.message}
-          </div>
-        )}
-        <div className="flex gap-4 pt-8">
-          <BackButton
-            className="w-full"
-            colorScheme="transparent"
-            onClick={onClose}
-          >
-            Close
-          </BackButton>
-          <Button
-            className="w-full"
-            loading={isTransitioning}
-            loadingText="Saving…"
-            type="submit"
-          >
-            Save
-          </Button>
-        </div>
-        {!disableCache && (
-          <UnsavedChangesBanner<TemplateFormValues> form={form} />
-        )}
-      </form>
-      <Modal
-        onOpenChange={() => setCreateInputModal(null)}
-        open={!!createInputModal}
-      >
-        <PageModalHeader
-          onClose={() => setCreateInputModal(null)}
-          title="New input"
-        />
-        <InputForm
-          disableCache
-          input={createInputModal}
-          onClose={() => setCreateInputModal(null)}
-          onSubmit={(values) => {
-            inputsArray.append(values);
-            setCreateInputModal(null);
-            router.refresh();
-          }}
-          subjects={subjects}
-        />
-      </Modal>
-    </>
+        <Modal.Portal>
+          <Modal.Overlay>
+            <Modal.Content>
+              <PageModalHeader
+                onClose={() => setCreateInputModal(null)}
+                title="New input"
+              />
+              <InputForm
+                disableCache
+                input={createInputModal}
+                onClose={() => setCreateInputModal(null)}
+                onSubmit={(values) => {
+                  inputsArray.append(values);
+                  setCreateInputModal(null);
+                  router.refresh();
+                }}
+                subjects={subjects}
+              />
+            </Modal.Content>
+          </Modal.Overlay>
+        </Modal.Portal>
+      </Modal.Root>
+      {form.formState.errors.root && (
+        <div className="text-center">{form.formState.errors.root.message}</div>
+      )}
+      <div className="flex gap-4 pt-8">
+        <PageModalBackButton
+          className="w-full"
+          colorScheme="transparent"
+          onClick={onClose}
+        >
+          Close
+        </PageModalBackButton>
+        <Button
+          className="w-full"
+          loading={isTransitioning}
+          loadingText="Saving…"
+          type="submit"
+        >
+          Save
+        </Button>
+      </div>
+      {!disableCache && (
+        <UnsavedChangesBanner<TemplateFormValues> form={form} />
+      )}
+    </form>
   );
 };
 
-export type { TemplateFormValues };
 export default TemplateForm;

@@ -1,11 +1,11 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import EventTypeMenu from '@/_components/event-type-menu';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
-import Modal from '@/_components/modal';
+import * as Modal from '@/_components/modal';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -30,7 +30,7 @@ interface EventTypeFormProps {
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-type EventTypeFormValues = {
+export type EventTypeFormValues = {
   content: string;
   inputs: NonNullable<ListInputsBySubjectIdData>;
   name: string;
@@ -63,7 +63,7 @@ const EventTypeForm = ({
   const router = useRouter();
 
   return (
-    <>
+    <Modal.Content>
       <PageModalHeader
         menu={
           <EventTypeMenu<EventTypeFormValues>
@@ -112,46 +112,72 @@ const EventTypeForm = ({
             />
           )}
         />
-        <Controller
-          control={form.control}
-          name="inputs"
-          render={({ field }) => (
-            <Select
-              formatCreateLabel={(value) => `Create "${value}" input`}
-              isCreatable
-              isMulti
-              label="Inputs"
-              name={field.name}
-              noOptionsMessage={() => 'Type to create a new input.'}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-              onCreateOption={(value) =>
-                setCreateInputModal({
-                  label: value,
-                  subjects: [{ id: subjectId }],
-                })
-              }
-              options={availableInputs as IOption[]}
-              placeholder="Select inputs or type to create…"
-              tooltip={
-                <>
-                  Define the specific data points you are interested in
-                  tracking.
-                </>
-              }
-              value={field.value as IOption[]}
-            />
-          )}
-        />
+        <Modal.Root
+          onOpenChange={() => setCreateInputModal(null)}
+          open={!!createInputModal}
+        >
+          <Controller
+            control={form.control}
+            name="inputs"
+            render={({ field }) => (
+              <Select
+                formatCreateLabel={(value) => `Create "${value}" input`}
+                isCreatable
+                isMulti
+                label="Inputs"
+                name={field.name}
+                noOptionsMessage={() => 'Type to create a new input.'}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                onCreateOption={(value) =>
+                  setCreateInputModal({
+                    label: value,
+                    subjects: [{ id: subjectId }],
+                  })
+                }
+                options={availableInputs as IOption[]}
+                placeholder="Select inputs or type to create…"
+                tooltip={
+                  <>
+                    Define the specific data points you are interested in
+                    tracking.
+                  </>
+                }
+                value={field.value as IOption[]}
+              />
+            )}
+          />
+          <Modal.Portal>
+            <Modal.Overlay>
+              <Modal.Content>
+                <PageModalHeader
+                  onClose={() => setCreateInputModal(null)}
+                  title="New input"
+                />
+                <InputForm
+                  disableCache
+                  input={createInputModal}
+                  onClose={() => setCreateInputModal(null)}
+                  onSubmit={(values) => {
+                    inputsArray.append(values, { shouldFocus: true });
+                    setCreateInputModal(null);
+                    router.refresh();
+                  }}
+                  subjects={subjects}
+                />
+              </Modal.Content>
+            </Modal.Overlay>
+          </Modal.Portal>
+        </Modal.Root>
         {form.formState.errors.root && (
           <div className="text-center">
             {form.formState.errors.root.message}
           </div>
         )}
         <div className="flex gap-4 pt-8">
-          <BackButton className="w-full" colorScheme="transparent">
+          <PageModalBackButton className="w-full" colorScheme="transparent">
             Close
-          </BackButton>
+          </PageModalBackButton>
           <Button
             className="w-full"
             loading={isTransitioning}
@@ -163,29 +189,8 @@ const EventTypeForm = ({
         </div>
         <UnsavedChangesBanner<EventTypeFormValues> form={form} />
       </form>
-      <Modal
-        onOpenChange={() => setCreateInputModal(null)}
-        open={!!createInputModal}
-      >
-        <PageModalHeader
-          onClose={() => setCreateInputModal(null)}
-          title="New input"
-        />
-        <InputForm
-          disableCache
-          input={createInputModal}
-          onClose={() => setCreateInputModal(null)}
-          onSubmit={(values) => {
-            inputsArray.append(values, { shouldFocus: true });
-            setCreateInputModal(null);
-            router.refresh();
-          }}
-          subjects={subjects}
-        />
-      </Modal>
-    </>
+    </Modal.Content>
   );
 };
 
-export type { EventTypeFormValues };
 export default EventTypeForm;

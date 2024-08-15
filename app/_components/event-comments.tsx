@@ -4,7 +4,7 @@ import { Database } from '@/_types/database';
 import { twMerge } from 'tailwind-merge';
 import EventComment from './event-comment';
 
-interface EventCommentsProps {
+export interface EventCommentsProps {
   className?: string;
   comments: Array<{
     content: string;
@@ -59,5 +59,4 @@ const EventComments = ({
   );
 };
 
-export type { EventCommentsProps };
 export default EventComments;

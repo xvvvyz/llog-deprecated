@@ -1,7 +1,8 @@
-import BackButton from '@/_components/back-button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
+import * as Modal from '@/_components/modal';
 import ModuleCard from '@/_components/module-card';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import SessionMenu from '@/_components/session-menu';
@@ -57,7 +58,7 @@ const SessionPage = async ({
   });
 
   return (
-    <>
+    <Modal.Content>
       <PageModalHeader
         menu={
           isTeamMember && (
@@ -140,10 +141,13 @@ const SessionPage = async ({
           </>
         )}
       </SessionLayout>
-      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+      <PageModalBackButton
+        className="m-0 block w-full py-6 text-center"
+        variant="link"
+      >
         Close
-      </BackButton>
-    </>
+      </PageModalBackButton>
+    </Modal.Content>
   );
 };
 

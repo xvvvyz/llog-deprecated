@@ -118,7 +118,9 @@ const PlotFigure = ({
               rows,
               P.binX<P.RectYOptions>(
                 {
-                  title: (d: typeof rows) => `${d[0][y]}: ${d.length}`,
+                  title: isInputNominal
+                    ? (d: typeof rows) => `${d[0][y]}: ${d.length}`
+                    : undefined,
                   y: barReducer,
                 },
                 {
@@ -253,6 +255,7 @@ const PlotFigure = ({
     const onClick = () => {
       try {
         const datum = plot.querySelector('title')?.innerHTML ?? '';
+        console.log(datum);
         if (!datum) return;
         const { Id } = JSON.parse(datum);
         if (!Id) return;
@@ -318,7 +321,7 @@ const PlotFigure = ({
   ]);
 
   return (
-    <div className="h-full w-full" ref={parentRef}>
+    <div className="h-full w-full select-none" ref={parentRef}>
       <div ref={containerRef} />
     </div>
   );

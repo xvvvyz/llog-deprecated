@@ -1,10 +1,10 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
@@ -44,7 +44,7 @@ interface InputFormProps {
   subjects?: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-type InputFormValues = {
+export type InputFormValues = {
   label: string;
   options: Array<Database['public']['Tables']['input_options']['Insert']>;
   settings?: InputSettingsJson;
@@ -314,13 +314,13 @@ const InputForm = ({
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <BackButton
+        <PageModalBackButton
           className="w-full"
           colorScheme="transparent"
           onClick={onClose}
         >
           Close
-        </BackButton>
+        </PageModalBackButton>
         <Button
           className="w-full"
           loading={isTransitioning}
@@ -335,5 +335,4 @@ const InputForm = ({
   );
 };
 
-export type { InputFormValues };
 export default InputForm;

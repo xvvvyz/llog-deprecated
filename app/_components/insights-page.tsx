@@ -1,7 +1,8 @@
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import Insights from '@/_components/insights';
+import * as Modal from '@/_components/modal';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import Number from '@/_constants/enum-number';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -48,7 +49,7 @@ const InsightsPage = async ({
   const searchString = searchObject.size ? `?${searchObject.toString()}` : '';
 
   return (
-    <>
+    <Modal.Content className="max-w-4xl">
       <PageModalHeader title="Insights" />
       <div className="space-y-4 px-4 sm:px-8">
         {isTeamMember && !subject.archived && (
@@ -80,10 +81,13 @@ const InsightsPage = async ({
           />
         )}
       </div>
-      <BackButton className="m-0 block w-full py-6 text-center" variant="link">
+      <PageModalBackButton
+        className="m-0 block w-full py-6 text-center"
+        variant="link"
+      >
         Close
-      </BackButton>
-    </>
+      </PageModalBackButton>
+    </Modal.Content>
   );
 };
 

@@ -1,4 +1,5 @@
-import BackIconButton from '@/_components/back-icon-button';
+import * as Modal from '@/_components/modal';
+import PageModalBackIconButton from '@/_components/page-modal-back-icon-button';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -25,12 +26,17 @@ const PageModalHeader = ({
     )}
   >
     <div className="min-w-0">
-      {title && <h1 className="-my-1 truncate text-xl">{title}</h1>}
+      {title && (
+        <Modal.Title className="-my-1 truncate text-xl">{title}</Modal.Title>
+      )}
       {subtitle}
     </div>
     <div className="relative -top-0.5 right-1 flex shrink-0 gap-6">
       {menu}
-      <BackIconButton icon={<XMarkIcon className="w-7" />} onClick={onClose} />
+      <PageModalBackIconButton
+        icon={<XMarkIcon className="w-7" />}
+        onClick={onClose}
+      />
     </div>
   </div>
 );

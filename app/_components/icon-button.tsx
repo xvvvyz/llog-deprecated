@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
-interface IconButtonProps extends ButtonProps {
+export interface IconButtonProps extends ButtonProps {
   icon: ReactNode;
   label?: string;
   spinnerClassName?: string;
@@ -42,5 +42,4 @@ const IconButton = ({
   );
 };
 
-export type { IconButtonProps };
 export default IconButton;

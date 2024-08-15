@@ -1,12 +1,12 @@
 import * as SwitchPrimitives from '@radix-ui/react-switch';
-import React, { ReactNode } from 'react';
+import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {
-    description?: ReactNode;
-    label: ReactNode;
+    description?: React.ReactNode;
+    label: React.ReactNode;
   }
 >(({ className, description, label, ...props }, ref) => (
   <label
@@ -32,4 +32,5 @@ const Switch = React.forwardRef<
 ));
 
 Switch.displayName = 'Switch';
+
 export default Switch;

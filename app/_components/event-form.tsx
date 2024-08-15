@@ -1,9 +1,9 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import Input from '@/_components/input';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import InputType from '@/_constants/enum-input-type';
@@ -26,18 +26,6 @@ import { twMerge } from 'tailwind-merge';
 import EventSelect from './event-select';
 import EventStopwatch from './event-stopwatch';
 
-interface EventFormValues {
-  comment: string;
-  completionTime: string;
-  inputs: Array<
-    | DurationInputType
-    | MultiSelectInputType
-    | SelectInputType
-    | boolean
-    | string
-  >;
-}
-
 interface EventFormProps {
   className?: string;
   disabled?: boolean;
@@ -52,6 +40,18 @@ interface EventFormProps {
   isMission?: boolean;
   isPublic?: boolean;
   subjectId: string;
+}
+
+export interface EventFormValues {
+  comment: string;
+  completionTime: string;
+  inputs: Array<
+    | DurationInputType
+    | MultiSelectInputType
+    | SelectInputType
+    | boolean
+    | string
+  >;
 }
 
 const EventForm = ({
@@ -294,9 +294,9 @@ const EventForm = ({
       {!isPublic && !isArchived && (!event || form.formState.isDirty) && (
         <div className="flex gap-4 pt-8">
           {!event && !isMission && (
-            <BackButton className="w-full" colorScheme="transparent">
+            <PageModalBackButton className="w-full" colorScheme="transparent">
               Close
-            </BackButton>
+            </PageModalBackButton>
           )}
           {(!event || form.formState.isDirty) && (
             <Button
@@ -316,5 +316,4 @@ const EventForm = ({
   );
 };
 
-export type { EventFormValues };
 export default EventForm;

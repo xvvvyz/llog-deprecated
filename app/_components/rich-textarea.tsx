@@ -1,5 +1,6 @@
 'use client';
 
+import Tip from '@/_components/tip';
 import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
@@ -14,30 +15,10 @@ import Text from '@tiptap/extension-text';
 import Typography from '@tiptap/extension-typography';
 import Underline from '@tiptap/extension-underline';
 import Youtube from '@tiptap/extension-youtube';
+import * as TipTap from '@tiptap/react';
+import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 import DirtyHtml from './dirty-html';
-
-import {
-  Content,
-  Editor,
-  EditorContent,
-  Extension,
-  KeyboardShortcutCommand,
-  useEditor,
-} from '@tiptap/react';
-
-import Tip from '@/_components/tip';
-import {
-  ChangeEvent,
-  forwardRef,
-  MutableRefObject,
-  ReactNode,
-  Ref,
-  TextareaHTMLAttributes,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react';
 
 const RichTextarea = (
   {
@@ -51,19 +32,20 @@ const RichTextarea = (
     right,
     tooltip,
     value,
-  }: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
+  }: Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
     label?: string;
     onEnter?: (e: KeyboardEvent) => void;
-    right?: ReactNode;
-    tooltip?: ReactNode;
+    right?: React.ReactNode;
+    tooltip?: React.ReactNode;
     value?: string | null;
   },
-  ref: Ref<{ focus: () => void }>,
+  ref: React.Ref<{ focus: () => void }>,
 ) => {
-  const editorRef: MutableRefObject<Editor | null> = useRef(null);
+  const editorRef: React.MutableRefObject<TipTap.Editor | null> =
+    React.useRef(null);
 
-  const editor = useEditor({
-    content: value as Content,
+  const editor = TipTap.useEditor({
+    content: value as TipTap.Content,
     editorProps: {
       attributes: {
         'aria-label': ariaLabel ?? '',
@@ -108,9 +90,9 @@ const RichTextarea = (
       Typography,
       Underline,
       Youtube.configure({ disableKBcontrols: true, modestBranding: true }),
-      Extension.create({
+      TipTap.Extension.create({
         addKeyboardShortcuts() {
-          const handleEnter: KeyboardShortcutCommand = ({ editor }) => {
+          const handleEnter: TipTap.KeyboardShortcutCommand = ({ editor }) => {
             editor.commands.enter();
             return true;
           };
@@ -128,20 +110,20 @@ const RichTextarea = (
           name,
           value: editor.getHTML() === '<p></p>' ? '' : editor.getHTML(),
         },
-      } as ChangeEvent<HTMLTextAreaElement>);
+      } as React.ChangeEvent<HTMLTextAreaElement>);
     },
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!editor || value === editorRef.current?.getHTML()) return;
     editor.commands.setContent(value ?? '');
   }, [editor, value]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     editorRef.current = editor;
   }, [editor]);
 
-  useImperativeHandle(ref, () => ({
+  React.useImperativeHandle(ref, () => ({
     focus() {
       // hack to get newly created textarea to focus via react-hook-form
       setTimeout(() => editorRef.current?.commands.focus('end'), 10);
@@ -166,7 +148,7 @@ const RichTextarea = (
         )}
       </div>
       {editor ? (
-        <EditorContent editor={editor} name={name} />
+        <TipTap.EditorContent editor={editor} name={name} />
       ) : (
         <DirtyHtml
           className={twMerge(
@@ -189,4 +171,5 @@ const RichTextarea = (
 };
 
 RichTextarea.displayName = 'RichTextarea';
-export default forwardRef(RichTextarea);
+
+export default React.forwardRef(RichTextarea);

@@ -1,34 +1,55 @@
 'use client';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import React from 'react';
+import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const Modal = React.forwardRef<
+const Close = DialogPrimitive.Close;
+
+const Content = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> & {
-    className?: string;
-  }
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <DialogPrimitive.Root {...props}>
-    <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-10 overflow-y-auto bg-alpha-reverse-1 py-16 backdrop-blur">
-        <div className="flex min-h-full items-start justify-center">
-          <DialogPrimitive.Content
-            ref={ref}
-            className={twMerge(
-              'relative z-20 w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 outline-none drop-shadow-2xl sm:border-x',
-              className,
-            )}
-          >
-            {children}
-          </DialogPrimitive.Content>
-        </div>
-      </DialogPrimitive.Overlay>
-    </DialogPrimitive.Portal>
-  </DialogPrimitive.Root>
+  <DialogPrimitive.Content
+    ref={ref}
+    className={twMerge(
+      'relative z-20 w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 outline-none drop-shadow-2xl sm:border-x',
+      className,
+    )}
+    {...props}
+  >
+    {children}
+  </DialogPrimitive.Content>
 ));
 
-Modal.displayName = 'Modal';
+Content.displayName = DialogPrimitive.Content.displayName;
 
-export default Modal;
+const Description = DialogPrimitive.Description;
+
+const Overlay = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ children, className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={twMerge(
+      'fixed inset-0 z-10 overflow-y-auto bg-alpha-reverse-1 py-16 backdrop-blur',
+      className,
+    )}
+    {...props}
+  >
+    <div className="flex min-h-full items-start justify-center">{children}</div>
+  </DialogPrimitive.Overlay>
+));
+
+Overlay.displayName = DialogPrimitive.Overlay.displayName;
+
+const Portal = DialogPrimitive.Portal;
+
+const Root = DialogPrimitive.Root;
+
+const Title = DialogPrimitive.Title;
+
+const Trigger = DialogPrimitive.Trigger;
+
+export { Close, Content, Description, Overlay, Portal, Root, Title, Trigger };

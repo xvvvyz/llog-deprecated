@@ -1,10 +1,10 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import CollapsibleSection from '@/_components/collapsible-section';
 import Input from '@/_components/input';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
@@ -64,7 +64,7 @@ interface InsightFormProps {
   subjectId: string;
 }
 
-type InsightFormValues = InsightConfigJson & {
+export type InsightFormValues = InsightConfigJson & {
   name: string;
 };
 
@@ -219,107 +219,137 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           type={form.watch('type')}
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Checkbox
-          label="Dots"
-          {...form.register('showDots', {
-            onChange: (e) =>
-              onMarkOrInputChange({ inputId, showDots: e.target.checked }),
-          })}
-        />
-        <Checkbox
-          label="Line"
-          {...form.register('showLine', {
-            onChange: (e) =>
-              onMarkOrInputChange({ inputId, showLine: e.target.checked }),
-          })}
-        />
-        <Checkbox
-          label="Bars"
-          {...form.register('showBars', {
-            onChange: (e) =>
-              onMarkOrInputChange({ inputId, showBars: e.target.checked }),
-          })}
-        />
-        <Checkbox
-          label="Trend"
-          {...form.register('showLinearRegression', {
-            onChange: (e) =>
-              onMarkOrInputChange({
-                inputId,
-                showLinearRegression: e.target.checked,
-              }),
-          })}
-        />
-      </div>
-      <CollapsibleSection
-        className="grid gap-6 pt-6 md:grid-cols-3 md:gap-4"
-        title="Additional options"
-        titleClassName="smallcaps"
-      >
-        <Controller
-          control={form.control}
-          name="lineCurveFunction"
-          render={({ field }) => (
-            <Select
-              isDisabled={!showLine}
-              isClearable={false}
-              isSearchable={false}
-              label="Line function"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption)?.id)}
-              options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
-              value={LINE_CURVE_FUNCTION_OPTIONS.find(
-                (o) => o.id === field.value,
+      <CollapsibleSection title="Marks" titleClassName="smallcaps">
+        <div className="grid grid-cols-2 gap-4 pt-6 md:grid-cols-4">
+          <Checkbox
+            label="Dots"
+            {...form.register('showDots', {
+              onChange: (e) =>
+                onMarkOrInputChange({ inputId, showDots: e.target.checked }),
+            })}
+          />
+          <Checkbox
+            label="Line"
+            {...form.register('showLine', {
+              onChange: (e) =>
+                onMarkOrInputChange({ inputId, showLine: e.target.checked }),
+            })}
+          />
+          <Checkbox
+            label="Bars"
+            {...form.register('showBars', {
+              onChange: (e) =>
+                onMarkOrInputChange({ inputId, showBars: e.target.checked }),
+            })}
+          />
+          <Checkbox
+            label="Trend"
+            {...form.register('showLinearRegression', {
+              onChange: (e) =>
+                onMarkOrInputChange({
+                  inputId,
+                  showLinearRegression: e.target.checked,
+                }),
+            })}
+          />
+        </div>
+        <div className="grid gap-6 pt-6 md:grid-cols-3 md:gap-4">
+          <Controller
+            control={form.control}
+            name="lineCurveFunction"
+            render={({ field }) => (
+              <Select
+                isDisabled={!showLine}
+                isClearable={false}
+                isSearchable={false}
+                label="Line function"
+                name={field.name}
+                onBlur={field.onBlur}
+                onChange={(value) => field.onChange((value as IOption)?.id)}
+                options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
+                value={LINE_CURVE_FUNCTION_OPTIONS.find(
+                  (o) => o.id === field.value,
+                )}
+              />
+            )}
+          />
+          <div className="grid grid-cols-2 gap-4 md:col-span-2">
+            <Controller
+              control={form.control}
+              name="barInterval"
+              render={({ field }) => (
+                <Select
+                  isDisabled={!showBars}
+                  isClearable={false}
+                  isSearchable={false}
+                  label="Bar interval"
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={(value) => field.onChange((value as IOption)?.id)}
+                  options={BAR_INTERVAL_OPTIONS as IOption[]}
+                  value={BAR_INTERVAL_OPTIONS.find((o) => o.id === field.value)}
+                />
               )}
             />
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="barInterval"
-          render={({ field }) => (
-            <Select
-              isDisabled={!showBars}
-              isClearable={false}
-              isSearchable={false}
-              label="Bar interval"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption)?.id)}
-              options={BAR_INTERVAL_OPTIONS as IOption[]}
-              value={BAR_INTERVAL_OPTIONS.find((o) => o.id === field.value)}
-            />
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="barReducer"
-          render={({ field }) => (
-            <Select
-              isDisabled={!showBars}
-              isClearable={false}
-              isSearchable={false}
-              label="Bar reducer"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange((value as IOption)?.id)}
-              options={BAR_REDUCER_OPTIONS.map((o) => {
-                o.isDisabled = isInputNominal
-                  ? o.id !== BarReducer.Count
-                  : o.id === BarReducer.Count;
+            <Controller
+              control={form.control}
+              name="barReducer"
+              render={({ field }) => (
+                <Select
+                  isDisabled={!showBars}
+                  isClearable={false}
+                  isSearchable={false}
+                  label="Bar reducer"
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={(value) => field.onChange((value as IOption)?.id)}
+                  options={BAR_REDUCER_OPTIONS.map((o) => {
+                    o.isDisabled = isInputNominal
+                      ? o.id !== BarReducer.Count
+                      : o.id === BarReducer.Count;
 
-                return o;
-              })}
-              value={BAR_REDUCER_OPTIONS.find((o) => o.id === field.value)}
+                    return o;
+                  })}
+                  value={BAR_REDUCER_OPTIONS.find((o) => o.id === field.value)}
+                />
+              )}
             />
-          )}
+          </div>
+        </div>
+      </CollapsibleSection>
+      <CollapsibleSection
+        className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
+        title="Margins"
+        titleClassName="smallcaps"
+      >
+        <Input
+          label="Top"
+          min={0}
+          type="number"
+          {...form.register('marginTop')}
+        />
+        <Input
+          label="Bottom"
+          min={0}
+          type="number"
+          {...form.register('marginBottom')}
+        />
+        <Input
+          label="Left"
+          min={0}
+          type="number"
+          {...form.register('marginLeft')}
+        />
+        <Input
+          label="Right"
+          min={0}
+          type="number"
+          {...form.register('marginRight')}
         />
       </CollapsibleSection>
       <CollapsibleSection
         className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4"
-        title="Filter events"
+        title="Filters"
         titleClassName="smallcaps"
       >
         <Controller
@@ -372,49 +402,19 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           )}
         />
       </CollapsibleSection>
-      <CollapsibleSection
-        className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
-        title="Margins"
-        titleClassName="smallcaps"
-      >
-        <Input
-          label="Top"
-          min={0}
-          type="number"
-          {...form.register('marginTop')}
-        />
-        <Input
-          label="Bottom"
-          min={0}
-          type="number"
-          {...form.register('marginBottom')}
-        />
-        <Input
-          label="Left"
-          min={0}
-          type="number"
-          {...form.register('marginLeft')}
-        />
-        <Input
-          label="Right"
-          min={0}
-          type="number"
-          {...form.register('marginRight')}
-        />
-      </CollapsibleSection>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex flex-col-reverse justify-between gap-8 pt-8 align-baseline sm:flex-row">
         <UnsavedChangesBanner<InsightFormValues> form={form} />
         <div className="flex justify-center gap-4">
-          <BackButton
+          <PageModalBackButton
             className="w-36 shrink-0"
             colorScheme="transparent"
             size="sm"
           >
             Close
-          </BackButton>
+          </PageModalBackButton>
           <Button
             className="w-36 shrink-0"
             loading={isTransitioning}
@@ -430,5 +430,4 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
   );
 };
 
-export type { InsightFormValues };
 export default InsightForm;

@@ -1,7 +1,7 @@
 'use client';
 
 import Avatar from '@/_components/avatar';
-import DropdownMenu from '@/_components/dropdown-menu';
+import * as DropdownMenu from '@/_components/dropdown-menu';
 import SubscriptionStatus from '@/_constants/enum-subscription-status';
 import signOut from '@/_mutations/sign-out';
 import getCustomerBillingPortal from '@/_queries/get-customer-billing-portal';
@@ -27,7 +27,7 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
     user.app_metadata.subscription_status === SubscriptionStatus.Active;
 
   return (
-    <DropdownMenu
+    <DropdownMenu.Root
       disableOnPointerDown={false}
       trigger={
         <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
@@ -84,7 +84,7 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
           Sign out
         </DropdownMenu.Button>
       </DropdownMenu.Content>
-    </DropdownMenu>
+    </DropdownMenu.Root>
   );
 };
 

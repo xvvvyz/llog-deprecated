@@ -48,5 +48,4 @@ const Calendar = ({
   />
 );
 
-Calendar.displayName = 'Calendar';
 export default Calendar;

@@ -1,8 +1,8 @@
 'use client';
 
-import BackButton from '@/_components/back-button';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import PageModalBackButton from '@/_components/page-modal-back-button';
 import updateUser from '@/_mutations/update-user';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
@@ -53,9 +53,9 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <BackButton className="w-full" colorScheme="transparent">
+        <PageModalBackButton className="w-full" colorScheme="transparent">
           Close
-        </BackButton>
+        </PageModalBackButton>
         <Button
           className="w-full"
           loading={isTransitioning}
