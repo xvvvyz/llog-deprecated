@@ -3,6 +3,7 @@
 import ButtonPrimitive from '@/_components/button';
 import ForwardSearchParamsButtonPrimitive from '@/_components/forward-search-params-button';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -78,7 +79,9 @@ Label.displayName = DropdownMenuPrimitive.Label.displayName;
 
 const Portal = DropdownMenuPrimitive.Portal;
 
-const Root = DropdownMenuPrimitive.Root;
+const Root = (props: DropdownMenuProps) => (
+  <DropdownMenuPrimitive.Root modal={false} {...props} />
+);
 
 const Separator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Separator>,

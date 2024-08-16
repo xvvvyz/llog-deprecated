@@ -23,39 +23,32 @@ import Bars2Icon from '@heroicons/react/24/outline/Bars2Icon';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import * as Form from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-import {
-  ArrayPath,
-  Controller,
-  FieldValue,
-  FieldValues,
-  Path,
-  PathValue,
-  useFieldArray,
-  UseFieldArrayReturn,
-  UseFormReturn,
-} from 'react-hook-form';
-
 interface ModuleFormSectionProps<
-  T extends FieldValues,
-  U extends ArrayPath<T>,
+  T extends Form.FieldValues,
+  U extends Form.ArrayPath<T>,
 > {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
   availableTemplates: NonNullable<ListTemplatesWithDataData>;
-  eventTypeArray: UseFieldArrayReturn<T, U, 'key'>;
+  eventTypeArray: Form.UseFieldArrayReturn<T, U, 'key'>;
   eventTypeIndex: number;
   eventTypeKey: string;
-  form: UseFormReturn<T>;
+  form: Form.UseFormReturn<T>;
   hasOnlyOne?: boolean;
   subjectId: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
+const ModuleFormSection = <
+  T extends Form.FieldValues,
+  U extends Form.ArrayPath<T>,
+>({
   availableInputs,
   availableTemplates,
   eventTypeArray,
@@ -83,9 +76,9 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
 
   const [useTemplateModal, toggleUseTemplateModal] = useToggle(false);
 
-  const inputsArray = useFieldArray({
+  const inputsArray = Form.useFieldArray({
     control: form.control,
-    name: `modules[${eventTypeIndex}].inputs` as ArrayPath<T>,
+    name: `modules[${eventTypeIndex}].inputs` as Form.ArrayPath<T>,
   });
 
   const router = useRouter();
@@ -156,23 +149,23 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
 
                             const inputs = availableInputs.filter(({ id }) =>
                               forceArray(data?.inputIds).includes(id),
-                            ) as PathValue<T, T[string]>;
+                            ) as Form.PathValue<T, T[string]>;
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].name` as Path<T>,
-                              template?.name as PathValue<T, Path<T>>,
+                              `modules[${eventTypeIndex}].name` as Form.Path<T>,
+                              template?.name as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].content` as Path<T>,
-                              data?.content as PathValue<T, Path<T>>,
+                              `modules[${eventTypeIndex}].content` as Form.Path<T>,
+                              data?.content as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].inputs` as Path<T>,
-                              inputs as PathValue<T, Path<T>>,
+                              `modules[${eventTypeIndex}].inputs` as Form.Path<T>,
+                              inputs as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
 
@@ -204,7 +197,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                   <DropdownMenu.Button
                     onClick={() => {
                       const { content, inputs, name } = form.getValues(
-                        `modules[${eventTypeIndex}]` as Path<T>,
+                        `modules[${eventTypeIndex}]` as Form.Path<T>,
                       );
 
                       setCreateTemplateModal({
@@ -242,11 +235,39 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                   </Modal.Overlay>
                 </Modal.Portal>
               </Modal.Root>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Button
+                onClick={() =>
+                  eventTypeArray.insert(eventTypeIndex, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <PlusIcon className="w-5 text-fg-4" />
+                Add module above
+              </DropdownMenu.Button>
+              <DropdownMenu.Button
+                onClick={() =>
+                  eventTypeArray.insert(eventTypeIndex + 1, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <PlusIcon className="w-5 text-fg-4" />
+                Add module below
+              </DropdownMenu.Button>
               {!hasOnlyOne && (
-                <DropdownMenuDeleteItem
-                  confirmText="Delete module"
-                  onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
-                />
+                <>
+                  <DropdownMenu.Separator />
+                  <DropdownMenuDeleteItem
+                    confirmText="Delete module"
+                    onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
+                  />
+                </>
               )}
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
@@ -256,9 +277,9 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         className="rounded-none border-t-0"
         maxLength={49}
         placeholder="Module title"
-        {...form.register(`modules[${eventTypeIndex}].name` as Path<T>)}
+        {...form.register(`modules[${eventTypeIndex}].name` as Form.Path<T>)}
       />
-      <Controller
+      <Form.Controller
         control={form.control}
         name={`modules[${eventTypeIndex}].content` as T[string]}
         render={({ field }) => (
@@ -274,7 +295,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
         onOpenChange={() => setCreateInputModal(null)}
         open={!!createInputModal}
       >
-        <Controller
+        <Form.Controller
           control={form.control}
           name={`modules[${eventTypeIndex}].inputs` as T[string]}
           render={({ field }) => (
@@ -311,7 +332,7 @@ const ModuleFormSection = <T extends FieldValues, U extends ArrayPath<T>>({
                 input={createInputModal}
                 onClose={() => setCreateInputModal(null)}
                 onSubmit={(values) => {
-                  inputsArray.append(values as FieldValue<T>);
+                  inputsArray.append(values as Form.FieldValue<T>);
                   setCreateInputModal(null);
                   router.refresh();
                 }}

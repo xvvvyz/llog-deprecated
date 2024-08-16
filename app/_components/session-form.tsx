@@ -341,7 +341,9 @@ const SessionForm = ({
             <Button
               className="w-full"
               colorScheme="transparent"
-              onClick={() => modulesArray.append({ content: '', inputs: [] })}
+              onClick={() =>
+                modulesArray.append({ content: '', inputs: [], name: '' })
+              }
             >
               <PlusIcon className="w-5" />
               Add module
