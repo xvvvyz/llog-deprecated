@@ -33,7 +33,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
           isTeamMember && (
             <EventTypeMenu
               eventTypeId={eventType.id}
-              isView
+              isModal
               subjectId={subjectId}
             />
           )

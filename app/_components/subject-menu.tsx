@@ -256,8 +256,8 @@ const SubjectMenu = ({
           </DropdownMenu.Button>
           <DropdownMenuDeleteItem
             confirmText="Delete subject"
-            onConfirm={() => {
-              void updateSubject({ deleted: true, id: subject.id });
+            onConfirm={async () => {
+              await updateSubject({ deleted: true, id: subject.id });
               if (!isList) router.replace('/subjects');
             }}
           />

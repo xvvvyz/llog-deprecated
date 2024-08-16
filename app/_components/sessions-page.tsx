@@ -55,7 +55,7 @@ const SessionsPage = async ({
         menu={
           isTeamMember && (
             <TrainingPlanMenu
-              isView
+              isModal
               missionId={mission.id}
               subjectId={subjectId}
             />

@@ -29,7 +29,7 @@ interface EventTypeMenuProps<T extends FieldValues> {
   availableTemplates?: NonNullable<ListTemplatesWithDataData>;
   eventTypeId?: string;
   form?: UseFormReturn<T>;
-  isView?: boolean;
+  isModal?: boolean;
   subjectId: string;
   subjects?: NonNullable<ListSubjectsByTeamIdData>;
 }
@@ -39,7 +39,7 @@ const EventTypeMenu = <T extends FieldValues>({
   availableTemplates,
   eventTypeId,
   form,
-  isView,
+  isModal,
   subjectId,
   subjects,
 }: EventTypeMenuProps<T>) => {
@@ -52,7 +52,7 @@ const EventTypeMenu = <T extends FieldValues>({
   return (
     <DropdownMenu.Root
       trigger={
-        form || isView ? (
+        form || isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
           <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
@@ -64,7 +64,7 @@ const EventTypeMenu = <T extends FieldValues>({
       }
     >
       <DropdownMenu.Content
-        className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
+        className={form || isModal ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
       >
         {form && availableInputs && subjects && (
           <>
@@ -206,9 +206,9 @@ const EventTypeMenu = <T extends FieldValues>({
             )}
             <DropdownMenuDeleteItem
               confirmText="Delete event type"
-              onConfirm={() => {
-                void deleteEventType(eventTypeId);
-                if (form || isView) router.replace(`/subjects/${subjectId}`);
+              onConfirm={async () => {
+                await deleteEventType(eventTypeId);
+                if (form || isModal) router.back();
               }}
             />
           </>

@@ -22,7 +22,7 @@ interface SessionMenuProps<T extends FieldValues> {
   highestPublishedOrder: number;
   isDraft?: boolean;
   isList?: boolean;
-  isView?: boolean;
+  isModal?: boolean;
   missionId: string;
   nextSessionOrder: number;
   session:
@@ -36,7 +36,7 @@ const SessionMenu = <T extends FieldValues>({
   highestPublishedOrder,
   isDraft,
   isList,
-  isView,
+  isModal,
   missionId,
   nextSessionOrder,
   session,
@@ -49,7 +49,7 @@ const SessionMenu = <T extends FieldValues>({
   return (
     <DropdownMenu.Root
       trigger={
-        form || isView ? (
+        form || isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
           <div className="group mr-1.5 flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2 sm:mr-6">
@@ -61,7 +61,7 @@ const SessionMenu = <T extends FieldValues>({
       }
     >
       <DropdownMenu.Content
-        className={form || isView ? '-mr-[3.7rem] -mt-14' : '-mt-20 mr-2'}
+        className={form || isModal ? '-mr-[3.7rem] -mt-14' : '-mt-20 mr-2'}
       >
         {form ? (
           !isDraft && (
@@ -135,14 +135,14 @@ const SessionMenu = <T extends FieldValues>({
         <DropdownMenu.Separator />
         <DropdownMenuDeleteItem
           confirmText="Delete session"
-          onConfirm={() => {
-            void deleteSession({
+          onConfirm={async () => {
+            await deleteSession({
               currentOrder: session.order,
               missionId: missionId,
               sessionId: session.id,
             });
 
-            if (form || isView) {
+            if (form || isModal) {
               router.replace(
                 `/subjects/${subjectId}/training-plans/${missionId}/sessions`,
               );

@@ -2,30 +2,46 @@
 
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import IconButton from '@/_components/icon-button';
 import deleteEvent from '@/_mutations/delete-event';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
+import { useRouter } from 'next/navigation';
 
 interface EventMenuProps {
   eventId: string;
+  isModal?: boolean;
 }
 
-const EventMenu = ({ eventId }: EventMenuProps) => (
-  <DropdownMenu.Root
-    trigger={
-      <div className="group absolute right-0 top-0 flex items-center justify-center px-2 py-2.5 text-fg-3 hover:text-fg-2 active:text-fg-2">
-        <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
-          <EllipsisVerticalIcon className="w-5" />
-        </div>
-      </div>
-    }
-  >
-    <DropdownMenu.Content className="-mt-[3.35rem] mr-1.5">
-      <DropdownMenuDeleteItem
-        confirmText="Delete event"
-        onConfirm={() => deleteEvent(eventId)}
-      />
-    </DropdownMenu.Content>
-  </DropdownMenu.Root>
-);
+const EventMenu = ({ eventId, isModal }: EventMenuProps) => {
+  const router = useRouter();
+
+  return (
+    <DropdownMenu.Root
+      trigger={
+        isModal ? (
+          <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
+        ) : (
+          <div className="group absolute right-0 top-0 flex items-center justify-center px-2 py-2.5 text-fg-3 hover:text-fg-2 active:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+              <EllipsisVerticalIcon className="w-5" />
+            </div>
+          </div>
+        )
+      }
+    >
+      <DropdownMenu.Content
+        className={isModal ? '-mr-[3.7rem] -mt-14' : '-mt-[3.35rem] mr-1.5'}
+      >
+        <DropdownMenuDeleteItem
+          confirmText="Delete event"
+          onConfirm={async () => {
+            await deleteEvent(eventId);
+            if (isModal) router.back();
+          }}
+        />
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+};
 
 export default EventMenu;

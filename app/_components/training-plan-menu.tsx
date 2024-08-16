@@ -9,13 +9,13 @@ import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import { useRouter } from 'next/navigation';
 
 interface TrainingPlanMenuProps {
-  isView?: boolean;
+  isModal?: boolean;
   missionId: string;
   subjectId: string;
 }
 
 const TrainingPlanMenu = ({
-  isView,
+  isModal,
   missionId,
   subjectId,
 }: TrainingPlanMenuProps) => {
@@ -25,7 +25,7 @@ const TrainingPlanMenu = ({
     <>
       <DropdownMenu.Root
         trigger={
-          isView ? (
+          isModal ? (
             <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
           ) : (
             <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
@@ -37,7 +37,7 @@ const TrainingPlanMenu = ({
         }
       >
         <DropdownMenu.Content
-          className={isView ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
+          className={isModal ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
         >
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
@@ -48,9 +48,9 @@ const TrainingPlanMenu = ({
           </DropdownMenu.Button>
           <DropdownMenuDeleteItem
             confirmText="Delete training plan"
-            onConfirm={() => {
-              void deleteTrainingPlan(missionId);
-              if (isView) router.replace(`/subjects/${subjectId}`);
+            onConfirm={async () => {
+              await deleteTrainingPlan(missionId);
+              if (isModal) router.back();
             }}
           />
         </DropdownMenu.Content>

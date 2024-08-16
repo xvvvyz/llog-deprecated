@@ -1,6 +1,7 @@
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import EventCard from '@/_components/event-card';
+import EventMenu from '@/_components/event-menu';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -30,6 +31,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
   return (
     <Modal.Content>
       <PageModalHeader
+        menu={<EventMenu eventId={eventId} isModal />}
         subtitle={
           <>
             {event && (

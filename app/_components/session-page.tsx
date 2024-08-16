@@ -64,7 +64,7 @@ const SessionPage = async ({
           isTeamMember && (
             <SessionMenu
               highestPublishedOrder={highestPublishedOrder}
-              isView
+              isModal
               missionId={missionId}
               nextSessionOrder={highestOrder + 1}
               session={session}
