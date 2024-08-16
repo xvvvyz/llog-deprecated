@@ -1,5 +1,6 @@
 'use client';
 
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
@@ -15,32 +16,24 @@ import ArchiveBoxIcon from '@heroicons/react/24/outline/ArchiveBoxIcon';
 import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
+import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
 import ClipboardDocumentIcon from '@heroicons/react/24/outline/ClipboardDocumentIcon';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import ShareIcon from '@heroicons/react/24/outline/ShareIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
-import { ReactNode, useOptimistic, useRef, useTransition } from 'react';
+import { useOptimistic, useRef, useTransition } from 'react';
 
 interface SubjectMenuProps {
   canUnarchive?: boolean;
-  children: ReactNode;
-  contentClassName?: string;
-  disableOnPointerDown?: boolean;
   isList?: boolean;
   subject: NonNullable<GetSubjectData> | NonNullable<ListSubjectsData>[0];
 }
 
-const SubjectMenu = ({
-  canUnarchive,
-  children,
-  contentClassName,
-  disableOnPointerDown,
-  isList,
-  subject,
-}: SubjectMenuProps) => {
+const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
   const [, copyToClipboard] = useCopyToClipboard();
   const [, startPublicTransition] = useTransition();
   const [hasCopiedClientLink, toggleHasCopiedClientLink] = useToggle(false);
@@ -54,12 +47,27 @@ const SubjectMenu = ({
   const router = useRouter();
 
   return (
-    <>
-      <DropdownMenu.Root
-        disableOnPointerDown={disableOnPointerDown}
-        trigger={children}
-      >
-        <DropdownMenu.Content className={contentClassName}>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        {isList ? (
+          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+              <EllipsisVerticalIcon className="w-5" />
+            </div>
+          </div>
+        ) : (
+          <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
+            <Bars3Icon className="w-5" />
+            <Avatar
+              className="-m-px"
+              file={subject.image_uri}
+              id={subject.id}
+            />
+          </div>
+        )}
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content className={isList ? 'mr-1.5' : 'mt-0.5'}>
           <DropdownMenu.Button
             href={`/subjects/${subject.id}/edit`}
             scroll={false}
@@ -262,8 +270,8 @@ const SubjectMenu = ({
             }}
           />
         </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 };
 

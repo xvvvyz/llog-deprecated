@@ -27,9 +27,8 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
     user.app_metadata.subscription_status === SubscriptionStatus.Active;
 
   return (
-    <DropdownMenu.Root
-      disableOnPointerDown={false}
-      trigger={
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
         <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
           <Bars3Icon className="w-5" />
           <Avatar
@@ -38,52 +37,53 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
             id={user?.id}
           />
         </div>
-      }
-    >
-      <DropdownMenu.Content className="mt-0.5">
-        <DropdownMenu.Button href="/account/profile" scroll={false}>
-          <Cog6ToothIcon className="w-5 text-fg-4" />
-          Account settings
-        </DropdownMenu.Button>
-        {!user?.user_metadata?.is_client && (
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content>
+          <DropdownMenu.Button href="/account/profile" scroll={false}>
+            <Cog6ToothIcon className="w-5 text-fg-4" />
+            Account settings
+          </DropdownMenu.Button>
+          {!user?.user_metadata?.is_client && (
+            <DropdownMenu.Button
+              href={isSubscribed ? undefined : '/upgrade'}
+              loading={isBillingRedirectLoading}
+              loadingText="Redirecting…"
+              onClick={async (e) => {
+                if (!isSubscribed) return;
+                e.preventDefault();
+                setIsBillingRedirectLoading(true);
+                const { url } = await getCustomerBillingPortal();
+                if (url) location.href = url;
+                else setIsBillingRedirectLoading(false);
+              }}
+            >
+              {isSubscribed ? (
+                <>
+                  <CreditCardIcon className="w-5 text-fg-4" />
+                  Manage billing
+                </>
+              ) : (
+                <>
+                  <RocketLaunchIcon className="w-5 text-fg-4" />
+                  Upgrade plan
+                </>
+              )}
+            </DropdownMenu.Button>
+          )}
           <DropdownMenu.Button
-            href={isSubscribed ? undefined : '/upgrade'}
-            loading={isBillingRedirectLoading}
-            loadingText="Redirecting…"
-            onClick={async (e) => {
-              if (!isSubscribed) return;
+            loading={isSignOutTransitioning}
+            loadingText="Signing out…"
+            onClick={(e) => {
               e.preventDefault();
-              setIsBillingRedirectLoading(true);
-              const { url } = await getCustomerBillingPortal();
-              if (url) location.href = url;
-              else setIsBillingRedirectLoading(false);
+              startSignOutTransition(signOut);
             }}
           >
-            {isSubscribed ? (
-              <>
-                <CreditCardIcon className="w-5 text-fg-4" />
-                Manage billing
-              </>
-            ) : (
-              <>
-                <RocketLaunchIcon className="w-5 text-fg-4" />
-                Upgrade plan
-              </>
-            )}
+            <ArrowLeftStartOnRectangleIcon className="w-5 text-fg-4" />
+            Sign out
           </DropdownMenu.Button>
-        )}
-        <DropdownMenu.Button
-          loading={isSignOutTransitioning}
-          loadingText="Signing out…"
-          onClick={(e) => {
-            e.preventDefault();
-            startSignOutTransition(signOut);
-          }}
-        >
-          <ArrowLeftStartOnRectangleIcon className="w-5 text-fg-4" />
-          Sign out
-        </DropdownMenu.Button>
-      </DropdownMenu.Content>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
 };

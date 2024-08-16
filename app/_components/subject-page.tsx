@@ -22,7 +22,6 @@ import formatEventFilters from '@/_utilities/format-event-filters';
 import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
-import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
@@ -83,19 +82,8 @@ const SubjectPage = async ({
                 SubscriptionStatus.Active ||
               (unarchivedTeamSubjectsCount ?? 0) < 2
             }
-            contentClassName="mt-0.5"
-            disableOnPointerDown={false}
             subject={subject}
-          >
-            <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
-              <Bars3Icon className="w-5" />
-              <Avatar
-                className="-m-px"
-                file={subject.image_uri}
-                id={subject.id}
-              />
-            </div>
-          </SubjectMenu>
+          />
         ) : (
           <Avatar file={subject.image_uri} id={subject.id} />
         )}

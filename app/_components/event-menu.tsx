@@ -16,9 +16,9 @@ const EventMenu = ({ eventId, isModal }: EventMenuProps) => {
   const router = useRouter();
 
   return (
-    <DropdownMenu.Root
-      trigger={
-        isModal ? (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        {isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
           <div className="group absolute right-0 top-0 flex items-center justify-center px-2 py-2.5 text-fg-3 hover:text-fg-2 active:text-fg-2">
@@ -26,20 +26,19 @@ const EventMenu = ({ eventId, isModal }: EventMenuProps) => {
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>
-        )
-      }
-    >
-      <DropdownMenu.Content
-        className={isModal ? '-mr-[3.7rem] -mt-14' : '-mt-[3.35rem] mr-1.5'}
-      >
-        <DropdownMenuDeleteItem
-          confirmText="Delete event"
-          onConfirm={async () => {
-            await deleteEvent(eventId);
-            if (isModal) router.back();
-          }}
-        />
-      </DropdownMenu.Content>
+        )}
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content className={isModal ? '-mr-[3.7rem]' : 'mr-1.5'}>
+          <DropdownMenuDeleteItem
+            confirmText="Delete event"
+            onConfirm={async () => {
+              await deleteEvent(eventId);
+              if (isModal) router.back();
+            }}
+          />
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
 };

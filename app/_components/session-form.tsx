@@ -152,13 +152,14 @@ const SessionForm = ({
         menu={
           session &&
           !isDuplicate && (
-            <SessionMenu<SessionFormValues>
-              form={form}
+            <SessionMenu
               highestPublishedOrder={highestPublishedOrder}
-              isDraft={draft}
+              isDraft={session.draft}
+              isEdit
               missionId={mission.id}
               nextSessionOrder={highestOrder + 1}
-              session={session}
+              order={session.order}
+              sessionId={session.id}
               subjectId={subjectId}
             />
           )

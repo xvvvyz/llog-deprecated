@@ -22,23 +22,20 @@ const TrainingPlanMenu = ({
   const router = useRouter();
 
   return (
-    <>
-      <DropdownMenu.Root
-        trigger={
-          isModal ? (
-            <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
-          ) : (
-            <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
-              <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
-                <EllipsisVerticalIcon className="w-5" />
-              </div>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        {isModal ? (
+          <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
+        ) : (
+          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+              <EllipsisVerticalIcon className="w-5" />
             </div>
-          )
-        }
-      >
-        <DropdownMenu.Content
-          className={isModal ? '-mr-[3.7rem] -mt-14' : '-mt-12 mr-1.5'}
-        >
+          </div>
+        )}
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content className={isModal ? '-mr-[3.7rem]' : 'mr-1.5'}>
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
             scroll={false}
@@ -54,8 +51,8 @@ const TrainingPlanMenu = ({
             }}
           />
         </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 };
 

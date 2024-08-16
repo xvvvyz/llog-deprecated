@@ -13,7 +13,7 @@ const Content = React.forwardRef<
   <DialogPrimitive.Content
     ref={ref}
     className={twMerge(
-      'relative z-20 w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 outline-none drop-shadow-2xl sm:border-x',
+      'relative w-full max-w-lg rounded border-y border-alpha-1 bg-bg-2 outline-none drop-shadow-2xl sm:border-x',
       className,
     )}
     {...props}

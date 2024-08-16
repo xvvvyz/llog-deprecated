@@ -51,21 +51,22 @@ const EventComment = ({
         {!isPublic &&
           !isArchived &&
           (userId === profile.id || isTeamMember) && (
-            <DropdownMenu.Root
-              trigger={
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger>
                 <div className="-mr-2 -mt-[0.7rem]">
                   <div className="rounded-full p-2 text-fg-3 transition-colors hover:bg-alpha-1 hover:text-fg-2 active:bg-alpha-1 active:text-fg-2">
                     <EllipsisVerticalIcon className="w-5" />
                   </div>
                 </div>
-              }
-            >
-              <DropdownMenu.Content className="-mt-8 mr-1.5">
-                <DropdownMenuDeleteItem
-                  confirmText="Delete comment"
-                  onConfirm={() => deleteComment(id)}
-                />
-              </DropdownMenu.Content>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content className="mr-1.5">
+                  <DropdownMenuDeleteItem
+                    confirmText="Delete comment"
+                    onConfirm={() => deleteComment(id)}
+                  />
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
             </DropdownMenu.Root>
           )}
       </div>

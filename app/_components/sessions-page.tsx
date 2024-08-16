@@ -135,10 +135,12 @@ const SessionsPage = async ({
                 {!isPublic && !subject.archived && isTeamMember && (
                   <SessionMenu
                     highestPublishedOrder={highestPublishedOrder}
+                    isDraft={session.draft}
                     isList
                     missionId={missionId}
                     nextSessionOrder={nextSessionOrder}
-                    session={session}
+                    order={session.order}
+                    sessionId={session.id}
                     subjectId={subjectId}
                   />
                 )}

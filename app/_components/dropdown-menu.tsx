@@ -46,8 +46,6 @@ const ForwardSearchParamsButton = React.forwardRef<
 
 ForwardSearchParamsButton.displayName = 'ForwardSearchParamsButton';
 
-const Group = DropdownMenuPrimitive.Group;
-
 const Item = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
@@ -78,41 +76,9 @@ const Label = React.forwardRef<
 
 Label.displayName = DropdownMenuPrimitive.Label.displayName;
 
-const Root = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root> & {
-    disableOnPointerDown?: boolean;
-    trigger: React.ReactNode;
-  }
->(({ children, disableOnPointerDown = true, trigger, ...props }, ref) => {
-  const [open, setOpen] = React.useState(false);
+const Portal = DropdownMenuPrimitive.Portal;
 
-  return (
-    <DropdownMenuPrimitive.Root
-      modal={false}
-      onOpenChange={disableOnPointerDown ? setOpen : undefined}
-      open={disableOnPointerDown ? open : undefined}
-      {...props}
-    >
-      <DropdownMenuPrimitive.Trigger
-        asChild
-        className="cursor-pointer outline-none"
-        onClick={
-          disableOnPointerDown ? () => setOpen((state) => !state) : undefined
-        }
-        onPointerDown={
-          disableOnPointerDown ? (e) => e.preventDefault() : undefined
-        }
-        ref={ref}
-      >
-        {trigger}
-      </DropdownMenuPrimitive.Trigger>
-      <DropdownMenuPrimitive.Portal>{children}</DropdownMenuPrimitive.Portal>
-    </DropdownMenuPrimitive.Root>
-  );
-});
-
-Root.displayName = DropdownMenuPrimitive.Root.displayName;
+const Root = DropdownMenuPrimitive.Root;
 
 const Separator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
@@ -127,13 +93,28 @@ const Separator = React.forwardRef<
 
 Separator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
+const Trigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <DropdownMenuPrimitive.Trigger
+    asChild
+    className={twMerge('cursor-pointer outline-none', className)}
+    ref={ref}
+    {...props}
+  />
+));
+
+Trigger.displayName = DropdownMenuPrimitive.Trigger.displayName;
+
 export {
   Button,
   Content,
   ForwardSearchParamsButton,
-  Group,
   Item,
   Label,
+  Portal,
   Root,
   Separator,
+  Trigger,
 };
