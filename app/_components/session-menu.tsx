@@ -72,7 +72,7 @@ const SessionMenu = ({
               View
             </DropdownMenu.ForwardSearchParamsButton>
           )}
-          {isView && (
+          {(isList || isView) && (
             <DropdownMenu.ForwardSearchParamsButton
               href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit${isList ? '?fromSessions=1' : ''}`}
               replace
