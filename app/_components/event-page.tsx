@@ -36,15 +36,17 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
           <>
             {event && (
               <div className="smallcaps flex items-center gap-2 pt-2 text-fg-4">
-                {event.type.session ? 'Completed' : 'Recorded'} by
+                <div className="shrink-0">
+                  {event.type.session ? 'Completed' : 'Recorded'} by
+                </div>
                 <Avatar
                   className="-my-[0.15rem] size-5"
                   file={event.profile?.image_uri}
                   id={event.profile?.id}
                 />
-                <span className="truncate">
+                <div className="truncate">
                   {event.profile?.first_name} {event.profile?.last_name}
-                </span>
+                </div>
               </div>
             )}
             {event.type.session && (
