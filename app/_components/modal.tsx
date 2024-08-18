@@ -33,7 +33,7 @@ const Overlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={twMerge(
-      'fixed inset-0 z-10 overflow-y-auto bg-alpha-reverse-1 py-16 backdrop-blur',
+      'fixed left-0 top-0 z-10 h-dvh w-dvw overflow-y-auto bg-alpha-reverse-1 py-16 backdrop-blur',
       className,
     )}
     {...props}
