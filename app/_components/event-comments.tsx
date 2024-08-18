@@ -1,8 +1,8 @@
 'use client';
 
+import EventComment from '@/_components/event-comment';
 import { Database } from '@/_types/database';
 import { twMerge } from 'tailwind-merge';
-import EventComment from './event-comment';
 
 export interface EventCommentsProps {
   className?: string;

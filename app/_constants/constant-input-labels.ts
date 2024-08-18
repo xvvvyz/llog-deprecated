@@ -1,4 +1,4 @@
-import InputType from './enum-input-type';
+import InputType from '@/_constants/enum-input-type';
 
 const INPUT_LABELS = {
   [InputType.Checkbox]: 'Yes / no',

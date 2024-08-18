@@ -1,5 +1,6 @@
 'use client';
 
+import Avatar from '@/_components/avatar';
 import Spinner from '@/_components/spinner';
 import Tip from '@/_components/tip';
 import forceArray from '@/_utilities/force-array';
@@ -9,7 +10,6 @@ import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { forwardRef, ReactNode, Ref } from 'react';
 import Creatable, { CreatableProps } from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
-import Avatar from './avatar';
 
 import ReactSelect, {
   ClearIndicatorProps,

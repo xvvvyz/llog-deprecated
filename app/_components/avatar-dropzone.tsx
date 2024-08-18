@@ -1,7 +1,7 @@
 'use client';
 
+import Avatar from '@/_components/avatar';
 import { useDropzone } from 'react-dropzone';
-import Avatar from './avatar';
 
 interface AvatarDropzoneProps {
   file?: File | string | null;

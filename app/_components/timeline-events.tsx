@@ -2,6 +2,7 @@
 
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
+import TimelineEventCard from '@/_components/timeline-event-card';
 import TimelineSessionCard from '@/_components/timeline-session-card';
 import listEvents, { ListEventsData } from '@/_queries/list-events';
 import listPublicEvents from '@/_queries/list-public-events';
@@ -9,7 +10,6 @@ import EventFilters from '@/_types/event-filters';
 import formatTimelineEvents from '@/_utilities/format-timeline-events';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
-import TimelineEventCard from './timeline-event-card';
 
 interface TimelineEventsProps {
   events: NonNullable<ListEventsData>;

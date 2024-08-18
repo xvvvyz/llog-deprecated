@@ -1,13 +1,16 @@
 import Avatar from '@/_components/avatar';
 import CollapsibleSection from '@/_components/collapsible-section';
 import DirtyHtml from '@/_components/dirty-html';
+import EventCommentForm from '@/_components/event-comment-form';
+import EventForm from '@/_components/event-form';
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
 import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import forceArray from '@/_utilities/force-array';
 import { User } from '@supabase/supabase-js';
-import EventCommentForm from './event-comment-form';
-import EventComments, { EventCommentsProps } from './event-comments';
-import EventForm from './event-form';
+
+import EventComments, {
+  EventCommentsProps,
+} from '@/_components/event-comments';
 
 interface ModuleCardProps {
   disabled?: boolean;

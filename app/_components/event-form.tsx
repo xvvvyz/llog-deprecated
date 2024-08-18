@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
+import EventSelect from '@/_components/event-select';
+import EventStopwatch from '@/_components/event-stopwatch';
 import Input from '@/_components/input';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import RichTextarea from '@/_components/rich-textarea';
@@ -23,8 +25,6 @@ import { useEffect, useRef, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { PropsValue } from 'react-select';
 import { twMerge } from 'tailwind-merge';
-import EventSelect from './event-select';
-import EventStopwatch from './event-stopwatch';
 
 interface EventFormProps {
   className?: string;

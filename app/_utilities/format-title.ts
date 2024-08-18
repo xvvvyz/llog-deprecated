@@ -1,4 +1,4 @@
-import forceArray from './force-array';
+import forceArray from '@/_utilities/force-array';
 
 const formatTitle = (parts: string | (string | null | undefined)[]) =>
   forceArray(parts)

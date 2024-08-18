@@ -1,11 +1,14 @@
 import DirtyHtml from '@/_components/dirty-html';
+import EventCommentForm from '@/_components/event-comment-form';
+import EventForm from '@/_components/event-form';
 import { GetEventData } from '@/_queries/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
 import forceArray from '@/_utilities/force-array';
 import { User } from '@supabase/supabase-js';
-import EventCommentForm from './event-comment-form';
-import EventComments, { EventCommentsProps } from './event-comments';
-import EventForm from './event-form';
+
+import EventComments, {
+  EventCommentsProps,
+} from '@/_components/event-comments';
 
 interface EventCardProps {
   event?: NonNullable<GetEventData>;

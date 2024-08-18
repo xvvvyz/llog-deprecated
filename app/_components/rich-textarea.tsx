@@ -1,6 +1,13 @@
 'use client';
 
+import DirtyHtml from '@/_components/dirty-html';
+import IconButton from '@/_components/icon-button';
 import Tip from '@/_components/tip';
+import BoldIcon from '@heroicons/react/24/outline/BoldIcon';
+import ItalicIcon from '@heroicons/react/24/outline/ItalicIcon';
+import ListBulletIcon from '@heroicons/react/24/outline/ListBulletIcon';
+import NumberedListIcon from '@heroicons/react/24/outline/NumberedListIcon';
+import UnderlineIcon from '@heroicons/react/24/outline/UnderlineIcon';
 import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import Document from '@tiptap/extension-document';
@@ -18,7 +25,6 @@ import Youtube from '@tiptap/extension-youtube';
 import * as TipTap from '@tiptap/react';
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
-import DirtyHtml from './dirty-html';
 
 const RichTextarea = (
   {
@@ -148,7 +154,60 @@ const RichTextarea = (
         )}
       </div>
       {editor ? (
-        <TipTap.EditorContent editor={editor} name={name} />
+        <>
+          <TipTap.BubbleMenu
+            className="overflow-hidden rounded border border-alpha-2 bg-bg-3 drop-shadow"
+            editor={editor}
+            tippyOptions={{ placement: 'bottom-start' }}
+          >
+            <IconButton
+              className={twMerge(
+                'm-0 hover:bg-alpha-1',
+                editor.isActive('bold') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<BoldIcon className="w-5" />}
+              label="Bold"
+              onClick={() => editor.chain().focus().toggleBold().run()}
+            />
+            <IconButton
+              className={twMerge(
+                'm-0 hover:bg-alpha-1',
+                editor.isActive('italic') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<ItalicIcon className="w-5" />}
+              label="Italic"
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+            />
+            <IconButton
+              className={twMerge(
+                'm-0 hover:bg-alpha-1',
+                editor.isActive('underline') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<UnderlineIcon className="w-5" />}
+              label="Underline"
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+            />
+            <IconButton
+              className={twMerge(
+                'm-0 hover:bg-alpha-1',
+                editor.isActive('bulletList') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<ListBulletIcon className="w-5" />}
+              label="Bullet list"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+            />
+            <IconButton
+              className={twMerge(
+                'm-0 hover:bg-alpha-1',
+                editor.isActive('orderedList') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<NumberedListIcon className="w-5" />}
+              label="Ordered list"
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            />
+          </TipTap.BubbleMenu>
+          <TipTap.EditorContent editor={editor} name={name} />
+        </>
       ) : (
         <DirtyHtml
           className={twMerge(

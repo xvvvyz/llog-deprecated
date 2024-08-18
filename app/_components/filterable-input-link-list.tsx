@@ -3,11 +3,11 @@
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputMenu from '@/_components/input-menu';
 import INPUT_LABELS from '@/_constants/constant-input-labels';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
-import InputMenu from './input-menu';
 
 import {
   ChangeEvent,
