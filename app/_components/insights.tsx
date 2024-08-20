@@ -71,6 +71,7 @@ const Insights = ({
           includeEventsFrom={config.includeEventsFrom}
           includeEventsSince={config.includeEventsSince}
           inputId={config.input}
+          inputOptions={config.inputOptions}
           isPublic={isPublic}
           lineCurveFunction={config.lineCurveFunction}
           marginBottom={config.marginBottom}

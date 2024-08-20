@@ -10,6 +10,7 @@ export type InsightConfigJson = {
   includeEventsFrom: string | null;
   includeEventsSince: TimeSinceMilliseconds | null;
   input: string;
+  inputOptions: string[];
   lineCurveFunction: LineCurveFunction;
   marginBottom: string;
   marginLeft: string;

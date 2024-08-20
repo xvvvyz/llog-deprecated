@@ -81,6 +81,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       includeEventsFrom: config?.includeEventsFrom ?? null,
       includeEventsSince: config?.includeEventsSince ?? null,
       input: config?.input,
+      inputOptions: config?.inputOptions ?? [],
       lineCurveFunction: config?.lineCurveFunction ?? LineCurveFunction.Linear,
       marginBottom: config?.marginBottom ?? '60',
       marginLeft: config?.marginLeft ?? '60',
@@ -103,8 +104,12 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
 
-  const { eventTypeOptions, inputOptions, trainingPlanOptions } =
-    getInsightOptionsFromEvents({ events, inputId });
+  const {
+    eventTypeOptions,
+    inputOptions,
+    inputOptionsOptions,
+    trainingPlanOptions,
+  } = getInsightOptionsFromEvents({ events, inputId });
 
   const eventTypeOrTrainingPlanOptions = [
     { label: 'Event types', options: eventTypeOptions },
@@ -179,6 +184,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                   field.onChange(inputId);
                   form.setValue('includeEventsFrom', null);
                   form.setValue('includeEventsSince', null);
+                  form.setValue('inputOptions', []);
 
                   onMarkOrInputChange({
                     inputId,
@@ -205,6 +211,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           includeEventsFrom={form.watch('includeEventsFrom')}
           includeEventsSince={form.watch('includeEventsSince')}
           inputId={inputId}
+          inputOptions={form.watch('inputOptions')}
           lineCurveFunction={form.watch('lineCurveFunction')}
           marginBottom={form.watch('marginBottom')}
           marginLeft={form.watch('marginLeft')}
@@ -347,60 +354,82 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           {...form.register('marginRight')}
         />
       </CollapsibleSection>
-      <CollapsibleSection
-        className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4"
-        title="Filters"
-        titleClassName="smallcaps"
-      >
-        <Controller
-          control={form.control}
-          name="includeEventsFrom"
-          render={({ field }) => {
-            let value;
+      <CollapsibleSection title="Filters" titleClassName="smallcaps">
+        <div className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4">
+          <Controller
+            control={form.control}
+            name="includeEventsFrom"
+            render={({ field }) => {
+              let value;
 
-            if (field.value) {
-              for (const group of eventTypeOrTrainingPlanOptions) {
-                value = group.options.find((o) => o.id === field.value);
-                if (value) break;
+              if (field.value) {
+                for (const group of eventTypeOrTrainingPlanOptions) {
+                  value = group.options.find((o) => o.id === field.value);
+                  if (value) break;
+                }
               }
-            }
 
-            return (
+              return (
+                <Select
+                  isSearchable={false}
+                  label="Events from"
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={(value) =>
+                    field.onChange((value as IOption)?.id ?? null)
+                  }
+                  options={eventTypeOrTrainingPlanOptions}
+                  placeholder="All event types/training plans…"
+                  value={value}
+                />
+              );
+            }}
+          />
+          <Controller
+            control={form.control}
+            name="includeEventsSince"
+            render={({ field }) => (
               <Select
                 isSearchable={false}
-                label="Events from"
+                label="Events since"
                 name={field.name}
                 onBlur={field.onBlur}
                 onChange={(value) =>
                   field.onChange((value as IOption)?.id ?? null)
                 }
-                options={eventTypeOrTrainingPlanOptions}
-                placeholder="All event types/training plans…"
-                value={value}
+                options={INCLUDE_EVENTS_SINCE_OPTIONS}
+                placeholder="The beginning of time…"
+                value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
+                  (o) => field.value === o.id,
+                )}
               />
-            );
-          }}
-        />
-        <Controller
-          control={form.control}
-          name="includeEventsSince"
-          render={({ field }) => (
-            <Select
-              isSearchable={false}
-              label="Events since"
-              name={field.name}
-              onBlur={field.onBlur}
-              onChange={(value) =>
-                field.onChange((value as IOption)?.id ?? null)
-              }
-              options={INCLUDE_EVENTS_SINCE_OPTIONS}
-              placeholder="The beginning of time…"
-              value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
-                (o) => field.value === o.id,
-              )}
-            />
-          )}
-        />
+            )}
+          />
+        </div>
+        <div className="mt-6">
+          <Controller
+            control={form.control}
+            name="inputOptions"
+            render={({ field }) => (
+              <Select
+                isDisabled={!inputOptionsOptions[inputId]}
+                isMulti
+                label="Input options"
+                name={field.name}
+                noOptionsMessage={() => 'No options.'}
+                onBlur={field.onBlur}
+                onChange={(values) =>
+                  field.onChange((values as IOption[]).map((v) => v.id))
+                }
+                options={inputOptionsOptions[inputId]}
+                placeholder="All input options…"
+                value={inputOptionsOptions[inputId]?.filter((o) =>
+                  field.value.includes(o.id),
+                )}
+              />
+            )}
+          />
+        </div>
       </CollapsibleSection>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>

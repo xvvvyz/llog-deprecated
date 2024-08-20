@@ -15,6 +15,7 @@ const formatTabularEvents = (
     flattenInputs?: boolean;
     includeEventsFrom?: string | null;
     includeEventsSince?: TimeSinceMilliseconds | null;
+    inputOptions?: string[];
     parseTime?: boolean;
   },
 ) => {
@@ -64,7 +65,11 @@ const formatTabularEvents = (
     for (const input of inputs) {
       if (
         !input.input ||
-        (options?.filterByInputId && input.input.id !== options.filterByInputId)
+        (options?.filterByInputId &&
+          input.input.id !== options.filterByInputId) ||
+        (options?.inputOptions?.length &&
+          !options.inputOptions.includes(input.option?.id ?? '') &&
+          !options.inputOptions.includes(String(input.value)))
       ) {
         continue;
       }

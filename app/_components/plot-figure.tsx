@@ -26,6 +26,7 @@ const PlotFigure = ({
   includeEventsSince,
   id,
   inputId,
+  inputOptions,
   isPublic,
   lineCurveFunction,
   marginBottom,
@@ -50,6 +51,7 @@ const PlotFigure = ({
   includeEventsSince: TimeSinceMilliseconds | null;
   id?: string;
   inputId: string;
+  inputOptions?: string[];
   isPublic?: boolean;
   lineCurveFunction: LineCurveFunction;
   marginBottom: string;
@@ -88,6 +90,7 @@ const PlotFigure = ({
           flattenInputs: true,
           includeEventsFrom,
           includeEventsSince,
+          inputOptions,
           parseTime: true,
         });
 
@@ -301,6 +304,7 @@ const PlotFigure = ({
     includeEventsSince,
     id,
     inputId,
+    inputOptions,
     isPublic,
     lineCurveFunction,
     marginBottom,
