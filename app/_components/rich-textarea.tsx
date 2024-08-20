@@ -1,10 +1,14 @@
 'use client';
 
+import Button from '@/_components/button';
 import DirtyHtml from '@/_components/dirty-html';
 import IconButton from '@/_components/icon-button';
+import Input from '@/_components/input';
+import * as Modal from '@/_components/modal';
 import Tip from '@/_components/tip';
 import BoldIcon from '@heroicons/react/24/outline/BoldIcon';
 import ItalicIcon from '@heroicons/react/24/outline/ItalicIcon';
+import LinkIcon from '@heroicons/react/24/outline/LinkIcon';
 import ListBulletIcon from '@heroicons/react/24/outline/ListBulletIcon';
 import NumberedListIcon from '@heroicons/react/24/outline/NumberedListIcon';
 import UnderlineIcon from '@heroicons/react/24/outline/UnderlineIcon';
@@ -83,7 +87,10 @@ const RichTextarea = (
       Document,
       History,
       Italic,
-      Link.configure({ HTMLAttributes: { target: '_blank' } }),
+      Link.configure({
+        HTMLAttributes: { target: '_blank' },
+        defaultProtocol: 'https',
+      }).extend({ inclusive: false }),
       ListItem,
       OrderedList,
       Paragraph,
@@ -119,6 +126,11 @@ const RichTextarea = (
       } as React.ChangeEvent<HTMLTextAreaElement>);
     },
   });
+
+  const [setLinkModal, setSetLinkModal] = React.useState<{
+    href: string;
+    text: string;
+  } | null>(null);
 
   React.useEffect(() => {
     if (!editor || value === editorRef.current?.getHTML()) return;
@@ -162,7 +174,7 @@ const RichTextarea = (
           >
             <IconButton
               className={twMerge(
-                'm-0 hover:bg-alpha-1',
+                'm-0',
                 editor.isActive('bold') && 'bg-alpha-1 text-fg-2',
               )}
               icon={<BoldIcon className="w-5" />}
@@ -171,7 +183,7 @@ const RichTextarea = (
             />
             <IconButton
               className={twMerge(
-                'm-0 hover:bg-alpha-1',
+                'm-0',
                 editor.isActive('italic') && 'bg-alpha-1 text-fg-2',
               )}
               icon={<ItalicIcon className="w-5" />}
@@ -180,7 +192,7 @@ const RichTextarea = (
             />
             <IconButton
               className={twMerge(
-                'm-0 hover:bg-alpha-1',
+                'm-0',
                 editor.isActive('underline') && 'bg-alpha-1 text-fg-2',
               )}
               icon={<UnderlineIcon className="w-5" />}
@@ -189,7 +201,7 @@ const RichTextarea = (
             />
             <IconButton
               className={twMerge(
-                'm-0 hover:bg-alpha-1',
+                'm-0',
                 editor.isActive('bulletList') && 'bg-alpha-1 text-fg-2',
               )}
               icon={<ListBulletIcon className="w-5" />}
@@ -198,12 +210,39 @@ const RichTextarea = (
             />
             <IconButton
               className={twMerge(
-                'm-0 hover:bg-alpha-1',
+                'm-0',
                 editor.isActive('orderedList') && 'bg-alpha-1 text-fg-2',
               )}
               icon={<NumberedListIcon className="w-5" />}
               label="Ordered list"
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            />
+            <IconButton
+              className={twMerge(
+                'm-0',
+                editor.isActive('link') && 'bg-alpha-1 text-fg-2',
+              )}
+              icon={<LinkIcon className="w-5" />}
+              label="Set link"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .extendMarkRange('link')
+                  .command(({ editor, state, tr }) => {
+                    setSetLinkModal({
+                      href: editor.getAttributes('link').href,
+                      text:
+                        state.doc.textBetween(
+                          tr.selection.$from.pos,
+                          tr.selection.$to.pos,
+                          ' ',
+                        ) ?? '',
+                    });
+
+                    return true;
+                  })
+              }
             />
           </TipTap.BubbleMenu>
           <TipTap.EditorContent editor={editor} name={name} />
@@ -224,6 +263,80 @@ const RichTextarea = (
         <div className="absolute right-0 top-0 flex h-full w-10 flex-col items-center justify-start">
           {right}
         </div>
+      )}
+      {!!setLinkModal && !!editor && (
+        <Modal.Root onOpenChange={() => setSetLinkModal(null)} open>
+          <Modal.Portal>
+            <Modal.Overlay>
+              <Modal.Content className="max-w-sm p-8 text-center">
+                <Modal.Title className="text-2xl">Set link</Modal.Title>
+                <form
+                  className="mt-16 flex flex-col gap-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const data = new FormData(e.currentTarget);
+                    const href = data.get('href') as string;
+                    const text = data.get('text') as string;
+
+                    editor
+                      .chain()
+                      .focus()
+                      .extendMarkRange('link')
+                      .insertContent(`<a href="${href}">${text}</a>`)
+                      .run();
+
+                    setSetLinkModal(null);
+                  }}
+                >
+                  <Input
+                    defaultValue={setLinkModal.text}
+                    name="text"
+                    placeholder="Link text"
+                    required
+                  />
+                  <Input
+                    defaultValue={setLinkModal.href}
+                    name="href"
+                    placeholder="https://..."
+                    required
+                    type="url"
+                  />
+                  <div className="flex gap-4">
+                    <Button
+                      className="w-full"
+                      colorScheme="transparent"
+                      onClick={() => {
+                        editor
+                          .chain()
+                          .focus()
+                          .extendMarkRange('link')
+                          .unsetLink()
+                          .run();
+
+                        setSetLinkModal(null);
+                      }}
+                    >
+                      Unset
+                    </Button>
+                    <Button className="w-full" type="submit">
+                      Set
+                    </Button>
+                  </div>
+                  <Modal.Close asChild onClick={(e) => e.preventDefault()}>
+                    <Button
+                      className="m-0 -mb-3 w-full justify-center p-0 py-3"
+                      onClick={() => setSetLinkModal(null)}
+                      variant="link"
+                    >
+                      Close
+                    </Button>
+                  </Modal.Close>
+                </form>
+              </Modal.Content>
+            </Modal.Overlay>
+          </Modal.Portal>
+        </Modal.Root>
       )}
     </div>
   );
