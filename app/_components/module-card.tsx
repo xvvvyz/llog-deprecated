@@ -13,10 +13,10 @@ import EventComments, {
 } from '@/_components/event-comments';
 
 interface ModuleCardProps {
-  disabled?: boolean;
   event?: NonNullable<GetSessionWithDetailsData>['modules'][0]['event'][0];
   eventType: NonNullable<GetSessionWithDetailsData>['modules'][0];
   isArchived?: boolean;
+  isPreviousModulePending?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
   mission: NonNullable<GetTrainingPlanWithSessionsData>;
@@ -25,10 +25,10 @@ interface ModuleCardProps {
 }
 
 const ModuleCard = ({
-  disabled,
   event,
   eventType,
   isArchived,
+  isPreviousModulePending,
   isPublic,
   isTeamMember,
   mission,
@@ -40,7 +40,7 @@ const ModuleCard = ({
   return (
     <CollapsibleSection
       className="space-y-16 pb-8 pt-10"
-      defaultOpen={!event && !disabled}
+      defaultOpen={!event && !isPreviousModulePending}
       title={
         <div className="min-w-0 text-left">
           <div className="truncate leading-snug">
@@ -69,11 +69,11 @@ const ModuleCard = ({
       )}
       {(event || (!isPublic && !isArchived)) && (
         <EventForm
-          disabled={disabled}
           event={event}
           eventType={eventType}
           isArchived={isArchived}
           isMission={!!mission}
+          isPreviousModulePending={isPreviousModulePending}
           isPublic={isPublic}
           subjectId={subjectId}
         />

@@ -28,7 +28,6 @@ import { twMerge } from 'tailwind-merge';
 
 interface EventFormProps {
   className?: string;
-  disabled?: boolean;
   event?:
     | NonNullable<GetEventData>
     | NonNullable<GetSessionWithDetailsData>['modules'][0]['event'][0];
@@ -38,6 +37,7 @@ interface EventFormProps {
     | NonNullable<GetSessionWithDetailsData>['modules'][0];
   isArchived?: boolean;
   isMission?: boolean;
+  isPreviousModulePending?: boolean;
   isPublic?: boolean;
   subjectId: string;
 }
@@ -56,11 +56,11 @@ export interface EventFormValues {
 
 const EventForm = ({
   className,
-  disabled,
   event,
   eventType,
   isArchived,
   isMission,
+  isPreviousModulePending,
   isPublic,
   subjectId,
 }: EventFormProps) => {
@@ -301,13 +301,21 @@ const EventForm = ({
           {(!event || form.formState.isDirty) && (
             <Button
               className="w-full"
-              colorScheme={event ? 'transparent' : 'accent'}
-              disabled={disabled}
+              colorScheme={
+                isPreviousModulePending || event ? 'transparent' : 'accent'
+              }
+              disabled={isPreviousModulePending}
               loading={isTransitioning}
               loadingText="Saving…"
               type="submit"
             >
-              {event ? 'Save' : isMission ? 'Complete' : 'Record'}
+              {isPreviousModulePending
+                ? 'Previous module incomplete'
+                : event
+                  ? 'Save'
+                  : isMission
+                    ? 'Complete'
+                    : 'Record'}
             </Button>
           )}
         </div>

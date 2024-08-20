@@ -116,7 +116,7 @@ const SessionPage = async ({
             <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
               {session.modules.map((module, i) => {
                 const event = firstIfArray(module.event);
-                const previousModule = session.modules[i - 1];
+                const previousModuleEvent = session.modules[i - 1]?.event;
 
                 return (
                   <li
@@ -124,12 +124,12 @@ const SessionPage = async ({
                     key={module.id}
                   >
                     <ModuleCard
-                      disabled={
-                        !!previousModule?.event && !previousModule.event.length
-                      }
                       event={event}
                       eventType={module}
                       isArchived={subject.archived}
+                      isPreviousModulePending={
+                        previousModuleEvent && !previousModuleEvent.length
+                      }
                       isPublic={isPublic}
                       isTeamMember={isTeamMember}
                       mission={trainingPlan}
