@@ -11,7 +11,7 @@ const Switch = React.forwardRef<
 >(({ className, description, label, ...props }, ref) => (
   <label
     className={twMerge(
-      'input block select-none bg-transparent py-4 text-left hover:bg-alpha-1 active:bg-alpha-1',
+      'input block bg-transparent py-4 text-left hover:bg-alpha-1 active:bg-alpha-1',
       className,
     )}
   >

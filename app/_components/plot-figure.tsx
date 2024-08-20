@@ -325,7 +325,7 @@ const PlotFigure = ({
   ]);
 
   return (
-    <div className="h-full w-full select-none" ref={parentRef}>
+    <div className="h-full w-full" ref={parentRef}>
       <div ref={containerRef} />
     </div>
   );

@@ -14,7 +14,7 @@ const Avatar = ({ className, file, id = '' }: AvatarProps) => {
   if (!file && !id) return null;
 
   return (
-    <div className={twMerge('relative size-8 shrink-0 select-none', className)}>
+    <div className={twMerge('relative size-8 shrink-0', className)}>
       <Image
         alt=""
         className="rounded-sm bg-alpha-2 object-cover object-center"

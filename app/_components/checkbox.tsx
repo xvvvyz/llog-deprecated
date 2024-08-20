@@ -17,7 +17,7 @@ const Checkbox = forwardRef(
     <div className={twMerge('relative', className)}>
       <label className="group w-full cursor-pointer">
         {label && <span className="label">{label}</span>}
-        <div className="input group flex select-none items-center justify-between gap-4 pr-2">
+        <div className="input group flex items-center justify-between gap-4 pr-2">
           <input
             className="peer absolute h-6 w-6 opacity-0"
             id={name}
