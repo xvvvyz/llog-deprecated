@@ -8,7 +8,7 @@ interface HtmlProps {
 
 const DirtyHtml = ({ children, className }: HtmlProps) => (
   <div
-    className={twMerge('prose', className)}
+    className={twMerge('prose select-text', className)}
     dangerouslySetInnerHTML={{ __html: sanitizeHtml(children) ?? '' }}
   />
 );
