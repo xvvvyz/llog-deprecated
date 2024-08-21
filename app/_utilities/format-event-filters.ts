@@ -12,9 +12,9 @@ const formatEventFilters = ({
 }) => ({
   endDate: add24Hours(parseShortIso(to ?? from)),
   from: 0,
-  pageSize: 15,
+  pageSize: 25,
   startDate: parseShortIso(from),
-  to: limit ? Number(limit) : 14,
+  to: limit ? Number(limit) : 24,
 });
 
 export default formatEventFilters;

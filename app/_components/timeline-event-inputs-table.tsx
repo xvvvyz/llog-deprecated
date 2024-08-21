@@ -12,46 +12,48 @@ const TimelineEventInputsTable = ({
   className,
   inputs,
 }: TimelineEventInputsTableProps) => (
-  <table className={twMerge('w-full table-fixed', className)}>
-    <tbody>
-      {Object.entries(
-        inputs.reduce<
-          Record<
-            string,
-            {
-              label: string;
-              type: InputType;
-              values: {
-                label?: string;
-                value?: string;
-              }[];
+  <div className={twMerge('border-y border-alpha-1 py-2', className)}>
+    <table className="w-full table-fixed">
+      <tbody>
+        {Object.entries(
+          inputs.reduce<
+            Record<
+              string,
+              {
+                label: string;
+                type: InputType;
+                values: {
+                  label?: string;
+                  value?: string;
+                }[];
+              }
+            >
+          >((acc, { input, option, value }) => {
+            if (!input) return acc;
+            acc[input.id] = acc[input.id] ?? { values: [] };
+            acc[input.id].label = input.label;
+            acc[input.id].type = input.type as InputType;
+
+            if (value || option?.label) {
+              acc[input.id].values.push({
+                label: option?.label,
+                value: value as string,
+              });
             }
-          >
-        >((acc, { input, option, value }) => {
-          if (!input) return acc;
-          acc[input.id] = acc[input.id] ?? { values: [] };
-          acc[input.id].label = input.label;
-          acc[input.id].type = input.type as InputType;
 
-          if (value || option?.label) {
-            acc[input.id].values.push({
-              label: option?.label,
-              value: value as string,
-            });
-          }
-
-          return acc;
-        }, {}),
-      ).map(([id, { label, type, values }]) => (
-        <tr key={id}>
-          <td className="truncate pr-4 text-fg-4">{label}</td>
-          <td className="truncate">
-            {formatInputValue[type as InputType](values)}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+            return acc;
+          }, {}),
+        ).map(([id, { label, type, values }]) => (
+          <tr key={id}>
+            <td className="truncate py-0.5 pr-4 text-fg-4">{label}</td>
+            <td className="truncate py-0.5">
+              {formatInputValue[type as InputType](values)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 );
 
 export default TimelineEventInputsTable;

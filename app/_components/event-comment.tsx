@@ -32,9 +32,9 @@ const EventComment = ({
   isTeamMember,
   userId,
 }: EventCommentProps) => (
-  <div className="flex gap-4">
-    <Avatar className="mt-0.5" file={profile.image_uri} id={profile.id} />
-    <div className="flex-1">
+  <div className="flex gap-2">
+    <Avatar file={profile.image_uri} id={profile.id} />
+    <div className="flex-1 rounded-sm border border-alpha-1 bg-alpha-1 px-4 pb-3 pt-3.5">
       <div className="flex h-5 w-full justify-between gap-2">
         <div className="smallcaps flex w-full gap-2 text-fg-4">
           <span className="w-0 flex-1 truncate">

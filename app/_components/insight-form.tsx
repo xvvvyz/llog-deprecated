@@ -226,7 +226,10 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           type={form.watch('type')}
         />
       </div>
-      <CollapsibleSection title="Marks" titleClassName="smallcaps">
+      <CollapsibleSection
+        title="Marks"
+        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
+      >
         <div className="grid grid-cols-2 gap-4 pt-6 md:grid-cols-4">
           <Checkbox
             label="Dots"
@@ -327,7 +330,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       <CollapsibleSection
         className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
         title="Margins"
-        titleClassName="smallcaps"
+        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
       >
         <Input
           label="Top"
@@ -354,7 +357,10 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           {...form.register('marginRight')}
         />
       </CollapsibleSection>
-      <CollapsibleSection title="Filters" titleClassName="smallcaps">
+      <CollapsibleSection
+        title="Filters"
+        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
+      >
         <div className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4">
           <Controller
             control={form.control}

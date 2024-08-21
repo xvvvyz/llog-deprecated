@@ -32,7 +32,7 @@ const CollapsibleSection = ({
         <Button
           colorScheme="transparent"
           className={twMerge(
-            'm-0 -mt-3 w-full justify-between gap-6 border-b border-alpha-1 px-4',
+            'm-0 w-full justify-between gap-6 px-4',
             titleClassName,
           )}
           variant="link"

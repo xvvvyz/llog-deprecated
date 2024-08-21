@@ -62,7 +62,7 @@ const ModuleCard = ({
           )}
         </div>
       }
-      titleClassName="sm:pl-8 border-0 my-0 pr-6 sm:pr-10 hover:bg-alpha-1 active:bg-alpha-1"
+      titleClassName="sm:pl-8 pr-6 sm:pr-10 hover:bg-alpha-1 active:bg-alpha-1"
     >
       {eventType.content && (
         <DirtyHtml className="px-4 sm:px-8">{eventType.content}</DirtyHtml>
