@@ -14,21 +14,29 @@ const deleteSession = async ({
 }) => {
   const supabase = createServerSupabaseClient();
 
-  const { data: shiftSessions } = await supabase
+  const { data: deleteSession } = await supabase
     .from('sessions')
-    .select('id, order')
-    .eq('mission_id', missionId)
-    .gt('"order"', currentOrder)
-    .eq('draft', false);
+    .select('draft')
+    .eq('id', sessionId)
+    .single();
 
-  if (shiftSessions?.length) {
-    await supabase.from('sessions').upsert(
-      shiftSessions.map((session) => ({
-        id: session.id,
-        mission_id: missionId,
-        order: session.order - 1,
-      })),
-    );
+  if (!deleteSession?.draft) {
+    const { data: shiftSessions } = await supabase
+      .from('sessions')
+      .select('id, order')
+      .eq('mission_id', missionId)
+      .gt('"order"', currentOrder)
+      .eq('draft', false);
+
+    if (shiftSessions?.length) {
+      await supabase.from('sessions').upsert(
+        shiftSessions.map((session) => ({
+          id: session.id,
+          mission_id: missionId,
+          order: session.order - 1,
+        })),
+      );
+    }
   }
 
   await supabase.from('sessions').delete().eq('id', sessionId);
