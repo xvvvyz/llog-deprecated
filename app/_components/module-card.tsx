@@ -1,5 +1,6 @@
 import Avatar from '@/_components/avatar';
 import CollapsibleSection from '@/_components/collapsible-section';
+import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
 import EventCommentForm from '@/_components/event-comment-form';
 import EventForm from '@/_components/event-form';
@@ -49,7 +50,7 @@ const ModuleCard = ({
           </div>
           {event && (
             <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
-              Completed by
+              <DateTime date={event.created_at} formatter="date-time" /> &mdash;
               <Avatar
                 className="-my-[0.15rem] size-5"
                 file={event.profile?.image_uri}

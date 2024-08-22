@@ -14,7 +14,7 @@ const getTrainingPlanWithSessionsAndEvents = (
         draft,
         id,
         modules:event_types(
-          event:events(id),
+          event:events(created_at, id),
           id
         ),
         order,

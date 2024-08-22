@@ -11,6 +11,7 @@ import getPublicSubject from '@/_queries/get-public-subject';
 import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-training-plan-with-sessions-and-events';
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
+import firstIfArray from '@/_utilities/first-if-array';
 import parseSessions from '@/_utilities/parse-sessions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
@@ -97,6 +98,10 @@ const SessionsPage = async ({
               (m) => m.event?.length,
             );
 
+            const latestCompletedEvent = firstIfArray(
+              completedModules[completedModules.length - 1]?.event,
+            );
+
             return (
               <li
                 className="flex items-stretch gap-2 hover:bg-alpha-1 active:bg-alpha-1"
@@ -117,12 +122,22 @@ const SessionsPage = async ({
                       {session.draft ? (
                         'Draft'
                       ) : new Date(session.scheduled_for ?? '') > new Date() ? (
-                        <DateTime
-                          date={session.scheduled_for ?? ''}
-                          formatter="date"
-                        />
+                        <>
+                          <DateTime
+                            date={session.scheduled_for ?? ''}
+                            formatter="date-time"
+                          />{' '}
+                          &mdash; Scheduled
+                        </>
                       ) : completedModules.length ? (
-                        `${completedModules.length} of ${session.modules.length} completed`
+                        <>
+                          <DateTime
+                            date={latestCompletedEvent.created_at}
+                            formatter="date-time"
+                          />{' '}
+                          &mdash; {completedModules.length} of{' '}
+                          {session.modules.length} completed
+                        </>
                       ) : (
                         'Not started'
                       )}
