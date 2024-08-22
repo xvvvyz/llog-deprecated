@@ -19,19 +19,21 @@ import { useTransition } from 'react';
 interface SessionMenuProps {
   highestPublishedOrder: number;
   isDraft: boolean;
+  isDuplicate?: boolean;
   isEdit?: boolean;
   isList?: boolean;
   isView?: boolean;
   missionId: string;
   nextSessionOrder: number;
   order: number;
-  sessionId: string;
+  sessionId?: string;
   subjectId: string;
 }
 
 const SessionMenu = ({
   highestPublishedOrder,
   isDraft,
+  isDuplicate,
   isEdit,
   isList,
   isView,
@@ -75,91 +77,113 @@ const SessionMenu = ({
           {(isList || isView) && (
             <DropdownMenu.ForwardSearchParamsButton
               href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit${isList ? '?fromSessions=1' : ''}`}
-              replace
+              replace={isView}
               scroll={false}
             >
               <PencilIcon className="w-5 text-fg-4" />
               Edit
             </DropdownMenu.ForwardSearchParamsButton>
           )}
-          <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
-            replace
-            scroll={false}
-          >
-            <DocumentDuplicateIcon className="w-5 text-fg-4" />
-            Duplicate
-          </DropdownMenu.Button>
-          <DropdownMenu.Separator />
-          <DropdownMenu.Button
-            disabled={!isDraft && order >= highestPublishedOrder}
-            loading={isMoveRightTransitioning}
-            loadingText="Moving…"
-            onClick={() =>
-              startMoveRightTransition(() =>
-                moveSession({
-                  currentOrder: order,
-                  isDraft,
-                  missionId,
-                  newOrder: order + 1,
-                  sessionId,
-                }),
-              )
-            }
-          >
-            {isList ? (
-              <>
-                <ArrowUpIcon className="w-5 text-fg-4" />
-                Move up
-              </>
-            ) : (
-              <>
-                <ArrowRightIcon className="w-5 text-fg-4" />
-                Move right
-              </>
-            )}
-          </DropdownMenu.Button>
-          <DropdownMenu.Button
-            disabled={order < 1}
-            loading={isMoveLeftTransitioning}
-            loadingText="Moving…"
-            onClick={() =>
-              startMoveLeftTransition(async () =>
-                moveSession({
-                  currentOrder: order,
-                  isDraft,
-                  missionId,
-                  newOrder: order - 1,
-                  sessionId,
-                }),
-              )
-            }
-          >
-            {isList ? (
-              <>
-                <ArrowDownIcon className="w-5 text-fg-4" />
-                Move down
-              </>
-            ) : (
-              <>
+          {sessionId && !isDuplicate ? (
+            <>
+              <DropdownMenu.Button
+                href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
+                replace={isView}
+                scroll={false}
+              >
+                <DocumentDuplicateIcon className="w-5 text-fg-4" />
+                Duplicate
+              </DropdownMenu.Button>
+              <DropdownMenu.Button
+                disabled={!isDraft && order >= highestPublishedOrder}
+                loading={isMoveRightTransitioning}
+                loadingText="Moving…"
+                onClick={() =>
+                  startMoveRightTransition(() =>
+                    moveSession({
+                      currentOrder: order,
+                      isDraft,
+                      missionId,
+                      newOrder: order + 1,
+                      sessionId,
+                    }),
+                  )
+                }
+              >
+                {isList ? (
+                  <>
+                    <ArrowUpIcon className="w-5 text-fg-4" />
+                    Move up
+                  </>
+                ) : (
+                  <>
+                    <ArrowRightIcon className="w-5 text-fg-4" />
+                    Move right
+                  </>
+                )}
+              </DropdownMenu.Button>
+              <DropdownMenu.Button
+                disabled={order < 1}
+                loading={isMoveLeftTransitioning}
+                loadingText="Moving…"
+                onClick={() => {
+                  startMoveLeftTransition(() =>
+                    moveSession({
+                      currentOrder: order,
+                      isDraft,
+                      missionId,
+                      newOrder: order - 1,
+                      sessionId,
+                    }),
+                  );
+                }}
+              >
+                {isList ? (
+                  <>
+                    <ArrowDownIcon className="w-5 text-fg-4" />
+                    Move down
+                  </>
+                ) : (
+                  <>
+                    <ArrowLeftIcon className="w-5 text-fg-4" />
+                    Move left
+                  </>
+                )}
+              </DropdownMenu.Button>
+              <DropdownMenuDeleteItem
+                confirmText="Delete session"
+                onConfirm={async () => {
+                  await deleteSession({
+                    currentOrder: order,
+                    missionId: missionId,
+                    sessionId,
+                  });
+
+                  if (isView || isEdit) router.back();
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <DropdownMenu.ForwardSearchParamsButton
+                disabled={order < 1}
+                href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${order - 1}${isDuplicate ? `/from-session/${sessionId}` : ''}`}
+                replace
+                scroll={false}
+              >
                 <ArrowLeftIcon className="w-5 text-fg-4" />
                 Move left
-              </>
-            )}
-          </DropdownMenu.Button>
-          <DropdownMenu.Separator />
-          <DropdownMenuDeleteItem
-            confirmText="Delete session"
-            onConfirm={async () => {
-              await deleteSession({
-                currentOrder: order,
-                missionId: missionId,
-                sessionId,
-              });
-
-              if (isView || isEdit) router.back();
-            }}
-          />
+              </DropdownMenu.ForwardSearchParamsButton>
+              <DropdownMenu.ForwardSearchParamsButton
+                href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${order + 1}${isDuplicate ? `/from-session/${sessionId}` : ''}`}
+                replace
+                scroll={false}
+              >
+                <ArrowRightIcon className="w-5 text-fg-4" />
+                Move right
+              </DropdownMenu.ForwardSearchParamsButton>
+            </>
+          )}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

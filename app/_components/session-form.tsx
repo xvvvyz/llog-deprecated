@@ -150,19 +150,17 @@ const SessionForm = ({
     <Modal.Content>
       <PageModalHeader
         menu={
-          session &&
-          !isDuplicate && (
-            <SessionMenu
-              highestPublishedOrder={highestPublishedOrder}
-              isDraft={session.draft}
-              isEdit
-              missionId={mission.id}
-              nextSessionOrder={highestOrder + 1}
-              order={session.order}
-              sessionId={session.id}
-              subjectId={subjectId}
-            />
-          )
+          <SessionMenu
+            highestPublishedOrder={highestPublishedOrder}
+            isDraft={session ? session.draft : true}
+            isDuplicate={isDuplicate}
+            isEdit
+            missionId={mission.id}
+            nextSessionOrder={highestOrder + 1}
+            order={currentOrder}
+            sessionId={session?.id}
+            subjectId={subjectId}
+          />
         }
         title={mission.name}
       />
