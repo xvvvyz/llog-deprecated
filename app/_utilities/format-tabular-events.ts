@@ -102,8 +102,7 @@ const formatTabularEvents = (
 
     for (const column of Array.from(flattenColumns)) {
       for (const value of row[column] as Array<string>) {
-        row[column] = value;
-        table.push(row);
+        table.push({ ...row, [column]: value });
       }
     }
   }

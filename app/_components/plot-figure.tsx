@@ -258,7 +258,6 @@ const PlotFigure = ({
     const onClick = () => {
       try {
         const datum = plot.querySelector('title')?.innerHTML ?? '';
-        console.log(datum);
         if (!datum) return;
         const { Id } = JSON.parse(datum);
         if (!Id) return;
