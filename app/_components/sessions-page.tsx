@@ -109,7 +109,7 @@ const SessionsPage = async ({
               >
                 <Button
                   className="m-0 w-full min-w-0 justify-between gap-6 py-3 pl-4 pr-0 sm:pl-8"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}?fromSessions=1`}
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   scroll={false}
                   variant="link"
                 >
@@ -118,7 +118,7 @@ const SessionsPage = async ({
                       Session {session.order + 1}
                       {session.title && `: ${session.title}`}
                     </div>
-                    <div className="smallcaps pb-0.5 pt-1.5 text-fg-4">
+                    <div className="smallcaps flex gap-2 pb-0.5 pt-1.5 text-fg-4">
                       {session.draft ? (
                         'Draft'
                       ) : new Date(session.scheduled_for ?? '') > new Date() ? (
@@ -126,17 +126,21 @@ const SessionsPage = async ({
                           <DateTime
                             date={session.scheduled_for ?? ''}
                             formatter="date-time"
-                          />{' '}
-                          &mdash; Scheduled
+                          />
+                          &middot;
+                          <div>Scheduled</div>
                         </>
                       ) : completedModules.length ? (
                         <>
                           <DateTime
                             date={latestCompletedEvent.created_at}
                             formatter="date-time"
-                          />{' '}
-                          &mdash; {completedModules.length} of{' '}
-                          {session.modules.length} completed
+                          />
+                          &middot;
+                          <div>
+                            {completedModules.length} of{' '}
+                            {session.modules.length} completed
+                          </div>
                         </>
                       ) : (
                         'Not started'

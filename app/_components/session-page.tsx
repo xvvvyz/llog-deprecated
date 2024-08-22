@@ -1,3 +1,4 @@
+import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import * as Modal from '@/_components/modal';
@@ -6,7 +7,6 @@ import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionLayout from '@/_components/session-layout';
 import SessionMenu from '@/_components/session-menu';
-import ViewAllSessionsButton from '@/_components/view-all-sessions-button';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
 import getPublicSubject from '@/_queries/get-public-subject';
@@ -16,6 +16,7 @@ import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import firstIfArray from '@/_utilities/first-if-array';
 import parseSessions from '@/_utilities/parse-sessions';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
 
 interface SessionPageProps {
@@ -45,6 +46,7 @@ const SessionPage = async ({
 
   if (!subject || !trainingPlan || !session) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
+  const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   const {
     highestOrder,
@@ -75,11 +77,15 @@ const SessionPage = async ({
           )
         }
         subtitle={
-          <ViewAllSessionsButton
-            isPublic={isPublic}
-            missionId={missionId}
-            subjectId={subjectId}
-          />
+          <Button
+            className="pt-4"
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`}
+            scroll={false}
+            variant="link"
+          >
+            View all sessions
+            <ArrowUpRightIcon className="w-5" />
+          </Button>
         }
         title={trainingPlan.name}
       />

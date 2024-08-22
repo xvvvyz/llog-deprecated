@@ -55,8 +55,8 @@ const TimelineEventCard = ({
             </div>
           </div>
           <div className="smallcaps flex w-full items-center justify-between gap-4 pb-0.5 pt-1 text-fg-4">
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="whitespace-nowrap">Recorded by</div>
+            <div className="flex min-w-0 items-center gap-2 whitespace-nowrap">
+              <div>Recorded by</div>
               <Avatar
                 className="-my-[0.15rem] size-5"
                 file={event.profile?.image_uri}

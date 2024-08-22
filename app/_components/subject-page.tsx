@@ -3,7 +3,6 @@ import Button from '@/_components/button';
 import DirtyHtml from '@/_components/dirty-html';
 import Empty from '@/_components/empty';
 import EventTypes from '@/_components/event-types';
-import ForwardSearchParamsButton from '@/_components/forward-search-params-button';
 import IconButton from '@/_components/icon-button';
 import SubjectEventsDateFilter from '@/_components/subject-events-date-filter';
 import SubjectMenu from '@/_components/subject-menu';
@@ -172,7 +171,7 @@ const SubjectPage = async ({
       )}
       <div className="mt-16 flex gap-4">
         <SubjectEventsDateFilter />
-        <ForwardSearchParamsButton
+        <Button
           colorScheme="transparent"
           href={`/${shareOrSubjects}/${subjectId}/insights`}
           scroll={false}
@@ -180,7 +179,7 @@ const SubjectPage = async ({
         >
           Insights
           <ArrowUpRightIcon className="-mr-0.5 w-5" />
-        </ForwardSearchParamsButton>
+        </Button>
       </div>
       {!!events?.length ? (
         <TimelineEvents

@@ -1,7 +1,6 @@
 'use client';
 
 import ButtonPrimitive from '@/_components/button';
-import ForwardSearchParamsButtonPrimitive from '@/_components/forward-search-params-button';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
 import * as React from 'react';
@@ -35,17 +34,6 @@ const Content = React.forwardRef<
 ));
 
 Content.displayName = DropdownMenuPrimitive.Content.displayName;
-
-const ForwardSearchParamsButton = React.forwardRef<
-  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof ForwardSearchParamsButtonPrimitive>
->((props, ref) => (
-  <Item asChild ref={ref}>
-    <ForwardSearchParamsButtonPrimitive colorScheme="transparent" {...props} />
-  </Item>
-));
-
-ForwardSearchParamsButton.displayName = 'ForwardSearchParamsButton';
 
 const Item = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
@@ -110,14 +98,4 @@ const Trigger = React.forwardRef<
 
 Trigger.displayName = DropdownMenuPrimitive.Trigger.displayName;
 
-export {
-  Button,
-  Content,
-  ForwardSearchParamsButton,
-  Item,
-  Label,
-  Portal,
-  Root,
-  Separator,
-  Trigger,
-};
+export { Button, Content, Item, Label, Portal, Root, Separator, Trigger };

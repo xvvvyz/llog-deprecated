@@ -65,30 +65,27 @@ const SessionMenu = ({
           className={isView || isEdit ? '-mr-[3.7rem]' : 'mr-2'}
         >
           {isEdit && !isDraft && (
-            <DropdownMenu.ForwardSearchParamsButton
+            <DropdownMenu.Button
               href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
-              replace
               scroll={false}
             >
               <EyeIcon className="w-5 text-fg-4" />
               View
-            </DropdownMenu.ForwardSearchParamsButton>
+            </DropdownMenu.Button>
           )}
           {(isList || isView) && (
-            <DropdownMenu.ForwardSearchParamsButton
-              href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit${isList ? '?fromSessions=1' : ''}`}
-              replace={isView}
+            <DropdownMenu.Button
+              href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
               scroll={false}
             >
               <PencilIcon className="w-5 text-fg-4" />
               Edit
-            </DropdownMenu.ForwardSearchParamsButton>
+            </DropdownMenu.Button>
           )}
           {sessionId && !isDuplicate ? (
             <>
               <DropdownMenu.Button
                 href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
-                replace={isView}
                 scroll={false}
               >
                 <DocumentDuplicateIcon className="w-5 text-fg-4" />
@@ -159,13 +156,17 @@ const SessionMenu = ({
                     sessionId,
                   });
 
-                  if (isView || isEdit) router.back();
+                  if (!isList) {
+                    router.replace(
+                      `/subjects/${subjectId}/training-plans/${missionId}/sessions`,
+                    );
+                  }
                 }}
               />
             </>
           ) : (
             <>
-              <DropdownMenu.ForwardSearchParamsButton
+              <DropdownMenu.Button
                 disabled={order < 1}
                 href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${order - 1}${isDuplicate ? `/from-session/${sessionId}` : ''}`}
                 replace
@@ -173,15 +174,15 @@ const SessionMenu = ({
               >
                 <ArrowLeftIcon className="w-5 text-fg-4" />
                 Move left
-              </DropdownMenu.ForwardSearchParamsButton>
-              <DropdownMenu.ForwardSearchParamsButton
+              </DropdownMenu.Button>
+              <DropdownMenu.Button
                 href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${order + 1}${isDuplicate ? `/from-session/${sessionId}` : ''}`}
                 replace
                 scroll={false}
               >
                 <ArrowRightIcon className="w-5 text-fg-4" />
                 Move right
-              </DropdownMenu.ForwardSearchParamsButton>
+              </DropdownMenu.Button>
             </>
           )}
         </DropdownMenu.Content>

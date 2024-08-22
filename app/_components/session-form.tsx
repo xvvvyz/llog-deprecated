@@ -152,7 +152,7 @@ const SessionForm = ({
         menu={
           <SessionMenu
             highestPublishedOrder={highestPublishedOrder}
-            isDraft={session ? session.draft : true}
+            isDraft={session && !isDuplicate ? session.draft : true}
             isDuplicate={isDuplicate}
             isEdit
             missionId={mission.id}

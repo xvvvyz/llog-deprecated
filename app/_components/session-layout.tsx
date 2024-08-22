@@ -1,4 +1,4 @@
-import ForwardSearchParamsIconButton from '@/_components/forward-search-params-icon-button';
+import IconButton from '@/_components/icon-button';
 import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
@@ -62,7 +62,7 @@ const SessionLayout = ({
   return (
     <>
       <nav className="flex w-full items-center justify-between px-4 sm:px-8">
-        <ForwardSearchParamsIconButton
+        <IconButton
           disabled={!previousSessionId}
           href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}${editSuffix}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
@@ -80,7 +80,7 @@ const SessionLayout = ({
           )}
         </div>
         {isEditOrCreate && !nextSessionId ? (
-          <ForwardSearchParamsIconButton
+          <IconButton
             disabled={isCreate}
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
             icon={<PlusIcon className="relative right-1 w-7" />}
@@ -89,7 +89,7 @@ const SessionLayout = ({
             scroll={false}
           />
         ) : (
-          <ForwardSearchParamsIconButton
+          <IconButton
             disabled={!nextSessionId}
             href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}${editSuffix}`}
             icon={<ChevronRightIcon className="relative right-1 w-7" />}
