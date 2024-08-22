@@ -3,14 +3,17 @@ const formatRelativeTime = (input?: Date | string) => {
   const utcDate = input instanceof Date ? input : new Date(input);
   const formatter = new Intl.RelativeTimeFormat();
 
+  // order matters, do not sort!
   const ranges = {
+    years: 3600 * 24 * 365,
+    // eslint-disable-next-line sort-keys
+    months: 3600 * 24 * 30,
+    weeks: 3600 * 24 * 7,
+    // eslint-disable-next-line sort-keys
     days: 3600 * 24,
     hours: 3600,
     minutes: 60,
-    months: 3600 * 24 * 30,
     seconds: 1,
-    weeks: 3600 * 24 * 7,
-    years: 3600 * 24 * 365,
   };
 
   const secondsElapsed = (utcDate.getTime() - Date.now()) / 1000;
