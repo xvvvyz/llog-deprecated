@@ -31,7 +31,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={<EventMenu eventId={eventId} isModal />}
+        menu={!isPublic && <EventMenu eventId={eventId} isModal />}
         subtitle={
           <>
             {event && (
