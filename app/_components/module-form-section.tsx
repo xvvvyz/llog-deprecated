@@ -101,7 +101,7 @@ const ModuleFormSection = <
     >
       <div className="flex items-center justify-between rounded-t border border-alpha-1 bg-alpha-1">
         <IconButton
-          className="m-0 h-full cursor-move touch-none px-4"
+          className="m-0 h-full cursor-ns-resize touch-none px-4"
           icon={<Bars2Icon className="w-5" />}
           {...attributes}
           {...listeners}

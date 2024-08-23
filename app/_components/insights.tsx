@@ -1,14 +1,14 @@
 'use client';
 
-import Button from '@/_components/button';
-import InsightMenu from '@/_components/insight-menu';
-import PlotFigure from '@/_components/plot-figure';
+import Insight from '@/_components/insight';
+import reorderInsights from '@/_mutations/reorder-insights';
 import { ListEventsData } from '@/_queries/list-events';
 import { ListInsightsData } from '@/_queries/list-insights';
 import { InsightConfigJson } from '@/_types/insight-config-json';
-import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
-import { useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import * as DndCore from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import * as DndSortable from '@dnd-kit/sortable';
+import { useEffect, useState } from 'react';
 
 interface InsightsProps {
   events: ListEventsData;
@@ -23,7 +23,7 @@ interface InsightsProps {
 
 const Insights = ({
   events,
-  insights,
+  insights: originalInsights,
   isArchived,
   isPublic,
   isTeamMember,
@@ -33,65 +33,62 @@ const Insights = ({
 }: InsightsProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [syncDate, setSyncDate] = useState<Date | null>(null);
+  const [insights, setInsights] = useState<typeof originalInsights>([]);
+  const sensors = DndCore.useSensors(DndCore.useSensor(DndCore.PointerSensor));
+  useEffect(() => setInsights(originalInsights), [originalInsights]);
 
-  return insights.map((insight) => {
-    const config = insight.config as InsightConfigJson;
-    const isReadOnly = !isTeamMember || isArchived;
+  return (
+    <DndCore.DndContext
+      collisionDetection={DndCore.closestCenter}
+      id="insights"
+      modifiers={[restrictToVerticalAxis]}
+      onDragEnd={({ active, over }: DndCore.DragEndEvent) => {
+        if (!over || active.id === over?.id) return;
 
-    return (
-      <div
-        className="min-h-12 rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl"
-        key={insight.id}
+        setInsights((insights) => {
+          const oldIndex = insights.findIndex(({ id }) => id === active.id);
+          const newIndex = insights.findIndex(({ id }) => id === over?.id);
+
+          const newInsights = DndSortable.arrayMove(
+            insights,
+            oldIndex,
+            newIndex,
+          );
+
+          void reorderInsights({
+            insightIds: newInsights.map((insight) => insight.id),
+            subjectId,
+          });
+
+          return newInsights;
+        });
+      }}
+      sensors={sensors}
+    >
+      <DndSortable.SortableContext
+        items={insights.map((insight) => insight.id)}
+        strategy={DndSortable.verticalListSortingStrategy}
       >
-        <div className="-mb-4 flex items-stretch">
-          <Button
-            className={twMerge(
-              'm-0 flex w-full gap-4 px-4 pt-3 leading-snug',
-              !isReadOnly && 'pr-0',
-            )}
-            href={`/${shareOrSubjects}/${subjectId}/insights/${insight.id}${searchString}`}
-            scroll={false}
-            variant="link"
-          >
-            {insight.name}
-            {isReadOnly && (
-              <ArrowUpRightIcon className="ml-auto w-5 shrink-0" />
-            )}
-          </Button>
-          {!isReadOnly && (
-            <InsightMenu insightId={insight.id} subjectId={subjectId} />
-          )}
-        </div>
-        <PlotFigure
-          barInterval={config.barInterval}
-          barReducer={config.barReducer}
-          defaultHeight={200}
-          events={events}
-          id={insight.id}
-          includeEventsFrom={config.includeEventsFrom}
-          includeEventsSince={config.includeEventsSince}
-          inputId={config.input}
-          inputOptions={config.inputOptions}
-          isPublic={isPublic}
-          lineCurveFunction={config.lineCurveFunction}
-          marginBottom={config.marginBottom}
-          marginLeft={config.marginLeft}
-          marginRight={config.marginRight}
-          marginTop={config.marginTop}
-          setActiveId={setActiveId}
-          setSyncDate={setSyncDate}
-          showBars={config.showBars}
-          showDots={config.showDots}
-          showLine={config.showLine}
-          showLinearRegression={config.showLinearRegression}
-          subjectId={subjectId}
-          syncDate={insight.id === activeId ? null : syncDate}
-          title={insight.name}
-          type={config.type}
-        />
-      </div>
-    );
-  });
+        {insights.map((insight) => (
+          <Insight
+            activeId={activeId}
+            config={insight.config as InsightConfigJson}
+            events={events}
+            insight={insight}
+            isPublic={isPublic}
+            isReadOnly={!isTeamMember || !!isArchived}
+            key={insight.id}
+            searchString={searchString}
+            setActiveId={setActiveId}
+            setSyncDate={setSyncDate}
+            shareOrSubjects={shareOrSubjects}
+            subjectId={subjectId}
+            syncDate={syncDate}
+          />
+        ))}
+      </DndSortable.SortableContext>
+    </DndCore.DndContext>
+  );
 };
 
 export default Insights;

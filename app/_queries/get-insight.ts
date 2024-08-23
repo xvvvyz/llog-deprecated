@@ -3,7 +3,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const getInsight = (insightId: string) =>
   createServerSupabaseClient()
     .from('insights')
-    .select('config, id, name')
+    .select('config, id, name, order')
     .eq('id', insightId)
     .single();
 

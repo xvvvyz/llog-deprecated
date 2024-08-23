@@ -66,6 +66,7 @@ interface InsightFormProps {
 
 export type InsightFormValues = InsightConfigJson & {
   name: string;
+  order?: number | null;
 };
 
 const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
@@ -88,6 +89,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       marginRight: config?.marginRight ?? '40',
       marginTop: config?.marginTop ?? '30',
       name: insight?.name ?? '',
+      order: insight?.order,
       showBars: config?.showBars ?? false,
       showDots: config?.showDots ?? true,
       showLine: config?.showLine ?? false,

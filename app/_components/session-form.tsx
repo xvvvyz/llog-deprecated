@@ -298,15 +298,13 @@ const SessionForm = ({
               collisionDetection={DndCore.closestCenter}
               id="modules"
               modifiers={[restrictToVerticalAxis]}
-              onDragEnd={(event: DndCore.DragEndEvent) => {
-                const { active, over } = event;
+              onDragEnd={({ active, over }: DndCore.DragEndEvent) => {
+                if (!over || active.id === over.id) return;
 
-                if (over && active.id !== over.id) {
-                  modulesArray.move(
-                    modulesArray.fields.findIndex((f) => f.key === active.id),
-                    modulesArray.fields.findIndex((f) => f.key === over.id),
-                  );
-                }
+                modulesArray.move(
+                  modulesArray.fields.findIndex((f) => f.key === active.id),
+                  modulesArray.fields.findIndex((f) => f.key === over.id),
+                );
               }}
               sensors={sensors}
             >
