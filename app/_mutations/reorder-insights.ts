@@ -2,6 +2,7 @@
 
 import listInsights from '@/_queries/list-insights';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
+import { revalidatePath } from 'next/cache';
 
 const reorderInsights = async ({
   insightIds,
@@ -26,25 +27,25 @@ const reorderInsights = async ({
         subject_id: subjectId,
       })),
     );
+  } else {
+    const insightIdMap = insights.reduce<Record<string, (typeof insights)[0]>>(
+      (acc, insight) => {
+        acc[insight.id] = insight;
+        return acc;
+      },
+      {},
+    );
 
-    return;
+    await supabase.from('insights').upsert(
+      insightIds.map((insightId, order) => ({
+        ...insightIdMap[insightId],
+        order,
+        subject_id: subjectId,
+      })),
+    );
   }
 
-  const insightIdMap = insights.reduce<Record<string, (typeof insights)[0]>>(
-    (acc, insight) => {
-      acc[insight.id] = insight;
-      return acc;
-    },
-    {},
-  );
-
-  await supabase.from('insights').upsert(
-    insightIds.map((insightId, order) => ({
-      ...insightIdMap[insightId],
-      order,
-      subject_id: subjectId,
-    })),
-  );
+  revalidatePath('/', 'layout');
 };
 
 export default reorderInsights;

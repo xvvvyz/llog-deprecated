@@ -31,7 +31,7 @@ const PageModalHeader = ({
       )}
       {subtitle}
     </div>
-    <div className="relative -top-0.5 right-1 flex shrink-0 gap-6">
+    <div className="relative -top-1 right-1 flex shrink-0 gap-6">
       {menu}
       <PageModalBackIconButton
         icon={<XMarkIcon className="w-7" />}

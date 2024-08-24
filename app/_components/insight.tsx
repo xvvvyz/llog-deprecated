@@ -71,14 +71,16 @@ const Insight = ({
         )}
         <Button
           className={twMerge(
-            'm-0 flex w-full gap-4 px-4 pt-3 leading-snug',
+            'm-0 flex w-full min-w-0 gap-4 px-4 pt-3 leading-snug',
             !isReadOnly && 'px-0',
           )}
           href={`/${shareOrSubjects}/${subjectId}/insights/${insight.id}${searchString}`}
           scroll={false}
           variant="link"
         >
-          {insight.name}
+          <div className="min-w-0">
+            <div className="truncate">{insight.name}</div>
+          </div>
           <ArrowsPointingOutIcon className="ml-auto w-5 shrink-0" />
         </Button>
         {!isReadOnly && (

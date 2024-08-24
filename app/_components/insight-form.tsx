@@ -169,7 +169,12 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       )}
     >
       <div className="grid gap-6 md:grid-cols-3 md:gap-4">
-        <Input label="Name" required {...form.register('name')} />
+        <Input
+          label="Name"
+          maxLength={49}
+          required
+          {...form.register('name')}
+        />
         <div className="md:col-span-2">
           <Controller
             control={form.control}
