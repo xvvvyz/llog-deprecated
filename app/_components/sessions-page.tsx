@@ -127,7 +127,7 @@ const SessionsPage = async ({
                             date={session.scheduled_for ?? ''}
                             formatter="date-time"
                           />
-                          &middot;
+                          &mdash;
                           <div>Scheduled</div>
                         </>
                       ) : completedModules.length ? (
@@ -136,7 +136,7 @@ const SessionsPage = async ({
                             date={latestCompletedEvent.created_at}
                             formatter="date-time"
                           />
-                          &middot;
+                          &mdash;
                           <div>
                             {completedModules.length} of{' '}
                             {session.modules.length} completed
