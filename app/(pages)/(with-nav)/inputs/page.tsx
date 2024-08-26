@@ -1,5 +1,5 @@
 import Empty from '@/_components/empty';
-import FilterableInputLinkList from '@/_components/filterable-input-link-list';
+import FilterableInputs from '@/_components/filterable-inputs';
 import listInputs from '@/_queries/list-inputs';
 import InformationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
 import { sortBy } from 'lodash';
@@ -21,9 +21,7 @@ const Page = async () => {
   }
 
   return (
-    <FilterableInputLinkList
-      inputs={sortBy(inputs, ['subjects[0].name', 'type'])}
-    />
+    <FilterableInputs inputs={sortBy(inputs, ['subjects[0].name', 'type'])} />
   );
 };
 

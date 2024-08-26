@@ -1,11 +1,13 @@
+import EventTypeTemplateForm from '@/_components/event-type-template-form';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
-import TemplateForm from '@/_components/template-form';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import formatTitle from '@/_utilities/format-title';
 
-export const metadata = { title: formatTitle(['Templates', 'New']) };
+export const metadata = {
+  title: formatTitle(['Templates', 'New']),
+};
 
 const Page = async () => {
   const [{ data: availableInputs }, { data: subjects }] = await Promise.all([
@@ -17,8 +19,11 @@ const Page = async () => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="New template" />
-      <TemplateForm availableInputs={availableInputs} subjects={subjects} />
+      <PageModalHeader title="New event type template" />
+      <EventTypeTemplateForm
+        availableInputs={availableInputs}
+        subjects={subjects}
+      />
     </Modal.Content>
   );
 };

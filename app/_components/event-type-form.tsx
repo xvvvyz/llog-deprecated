@@ -65,7 +65,7 @@ const EventTypeForm = ({
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={
+        right={
           <EventTypeMenu<EventTypeFormValues>
             availableInputs={availableInputs}
             availableTemplates={availableTemplates}

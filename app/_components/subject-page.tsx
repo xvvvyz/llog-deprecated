@@ -1,6 +1,7 @@
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import DirtyHtml from '@/_components/dirty-html';
+import * as DropdownMenu from '@/_components/dropdown-menu';
 import Empty from '@/_components/empty';
 import EventTypes from '@/_components/event-types';
 import IconButton from '@/_components/icon-button';
@@ -21,6 +22,7 @@ import formatEventFilters from '@/_utilities/format-event-filters';
 import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
@@ -75,53 +77,63 @@ const SubjectPage = async ({
           <h1 className="truncate text-2xl">{subject.name}</h1>
         </div>
         {isTeamMember && !isPublic ? (
-          <SubjectMenu
-            canUnarchive={
-              user.app_metadata.subscription_status ===
-                SubscriptionStatus.Active ||
-              (unarchivedTeamSubjectsCount ?? 0) < 2
-            }
-            subject={subject}
-          />
+          <div className="flex gap-4">
+            {!subject.archived && (
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button size="sm">
+                    New&hellip;
+                    <ChevronDownIcon className="-mr-1 w-5 stroke-2" />
+                  </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content>
+                    <div className="relative">
+                      <DropdownMenu.Button
+                        href={`/subjects/${subjectId}/event-types/create`}
+                        scroll={false}
+                      >
+                        <PlusIcon className="w-5 text-fg-4" />
+                        Event type
+                      </DropdownMenu.Button>
+                      <Tip className="absolute right-3 top-2.5" side="left">
+                        Use event types to track individual behaviors,
+                        activities etc. For example: &ldquo;Barking&rdquo; or
+                        &ldquo;Medication&rdquo;.
+                      </Tip>
+                    </div>
+                    <div className="relative">
+                      <DropdownMenu.Button
+                        href={`/subjects/${subjectId}/training-plans/create`}
+                        scroll={false}
+                      >
+                        <PlusIcon className="w-5 text-fg-4" />
+                        Training plan
+                      </DropdownMenu.Button>
+                      <Tip className="absolute right-3 top-2.5" side="left">
+                        Use training plans to teach new behaviors, skills etc.
+                        For example: &ldquo;Reduce separation anxiety&rdquo;.
+                      </Tip>
+                    </div>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
+            )}
+            <SubjectMenu
+              canUnarchive={
+                user.app_metadata.subscription_status ===
+                  SubscriptionStatus.Active ||
+                (unarchivedTeamSubjectsCount ?? 0) < 2
+              }
+              subject={subject}
+            />
+          </div>
         ) : (
           <Avatar file={subject.image_uri} id={subject.id} />
         )}
       </div>
       {!isPublic && (
         <div className="mt-16 space-y-4">
-          {!subject.archived && isTeamMember && (
-            <div className="flex justify-end gap-4">
-              <Tip align="start" side="bottom" tipClassName="space-y-4">
-                <p>
-                  Use event types to track individual behaviors, activities etc.
-                  For example: &ldquo;Barking&rdquo; or
-                  &ldquo;Medication&rdquo;.
-                </p>
-                <p>
-                  Use training plans to teach new behaviors, skills etc. For
-                  example: &ldquo;Reduce separation anxiety&rdquo;.
-                </p>
-              </Tip>
-              <Button
-                colorScheme="transparent"
-                href={`/subjects/${subjectId}/event-types/create`}
-                scroll={false}
-                size="sm"
-              >
-                <PlusIcon className="-ml-0.5 w-5" />
-                Event type
-              </Button>
-              <Button
-                colorScheme="transparent"
-                href={`/subjects/${subjectId}/training-plans/create`}
-                scroll={false}
-                size="sm"
-              >
-                <PlusIcon className="-ml-0.5 w-5" />
-                Training plan
-              </Button>
-            </div>
-          )}
           {(subjectData?.banner || !!subjectData?.links?.length) && (
             <div>
               {subjectData?.banner && (

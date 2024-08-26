@@ -35,7 +35,7 @@ const TrainingPlanMenu = ({
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={isModal ? '-mr-[3.7rem]' : 'mr-1.5'}>
+        <DropdownMenu.Content>
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
             scroll={false}

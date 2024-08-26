@@ -60,7 +60,7 @@ const EventComment = ({
                 </div>
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
-                <DropdownMenu.Content className="mr-1.5">
+                <DropdownMenu.Content>
                   <DropdownMenuDeleteItem
                     confirmText="Delete comment"
                     onConfirm={() => deleteComment(id)}

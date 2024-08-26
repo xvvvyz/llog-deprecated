@@ -21,7 +21,7 @@ const InsightMenu = ({ insightId, subjectId }: InsightMenuProps) => (
       </div>
     </DropdownMenu.Trigger>
     <DropdownMenu.Portal>
-      <DropdownMenu.Content className="mr-1.5">
+      <DropdownMenu.Content>
         <DropdownMenu.Button
           href={`/subjects/${subjectId}/insights/${insightId}/edit`}
           scroll={false}

@@ -3,11 +3,11 @@
 import Button from '@/_components/button';
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import EventTypeTemplateForm from '@/_components/event-type-template-form';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import Select from '@/_components/select';
-import TemplateForm from '@/_components/template-form';
 import deleteEventType from '@/_mutations/delete-event-type';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
@@ -16,9 +16,9 @@ import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
 import { TemplateDataJson } from '@/_types/template-data-json';
 import forceArray from '@/_utilities/force-array';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
-import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -63,9 +63,7 @@ const EventTypeMenu = <T extends FieldValues>({
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          className={form || isModal ? '-mr-[3.7rem]' : 'mr-1.5'}
-        >
+        <DropdownMenu.Content>
           {form && availableInputs && subjects && (
             <>
               <Modal.Root
@@ -74,7 +72,7 @@ const EventTypeMenu = <T extends FieldValues>({
               >
                 <Modal.Trigger asChild>
                   <DropdownMenu.Button onClick={() => toggleUseTemplateModal()}>
-                    <DocumentTextIcon className="w-5 text-fg-4" />
+                    <DocumentDuplicateIcon className="w-5 text-fg-4" />
                     Use template
                   </DropdownMenu.Button>
                 </Modal.Trigger>
@@ -158,7 +156,7 @@ const EventTypeMenu = <T extends FieldValues>({
                       });
                     }}
                   >
-                    <DocumentDuplicateIcon className="w-5 text-fg-4" />
+                    <PlusIcon className="w-5 text-fg-4" />
                     New template
                   </DropdownMenu.Button>
                 </Modal.Trigger>
@@ -167,9 +165,9 @@ const EventTypeMenu = <T extends FieldValues>({
                     <Modal.Content>
                       <PageModalHeader
                         onClose={() => setCreateTemplateModal(null)}
-                        title="New template"
+                        title="New event type template"
                       />
-                      <TemplateForm
+                      <EventTypeTemplateForm
                         availableInputs={availableInputs}
                         disableCache
                         onClose={() => setCreateTemplateModal(null)}
@@ -198,10 +196,10 @@ const EventTypeMenu = <T extends FieldValues>({
                     Edit
                   </DropdownMenu.Button>
                   <DropdownMenu.Button
-                    href={`/templates/create/from-event-type/${eventTypeId}`}
+                    href={`/templates/event-types/create/from-event-type/${eventTypeId}`}
                     scroll={false}
                   >
-                    <DocumentDuplicateIcon className="w-5 text-fg-4" />
+                    <PlusIcon className="w-5 text-fg-4" />
                     New template
                   </DropdownMenu.Button>
                 </>

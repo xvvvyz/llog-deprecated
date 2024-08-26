@@ -7,7 +7,7 @@ import Input from '@/_components/input';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
-import INPUT_LABELS from '@/_constants/constant-input-labels';
+import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import InputType from '@/_constants/enum-input-type';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInput from '@/_mutations/upsert-input';
@@ -27,12 +27,15 @@ import { Controller, useFieldArray } from 'react-hook-form';
 import { PropsValue } from 'react-select';
 
 const INPUT_TYPE_OPTIONS = [
-  { id: InputType.Select, label: INPUT_LABELS[InputType.Select] },
-  { id: InputType.MultiSelect, label: INPUT_LABELS[InputType.MultiSelect] },
-  { id: InputType.Number, label: INPUT_LABELS[InputType.Number] },
-  { id: InputType.Checkbox, label: INPUT_LABELS[InputType.Checkbox] },
-  { id: InputType.Duration, label: INPUT_LABELS[InputType.Duration] },
-  { id: InputType.Stopwatch, label: INPUT_LABELS[InputType.Stopwatch] },
+  { id: InputType.Select, label: INPUT_TYPE_LABELS[InputType.Select] },
+  {
+    id: InputType.MultiSelect,
+    label: INPUT_TYPE_LABELS[InputType.MultiSelect],
+  },
+  { id: InputType.Number, label: INPUT_TYPE_LABELS[InputType.Number] },
+  { id: InputType.Checkbox, label: INPUT_TYPE_LABELS[InputType.Checkbox] },
+  { id: InputType.Duration, label: INPUT_TYPE_LABELS[InputType.Duration] },
+  { id: InputType.Stopwatch, label: INPUT_TYPE_LABELS[InputType.Stopwatch] },
 ];
 
 interface InputFormProps {

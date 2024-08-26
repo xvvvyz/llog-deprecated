@@ -1,6 +1,6 @@
 import InputType from '@/_constants/enum-input-type';
 
-const INPUT_LABELS = {
+const INPUT_TYPE_LABELS = {
   [InputType.Checkbox]: 'Yes / no',
   [InputType.Duration]: 'Duration',
   [InputType.MultiSelect]: 'Select multiple',
@@ -9,4 +9,4 @@ const INPUT_LABELS = {
   [InputType.Stopwatch]: 'Stopwatch',
 };
 
-export default INPUT_LABELS;
+export default INPUT_TYPE_LABELS;

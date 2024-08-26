@@ -53,7 +53,7 @@ const SessionsPage = async ({
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={
+        right={
           isTeamMember && (
             <TrainingPlanMenu
               isModal

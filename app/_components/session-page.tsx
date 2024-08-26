@@ -62,7 +62,7 @@ const SessionPage = async ({
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={
+        right={
           isTeamMember && (
             <SessionMenu
               highestPublishedOrder={highestPublishedOrder}

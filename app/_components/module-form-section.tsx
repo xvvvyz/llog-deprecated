@@ -7,10 +7,10 @@ import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import * as Modal from '@/_components/modal';
+import ModuleTemplateForm from '@/_components/module-template-form';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
-import TemplateForm from '@/_components/template-form';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
@@ -116,7 +116,7 @@ const ModuleFormSection = <
             </div>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="mr-1">
+            <DropdownMenu.Content>
               <Modal.Root
                 onOpenChange={toggleUseTemplateModal}
                 open={useTemplateModal}
@@ -218,9 +218,9 @@ const ModuleFormSection = <
                     <Modal.Content>
                       <PageModalHeader
                         onClose={() => setCreateTemplateModal(null)}
-                        title="New template"
+                        title="New module template"
                       />
-                      <TemplateForm
+                      <ModuleTemplateForm
                         availableInputs={availableInputs}
                         disableCache
                         onClose={() => setCreateTemplateModal(null)}

@@ -36,7 +36,7 @@ const EventMenu = ({ className, eventId, isModal }: EventMenuProps) => {
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={isModal ? '-mr-[3.7rem]' : 'mr-1.5'}>
+        <DropdownMenu.Content>
           <DropdownMenuDeleteItem
             confirmText="Delete event"
             onConfirm={async () => {

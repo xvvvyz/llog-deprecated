@@ -20,7 +20,7 @@ const InputMenu = ({ inputId }: InputMenuProps) => (
       </div>
     </DropdownMenu.Trigger>
     <DropdownMenu.Portal>
-      <DropdownMenu.Content className="mr-1.5">
+      <DropdownMenu.Content>
         <DropdownMenu.Button
           href={`/inputs/create/from-input/${inputId}`}
           scroll={false}

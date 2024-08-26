@@ -4,8 +4,9 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const listTemplates = async () =>
   createServerSupabaseClient()
     .from('templates')
-    .select('id, name')
+    .select('id, name, type')
     .eq('team_id', (await getCurrentUser())?.id ?? '')
+    .not('type', 'is', null)
     .order('name');
 
 export type ListTemplatesData = Awaited<

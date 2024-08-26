@@ -67,7 +67,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={isList ? 'mr-1.5' : 'mt-0.5'}>
+        <DropdownMenu.Content>
           <DropdownMenu.Button
             href={`/subjects/${subject.id}/edit`}
             scroll={false}
@@ -156,6 +156,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
                       onCheckedChange={() =>
                         startPublicTransition(() => {
                           toggleOpPublic(null);
+
                           void updateSubject({
                             id: subject.id,
                             public: !opPublic,

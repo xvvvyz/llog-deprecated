@@ -29,7 +29,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={
+        right={
           isTeamMember && (
             <EventTypeMenu
               eventTypeId={eventType.id}

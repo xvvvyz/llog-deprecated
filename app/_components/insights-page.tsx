@@ -13,7 +13,7 @@ import listInsights from '@/_queries/list-insights';
 import listPublicEvents from '@/_queries/list-public-events';
 import listPublicInsights from '@/_queries/list-public-insights';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
+import { ChartBarSquareIcon } from '@heroicons/react/24/outline';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives';
 
@@ -50,22 +50,27 @@ const InsightsPage = async ({
 
   return (
     <Modal.Content className="max-w-4xl">
-      <PageModalHeader title="Insights" />
+      <PageModalHeader
+        right={
+          isTeamMember &&
+          !subject.archived && (
+            <Button
+              className="sm:pr-6"
+              href={`/subjects/${subjectId}/insights/create`}
+              scroll={false}
+              variant="link"
+            >
+              <PlusIcon className="w-5" />
+              New insight
+            </Button>
+          )
+        }
+        title="Insights"
+      />
       <div className="space-y-4 px-4 sm:px-8">
-        {isTeamMember && !subject.archived && (
-          <Button
-            className="mb-4 w-full"
-            colorScheme="transparent"
-            href={`/subjects/${subjectId}/insights/create`}
-            scroll={false}
-          >
-            <PlusIcon className="w-5" />
-            New insight
-          </Button>
-        )}
         {!insights?.length ? (
           <Empty className="border-0">
-            <InformationCircleIcon className="w-7" />
+            <ChartBarSquareIcon className="w-7" />
             No insights.
           </Empty>
         ) : (

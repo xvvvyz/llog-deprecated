@@ -41,7 +41,7 @@ const TimelineEventCard = ({
         <div>
           <div className="flex items-baseline justify-between gap-4">
             <div className="min-w-0">
-              <div className="-mb-0.5 truncate text-lg">{event.type?.name}</div>
+              <div className="truncate leading-snug">{event.type?.name}</div>
             </div>
             <div className="smallcaps flex shrink-0 gap-4 whitespace-nowrap">
               <DateTime
@@ -85,9 +85,7 @@ const TimelineEventCard = ({
           </div>
         )}
       </Button>
-      {isTeamMember && (
-        <EventMenu className="top-[0.2rem]" eventId={event.id} />
-      )}
+      {isTeamMember && <EventMenu eventId={event.id} />}
     </div>
   );
 };

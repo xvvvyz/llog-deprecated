@@ -2,8 +2,8 @@
 
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
-import CollapsibleSection from '@/_components/collapsible-section';
 import Input from '@/_components/input';
+import InsightSettingsSection from '@/_components/insight-settings-section';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PlotFigure from '@/_components/plot-figure';
 import Select, { IOption } from '@/_components/select';
@@ -233,10 +233,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           type={form.watch('type')}
         />
       </div>
-      <CollapsibleSection
-        title="Marks"
-        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
-      >
+      <InsightSettingsSection title="Marks">
         <div className="grid grid-cols-2 gap-4 pt-6 md:grid-cols-4">
           <Checkbox
             label="Dots"
@@ -333,41 +330,36 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             />
           </div>
         </div>
-      </CollapsibleSection>
-      <CollapsibleSection
-        className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4"
-        title="Margins"
-        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
-      >
-        <Input
-          label="Top"
-          min={0}
-          type="number"
-          {...form.register('marginTop')}
-        />
-        <Input
-          label="Bottom"
-          min={0}
-          type="number"
-          {...form.register('marginBottom')}
-        />
-        <Input
-          label="Left"
-          min={0}
-          type="number"
-          {...form.register('marginLeft')}
-        />
-        <Input
-          label="Right"
-          min={0}
-          type="number"
-          {...form.register('marginRight')}
-        />
-      </CollapsibleSection>
-      <CollapsibleSection
-        title="Filters"
-        titleClassName="smallcaps -mt-3 border-b border-alpha-1"
-      >
+      </InsightSettingsSection>
+      <InsightSettingsSection title="Margins">
+        <div className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4">
+          <Input
+            label="Top"
+            min={0}
+            type="number"
+            {...form.register('marginTop')}
+          />
+          <Input
+            label="Bottom"
+            min={0}
+            type="number"
+            {...form.register('marginBottom')}
+          />
+          <Input
+            label="Left"
+            min={0}
+            type="number"
+            {...form.register('marginLeft')}
+          />
+          <Input
+            label="Right"
+            min={0}
+            type="number"
+            {...form.register('marginRight')}
+          />
+        </div>
+      </InsightSettingsSection>
+      <InsightSettingsSection title="Filters">
         <div className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4">
           <Controller
             control={form.control}
@@ -443,7 +435,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
             )}
           />
         </div>
-      </CollapsibleSection>
+      </InsightSettingsSection>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

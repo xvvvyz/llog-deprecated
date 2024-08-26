@@ -4,7 +4,7 @@ import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import InputMenu from '@/_components/input-menu';
-import INPUT_LABELS from '@/_constants/constant-input-labels';
+import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
@@ -19,11 +19,11 @@ import {
   useTransition,
 } from 'react';
 
-interface FilterableInputLinkListProps {
+interface FilterableInputsProps {
   inputs: NonNullable<ListInputsData>;
 }
 
-const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
+const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
   const [, startTransition] = useTransition();
   const ref = useRef<HTMLInputElement>(null);
 
@@ -85,7 +85,7 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
               <div className="min-w-0">
                 <div className="truncate">{input.label}</div>
                 <div className="smallcaps pb-0.5 pt-1 text-fg-4">
-                  {INPUT_LABELS[input.type]}
+                  {INPUT_TYPE_LABELS[input.type]}
                 </div>
               </div>
               {!!input.subjects.length && (
@@ -109,4 +109,4 @@ const FilterableInputLinkList = ({ inputs }: FilterableInputLinkListProps) => {
   );
 };
 
-export default FilterableInputLinkList;
+export default FilterableInputs;

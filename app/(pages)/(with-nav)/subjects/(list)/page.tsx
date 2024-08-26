@@ -58,7 +58,7 @@ const Page = async () => {
             scroll={false}
             size="sm"
           >
-            <PlusIcon className="-ml-0.5 w-5 stroke-2" />
+            <PlusIcon className="-ml-1 w-5 stroke-2" />
             New subject
           </Button>
         </div>

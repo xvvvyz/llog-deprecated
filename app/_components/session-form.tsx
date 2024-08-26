@@ -149,7 +149,7 @@ const SessionForm = ({
   return (
     <Modal.Content>
       <PageModalHeader
-        menu={
+        right={
           <SessionMenu
             highestPublishedOrder={highestPublishedOrder}
             isDraft={session && !isDuplicate ? session.draft : true}

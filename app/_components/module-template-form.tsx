@@ -9,6 +9,7 @@ import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
+import TemplateType from '@/_constants/enum-template-type';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertTemplate from '@/_mutations/upsert-template';
 import { GetInputData } from '@/_queries/get-input';
@@ -23,7 +24,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
-interface TemplateFormProps {
+interface ModuleTemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
   disableCache?: boolean;
   isDuplicate?: boolean;
@@ -33,13 +34,13 @@ interface TemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-export type TemplateFormValues = {
+export type ModuleTemplateFormValues = {
   content: string;
   inputs: NonNullable<ListInputsData>;
   name: string;
 };
 
-const TemplateForm = ({
+const ModuleTemplateForm = ({
   availableInputs,
   disableCache,
   isDuplicate,
@@ -47,16 +48,20 @@ const TemplateForm = ({
   onSubmit,
   subjects,
   template,
-}: TemplateFormProps) => {
+}: ModuleTemplateFormProps) => {
   const [createInputModal, setCreateInputModal] =
     useState<Partial<GetInputData>>(null);
 
   const [isTransitioning, startTransition] = useTransition();
-  const cacheKey = getFormCacheKey.template({ id: template?.id, isDuplicate });
   const router = useRouter();
   const templateData = template?.data as TemplateDataJson;
 
-  const form = useCachedForm<TemplateFormValues>(
+  const cacheKey = getFormCacheKey.moduleTemplate({
+    id: template?.id,
+    isDuplicate,
+  });
+
+  const form = useCachedForm<ModuleTemplateFormValues>(
     cacheKey,
     {
       defaultValues: {
@@ -79,7 +84,7 @@ const TemplateForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertTemplate(
-              { templateId: template?.id },
+              { templateId: template?.id, type: TemplateType.Module },
               values,
             );
 
@@ -93,7 +98,12 @@ const TemplateForm = ({
         ),
       )}
     >
-      <Input label="Name" maxLength={49} required {...form.register('name')} />
+      <Input
+        label="Module title"
+        maxLength={49}
+        required
+        {...form.register('name')}
+      />
       <Controller
         control={form.control}
         name="content"
@@ -168,10 +178,10 @@ const TemplateForm = ({
         </Button>
       </div>
       {!disableCache && (
-        <UnsavedChangesBanner<TemplateFormValues> form={form} />
+        <UnsavedChangesBanner<ModuleTemplateFormValues> form={form} />
       )}
     </form>
   );
 };
 
-export default TemplateForm;
+export default ModuleTemplateForm;

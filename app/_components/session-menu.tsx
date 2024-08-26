@@ -61,9 +61,7 @@ const SessionMenu = ({
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          className={isView || isEdit ? '-mr-[3.7rem]' : 'mr-2'}
-        >
+        <DropdownMenu.Content>
           {isEdit && !isDraft && (
             <DropdownMenu.Button
               href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}`}
