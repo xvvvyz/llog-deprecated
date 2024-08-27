@@ -8,15 +8,15 @@ import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 const TrainingPlanUseTemplateModal = () => (
   <Modal.Root>
     <Modal.Trigger asChild>
-      <Button className="sm:pr-6" variant="link">
+      <Button className="pr-2 sm:pr-6" variant="link">
         <DocumentTextIcon className="w-5 text-fg-4" />
-        Use a template
+        Use template
       </Button>
     </Modal.Trigger>
     <Modal.Portal>
       <Modal.Overlay>
         <Modal.Content className="max-w-sm p-8 text-center">
-          <Modal.Title className="text-2xl">Use a template</Modal.Title>
+          <Modal.Title className="text-2xl">Use template</Modal.Title>
           <Modal.Description className="mt-4 px-4 text-fg-4">
             Who said creating an entire training plan had to be hard?
           </Modal.Description>

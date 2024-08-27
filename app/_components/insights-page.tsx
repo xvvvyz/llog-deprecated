@@ -55,7 +55,7 @@ const InsightsPage = async ({
           isTeamMember &&
           !subject.archived && (
             <Button
-              className="sm:pr-6"
+              className="pr-2 sm:pr-6"
               href={`/subjects/${subjectId}/insights/create`}
               scroll={false}
               variant="link"

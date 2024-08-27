@@ -125,14 +125,14 @@ const ModuleFormSection = <
                 <Modal.Trigger asChild>
                   <DropdownMenu.Button onClick={() => toggleUseTemplateModal()}>
                     <DocumentTextIcon className="w-5 text-fg-4" />
-                    Use a template
+                    Use template
                   </DropdownMenu.Button>
                 </Modal.Trigger>
                 <Modal.Portal>
                   <Modal.Overlay>
                     <Modal.Content className="max-w-sm p-8 text-center">
                       <Modal.Title className="text-2xl">
-                        Use a template
+                        Use template
                       </Modal.Title>
                       <Modal.Description className="mt-4 px-4 text-fg-4">
                         Selecting a template will overwrite any existing module
