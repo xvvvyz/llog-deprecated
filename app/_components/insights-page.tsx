@@ -13,7 +13,7 @@ import listInsights from '@/_queries/list-insights';
 import listPublicEvents from '@/_queries/list-public-events';
 import listPublicInsights from '@/_queries/list-public-insights';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import { ChartBarSquareIcon } from '@heroicons/react/24/outline';
+import ChartBarSquareIcon from '@heroicons/react/24/outline/ChartBarSquareIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives';
 

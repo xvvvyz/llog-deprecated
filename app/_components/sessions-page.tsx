@@ -104,7 +104,7 @@ const SessionsPage = async ({
 
             return (
               <li
-                className="flex items-stretch gap-2 hover:bg-alpha-1 active:bg-alpha-1"
+                className="flex items-stretch gap-2 hover:bg-alpha-1"
                 key={session.id}
               >
                 <Button

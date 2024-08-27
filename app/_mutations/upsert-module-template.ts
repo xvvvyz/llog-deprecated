@@ -1,6 +1,6 @@
 'use server';
 
-import { EventTypeTemplateFormValues } from '@/_components/event-type-template-form';
+import { ModuleTemplateFormValues } from '@/_components/module-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
@@ -8,9 +8,9 @@ import { revalidatePath } from 'next/cache';
 
 type State = { data?: { id?: string }; error?: string } | null;
 
-const upsertTemplate = async (
-  context: { templateId?: string; type: TemplateType },
-  data: EventTypeTemplateFormValues,
+const upsertModuleTemplate = async (
+  context: { templateId?: string },
+  data: ModuleTemplateFormValues,
 ): Promise<State> => {
   const supabase = createServerSupabaseClient();
 
@@ -24,7 +24,7 @@ const upsertTemplate = async (
       id: context.templateId,
       name: data.name.trim(),
       public: false,
-      type: context.type,
+      type: TemplateType.Module,
     })
     .select('id')
     .single();
@@ -34,4 +34,4 @@ const upsertTemplate = async (
   return { data: template };
 };
 
-export default upsertTemplate;
+export default upsertModuleTemplate;

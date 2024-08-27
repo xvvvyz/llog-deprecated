@@ -8,8 +8,6 @@ import listSubjects, { ListSubjectsData } from '@/_queries/list-subjects';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 
-export const metadata = { title: 'Subjects' };
-
 const Page = async () => {
   const [{ data: subjects }, user] = await Promise.all([
     listSubjects(),

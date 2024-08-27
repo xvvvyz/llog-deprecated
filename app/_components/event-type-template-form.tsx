@@ -9,14 +9,13 @@ import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
-import TemplateType from '@/_constants/enum-template-type';
 import useCachedForm from '@/_hooks/use-cached-form';
-import upsertTemplate from '@/_mutations/upsert-template';
+import upsertEventTypeTemplate from '@/_mutations/upsert-event-type-template';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
-import { TemplateDataJson } from '@/_types/template-data-json';
+import { EventTypeTemplateDataJson } from '@/_types/event-type-template-data-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { sortBy } from 'lodash';
@@ -28,8 +27,6 @@ interface EventTypeTemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
   disableCache?: boolean;
   isDuplicate?: boolean;
-  onClose?: () => void;
-  onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
 }
@@ -44,8 +41,6 @@ const EventTypeTemplateForm = ({
   availableInputs,
   disableCache,
   isDuplicate,
-  onClose,
-  onSubmit,
   subjects,
   template,
 }: EventTypeTemplateFormProps) => {
@@ -53,9 +48,8 @@ const EventTypeTemplateForm = ({
     useState<Partial<GetInputData>>(null);
 
   const [isTransitioning, startTransition] = useTransition();
-
   const router = useRouter();
-  const templateData = template?.data as TemplateDataJson;
+  const templateData = template?.data as EventTypeTemplateDataJson;
 
   const cacheKey = getFormCacheKey.eventTypeTemplate({
     id: template?.id,
@@ -67,8 +61,8 @@ const EventTypeTemplateForm = ({
     {
       defaultValues: {
         content: templateData?.content ?? '',
-        inputs: availableInputs.filter(({ id }) =>
-          templateData?.inputIds?.includes(id),
+        inputs: availableInputs.filter((input) =>
+          templateData?.inputIds?.includes(input.id),
         ),
         name: template?.name ?? '',
       },
@@ -84,17 +78,17 @@ const EventTypeTemplateForm = ({
       onSubmit={stopPropagation(
         form.handleSubmit((values) =>
           startTransition(async () => {
-            const res = await upsertTemplate(
-              { templateId: template?.id, type: TemplateType.EventType },
+            const res = await upsertEventTypeTemplate(
+              { templateId: template?.id },
               values,
             );
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
-            } else if (res?.data) {
-              onSubmit?.();
-              if (!onClose) router.back();
+              return;
             }
+
+            router.back();
           }),
         ),
       )}
@@ -157,11 +151,7 @@ const EventTypeTemplateForm = ({
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton
-          className="w-full"
-          colorScheme="transparent"
-          onClick={onClose}
-        >
+        <PageModalBackButton className="w-full" colorScheme="transparent">
           Close
         </PageModalBackButton>
         <Button

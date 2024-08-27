@@ -19,7 +19,7 @@ const Content = React.forwardRef<
         className,
       )}
       onOpenAutoFocus={(e) => e.preventDefault()}
-      sideOffset={8}
+      sideOffset={7}
       {...props}
     />
   </PopoverPrimitive.Portal>

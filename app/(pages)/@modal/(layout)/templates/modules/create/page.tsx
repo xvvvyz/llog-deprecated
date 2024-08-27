@@ -3,11 +3,6 @@ import ModuleTemplateForm from '@/_components/module-template-form';
 import PageModalHeader from '@/_components/page-modal-header';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import formatTitle from '@/_utilities/format-title';
-
-export const metadata = {
-  title: formatTitle(['Templates', 'New']),
-};
 
 const Page = async () => {
   const [{ data: availableInputs }, { data: subjects }] = await Promise.all([

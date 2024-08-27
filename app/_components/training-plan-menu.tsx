@@ -6,6 +6,7 @@ import IconButton from '@/_components/icon-button';
 import deleteTrainingPlan from '@/_mutations/delete-training-plan';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
 
 interface TrainingPlanMenuProps {
@@ -27,21 +28,28 @@ const TrainingPlanMenu = ({
         {isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
-          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
-            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content>
+        <DropdownMenu.Content className="mx-2" sideOffset={-2}>
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit name
+          </DropdownMenu.Button>
+          <DropdownMenu.Button
+            href={`/templates/training-plans/create/from-training-plan/${missionId}`}
+            scroll={false}
+          >
+            <PlusIcon className="w-5 text-fg-4" />
+            New template
           </DropdownMenu.Button>
           <DropdownMenuDeleteItem
             confirmText="Delete training plan"

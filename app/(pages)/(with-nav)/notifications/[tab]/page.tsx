@@ -7,8 +7,6 @@ interface PageProps {
   };
 }
 
-export const metadata = { title: 'Notifications' };
-
 const Page = async ({ params: { tab } }: PageProps) => {
   if (!['archive', 'inbox'].includes(tab)) return null;
 

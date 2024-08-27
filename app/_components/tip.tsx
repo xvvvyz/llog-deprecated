@@ -2,7 +2,7 @@
 
 import Button from '@/_components/button';
 import * as Popover from '@/_components/popover';
-import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
+import QuestionMarkCircleIcon from '@heroicons/react/24/outline/QuestionMarkCircleIcon';
 import { PopoverContentProps } from '@radix-ui/react-popover';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -17,7 +17,7 @@ const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
   <Popover.Root>
     <Popover.Trigger asChild>
       <Button className={className} variant="link">
-        <InformationCircleIcon className="w-5" />
+        <QuestionMarkCircleIcon className="w-5" />
       </Button>
     </Popover.Trigger>
     <Popover.Content
@@ -25,7 +25,7 @@ const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
         'z-30 max-w-[20rem] rounded border border-alpha-2 bg-bg-3 px-6 py-4 text-center drop-shadow',
         tipClassName,
       )}
-      sideOffset={0}
+      sideOffset={-2}
       {...rest}
     >
       {children}

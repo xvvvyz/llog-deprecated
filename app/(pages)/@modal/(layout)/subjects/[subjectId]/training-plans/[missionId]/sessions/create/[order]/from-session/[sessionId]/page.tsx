@@ -1,4 +1,5 @@
 import SessionForm from '@/_components/session-form';
+import TemplateType from '@/_constants/enum-template-type';
 import getCurrentUser from '@/_queries/get-current-user';
 import getSession from '@/_queries/get-session';
 import getSubject from '@/_queries/get-subject';
@@ -6,7 +7,6 @@ import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessi
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {
@@ -17,37 +17,36 @@ interface PageProps {
   };
 }
 
-export const metadata = {
-  title: formatTitle(['Subjects', 'Training plans', 'Sessions', 'New']),
-};
-
 const Page = async ({
   params: { missionId, order, sessionId, subjectId },
 }: PageProps) => {
   const [
-    { data: subject },
+    { data: availableInputs },
+    { data: availableModuleTemplates },
+    { data: availableSessionTemplates },
     { data: mission },
     { data: session },
-    { data: availableInputs },
-    { data: availableTemplates },
+    { data: subject },
     { data: subjects },
     user,
   ] = await Promise.all([
-    getSubject(subjectId),
+    listInputsBySubjectId(subjectId),
+    listTemplatesWithData({ type: TemplateType.Module }),
+    listTemplatesWithData({ type: TemplateType.Session }),
     getTrainingPlanWithSessions(missionId, { draft: true }),
     getSession(sessionId),
-    listInputsBySubjectId(subjectId),
-    listTemplatesWithData(),
+    getSubject(subjectId),
     listSubjectsByTeamId(),
     getCurrentUser(),
   ]);
 
   if (
-    !subject ||
+    !availableInputs ||
+    !availableModuleTemplates ||
+    !availableSessionTemplates ||
     !mission ||
     !session ||
-    !availableInputs ||
-    !availableTemplates ||
+    !subject ||
     !subjects ||
     !user ||
     subject.team_id !== user.id
@@ -58,13 +57,14 @@ const Page = async ({
   return (
     <SessionForm
       availableInputs={availableInputs}
-      availableTemplates={availableTemplates}
+      availableModuleTemplates={availableModuleTemplates}
+      availableSessionTemplates={availableSessionTemplates}
       isDuplicate
       mission={mission}
       order={order}
       session={session}
-      subjects={subjects}
       subjectId={subjectId}
+      subjects={subjects}
     />
   );
 };

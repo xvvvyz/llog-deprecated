@@ -52,15 +52,13 @@ const EventComment = ({
           !isArchived &&
           (userId === profile.id || isTeamMember) && (
             <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <div className="-mr-2 -mt-[0.7rem]">
-                  <div className="rounded-full p-2 text-fg-3 transition-colors hover:bg-alpha-1 hover:text-fg-2 active:bg-alpha-1 active:text-fg-2">
-                    <EllipsisVerticalIcon className="w-5" />
-                  </div>
+              <DropdownMenu.Trigger className="-mr-4 -mt-[0.7rem]">
+                <div className="rounded-full p-2 text-fg-3 transition-colors hover:text-fg-2">
+                  <EllipsisVerticalIcon className="w-5" />
                 </div>
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
-                <DropdownMenu.Content>
+                <DropdownMenu.Content className="mx-2" sideOffset={4}>
                   <DropdownMenuDeleteItem
                     confirmText="Delete comment"
                     onConfirm={() => deleteComment(id)}

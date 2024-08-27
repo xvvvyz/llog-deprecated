@@ -23,8 +23,8 @@ import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
-import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import TableCellsIcon from '@heroicons/react/24/outline/TableCellsIcon';
 import { twMerge } from 'tailwind-merge';
 
 interface SubjectPageProps {
@@ -65,8 +65,8 @@ const SubjectPage = async ({
 
   return (
     <div className="px-4">
-      <div className="mt-16 flex h-8 items-center justify-between gap-6">
-        <div className="flex min-w-0 items-center gap-6">
+      <div className="mt-16 flex h-8 items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-4">
           {!isPublic && (
             <IconButton
               href="/subjects"
@@ -77,7 +77,7 @@ const SubjectPage = async ({
           <h1 className="truncate text-2xl">{subject.name}</h1>
         </div>
         {isTeamMember && !isPublic ? (
-          <div className="flex gap-4">
+          <div className="flex shrink-0 gap-4">
             {!subject.archived && (
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
@@ -96,7 +96,7 @@ const SubjectPage = async ({
                         <PlusIcon className="w-5 text-fg-4" />
                         Event type
                       </DropdownMenu.Button>
-                      <Tip className="absolute right-3 top-2.5" side="left">
+                      <Tip className="absolute right-3 top-2.5">
                         Use event types to track individual behaviors,
                         activities etc. For example: &ldquo;Barking&rdquo; or
                         &ldquo;Medication&rdquo;.
@@ -110,7 +110,7 @@ const SubjectPage = async ({
                         <PlusIcon className="w-5 text-fg-4" />
                         Training plan
                       </DropdownMenu.Button>
-                      <Tip className="absolute right-3 top-2.5" side="left">
+                      <Tip className="absolute right-3 top-2.5">
                         Use training plans to teach new behaviors, skills etc.
                         For example: &ldquo;Reduce separation anxiety&rdquo;.
                       </Tip>
@@ -205,7 +205,7 @@ const SubjectPage = async ({
         <>
           <div className="mx-4 mt-4 h-14 border-l-2 border-dashed border-alpha-2" />
           <Empty className="mt-4">
-            <InformationCircleIcon className="w-7" />
+            <TableCellsIcon className="w-7" />
             No events.
           </Empty>
         </>

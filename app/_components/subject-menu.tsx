@@ -26,6 +26,7 @@ import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useOptimistic, useRef, useTransition } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface SubjectMenuProps {
   canUnarchive?: boolean;
@@ -50,24 +51,23 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {isList ? (
-          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 active:text-fg-2">
-            <div className="rounded-full p-2 group-hover:bg-alpha-1 group-active:bg-alpha-1">
+          <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
+            <div className="rounded-full p-2 group-hover:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>
         ) : (
-          <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1 active:bg-alpha-1">
+          <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
             <Bars3Icon className="w-5" />
-            <Avatar
-              className="-m-px"
-              file={subject.image_uri}
-              id={subject.id}
-            />
+            <Avatar file={subject.image_uri} id={subject.id} />
           </div>
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content>
+        <DropdownMenu.Content
+          className={twMerge(isList && 'mx-2')}
+          sideOffset={isList ? -2 : 7}
+        >
           <DropdownMenu.Button
             href={`/subjects/${subject.id}/edit`}
             scroll={false}

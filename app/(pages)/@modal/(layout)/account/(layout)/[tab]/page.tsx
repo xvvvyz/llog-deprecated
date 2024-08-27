@@ -9,8 +9,6 @@ interface PageProps {
   };
 }
 
-export const metadata = { title: 'Account' };
-
 const Page = async ({ params: { tab } }: PageProps) => {
   const user = await getCurrentUser();
   if (!user || !['email', 'password', 'profile'].includes(tab)) return null;

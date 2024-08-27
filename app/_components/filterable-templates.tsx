@@ -65,10 +65,7 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
       </div>
       <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
         {filteredTemplates.map((template) => (
-          <li
-            className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
-            key={template.id}
-          >
+          <li className="flex items-stretch hover:bg-alpha-1" key={template.id}>
             <Button
               className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
               href={`/templates/${TEMPLATE_TYPE_SLUGS[template.type]}/${template.id}`}

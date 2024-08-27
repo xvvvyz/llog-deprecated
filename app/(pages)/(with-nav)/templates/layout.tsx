@@ -16,26 +16,34 @@ const Layout = ({ children }: LayoutProps) => (
         <DropdownMenu.Trigger>
           <Button size="sm">
             New&hellip;
-            <ChevronDownIcon className="-mr-0.5 w-5 stroke-2" />
+            <ChevronDownIcon className="-mr-1 w-5 stroke-2" />
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
           <DropdownMenu.Content>
             <DropdownMenu.Button href="/templates/event-types/create">
               <PlusIcon className="w-5 text-fg-4" />
-              Event type template
+              <div>
+                Event type <span className="text-fg-4">template</span>
+              </div>
             </DropdownMenu.Button>
-            {/*<DropdownMenu.Button>*/}
-            {/*  <PlusIcon className="w-5 text-fg-4" />*/}
-            {/*  Training plan template*/}
-            {/*</DropdownMenu.Button>*/}
-            {/*<DropdownMenu.Button>*/}
-            {/*  <PlusIcon className="w-5 text-fg-4" />*/}
-            {/*  Session template*/}
-            {/*</DropdownMenu.Button>*/}
+            <DropdownMenu.Button href="/templates/training-plans/create">
+              <PlusIcon className="w-5 text-fg-4" />
+              <div>
+                Training plan <span className="text-fg-4">template</span>
+              </div>
+            </DropdownMenu.Button>
+            <DropdownMenu.Button href="/templates/sessions/create">
+              <PlusIcon className="w-5 text-fg-4" />
+              <div>
+                Session <span className="text-fg-4">template</span>
+              </div>
+            </DropdownMenu.Button>
             <DropdownMenu.Button href="/templates/modules/create">
               <PlusIcon className="w-5 text-fg-4" />
-              Module template
+              <div>
+                Module <span className="text-fg-4">template</span>
+              </div>
             </DropdownMenu.Button>
           </DropdownMenu.Content>
         </DropdownMenu.Portal>

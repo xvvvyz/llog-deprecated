@@ -4,15 +4,12 @@ import PageModalHeader from '@/_components/page-modal-header';
 import getTemplate from '@/_queries/get-template';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {
     templateId: string;
   };
 }
-
-export const metadata = { title: formatTitle(['Templates', 'Edit']) };
 
 const Page = async ({ params: { templateId } }: PageProps) => {
   const [{ data: template }, { data: availableInputs }, { data: subjects }] =
@@ -26,7 +23,7 @@ const Page = async ({ params: { templateId } }: PageProps) => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title={template.name} />
+      <PageModalHeader title="Edit event type template" />
       <EventTypeTemplateForm
         availableInputs={availableInputs}
         subjects={subjects}

@@ -1,11 +1,11 @@
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
+import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import ModuleCard from '@/_components/module-card';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
-import SessionLayout from '@/_components/session-layout';
 import SessionMenu from '@/_components/session-menu';
 import getCurrentUser from '@/_queries/get-current-user';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
@@ -18,6 +18,8 @@ import firstIfArray from '@/_utilities/first-if-array';
 import parseSessions from '@/_utilities/parse-sessions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
+import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
 
 interface SessionPageProps {
   isPublic?: boolean;
@@ -45,11 +47,16 @@ const SessionPage = async ({
     ]);
 
   if (!subject || !trainingPlan || !session) return null;
+  const currentSession = trainingPlan.sessions.find((s) => s.id === sessionId);
+  if (!currentSession) return null;
+
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
-  const {
+  let {
+    // eslint-disable-next-line prefer-const
     highestOrder,
+    // eslint-disable-next-line prefer-const
     highestPublishedOrder,
     nextSessionId,
     previousSessionId,
@@ -58,6 +65,21 @@ const SessionPage = async ({
     sessionOrder: session.order,
     sessions: trainingPlan.sessions,
   });
+
+  if (
+    trainingPlan.sessions.length > 0 &&
+    !previousSessionId &&
+    !nextSessionId
+  ) {
+    trainingPlan.sessions.some((session) => {
+      if (session.order < currentSession.order) {
+        previousSessionId = session.id;
+      } else if (session.order > currentSession.order) {
+        nextSessionId = session.id;
+        return true;
+      }
+    });
+  }
 
   return (
     <Modal.Content>
@@ -89,66 +111,75 @@ const SessionPage = async ({
         }
         title={trainingPlan.name}
       />
-      <SessionLayout
-        highestOrder={highestOrder}
-        isPublic={isPublic}
-        missionId={missionId}
-        nextSessionId={nextSessionId}
-        previousSessionId={previousSessionId}
-        sessionId={sessionId}
-        sessions={trainingPlan.sessions}
-        subjectId={subjectId}
-      >
-        {session.scheduled_for &&
-        new Date(session.scheduled_for) > new Date() ? (
-          <Empty className="mt-6 border-0">
-            <CalendarDaysIcon className="w-7" />
-            <p>
-              Scheduled for{' '}
-              <DateTime
-                className="inline"
-                date={session.scheduled_for}
-                formatter="date-time"
-              />
-            </p>
-          </Empty>
-        ) : (
-          <>
-            {session.title && (
-              <p className="mx-auto max-w-xs px-4 text-center">
-                {session.title}
-              </p>
-            )}
-            <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
-              {session.modules.map((module, i) => {
-                const event = firstIfArray(module.event);
-                const previousModuleEvent = session.modules[i - 1]?.event;
+      <nav className="flex w-full items-center justify-between px-4 sm:px-8">
+        <IconButton
+          disabled={!previousSessionId}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}`}
+          icon={<ChevronLeftIcon className="relative left-1 w-7" />}
+          label="Previous session"
+          replace
+          scroll={false}
+        />
+        <div className="flex items-baseline gap-4">
+          <span className="smallcaps text-fg-4">
+            Session {currentSession.order + 1} of {highestOrder + 1}
+          </span>
+          {currentSession.draft && (
+            <span className="smallcaps text-fg-4">Draft</span>
+          )}
+        </div>
+        <IconButton
+          disabled={!nextSessionId}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}`}
+          icon={<ChevronRightIcon className="relative right-1 w-7" />}
+          label="Next session"
+          replace
+          scroll={false}
+        />
+      </nav>
+      {session.scheduled_for && new Date(session.scheduled_for) > new Date() ? (
+        <Empty className="mt-6 border-0">
+          <CalendarDaysIcon className="w-7" />
+          <p>
+            Scheduled for{' '}
+            <DateTime
+              className="inline"
+              date={session.scheduled_for}
+              formatter="date-time"
+            />
+          </p>
+        </Empty>
+      ) : (
+        <>
+          {session.title && (
+            <p className="mx-auto max-w-xs px-4 text-center">{session.title}</p>
+          )}
+          <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
+            {session.modules.map((module, i) => {
+              const event = firstIfArray(module.event);
+              const previousModuleEvent = session.modules[i - 1]?.event;
 
-                return (
-                  <li
-                    className="border-y border-alpha-1 bg-bg-2"
-                    key={module.id}
-                  >
-                    <ModuleCard
-                      event={event}
-                      eventType={module}
-                      isArchived={subject.archived}
-                      isPreviousModulePending={
-                        previousModuleEvent && !previousModuleEvent.length
-                      }
-                      isPublic={isPublic}
-                      isTeamMember={isTeamMember}
-                      mission={trainingPlan}
-                      subjectId={subjectId}
-                      user={user}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        )}
-      </SessionLayout>
+              return (
+                <li className="border-y border-alpha-1 bg-bg-2" key={module.id}>
+                  <ModuleCard
+                    event={event}
+                    eventType={module}
+                    isArchived={subject.archived}
+                    isPreviousModulePending={
+                      previousModuleEvent && !previousModuleEvent.length
+                    }
+                    isPublic={isPublic}
+                    isTeamMember={isTeamMember}
+                    mission={trainingPlan}
+                    subjectId={subjectId}
+                    user={user}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
       <PageModalBackButton
         className="m-0 block w-full py-6 text-center"
         variant="link"

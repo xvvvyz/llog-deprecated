@@ -16,10 +16,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
   return (
     <ul className="overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {eventTypes.map((eventType) => (
-        <li
-          className="flex items-stretch hover:bg-alpha-1 active:bg-alpha-1"
-          key={eventType.id}
-        >
+        <li className="flex items-stretch hover:bg-alpha-1" key={eventType.id}>
           <Button
             className={twMerge(
               'm-0 flex w-full gap-4 px-4 py-3 leading-snug',

@@ -9,9 +9,9 @@ import { twMerge } from 'tailwind-merge';
 
 const colorSchemes = {
   accent:
-    'ring-accent-2 bg-accent-1 text-bg-1 font-bold active:bg-accent-2 hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
+    'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
   transparent:
-    'ring-accent-2 hover:bg-alpha-1 font-normal active:text-fg-2 active:bg-alpha-1 text-fg-3 hover:text-fg-2',
+    'ring-accent-2 hover:bg-alpha-1 font-normal text-fg-3 hover:text-fg-2',
 };
 
 const spinnerColorSchemes = {
@@ -25,7 +25,7 @@ const sizes = {
 };
 
 const variants = {
-  link: 'p-3 -m-3 border-0 text-fg-3 hover:text-fg-2 active:text-fg-2',
+  link: 'p-3 -m-3 border-0 text-fg-3 hover:text-fg-2',
   primary: 'focus:ring-1 justify-center',
 };
 

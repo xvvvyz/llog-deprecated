@@ -1,19 +1,15 @@
 import EventTypeForm from '@/_components/event-type-form';
+import TemplateType from '@/_constants/enum-template-type';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {
     subjectId: string;
   };
 }
-
-export const metadata = {
-  title: formatTitle(['Subjects', 'Event types', 'New']),
-};
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const [
@@ -25,7 +21,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     getSubject(subjectId),
     listInputsBySubjectId(subjectId),
     listSubjectsByTeamId(),
-    listTemplatesWithData(),
+    listTemplatesWithData({ type: TemplateType.EventType }),
   ]);
 
   if (!subject || !availableInputs || !subjects || !availableTemplates) {

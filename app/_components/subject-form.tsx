@@ -137,24 +137,15 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           {!!linkArray.fields.length && (
             <ul className="flex flex-col gap-2">
               {linkArray.fields.map((link, linkIndex) => (
-                <li key={link.id}>
+                <li className="relative" key={link.id}>
                   <Controller
                     control={form.control}
                     name={`data.links.${linkIndex}.label`}
                     render={({ field }) => (
                       <Input
-                        className="rounded-b-none border-b-0"
+                        className="rounded-b-none border-b-0 pr-[2.4rem]"
                         placeholder="Label…"
                         required
-                        right={
-                          <IconButton
-                            className="m-0 h-full w-full justify-center p-0"
-                            icon={<XMarkIcon className="w-5" />}
-                            label="Delete link"
-                            onClick={() => linkArray.remove(linkIndex)}
-                            tabIndex={-1}
-                          />
-                        }
                         {...field}
                       />
                     )}
@@ -172,6 +163,15 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
                       />
                     )}
                   />
+                  <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
+                    <IconButton
+                      className="m-0 h-full w-full justify-center p-0"
+                      icon={<XMarkIcon className="w-5" />}
+                      label="Delete link"
+                      onClick={() => linkArray.remove(linkIndex)}
+                      tabIndex={-1}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>

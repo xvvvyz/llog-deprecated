@@ -3,9 +3,6 @@ import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import UpgradePlanButton from '@/_components/upgrade-plan-button';
 import getCurrentUser from '@/_queries/get-current-user';
-import formatTitle from '@/_utilities/format-title';
-
-export const metadata = { title: formatTitle(['Upgrade plan']) };
 
 const Page = async () => {
   const user = await getCurrentUser();

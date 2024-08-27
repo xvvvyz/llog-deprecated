@@ -42,7 +42,7 @@ const TimelineSessionCard = ({
   return (
     <div className="overflow-hidden rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
-        className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1 active:bg-alpha-1"
+        className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
         href={`/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType?.session?.mission?.id}/sessions/${lastEventType?.session?.id}`}
         scroll={false}
         variant="link"
@@ -68,7 +68,7 @@ const TimelineSessionCard = ({
         <Collapsible.Trigger asChild>
           <Button
             colorScheme="transparent"
-            className="m-0 mb-1 w-full justify-between gap-6 px-4 hover:bg-alpha-1 active:bg-alpha-1"
+            className="m-0 mb-1 w-full justify-between gap-6 px-4 hover:bg-alpha-1"
             variant="link"
           >
             {group.length} completed module{group.length > 1 ? 's' : ''}
@@ -84,7 +84,7 @@ const TimelineSessionCard = ({
             {group.map((event) => (
               <li className="relative py-1" key={event.id}>
                 <Button
-                  className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1 active:bg-alpha-1"
+                  className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
                   href={`/${shareOrSubjects}/${subjectId}/events/${event.id}`}
                   scroll={false}
                   variant="link"

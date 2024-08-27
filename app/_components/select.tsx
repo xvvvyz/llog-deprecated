@@ -50,7 +50,7 @@ const ClearIndicator = <TOption extends IOption>(
   props: ClearIndicatorProps<TOption>,
 ) => (
   <components.ClearIndicator {...props}>
-    <div className="cursor-pointer p-1 text-fg-3 transition-colors hover:text-fg-2 active:text-fg-2">
+    <div className="cursor-pointer p-1 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </components.ClearIndicator>
@@ -77,8 +77,7 @@ const Control = <TOption extends IOption>({
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
-        selectProps.isDisabled &&
-          'disabled group-hover:bg-alpha-1 group-active:bg-alpha-1',
+        selectProps.isDisabled && 'disabled group-hover:bg-alpha-1',
         selectProps.className,
       )}
       menuIsOpen={menuIsOpen}
@@ -91,7 +90,7 @@ const Control = <TOption extends IOption>({
 };
 
 const DropdownIndicator = () => (
-  <ChevronUpDownIcon className="mx-1 w-5 text-fg-3 transition-colors group-hover:text-fg-2 group-active:text-fg-2" />
+  <ChevronUpDownIcon className="mx-1 w-5 text-fg-3 transition-colors group-hover:text-fg-2" />
 );
 
 const GroupHeading = <TOption extends IOption>(
@@ -132,7 +131,10 @@ const Menu = <TOption extends IOption>({
   children,
   ...props
 }: MenuProps<TOption>) => (
-  <components.Menu className="rounded-b bg-bg-2 drop-shadow" {...props}>
+  <components.Menu
+    className="overflow-hidden rounded-b bg-bg-2 drop-shadow"
+    {...props}
+  >
     <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-2">
       {children}
     </div>
@@ -197,7 +199,7 @@ const MultiValueLabel = <TOption extends IOption>({
 
 const MultiValueRemove = (props: MultiValueRemoveProps) => (
   <components.MultiValueRemove {...props}>
-    <div className="-m-1 p-1 pr-1.5 text-fg-3 transition-colors hover:text-fg-2 active:text-fg-2">
+    <div className="-m-1 p-1 pr-1.5 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </components.MultiValueRemove>

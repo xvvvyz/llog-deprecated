@@ -33,7 +33,7 @@ const Calendar = ({
       months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
       nav: 'space-x-1 flex items-center',
       nav_button:
-        'p-3 -m-3 p-0 focus:outline-none transition-colors absolute text-fg-3 hover:text-fg-2 active:text-fg-2',
+        'p-3 -m-3 p-0 focus:outline-none transition-colors absolute text-fg-3 hover:text-fg-2',
       nav_button_next: '-right-2',
       nav_button_previous: 'left-1',
       row: 'flex w-full mt-2',

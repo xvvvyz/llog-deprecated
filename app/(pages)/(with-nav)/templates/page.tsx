@@ -1,9 +1,7 @@
 import Empty from '@/_components/empty';
 import FilterableTemplates from '@/_components/filterable-templates';
 import listTemplates from '@/_queries/list-templates';
-import InformationCircleIcon from '@heroicons/react/24/outline/ExclamationCircleIcon';
-
-export const metadata = { title: 'Templates' };
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 
 const Page = async () => {
   const { data: templates } = await listTemplates();
@@ -14,7 +12,7 @@ const Page = async () => {
         <InformationCircleIcon className="w-7" />
         Templates define reusable content for
         <br />
-        event types and session modules.
+        event types and training plans.
       </Empty>
     );
   }

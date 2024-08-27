@@ -1,5 +1,4 @@
 import SessionPage from '@/_components/session-page';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {
@@ -8,10 +7,6 @@ interface PageProps {
     subjectId: string;
   };
 }
-
-export const metadata = {
-  title: formatTitle(['Subjects', 'Training plans', 'Sessions']),
-};
 
 const Page = async ({
   params: { missionId, sessionId, subjectId },

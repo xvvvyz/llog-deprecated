@@ -51,7 +51,7 @@ const ModuleCard = ({
       <Collapsible.Trigger asChild>
         <Button
           colorScheme="transparent"
-          className="m-0 block w-full px-4 hover:bg-alpha-1 active:bg-alpha-1 sm:px-8"
+          className="m-0 block w-full px-4 hover:bg-alpha-1 sm:px-8"
           variant="link"
         >
           <div

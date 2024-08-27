@@ -9,14 +9,13 @@ import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
-import TemplateType from '@/_constants/enum-template-type';
 import useCachedForm from '@/_hooks/use-cached-form';
-import upsertTemplate from '@/_mutations/upsert-template';
+import upsertModuleTemplate from '@/_mutations/upsert-module-template';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
-import { TemplateDataJson } from '@/_types/template-data-json';
+import { ModuleTemplateDataJson } from '@/_types/module-template-data-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { sortBy } from 'lodash';
@@ -27,7 +26,6 @@ import { Controller, useFieldArray } from 'react-hook-form';
 interface ModuleTemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
   disableCache?: boolean;
-  isDuplicate?: boolean;
   onClose?: () => void;
   onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
@@ -43,7 +41,6 @@ export type ModuleTemplateFormValues = {
 const ModuleTemplateForm = ({
   availableInputs,
   disableCache,
-  isDuplicate,
   onClose,
   onSubmit,
   subjects,
@@ -54,20 +51,16 @@ const ModuleTemplateForm = ({
 
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
-  const templateData = template?.data as TemplateDataJson;
-
-  const cacheKey = getFormCacheKey.moduleTemplate({
-    id: template?.id,
-    isDuplicate,
-  });
+  const templateData = template?.data as ModuleTemplateDataJson;
+  const cacheKey = getFormCacheKey.moduleTemplate({ id: template?.id });
 
   const form = useCachedForm<ModuleTemplateFormValues>(
     cacheKey,
     {
       defaultValues: {
         content: templateData?.content ?? '',
-        inputs: availableInputs.filter(({ id }) =>
-          templateData?.inputIds?.includes(id),
+        inputs: availableInputs.filter((input) =>
+          templateData?.inputIds?.includes(input.id),
         ),
         name: template?.name ?? '',
       },
@@ -83,8 +76,8 @@ const ModuleTemplateForm = ({
       onSubmit={stopPropagation(
         form.handleSubmit((values) =>
           startTransition(async () => {
-            const res = await upsertTemplate(
-              { templateId: template?.id, type: TemplateType.Module },
+            const res = await upsertModuleTemplate(
+              { templateId: template?.id },
               values,
             );
 
@@ -98,12 +91,7 @@ const ModuleTemplateForm = ({
         ),
       )}
     >
-      <Input
-        label="Module title"
-        maxLength={49}
-        required
-        {...form.register('name')}
-      />
+      <Input label="Name" maxLength={49} required {...form.register('name')} />
       <Controller
         control={form.control}
         name="content"

@@ -8,7 +8,7 @@ import { ListEventsData } from '@/_queries/list-events';
 import { ListInsightsData } from '@/_queries/list-insights';
 import { InsightConfigJson } from '@/_types/insight-config-json';
 import { useSortable } from '@dnd-kit/sortable';
-import { ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
+import ArrowsPointingOutIcon from '@heroicons/react/24/outline/ArrowsPointingOutIcon';
 import Bars2Icon from '@heroicons/react/24/outline/Bars2Icon';
 import { Dispatch, SetStateAction } from 'react';
 import { twMerge } from 'tailwind-merge';

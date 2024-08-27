@@ -5,7 +5,6 @@ import { twMerge } from 'tailwind-merge';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: ReactNode;
-  right?: ReactNode;
   tooltip?: ReactNode;
 }
 
@@ -16,7 +15,6 @@ const Input = forwardRef(
       disabled,
       id,
       label,
-      right,
       type,
       name,
       tooltip,
@@ -42,7 +40,7 @@ const Input = forwardRef(
         </div>
         <input
           autoComplete="off"
-          className={twMerge('input', right && 'pr-[2.4rem]', className)}
+          className={twMerge('input', className)}
           disabled={disabled || pending}
           id={id ?? name}
           name={name}
@@ -50,11 +48,6 @@ const Input = forwardRef(
           type={type ?? 'text'}
           {...rest}
         />
-        {right && (
-          <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
-            {right}
-          </div>
-        )}
       </div>
     );
   },

@@ -53,7 +53,7 @@ const SubjectEventsDateFilter = () => {
           )}
         </Button>
       </Popover.Trigger>
-      <Popover.Content align="start" className="my-2" sideOffset={0}>
+      <Popover.Content align="start">
         <Calendar
           defaultMonth={opDate?.to ?? opDate?.from}
           disabled={{ after: new Date() }}

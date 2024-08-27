@@ -1,10 +1,10 @@
 import EventTypeForm from '@/_components/event-type-form';
+import TemplateType from '@/_constants/enum-template-type';
 import getEventTypeWithInputs from '@/_queries/get-event-type-with-inputs';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesWithData from '@/_queries/list-templates-with-data';
-import formatTitle from '@/_utilities/format-title';
 
 interface PageProps {
   params: {
@@ -12,10 +12,6 @@ interface PageProps {
     subjectId: string;
   };
 }
-
-export const metadata = {
-  title: formatTitle(['Subjects', 'Event types', 'Edit']),
-};
 
 const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   const [
@@ -29,7 +25,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
     getEventTypeWithInputs(eventTypeId),
     listInputsBySubjectId(subjectId),
     listSubjectsByTeamId(),
-    listTemplatesWithData(),
+    listTemplatesWithData({ type: TemplateType.EventType }),
   ]);
 
   if (

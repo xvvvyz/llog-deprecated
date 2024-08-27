@@ -197,12 +197,13 @@ const InputForm = ({
               {!!optionsArray.fields.length && (
                 <ul className="flex flex-col gap-2">
                   {optionsArray.fields.map((option, optionIndex) => (
-                    <li key={option.id}>
+                    <li className="relative" key={option.id}>
                       <Controller
                         control={form.control}
                         name={`options.${optionIndex}.label`}
                         render={({ field }) => (
                           <Input
+                            className="pr-[2.4rem]"
                             onKeyDown={(e) => {
                               if (e.key === 'Backspace' && !field.value) {
                                 e.preventDefault();
@@ -228,19 +229,19 @@ const InputForm = ({
                             }}
                             placeholder="Label…"
                             required
-                            right={
-                              <IconButton
-                                className="m-0 h-full w-full justify-center p-0"
-                                icon={<XMarkIcon className="w-5" />}
-                                label="Delete option"
-                                onClick={() => optionsArray.remove(optionIndex)}
-                                tabIndex={-1}
-                              />
-                            }
                             {...field}
                           />
                         )}
                       />
+                      <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
+                        <IconButton
+                          className="m-0 h-full w-full justify-center p-0"
+                          icon={<XMarkIcon className="w-5" />}
+                          label="Delete option"
+                          onClick={() => optionsArray.remove(optionIndex)}
+                          tabIndex={-1}
+                        />
+                      </div>
                     </li>
                   ))}
                 </ul>

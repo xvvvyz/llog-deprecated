@@ -4,8 +4,8 @@ import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon';
 
 const SubjectLoading = () => (
   <>
-    <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
-      <div className="flex items-center gap-6">
+    <div className="my-16 flex h-8 items-center justify-between gap-4 px-4">
+      <div className="flex items-center gap-4">
         <IconButton
           icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
         />
