@@ -41,7 +41,7 @@ export type SessionFormValues = {
   modules: Array<{
     content: string;
     id?: string;
-    inputs: Array<{ id: string }>;
+    inputs: NonNullable<ListInputsBySubjectIdData>;
     name?: string | null;
   }>;
   scheduledFor: string | null;

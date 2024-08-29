@@ -4,6 +4,7 @@ import TemplateType from '@/_constants/enum-template-type';
 import upsertSession from '@/_mutations/upsert-session';
 import upsertTrainingPlan from '@/_mutations/upsert-training-plan';
 import getTemplate from '@/_queries/get-template';
+import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import { TrainingPlanTemplateDataJson } from '@/_types/training-plan-template-data-json';
 
 const createTrainingPlanFromTemplate = async ({
@@ -18,6 +19,12 @@ const createTrainingPlanFromTemplate = async ({
 
   if (getTemplateRes.data.type !== TemplateType.TrainingPlan) {
     return { error: 'Invalid template' };
+  }
+
+  const availableInputsRes = await listInputsBySubjectId(subjectId);
+
+  if (availableInputsRes.error) {
+    return { error: availableInputsRes.error };
   }
 
   const upsertTrainingPlanRes = await upsertTrainingPlan(
@@ -44,7 +51,9 @@ const createTrainingPlanFromTemplate = async ({
           draft: false,
           modules: session.modules.map((module) => ({
             content: module.content ?? '',
-            inputs: module.inputIds?.map((id) => ({ id })) ?? [],
+            inputs: availableInputsRes.data.filter((input) =>
+              module.inputIds?.includes(input.id),
+            ),
             name: module.name ?? '',
           })),
           scheduledFor: null,
