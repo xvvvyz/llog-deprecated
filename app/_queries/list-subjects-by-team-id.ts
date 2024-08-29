@@ -7,7 +7,7 @@ const listSubjectsByTeamId = async () =>
     .select('archived, id, image_uri, name, team_id')
     .eq('team_id', (await getCurrentUser())?.id ?? '')
     .eq('deleted', false)
-    .not('archived', 'is', null)
+    .eq('archived', false)
     .order('name');
 
 export type ListSubjectsByTeamIdData = Awaited<

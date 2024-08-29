@@ -11,9 +11,9 @@ interface PageProps {
 }
 
 const Page = async ({ params: { inputId } }: PageProps) => {
-  const [{ data: subjects }, { data: input }] = await Promise.all([
-    listSubjectsByTeamId(),
+  const [{ data: input }, { data: subjects }] = await Promise.all([
     getInput(inputId),
+    listSubjectsByTeamId(),
   ]);
 
   if (!input || !subjects) return null;
