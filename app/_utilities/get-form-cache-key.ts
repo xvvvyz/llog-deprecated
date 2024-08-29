@@ -29,6 +29,11 @@ const getFormCacheKey = {
     isDuplicate,
   }: { id?: string; isDuplicate?: boolean } = {}) =>
     `session-template-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
+  trainingPlanTemplate: ({
+    id,
+    isDuplicate,
+  }: { id?: string; isDuplicate?: boolean } = {}) =>
+    `training-plan-template-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
 };
 
 export default getFormCacheKey;

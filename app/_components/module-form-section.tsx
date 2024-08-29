@@ -11,6 +11,7 @@ import ModuleTemplateForm from '@/_components/module-template-form';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
+import { SessionFormValues } from '@/_components/session-form';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
@@ -23,7 +24,7 @@ import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/outline/ArrowUpIcon';
 import Bars2Icon from '@heroicons/react/24/outline/Bars2Icon';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
-import EllipsisHorizontalIcon from '@heroicons/react/24/outline/EllipsisHorizontalIcon';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
@@ -37,11 +38,12 @@ interface ModuleFormSectionProps<
 > {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
   availableTemplates: NonNullable<ListTemplatesWithDataData>;
-  eventTypeArray: Form.UseFieldArrayReturn<T, U, 'key'>;
-  eventTypeIndex: number;
-  eventTypeKey: string;
+  fieldPath: Form.FieldPath<T>;
   form: Form.UseFormReturn<T>;
   hasOnlyOne?: boolean;
+  moduleArray: Form.UseFieldArrayReturn<T, U, 'key'>;
+  moduleIndex: number;
+  moduleKey: string;
   subjectId?: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
@@ -52,11 +54,12 @@ const ModuleFormSection = <
 >({
   availableInputs,
   availableTemplates,
-  eventTypeArray,
-  eventTypeIndex,
-  eventTypeKey,
+  fieldPath,
   form,
   hasOnlyOne,
+  moduleArray,
+  moduleIndex,
+  moduleKey,
   subjectId,
   subjects,
 }: ModuleFormSectionProps<T, U>) => {
@@ -67,7 +70,7 @@ const ModuleFormSection = <
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: eventTypeKey });
+  } = useSortable({ id: moduleKey });
 
   const [createInputModal, setCreateInputModal] =
     useState<Partial<GetInputData>>(null);
@@ -79,7 +82,7 @@ const ModuleFormSection = <
 
   const inputsArray = Form.useFieldArray({
     control: form.control,
-    name: `modules[${eventTypeIndex}].inputs` as Form.ArrayPath<T>,
+    name: `${fieldPath}.inputs` as Form.ArrayPath<T>,
   });
 
   const router = useRouter();
@@ -107,17 +110,44 @@ const ModuleFormSection = <
           {...attributes}
           {...listeners}
         />
-        <div className="smallcaps text-fg-4">Module {eventTypeIndex + 1}</div>
+        <div className="smallcaps pr-1.5 text-fg-4">
+          Module {moduleIndex + 1}
+        </div>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
-              <div className="rounded-full p-2 group-hover:bg-alpha-1">
-                <EllipsisHorizontalIcon className="w-5" />
+            <div className="group -mr-1 flex items-center justify-center p-1 text-fg-3 transition-colors hover:text-fg-2">
+              <div className="rounded-full p-2">
+                <EllipsisVerticalIcon className="w-5" />
               </div>
             </div>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="mx-2">
+              <DropdownMenu.Button
+                onClick={() =>
+                  moduleArray.insert(moduleIndex, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <ArrowUpIcon className="w-5 text-fg-4" />
+                Add module above
+              </DropdownMenu.Button>
+              <DropdownMenu.Button
+                onClick={() =>
+                  moduleArray.insert(moduleIndex + 1, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <ArrowDownIcon className="w-5 text-fg-4" />
+                Add module below
+              </DropdownMenu.Button>
+              <DropdownMenu.Separator />
               <Modal.Root
                 onOpenChange={toggleUseTemplateModal}
                 open={useTemplateModal}
@@ -153,19 +183,19 @@ const ModuleFormSection = <
                             ) as Form.PathValue<T, T[string]>;
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].name` as Form.Path<T>,
+                              `${fieldPath}.name` as Form.Path<T>,
                               template?.name as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].content` as Form.Path<T>,
+                              `${fieldPath}.content` as Form.Path<T>,
                               data?.content as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
 
                             form.setValue(
-                              `modules[${eventTypeIndex}].inputs` as Form.Path<T>,
+                              `${fieldPath}.inputs` as Form.Path<T>,
                               inputs as Form.PathValue<T, Form.Path<T>>,
                               { shouldDirty: true },
                             );
@@ -198,15 +228,15 @@ const ModuleFormSection = <
                   <DropdownMenu.Button
                     onClick={() => {
                       const { content, inputs, name } = form.getValues(
-                        `modules[${eventTypeIndex}]` as Form.Path<T>,
-                      );
+                        fieldPath,
+                      ) as SessionFormValues['modules'][0];
 
                       setCreateTemplateModal({
                         data: {
                           content,
-                          inputIds: inputs.map(({ id }: { id: string }) => id),
+                          inputIds: inputs.map(({ id }) => id),
                         },
-                        name,
+                        name: name ?? '',
                       });
                     }}
                   >
@@ -236,35 +266,14 @@ const ModuleFormSection = <
                   </Modal.Overlay>
                 </Modal.Portal>
               </Modal.Root>
-              <DropdownMenu.Button
-                onClick={() =>
-                  eventTypeArray.insert(eventTypeIndex, {
-                    content: '',
-                    inputs: [],
-                    name: '',
-                  } as Form.FieldValue<T>)
-                }
-              >
-                <ArrowUpIcon className="w-5 text-fg-4" />
-                Add module above
-              </DropdownMenu.Button>
-              <DropdownMenu.Button
-                onClick={() =>
-                  eventTypeArray.insert(eventTypeIndex + 1, {
-                    content: '',
-                    inputs: [],
-                    name: '',
-                  } as Form.FieldValue<T>)
-                }
-              >
-                <ArrowDownIcon className="w-5 text-fg-4" />
-                Add module below
-              </DropdownMenu.Button>
               {!hasOnlyOne && (
-                <DropdownMenuDeleteItem
-                  confirmText="Delete module"
-                  onConfirm={() => eventTypeArray.remove(eventTypeIndex)}
-                />
+                <>
+                  <DropdownMenu.Separator />
+                  <DropdownMenuDeleteItem
+                    confirmText="Delete module"
+                    onConfirm={() => moduleArray.remove(moduleIndex)}
+                  />
+                </>
               )}
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
@@ -274,11 +283,11 @@ const ModuleFormSection = <
         className="rounded-none border-t-0"
         maxLength={49}
         placeholder="Title"
-        {...form.register(`modules[${eventTypeIndex}].name` as Form.Path<T>)}
+        {...form.register(`${fieldPath}.name` as Form.Path<T>)}
       />
       <Form.Controller
         control={form.control}
-        name={`modules[${eventTypeIndex}].content` as T[string]}
+        name={`${fieldPath}.content` as T[string]}
         render={({ field }) => (
           <RichTextarea
             className="rounded-none border-t-0"
@@ -294,7 +303,7 @@ const ModuleFormSection = <
       >
         <Form.Controller
           control={form.control}
-          name={`modules[${eventTypeIndex}].inputs` as T[string]}
+          name={`${fieldPath}.inputs` as T[string]}
           render={({ field }) => (
             <Select
               className="rounded-t-none border-t-0"

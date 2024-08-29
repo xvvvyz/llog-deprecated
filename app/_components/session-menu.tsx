@@ -47,8 +47,8 @@ const SessionMenu = ({
         {isView ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
-          <div className="group mr-1.5 flex items-center justify-center px-2 text-fg-3 hover:text-fg-2 sm:mr-6">
-            <div className="rounded-full p-2 group-hover:bg-alpha-1">
+          <div className="group mr-1.5 flex items-center justify-center px-2 text-fg-3 transition-colors hover:text-fg-2 sm:mr-6">
+            <div className="rounded-full p-2 transition-colors group-hover:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>
@@ -70,15 +70,9 @@ const SessionMenu = ({
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate
           </DropdownMenu.Button>
-          <DropdownMenu.Button
-            href={`/templates/sessions/create/from-session/${sessionId}`}
-            scroll={false}
-          >
-            <PlusIcon className="w-5 text-fg-4" />
-            New template
-          </DropdownMenu.Button>
           {isList && (
             <>
+              <DropdownMenu.Separator />
               <DropdownMenu.Button
                 disabled={!isDraft && order >= highestPublishedOrder}
                 loading={isMoveRightTransitioning}
@@ -119,6 +113,15 @@ const SessionMenu = ({
               </DropdownMenu.Button>
             </>
           )}
+          <DropdownMenu.Separator />
+          <DropdownMenu.Button
+            href={`/templates/sessions/create/from-session/${sessionId}`}
+            scroll={false}
+          >
+            <PlusIcon className="w-5 text-fg-4" />
+            New template
+          </DropdownMenu.Button>
+          <DropdownMenu.Separator />
           <DropdownMenuDeleteItem
             confirmText="Delete session"
             onConfirm={async () => {

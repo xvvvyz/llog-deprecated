@@ -24,7 +24,7 @@ const Page = async () => {
       <PageModalHeader title="New session template" />
       <SessionTemplateForm
         availableInputs={availableInputs}
-        availableTemplates={availableTemplates}
+        availableModuleTemplates={availableTemplates}
         subjects={subjects}
       />
     </Modal.Content>

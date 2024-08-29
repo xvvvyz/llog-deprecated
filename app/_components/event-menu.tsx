@@ -29,7 +29,7 @@ const EventMenu = ({ className, eventId, isModal }: EventMenuProps) => {
               className,
             )}
           >
-            <div className="rounded-full p-2 group-hover:bg-alpha-1">
+            <div className="rounded-full p-2 transition-colors group-hover:bg-alpha-1">
               <EllipsisVerticalIcon className="w-5" />
             </div>
           </div>

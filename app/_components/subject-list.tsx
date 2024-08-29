@@ -19,7 +19,10 @@ const SubjectList = async ({
     {!!teamSubjects.length && (
       <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
         {teamSubjects.map((subject) => (
-          <li className="flex items-stretch hover:bg-alpha-1" key={subject.id}>
+          <li
+            className="flex items-stretch transition-colors hover:bg-alpha-1"
+            key={subject.id}
+          >
             <Button
               className="m-0 w-full gap-4 px-4 py-3 pr-0 leading-snug"
               href={`/subjects/${subject.id}`}

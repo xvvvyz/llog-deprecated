@@ -35,7 +35,7 @@ const Page = async ({ params: { sessionId } }: PageProps) => {
       <PageModalHeader title="New session template" />
       <SessionTemplateForm
         availableInputs={availableInputs}
-        availableTemplates={availableTemplates}
+        availableModuleTemplates={availableTemplates}
         disableCache
         isDuplicate
         subjects={subjects}
