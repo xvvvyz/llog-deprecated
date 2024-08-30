@@ -1,11 +1,11 @@
 import Empty from '@/_components/empty';
 import FilterableInputs from '@/_components/filterable-inputs';
-import listInputs from '@/_queries/list-inputs';
+import listInputsWithUses from '@/_queries/list-inputs-with-uses';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { sortBy } from 'lodash';
 
 const Page = async () => {
-  const { data: inputs } = await listInputs();
+  const { data: inputs } = await listInputsWithUses();
 
   if (!inputs?.length) {
     return (

@@ -116,6 +116,7 @@ const InputForm = ({
         ),
       )}
     >
+      <Input label="Label" required {...form.register('label')} />
       <Controller
         control={form.control}
         name="subjects"
@@ -132,15 +133,14 @@ const InputForm = ({
             placeholder="All subjects…"
             tooltip={
               <>
-                If this input isn&rsquo;t applicable to all of your subjects,
-                you can specify the relevant subjects here.
+                The input will only be available for the&nbsp;specified
+                subjects.
               </>
             }
             value={field.value as PropsValue<IOption>}
           />
         )}
       />
-      <Input label="Label" required {...form.register('label')} />
       <Controller
         control={form.control}
         name="type"

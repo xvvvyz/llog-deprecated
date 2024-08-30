@@ -111,7 +111,7 @@ const TimelineSessionCard = ({
                         />
                       </div>
                     </div>
-                    <div className="smallcaps flex w-full items-center justify-between gap-4 pb-0.5 pt-1 text-fg-4">
+                    <div className="smallcaps flex w-full items-center justify-between gap-4 pb-0.5 pt-1.5 text-fg-4">
                       <div className="flex min-w-0 items-center gap-2 whitespace-nowrap">
                         <div>Completed by</div>
                         <Avatar

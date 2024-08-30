@@ -21,17 +21,17 @@ const PageModalHeader = ({
 }: PageModalHeaderProps) => (
   <div
     className={twMerge(
-      'flex items-start justify-between gap-8 px-4 pb-6 pt-8 sm:px-8',
+      'flex items-start justify-between gap-8 px-4 py-6 sm:px-8',
       className,
     )}
   >
     <div className="min-w-0">
       {title && (
-        <Modal.Title className="-my-1 truncate text-xl">{title}</Modal.Title>
+        <Modal.Title className="-mb-1 truncate text-xl">{title}</Modal.Title>
       )}
       {subtitle}
     </div>
-    <div className="relative -top-1 right-1 flex shrink-0 items-center gap-6">
+    <div className="relative right-1 top-0 flex shrink-0 items-center gap-6">
       {right}
       <PageModalBackIconButton
         icon={<XMarkIcon className="w-7" />}

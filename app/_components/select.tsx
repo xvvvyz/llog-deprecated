@@ -355,7 +355,7 @@ const Select = <TOption extends IOption>(
           </label>
         )}
         {tooltip && (
-          <Tip className="relative -top-1 -mr-[0.2rem]" side="left">
+          <Tip className="relative -top-1 -mr-1" side="left">
             {tooltip}
           </Tip>
         )}

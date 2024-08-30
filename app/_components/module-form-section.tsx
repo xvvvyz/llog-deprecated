@@ -14,6 +14,7 @@ import Select, { IOption } from '@/_components/select';
 import { SessionFormValues } from '@/_components/session-form';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
+import { ListInputsData } from '@/_queries/list-inputs';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
@@ -36,7 +37,7 @@ interface ModuleFormSectionProps<
   T extends Form.FieldValues,
   U extends Form.ArrayPath<T>,
 > {
-  availableInputs: NonNullable<ListInputsBySubjectIdData>;
+  availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   availableTemplates: NonNullable<ListTemplatesWithDataData>;
   fieldPath: Form.FieldPath<T>;
   form: Form.UseFormReturn<T>;

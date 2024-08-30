@@ -26,7 +26,7 @@ const listInputsBySubjectId = async (subjectId: string) => {
     .eq('archived', false)
     .not('id', 'in', `(${blacklist.data.map((is) => is.input_id).join(',')})`)
     .eq('subjects.deleted', false)
-    .eq('subjects.archived', false)
+    .not('subjects.archived', 'is', null)
     .order('name', { referencedTable: 'subjects' })
     .order('label');
 };

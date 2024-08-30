@@ -5,42 +5,33 @@ import Button from '@/_components/button';
 import Input from '@/_components/input';
 import InputMenu from '@/_components/input-menu';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
-import { ListInputsData } from '@/_queries/list-inputs';
+import { ListInputsWithUsesData } from '@/_queries/list-inputs-with-uses';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
-
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
+import * as React from 'react';
 
 interface FilterableInputsProps {
-  inputs: NonNullable<ListInputsData>;
+  inputs: NonNullable<ListInputsWithUsesData>;
 }
 
 const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
-  const [, startTransition] = useTransition();
-  const ref = useRef<HTMLInputElement>(null);
+  const [, startTransition] = React.useTransition();
+  const ref = React.useRef<HTMLInputElement>(null);
 
-  const [filteredInputs, setFilteredInputs] = useState<
-    NonNullable<ListInputsData>
+  const [filteredInputs, setFilteredInputs] = React.useState<
+    NonNullable<ListInputsWithUsesData>
   >([]);
 
-  const fuse = useMemo(
+  const fuse = React.useMemo(
     () =>
       new Fuse(inputs, {
-        keys: ['label', 'subjects.name', 'type'],
+        keys: ['label', 'subjects.name', 'type', 'uses.subject.name'],
         threshold: 0.3,
       }),
     [inputs],
   );
 
-  const filter = useCallback(
+  const filter = React.useCallback(
     (value: string) =>
       setFilteredInputs(fuse.search(value).map((result) => result.item)),
     [fuse],
@@ -49,7 +40,7 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
   const inputsLen = inputs.length;
   const prevInputsLen = usePrevious(inputsLen);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (inputsLen !== prevInputsLen) {
       setFilteredInputs(inputs);
       if (ref.current?.value) filter(ref.current.value);
@@ -60,7 +51,9 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
     <div className="space-y-4">
       <div className="px-4">
         <Input
-          onChange={({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+          onChange={({
+            target: { value },
+          }: React.ChangeEvent<HTMLInputElement>) =>
             startTransition(() => {
               if (value) filter(value);
               else setFilteredInputs(inputs);
@@ -84,22 +77,37 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
             >
               <div className="min-w-0">
                 <div className="truncate">{input.label}</div>
-                <div className="smallcaps pb-0.5 pt-1 text-fg-4">
-                  {INPUT_TYPE_LABELS[input.type]}
+                <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
+                  {!!input.subjects.length && (
+                    <>
+                      <div className="mr-0.5 flex shrink-0 gap-1">
+                        {input.subjects.map(({ id, image_uri }) => (
+                          <Avatar
+                            className="size-4"
+                            file={image_uri}
+                            key={id}
+                            id={id}
+                          />
+                        ))}
+                      </div>
+                      &#8226;
+                    </>
+                  )}
+                  <div className="min-w-0">
+                    <div className="truncate">
+                      {INPUT_TYPE_LABELS[input.type]}
+                    </div>
+                  </div>
+                  &#8226;
+                  <div className="min-w-0">
+                    <div className="truncate">
+                      {input.uses.length
+                        ? `${input.uses.length} use${input.uses.length === 1 ? '' : 's'}`
+                        : 'Not used'}
+                    </div>
+                  </div>
                 </div>
               </div>
-              {!!input.subjects.length && (
-                <div className="-my-0.5 ml-auto flex shrink-0 gap-1.5">
-                  {input.subjects.map(({ id, image_uri }) => (
-                    <Avatar
-                      className="size-5"
-                      file={image_uri}
-                      key={id}
-                      id={id}
-                    />
-                  ))}
-                </div>
-              )}
             </Button>
             <InputMenu inputId={input.id} />
           </li>

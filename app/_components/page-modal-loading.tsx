@@ -11,10 +11,10 @@ interface LoadingProps {
 
 const PageModalLoading = ({ className }: LoadingProps) => (
   <Modal.Content className={className}>
-    <div className="align-start flex justify-between px-4 py-8 sm:px-8">
+    <div className="align-start flex justify-between px-4 py-6 sm:px-8">
       <Modal.Title className="h-6 w-32 animate-pulse rounded-sm bg-alpha-3" />
       <PageModalBackIconButton
-        className="relative -top-1 right-1 shrink-0"
+        className="relative right-1 top-0 shrink-0"
         icon={<XMarkIcon className="w-7" />}
       />
     </div>

@@ -1,6 +1,6 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getInput = (inputId: string) =>
+const getInputWithUses = (inputId: string) =>
   createServerSupabaseClient()
     .from('inputs')
     .select(
@@ -10,14 +10,18 @@ const getInput = (inputId: string) =>
       options:input_options(id, label),
       settings,
       subjects(id),
-      type`,
+      type,
+      uses:event_types(subject:subjects(id, name, image_uri))`,
     )
     .eq('id', inputId)
     .eq('subjects.deleted', false)
     .not('subjects.archived', 'is', null)
+    .eq('event_types.subjects.deleted', false)
     .order('order', { referencedTable: 'options' })
     .single();
 
-export type GetInputData = Awaited<ReturnType<typeof getInput>>['data'];
+export type GetInputWithUsesData = Awaited<
+  ReturnType<typeof getInputWithUses>
+>['data'];
 
-export default getInput;
+export default getInputWithUses;

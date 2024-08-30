@@ -1,17 +1,27 @@
 import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listInputs = async () =>
+const listInputsWithUses = async () =>
   createServerSupabaseClient()
     .from('inputs')
-    .select('id, label, subjects(id, image_uri, name), type')
+    .select(
+      `
+      id,
+      label,
+      subjects(id, image_uri, name),
+      type,
+      uses:event_types(subject:subjects(id, name))`,
+    )
     .eq('team_id', (await getCurrentUser())?.id ?? '')
     .eq('archived', false)
     .eq('subjects.deleted', false)
     .not('subjects.archived', 'is', null)
+    .eq('event_types.subjects.deleted', false)
     .order('name', { referencedTable: 'subjects' })
     .order('label');
 
-export type ListInputsData = Awaited<ReturnType<typeof listInputs>>['data'];
+export type ListInputsWithUsesData = Awaited<
+  ReturnType<typeof listInputsWithUses>
+>['data'];
 
-export default listInputs;
+export default listInputsWithUses;

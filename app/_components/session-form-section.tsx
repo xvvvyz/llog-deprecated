@@ -6,6 +6,7 @@ import Input from '@/_components/input';
 import * as Modal from '@/_components/modal';
 import ModuleFormSection from '@/_components/module-form-section';
 import Tip from '@/_components/tip';
+import { ListInputsData } from '@/_queries/list-inputs';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
@@ -20,7 +21,7 @@ import { useState } from 'react';
 import * as Form from 'react-hook-form';
 
 export interface SessionFormSectionProps<T extends Form.FieldValues> {
-  availableInputs: NonNullable<ListInputsBySubjectIdData>;
+  availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   availableModuleTemplates: NonNullable<ListTemplatesWithDataData>;
   fieldPath?: Form.FieldPath<T>;
   form: Form.UseFormReturn<T>;

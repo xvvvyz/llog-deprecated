@@ -14,6 +14,7 @@ import upsertModuleTemplate from '@/_mutations/upsert-module-template';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
+import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ModuleTemplateDataJson } from '@/_types/module-template-data-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
@@ -24,7 +25,7 @@ import { useState, useTransition } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
 
 interface ModuleTemplateFormProps {
-  availableInputs: NonNullable<ListInputsData>;
+  availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   disableCache?: boolean;
   onClose?: () => void;
   onSubmit?: () => void;
@@ -34,7 +35,7 @@ interface ModuleTemplateFormProps {
 
 export type ModuleTemplateFormValues = {
   content: string;
-  inputs: NonNullable<ListInputsData>;
+  inputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   name: string;
 };
 

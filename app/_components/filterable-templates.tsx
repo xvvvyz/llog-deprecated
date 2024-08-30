@@ -77,7 +77,7 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
             >
               <div className="min-w-0">
                 <div className="truncate">{template.name}</div>
-                <div className="smallcaps pb-0.5 pt-1 text-fg-4">
+                <div className="smallcaps pb-0.5 pt-1.5 text-fg-4">
                   {TEMPLATE_TYPE_LABELS[template.type]}
                 </div>
               </div>
