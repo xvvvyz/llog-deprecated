@@ -35,9 +35,10 @@ const SessionFormSection = <T extends Form.FieldValues>({
   availableInputs,
   availableModuleTemplates,
   fieldPath,
+  form,
   includeScheduledFor,
   includeTitle,
-  form,
+  subjectId,
   subjects,
 }: SessionFormSectionProps<T>) => {
   const [ogScheduledFor, setOgScheduledFor] = useState<string | null>(null);
@@ -203,12 +204,13 @@ const SessionFormSection = <T extends Form.FieldValues>({
                   availableInputs={availableInputs}
                   availableTemplates={availableModuleTemplates}
                   fieldPath={`${modulesFieldPath}[${i}]` as Form.FieldPath<T>}
-                  moduleArray={modulesArray}
-                  moduleIndex={i}
-                  moduleKey={module.key}
                   form={form}
                   hasOnlyOne={modulesArray.fields.length === 1}
                   key={module.key}
+                  moduleArray={modulesArray}
+                  moduleIndex={i}
+                  moduleKey={module.key}
+                  subjectId={subjectId}
                   subjects={subjects}
                 />
               ))}
