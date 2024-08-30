@@ -6,6 +6,7 @@ import Input from '@/_components/input';
 import InputMenu from '@/_components/input-menu';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import { ListInputsWithUsesData } from '@/_queries/list-inputs-with-uses';
+import getInputUsedBySubjectMap from '@/_utilities/get-input-used-by-subject-map';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
 import * as React from 'react';
@@ -64,54 +65,59 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
         />
       </div>
       <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1 empty:hidden">
-        {filteredInputs.map((input) => (
-          <li
-            className="flex items-stretch transition-colors hover:bg-alpha-1"
-            key={input.id}
-          >
-            <Button
-              className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
-              href={`/inputs/${input.id}`}
-              scroll={false}
-              variant="link"
+        {filteredInputs.map((input) => {
+          const usedBy =
+            getInputUsedBySubjectMap<NonNullable<ListInputsWithUsesData>[0]>(
+              input,
+            );
+
+          return (
+            <li
+              className="flex items-stretch transition-colors hover:bg-alpha-1"
+              key={input.id}
             >
-              <div className="min-w-0">
-                <div className="truncate">{input.label}</div>
-                <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
-                  {!!input.subjects.length && (
-                    <>
-                      <div className="mr-0.5 flex shrink-0 gap-1">
-                        {input.subjects.map(({ id, image_uri }) => (
-                          <Avatar
-                            className="size-4"
-                            file={image_uri}
-                            key={id}
-                            id={id}
-                          />
-                        ))}
+              <Button
+                className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
+                href={`/inputs/${input.id}`}
+                scroll={false}
+                variant="link"
+              >
+                <div className="min-w-0">
+                  <div className="truncate">{input.label}</div>
+                  <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
+                    {!!input.subjects.length && (
+                      <>
+                        <div className="mr-0.5 flex shrink-0 gap-1">
+                          {input.subjects.map(({ id, image_uri }) => (
+                            <Avatar
+                              className="size-4"
+                              file={image_uri}
+                              key={id}
+                              id={id}
+                            />
+                          ))}
+                        </div>
+                        &#8226;
+                      </>
+                    )}
+                    <div className="min-w-0">
+                      <div className="truncate">
+                        {INPUT_TYPE_LABELS[input.type]}
                       </div>
-                      &#8226;
-                    </>
-                  )}
-                  <div className="min-w-0">
-                    <div className="truncate">
-                      {INPUT_TYPE_LABELS[input.type]}
                     </div>
-                  </div>
-                  &#8226;
-                  <div className="min-w-0">
-                    <div className="truncate">
-                      {input.uses.length
-                        ? `${input.uses.length} use${input.uses.length === 1 ? '' : 's'}`
-                        : 'Not used'}
+                    &#8226;
+                    <div className="min-w-0">
+                      <div className="truncate">
+                        {usedBy.size ? `Used by ${usedBy.size}` : 'Not used'}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Button>
-            <InputMenu inputId={input.id} />
-          </li>
-        ))}
+              </Button>
+              <InputMenu inputId={input.id} />
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
