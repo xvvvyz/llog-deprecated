@@ -47,6 +47,7 @@ const Page = async () => {
         <div className="mt-16 flex h-8 items-center justify-between gap-8 px-4">
           <h1 className="text-2xl">Subjects</h1>
           <Button
+            className="pl-3"
             href={
               user.app_metadata.subscription_status !==
                 SubscriptionStatus.Active && teamSubjects.length >= 2
@@ -56,7 +57,7 @@ const Page = async () => {
             scroll={false}
             size="sm"
           >
-            <PlusIcon className="-ml-1 w-5 stroke-2" />
+            <PlusIcon className="w-5 stroke-2" />
             New subject
           </Button>
         </div>

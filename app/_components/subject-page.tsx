@@ -58,7 +58,7 @@ const SubjectPage = async ({
     isPublic ? Promise.resolve({ count: 0 }) : countUnarchivedTeamSubjects(),
   ]);
 
-  if (!subject) return null;
+  if (!subject || !events) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const subjectData = subject.data as SubjectDataJson;
@@ -66,70 +66,85 @@ const SubjectPage = async ({
   return (
     <div className="px-4">
       <div className="mt-16 flex h-8 items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-4">
-          {!isPublic && (
-            <IconButton
-              href="/subjects"
-              icon={<ArrowLeftIcon className="relative -left-[0.16em] w-7" />}
-              label="Back"
-            />
-          )}
-          <h1 className="truncate text-2xl">{subject.name}</h1>
-        </div>
-        {isTeamMember && !isPublic ? (
-          <div className="flex shrink-0 gap-4">
-            {!subject.archived && (
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
-                  <Button size="sm">
-                    New&hellip;
-                    <ChevronDownIcon className="-mr-1 w-5 stroke-2" />
-                  </Button>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Portal>
-                  <DropdownMenu.Content>
-                    <div className="relative">
-                      <DropdownMenu.Button
-                        href={`/subjects/${subjectId}/event-types/create`}
-                        scroll={false}
-                      >
-                        <PlusIcon className="w-5 text-fg-4" />
-                        Event type
-                      </DropdownMenu.Button>
-                      <Tip className="absolute right-3 top-2.5">
-                        Use event types to track individual behaviors,
-                        activities etc. For example: &ldquo;Barking&rdquo; or
-                        &ldquo;Medication&rdquo;.
-                      </Tip>
-                    </div>
-                    <div className="relative">
-                      <DropdownMenu.Button
-                        href={`/subjects/${subjectId}/training-plans/create`}
-                        scroll={false}
-                      >
-                        <PlusIcon className="w-5 text-fg-4" />
-                        Training plan
-                      </DropdownMenu.Button>
-                      <Tip className="absolute right-3 top-2.5">
-                        Use training plans to teach new behaviors, skills etc.
-                        For example: &ldquo;Reduce separation anxiety&rdquo;.
-                      </Tip>
-                    </div>
-                  </DropdownMenu.Content>
-                </DropdownMenu.Portal>
-              </DropdownMenu.Root>
+        <div className="min-w-0">
+          <div className="flex items-center gap-4 sm:gap-6">
+            {!isPublic && (
+              <IconButton
+                className="-ml-3.5"
+                href="/subjects"
+                icon={<ArrowLeftIcon className="w-7" />}
+                label="Back"
+              />
             )}
-            <SubjectMenu
-              canUnarchive={
-                user.app_metadata.subscription_status ===
-                  SubscriptionStatus.Active ||
-                (unarchivedTeamSubjectsCount ?? 0) < 2
-              }
-              subject={subject}
-            />
+            <div className="min-w-0">
+              {!isPublic && isTeamMember ? (
+                <SubjectMenu
+                  canUnarchive={
+                    user.app_metadata.subscription_status ===
+                      SubscriptionStatus.Active ||
+                    (unarchivedTeamSubjectsCount ?? 0) < 2
+                  }
+                  subject={subject}
+                />
+              ) : (
+                <h1 className="font-semibold truncate text-2xl">
+                  {subject.name}
+                </h1>
+              )}
+            </div>
           </div>
-        ) : (
-          <Avatar file={subject.image_uri} id={subject.id} />
+        </div>
+        {!isPublic && isTeamMember && !subject.archived && (
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Button
+                className="shrink-0 pl-5"
+                disabled={subject.archived}
+                size="sm"
+              >
+                New&hellip;
+                <ChevronDownIcon className="w-5 stroke-2" />
+              </Button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content>
+                <div className="relative">
+                  <DropdownMenu.Button
+                    href={`/subjects/${subjectId}/event-types/create`}
+                    scroll={false}
+                  >
+                    <PlusIcon className="w-5 text-fg-4" />
+                    Event type
+                  </DropdownMenu.Button>
+                  <Tip align="end" className="absolute right-4 top-2.5">
+                    Use event types to track individual behaviors, activities
+                    etc. For example: &ldquo;Barking&rdquo; or
+                    &ldquo;Medication&rdquo;.
+                  </Tip>
+                </div>
+                <div className="relative">
+                  <DropdownMenu.Button
+                    href={`/subjects/${subjectId}/training-plans/create`}
+                    scroll={false}
+                  >
+                    <PlusIcon className="w-5 text-fg-4" />
+                    Training plan
+                  </DropdownMenu.Button>
+                  <Tip align="end" className="absolute right-4 top-2.5">
+                    Use training plans to teach new behaviors, skills etc. For
+                    example: &ldquo;Reduce separation anxiety&rdquo;.
+                  </Tip>
+                </div>
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+        )}
+        {(isPublic || !isTeamMember) && (
+          <Avatar
+            className="size-[calc(theme('spacing.8')+2px)]"
+            file={subject.image_uri}
+            id={subject.id}
+          />
         )}
       </div>
       {!isPublic && (
@@ -153,7 +168,7 @@ const SubjectPage = async ({
                       <li className="group" key={link.url}>
                         <Button
                           className={twMerge(
-                            'w-full justify-between rounded-none border-b-0 pr-3 group-first:rounded-t group-last:rounded-b group-last:border-b',
+                            'w-full justify-between rounded-none border-b-0 group-first:rounded-t group-last:rounded-b group-last:border-b',
                             subjectData?.banner && 'group-first:rounded-t-none',
                           )}
                           colorScheme="transparent"
@@ -161,7 +176,7 @@ const SubjectPage = async ({
                           target="_blank"
                         >
                           {link.label}
-                          <ArrowTopRightOnSquareIcon className="mr-0.5 w-5" />
+                          <ArrowTopRightOnSquareIcon className="w-5" />
                         </Button>
                       </li>
                     ))}
@@ -193,7 +208,7 @@ const SubjectPage = async ({
           <ArrowUpRightIcon className="-mr-0.5 w-5" />
         </Button>
       </div>
-      {!!events?.length ? (
+      {!!events.length ? (
         <TimelineEvents
           events={events}
           filters={f}

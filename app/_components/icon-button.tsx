@@ -26,7 +26,7 @@ const IconButton = ({
 
   return (
     <Button
-      className={twMerge('print:hidden', className)}
+      className={twMerge('shrink-0 print:hidden', className)}
       disabled={loading || pending}
       type={type}
       variant="link"

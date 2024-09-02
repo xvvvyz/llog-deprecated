@@ -1,3 +1,5 @@
 import SubjectLoading from '@/_components/subject-loading';
 
-export default SubjectLoading;
+const Loading = () => <SubjectLoading isPublic />;
+
+export default Loading;

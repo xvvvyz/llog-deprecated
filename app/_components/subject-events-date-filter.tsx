@@ -39,7 +39,7 @@ const SubjectEventsDateFilter = () => {
     <Popover.Root>
       <Popover.Trigger asChild>
         <Button colorScheme="transparent" loading={isTransitioning} size="sm">
-          {!isTransitioning && <CalendarDaysIcon className="-ml-1 w-5" />}
+          {!isTransitioning && <CalendarDaysIcon className="-ml-0.5 w-5" />}
           {opDate?.from && opDate?.to ? (
             <>
               {formatDate(opDate.from, { month: 'short', weekday: undefined })}

@@ -16,8 +16,8 @@ import ArchiveBoxIcon from '@heroicons/react/24/outline/ArchiveBoxIcon';
 import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
 import ArrowDownTrayIcon from '@heroicons/react/24/outline/ArrowDownTrayIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/outline/ArrowTopRightOnSquareIcon';
-import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import CheckIcon from '@heroicons/react/24/outline/CheckIcon';
+import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ClipboardDocumentIcon from '@heroicons/react/24/outline/ClipboardDocumentIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
@@ -57,14 +57,22 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
             </div>
           </div>
         ) : (
-          <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
-            <Bars3Icon className="w-5" />
-            <Avatar file={subject.image_uri} id={subject.id} />
+          <div className="flex items-center gap-2 rounded-sm border border-alpha-3 pr-4 transition-colors hover:bg-alpha-1">
+            <Avatar
+              className="-m-px size-[calc(theme('spacing.8')+2px)]"
+              file={subject.image_uri}
+              id={subject.id}
+            />
+            <div className="min-w-0 pl-3">
+              <div className="truncate">{subject.name}</div>
+            </div>
+            <ChevronDownIcon className="w-5 shrink-0" />
           </div>
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
+          align={isList ? 'end' : 'start'}
           className={twMerge(isList && 'mx-2')}
           sideOffset={isList ? -2 : 7}
         >
@@ -116,7 +124,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
                 </>
               )}
             </DropdownMenu.Button>
-            <Tip className="absolute right-3 top-2.5" side="left">
+            <Tip align="end" className="absolute right-4 top-2.5">
               Clients can complete training plans, record events
               and&nbsp;comment.
             </Tip>

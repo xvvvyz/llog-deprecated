@@ -14,9 +14,9 @@ const Layout = ({ children }: LayoutProps) => (
       <h1 className="text-2xl">Templates</h1>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button size="sm">
+          <Button className="pl-5" size="sm">
             New&hellip;
-            <ChevronDownIcon className="-mr-1 w-5 stroke-2" />
+            <ChevronDownIcon className="w-5 stroke-2" />
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>

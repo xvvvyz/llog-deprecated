@@ -96,11 +96,11 @@ const SessionFormSection = <T extends Form.FieldValues>({
             <Modal.Root onOpenChange={cancelScheduleModal} open={scheduleModal}>
               <Modal.Trigger asChild onClick={(e) => e.preventDefault()}>
                 <Button
-                  className="mt-4 w-full"
+                  className="mt-4 w-full pl-3"
                   colorScheme="transparent"
                   onClick={openScheduleModal}
                 >
-                  <ClockIcon className="-ml-1 w-5" />
+                  <ClockIcon className="w-5" />
                   {scheduledFor ? (
                     <span>
                       Scheduled for{' '}

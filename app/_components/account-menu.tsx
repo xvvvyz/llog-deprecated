@@ -32,7 +32,7 @@ const AccountMenu = ({ user }: AccountMenuProps) => {
         <div className="flex gap-2 rounded-sm border border-alpha-3 pl-2 transition-colors hover:bg-alpha-1">
           <Bars3Icon className="w-5" />
           <Avatar
-            className="-m-px"
+            className="-m-px size-[calc(theme('spacing.8')+2px)]"
             file={user?.user_metadata?.image_uri}
             id={user?.id}
           />

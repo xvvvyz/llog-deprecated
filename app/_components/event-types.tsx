@@ -1,7 +1,7 @@
 import Button from '@/_components/button';
 import EventTypeMenu from '@/_components/event-type-menu';
 import listSubjectEventTypes from '@/_queries/list-subject-event-types';
-import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
 
 interface EventTypesProps {
@@ -30,9 +30,7 @@ const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
             variant="link"
           >
             {eventType.name}
-            {!isTeamMember && (
-              <ArrowUpRightIcon className="ml-auto w-5 shrink-0" />
-            )}
+            {!isTeamMember && <PlusIcon className="ml-auto w-5 shrink-0" />}
           </Button>
           {isTeamMember && (
             <EventTypeMenu eventTypeId={eventType.id} subjectId={subjectId} />
