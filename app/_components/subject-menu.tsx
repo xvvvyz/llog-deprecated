@@ -63,7 +63,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
               file={subject.image_uri}
               id={subject.id}
             />
-            <div className="min-w-0 pl-3">
+            <div className="min-w-0 pl-1">
               <div className="truncate">{subject.name}</div>
             </div>
             <ChevronDownIcon className="w-5 shrink-0" />
