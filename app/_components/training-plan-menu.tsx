@@ -11,14 +11,14 @@ import { useRouter } from 'next/navigation';
 
 interface TrainingPlanMenuProps {
   isModal?: boolean;
-  missionId: string;
   subjectId: string;
+  trainingPlanId: string;
 }
 
 const TrainingPlanMenu = ({
   isModal,
-  missionId,
   subjectId,
+  trainingPlanId,
 }: TrainingPlanMenuProps) => {
   const router = useRouter();
 
@@ -38,14 +38,14 @@ const TrainingPlanMenu = ({
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="mx-2" sideOffset={-2}>
           <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${missionId}/edit`}
+            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/edit`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit name
           </DropdownMenu.Button>
           <DropdownMenu.Button
-            href={`/templates/training-plans/create/from-training-plan/${missionId}`}
+            href={`/templates/training-plans/create/from-training-plan/${trainingPlanId}`}
             scroll={false}
           >
             <PlusIcon className="w-5 text-fg-4" />
@@ -54,7 +54,7 @@ const TrainingPlanMenu = ({
           <DropdownMenuDeleteItem
             confirmText="Delete training plan"
             onConfirm={async () => {
-              await deleteTrainingPlan(missionId);
+              await deleteTrainingPlan(trainingPlanId);
               if (isModal) router.back();
             }}
           />

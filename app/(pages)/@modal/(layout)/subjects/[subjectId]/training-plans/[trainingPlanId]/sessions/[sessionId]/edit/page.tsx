@@ -10,33 +10,33 @@ import listTemplatesWithData from '@/_queries/list-templates-with-data';
 
 interface PageProps {
   params: {
-    missionId: string;
     order: string;
     sessionId: string;
     subjectId: string;
+    trainingPlanId: string;
   };
 }
 
 const Page = async ({
-  params: { missionId, order, sessionId, subjectId },
+  params: { sessionId, subjectId, trainingPlanId },
 }: PageProps) => {
   const [
     { data: availableInputs },
     { data: availableModuleTemplates },
     { data: availableSessionTemplates },
-    { data: mission },
     { data: session },
     { data: subject },
     { data: subjects },
+    { data: trainingPlan },
     user,
   ] = await Promise.all([
     listInputsBySubjectId(subjectId),
     listTemplatesWithData({ type: TemplateType.Module }),
     listTemplatesWithData({ type: TemplateType.Session }),
-    getTrainingPlanWithSessions(missionId, { draft: true }),
     getSession(sessionId),
     getSubject(subjectId),
     listSubjectsByTeamId(),
+    getTrainingPlanWithSessions(trainingPlanId, { draft: true }),
     getCurrentUser(),
   ]);
 
@@ -44,10 +44,10 @@ const Page = async ({
     !availableInputs ||
     !availableModuleTemplates ||
     !availableSessionTemplates ||
-    !mission ||
     !session ||
     !subject ||
     !subjects ||
+    !trainingPlan ||
     !user ||
     subject.team_id !== user.id
   ) {
@@ -59,12 +59,10 @@ const Page = async ({
       availableInputs={availableInputs}
       availableModuleTemplates={availableModuleTemplates}
       availableSessionTemplates={availableSessionTemplates}
-      isDuplicate
-      mission={mission}
-      order={order}
       session={session}
       subjectId={subjectId}
       subjects={subjects}
+      trainingPlan={trainingPlan}
     />
   );
 };

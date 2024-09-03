@@ -52,7 +52,7 @@ const getInsightOptionsFromEvents = ({
     }
 
     if (!inputIdMatch) continue;
-    const tp = et.session?.mission;
+    const tp = et.session?.training_plan;
 
     if (!et.session && !eventTypeOptions.some((o) => o.id === et.id)) {
       eventTypeOptions.push({ id: et.id, label: et.name as string });

@@ -4,7 +4,11 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { revalidatePath } from 'next/cache';
 
 const deleteTrainingPlan = async (id: string) => {
-  await createServerSupabaseClient().from('missions').delete().eq('id', id);
+  await createServerSupabaseClient()
+    .from('training_plans')
+    .delete()
+    .eq('id', id);
+
   revalidatePath('/', 'layout');
 };
 

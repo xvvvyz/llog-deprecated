@@ -1,7 +1,6 @@
 import SessionForm from '@/_components/session-form';
 import TemplateType from '@/_constants/enum-template-type';
 import getCurrentUser from '@/_queries/get-current-user';
-import getSession from '@/_queries/get-session';
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
@@ -10,33 +9,30 @@ import listTemplatesWithData from '@/_queries/list-templates-with-data';
 
 interface PageProps {
   params: {
-    missionId: string;
     order: string;
-    sessionId: string;
     subjectId: string;
+    trainingPlanId: string;
   };
 }
 
 const Page = async ({
-  params: { missionId, sessionId, subjectId },
+  params: { order, subjectId, trainingPlanId },
 }: PageProps) => {
   const [
     { data: availableInputs },
     { data: availableModuleTemplates },
     { data: availableSessionTemplates },
-    { data: mission },
-    { data: session },
     { data: subject },
     { data: subjects },
+    { data: trainingPlan },
     user,
   ] = await Promise.all([
     listInputsBySubjectId(subjectId),
     listTemplatesWithData({ type: TemplateType.Module }),
     listTemplatesWithData({ type: TemplateType.Session }),
-    getTrainingPlanWithSessions(missionId, { draft: true }),
-    getSession(sessionId),
     getSubject(subjectId),
     listSubjectsByTeamId(),
+    getTrainingPlanWithSessions(trainingPlanId, { draft: true }),
     getCurrentUser(),
   ]);
 
@@ -44,10 +40,9 @@ const Page = async ({
     !availableInputs ||
     !availableModuleTemplates ||
     !availableSessionTemplates ||
-    !mission ||
-    !session ||
     !subject ||
     !subjects ||
+    !trainingPlan ||
     !user ||
     subject.team_id !== user.id
   ) {
@@ -59,10 +54,10 @@ const Page = async ({
       availableInputs={availableInputs}
       availableModuleTemplates={availableModuleTemplates}
       availableSessionTemplates={availableSessionTemplates}
-      mission={mission}
-      session={session}
+      order={order}
       subjectId={subjectId}
       subjects={subjects}
+      trainingPlan={trainingPlan}
     />
   );
 };

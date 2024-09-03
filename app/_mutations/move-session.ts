@@ -6,24 +6,26 @@ import { revalidatePath } from 'next/cache';
 const moveSession = async ({
   currentOrder,
   isDraft,
-  missionId,
   newOrder,
   sessionId,
+  trainingPlanId,
 }: {
   currentOrder: number;
   isDraft: boolean;
-  missionId: string;
   newOrder: number;
   sessionId: string;
+  trainingPlanId: string;
 }) => {
   const supabase = createServerSupabaseClient();
-  const update = [{ id: sessionId, mission_id: missionId, order: newOrder }];
+  const update = [
+    { id: sessionId, order: newOrder, training_plan_id: trainingPlanId },
+  ];
 
   if (!isDraft) {
     const { data: swapWith } = await supabase
       .from('sessions')
       .select('id')
-      .eq('mission_id', missionId)
+      .eq('training_plan_id', trainingPlanId)
       .eq('"order"', newOrder)
       .eq('draft', false)
       .single();
@@ -31,8 +33,8 @@ const moveSession = async ({
     if (swapWith) {
       update.push({
         id: swapWith.id,
-        mission_id: missionId,
         order: currentOrder,
+        training_plan_id: trainingPlanId,
       });
     }
   }

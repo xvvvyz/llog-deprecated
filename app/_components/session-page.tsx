@@ -23,23 +23,23 @@ import ChevronRightIcon from '@heroicons/react/24/outline/ChevronRightIcon';
 
 interface SessionPageProps {
   isPublic?: boolean;
-  missionId: string;
   sessionId: string;
   subjectId: string;
+  trainingPlanId: string;
 }
 
 const SessionPage = async ({
   isPublic,
-  missionId,
   sessionId,
   subjectId,
+  trainingPlanId,
 }: SessionPageProps) => {
   const [{ data: subject }, { data: trainingPlan }, { data: session }, user] =
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic
-        ? getPublicTrainingPlanWithSessions(missionId)
-        : getTrainingPlanWithSessions(missionId),
+        ? getPublicTrainingPlanWithSessions(trainingPlanId)
+        : getTrainingPlanWithSessions(trainingPlanId),
       isPublic
         ? getPublicSessionWithDetails(sessionId)
         : getSessionWithDetails(sessionId),
@@ -90,18 +90,18 @@ const SessionPage = async ({
               highestPublishedOrder={highestPublishedOrder}
               isDraft={session.draft}
               isView
-              missionId={missionId}
               nextSessionOrder={highestOrder + 1}
               order={session.order}
               sessionId={sessionId}
               subjectId={subjectId}
+              trainingPlanId={trainingPlanId}
             />
           )
         }
         subtitle={
           <Button
             className="pt-4"
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions`}
+            href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions`}
             scroll={false}
             variant="link"
           >
@@ -114,7 +114,7 @@ const SessionPage = async ({
       <nav className="flex w-full items-center justify-between px-4 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${previousSessionId}`}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${previousSessionId}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
@@ -130,7 +130,7 @@ const SessionPage = async ({
         </div>
         <IconButton
           disabled={!nextSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${nextSessionId}`}
+          href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${nextSessionId}`}
           icon={<ChevronRightIcon className="relative right-1 w-7" />}
           label="Next session"
           replace
@@ -170,8 +170,8 @@ const SessionPage = async ({
                     }
                     isPublic={isPublic}
                     isTeamMember={isTeamMember}
-                    mission={trainingPlan}
                     subjectId={subjectId}
+                    trainingPlan={trainingPlan}
                     user={user}
                   />
                 </li>

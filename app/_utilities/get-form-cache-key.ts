@@ -15,15 +15,15 @@ const getFormCacheKey = {
   session: ({
     id,
     isDuplicate,
-    missionId,
+    trainingPlanId,
     subjectId,
   }: {
     id?: string;
     isDuplicate?: boolean;
-    missionId: string;
     subjectId: string;
+    trainingPlanId: string;
   }) =>
-    `subject-${subjectId}-mission-${missionId}-session-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
+    `subject-${subjectId}-training-plan-${trainingPlanId}-session-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
   sessionTemplate: ({
     id,
     isDuplicate,

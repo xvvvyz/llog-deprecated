@@ -10,19 +10,22 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface TrainingPlanFormProps {
-  mission?: NonNullable<GetTrainingPlanData>;
   subjectId: string;
+  trainingPlan?: NonNullable<GetTrainingPlanData>;
 }
 
 export interface TrainingPlanFormValues {
   name: string;
 }
 
-const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
+const TrainingPlanForm = ({
+  subjectId,
+  trainingPlan,
+}: TrainingPlanFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
 
   const form = useForm<TrainingPlanFormValues>({
-    defaultValues: { name: mission?.name },
+    defaultValues: { name: trainingPlan?.name },
   });
 
   const router = useRouter();
@@ -33,7 +36,7 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertTrainingPlan(
-            { missionId: mission?.id, subjectId },
+            { subjectId, trainingPlanId: trainingPlan?.id },
             values,
           );
 
@@ -42,7 +45,7 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
             return;
           }
 
-          if (mission) {
+          if (trainingPlan) {
             router.back();
           } else if (res.data) {
             router.replace(
@@ -72,7 +75,7 @@ const TrainingPlanForm = ({ mission, subjectId }: TrainingPlanFormProps) => {
           loadingText="Saving…"
           type="submit"
         >
-          {mission ? 'Save' : 'Continue'}
+          {trainingPlan ? 'Save' : 'Continue'}
         </Button>
       </div>
     </form>

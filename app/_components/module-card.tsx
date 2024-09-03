@@ -27,7 +27,7 @@ interface ModuleCardProps {
   isPreviousModulePending?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
-  mission: NonNullable<GetTrainingPlanWithSessionsData>;
+  trainingPlan: NonNullable<GetTrainingPlanWithSessionsData>;
   subjectId: string;
   user?: User | null;
 }
@@ -39,7 +39,7 @@ const ModuleCard = ({
   isPreviousModulePending,
   isPublic,
   isTeamMember,
-  mission,
+  trainingPlan,
   subjectId,
   user,
 }: ModuleCardProps) => {
@@ -109,7 +109,7 @@ const ModuleCard = ({
             event={event}
             eventType={eventType}
             isArchived={isArchived}
-            isMission={!!mission}
+            isMission={!!trainingPlan}
             isPreviousModulePending={isPreviousModulePending}
             isPublic={isPublic}
             subjectId={subjectId}

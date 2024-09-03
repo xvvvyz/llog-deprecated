@@ -5,7 +5,7 @@ const getTrainingPlanWithSessions = (
   { draft } = { draft: false },
 ) =>
   createServerSupabaseClient()
-    .from('missions')
+    .from('training_plans')
     .select('id, name, sessions(draft, id, order, scheduled_for, title)')
     .eq('id', trainingPlanId)
     .order('order', { referencedTable: 'sessions' })

@@ -29,11 +29,11 @@ interface SessionFormProps {
   availableModuleTemplates: NonNullable<ListTemplatesWithDataData>;
   availableSessionTemplates: NonNullable<ListTemplatesWithDataData>;
   isDuplicate?: boolean;
-  mission: NonNullable<GetTrainingPlanWithSessionsData>;
   order?: string;
   session?: NonNullable<GetSessionData>;
-  subjects: NonNullable<ListSubjectsByTeamIdData>;
   subjectId: string;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
+  trainingPlan: NonNullable<GetTrainingPlanWithSessionsData>;
 }
 
 export type SessionFormValues = {
@@ -53,11 +53,11 @@ const SessionForm = ({
   availableModuleTemplates,
   availableSessionTemplates,
   isDuplicate,
-  mission,
   order,
   session,
-  subjects,
   subjectId,
+  subjects,
+  trainingPlan,
 }: SessionFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const [useTemplateModal, toggleUseTemplateModal] = useToggle(false);
@@ -71,8 +71,8 @@ const SessionForm = ({
   const cacheKey = getFormCacheKey.session({
     id: session?.id,
     isDuplicate,
-    missionId: mission.id,
     subjectId,
+    trainingPlanId: trainingPlan.id,
   });
 
   const form = useCachedForm<SessionFormValues>(
@@ -107,7 +107,7 @@ const SessionForm = ({
   const { highestPublishedOrder } = parseSessions({
     currentSession: session,
     sessionOrder: currentOrder,
-    sessions: mission.sessions,
+    sessions: trainingPlan.sessions,
   });
 
   return (
@@ -190,13 +190,13 @@ const SessionForm = ({
             const res = await upsertSession(
               {
                 currentOrder,
-                missionId: mission.id,
                 publishedOrder: Math.min(
                   currentOrder,
                   highestPublishedOrder + 1,
                 ),
                 sessionId: isDuplicate ? undefined : session?.id,
                 subjectId,
+                trainingPlanId: trainingPlan.id,
               },
               values,
             );

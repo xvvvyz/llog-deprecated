@@ -31,14 +31,14 @@ const formatTabularEvents = (
           )) ||
       (options?.includeEventsFrom &&
         event.type?.id !== options.includeEventsFrom &&
-        event.type?.session?.mission?.id !== options.includeEventsFrom)
+        event.type?.session?.training_plan?.id !== options.includeEventsFrom)
     ) {
       continue;
     }
 
     const row: Row = {
       Id: event.id,
-      Name: strip(event.type?.name ?? event.type?.session?.mission?.name),
+      Name: strip(event.type?.name ?? event.type?.session?.training_plan?.name),
       'Recorded by': strip(formatFullName(event?.profile)),
       Time: options?.parseTime ? new Date(event.created_at) : event.created_at,
     };

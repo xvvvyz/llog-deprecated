@@ -2,20 +2,19 @@ import SessionPage from '@/_components/session-page';
 
 interface PageProps {
   params: {
-    missionId: string;
     sessionId: string;
     subjectId: string;
+    trainingPlanId: string;
   };
 }
 
 const Page = async ({
-  params: { missionId, sessionId, subjectId },
+  params: { sessionId, subjectId, trainingPlanId },
 }: PageProps) => (
   <SessionPage
-    isPublic
-    missionId={missionId}
     sessionId={sessionId}
     subjectId={subjectId}
+    trainingPlanId={trainingPlanId}
   />
 );
 

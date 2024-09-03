@@ -43,7 +43,7 @@ const TimelineSessionCard = ({
     <div className="overflow-hidden rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
         className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
-        href={`/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType?.session?.mission?.id}/sessions/${lastEventType?.session?.id}`}
+        href={`/${shareOrSubjects}/${subjectId}/training-plans/${lastEventType?.session?.training_plan?.id}/sessions/${lastEventType?.session?.id}`}
         scroll={false}
         variant="link"
       >
@@ -51,7 +51,7 @@ const TimelineSessionCard = ({
           <div className="flex justify-between gap-4">
             <div className="min-w-0">
               <div className="truncate leading-snug">
-                {lastEventType?.session?.mission?.name}
+                {lastEventType?.session?.training_plan?.name}
               </div>
             </div>
             <ArrowUpRightIcon className="w-5 shrink-0" />

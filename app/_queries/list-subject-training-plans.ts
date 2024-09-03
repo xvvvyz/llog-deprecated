@@ -2,7 +2,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 
 const listSubjectTrainingPlans = (subjectId: string) =>
   createServerSupabaseClient()
-    .from('missions')
+    .from('training_plans')
     .select(
       'id, name, sessions(id, modules:event_types(event:events(id)), order, title)',
     )

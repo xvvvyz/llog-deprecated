@@ -3,8 +3,8 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 
 const getPublicTrainingPlanWithSessionsAndEvents = (trainingPlanId: string) =>
   createServerSupabaseClient().rpc(
-    'get_public_mission_with_sessions_and_events',
-    { public_mission_id: trainingPlanId },
+    'get_public_training_plan_with_sessions_and_events',
+    { public_training_plan_id: trainingPlanId },
   ) as ReturnType<typeof getTrainingPlanWithSessionsAndEvents>;
 
 export default getPublicTrainingPlanWithSessionsAndEvents;

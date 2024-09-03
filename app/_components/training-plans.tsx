@@ -11,11 +11,11 @@ interface MissionsProps {
 }
 
 const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
-  const { data: missions } = await listSubjectTrainingPlans(subjectId);
-  if (!missions) return null;
+  const { data: trainingPlans } = await listSubjectTrainingPlans(subjectId);
+  if (!trainingPlans) return null;
 
-  const listItems = missions.reduce((acc, mission) => {
-    const activeSession = mission.sessions.find(({ modules }) =>
+  const listItems = trainingPlans.reduce((acc, trainingPlan) => {
+    const activeSession = trainingPlan.sessions.find(({ modules }) =>
       modules.find((et) => !et.event.length),
     );
 
@@ -25,7 +25,7 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
     acc.push(
       <li
         className="flex items-stretch transition-colors hover:bg-alpha-1"
-        key={mission.id}
+        key={trainingPlan.id}
       >
         <Button
           className={twMerge(
@@ -34,8 +34,8 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
           )}
           href={
             isTeamMember
-              ? `/subjects/${subjectId}/training-plans/${mission.id}/sessions`
-              : `/subjects/${subjectId}/training-plans/${mission.id}/sessions/${activeSessionId}`
+              ? `/subjects/${subjectId}/training-plans/${trainingPlan.id}/sessions`
+              : `/subjects/${subjectId}/training-plans/${trainingPlan.id}/sessions/${activeSessionId}`
           }
           scroll={false}
           variant="link"
@@ -43,7 +43,7 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
           <div className="w-full min-w-0">
             <div className="flex w-full justify-between gap-4">
               <div className="min-w-0">
-                <div className="truncate">{mission.name}</div>
+                <div className="truncate">{trainingPlan.name}</div>
               </div>
               {!isTeamMember && <ArrowUpRightIcon className="w-5 shrink-0" />}
             </div>
@@ -56,7 +56,10 @@ const TrainingPlans = async ({ isTeamMember, subjectId }: MissionsProps) => {
           </div>
         </Button>
         {isTeamMember && (
-          <TrainingPlanMenu missionId={mission.id} subjectId={subjectId} />
+          <TrainingPlanMenu
+            subjectId={subjectId}
+            trainingPlanId={trainingPlan.id}
+          />
         )}
       </li>,
     );

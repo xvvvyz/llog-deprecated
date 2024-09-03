@@ -19,14 +19,14 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 
 interface SessionsPageProps {
   isPublic?: boolean;
-  missionId: string;
   subjectId: string;
+  trainingPlanId: string;
 }
 
 const SessionsPage = async ({
   isPublic,
-  missionId,
   subjectId,
+  trainingPlanId,
 }: SessionsPageProps) => {
   const [{ data: subject }, user] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
@@ -36,16 +36,16 @@ const SessionsPage = async ({
   if (!subject) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
 
-  const { data: mission } = isPublic
-    ? await getPublicTrainingPlanWithSessionsAndEvents(missionId)
-    : await getTrainingPlanWithSessionsAndEvents(missionId, {
+  const { data: trainingPlan } = isPublic
+    ? await getPublicTrainingPlanWithSessionsAndEvents(trainingPlanId)
+    : await getTrainingPlanWithSessionsAndEvents(trainingPlanId, {
         draft: isTeamMember,
       });
 
-  if (!mission) return null;
+  if (!trainingPlan) return null;
 
   const { highestOrder, highestPublishedOrder, sessionsReversed } =
-    parseSessions({ sessions: mission.sessions });
+    parseSessions({ sessions: trainingPlan.sessions });
 
   const nextSessionOrder = highestOrder + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
@@ -57,19 +57,19 @@ const SessionsPage = async ({
           isTeamMember && (
             <TrainingPlanMenu
               isModal
-              missionId={mission.id}
               subjectId={subjectId}
+              trainingPlanId={trainingPlan.id}
             />
           )
         }
-        title={mission.name}
+        title={trainingPlan.name}
       />
       {!isPublic && !subject.archived && isTeamMember && (
         <div className="px-4 pb-8 sm:px-8">
           <Button
             colorScheme="transparent"
             className="w-full"
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}`}
+            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/create/${nextSessionOrder}`}
             scroll={false}
           >
             <PlusIcon className="w-5" />
@@ -109,7 +109,7 @@ const SessionsPage = async ({
               >
                 <Button
                   className="m-0 w-full min-w-0 justify-between gap-6 py-3 pl-4 pr-0 sm:pl-8"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${missionId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
+                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   scroll={false}
                   variant="link"
                 >
@@ -156,7 +156,7 @@ const SessionsPage = async ({
                     highestPublishedOrder={highestPublishedOrder}
                     isDraft={session.draft}
                     isList
-                    missionId={missionId}
+                    trainingPlanId={trainingPlanId}
                     nextSessionOrder={nextSessionOrder}
                     order={session.order}
                     sessionId={session.id}

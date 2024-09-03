@@ -5,7 +5,7 @@ const getTrainingPlanWithSessionsAndEvents = (
   { draft } = { draft: false },
 ) =>
   createServerSupabaseClient()
-    .from('missions')
+    .from('training_plans')
     .select(
       `
       id,

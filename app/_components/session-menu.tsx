@@ -19,11 +19,11 @@ interface SessionMenuProps {
   isDraft: boolean;
   isList?: boolean;
   isView?: boolean;
-  missionId: string;
   nextSessionOrder: number;
   order: number;
   sessionId: string;
   subjectId: string;
+  trainingPlanId: string;
 }
 
 const SessionMenu = ({
@@ -31,11 +31,11 @@ const SessionMenu = ({
   isDraft,
   isList,
   isView,
-  missionId,
   nextSessionOrder,
   order,
   sessionId,
   subjectId,
+  trainingPlanId,
 }: SessionMenuProps) => {
   const [isMoveLeftTransitioning, startMoveLeftTransition] = useTransition();
   const [isMoveRightTransitioning, startMoveRightTransition] = useTransition();
@@ -57,14 +57,14 @@ const SessionMenu = ({
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="mx-2" sideOffset={-2}>
           <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/${sessionId}/edit`}
+            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/${sessionId}/edit`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </DropdownMenu.Button>
           <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${missionId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
+            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
             scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
@@ -82,9 +82,9 @@ const SessionMenu = ({
                     moveSession({
                       currentOrder: order,
                       isDraft,
-                      missionId,
                       newOrder: order + 1,
                       sessionId,
+                      trainingPlanId: trainingPlanId,
                     }),
                   )
                 }
@@ -101,9 +101,9 @@ const SessionMenu = ({
                     moveSession({
                       currentOrder: order,
                       isDraft,
-                      missionId,
                       newOrder: order - 1,
                       sessionId,
+                      trainingPlanId: trainingPlanId,
                     }),
                   );
                 }}
@@ -127,13 +127,13 @@ const SessionMenu = ({
             onConfirm={async () => {
               await deleteSession({
                 currentOrder: order,
-                missionId: missionId,
                 sessionId,
+                trainingPlanId: trainingPlanId,
               });
 
               if (!isList) {
                 router.replace(
-                  `/subjects/${subjectId}/training-plans/${missionId}/sessions`,
+                  `/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions`,
                 );
               }
             }}

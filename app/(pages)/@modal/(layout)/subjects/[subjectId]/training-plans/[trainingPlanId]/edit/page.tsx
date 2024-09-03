@@ -6,15 +6,15 @@ import getTrainingPlan from '@/_queries/get-training-plan';
 
 interface PageProps {
   params: {
-    missionId: string;
     subjectId: string;
+    trainingPlanId: string;
   };
 }
 
-const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
+const Page = async ({ params: { subjectId, trainingPlanId } }: PageProps) => {
   const [{ data: subject }, { data: mission }] = await Promise.all([
     getSubject(subjectId),
-    getTrainingPlan(missionId),
+    getTrainingPlan(trainingPlanId),
   ]);
 
   if (!subject || !mission) return null;
@@ -22,7 +22,7 @@ const Page = async ({ params: { missionId, subjectId } }: PageProps) => {
   return (
     <Modal.Content>
       <PageModalHeader title="Edit training plan name" />
-      <TrainingPlanForm mission={mission} subjectId={subjectId} />
+      <TrainingPlanForm trainingPlan={mission} subjectId={subjectId} />
     </Modal.Content>
   );
 };

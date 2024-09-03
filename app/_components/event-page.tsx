@@ -52,7 +52,7 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
             {event.type.session && (
               <Button
                 className="pt-4"
-                href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.mission?.id}/sessions/${event.type.session.id}`}
+                href={`/${shareOrSubjects}/${subjectId}/training-plans/${event.type.session.training_plan?.id}/sessions/${event.type.session.id}`}
                 scroll={false}
                 variant="link"
               >

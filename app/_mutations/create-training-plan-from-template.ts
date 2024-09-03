@@ -43,9 +43,9 @@ const createTrainingPlanFromTemplate = async ({
       upsertSession(
         {
           currentOrder: i,
-          missionId: upsertTrainingPlanRes.data.id,
           publishedOrder: i,
           subjectId,
+          trainingPlanId: upsertTrainingPlanRes.data.id,
         },
         {
           draft: false,

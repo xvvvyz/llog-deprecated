@@ -5,12 +5,12 @@ import { revalidatePath } from 'next/cache';
 
 const deleteSession = async ({
   currentOrder,
-  missionId,
   sessionId,
+  trainingPlanId,
 }: {
   currentOrder: number;
-  missionId: string;
   sessionId: string;
+  trainingPlanId: string;
 }) => {
   const supabase = createServerSupabaseClient();
 
@@ -24,7 +24,7 @@ const deleteSession = async ({
     const { data: shiftSessions } = await supabase
       .from('sessions')
       .select('id, order')
-      .eq('mission_id', missionId)
+      .eq('training_plan_id', trainingPlanId)
       .gt('"order"', currentOrder)
       .eq('draft', false);
 
@@ -32,8 +32,8 @@ const deleteSession = async ({
       await supabase.from('sessions').upsert(
         shiftSessions.map((session) => ({
           id: session.id,
-          mission_id: missionId,
           order: session.order - 1,
+          training_plan_id: trainingPlanId,
         })),
       );
     }

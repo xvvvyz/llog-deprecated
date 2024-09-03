@@ -2,7 +2,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 
 const getTrainingPlan = (trainingPlanId: string) =>
   createServerSupabaseClient()
-    .from('missions')
+    .from('training_plans')
     .select('id, name')
     .eq('id', trainingPlanId)
     .single();

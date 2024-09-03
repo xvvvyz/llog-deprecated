@@ -5,15 +5,15 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { revalidatePath } from 'next/cache';
 
 const upsertTrainingPlan = async (
-  context: { missionId?: string; subjectId: string },
+  context: { subjectId: string; trainingPlanId?: string },
   data: TrainingPlanFormValues,
 ) => {
   const supabase = createServerSupabaseClient();
 
-  const { data: mission, error } = await supabase
-    .from('missions')
+  const { data: trainingPlan, error } = await supabase
+    .from('training_plans')
     .upsert({
-      id: context.missionId,
+      id: context.trainingPlanId,
       name: data.name,
       subject_id: context.subjectId,
     })
@@ -22,7 +22,7 @@ const upsertTrainingPlan = async (
 
   if (error) return { error: error.message };
   revalidatePath('/', 'layout');
-  return { data: mission };
+  return { data: trainingPlan };
 };
 
 export default upsertTrainingPlan;

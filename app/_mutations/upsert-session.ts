@@ -9,10 +9,10 @@ import { revalidatePath } from 'next/cache';
 const upsertSession = async (
   context: {
     currentOrder: number;
-    missionId: string;
     publishedOrder: number;
     sessionId?: string;
     subjectId: string;
+    trainingPlanId: string;
   },
   data: SessionFormValues,
 ) => {
@@ -34,7 +34,7 @@ const upsertSession = async (
     const { data: shiftSessions } = await supabase
       .from('sessions')
       .select('id, order')
-      .eq('mission_id', context.missionId)
+      .eq('training_plan_id', context.trainingPlanId)
       .gte('"order"', finalOrder)
       .eq('draft', false);
 
@@ -42,8 +42,8 @@ const upsertSession = async (
       await supabase.from('sessions').upsert(
         shiftSessions.map((session) => ({
           id: session.id,
-          mission_id: context.missionId,
           order: session.order + 1,
+          training_plan_id: context.trainingPlanId,
         })),
       );
     }
@@ -54,10 +54,10 @@ const upsertSession = async (
     .upsert({
       draft: data.draft,
       id: context.sessionId,
-      mission_id: context.missionId,
       order: finalOrder,
       scheduled_for: data.scheduledFor || null,
       title: data.title?.trim() || null,
+      training_plan_id: context.trainingPlanId,
     })
     .select('id')
     .single();
