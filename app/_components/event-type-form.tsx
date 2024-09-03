@@ -204,7 +204,7 @@ const EventTypeForm = ({
                 tooltip={
                   <>
                     Define the specific data points you are interested in
-                    tracking.
+                    tracking and creating insights for.
                   </>
                 }
                 value={field.value as IOption[]}
