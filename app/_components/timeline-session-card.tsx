@@ -8,6 +8,7 @@ import EventMenu from '@/_components/event-menu';
 import TimelineEventInputsTable from '@/_components/timeline-event-inputs-table';
 import { ListEventsData } from '@/_queries/list-events';
 import firstIfArray from '@/_utilities/first-if-array';
+import getDurationFromTimestamps from '@/_utilities/get-duration-from-timestamps';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon';
@@ -38,6 +39,11 @@ const TimelineSessionCard = ({
   const lastEventType = firstIfArray(lastEvent.type);
   const sessionNumber = (lastEventType?.session?.order ?? 0) + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
+
+  const duration = getDurationFromTimestamps(
+    group[0].created_at,
+    group[group.length - 1].created_at,
+  );
 
   return (
     <div className="overflow-hidden rounded border border-alpha-1 bg-bg-2 pt-1">
@@ -71,7 +77,13 @@ const TimelineSessionCard = ({
             className="m-0 mb-1 w-full justify-between gap-6 px-4 hover:bg-alpha-1"
             variant="link"
           >
-            {group.length} completed module{group.length > 1 ? 's' : ''}
+            <div className="flex gap-2">
+              <div>
+                {group.length} completed module{group.length === 1 ? '' : 's'}
+              </div>
+              &#8226;
+              <div>{duration}</div>
+            </div>
             {isOpen ? (
               <ChevronUpIcon className="w-5 shrink-0" />
             ) : (
@@ -97,19 +109,14 @@ const TimelineSessionCard = ({
                           {event.type?.name ? `: ${event.type?.name}` : ''}
                         </div>
                       </div>
-                      <div className="smallcaps flex shrink-0 gap-4 whitespace-nowrap">
-                        <DateTime
-                          className="text-fg-4"
-                          date={event.created_at}
-                          formatter="time"
-                        />
-                        <ArrowUpRightIcon
-                          className={twMerge(
-                            '-mt-0.5 w-5',
-                            isTeamMember && 'invisible',
-                          )}
-                        />
-                      </div>
+                      <DateTime
+                        className={twMerge(
+                          'smallcaps shrink-0 text-fg-4',
+                          isTeamMember && 'pr-9',
+                        )}
+                        date={event.created_at}
+                        formatter="time"
+                      />
                     </div>
                     <div className="smallcaps flex w-full items-center justify-between gap-4 pb-0.5 pt-1.5 text-fg-4">
                       <div className="flex min-w-0 items-center gap-2 whitespace-nowrap">

@@ -15,6 +15,7 @@ import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import firstIfArray from '@/_utilities/first-if-array';
+import getDurationFromTimestamps from '@/_utilities/get-duration-from-timestamps';
 import parseSessions from '@/_utilities/parse-sessions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import CalendarDaysIcon from '@heroicons/react/24/outline/CalendarDaysIcon';
@@ -80,6 +81,14 @@ const SessionPage = async ({
       }
     });
   }
+
+  const completedModules = session.modules.filter((m) => m.event?.length);
+
+  const firstCompletedEvent = firstIfArray(completedModules[0]?.event);
+
+  const lastCompletedEvent = firstIfArray(
+    completedModules[completedModules.length - 1]?.event,
+  );
 
   return (
     <Modal.Content>
@@ -154,6 +163,30 @@ const SessionPage = async ({
           {session.title && (
             <p className="mx-auto max-w-xs px-4 text-center">{session.title}</p>
           )}
+          <div className="smallcaps flex justify-center gap-2 pt-2 text-fg-4">
+            {completedModules.length ? (
+              <>
+                <div>
+                  {completedModules.length} of {session.modules.length}{' '}
+                  completed
+                </div>
+                {firstCompletedEvent.created_at !==
+                  lastCompletedEvent.created_at && (
+                  <>
+                    &#8226;
+                    <div>
+                      {getDurationFromTimestamps(
+                        firstCompletedEvent.created_at,
+                        lastCompletedEvent.created_at,
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              'Not started'
+            )}
+          </div>
           <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
             {session.modules.map((module, i) => {
               const event = firstIfArray(module.event);

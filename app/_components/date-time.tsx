@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 
 const formatters = {
   date: formatDate,
+  'date-short': (input: Date | string) =>
+    formatDate(input, { day: 'numeric', month: 'numeric', weekday: undefined }),
   'date-time': formatDateTime,
   relative: formatRelativeTime,
   time: formatTime,

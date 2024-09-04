@@ -12,6 +12,7 @@ import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-tr
 import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
 import firstIfArray from '@/_utilities/first-if-array';
+import getDurationFromTimestamps from '@/_utilities/get-duration-from-timestamps';
 import parseSessions from '@/_utilities/parse-sessions';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
@@ -95,10 +96,14 @@ const SessionsPage = async ({
         <ul className="border-y border-alpha-1 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
-              (m) => m.event?.length,
+              (m) => m.event.length,
             );
 
-            const latestCompletedEvent = firstIfArray(
+            const firstCompletedEvent = firstIfArray(
+              completedModules[0]?.event,
+            );
+
+            const lastCompletedEvent = firstIfArray(
               completedModules[completedModules.length - 1]?.event,
             );
 
@@ -133,14 +138,26 @@ const SessionsPage = async ({
                       ) : completedModules.length ? (
                         <>
                           <DateTime
-                            date={latestCompletedEvent.created_at}
-                            formatter="date-time"
+                            date={lastCompletedEvent.created_at}
+                            formatter="date-short"
                           />
                           &#8226;
                           <div>
                             {completedModules.length} of{' '}
                             {session.modules.length} completed
                           </div>
+                          {firstCompletedEvent.created_at !==
+                            lastCompletedEvent.created_at && (
+                            <>
+                              &#8226;
+                              <div>
+                                {getDurationFromTimestamps(
+                                  firstCompletedEvent.created_at,
+                                  lastCompletedEvent.created_at,
+                                )}
+                              </div>
+                            </>
+                          )}
                         </>
                       ) : (
                         'Not started'
