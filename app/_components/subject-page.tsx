@@ -94,7 +94,7 @@ const SubjectPage = async ({
             </div>
           </div>
         </div>
-        {!isPublic && isTeamMember && !subject.archived && (
+        {!isPublic && isTeamMember && (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <Button
