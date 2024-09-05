@@ -16,6 +16,7 @@ import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { EventTypeTemplateDataJson } from '@/_types/event-type-template-data-json';
+import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { sortBy } from 'lodash';
@@ -35,6 +36,7 @@ export type EventTypeTemplateFormValues = {
   content: string;
   description: string;
   inputs: NonNullable<ListInputsData>;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
   name: string;
 };
 
@@ -67,6 +69,9 @@ const EventTypeTemplateForm = ({
           templateData?.inputIds?.includes(input.id),
         ),
         name: template?.name ?? '',
+        subjects: forceArray(subjects).filter(({ id }) =>
+          template?.subjects?.some((sf) => sf.id === id),
+        ),
       },
     },
     { disableCache },
@@ -95,7 +100,10 @@ const EventTypeTemplateForm = ({
         ),
       )}
     >
-      <TemplateFormSection<EventTypeTemplateFormValues> form={form} />
+      <TemplateFormSection<EventTypeTemplateFormValues>
+        form={form}
+        subjects={subjects}
+      />
       <Controller
         control={form.control}
         name="content"

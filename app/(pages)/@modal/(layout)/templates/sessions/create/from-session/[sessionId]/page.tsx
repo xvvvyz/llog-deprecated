@@ -5,7 +5,7 @@ import TemplateType from '@/_constants/enum-template-type';
 import getSession from '@/_queries/get-session';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
+import listTemplates from '@/_queries/list-templates';
 
 interface PageProps {
   params: {
@@ -16,17 +16,17 @@ interface PageProps {
 const Page = async ({ params: { sessionId } }: PageProps) => {
   const [
     { data: availableInputs },
-    { data: availableTemplates },
+    { data: availableModuleTemplates },
     { data: session },
     { data: subjects },
   ] = await Promise.all([
     listInputs(),
-    listTemplatesWithData({ type: TemplateType.Module }),
+    listTemplates({ type: TemplateType.Module }),
     getSession(sessionId),
     listSubjectsByTeamId(),
   ]);
 
-  if (!availableInputs || !availableTemplates || !session || !subjects) {
+  if (!availableInputs || !availableModuleTemplates || !session || !subjects) {
     return null;
   }
 
@@ -35,7 +35,7 @@ const Page = async ({ params: { sessionId } }: PageProps) => {
       <PageModalHeader title="New session template" />
       <SessionTemplateForm
         availableInputs={availableInputs}
-        availableModuleTemplates={availableTemplates}
+        availableModuleTemplates={availableModuleTemplates}
         disableCache
         isDuplicate
         subjects={subjects}

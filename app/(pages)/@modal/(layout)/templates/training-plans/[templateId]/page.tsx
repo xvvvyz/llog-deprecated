@@ -5,7 +5,7 @@ import TemplateType from '@/_constants/enum-template-type';
 import getTemplate from '@/_queries/get-template';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
+import listTemplates from '@/_queries/list-templates';
 
 interface PageProps {
   params: {
@@ -22,8 +22,8 @@ const Page = async ({ params: { templateId } }: PageProps) => {
     { data: template },
   ] = await Promise.all([
     listInputs(),
-    listTemplatesWithData({ type: TemplateType.Module }),
-    listTemplatesWithData({ type: TemplateType.Session }),
+    listTemplates({ type: TemplateType.Module }),
+    listTemplates({ type: TemplateType.Session }),
     listSubjectsByTeamId(),
     getTemplate(templateId),
   ]);

@@ -10,9 +10,10 @@ import upsertTrainingPlanTemplate from '@/_mutations/upsert-training-plan-templa
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
-import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
+import { ListTemplatesData } from '@/_queries/list-templates';
 import { Database } from '@/_types/database';
 import { TrainingPlanTemplateDataJson } from '@/_types/training-plan-template-data-json';
+import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import * as DndCore from '@dnd-kit/core';
@@ -25,8 +26,8 @@ import { FieldPath, useFieldArray } from 'react-hook-form';
 
 interface TrainingPlanTemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
-  availableModuleTemplates: NonNullable<ListTemplatesWithDataData>;
-  availableSessionTemplates: NonNullable<ListTemplatesWithDataData>;
+  availableModuleTemplates: NonNullable<ListTemplatesData>;
+  availableSessionTemplates: NonNullable<ListTemplatesData>;
   disableCache?: boolean;
   isDuplicate?: boolean;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
@@ -44,6 +45,7 @@ export type TrainingPlanTemplateFormValues = {
     }>;
     title: string;
   }>;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
 };
 
 const TrainingPlanTemplateForm = ({
@@ -85,6 +87,9 @@ const TrainingPlanTemplateForm = ({
               title: session.title ?? '',
             }))
           : [],
+        subjects: forceArray(subjects).filter(({ id }) =>
+          template?.subjects?.some((sf) => sf.id === id),
+        ),
       },
     },
     { disableCache },
@@ -117,7 +122,10 @@ const TrainingPlanTemplateForm = ({
       )}
     >
       <div className="space-y-8 px-4 sm:px-8">
-        <TemplateFormSection<TrainingPlanTemplateFormValues> form={form} />
+        <TemplateFormSection<TrainingPlanTemplateFormValues>
+          form={form}
+          subjects={subjects}
+        />
       </div>
       {!!sessionsArray.fields.length && (
         <ul className="space-y-4 overflow-x-clip border-y border-alpha-1 bg-alpha-reverse-2 py-4">

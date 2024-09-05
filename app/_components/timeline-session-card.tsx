@@ -40,11 +40,6 @@ const TimelineSessionCard = ({
   const sessionNumber = (lastEventType?.session?.order ?? 0) + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
-  const duration = getDurationFromTimestamps(
-    group[0].created_at,
-    group[group.length - 1].created_at,
-  );
-
   return (
     <div className="overflow-hidden rounded border border-alpha-1 bg-bg-2 pt-1">
       <Button
@@ -81,8 +76,17 @@ const TimelineSessionCard = ({
               <div>
                 {group.length} completed module{group.length === 1 ? '' : 's'}
               </div>
-              &#8226;
-              <div>{duration}</div>
+              {group.length > 1 && (
+                <>
+                  &#8226;
+                  <div>
+                    {getDurationFromTimestamps(
+                      group[0].created_at,
+                      group[group.length - 1].created_at,
+                    )}
+                  </div>
+                </>
+              )}
             </div>
             {isOpen ? (
               <ChevronUpIcon className="w-5 shrink-0" />

@@ -17,6 +17,7 @@ import { ListInputsData } from '@/_queries/list-inputs';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ModuleTemplateDataJson } from '@/_types/module-template-data-json';
+import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { sortBy } from 'lodash';
@@ -38,6 +39,7 @@ export type ModuleTemplateFormValues = {
   description: string;
   inputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   name: string;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
 };
 
 const ModuleTemplateForm = ({
@@ -66,6 +68,9 @@ const ModuleTemplateForm = ({
           templateData?.inputIds?.includes(input.id),
         ),
         name: template?.name ?? '',
+        subjects: forceArray(subjects).filter(({ id }) =>
+          template?.subjects?.some((sf) => sf.id === id),
+        ),
       },
     },
     { disableCache },
@@ -94,7 +99,10 @@ const ModuleTemplateForm = ({
         ),
       )}
     >
-      <TemplateFormSection<ModuleTemplateFormValues> form={form} />
+      <TemplateFormSection<ModuleTemplateFormValues>
+        form={form}
+        subjects={subjects}
+      />
       <Controller
         control={form.control}
         name="content"

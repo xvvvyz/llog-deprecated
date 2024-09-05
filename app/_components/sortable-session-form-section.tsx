@@ -7,21 +7,21 @@ import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
-import Select from '@/_components/select';
 import SessionTemplateForm from '@/_components/session-template-form';
+import SessionUseTemplateModal from '@/_components/session-use-template-modal';
+import { TrainingPlanTemplateFormValues } from '@/_components/training-plan-template-form';
 import { GetTemplateData } from '@/_queries/get-template';
-import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
-import forceArray from '@/_utilities/force-array';
+import { ListTemplatesData } from '@/_queries/list-templates';
 import { useSortable } from '@dnd-kit/sortable';
 import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/outline/ArrowUpIcon';
 import Bars2Icon from '@heroicons/react/24/outline/Bars2Icon';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon';
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
-import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import * as Form from 'react-hook-form';
@@ -30,15 +30,12 @@ import { twMerge } from 'tailwind-merge';
 import SessionFormSection, {
   SessionFormSectionProps,
 } from '@/_components/session-form-section';
-import { TrainingPlanTemplateFormValues } from '@/_components/training-plan-template-form';
-import { SessionTemplateDataJson } from '@/_types/session-template-data-json';
-import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 
 interface SortableSessionFormSectionProps<
   T extends Form.FieldValues,
   U extends Form.ArrayPath<T>,
 > extends SessionFormSectionProps<T> {
-  availableSessionTemplates: NonNullable<ListTemplatesWithDataData>;
+  availableSessionTemplates: NonNullable<ListTemplatesData>;
   sessionArray: Form.UseFieldArrayReturn<T, U, 'key'>;
   sessionIndex: number;
   sessionKey: string;
@@ -58,7 +55,6 @@ const SortableSessionFormSection = <
     useState<Partial<GetTemplateData>>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [useTemplateModal, toggleUseTemplateModal] = useToggle(false);
   const router = useRouter();
 
   const {
@@ -161,83 +157,20 @@ const SortableSessionFormSection = <
                   Add session below
                 </DropdownMenu.Button>
                 <DropdownMenu.Separator />
-                <Modal.Root
-                  onOpenChange={toggleUseTemplateModal}
-                  open={useTemplateModal}
-                >
-                  <Modal.Trigger asChild>
-                    <DropdownMenu.Button
-                      onClick={() => toggleUseTemplateModal()}
-                    >
-                      <DocumentTextIcon className="w-5 text-fg-4" />
-                      Use template
-                    </DropdownMenu.Button>
-                  </Modal.Trigger>
-                  <Modal.Portal>
-                    <Modal.Overlay>
-                      <Modal.Content className="max-w-sm p-8 text-center">
-                        <Modal.Title className="text-2xl">
-                          Use template
-                        </Modal.Title>
-                        <Modal.Description className="mt-4 px-4 text-fg-4">
-                          Selecting a template will overwrite any existing
-                          module values.
-                        </Modal.Description>
-                        <div className="pt-16 text-left">
-                          <Select
-                            noOptionsMessage={() => 'No templates.'}
-                            onChange={(t) => {
-                              const template =
-                                t as NonNullable<ListTemplatesWithDataData>[0];
-
-                              const data =
-                                template?.data as SessionTemplateDataJson;
-
-                              rest.form.setValue(
-                                `${rest.fieldPath}.title` as Form.Path<T>,
-                                template?.name as Form.PathValue<
-                                  T,
-                                  Form.Path<T>
-                                >,
-                                { shouldDirty: true },
-                              );
-
-                              rest.form.setValue(
-                                `${rest.fieldPath}.modules` as Form.Path<T>,
-                                data?.modules?.map((module) => ({
-                                  content: module.content,
-                                  inputs: rest.availableInputs.filter(
-                                    ({ id }) =>
-                                      forceArray(module?.inputIds).includes(id),
-                                  ),
-                                  name: module.name,
-                                })) as Form.PathValue<T, Form.Path<T>>,
-                                { shouldDirty: true },
-                              );
-
-                              toggleUseTemplateModal();
-                            }}
-                            options={availableSessionTemplates}
-                            placeholder="Select a template…"
-                            value={null}
-                          />
-                        </div>
-                        <Modal.Close
-                          asChild
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <Button
-                            className="-mb-3 mt-14 w-full justify-center p-0 py-3"
-                            onClick={() => toggleUseTemplateModal()}
-                            variant="link"
-                          >
-                            Close
-                          </Button>
-                        </Modal.Close>
-                      </Modal.Content>
-                    </Modal.Overlay>
-                  </Modal.Portal>
-                </Modal.Root>
+                <SessionUseTemplateModal
+                  availableInputs={rest.availableInputs}
+                  availableSessionTemplates={availableSessionTemplates}
+                  fieldPath={rest.fieldPath}
+                  form={rest.form}
+                  trigger={
+                    <Modal.Trigger asChild>
+                      <DropdownMenu.Button>
+                        <DocumentTextIcon className="w-5 text-fg-4" />
+                        Use template
+                      </DropdownMenu.Button>
+                    </Modal.Trigger>
+                  }
+                />
                 <Modal.Root
                   onOpenChange={() => setCreateTemplateModal(null)}
                   open={!!createTemplateModal}

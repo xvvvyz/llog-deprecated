@@ -4,8 +4,8 @@ import Button from '@/_components/button';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
-import Select from '@/_components/select';
 import SessionFormSection from '@/_components/session-form-section';
+import SessionUseTemplateModal from '@/_components/session-use-template-modal';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
@@ -13,21 +13,24 @@ import { GetSessionData } from '@/_queries/get-session';
 import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
-import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
-import { SessionTemplateDataJson } from '@/_types/session-template-data-json';
+import { ListTemplatesData } from '@/_queries/list-templates';
+import { ListTemplatesBySubjectIdAndTypeData } from '@/_queries/list-templates-by-subject-id-and-type';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import parseSessions from '@/_utilities/parse-sessions';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
-import { useToggle } from '@uidotdev/usehooks';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface SessionFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData>;
-  availableModuleTemplates: NonNullable<ListTemplatesWithDataData>;
-  availableSessionTemplates: NonNullable<ListTemplatesWithDataData>;
+  availableModuleTemplates: NonNullable<
+    ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
+  >;
+  availableSessionTemplates: NonNullable<
+    ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
+  >;
   isDuplicate?: boolean;
   order?: string;
   session?: NonNullable<GetSessionData>;
@@ -60,7 +63,6 @@ const SessionForm = ({
   trainingPlan,
 }: SessionFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
-  const [useTemplateModal, toggleUseTemplateModal] = useToggle(false);
   const modules = forceArray(session?.modules);
   const router = useRouter();
 
@@ -114,68 +116,19 @@ const SessionForm = ({
     <Modal.Content>
       <PageModalHeader
         right={
-          <Modal.Root
-            onOpenChange={toggleUseTemplateModal}
-            open={useTemplateModal}
-          >
-            <Modal.Trigger asChild>
-              <Button className="pr-2 sm:pr-6" variant="link">
-                <DocumentTextIcon className="w-5 text-fg-4" />
-                Use template
-              </Button>
-            </Modal.Trigger>
-            <Modal.Portal>
-              <Modal.Overlay>
-                <Modal.Content className="max-w-sm p-8 text-center">
-                  <Modal.Title className="text-2xl">Use template</Modal.Title>
-                  <Modal.Description className="mt-4 px-4 text-fg-4">
-                    Selecting a template will overwrite any existing session
-                    modules.
-                  </Modal.Description>
-                  <div className="pt-16 text-left">
-                    <Select
-                      noOptionsMessage={() => 'No templates.'}
-                      onChange={(t) => {
-                        const template =
-                          t as NonNullable<ListTemplatesWithDataData>[0];
-
-                        const data = template?.data as SessionTemplateDataJson;
-
-                        form.setValue('title', template.name, {
-                          shouldDirty: true,
-                        });
-
-                        form.setValue(
-                          'modules',
-                          (data?.modules ?? []).map((module) => ({
-                            content: module.content ?? '',
-                            inputs: availableInputs.filter((input) =>
-                              module.inputIds?.some((id) => id === input.id),
-                            ),
-                            name: module.name,
-                          })),
-                          { shouldDirty: true },
-                        );
-
-                        toggleUseTemplateModal();
-                      }}
-                      options={availableSessionTemplates}
-                      placeholder="Select a template…"
-                      value={null}
-                    />
-                  </div>
-                  <Modal.Close asChild>
-                    <Button
-                      className="-mb-3 mt-14 w-full justify-center p-0 py-3"
-                      variant="link"
-                    >
-                      Close
-                    </Button>
-                  </Modal.Close>
-                </Modal.Content>
-              </Modal.Overlay>
-            </Modal.Portal>
-          </Modal.Root>
+          <SessionUseTemplateModal<SessionFormValues>
+            availableInputs={availableInputs}
+            availableSessionTemplates={availableSessionTemplates}
+            form={form}
+            trigger={
+              <Modal.Trigger asChild>
+                <Button className="pr-2 sm:pr-6" variant="link">
+                  <DocumentTextIcon className="w-5 text-fg-4" />
+                  Use template
+                </Button>
+              </Modal.Trigger>
+            }
+          />
         }
         title={session && !isDuplicate ? 'Edit session' : 'New session'}
       />

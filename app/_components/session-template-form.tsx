@@ -10,9 +10,11 @@ import upsertSessionTemplate from '@/_mutations/upsert-session-template';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListInputsData } from '@/_queries/list-inputs';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
-import { ListTemplatesWithDataData } from '@/_queries/list-templates-with-data';
+import { ListTemplatesData } from '@/_queries/list-templates';
+import { ListTemplatesBySubjectIdAndTypeData } from '@/_queries/list-templates-by-subject-id-and-type';
 import { Database } from '@/_types/database';
 import { SessionTemplateDataJson } from '@/_types/session-template-data-json';
+import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import { useRouter } from 'next/navigation';
@@ -20,7 +22,9 @@ import { useTransition } from 'react';
 
 interface SessionTemplateFormProps {
   availableInputs: NonNullable<ListInputsData>;
-  availableModuleTemplates: NonNullable<ListTemplatesWithDataData>;
+  availableModuleTemplates: NonNullable<
+    ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
+  >;
   disableCache?: boolean;
   isDuplicate?: boolean;
   onClose?: () => void;
@@ -37,6 +41,7 @@ export type SessionTemplateFormValues = {
     name?: string | null;
   }>;
   name: string;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
 };
 
 const SessionTemplateForm = ({
@@ -73,6 +78,9 @@ const SessionTemplateForm = ({
             }))
           : [{ content: '', inputs: [], name: '' }],
         name: template?.name ?? '',
+        subjects: forceArray(subjects).filter(({ id }) =>
+          template?.subjects?.some((sf) => sf.id === id),
+        ),
       },
     },
     { disableCache },
@@ -99,7 +107,10 @@ const SessionTemplateForm = ({
         ),
       )}
     >
-      <TemplateFormSection<SessionTemplateFormValues> form={form} />
+      <TemplateFormSection<SessionTemplateFormValues>
+        form={form}
+        subjects={subjects}
+      />
       <SessionFormSection<SessionTemplateFormValues>
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}

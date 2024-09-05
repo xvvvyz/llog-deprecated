@@ -1,5 +1,6 @@
 'use client';
 
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
 import TemplateMenu from '@/_components/template-menu';
@@ -25,7 +26,7 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
   const fuse = React.useMemo(
     () =>
       new Fuse(templates, {
-        keys: ['name', 'type'],
+        keys: ['name', 'subjects.name', 'type'],
         threshold: 0.3,
       }),
     [templates],
@@ -59,7 +60,7 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
               else setFilteredTemplates(templates);
             })
           }
-          placeholder="Filter by name or type…"
+          placeholder="Filter by name, subject or type…"
           ref={ref}
         />
       </div>
@@ -77,8 +78,27 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
             >
               <div className="min-w-0">
                 <div className="truncate">{template.name}</div>
-                <div className="smallcaps pb-0.5 pt-1.5 text-fg-4">
-                  {TEMPLATE_TYPE_LABELS[template.type]}
+                <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
+                  {!!template.subjects.length && (
+                    <>
+                      <div className="mr-0.5 flex shrink-0 gap-1">
+                        {template.subjects.map(({ id, image_uri }) => (
+                          <Avatar
+                            className="size-4"
+                            file={image_uri}
+                            key={id}
+                            id={id}
+                          />
+                        ))}
+                      </div>
+                      &#8226;
+                    </>
+                  )}
+                  <div className="min-w-0">
+                    <div className="truncate">
+                      {TEMPLATE_TYPE_LABELS[template.type]}
+                    </div>
+                  </div>
                 </div>
               </div>
             </Button>

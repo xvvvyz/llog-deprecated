@@ -2,15 +2,16 @@
 
 import Button from '@/_components/button';
 import * as Modal from '@/_components/modal';
-import Select from '@/_components/select';
+import Select, { IOption } from '@/_components/select';
 import createTrainingPlanFromTemplate from '@/_mutations/create-training-plan-from-template';
 import { ListTemplatesData } from '@/_queries/list-templates';
+import { ListTemplatesBySubjectIdAndTypeData } from '@/_queries/list-templates-by-subject-id-and-type';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface TrainingPlanUseTemplateModalProps {
-  availableTrainingPlanTemplates: NonNullable<ListTemplatesData>;
+  availableTrainingPlanTemplates: NonNullable<ListTemplatesBySubjectIdAndTypeData>;
   subjectId: string;
 }
 
@@ -59,7 +60,7 @@ const TrainingPlanUseTemplateModal = ({
                     );
                   })
                 }
-                options={availableTrainingPlanTemplates}
+                options={availableTrainingPlanTemplates as IOption[]}
                 placeholder="Select a template…"
                 value={null}
               />

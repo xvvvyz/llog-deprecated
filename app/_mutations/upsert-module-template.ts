@@ -31,6 +31,29 @@ const upsertModuleTemplate = async (
     .single();
 
   if (error) return { error: error.message };
+
+  await supabase
+    .from('template_subjects')
+    .delete()
+    .eq('template_id', template.id);
+
+  if (data.subjects.length) {
+    const { error } = await supabase.from('template_subjects').insert(
+      data.subjects.map(({ id }) => ({
+        subject_id: id,
+        template_id: template.id,
+      })),
+    );
+
+    if (error) {
+      if (!context.templateId) {
+        await supabase.from('templates').delete().eq('id', template.id);
+      }
+
+      return { error: error.message };
+    }
+  }
+
   revalidatePath('/', 'layout');
   return { data: template };
 };

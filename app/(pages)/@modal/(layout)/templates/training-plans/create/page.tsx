@@ -4,7 +4,7 @@ import TrainingPlanTemplateForm from '@/_components/training-plan-template-form'
 import TemplateType from '@/_constants/enum-template-type';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
+import listTemplates from '@/_queries/list-templates';
 
 const Page = async () => {
   const [
@@ -14,8 +14,8 @@ const Page = async () => {
     { data: subjects },
   ] = await Promise.all([
     listInputs(),
-    listTemplatesWithData({ type: TemplateType.Module }),
-    listTemplatesWithData({ type: TemplateType.Session }),
+    listTemplates({ type: TemplateType.Module }),
+    listTemplates({ type: TemplateType.Session }),
     listSubjectsByTeamId(),
   ]);
 

@@ -12,7 +12,7 @@ const upsertTrainingPlanTemplate = async (
 ) => {
   const supabase = createServerSupabaseClient();
 
-  const { error } = await supabase
+  const { data: template, error } = await supabase
     .from('templates')
     .upsert({
       data: {
@@ -35,6 +35,29 @@ const upsertTrainingPlanTemplate = async (
     .single();
 
   if (error) return { error: error.message };
+
+  await supabase
+    .from('template_subjects')
+    .delete()
+    .eq('template_id', template.id);
+
+  if (data.subjects.length) {
+    const { error } = await supabase.from('template_subjects').insert(
+      data.subjects.map(({ id }) => ({
+        subject_id: id,
+        template_id: template.id,
+      })),
+    );
+
+    if (error) {
+      if (!context.templateId) {
+        await supabase.from('templates').delete().eq('id', template.id);
+      }
+
+      return { error: error.message };
+    }
+  }
+
   revalidatePath('/', 'layout');
 };
 

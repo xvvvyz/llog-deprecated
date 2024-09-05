@@ -51,7 +51,7 @@ export type InputFormValues = {
   label: string;
   options: Array<Database['public']['Tables']['input_options']['Insert']>;
   settings?: InputSettingsJson;
-  subjects: Array<Database['public']['Tables']['subjects']['Row']>;
+  subjects: NonNullable<ListSubjectsByTeamIdData>;
   type: { id: Database['public']['Enums']['input_type'] };
 };
 

@@ -6,7 +6,7 @@ import getSubject from '@/_queries/get-subject';
 import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
+import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
   params: {
@@ -31,8 +31,8 @@ const Page = async ({
     user,
   ] = await Promise.all([
     listInputsBySubjectId(subjectId),
-    listTemplatesWithData({ type: TemplateType.Module }),
-    listTemplatesWithData({ type: TemplateType.Session }),
+    listTemplatesBySubjectIdAndType({ subjectId, type: TemplateType.Module }),
+    listTemplatesBySubjectIdAndType({ subjectId, type: TemplateType.Session }),
     getSession(sessionId),
     getSubject(subjectId),
     listSubjectsByTeamId(),

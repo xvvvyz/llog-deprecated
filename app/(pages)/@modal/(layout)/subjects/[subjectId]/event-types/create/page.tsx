@@ -3,7 +3,7 @@ import TemplateType from '@/_constants/enum-template-type';
 import getSubject from '@/_queries/get-subject';
 import listInputsBySubjectId from '@/_queries/list-inputs-by-subject-id';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
-import listTemplatesWithData from '@/_queries/list-templates-with-data';
+import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
   params: {
@@ -13,25 +13,33 @@ interface PageProps {
 
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const [
-    { data: subject },
+    { data: availableEventTypeTemplates },
     { data: availableInputs },
+    { data: subject },
     { data: subjects },
-    { data: availableTemplates },
   ] = await Promise.all([
-    getSubject(subjectId),
+    listTemplatesBySubjectIdAndType({
+      subjectId,
+      type: TemplateType.EventType,
+    }),
     listInputsBySubjectId(subjectId),
+    getSubject(subjectId),
     listSubjectsByTeamId(),
-    listTemplatesWithData({ type: TemplateType.EventType }),
   ]);
 
-  if (!subject || !availableInputs || !subjects || !availableTemplates) {
+  if (
+    !availableEventTypeTemplates ||
+    !availableInputs ||
+    !subject ||
+    !subjects
+  ) {
     return null;
   }
 
   return (
     <EventTypeForm
+      availableEventTypeTemplates={availableEventTypeTemplates}
       availableInputs={availableInputs}
-      availableTemplates={availableTemplates}
       subjects={subjects}
       subjectId={subjectId}
     />

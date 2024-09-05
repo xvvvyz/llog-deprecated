@@ -2,6 +2,7 @@ import Empty from '@/_components/empty';
 import FilterableTemplates from '@/_components/filterable-templates';
 import listTemplates from '@/_queries/list-templates';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
+import { sortBy } from 'lodash';
 
 const Page = async () => {
   const { data: templates } = await listTemplates();
@@ -17,7 +18,11 @@ const Page = async () => {
     );
   }
 
-  return <FilterableTemplates templates={templates} />;
+  return (
+    <FilterableTemplates
+      templates={sortBy(templates, ['subjects[0].name', 'type'])}
+    />
+  );
 };
 
 export default Page;

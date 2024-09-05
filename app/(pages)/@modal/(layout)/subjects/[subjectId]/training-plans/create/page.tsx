@@ -4,7 +4,7 @@ import TrainingPlanForm from '@/_components/training-plan-form';
 import TrainingPlanUseTemplateModal from '@/_components/training-plan-use-template-modal';
 import TemplateType from '@/_constants/enum-template-type';
 import getSubject from '@/_queries/get-subject';
-import listTemplates from '@/_queries/list-templates';
+import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
   params: {
@@ -15,7 +15,10 @@ interface PageProps {
 const Page = async ({ params: { subjectId } }: PageProps) => {
   const [{ data: availableTrainingPlanTemplates }, { data: subject }] =
     await Promise.all([
-      listTemplates({ type: TemplateType.TrainingPlan }),
+      listTemplatesBySubjectIdAndType({
+        subjectId,
+        type: TemplateType.TrainingPlan,
+      }),
       getSubject(subjectId),
     ]);
 
