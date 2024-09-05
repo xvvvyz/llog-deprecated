@@ -12,7 +12,15 @@ const updateSubject = async (
   // get the latest app_metadata for rls validation
   await supabase.auth.refreshSession();
 
-  await supabase.from('subjects').update(subject).eq('id', subject.id);
+  await supabase
+    .from('subjects')
+    .update({
+      archived: subject.archived,
+      deleted: subject.deleted,
+      name: subject.name,
+      public: subject.public,
+    })
+    .eq('id', subject.id);
   revalidatePath('/', 'layout');
 };
 

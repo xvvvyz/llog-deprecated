@@ -1,13 +1,13 @@
 'use client';
 
 import Button from '@/_components/button';
-import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
+import TemplateFormSection from '@/_components/template-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertEventTypeTemplate from '@/_mutations/upsert-event-type-template';
@@ -33,6 +33,7 @@ interface EventTypeTemplateFormProps {
 
 export type EventTypeTemplateFormValues = {
   content: string;
+  description: string;
   inputs: NonNullable<ListInputsData>;
   name: string;
 };
@@ -61,6 +62,7 @@ const EventTypeTemplateForm = ({
     {
       defaultValues: {
         content: templateData?.content ?? '',
+        description: template?.description ?? '',
         inputs: availableInputs.filter((input) =>
           templateData?.inputIds?.includes(input.id),
         ),
@@ -93,12 +95,15 @@ const EventTypeTemplateForm = ({
         ),
       )}
     >
-      <Input label="Name" maxLength={49} required {...form.register('name')} />
+      <TemplateFormSection<EventTypeTemplateFormValues> form={form} />
       <Controller
         control={form.control}
         name="content"
         render={({ field }) => (
-          <RichTextarea label="Description or instructions" {...field} />
+          <RichTextarea
+            label="Event type description or instructions"
+            {...field}
+          />
         )}
       />
       <Modal.Root

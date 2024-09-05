@@ -1,9 +1,9 @@
 'use client';
 
 import Button from '@/_components/button';
-import Input from '@/_components/input';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import SessionFormSection from '@/_components/session-form-section';
+import TemplateFormSection from '@/_components/template-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSessionTemplate from '@/_mutations/upsert-session-template';
@@ -30,6 +30,7 @@ interface SessionTemplateFormProps {
 }
 
 export type SessionTemplateFormValues = {
+  description: string;
   modules: Array<{
     content: string;
     inputs: Array<Database['public']['Tables']['inputs']['Row']>;
@@ -61,6 +62,7 @@ const SessionTemplateForm = ({
     cacheKey,
     {
       defaultValues: {
+        description: template?.description ?? '',
         modules: templateData?.modules?.length
           ? templateData.modules.map((module) => ({
               content: module.content,
@@ -97,7 +99,7 @@ const SessionTemplateForm = ({
         ),
       )}
     >
-      <Input label="Name" maxLength={49} required {...form.register('name')} />
+      <TemplateFormSection<SessionTemplateFormValues> form={form} />
       <SessionFormSection<SessionTemplateFormValues>
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}

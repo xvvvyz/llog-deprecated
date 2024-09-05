@@ -19,6 +19,7 @@ const upsertEventTypeTemplate = async (
         content: sanitizeHtml(data.content),
         inputIds: data.inputs.map((input) => input.id),
       },
+      description: sanitizeHtml(data.description),
       id: context.templateId,
       name: data.name.trim(),
       public: false,

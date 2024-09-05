@@ -3,6 +3,7 @@
 import { SessionTemplateFormValues } from '@/_components/session-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { revalidatePath } from 'next/cache';
 
 const upsertSessionTemplate = async (
@@ -16,11 +17,12 @@ const upsertSessionTemplate = async (
     .upsert({
       data: {
         modules: data.modules.map((module) => ({
-          content: module.content,
+          content: sanitizeHtml(module.content),
           inputIds: module.inputs.map((input) => input.id),
           name: module.name?.trim(),
         })),
       },
+      description: sanitizeHtml(data.description),
       id: context.templateId,
       name: data.name.trim(),
       public: false,

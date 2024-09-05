@@ -1,9 +1,9 @@
 'use client';
 
 import Button from '@/_components/button';
-import Input from '@/_components/input';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import SortableSessionFormSection from '@/_components/sortable-session-form-section';
+import TemplateFormSection from '@/_components/template-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertTrainingPlanTemplate from '@/_mutations/upsert-training-plan-template';
@@ -34,6 +34,7 @@ interface TrainingPlanTemplateFormProps {
 }
 
 export type TrainingPlanTemplateFormValues = {
+  description: string;
   name: string;
   sessions: Array<{
     modules: Array<{
@@ -68,6 +69,7 @@ const TrainingPlanTemplateForm = ({
     cacheKey,
     {
       defaultValues: {
+        description: template?.description ?? '',
         name: template?.name ?? '',
         sessions: templateData?.sessions?.length
           ? templateData.sessions.map((session) => ({
@@ -114,13 +116,8 @@ const TrainingPlanTemplateForm = ({
         ),
       )}
     >
-      <div className="px-4 sm:px-8">
-        <Input
-          label="Name"
-          maxLength={49}
-          required
-          {...form.register('name')}
-        />
+      <div className="space-y-8 px-4 sm:px-8">
+        <TemplateFormSection<TrainingPlanTemplateFormValues> form={form} />
       </div>
       {!!sessionsArray.fields.length && (
         <ul className="space-y-4 overflow-x-clip border-y border-alpha-1 bg-alpha-reverse-2 py-4">
