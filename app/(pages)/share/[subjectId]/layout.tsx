@@ -50,12 +50,13 @@ const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
           ) : (
             <>
               <span className="text-sm leading-tight text-fg-4">
-                Delight your clients with the ultimate
+                <span className="text-fg-2">llog</span>&mdash;achieve lasting
+                behavior
                 <br />
-                collaborative behavior tracking platform.
+                changes with your clients.
               </span>
-              <Button href="/sign-up" size="sm">
-                Sign up
+              <Button href="/" size="sm">
+                Request a demo
               </Button>
             </>
           )}

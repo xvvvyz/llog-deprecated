@@ -42,11 +42,6 @@ export const middleware = async (req: NextRequest) => {
       return NextResponse.redirect(new URL('/subjects', req.url));
     }
   } else {
-    if (req.nextUrl.pathname === '/') {
-      // temporary landing page redirect
-      return NextResponse.redirect(new URL('/sign-in', req.url));
-    }
-
     const forcePrivateStartsWith = [
       '/account',
       '/inputs',
