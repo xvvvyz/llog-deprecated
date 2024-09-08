@@ -28,6 +28,7 @@ import { Controller, useFieldArray } from 'react-hook-form';
 interface ModuleTemplateFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   disableCache?: boolean;
+  isDuplicate?: boolean;
   onClose?: () => void;
   onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
@@ -45,6 +46,7 @@ export type ModuleTemplateFormValues = {
 const ModuleTemplateForm = ({
   availableInputs,
   disableCache,
+  isDuplicate,
   onClose,
   onSubmit,
   subjects,
@@ -56,7 +58,11 @@ const ModuleTemplateForm = ({
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const templateData = template?.data as ModuleTemplateDataJson;
-  const cacheKey = getFormCacheKey.moduleTemplate({ id: template?.id });
+
+  const cacheKey = getFormCacheKey.moduleTemplate({
+    id: template?.id,
+    isDuplicate,
+  });
 
   const form = useCachedForm<ModuleTemplateFormValues>(
     cacheKey,
@@ -85,7 +91,7 @@ const ModuleTemplateForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertModuleTemplate(
-              { templateId: template?.id },
+              { templateId: isDuplicate ? undefined : template?.id },
               values,
             );
 

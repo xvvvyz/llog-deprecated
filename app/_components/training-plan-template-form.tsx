@@ -108,7 +108,7 @@ const TrainingPlanTemplateForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertTrainingPlanTemplate(
-              { templateId: template?.id },
+              { templateId: isDuplicate ? undefined : template?.id },
               values,
             );
 

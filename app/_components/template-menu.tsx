@@ -2,14 +2,18 @@
 
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import TEMPLATE_TYPE_SLUGS from '@/_constants/constant-template-type-slugs';
+import TemplateType from '@/_constants/enum-template-type';
 import deleteTemplate from '@/_mutations/delete-template';
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 
 interface TemplateMenuProps {
   templateId: string;
+  type: TemplateType;
 }
 
-const TemplateMenu = ({ templateId }: TemplateMenuProps) => (
+const TemplateMenu = ({ templateId, type }: TemplateMenuProps) => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
       <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
@@ -20,6 +24,13 @@ const TemplateMenu = ({ templateId }: TemplateMenuProps) => (
     </DropdownMenu.Trigger>
     <DropdownMenu.Portal>
       <DropdownMenu.Content className="mx-2" sideOffset={-2}>
+        <DropdownMenu.Button
+          href={`/templates/${TEMPLATE_TYPE_SLUGS[type]}/create/from-template/${templateId}`}
+          scroll={false}
+        >
+          <DocumentDuplicateIcon className="w-5 text-fg-4" />
+          Duplicate
+        </DropdownMenu.Button>
         <DropdownMenuDeleteItem
           confirmText="Delete template"
           onConfirm={() => deleteTemplate(templateId)}

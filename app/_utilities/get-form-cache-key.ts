@@ -10,8 +10,11 @@ const getFormCacheKey = {
     `input-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
   insight: ({ id, subjectId }: { id?: string; subjectId: string }) =>
     `subject-${subjectId}-insight-${id ?? 'create'}`,
-  moduleTemplate: ({ id }: { id?: string } = {}) =>
-    `module-template-${id ?? 'create'}`,
+  moduleTemplate: ({
+    id,
+    isDuplicate,
+  }: { id?: string; isDuplicate?: boolean } = {}) =>
+    `module-template-${id ?? 'create'}}${isDuplicate ? '-duplicate' : ''}`,
   session: ({
     id,
     isDuplicate,

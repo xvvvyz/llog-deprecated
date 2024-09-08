@@ -93,7 +93,7 @@ const SessionTemplateForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertSessionTemplate(
-              { templateId: template?.id },
+              { templateId: isDuplicate ? undefined : template?.id },
               values,
             );
 

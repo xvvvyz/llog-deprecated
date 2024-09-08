@@ -86,7 +86,7 @@ const EventTypeTemplateForm = ({
         form.handleSubmit((values) =>
           startTransition(async () => {
             const res = await upsertEventTypeTemplate(
-              { templateId: template?.id },
+              { templateId: isDuplicate ? undefined : template?.id },
               values,
             );
 

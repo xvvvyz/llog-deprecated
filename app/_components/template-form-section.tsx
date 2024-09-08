@@ -1,7 +1,6 @@
 'use client';
 
 import Input from '@/_components/input';
-import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import * as Form from 'react-hook-form';
@@ -47,22 +46,22 @@ const TemplateFormSection = <T extends Form.FieldValues>({
         />
       )}
     />
-    <Form.Controller
-      control={form.control}
-      name={'description' as Form.FieldPath<T>}
-      render={({ field }) => (
-        <RichTextarea
-          label="Template description"
-          tooltip={
-            <>
-              An optional note describing what the template is for or how to use
-              it.
-            </>
-          }
-          {...field}
-        />
-      )}
-    />
+    {/*<Form.Controller*/}
+    {/*  control={form.control}*/}
+    {/*  name={'description' as Form.FieldPath<T>}*/}
+    {/*  render={({ field }) => (*/}
+    {/*    <RichTextarea*/}
+    {/*      label="Template description"*/}
+    {/*      tooltip={*/}
+    {/*        <>*/}
+    {/*          An optional note describing what the template is for or how to use*/}
+    {/*          it.*/}
+    {/*        </>*/}
+    {/*      }*/}
+    {/*      {...field}*/}
+    {/*    />*/}
+    {/*  )}*/}
+    {/*/>*/}
   </>
 );
 

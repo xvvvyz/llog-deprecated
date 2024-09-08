@@ -102,7 +102,7 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
                 </div>
               </div>
             </Button>
-            <TemplateMenu templateId={template.id} />
+            <TemplateMenu templateId={template.id} type={template.type} />
           </li>
         ))}
       </ul>
