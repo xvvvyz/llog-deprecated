@@ -1,6 +1,7 @@
 'use server';
 
 import { ContactFormValues } from '@/_components/contact-form';
+import sanitizeHtml from '@/_utilities/sanitize-html';
 import { Resend } from 'resend';
 
 const newLead = async (data: ContactFormValues) => {
@@ -11,6 +12,7 @@ const newLead = async (data: ContactFormValues) => {
     html: `<pre>${JSON.stringify(
       {
         ...data,
+        comment: sanitizeHtml(data.comment),
         profession: data.profession?.label,
         types: data.types.map((type) => type.label),
       },

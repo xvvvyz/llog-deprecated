@@ -2,11 +2,13 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import newLead from '@/_mutations/new-lead';
 import { Controller, useForm } from 'react-hook-form';
 
 export interface ContactFormValues {
+  comment: string;
   email: string;
   name: string;
   phone?: string;
@@ -18,6 +20,7 @@ export interface ContactFormValues {
 const ContactForm = () => {
   const form = useForm<ContactFormValues>({
     defaultValues: {
+      comment: '',
       email: '',
       name: '',
       phone: '',
@@ -73,15 +76,32 @@ const ContactForm = () => {
             name={field.name}
             onBlur={field.onBlur}
             onChange={(value) => field.onChange(value)}
+            // prettier-ignore
             options={[
-              { id: 'aggression', label: 'Aggression' },
-              { id: 'anxiety', label: 'Anxiety' },
-              { id: 'fear', label: 'Fear' },
-              { id: 'reactivity', label: 'Reactivity' },
+              { id: 'separation-anxiety', label: 'Separation anxiety' },
+              { id: 'resource-guarding', label: 'Resource guarding' },
+              { id: 'dog-dog-aggression', label: 'Dog-dog aggression/reactivity' },
+              { id: 'prey-drive-aggression', label: 'Prey drive aggression' },
+              { id: 'pain-health', label: 'Pain/health' },
+              { id: 'hyperactivity', label: 'Hyperactivity' },
+              { id: 'human-directed-aggression', label: 'Human directed aggression' },
+              { id: 'fear-anxiety', label: 'Fear/anxiety' },
+              { id: 'sound-phobia-sensitivity', label: 'Sound phobia/sensitivity' },
               { id: 'other', label: 'Other' },
             ]}
             placeholder="Select all that apply…"
             value={field.value}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="comment"
+        render={({ field }) => (
+          <RichTextarea
+            label="Additional notes"
+            placeholder="What else should we know?"
+            {...field}
           />
         )}
       />
