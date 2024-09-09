@@ -3,6 +3,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Resend } from 'resend';
 
 const signUp = async (
   context: { next?: string },
@@ -23,13 +24,14 @@ const signUp = async (
   const firstName = data.get('firstName') as string;
   const lastName = data.get('lastName') as string;
   const password = data.get('password') as string;
+  const isClient = context.next?.includes('/join/');
 
   const { error } = await createServerSupabaseClient().auth.signUp({
     email,
     options: {
       data: {
         first_name: firstName,
-        is_client: context.next?.includes('/join/'),
+        is_client: isClient,
         last_name: lastName,
       },
       emailRedirectTo: `${proto}://${host}${context.next ?? '/subjects'}`,
@@ -43,6 +45,24 @@ const signUp = async (
       error: error.message,
     };
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  await resend.emails.send({
+    from: 'system@llog.app',
+    html: `<pre>${JSON.stringify(
+      {
+        email,
+        firstName,
+        isClient,
+        lastName,
+      },
+      null,
+      2,
+    )}</pre>`,
+    subject: 'New llog sign up',
+    to: ['cade@llog.app'],
+  });
 
   redirect('/confirmation-sent');
 };
