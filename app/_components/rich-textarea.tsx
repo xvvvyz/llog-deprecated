@@ -95,9 +95,10 @@ const RichTextarea = (
       OrderedList,
       Paragraph,
       Placeholder.configure({
-        emptyNodeClass:
+        emptyEditorClass:
           'first:before:text-fg-4 first:before:absolute first:before:content-[attr(data-placeholder)]',
-        placeholder,
+        placeholder: ({ node }) =>
+          node.childCount > 0 ? '' : (placeholder ?? ''),
       }),
       Text,
       Typography,
