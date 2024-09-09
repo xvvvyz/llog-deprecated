@@ -21,6 +21,7 @@ import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ClipboardDocumentIcon from '@heroicons/react/24/outline/ClipboardDocumentIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
+import PencilSquareIcon from '@heroicons/react/24/outline/PencilSquareIcon';
 import ShareIcon from '@heroicons/react/24/outline/ShareIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useCopyToClipboard, useToggle } from '@uidotdev/usehooks';
@@ -83,6 +84,18 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
             <PencilIcon className="w-5 text-fg-4" />
             Edit profile
           </DropdownMenu.Button>
+          <div className="relative">
+            <DropdownMenu.Button
+              href={`/subjects/${subject.id}/notes`}
+              scroll={false}
+            >
+              <PencilSquareIcon className="w-5 text-fg-4" />
+              Notes
+            </DropdownMenu.Button>
+            <Tip align="end" className="absolute right-4 top-2.5">
+              Not visible to clients.
+            </Tip>
+          </div>
           <DropdownMenu.Separator />
           <div className="relative">
             <DropdownMenu.Button
