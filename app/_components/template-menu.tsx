@@ -3,14 +3,14 @@
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
 import TEMPLATE_TYPE_SLUGS from '@/_constants/constant-template-type-slugs';
-import TemplateType from '@/_constants/enum-template-type';
 import deleteTemplate from '@/_mutations/delete-template';
+import { Database } from '@/_types/database';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 
 interface TemplateMenuProps {
   templateId: string;
-  type: TemplateType;
+  type: Database['public']['Enums']['template_type'];
 }
 
 const TemplateMenu = ({ templateId, type }: TemplateMenuProps) => (
