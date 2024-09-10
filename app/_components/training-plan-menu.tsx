@@ -8,6 +8,7 @@ import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIc
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
 interface TrainingPlanMenuProps {
   isModal?: boolean;
@@ -36,7 +37,7 @@ const TrainingPlanMenu = ({
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="mx-2" sideOffset={-2}>
+        <DropdownMenu.Content className={twMerge(!isModal && 'mr-1.5')}>
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/edit`}
             scroll={false}

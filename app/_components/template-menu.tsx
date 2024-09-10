@@ -23,7 +23,7 @@ const TemplateMenu = ({ templateId, type }: TemplateMenuProps) => (
       </div>
     </DropdownMenu.Trigger>
     <DropdownMenu.Portal>
-      <DropdownMenu.Content className="mx-2" sideOffset={-2}>
+      <DropdownMenu.Content className="mr-1.5">
         <DropdownMenu.Button
           href={`/templates/${TEMPLATE_TYPE_SLUGS[type]}/create/from-template/${templateId}`}
           scroll={false}

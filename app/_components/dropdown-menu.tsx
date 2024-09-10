@@ -24,9 +24,9 @@ const Content = React.forwardRef<
   <DropdownMenuPrimitive.Content
     align="end"
     ref={ref}
-    sideOffset={7}
+    sideOffset={0}
     className={twMerge(
-      'z-10 w-60 overflow-hidden rounded border border-alpha-2 bg-bg-3 py-1 drop-shadow',
+      'z-10 my-1.5 w-60 overflow-hidden rounded border border-alpha-2 bg-bg-3 py-1 drop-shadow',
       className,
     )}
     {...props}

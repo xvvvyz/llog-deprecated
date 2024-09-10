@@ -4,6 +4,7 @@ import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  inputClassName?: string;
   label?: ReactNode;
   tooltip?: ReactNode;
 }
@@ -14,10 +15,11 @@ const Input = forwardRef(
       className,
       disabled,
       id,
+      inputClassName,
       label,
-      type,
       name,
       tooltip,
+      type,
       ...rest
     }: InputProps,
     ref: Ref<HTMLInputElement>,
@@ -25,7 +27,7 @@ const Input = forwardRef(
     const { pending } = useFormStatus();
 
     return (
-      <div className="group relative w-full">
+      <div className={twMerge('group relative w-full', className)}>
         <div className="flex justify-between">
           {label && (
             <label className="label" htmlFor={id ?? name}>
@@ -40,7 +42,7 @@ const Input = forwardRef(
         </div>
         <input
           autoComplete="off"
-          className={twMerge('input', className)}
+          className={twMerge('input', inputClassName)}
           disabled={disabled || pending}
           id={id ?? name}
           name={name}

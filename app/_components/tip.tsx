@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/_components/button';
+import IconButton from '@/_components/icon-button';
 import * as Popover from '@/_components/popover';
 import QuestionMarkCircleIcon from '@heroicons/react/24/outline/QuestionMarkCircleIcon';
 import { PopoverContentProps } from '@radix-ui/react-popover';
@@ -16,16 +16,17 @@ interface TipProps extends PopoverContentProps {
 const Tip = ({ children, className, tipClassName, ...rest }: TipProps) => (
   <Popover.Root>
     <Popover.Trigger asChild>
-      <Button className={className} variant="link">
-        <QuestionMarkCircleIcon className="w-5" />
-      </Button>
+      <IconButton
+        className={className}
+        icon={<QuestionMarkCircleIcon className="w-5" />}
+        label="Help"
+      />
     </Popover.Trigger>
     <Popover.Content
       className={twMerge(
-        'z-30 max-w-[20rem] rounded border border-alpha-2 bg-bg-3 px-6 py-4 text-center drop-shadow',
+        'z-30 m-0 max-w-[20rem] rounded border border-alpha-2 bg-bg-3 px-6 py-4 text-center drop-shadow',
         tipClassName,
       )}
-      sideOffset={-2}
       {...rest}
     >
       {children}

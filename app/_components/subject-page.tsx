@@ -116,7 +116,11 @@ const SubjectPage = async ({
                     <PlusIcon className="w-5 text-fg-4" />
                     Event type
                   </DropdownMenu.Button>
-                  <Tip align="end" className="absolute right-4 top-2.5">
+                  <Tip
+                    align="end"
+                    className="absolute right-4 top-2.5"
+                    tipClassName="mr-0.5"
+                  >
                     Use event types to track individual behaviors, activities
                     etc. For example: &ldquo;Barking&rdquo; or
                     &ldquo;Medication&rdquo;.
@@ -130,7 +134,11 @@ const SubjectPage = async ({
                     <PlusIcon className="w-5 text-fg-4" />
                     Training plan
                   </DropdownMenu.Button>
-                  <Tip align="end" className="absolute right-4 top-2.5">
+                  <Tip
+                    align="end"
+                    className="absolute right-4 top-2.5"
+                    tipClassName="mr-0.5"
+                  >
                     Use training plans to teach new behaviors, skills etc. For
                     example: &ldquo;Reduce separation anxiety&rdquo;.
                   </Tip>

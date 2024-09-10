@@ -6,6 +6,7 @@ import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import Select, { IOption } from '@/_components/select';
+import Tip from '@/_components/tip';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import InputType from '@/_constants/enum-input-type';
@@ -264,11 +265,11 @@ const InputForm = ({
           </fieldset>
           <Checkbox
             label="Allow options to be created"
-            tooltip={
-              <>
+            right={
+              <Tip side="left">
                 Enable this when you don&rsquo;t know all possible options in
                 advance.
-              </>
+              </Tip>
             }
             {...form.register('settings.isCreatable')}
           />

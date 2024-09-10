@@ -74,8 +74,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           align={isList ? 'end' : 'start'}
-          className={twMerge(isList && 'mx-2')}
-          sideOffset={isList ? -2 : 7}
+          className={twMerge(isList && 'mr-1.5')}
         >
           <DropdownMenu.Button
             href={`/subjects/${subject.id}/edit`}
@@ -92,7 +91,11 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
               <PencilSquareIcon className="w-5 text-fg-4" />
               Notes
             </DropdownMenu.Button>
-            <Tip align="end" className="absolute right-4 top-2.5">
+            <Tip
+              align="end"
+              className="absolute right-4 top-2.5"
+              tipClassName="mr-0.5"
+            >
               Not visible to clients.
             </Tip>
           </div>
@@ -137,7 +140,11 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
                 </>
               )}
             </DropdownMenu.Button>
-            <Tip align="end" className="absolute right-4 top-2.5">
+            <Tip
+              align="end"
+              className="absolute right-4 top-2.5"
+              tipClassName="mr-0.5"
+            >
               Clients can complete training plans, record events
               and&nbsp;comment.
             </Tip>

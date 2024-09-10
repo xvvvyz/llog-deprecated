@@ -143,7 +143,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
                     name={`data.links.${linkIndex}.label`}
                     render={({ field }) => (
                       <Input
-                        className="rounded-b-none border-b-0 pr-[2.4rem]"
+                        inputClassName="rounded-b-none border-b-0 pr-[2.4rem]"
                         placeholder="Label…"
                         required
                         {...field}
@@ -155,7 +155,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
                     name={`data.links.${linkIndex}.url`}
                     render={({ field }) => (
                       <Input
-                        className="rounded-t-none"
+                        inputClassName="rounded-t-none"
                         placeholder="https://…"
                         required
                         type="url"

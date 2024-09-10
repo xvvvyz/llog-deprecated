@@ -12,10 +12,11 @@ const formatTabularEvents = (
   events: ListEventsData,
   options?: {
     filterByInputId?: string;
-    flattenInputs?: boolean;
+    filterByInputOptions?: string[];
+    flattenColumnValues?: boolean;
+    includeComments?: boolean;
     includeEventsFrom?: string | null;
     includeEventsSince?: TimeSinceMilliseconds | null;
-    inputOptions?: string[];
     parseTime?: boolean;
   },
 ) => {
@@ -38,17 +39,20 @@ const formatTabularEvents = (
 
     const row: Row = {
       Id: event.id,
-      Name: strip(event.type?.name ?? event.type?.session?.training_plan?.name),
       'Recorded by': strip(formatFullName(event?.profile)),
       Time: options?.parseTime ? new Date(event.created_at) : event.created_at,
     };
 
     if (event?.type?.session) {
+      row['Module name'] = strip(event.type?.name ?? '');
       row['Module number'] = (event.type.order ?? 0) + 1;
       row['Session number'] = event.type.session.order + 1;
+      row['Session title'] = strip(event.type.session.title ?? '');
+    } else {
+      row['Event type name'] = strip(event.type?.name ?? '');
     }
 
-    if (event.comments && event.comments.length) {
+    if (options?.includeComments && event.comments && event.comments.length) {
       row.Comments = event.comments.map((comment) => {
         const strippedComment = comment.content.replace(/<[^>]+>/g, ' ');
 
@@ -58,18 +62,18 @@ const formatTabularEvents = (
       });
     }
 
-    const flattenColumns: Set<string> = new Set();
     const inputs = forceArray(event.inputs);
-    let hasFilteredInputId = false;
+    const flattenColumns = new Set<string>();
+    let filteredInputExists = false;
 
     for (const input of inputs) {
       if (
         !input.input ||
         (options?.filterByInputId &&
           input.input.id !== options.filterByInputId) ||
-        (options?.inputOptions?.length &&
-          !options.inputOptions.includes(input.option?.id ?? '') &&
-          !options.inputOptions.includes(String(input.value)))
+        (options?.filterByInputOptions?.length &&
+          !options.filterByInputOptions.includes(input.option?.id ?? '') &&
+          !options.filterByInputOptions.includes(String(input.value)))
       ) {
         continue;
       }
@@ -79,7 +83,7 @@ const formatTabularEvents = (
       if (input.input.type === InputType.MultiSelect) {
         row[column] = row[column] ?? [];
         (row[column] as Array<string>).push(strip(input.option?.label));
-        if (options?.flattenInputs) flattenColumns.add(column);
+        if (options?.flattenColumnValues) flattenColumns.add(column);
       } else if (input.input.type === InputType.Select) {
         (row[column] as string) = strip(input.option?.label);
       } else if (input.input.type === InputType.Checkbox) {
@@ -88,22 +92,32 @@ const formatTabularEvents = (
         row[column] = Number(input.value);
       }
 
-      hasFilteredInputId = !!options?.filterByInputId;
+      if (options?.filterByInputId) {
+        filteredInputExists = true;
+      }
     }
 
-    if (options?.filterByInputId && !hasFilteredInputId) {
+    if (options?.filterByInputId && !filteredInputExists) {
       continue;
     }
 
-    if (!options?.flattenInputs || !flattenColumns.size) {
+    if (!options?.flattenColumnValues || !flattenColumns.size) {
       table.push(row);
       continue;
     }
 
-    for (const column of Array.from(flattenColumns)) {
+    for (const column of Array.from(flattenColumns.values())) {
+      if (!row[column]) continue;
+
       for (const value of row[column] as Array<string>) {
-        table.push({ ...row, [column]: value });
+        table.push({ Id: row.Id, Time: row.Time, [column]: value });
       }
+
+      delete row[column];
+    }
+
+    if (!options?.filterByInputId) {
+      table.push(row);
     }
   }
 

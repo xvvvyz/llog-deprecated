@@ -196,7 +196,7 @@ const EventForm = ({
                     name={`inputs.${i}.0`}
                     render={({ field }) => (
                       <Select
-                        className="rounded-r-none border-r-0"
+                        controlClassName="rounded-r-none border-r-0"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}
@@ -215,7 +215,7 @@ const EventForm = ({
                     name={`inputs.${i}.1`}
                     render={({ field }) => (
                       <Select
-                        className="rounded-none"
+                        controlClassName="rounded-none"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}
@@ -234,7 +234,7 @@ const EventForm = ({
                     name={`inputs.${i}.2`}
                     render={({ field }) => (
                       <Select
-                        className="rounded-l-none border-l-0"
+                        controlClassName="rounded-l-none border-l-0"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}

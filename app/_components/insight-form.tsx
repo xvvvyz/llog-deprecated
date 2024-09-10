@@ -2,10 +2,11 @@
 
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
+import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
-import InsightSettingsSection from '@/_components/insight-settings-section';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PlotFigure from '@/_components/plot-figure';
+import * as Popover from '@/_components/popover';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import BarInterval from '@/_constants/enum-bar-interval';
@@ -21,6 +22,10 @@ import { InsightConfigJson } from '@/_types/insight-config-json';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
 import getInsightOptionsFromEvents from '@/_utilities/get-insight-options-from-events';
+import { ArrowsPointingInIcon } from '@heroicons/react/24/outline';
+import AdjustmentsHorizontalIcon from '@heroicons/react/24/outline/AdjustmentsHorizontalIcon';
+import FunnelIcon from '@heroicons/react/24/outline/FunnelIcon';
+import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller } from 'react-hook-form';
@@ -51,7 +56,6 @@ const BAR_INTERVAL_OPTIONS = [
 ];
 
 const BAR_REDUCER_OPTIONS = [
-  { id: BarReducer.Count, isDisabled: false, label: 'Count' },
   { id: BarReducer.Mean, isDisabled: false, label: 'Average' },
   { id: BarReducer.Sum, isDisabled: false, label: 'Sum' },
   { id: BarReducer.Min, isDisabled: false, label: 'Min' },
@@ -100,9 +104,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   const inputId = form.watch('input');
   const showBars = form.watch('showBars');
-  const showDots = form.watch('showDots');
   const showLine = form.watch('showLine');
-  const showLinearRegression = form.watch('showLinearRegression');
 
   const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
 
@@ -118,40 +120,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     { label: 'Training plans', options: trainingPlanOptions },
   ];
 
-  const onMarkOrInputChange = ({
-    inputId,
-    showBars,
-    showDots,
-    showLine,
-    showLinearRegression,
-  }: {
-    inputId: string;
-    showBars?: boolean;
-    showDots?: boolean;
-    showLine?: boolean;
-    showLinearRegression?: boolean;
-  }) => {
-    const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
-
-    if (isInputNominal) {
-      if (showDots || showLine || showLinearRegression) {
-        form.setValue('showBars', false);
-      } else if (showBars) {
-        form.setValue('barReducer', BarReducer.Count);
-        form.setValue('showDots', false);
-        form.setValue('showLine', false);
-        form.setValue('showLinearRegression', false);
-      }
-    } else {
-      if (showBars) {
-        form.setValue('barReducer', BarReducer.Mean);
-      }
-    }
-  };
-
   return (
     <form
-      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
+      className="flex flex-col gap-8 px-4 py-8 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
           const res = await upsertInsight(
@@ -168,46 +139,46 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
         }),
       )}
     >
-      <div className="grid gap-6 md:grid-cols-3 md:gap-4">
+      <div className="grid gap-4 md:grid-cols-3">
         <Input
-          label="Name"
+          placeholder="Name"
           maxLength={49}
           required
           {...form.register('name')}
         />
-        <div className="md:col-span-2">
-          <Controller
-            control={form.control}
-            name="input"
-            render={({ field }) => (
-              <Select
-                isClearable={false}
-                label="Input"
-                name={field.name}
-                noOptionsMessage={() => 'No inputs have been recorded.'}
-                onBlur={field.onBlur}
-                onChange={(value) => {
-                  const inputId = (value as IOption).id;
-                  field.onChange(inputId);
-                  form.setValue('includeEventsFrom', null);
-                  form.setValue('includeEventsSince', null);
-                  form.setValue('inputOptions', []);
+        <Controller
+          control={form.control}
+          name="input"
+          render={({ field }) => (
+            <Select
+              className="md:col-span-2"
+              isClearable={false}
+              name={field.name}
+              noOptionsMessage={() => 'No inputs have been recorded.'}
+              onBlur={field.onBlur}
+              onChange={(value) => {
+                const inputId = (value as IOption).id;
+                field.onChange(inputId);
+                form.setValue('includeEventsFrom', null);
+                form.setValue('includeEventsSince', null);
+                form.setValue('inputOptions', []);
 
-                  onMarkOrInputChange({
-                    inputId,
-                    showBars,
-                    showDots,
-                    showLine,
-                    showLinearRegression,
-                  });
-                }}
-                options={inputOptions}
-                placeholder="Select an input…"
-                value={inputOptions.find((o) => field.value === o.id)}
-              />
-            )}
-          />
-        </div>
+                const { isInputNominal } = getInputDetailsFromEvents({
+                  events,
+                  inputId,
+                });
+
+                form.setValue(
+                  'barReducer',
+                  isInputNominal ? BarReducer.Count : BarReducer.Mean,
+                );
+              }}
+              options={inputOptions}
+              placeholder="Select an input…"
+              value={inputOptions.find((o) => field.value === o.id)}
+            />
+          )}
+        />
       </div>
       <div className="rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl">
         <PlotFigure
@@ -233,227 +204,293 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           type={form.watch('type')}
         />
       </div>
-      <InsightSettingsSection title="Marks">
-        <div className="grid grid-cols-2 gap-4 pt-6 md:grid-cols-4">
+      <div className="flex flex-col gap-4 md:flex-row">
+        <Checkbox
+          className="w-full"
+          label="Dots"
+          labelInside
+          {...form.register('showDots')}
+        />
+        <div className="flex w-full">
           <Checkbox
-            label="Dots"
-            {...form.register('showDots', {
-              onChange: (e) =>
-                onMarkOrInputChange({ inputId, showDots: e.target.checked }),
-            })}
-          />
-          <Checkbox
+            className="w-full"
+            inputClassName="rounded-r-none"
             label="Line"
-            {...form.register('showLine', {
-              onChange: (e) =>
-                onMarkOrInputChange({ inputId, showLine: e.target.checked }),
-            })}
+            labelInside
+            {...form.register('showLine')}
           />
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <IconButton
+                className="rounded-l-none border-l-0 p-2.5"
+                colorScheme="transparent"
+                icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                label="Line settings"
+                variant="primary"
+              />
+            </Popover.Trigger>
+            <Popover.Content
+              align="end"
+              className="mr-0 w-64 space-y-6 p-8 pt-7"
+              side="top"
+            >
+              <Controller
+                control={form.control}
+                name="lineCurveFunction"
+                render={({ field }) => (
+                  <Select
+                    isClearable={false}
+                    isSearchable={false}
+                    label="Curve function"
+                    name={field.name}
+                    onBlur={field.onBlur}
+                    onChange={(value) => field.onChange((value as IOption)?.id)}
+                    options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
+                    value={LINE_CURVE_FUNCTION_OPTIONS.find(
+                      (o) => o.id === field.value,
+                    )}
+                  />
+                )}
+              />
+            </Popover.Content>
+          </Popover.Root>
+        </div>
+        <div className="flex w-full">
           <Checkbox
+            className="w-full"
+            inputClassName="rounded-r-none"
             label="Bars"
-            {...form.register('showBars', {
-              onChange: (e) =>
-                onMarkOrInputChange({ inputId, showBars: e.target.checked }),
-            })}
+            labelInside
+            {...form.register('showBars')}
           />
-          <Checkbox
-            label="Trend"
-            {...form.register('showLinearRegression', {
-              onChange: (e) =>
-                onMarkOrInputChange({
-                  inputId,
-                  showLinearRegression: e.target.checked,
-                }),
-            })}
-          />
-        </div>
-        <div className="grid gap-6 pt-6 md:grid-cols-3 md:gap-4">
-          <Controller
-            control={form.control}
-            name="lineCurveFunction"
-            render={({ field }) => (
-              <Select
-                isDisabled={!showLine}
-                isClearable={false}
-                isSearchable={false}
-                label="Line function"
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={(value) => field.onChange((value as IOption)?.id)}
-                options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
-                value={LINE_CURVE_FUNCTION_OPTIONS.find(
-                  (o) => o.id === field.value,
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <IconButton
+                className="rounded-l-none border-l-0 p-2.5"
+                colorScheme="transparent"
+                icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                label="Bar settings"
+                variant="primary"
+              />
+            </Popover.Trigger>
+            <Popover.Content
+              align="end"
+              className="mr-0 w-64 space-y-6 p-8 pt-7"
+              side="top"
+            >
+              <Controller
+                control={form.control}
+                name="barInterval"
+                render={({ field }) => (
+                  <Select
+                    isClearable={false}
+                    isSearchable={false}
+                    label="Interval"
+                    name={field.name}
+                    onBlur={field.onBlur}
+                    onChange={(value) => field.onChange((value as IOption)?.id)}
+                    options={BAR_INTERVAL_OPTIONS as IOption[]}
+                    value={BAR_INTERVAL_OPTIONS.find(
+                      (o) => o.id === field.value,
+                    )}
+                  />
                 )}
               />
-            )}
-          />
-          <div className="grid grid-cols-2 gap-4 md:col-span-2">
-            <Controller
-              control={form.control}
-              name="barInterval"
-              render={({ field }) => (
-                <Select
-                  isDisabled={!showBars}
-                  isClearable={false}
-                  isSearchable={false}
-                  label="Bar interval"
-                  name={field.name}
-                  onBlur={field.onBlur}
-                  onChange={(value) => field.onChange((value as IOption)?.id)}
-                  options={BAR_INTERVAL_OPTIONS as IOption[]}
-                  value={BAR_INTERVAL_OPTIONS.find((o) => o.id === field.value)}
+              {!isInputNominal && (
+                <Controller
+                  control={form.control}
+                  name="barReducer"
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      isSearchable={false}
+                      label="Reducer"
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={(value) =>
+                        field.onChange((value as IOption)?.id)
+                      }
+                      options={BAR_REDUCER_OPTIONS}
+                      value={BAR_REDUCER_OPTIONS.find(
+                        (o) => o.id === field.value,
+                      )}
+                    />
+                  )}
                 />
               )}
-            />
-            <Controller
-              control={form.control}
-              name="barReducer"
-              render={({ field }) => (
-                <Select
-                  isDisabled={!showBars}
-                  isClearable={false}
-                  isSearchable={false}
-                  label="Bar reducer"
-                  name={field.name}
-                  onBlur={field.onBlur}
-                  onChange={(value) => field.onChange((value as IOption)?.id)}
-                  options={BAR_REDUCER_OPTIONS.map((o) => {
-                    o.isDisabled = isInputNominal
-                      ? o.id !== BarReducer.Count
-                      : o.id === BarReducer.Count;
-
-                    return o;
-                  })}
-                  value={BAR_REDUCER_OPTIONS.find((o) => o.id === field.value)}
-                />
-              )}
-            />
-          </div>
+            </Popover.Content>
+          </Popover.Root>
         </div>
-      </InsightSettingsSection>
-      <InsightSettingsSection title="Margins">
-        <div className="grid grid-cols-2 gap-6 pt-6 md:grid-cols-4 md:gap-4">
-          <Input
-            label="Top"
-            min={0}
-            type="number"
-            {...form.register('marginTop')}
-          />
-          <Input
-            label="Bottom"
-            min={0}
-            type="number"
-            {...form.register('marginBottom')}
-          />
-          <Input
-            label="Left"
-            min={0}
-            type="number"
-            {...form.register('marginLeft')}
-          />
-          <Input
-            label="Right"
-            min={0}
-            type="number"
-            {...form.register('marginRight')}
-          />
-        </div>
-      </InsightSettingsSection>
-      <InsightSettingsSection title="Filters">
-        <div className="grid gap-6 pt-6 md:grid-cols-2 md:gap-4">
-          <Controller
-            control={form.control}
-            name="includeEventsFrom"
-            render={({ field }) => {
-              let value;
+        <div className="flex w-full gap-4 md:w-auto">
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <IconButton
+                className="w-full shrink p-2.5"
+                colorScheme="transparent"
+                icon={<PlusIcon className="m-0 size-5" />}
+                label="Margins"
+                variant="primary"
+              />
+            </Popover.Trigger>
+            <Popover.Content
+              align="end"
+              className="mr-0 w-96 space-y-4 p-8 pt-7"
+              side="top"
+            >
+              <Checkbox
+                label="Linear regression"
+                {...form.register('showLinearRegression')}
+              />
+            </Popover.Content>
+          </Popover.Root>
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <IconButton
+                className="w-full shrink p-2.5"
+                colorScheme="transparent"
+                icon={<FunnelIcon className="m-0 size-5" />}
+                label="Filters"
+                variant="primary"
+              />
+            </Popover.Trigger>
+            <Popover.Content
+              align="end"
+              className="mr-0 w-96 space-y-6 p-8 pt-7"
+              side="top"
+            >
+              <Controller
+                control={form.control}
+                name="includeEventsFrom"
+                render={({ field }) => {
+                  let value;
 
-              if (field.value) {
-                for (const group of eventTypeOrTrainingPlanOptions) {
-                  value = group.options.find((o) => o.id === field.value);
-                  if (value) break;
-                }
-              }
-
-              return (
-                <Select
-                  isSearchable={false}
-                  label="Events from"
-                  name={field.name}
-                  onBlur={field.onBlur}
-                  onChange={(value) =>
-                    field.onChange((value as IOption)?.id ?? null)
+                  if (field.value) {
+                    for (const group of eventTypeOrTrainingPlanOptions) {
+                      value = group.options.find((o) => o.id === field.value);
+                      if (value) break;
+                    }
                   }
-                  options={eventTypeOrTrainingPlanOptions}
-                  placeholder="All event types/training plans…"
-                  value={value}
+
+                  return (
+                    <Select
+                      isSearchable={false}
+                      label="Events from"
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={(value) =>
+                        field.onChange((value as IOption)?.id ?? null)
+                      }
+                      options={eventTypeOrTrainingPlanOptions}
+                      placeholder="All event types/training plans…"
+                      value={value}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                control={form.control}
+                name="includeEventsSince"
+                render={({ field }) => (
+                  <Select
+                    isSearchable={false}
+                    label="Events since"
+                    name={field.name}
+                    onBlur={field.onBlur}
+                    onChange={(value) =>
+                      field.onChange((value as IOption)?.id ?? null)
+                    }
+                    options={INCLUDE_EVENTS_SINCE_OPTIONS}
+                    placeholder="The beginning of time…"
+                    value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
+                      (o) => field.value === o.id,
+                    )}
+                  />
+                )}
+              />
+              {inputOptionsOptions[inputId] && (
+                <Controller
+                  control={form.control}
+                  name="inputOptions"
+                  render={({ field }) => (
+                    <Select
+                      isMulti
+                      label="Input options"
+                      name={field.name}
+                      noOptionsMessage={() => 'No options.'}
+                      onBlur={field.onBlur}
+                      onChange={(values) =>
+                        field.onChange((values as IOption[]).map((v) => v.id))
+                      }
+                      options={inputOptionsOptions[inputId]}
+                      placeholder="All input options…"
+                      value={inputOptionsOptions[inputId]?.filter((o) =>
+                        field.value.includes(o.id),
+                      )}
+                    />
+                  )}
                 />
-              );
-            }}
-          />
-          <Controller
-            control={form.control}
-            name="includeEventsSince"
-            render={({ field }) => (
-              <Select
-                isSearchable={false}
-                label="Events since"
-                name={field.name}
-                onBlur={field.onBlur}
-                onChange={(value) =>
-                  field.onChange((value as IOption)?.id ?? null)
-                }
-                options={INCLUDE_EVENTS_SINCE_OPTIONS}
-                placeholder="The beginning of time…"
-                value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
-                  (o) => field.value === o.id,
-                )}
+              )}
+            </Popover.Content>
+          </Popover.Root>
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <IconButton
+                className="w-full shrink p-2.5"
+                colorScheme="transparent"
+                icon={<ArrowsPointingInIcon className="m-0 size-5" />}
+                label="Margins"
+                variant="primary"
               />
-            )}
-          />
+            </Popover.Trigger>
+            <Popover.Content
+              align="end"
+              className="mr-0 w-64 space-y-4 p-8 pt-7"
+              side="top"
+            >
+              <div className="grid w-full grid-cols-4 gap-4">
+                <Input
+                  className="col-span-2 col-start-2"
+                  min={0}
+                  type="number"
+                  {...form.register('marginTop')}
+                />
+              </div>
+              <div className="flex gap-4">
+                <Input min={0} type="number" {...form.register('marginLeft')} />
+                <Input
+                  min={0}
+                  type="number"
+                  {...form.register('marginRight')}
+                />
+              </div>
+              <div className="grid w-full grid-cols-4 gap-4">
+                <Input
+                  className="col-span-2 col-start-2"
+                  min={0}
+                  type="number"
+                  {...form.register('marginBottom')}
+                />
+              </div>
+            </Popover.Content>
+          </Popover.Root>
         </div>
-        <div className="mt-6">
-          <Controller
-            control={form.control}
-            name="inputOptions"
-            render={({ field }) => (
-              <Select
-                isDisabled={!inputOptionsOptions[inputId]}
-                isMulti
-                label="Input options"
-                name={field.name}
-                noOptionsMessage={() => 'No options.'}
-                onBlur={field.onBlur}
-                onChange={(values) =>
-                  field.onChange((values as IOption[]).map((v) => v.id))
-                }
-                options={inputOptionsOptions[inputId]}
-                placeholder="All input options…"
-                value={inputOptionsOptions[inputId]?.filter((o) =>
-                  field.value.includes(o.id),
-                )}
-              />
-            )}
-          />
-        </div>
-      </InsightSettingsSection>
+      </div>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
-      <div className="flex flex-col-reverse justify-between gap-8 pt-8 align-baseline sm:flex-row">
-        <UnsavedChangesBanner<InsightFormValues> form={form} />
-        <div className="flex justify-center gap-4">
-          <PageModalBackButton
-            className="w-36 shrink-0"
-            colorScheme="transparent"
-            size="sm"
-          >
+      <div className="flex flex-col-reverse gap-8 pt-8 md:flex-row md:items-end md:justify-between">
+        <UnsavedChangesBanner<InsightFormValues>
+          className="shrink-0"
+          form={form}
+        />
+        <div className="mx-auto flex w-full max-w-sm gap-4 md:mx-0">
+          <PageModalBackButton className="w-full" colorScheme="transparent">
             Close
           </PageModalBackButton>
           <Button
-            className="w-36 shrink-0"
+            className="w-full"
             loading={isTransitioning}
             loadingText="Saving…"
-            size="sm"
             type="submit"
           >
             Save

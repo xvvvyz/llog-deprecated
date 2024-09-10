@@ -55,7 +55,7 @@ const SessionMenu = ({
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="mx-2" sideOffset={-2}>
+        <DropdownMenu.Content>
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/${sessionId}/edit`}
             scroll={false}

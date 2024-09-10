@@ -23,6 +23,7 @@ import ReactSelect, {
   MultiValueRemoveProps,
   OptionProps,
   PlaceholderProps,
+  Props,
   Props as ReactSelectProps,
   SelectInstance,
   SingleValueProps,
@@ -61,7 +62,11 @@ const Control = <TOption extends IOption>({
   menuIsOpen,
   selectProps,
   ...props
-}: ControlProps<TOption>) => {
+}: ControlProps<TOption> & {
+  selectProps: Props<TOption, boolean, GroupBase<TOption>> & {
+    controlClassName?: string;
+  };
+}) => {
   const hasNoOptionsMessage = !!selectProps.noOptionsMessage({
     inputValue: selectProps.inputValue,
   });
@@ -78,7 +83,7 @@ const Control = <TOption extends IOption>({
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
         selectProps.isDisabled && 'disabled group-hover:bg-alpha-1',
-        selectProps.className,
+        selectProps.controlClassName,
       )}
       menuIsOpen={menuIsOpen}
       selectProps={selectProps}
@@ -295,6 +300,7 @@ const ValueContainer = <TOption extends IOption>({
 
 const Select = <TOption extends IOption>(
   {
+    className,
     instanceId,
     isCreatable,
     isDisabled,
@@ -306,7 +312,7 @@ const Select = <TOption extends IOption>(
     tooltip,
     value,
     ...props
-  }: SelectProps<TOption>,
+  }: SelectProps<TOption> & { controlClassName?: string },
   ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
 ) => {
   const commonProps = {
@@ -347,7 +353,7 @@ const Select = <TOption extends IOption>(
   };
 
   return (
-    <div className="group">
+    <div className={twMerge('group', className)}>
       <div className="flex justify-between">
         {label && (
           <label className="label" htmlFor={`react-select-${name}-input`}>

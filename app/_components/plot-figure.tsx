@@ -15,7 +15,7 @@ import * as P from '@observablehq/plot';
 import { useParentSize } from '@visx/responsive';
 import { throttle } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import * as React from 'react';
 
 const PlotFigure = ({
   barInterval,
@@ -58,8 +58,8 @@ const PlotFigure = ({
   marginLeft: string;
   marginRight: string;
   marginTop: string;
-  setActiveId?: Dispatch<SetStateAction<string | null>>;
-  setSyncDate?: Dispatch<SetStateAction<Date | null>>;
+  setActiveId?: React.Dispatch<React.SetStateAction<string | null>>;
+  setSyncDate?: React.Dispatch<React.SetStateAction<Date | null>>;
   showBars: boolean;
   showDots: boolean;
   showLine: boolean;
@@ -69,11 +69,11 @@ const PlotFigure = ({
   title: string;
   type: ChartType;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { parentRef, width } = useParentSize();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!containerRef.current || !events) return;
 
     const { input, isDuration, isInputNominal } = getInputDetailsFromEvents({
@@ -85,35 +85,37 @@ const PlotFigure = ({
 
     switch (type) {
       case ChartType.TimeSeries: {
-        const rows = formatTabularEvents(events, {
-          filterByInputId: inputId,
-          flattenInputs: true,
-          includeEventsFrom,
-          includeEventsSince,
-          inputOptions,
-          parseTime: true,
-        });
-
         const x = 'Time';
         const y = formatDirtyColumnHeader(input?.label);
 
-        marks.push(
-          P.axisX({
-            fill: '#C3C3C2',
-            stroke: 'hsla(0, 0%, 100%, 10%)',
-          }),
-        );
+        const rows = formatTabularEvents(events, {
+          filterByInputId: inputId,
+          filterByInputOptions: inputOptions,
+          flattenColumnValues: true,
+          includeEventsFrom,
+          includeEventsSince,
+          parseTime: true,
+        });
 
-        marks.push(
-          P.axisY({
-            fill: '#C3C3C2',
-            label: null,
-            stroke: 'hsla(0, 0%, 100%, 10%)',
-            tickFormat: isDuration
-              ? (t) => `${humanizeDurationShort(t * 1000)}`
-              : undefined,
-          }),
-        );
+        if (showBars || showLine || showLinearRegression || showDots) {
+          marks.push(
+            P.axisX({
+              fill: '#C3C3C2',
+              stroke: 'hsla(0, 0%, 100%, 10%)',
+            }),
+          );
+
+          marks.push(
+            P.axisY({
+              fill: '#C3C3C2',
+              label: null,
+              stroke: 'hsla(0, 0%, 100%, 10%)',
+              tickFormat: isDuration
+                ? (t) => `${humanizeDurationShort(t * 1000)}`
+                : undefined,
+            }),
+          );
+        }
 
         if (showBars) {
           marks.push(
@@ -144,10 +146,6 @@ const PlotFigure = ({
           marks.push(P.line(rows, { curve: lineCurveFunction, x, y }));
         }
 
-        if (showDots) {
-          marks.push(P.dot(rows, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
-        }
-
         if (showLinearRegression) {
           marks.push(
             P.linearRegressionY(rows, {
@@ -159,7 +157,9 @@ const PlotFigure = ({
           );
         }
 
-        if (!showBars || !isInputNominal) {
+        if (showDots) {
+          marks.push(P.dot(rows, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
+
           marks.push(
             P.dot(
               rows,
@@ -191,7 +191,7 @@ const PlotFigure = ({
               P.pointerX({
                 maxRadius: 100,
                 px: x,
-                stroke: 'hsla(0, 0%, 100%, 25%)',
+                stroke: 'hsla(0, 0%, 100%, 10%)',
                 y,
               }),
             ),
@@ -244,7 +244,10 @@ const PlotFigure = ({
 
     const plot = P.plot({
       color: { legend: true },
-      height: isInputNominal && !showBars ? undefined : defaultHeight,
+      height:
+        isInputNominal && (showDots || showLine || showLinearRegression)
+          ? undefined
+          : defaultHeight,
       inset: 10,
       marginBottom: Number(marginBottom),
       marginLeft: Number(marginLeft),
@@ -252,7 +255,7 @@ const PlotFigure = ({
       marginTop: Number(marginTop),
       marks,
       width,
-      x: { type: 'time' },
+      x: marks.length ? { type: 'time' } : undefined,
     });
 
     const onClick = () => {
@@ -292,6 +295,7 @@ const PlotFigure = ({
     plot.addEventListener('touchcancel', onEnd);
     plot.addEventListener('touchend', onEnd);
     plot.addEventListener('touchmove', onMove);
+
     containerRef.current.append(plot);
     return () => plot.remove();
   }, [

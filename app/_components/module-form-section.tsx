@@ -120,7 +120,7 @@ const ModuleFormSection = <
             </div>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="mx-2">
+            <DropdownMenu.Content className="mr-2">
               <DropdownMenu.Button
                 onClick={() =>
                   moduleArray.insert(moduleIndex, {
@@ -212,7 +212,7 @@ const ModuleFormSection = <
         </DropdownMenu.Root>
       </div>
       <Input
-        className="rounded-none border-t-0"
+        inputClassName="rounded-none border-t-0"
         maxLength={49}
         placeholder="Title"
         {...form.register(`${fieldPath}.name` as Form.Path<T>)}
@@ -238,7 +238,7 @@ const ModuleFormSection = <
           name={`${fieldPath}.inputs` as T[string]}
           render={({ field }) => (
             <Select
-              className="rounded-t-none border-t-0"
+              controlClassName="rounded-t-none border-t-0"
               formatCreateLabel={(value) => `Create "${value}" input`}
               isCreatable
               isMulti

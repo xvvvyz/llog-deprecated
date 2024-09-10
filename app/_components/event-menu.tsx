@@ -36,7 +36,7 @@ const EventMenu = ({ className, eventId, isModal }: EventMenuProps) => {
         )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="mx-2" sideOffset={0}>
+        <DropdownMenu.Content className={twMerge(!isModal && 'mr-1.5')}>
           <DropdownMenuDeleteItem
             confirmText="Delete event"
             onConfirm={async () => {
