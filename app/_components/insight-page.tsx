@@ -1,6 +1,6 @@
+import InsightPlot from '@/_components/insight-plot';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
-import PlotFigure from '@/_components/plot-figure';
 import Number from '@/_constants/enum-number';
 import getInsight from '@/_queries/get-insight';
 import getPublicInsight from '@/_queries/get-public-insight';
@@ -45,7 +45,7 @@ const InsightPage = async ({
   return (
     <Modal.Content className="max-w-4xl bg-bg-3">
       <PageModalHeader className="-mb-8" title={insight.name} />
-      <PlotFigure
+      <InsightPlot
         barInterval={config.barInterval}
         barReducer={config.barReducer}
         events={events}
@@ -63,6 +63,7 @@ const InsightPage = async ({
         showDots={config.showDots}
         showLine={config.showLine}
         showLinearRegression={config.showLinearRegression}
+        showLinearRegressionConfidence={config.showLinearRegressionConfidence}
         subjectId={subjectId}
         title={insight.name}
         type={config.type}

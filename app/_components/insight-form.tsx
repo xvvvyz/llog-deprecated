@@ -4,8 +4,8 @@ import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import InsightPlot from '@/_components/insight-plot';
 import PageModalBackButton from '@/_components/page-modal-back-button';
-import PlotFigure from '@/_components/plot-figure';
 import * as Popover from '@/_components/popover';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
@@ -24,8 +24,8 @@ import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-event
 import getInsightOptionsFromEvents from '@/_utilities/get-insight-options-from-events';
 import { ArrowsPointingInIcon } from '@heroicons/react/24/outline';
 import AdjustmentsHorizontalIcon from '@heroicons/react/24/outline/AdjustmentsHorizontalIcon';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import FunnelIcon from '@heroicons/react/24/outline/FunnelIcon';
-import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Controller } from 'react-hook-form';
@@ -98,6 +98,8 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       showDots: config?.showDots ?? true,
       showLine: config?.showLine ?? false,
       showLinearRegression: config?.showLinearRegression ?? false,
+      showLinearRegressionConfidence:
+        config?.showLinearRegressionConfidence ?? false,
       type: config?.type ?? ChartType.TimeSeries,
     },
   });
@@ -181,7 +183,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
         />
       </div>
       <div className="rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl">
-        <PlotFigure
+        <InsightPlot
           barInterval={form.watch('barInterval')}
           barReducer={form.watch('barReducer')}
           defaultHeight={200}
@@ -199,6 +201,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           showDots={form.watch('showDots')}
           showLine={showLine}
           showLinearRegression={form.watch('showLinearRegression')}
+          showLinearRegressionConfidence={form.watch(
+            'showLinearRegressionConfidence',
+          )}
           subjectId={subjectId}
           title={form.watch('name')}
           type={form.watch('type')}
@@ -327,7 +332,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               <IconButton
                 className="w-full shrink p-2.5"
                 colorScheme="transparent"
-                icon={<PlusIcon className="m-0 size-5" />}
+                icon={<EllipsisVerticalIcon className="m-0 size-5" />}
                 label="Margins"
                 variant="primary"
               />
@@ -337,10 +342,35 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               className="mr-0 w-96 space-y-4 p-8 pt-7"
               side="top"
             >
-              <Checkbox
-                label="Linear regression"
-                {...form.register('showLinearRegression')}
-              />
+              <div className="flex w-full items-end">
+                <Checkbox
+                  className="w-full"
+                  inputClassName="rounded-r-none"
+                  label="Linear regression"
+                  {...form.register('showLinearRegression')}
+                />
+                <Popover.Root>
+                  <Popover.Trigger asChild>
+                    <IconButton
+                      className="rounded-l-none border-l-0 p-2.5"
+                      colorScheme="transparent"
+                      icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                      label="Linear regression settings"
+                      variant="primary"
+                    />
+                  </Popover.Trigger>
+                  <Popover.Content
+                    align="end"
+                    className="mr-0 w-64 space-y-6 p-8 pt-7"
+                    side="top"
+                  >
+                    <Checkbox
+                      label="Confidence band"
+                      {...form.register('showLinearRegressionConfidence')}
+                    />
+                  </Popover.Content>
+                </Popover.Root>
+              </div>
             </Popover.Content>
           </Popover.Root>
           <Popover.Root>

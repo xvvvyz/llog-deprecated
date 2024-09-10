@@ -3,7 +3,7 @@
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import InsightMenu from '@/_components/insight-menu';
-import PlotFigure from '@/_components/plot-figure';
+import InsightPlot from '@/_components/insight-plot';
 import { ListEventsData } from '@/_queries/list-events';
 import { ListInsightsData } from '@/_queries/list-insights';
 import { InsightConfigJson } from '@/_types/insight-config-json';
@@ -87,7 +87,7 @@ const Insight = ({
           <InsightMenu insightId={insight.id} subjectId={subjectId} />
         )}
       </div>
-      <PlotFigure
+      <InsightPlot
         barInterval={config.barInterval}
         barReducer={config.barReducer}
         defaultHeight={200}
@@ -109,6 +109,7 @@ const Insight = ({
         showDots={config.showDots}
         showLine={config.showLine}
         showLinearRegression={config.showLinearRegression}
+        showLinearRegressionConfidence={config.showLinearRegressionConfidence}
         subjectId={subjectId}
         syncDate={insight.id === activeId ? null : syncDate}
         title={insight.name}

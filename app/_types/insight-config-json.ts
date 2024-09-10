@@ -12,6 +12,7 @@ export type InsightConfigJson = {
   input: string;
   inputOptions: string[];
   lineCurveFunction: LineCurveFunction;
+  showLinearRegressionConfidence: boolean;
   marginBottom: string;
   marginLeft: string;
   marginRight: string;

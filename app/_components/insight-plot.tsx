@@ -17,39 +17,14 @@ import { throttle } from 'lodash';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
-const PlotFigure = ({
-  barInterval,
-  barReducer,
-  defaultHeight,
-  events,
-  includeEventsFrom,
-  includeEventsSince,
-  id,
-  inputId,
-  inputOptions,
-  isPublic,
-  lineCurveFunction,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  marginTop,
-  setActiveId,
-  setSyncDate,
-  showBars,
-  showDots,
-  showLine,
-  showLinearRegression,
-  subjectId,
-  syncDate,
-  type,
-}: {
+interface InsightPlot {
   barInterval: BarInterval;
   barReducer: BarReducer;
   defaultHeight?: number;
   events: ListEventsData;
+  id?: string;
   includeEventsFrom: string | null;
   includeEventsSince: TimeSinceMilliseconds | null;
-  id?: string;
   inputId: string;
   inputOptions?: string[];
   isPublic?: boolean;
@@ -64,11 +39,40 @@ const PlotFigure = ({
   showDots: boolean;
   showLine: boolean;
   showLinearRegression: boolean;
+  showLinearRegressionConfidence?: boolean;
   subjectId: string;
   syncDate?: Date | null;
   title: string;
   type: ChartType;
-}) => {
+}
+
+const InsightPlot = ({
+  barInterval,
+  barReducer,
+  defaultHeight,
+  events,
+  id,
+  includeEventsFrom,
+  includeEventsSince,
+  inputId,
+  inputOptions,
+  isPublic,
+  lineCurveFunction,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  marginTop,
+  setActiveId,
+  setSyncDate,
+  showBars,
+  showDots,
+  showLine,
+  showLinearRegression,
+  showLinearRegressionConfidence,
+  subjectId,
+  syncDate,
+  type,
+}: InsightPlot) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { parentRef, width } = useParentSize();
@@ -149,7 +153,9 @@ const PlotFigure = ({
         if (showLinearRegression) {
           marks.push(
             P.linearRegressionY(rows, {
-              ci: 0,
+              ci: showLinearRegressionConfidence ? undefined : 0,
+              fill: 'hsla(5, 85%, 50%, 10%)',
+              fillOpacity: 1,
               stroke: 'hsla(5, 85%, 50%, 75%)',
               x,
               y,
@@ -258,43 +264,45 @@ const PlotFigure = ({
       x: marks.length ? { type: 'time' } : undefined,
     });
 
-    const onClick = () => {
-      try {
-        const datum = plot.querySelector('title')?.innerHTML ?? '';
-        if (!datum) return;
-        const { Id } = JSON.parse(datum);
-        if (!Id) return;
-        const shareOrSubjects = isPublic ? 'share' : 'subjects';
-        const href = `/${shareOrSubjects}/${subjectId}/events/${Id}`;
-        router.push(href, { scroll: false });
-      } catch {
-        // noop
-      }
-    };
+    if (showDots) {
+      const onClick = () => {
+        try {
+          const datum = plot.querySelector('title')?.innerHTML ?? '';
+          if (!datum) return;
+          const { Id } = JSON.parse(datum);
+          if (!Id) return;
+          const shareOrSubjects = isPublic ? 'share' : 'subjects';
+          const href = `/${shareOrSubjects}/${subjectId}/events/${Id}`;
+          router.push(href, { scroll: false });
+        } catch {
+          // noop
+        }
+      };
 
-    const onEnd = () => {
-      setActiveId?.(null);
-      setSyncDate?.(null);
-    };
+      const onEnd = () => {
+        setActiveId?.(null);
+        setSyncDate?.(null);
+      };
 
-    const onMove = throttle(() => {
-      try {
-        const datum = plot.querySelector('title')?.innerHTML ?? '';
-        if (!datum) return;
-        const { Time } = JSON.parse(datum);
-        setActiveId?.(id ?? null);
-        setSyncDate?.(Time ? new Date(Time) : null);
-      } catch {
-        // noop
-      }
-    }, 50);
+      const onMove = throttle(() => {
+        try {
+          const datum = plot.querySelector('title')?.innerHTML ?? '';
+          if (!datum) return;
+          const { Time } = JSON.parse(datum);
+          setActiveId?.(id ?? null);
+          setSyncDate?.(Time ? new Date(Time) : null);
+        } catch {
+          // noop
+        }
+      }, 50);
 
-    plot.addEventListener('click', onClick);
-    plot.addEventListener('mouseleave', onEnd);
-    plot.addEventListener('mousemove', onMove);
-    plot.addEventListener('touchcancel', onEnd);
-    plot.addEventListener('touchend', onEnd);
-    plot.addEventListener('touchmove', onMove);
+      plot.addEventListener('click', onClick);
+      plot.addEventListener('mouseleave', onEnd);
+      plot.addEventListener('mousemove', onMove);
+      plot.addEventListener('touchcancel', onEnd);
+      plot.addEventListener('touchend', onEnd);
+      plot.addEventListener('touchmove', onMove);
+    }
 
     containerRef.current.append(plot);
     return () => plot.remove();
@@ -310,6 +318,7 @@ const PlotFigure = ({
     inputOptions,
     isPublic,
     lineCurveFunction,
+    showLinearRegressionConfidence,
     marginBottom,
     marginLeft,
     marginRight,
@@ -334,4 +343,4 @@ const PlotFigure = ({
   );
 };
 
-export default PlotFigure;
+export default InsightPlot;
