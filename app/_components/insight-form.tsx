@@ -81,6 +81,10 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
 
   const form = useCachedForm<InsightFormValues>(cacheKey, {
     defaultValues: {
+      annotationIncludeEventsFrom: config?.annotationIncludeEventsFrom ?? null,
+      annotationInput: config?.annotationInput ?? null,
+      annotationInputOptions: config?.annotationInputOptions ?? [],
+      annotationLabel: config?.annotationLabel ?? '',
       barInterval: config?.barInterval ?? BarInterval.Day,
       barReducer: config?.barReducer ?? BarReducer.Mean,
       includeEventsFrom: config?.includeEventsFrom ?? null,
@@ -104,23 +108,18 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
     },
   });
 
+  const annotationInputId = form.watch('annotationInput');
   const inputId = form.watch('input');
   const showBars = form.watch('showBars');
   const showLine = form.watch('showLine');
 
   const { isInputNominal } = getInputDetailsFromEvents({ events, inputId });
+  const inputOptions = getInsightOptionsFromEvents({ events, inputId });
 
-  const {
-    eventTypeOptions,
-    inputOptions,
-    inputOptionsOptions,
-    trainingPlanOptions,
-  } = getInsightOptionsFromEvents({ events, inputId });
-
-  const eventTypeOrTrainingPlanOptions = [
-    { label: 'Event types', options: eventTypeOptions },
-    { label: 'Training plans', options: trainingPlanOptions },
-  ];
+  const annotationInputOptions = getInsightOptionsFromEvents({
+    events,
+    inputId: annotationInputId,
+  });
 
   return (
     <form
@@ -175,15 +174,23 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                   isInputNominal ? BarReducer.Count : BarReducer.Mean,
                 );
               }}
-              options={inputOptions}
+              options={inputOptions.inputOptions}
               placeholder="Select an input…"
-              value={inputOptions.find((o) => field.value === o.id)}
+              value={inputOptions.inputOptions.find(
+                (o) => field.value === o.id,
+              )}
             />
           )}
         />
       </div>
       <div className="rounded border border-alpha-1 bg-bg-3 drop-shadow-2xl">
         <InsightPlot
+          annotationIncludeEventsFrom={form.watch(
+            'annotationIncludeEventsFrom',
+          )}
+          annotationInputId={annotationInputId}
+          annotationInputOptions={form.watch('annotationInputOptions')}
+          annotationLabel={form.watch('annotationLabel')}
           barInterval={form.watch('barInterval')}
           barReducer={form.watch('barReducer')}
           defaultHeight={200}
@@ -371,6 +378,121 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                   </Popover.Content>
                 </Popover.Root>
               </div>
+              <Controller
+                control={form.control}
+                name="annotationInput"
+                render={({ field }) => (
+                  <Select
+                    controlClassName="rounded-r-none"
+                    label="Annotate"
+                    name={field.name}
+                    noOptionsMessage={() => 'No inputs have been recorded.'}
+                    onBlur={field.onBlur}
+                    onChange={(value) => {
+                      const inputId = (value as IOption)?.id;
+                      field.onChange(inputId ?? null);
+                      form.setValue('annotationIncludeEventsFrom', null);
+                      form.setValue('annotationInputOptions', []);
+                      form.setValue('annotationLabel', '');
+                    }}
+                    options={annotationInputOptions.inputOptions}
+                    placeholder="Select an input…"
+                    right={
+                      <Popover.Root>
+                        <Popover.Trigger asChild>
+                          <IconButton
+                            className="rounded-l-none border-l-0 p-2.5"
+                            colorScheme="transparent"
+                            icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                            label="Annotation settings"
+                            variant="primary"
+                          />
+                        </Popover.Trigger>
+                        <Popover.Content
+                          align="end"
+                          className="mr-0 w-96 space-y-6 p-8 pt-7"
+                          side="top"
+                        >
+                          <Input
+                            label="Custom label"
+                            maxLength={20}
+                            {...form.register('annotationLabel')}
+                          />
+                          <Controller
+                            control={form.control}
+                            name="annotationIncludeEventsFrom"
+                            render={({ field }) => {
+                              let value;
+
+                              if (field.value) {
+                                for (const group of annotationInputOptions.eventTypeOrTrainingPlanOptions) {
+                                  value = group.options.find(
+                                    (o) => o.id === field.value,
+                                  );
+                                  if (value) break;
+                                }
+                              }
+
+                              return (
+                                <Select
+                                  isSearchable={false}
+                                  label="Events from"
+                                  name={field.name}
+                                  onBlur={field.onBlur}
+                                  onChange={(value) =>
+                                    field.onChange(
+                                      (value as IOption)?.id ?? null,
+                                    )
+                                  }
+                                  options={
+                                    annotationInputOptions.eventTypeOrTrainingPlanOptions
+                                  }
+                                  placeholder="All event types/training plans…"
+                                  value={value}
+                                />
+                              );
+                            }}
+                          />
+                          {annotationInputOptions.inputOptionsOptions[
+                            annotationInputId
+                          ] && (
+                            <Controller
+                              control={form.control}
+                              name="annotationInputOptions"
+                              render={({ field }) => (
+                                <Select
+                                  isMulti
+                                  label="Input options"
+                                  name={field.name}
+                                  noOptionsMessage={() => 'No options.'}
+                                  onBlur={field.onBlur}
+                                  onChange={(values) =>
+                                    field.onChange(
+                                      (values as IOption[]).map((v) => v.id),
+                                    )
+                                  }
+                                  options={
+                                    annotationInputOptions.inputOptionsOptions[
+                                      annotationInputId
+                                    ]
+                                  }
+                                  placeholder="All input options…"
+                                  value={annotationInputOptions.inputOptionsOptions[
+                                    annotationInputId
+                                  ]?.filter((o) => field.value.includes(o.id))}
+                                />
+                              )}
+                            />
+                          )}
+                        </Popover.Content>
+                      </Popover.Root>
+                    }
+                    value={annotationInputOptions.inputOptions.find(
+                      (o) => field.value === o.id,
+                    )}
+                  />
+                )}
+              />
             </Popover.Content>
           </Popover.Root>
           <Popover.Root>
@@ -395,7 +517,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                   let value;
 
                   if (field.value) {
-                    for (const group of eventTypeOrTrainingPlanOptions) {
+                    for (const group of inputOptions.eventTypeOrTrainingPlanOptions) {
                       value = group.options.find((o) => o.id === field.value);
                       if (value) break;
                     }
@@ -410,7 +532,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                       onChange={(value) =>
                         field.onChange((value as IOption)?.id ?? null)
                       }
-                      options={eventTypeOrTrainingPlanOptions}
+                      options={inputOptions.eventTypeOrTrainingPlanOptions}
                       placeholder="All event types/training plans…"
                       value={value}
                     />
@@ -437,7 +559,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                   />
                 )}
               />
-              {inputOptionsOptions[inputId] && (
+              {inputOptions.inputOptionsOptions[inputId] && (
                 <Controller
                   control={form.control}
                   name="inputOptions"
@@ -451,10 +573,10 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                       onChange={(values) =>
                         field.onChange((values as IOption[]).map((v) => v.id))
                       }
-                      options={inputOptionsOptions[inputId]}
+                      options={inputOptions.inputOptionsOptions[inputId]}
                       placeholder="All input options…"
-                      value={inputOptionsOptions[inputId]?.filter((o) =>
-                        field.value.includes(o.id),
+                      value={inputOptions.inputOptionsOptions[inputId]?.filter(
+                        (o) => field.value.includes(o.id),
                       )}
                     />
                   )}

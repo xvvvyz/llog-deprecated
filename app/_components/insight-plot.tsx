@@ -18,6 +18,10 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
 interface InsightPlot {
+  annotationIncludeEventsFrom: string | null;
+  annotationInputId: string;
+  annotationInputOptions: string[];
+  annotationLabel: string;
   barInterval: BarInterval;
   barReducer: BarReducer;
   defaultHeight?: number;
@@ -47,6 +51,10 @@ interface InsightPlot {
 }
 
 const InsightPlot = ({
+  annotationIncludeEventsFrom,
+  annotationInputId,
+  annotationInputOptions,
+  annotationLabel,
   barInterval,
   barReducer,
   defaultHeight,
@@ -163,16 +171,98 @@ const InsightPlot = ({
           );
         }
 
+        if (annotationInputId) {
+          const annotationInputDetails = getInputDetailsFromEvents({
+            events,
+            inputId: annotationInputId,
+          });
+
+          const annotationRows = formatTabularEvents(events, {
+            filterByInputId: annotationInputId,
+            filterByInputOptions: annotationInputOptions,
+            flattenColumnValues: true,
+            includeEventsFrom: annotationIncludeEventsFrom,
+            includeEventsSince,
+            parseTime: true,
+          });
+
+          const columnHeader = formatDirtyColumnHeader(
+            annotationInputDetails.input?.label,
+          );
+
+          marks.push(
+            P.ruleX(annotationRows, {
+              stroke: 'hsla(5, 85%, 50%, 75%)',
+              x,
+            }),
+          );
+
+          marks.push(
+            P.ruleX(
+              annotationRows,
+              P.pointerX({
+                maxRadius: 100,
+                stroke: 'hsl(5, 85%, 50%)',
+                x,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.dot(annotationRows, {
+              dy: -3,
+              fill: 'hsla(5, 85%, 50%, 50%)',
+              frameAnchor: 'top',
+              x,
+            }),
+          );
+
+          marks.push(
+            P.dot(
+              annotationRows,
+              P.pointerX({
+                dy: -3,
+                fill: 'hsla(5, 85%, 50%, 100%)',
+                frameAnchor: 'top',
+                maxRadius: 100,
+                title: (d) => JSON.stringify(d),
+                x,
+              }),
+            ),
+          );
+
+          marks.push(
+            P.text(
+              annotationRows,
+              P.pointerX({
+                dy: -22,
+                fill: '#fff',
+                frameAnchor: 'top',
+                maxRadius: 100,
+                text: (d) =>
+                  annotationLabel ||
+                  `${columnHeader} - ${
+                    annotationInputDetails.isDuration
+                      ? humanizeDurationShort(d[columnHeader] * 1000)
+                      : d[columnHeader]
+                  }`,
+                textAnchor: 'middle',
+                x,
+              }),
+            ),
+          );
+        }
+
         if (showDots) {
           marks.push(P.dot(rows, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
 
           marks.push(
             P.dot(
               rows,
-              P.pointerX({
+              P.pointer({
                 fill: '#fff',
-                maxRadius: 100,
-                title: (d) => JSON.stringify(d),
+                maxRadius: 50,
+                title: (d) => JSON.stringify({ ...d, priority: true }),
                 x,
                 y,
               }),
@@ -187,18 +277,6 @@ const InsightPlot = ({
                 py: y,
                 stroke: 'hsla(0, 0%, 100%, 25%)',
                 x,
-              }),
-            ),
-          );
-
-          marks.push(
-            P.ruleY(
-              rows,
-              P.pointerX({
-                maxRadius: 100,
-                px: x,
-                stroke: 'hsla(0, 0%, 100%, 10%)',
-                y,
               }),
             ),
           );
@@ -264,56 +342,64 @@ const InsightPlot = ({
       x: marks.length ? { type: 'time' } : undefined,
     });
 
-    if (showDots) {
-      const onClick = () => {
+    const getActiveDatum = () => {
+      const data = plot.querySelectorAll('title');
+      if (!data.length) return;
+      let final: { Id: string; Time: string } | null = null;
+
+      for (const datum of Array.from(data)) {
         try {
-          const datum = plot.querySelector('title')?.innerHTML ?? '';
-          if (!datum) return;
-          const { Id } = JSON.parse(datum);
-          if (!Id) return;
-          const shareOrSubjects = isPublic ? 'share' : 'subjects';
-          const href = `/${shareOrSubjects}/${subjectId}/events/${Id}`;
-          router.push(href, { scroll: false });
+          const { Id, Time, priority } = JSON.parse(datum.innerHTML ?? '');
+          if ((Id && !final) || priority) final = { Id, Time };
         } catch {
           // noop
         }
-      };
+      }
 
-      const onEnd = () => {
-        setActiveId?.(null);
-        setSyncDate?.(null);
-      };
+      return final;
+    };
 
-      const onMove = throttle(() => {
-        try {
-          const datum = plot.querySelector('title')?.innerHTML ?? '';
-          if (!datum) return;
-          const { Time } = JSON.parse(datum);
-          setActiveId?.(id ?? null);
-          setSyncDate?.(Time ? new Date(Time) : null);
-        } catch {
-          // noop
-        }
-      }, 50);
+    const onClick = () => {
+      const datum = getActiveDatum();
+      if (!datum) return;
+      const shareOrSubjects = isPublic ? 'share' : 'subjects';
+      const href = `/${shareOrSubjects}/${subjectId}/events/${datum.Id}`;
+      router.push(href, { scroll: false });
+    };
 
-      plot.addEventListener('click', onClick);
-      plot.addEventListener('mouseleave', onEnd);
-      plot.addEventListener('mousemove', onMove);
-      plot.addEventListener('touchcancel', onEnd);
-      plot.addEventListener('touchend', onEnd);
-      plot.addEventListener('touchmove', onMove);
-    }
+    const onEnd = () => {
+      setActiveId?.(null);
+      setSyncDate?.(null);
+    };
+
+    const onMove = throttle(() => {
+      const datum = getActiveDatum();
+      if (!datum) return;
+      setActiveId?.(id ?? null);
+      setSyncDate?.(datum.Time ? new Date(datum.Time) : null);
+    }, 50);
+
+    plot.addEventListener('click', onClick);
+    plot.addEventListener('mouseleave', onEnd);
+    plot.addEventListener('mousemove', onMove);
+    plot.addEventListener('touchcancel', onEnd);
+    plot.addEventListener('touchend', onEnd);
+    plot.addEventListener('touchmove', onMove);
 
     containerRef.current.append(plot);
     return () => plot.remove();
   }, [
+    annotationIncludeEventsFrom,
+    annotationInputId,
+    annotationInputOptions,
+    annotationLabel,
     barInterval,
     barReducer,
     defaultHeight,
     events,
+    id,
     includeEventsFrom,
     includeEventsSince,
-    id,
     inputId,
     inputOptions,
     isPublic,

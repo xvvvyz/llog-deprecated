@@ -88,6 +88,10 @@ const Insight = ({
         )}
       </div>
       <InsightPlot
+        annotationIncludeEventsFrom={config.annotationIncludeEventsFrom}
+        annotationInputId={config.annotationInput}
+        annotationInputOptions={config.annotationInputOptions}
+        annotationLabel={config.annotationLabel}
         barInterval={config.barInterval}
         barReducer={config.barReducer}
         defaultHeight={200}

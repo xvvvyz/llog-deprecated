@@ -40,10 +40,12 @@ export type IOption = {
 
 type SelectProps<TOption> = ReactSelectProps<TOption> &
   CreatableProps<IOption, boolean, GroupBase<IOption>> & {
+    controlClassName?: string;
     hasAvatar?: boolean;
     inputType?: 'text' | 'number';
     isCreatable?: boolean;
     label?: string;
+    right?: ReactNode;
     tooltip?: ReactNode;
   };
 
@@ -63,9 +65,8 @@ const Control = <TOption extends IOption>({
   selectProps,
   ...props
 }: ControlProps<TOption> & {
-  selectProps: Props<TOption, boolean, GroupBase<TOption>> & {
-    controlClassName?: string;
-  };
+  selectProps: Props<TOption, boolean, GroupBase<TOption>> &
+    Pick<SelectProps<TOption>, 'controlClassName'>;
 }) => {
   const hasNoOptionsMessage = !!selectProps.noOptionsMessage({
     inputValue: selectProps.inputValue,
@@ -309,10 +310,11 @@ const Select = <TOption extends IOption>(
     name,
     options,
     placeholder,
+    right,
     tooltip,
     value,
     ...props
-  }: SelectProps<TOption> & { controlClassName?: string },
+  }: SelectProps<TOption>,
   ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
 ) => {
   const commonProps = {
@@ -374,12 +376,15 @@ const Select = <TOption extends IOption>(
           </span>
         ))}
       </div>
-      <div className="print:hidden">
-        {isCreatable ? (
-          <Creatable ref={ref} {...commonProps} />
-        ) : (
-          <ReactSelect ref={ref} {...commonProps} />
-        )}
+      <div className="flex print:hidden">
+        <div className="w-full [&>*]:w-full">
+          {isCreatable ? (
+            <Creatable ref={ref} {...commonProps} />
+          ) : (
+            <ReactSelect ref={ref} {...commonProps} />
+          )}
+        </div>
+        {right}
       </div>
     </div>
   );

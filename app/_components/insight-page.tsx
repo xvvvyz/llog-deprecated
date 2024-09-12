@@ -46,6 +46,10 @@ const InsightPage = async ({
     <Modal.Content className="max-w-4xl bg-bg-3">
       <PageModalHeader className="-mb-8" title={insight.name} />
       <InsightPlot
+        annotationIncludeEventsFrom={config.annotationIncludeEventsFrom}
+        annotationInputId={config.annotationInput}
+        annotationInputOptions={config.annotationInputOptions}
+        annotationLabel={config.annotationLabel}
         barInterval={config.barInterval}
         barReducer={config.barReducer}
         events={events}

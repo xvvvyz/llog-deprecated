@@ -60,9 +60,15 @@ const getInsightOptionsFromEvents = ({
       trainingPlanOptions.push({ id: tp.id, label: tp.name });
     }
   }
+  const sortedEventTypeOptions = sortBy(eventTypeOptions, 'label');
+  const sortedTrainingPlanOptions = sortBy(trainingPlanOptions, 'label');
 
   return {
-    eventTypeOptions: sortBy(eventTypeOptions, 'label'),
+    eventTypeOptions: sortedEventTypeOptions,
+    eventTypeOrTrainingPlanOptions: [
+      { label: 'Event types', options: sortedEventTypeOptions },
+      { label: 'Training plans', options: sortedTrainingPlanOptions },
+    ],
     inputOptions: sortBy(inputOptions, 'label'),
     inputOptionsOptions: Object.fromEntries(
       Object.entries(inputOptionsOptions).map(([key, value]) => [
@@ -70,7 +76,7 @@ const getInsightOptionsFromEvents = ({
         sortBy(value, 'label'),
       ]),
     ),
-    trainingPlanOptions: sortBy(trainingPlanOptions, 'label'),
+    trainingPlanOptions: sortedTrainingPlanOptions,
   };
 };
 

@@ -5,6 +5,10 @@ import LineCurveFunction from '@/_constants/enum-line-curve-function';
 import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 
 export type InsightConfigJson = {
+  annotationIncludeEventsFrom: string | null;
+  annotationInput: string;
+  annotationInputOptions: string[];
+  annotationLabel: string;
   barInterval: BarInterval;
   barReducer: BarReducer;
   includeEventsFrom: string | null;
@@ -12,7 +16,6 @@ export type InsightConfigJson = {
   input: string;
   inputOptions: string[];
   lineCurveFunction: LineCurveFunction;
-  showLinearRegressionConfidence: boolean;
   marginBottom: string;
   marginLeft: string;
   marginRight: string;
@@ -21,5 +24,6 @@ export type InsightConfigJson = {
   showDots: boolean;
   showLine: boolean;
   showLinearRegression: boolean;
+  showLinearRegressionConfidence: boolean;
   type: ChartType;
 };
