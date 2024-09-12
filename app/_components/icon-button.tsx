@@ -1,12 +1,12 @@
 'use client';
 
-import Button, { ButtonProps } from '@/_components/button';
+import Button from '@/_components/button';
 import Spinner from '@/_components/spinner';
-import { ReactNode } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
-export interface IconButtonProps extends ButtonProps {
+interface IconButtonProps extends ComponentProps<typeof Button> {
   icon: ReactNode;
   label?: string;
   spinnerClassName?: string;
@@ -26,7 +26,7 @@ const IconButton = ({
 
   return (
     <Button
-      className={twMerge('shrink-0 print:hidden', className)}
+      className={twMerge('shrink-0', className)}
       disabled={loading || pending}
       type={type}
       variant="link"

@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import { useRouter } from 'next/navigation';
@@ -14,12 +16,11 @@ interface AccountPasswordFormValues {
 
 const AccountPasswordForm = () => {
   const [isTransitioning, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<AccountPasswordFormValues>({
     defaultValues: { password: '' },
   });
-
-  const router = useRouter();
 
   return (
     <form
@@ -45,13 +46,15 @@ const AccountPasswordForm = () => {
         }),
       )}
     >
-      <Input
-        label="New password"
-        minLength={6}
-        placeholder="••••••••••••"
-        type="password"
-        {...form.register('password')}
-      />
+      <InputRoot>
+        <Label.Root htmlFor="password">Password</Label.Root>
+        <Input
+          minLength={6}
+          placeholder="••••••••••••"
+          type="password"
+          {...form.register('password')}
+        />
+      </InputRoot>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

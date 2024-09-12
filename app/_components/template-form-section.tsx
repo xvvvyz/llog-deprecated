@@ -1,6 +1,8 @@
 'use client';
 
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import Select, { IOption } from '@/_components/select';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import * as Form from 'react-hook-form';
@@ -16,52 +18,37 @@ const TemplateFormSection = <T extends Form.FieldValues>({
   subjects,
 }: TemplateFormSectionProps<T>) => (
   <>
-    <Input
-      label="Name"
-      maxLength={49}
-      required
-      {...form.register('name' as Form.FieldPath<T>)}
-    />
-    <Form.Controller
-      control={form.control}
-      name={'subjects' as Form.FieldPath<T>}
-      render={({ field }) => (
-        <Select
-          hasAvatar
-          isMulti
-          label="For"
-          name={field.name}
-          noOptionsMessage={() => 'No subjects.'}
-          onBlur={field.onBlur}
-          onChange={(value) => field.onChange(value)}
-          options={subjects as IOption[]}
-          placeholder="All subjects…"
-          tooltip={
-            <>
-              The template will only be available for the&nbsp;specified
-              subjects.
-            </>
-          }
-          value={field.value as PropsValue<IOption>}
-        />
-      )}
-    />
-    {/*<Form.Controller*/}
-    {/*  control={form.control}*/}
-    {/*  name={'description' as Form.FieldPath<T>}*/}
-    {/*  render={({ field }) => (*/}
-    {/*    <RichTextarea*/}
-    {/*      label="Template description"*/}
-    {/*      tooltip={*/}
-    {/*        <>*/}
-    {/*          An optional note describing what the template is for or how to use*/}
-    {/*          it.*/}
-    {/*        </>*/}
-    {/*      }*/}
-    {/*      {...field}*/}
-    {/*    />*/}
-    {/*  )}*/}
-    {/*/>*/}
+    <InputRoot>
+      <Label.Root htmlFor="name">Name</Label.Root>
+      <Input
+        maxLength={49}
+        required
+        {...form.register('name' as Form.FieldPath<T>)}
+      />
+    </InputRoot>
+    <InputRoot>
+      <Label.Root htmlFor="react-select-subjects-input">For</Label.Root>
+      <Label.Tip>
+        The template will only be available for the&nbsp;specified subjects.
+      </Label.Tip>
+      <Form.Controller
+        control={form.control}
+        name={'subjects' as Form.FieldPath<T>}
+        render={({ field }) => (
+          <Select
+            hasAvatar
+            isMulti
+            name={field.name}
+            noOptionsMessage={() => 'No subjects.'}
+            onBlur={field.onBlur}
+            onChange={(value) => field.onChange(value)}
+            options={subjects as IOption[]}
+            placeholder="All subjects…"
+            value={field.value as PropsValue<IOption>}
+          />
+        )}
+      />
+    </InputRoot>
   </>
 );
 

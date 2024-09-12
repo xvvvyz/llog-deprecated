@@ -68,29 +68,21 @@
   div[data-youtube-video] > iframe {
     @apply my-1.5 aspect-video h-auto w-full rounded;
   }
-
-  @media print {
-    html,
-    body {
-      /* hack to remove empty last page on print */
-      @apply h-[99%] break-before-avoid-page break-after-avoid-page border border-transparent;
-    }
-  }
 }
 
 @layer components {
   .input {
-    @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-2 outline-none transition-colors placeholder:text-fg-4 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2 print:hidden;
+    @apply w-full max-w-full appearance-none rounded border border-alpha-1 bg-alpha-1 px-4 py-2 text-fg-2 outline-none transition-colors placeholder:text-fg-4 focus-within:bg-alpha-2 focus-within:ring-1 focus-within:ring-accent-2 hover:bg-alpha-2;
   }
 
   .label {
-    @apply flex items-baseline justify-between px-4 pb-2 leading-snug text-fg-3 transition-colors group-focus-within:text-fg-2 group-hover:text-fg-2 print:pt-8 print:font-bold print:text-fg-1;
+    @apply block px-4 pb-2 leading-snug text-fg-3 transition-colors group-focus-within:text-fg-2 group-hover:text-fg-2;
   }
 }
 
 @layer utilities {
   .disabled {
-    @apply pointer-events-none opacity-50 print:opacity-100;
+    @apply pointer-events-none opacity-50;
   }
 
   .prose {

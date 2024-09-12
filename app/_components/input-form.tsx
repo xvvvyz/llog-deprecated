@@ -4,9 +4,10 @@ import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import Select, { IOption } from '@/_components/select';
-import Tip from '@/_components/tip';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import InputType from '@/_constants/enum-input-type';
@@ -117,79 +118,83 @@ const InputForm = ({
         ),
       )}
     >
-      <Input label="Label" required {...form.register('label')} />
-      <Controller
-        control={form.control}
-        name="subjects"
-        render={({ field }) => (
-          <Select
-            hasAvatar
-            isMulti
-            label="For"
-            name={field.name}
-            noOptionsMessage={() => 'No subjects.'}
-            onBlur={field.onBlur}
-            onChange={(value) => field.onChange(value)}
-            options={subjects as IOption[]}
-            placeholder="All subjects…"
-            tooltip={
-              <>
-                The input will only be available for the&nbsp;specified
-                subjects.
-              </>
-            }
-            value={field.value as PropsValue<IOption>}
-          />
-        )}
-      />
-      <Controller
-        control={form.control}
-        name="type"
-        render={({ field }) => (
-          <Select
-            isClearable={false}
-            isSearchable={false}
-            label="Type"
-            name={field.name}
-            onBlur={field.onBlur}
-            onChange={(option) => {
-              field.onChange(option);
-              form.setValue('settings', null, { shouldDirty: true });
+      <InputRoot>
+        <Label.Root htmlFor="label">Label</Label.Root>
+        <Input required {...form.register('label')} />
+      </InputRoot>
+      <InputRoot>
+        <Label.Root htmlFor="react-select-subjects-input">For</Label.Root>
+        <Label.Tip>
+          The input will only be available for the&nbsp;specified subjects.
+        </Label.Tip>
+        <Controller
+          control={form.control}
+          name="subjects"
+          render={({ field }) => (
+            <Select
+              hasAvatar
+              isMulti
+              name={field.name}
+              noOptionsMessage={() => 'No subjects.'}
+              onBlur={field.onBlur}
+              onChange={(value) => field.onChange(value)}
+              options={subjects as IOption[]}
+              placeholder="All subjects…"
+              value={field.value as PropsValue<IOption>}
+            />
+          )}
+        />
+      </InputRoot>
+      <InputRoot>
+        <Label.Root htmlFor="react-select-type-input">Type</Label.Root>
+        <Controller
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <Select
+              isClearable={false}
+              isSearchable={false}
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={(option) => {
+                field.onChange(option);
+                form.setValue('settings', null, { shouldDirty: true });
 
-              switch ((option as InputFormValues['options'][0])?.id) {
-                case InputType.Number: {
-                  form.setValue(
-                    'settings',
-                    { max: '100', min: '0', step: '1' },
-                    { shouldDirty: true },
-                  );
+                switch ((option as InputFormValues['options'][0])?.id) {
+                  case InputType.Number: {
+                    form.setValue(
+                      'settings',
+                      { max: '100', min: '0', step: '1' },
+                      { shouldDirty: true },
+                    );
 
-                  return;
+                    return;
+                  }
+
+                  case InputType.MultiSelect:
+                  case InputType.Select: {
+                    form.setValue(
+                      'settings',
+                      { isCreatable: false },
+                      { shouldDirty: true },
+                    );
+
+                    return;
+                  }
+
+                  default: {
+                    // noop
+                  }
                 }
-
-                case InputType.MultiSelect:
-                case InputType.Select: {
-                  form.setValue(
-                    'settings',
-                    { isCreatable: false },
-                    { shouldDirty: true },
-                  );
-
-                  return;
-                }
-
-                default: {
-                  // noop
-                }
-              }
-            }}
-            options={INPUT_TYPE_OPTIONS}
-            placeholder="Select type…"
-            required
-            value={field.value as PropsValue<IOption>}
-          />
-        )}
-      />
+              }}
+              options={INPUT_TYPE_OPTIONS}
+              placeholder="Select type…"
+              required
+              value={field.value as PropsValue<IOption>}
+            />
+          )}
+        />
+      </InputRoot>
       {(type === InputType.Select || type === InputType.MultiSelect) && (
         <>
           <fieldset className="group">
@@ -263,55 +268,58 @@ const InputForm = ({
               </Button>
             </div>
           </fieldset>
-          <Checkbox
-            label="Allow options to be created"
-            right={
-              <Tip side="left">
-                Enable this when you don&rsquo;t know all possible options in
-                advance.
-              </Tip>
-            }
-            {...form.register('settings.isCreatable')}
-          />
+          <InputRoot>
+            <Label.Root htmlFor="settings.isCreatable">
+              Allow options to be created
+            </Label.Root>
+            <Label.Tip>
+              Enable this when you don&rsquo;t know all possible options in
+              advance.
+            </Label.Tip>
+            <Checkbox {...form.register('settings.isCreatable')} />
+          </InputRoot>
         </>
       )}
       {type === InputType.Number && (
         <>
           <fieldset className="flex gap-4">
-            <Input
-              label="Min value"
-              max={form.watch('settings.max')}
-              required
-              step={form.watch('settings.step')}
-              type="number"
-              {...form.register('settings.min')}
-            />
-            <Input
-              label="Max value"
-              min={form.watch('settings.min')}
-              required
-              step={form.watch('settings.step')}
-              type="number"
-              {...form.register('settings.max')}
-            />
+            <InputRoot>
+              <Label.Root htmlFor="settings.min">Min value</Label.Root>
+              <Input
+                max={form.watch('settings.max')}
+                required
+                step={form.watch('settings.step')}
+                type="number"
+                {...form.register('settings.min')}
+              />
+            </InputRoot>
+            <InputRoot>
+              <Label.Root htmlFor="settings.max">Max value</Label.Root>
+              <Input
+                min={form.watch('settings.min')}
+                required
+                step={form.watch('settings.step')}
+                type="number"
+                {...form.register('settings.max')}
+              />
+            </InputRoot>
           </fieldset>
           <fieldset>
-            <Input
-              label="Step"
-              min={0}
-              required
-              step="any"
-              // explain html number input step so it's not confusing
-              tooltip={
-                <>
-                  Step is the interval between values. For example, if you set
-                  the step to 5, you can only enter values that are multiples of
-                  5 (5, 10, 15, etc).
-                </>
-              }
-              type="number"
-              {...form.register('settings.step')}
-            />
+            <InputRoot>
+              <Label.Root htmlFor="settings.step">Step</Label.Root>
+              <Label.Tip>
+                Step is the interval between values. For example, if you set the
+                step to 5, you can only enter values that are multiples of 5 (5,
+                10, 15, etc).
+              </Label.Tip>
+              <Input
+                min={0}
+                required
+                step="any"
+                type="number"
+                {...form.register('settings.step')}
+              />
+            </InputRoot>
           </fieldset>
         </>
       )}

@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import InputForm from '@/_components/input-form';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -109,37 +111,46 @@ const ModuleTemplateForm = ({
         form={form}
         subjects={subjects}
       />
-      <Controller
-        control={form.control}
-        name="content"
-        render={({ field }) => (
-          <RichTextarea label="Module description or instructions" {...field} />
-        )}
-      />
+      <InputRoot>
+        <Label.Root htmlFor="content">
+          Module description or instructions
+        </Label.Root>
+        <Controller
+          control={form.control}
+          name="content"
+          render={({ field }) => <RichTextarea {...field} />}
+        />
+      </InputRoot>
       <Modal.Root
         onOpenChange={() => setCreateInputModal(null)}
         open={!!createInputModal}
       >
-        <Controller
-          control={form.control}
-          name="inputs"
-          render={({ field }) => (
-            <Select
-              formatCreateLabel={(value) => `Create "${value}" input`}
-              isCreatable
-              isMulti
-              label="Inputs"
-              name={field.name}
-              noOptionsMessage={() => 'Type to create a new input.'}
-              onBlur={field.onBlur}
-              onChange={(value) => field.onChange(value)}
-              onCreateOption={(value) => setCreateInputModal({ label: value })}
-              options={sortBy(availableInputs, 'subjects[0].name') as IOption[]}
-              placeholder="Select inputs or type to create…"
-              value={field.value as IOption[]}
-            />
-          )}
-        />
+        <InputRoot>
+          <Label.Root htmlFor="react-select-inputs-input">Inputs</Label.Root>
+          <Controller
+            control={form.control}
+            name="inputs"
+            render={({ field }) => (
+              <Select
+                formatCreateLabel={(value) => `Create "${value}" input`}
+                isCreatable
+                isMulti
+                name={field.name}
+                noOptionsMessage={() => 'Type to create a new input.'}
+                onBlur={field.onBlur}
+                onChange={(value) => field.onChange(value)}
+                onCreateOption={(value) =>
+                  setCreateInputModal({ label: value })
+                }
+                options={
+                  sortBy(availableInputs, 'subjects[0].name') as IOption[]
+                }
+                placeholder="Select inputs or type to create…"
+                value={field.value as IOption[]}
+              />
+            )}
+          />
+        </InputRoot>
         <Modal.Portal>
           <Modal.Overlay>
             <Modal.Content>

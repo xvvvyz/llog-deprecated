@@ -2,12 +2,16 @@ import * as SwitchPrimitives from '@radix-ui/react-switch';
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
+type SwitchProps = React.ComponentPropsWithoutRef<
+  typeof SwitchPrimitives.Root
+> & {
+  description?: React.ReactNode;
+  label: React.ReactNode;
+};
+
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {
-    description?: React.ReactNode;
-    label: React.ReactNode;
-  }
+  SwitchProps
 >(({ className, description, label, ...props }, ref) => (
   <label
     className={twMerge(

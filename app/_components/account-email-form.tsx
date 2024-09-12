@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import updateUser from '@/_mutations/update-user';
 import { User } from '@supabase/supabase-js';
@@ -43,12 +45,10 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
         }),
       )}
     >
-      <Input
-        label="Email address"
-        required
-        type="email"
-        {...form.register('email')}
-      />
+      <InputRoot>
+        <Label.Root htmlFor="email">Email address</Label.Root>
+        <Input required type="email" {...form.register('email')} />
+      </InputRoot>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

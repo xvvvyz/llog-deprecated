@@ -4,7 +4,9 @@ import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
 import InsightPlot from '@/_components/insight-plot';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import * as Popover from '@/_components/popover';
 import Select, { IOption } from '@/_components/select';
@@ -220,21 +222,18 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
         <Checkbox
           className="w-full"
           label="Dots"
-          labelInside
           {...form.register('showDots')}
         />
         <div className="flex w-full">
           <Checkbox
-            className="w-full"
-            inputClassName="rounded-r-none"
+            className="rounded-r-none border-r-0"
             label="Line"
-            labelInside
             {...form.register('showLine')}
           />
           <Popover.Root>
             <Popover.Trigger asChild>
               <IconButton
-                className="rounded-l-none border-l-0 p-2.5"
+                className="rounded-l-none p-2.5"
                 colorScheme="transparent"
                 icon={<AdjustmentsHorizontalIcon className="w-5" />}
                 label="Line settings"
@@ -246,39 +245,43 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               className="mr-0 w-64 space-y-6 p-8 pt-7"
               side="top"
             >
-              <Controller
-                control={form.control}
-                name="lineCurveFunction"
-                render={({ field }) => (
-                  <Select
-                    isClearable={false}
-                    isSearchable={false}
-                    label="Curve function"
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    onChange={(value) => field.onChange((value as IOption)?.id)}
-                    options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
-                    value={LINE_CURVE_FUNCTION_OPTIONS.find(
-                      (o) => o.id === field.value,
-                    )}
-                  />
-                )}
-              />
+              <InputRoot>
+                <Label.Root htmlFor="react-select-lineCurveFunction-input">
+                  Curve function
+                </Label.Root>
+                <Controller
+                  control={form.control}
+                  name="lineCurveFunction"
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      isSearchable={false}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={(value) =>
+                        field.onChange((value as IOption)?.id)
+                      }
+                      options={LINE_CURVE_FUNCTION_OPTIONS as IOption[]}
+                      value={LINE_CURVE_FUNCTION_OPTIONS.find(
+                        (o) => o.id === field.value,
+                      )}
+                    />
+                  )}
+                />
+              </InputRoot>
             </Popover.Content>
           </Popover.Root>
         </div>
         <div className="flex w-full">
           <Checkbox
-            className="w-full"
-            inputClassName="rounded-r-none"
+            className="rounded-r-none border-r-0"
             label="Bars"
-            labelInside
             {...form.register('showBars')}
           />
           <Popover.Root>
             <Popover.Trigger asChild>
               <IconButton
-                className="rounded-l-none border-l-0 p-2.5"
+                className="rounded-l-none p-2.5"
                 colorScheme="transparent"
                 icon={<AdjustmentsHorizontalIcon className="w-5" />}
                 label="Bar settings"
@@ -290,45 +293,55 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               className="mr-0 w-64 space-y-6 p-8 pt-7"
               side="top"
             >
-              <Controller
-                control={form.control}
-                name="barInterval"
-                render={({ field }) => (
-                  <Select
-                    isClearable={false}
-                    isSearchable={false}
-                    label="Interval"
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    onChange={(value) => field.onChange((value as IOption)?.id)}
-                    options={BAR_INTERVAL_OPTIONS as IOption[]}
-                    value={BAR_INTERVAL_OPTIONS.find(
-                      (o) => o.id === field.value,
-                    )}
-                  />
-                )}
-              />
-              {!isInputNominal && (
+              <InputRoot>
+                <Label.Root htmlFor="react-select-barInterval-input">
+                  Interval
+                </Label.Root>
                 <Controller
                   control={form.control}
-                  name="barReducer"
+                  name="barInterval"
                   render={({ field }) => (
                     <Select
                       isClearable={false}
                       isSearchable={false}
-                      label="Reducer"
                       name={field.name}
                       onBlur={field.onBlur}
                       onChange={(value) =>
                         field.onChange((value as IOption)?.id)
                       }
-                      options={BAR_REDUCER_OPTIONS}
-                      value={BAR_REDUCER_OPTIONS.find(
+                      options={BAR_INTERVAL_OPTIONS as IOption[]}
+                      value={BAR_INTERVAL_OPTIONS.find(
                         (o) => o.id === field.value,
                       )}
                     />
                   )}
                 />
+              </InputRoot>
+              {!isInputNominal && (
+                <InputRoot>
+                  <Label.Root htmlFor="react-select-barReducer-input">
+                    Reducer
+                  </Label.Root>
+                  <Controller
+                    control={form.control}
+                    name="barReducer"
+                    render={({ field }) => (
+                      <Select
+                        isClearable={false}
+                        isSearchable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) =>
+                          field.onChange((value as IOption)?.id)
+                        }
+                        options={BAR_REDUCER_OPTIONS}
+                        value={BAR_REDUCER_OPTIONS.find(
+                          (o) => o.id === field.value,
+                        )}
+                      />
+                    )}
+                  />
+                </InputRoot>
               )}
             </Popover.Content>
           </Popover.Root>
@@ -349,150 +362,171 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               className="mr-0 w-96 space-y-4 p-8 pt-7"
               side="top"
             >
-              <div className="flex w-full items-end">
-                <Checkbox
-                  className="w-full"
-                  inputClassName="rounded-r-none"
-                  label="Linear regression"
-                  {...form.register('showLinearRegression')}
-                />
-                <Popover.Root>
-                  <Popover.Trigger asChild>
-                    <IconButton
-                      className="rounded-l-none border-l-0 p-2.5"
-                      colorScheme="transparent"
-                      icon={<AdjustmentsHorizontalIcon className="w-5" />}
-                      label="Linear regression settings"
-                      variant="primary"
-                    />
-                  </Popover.Trigger>
-                  <Popover.Content
-                    align="end"
-                    className="mr-0 w-64 space-y-6 p-8 pt-7"
-                    side="top"
-                  >
-                    <Checkbox
-                      label="Confidence band"
-                      {...form.register('showLinearRegressionConfidence')}
-                    />
-                  </Popover.Content>
-                </Popover.Root>
-              </div>
-              <Controller
-                control={form.control}
-                name="annotationInput"
-                render={({ field }) => (
-                  <Select
-                    controlClassName="rounded-r-none"
-                    label="Annotate"
-                    name={field.name}
-                    noOptionsMessage={() => 'No inputs have been recorded.'}
-                    onBlur={field.onBlur}
-                    onChange={(value) => {
-                      const inputId = (value as IOption)?.id;
-                      field.onChange(inputId ?? null);
-                      form.setValue('annotationIncludeEventsFrom', null);
-                      form.setValue('annotationInputOptions', []);
-                      form.setValue('annotationLabel', '');
-                    }}
-                    options={annotationInputOptions.inputOptions}
-                    placeholder="Select an input…"
-                    right={
-                      <Popover.Root>
-                        <Popover.Trigger asChild>
-                          <IconButton
-                            className="rounded-l-none border-l-0 p-2.5"
-                            colorScheme="transparent"
-                            icon={<AdjustmentsHorizontalIcon className="w-5" />}
-                            label="Annotation settings"
-                            variant="primary"
-                          />
-                        </Popover.Trigger>
-                        <Popover.Content
-                          align="end"
-                          className="mr-0 w-96 space-y-6 p-8 pt-7"
-                          side="top"
-                        >
-                          <Input
-                            label="Custom label"
-                            maxLength={20}
-                            {...form.register('annotationLabel')}
-                          />
-                          <Controller
-                            control={form.control}
-                            name="annotationIncludeEventsFrom"
-                            render={({ field }) => {
-                              let value;
-
-                              if (field.value) {
-                                for (const group of annotationInputOptions.eventTypeOrTrainingPlanOptions) {
-                                  value = group.options.find(
-                                    (o) => o.id === field.value,
-                                  );
-                                  if (value) break;
-                                }
-                              }
-
-                              return (
-                                <Select
-                                  isSearchable={false}
-                                  label="Events from"
-                                  name={field.name}
-                                  onBlur={field.onBlur}
-                                  onChange={(value) =>
-                                    field.onChange(
-                                      (value as IOption)?.id ?? null,
-                                    )
-                                  }
-                                  options={
-                                    annotationInputOptions.eventTypeOrTrainingPlanOptions
-                                  }
-                                  placeholder="All event types/training plans…"
-                                  value={value}
-                                />
-                              );
-                            }}
-                          />
-                          {annotationInputOptions.inputOptionsOptions[
-                            annotationInputId
-                          ] && (
-                            <Controller
-                              control={form.control}
-                              name="annotationInputOptions"
-                              render={({ field }) => (
-                                <Select
-                                  isMulti
-                                  label="Input options"
-                                  name={field.name}
-                                  noOptionsMessage={() => 'No options.'}
-                                  onBlur={field.onBlur}
-                                  onChange={(values) =>
-                                    field.onChange(
-                                      (values as IOption[]).map((v) => v.id),
-                                    )
-                                  }
-                                  options={
-                                    annotationInputOptions.inputOptionsOptions[
-                                      annotationInputId
-                                    ]
-                                  }
-                                  placeholder="All input options…"
-                                  value={annotationInputOptions.inputOptionsOptions[
-                                    annotationInputId
-                                  ]?.filter((o) => field.value.includes(o.id))}
-                                />
-                              )}
-                            />
-                          )}
-                        </Popover.Content>
-                      </Popover.Root>
-                    }
-                    value={annotationInputOptions.inputOptions.find(
-                      (o) => field.value === o.id,
+              <InputRoot>
+                <Label.Root htmlFor="showLinearRegression">
+                  Linear regression
+                </Label.Root>
+                <div className="flex w-full">
+                  <Checkbox
+                    className="rounded-r-none border-r-0"
+                    {...form.register('showLinearRegression')}
+                  />
+                  <Popover.Root>
+                    <Popover.Trigger asChild>
+                      <IconButton
+                        className="rounded-l-none p-2.5"
+                        colorScheme="transparent"
+                        icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                        label="Linear regression settings"
+                        variant="primary"
+                      />
+                    </Popover.Trigger>
+                    <Popover.Content
+                      align="end"
+                      className="mr-0 w-64 space-y-6 p-8 pt-7"
+                      side="top"
+                    >
+                      <InputRoot>
+                        <Label.Root htmlFor="showLinearRegressionConfidence">
+                          Confidence band
+                        </Label.Root>
+                        <Checkbox
+                          {...form.register('showLinearRegressionConfidence')}
+                        />
+                      </InputRoot>
+                    </Popover.Content>
+                  </Popover.Root>
+                </div>
+              </InputRoot>
+              <InputRoot>
+                <Label.Root htmlFor="react-select-annotationInput-input">
+                  Annotate
+                </Label.Root>
+                <div className="flex w-full">
+                  <Controller
+                    control={form.control}
+                    name="annotationInput"
+                    render={({ field }) => (
+                      <Select
+                        className="w-full rounded-r-none border-r-0"
+                        name={field.name}
+                        noOptionsMessage={() => 'No inputs have been recorded.'}
+                        onBlur={field.onBlur}
+                        onChange={(value) => {
+                          const inputId = (value as IOption)?.id;
+                          field.onChange(inputId ?? null);
+                          form.setValue('annotationIncludeEventsFrom', null);
+                          form.setValue('annotationInputOptions', []);
+                          form.setValue('annotationLabel', '');
+                        }}
+                        options={annotationInputOptions.inputOptions}
+                        placeholder="Select an input…"
+                        value={annotationInputOptions.inputOptions.find(
+                          (o) => field.value === o.id,
+                        )}
+                      />
                     )}
                   />
-                )}
-              />
+                  <Popover.Root>
+                    <Popover.Trigger asChild>
+                      <IconButton
+                        className="rounded-l-none p-2.5"
+                        colorScheme="transparent"
+                        icon={<AdjustmentsHorizontalIcon className="w-5" />}
+                        label="Annotation settings"
+                        variant="primary"
+                      />
+                    </Popover.Trigger>
+                    <Popover.Content
+                      align="end"
+                      className="mr-0 w-96 space-y-6 p-8 pt-7"
+                      side="top"
+                    >
+                      <InputRoot>
+                        <Label.Root htmlFor="annotationLabel">
+                          Custom label
+                        </Label.Root>
+                        <Input
+                          maxLength={20}
+                          {...form.register('annotationLabel')}
+                        />
+                      </InputRoot>
+                      <InputRoot>
+                        <Label.Root htmlFor="react-select-annotationIncludeEventsFrom-input">
+                          Events from
+                        </Label.Root>
+                        <Controller
+                          control={form.control}
+                          name="annotationIncludeEventsFrom"
+                          render={({ field }) => {
+                            let value;
+
+                            if (field.value) {
+                              for (const group of annotationInputOptions.eventTypeOrTrainingPlanOptions) {
+                                value = group.options.find(
+                                  (o) => o.id === field.value,
+                                );
+                                if (value) break;
+                              }
+                            }
+
+                            return (
+                              <Select
+                                isSearchable={false}
+                                name={field.name}
+                                onBlur={field.onBlur}
+                                onChange={(value) =>
+                                  field.onChange((value as IOption)?.id ?? null)
+                                }
+                                options={
+                                  annotationInputOptions.eventTypeOrTrainingPlanOptions
+                                }
+                                placeholder="All event types/training plans…"
+                                value={value}
+                              />
+                            );
+                          }}
+                        />
+                      </InputRoot>
+                      {annotationInputOptions.inputOptionsOptions[
+                        annotationInputId
+                      ] && (
+                        <InputRoot>
+                          <Label.Root htmlFor="react-select-annotationInputOptions-input">
+                            Input options
+                          </Label.Root>
+                          <Controller
+                            control={form.control}
+                            name="annotationInputOptions"
+                            render={({ field }) => (
+                              <Select
+                                isMulti
+                                name={field.name}
+                                noOptionsMessage={() => 'No options.'}
+                                onBlur={field.onBlur}
+                                onChange={(values) =>
+                                  field.onChange(
+                                    (values as IOption[]).map((v) => v.id),
+                                  )
+                                }
+                                options={
+                                  annotationInputOptions.inputOptionsOptions[
+                                    annotationInputId
+                                  ]
+                                }
+                                placeholder="All input options…"
+                                value={annotationInputOptions.inputOptionsOptions[
+                                  annotationInputId
+                                ]?.filter((o) => field.value.includes(o.id))}
+                              />
+                            )}
+                          />
+                        </InputRoot>
+                      )}
+                    </Popover.Content>
+                  </Popover.Root>
+                </div>
+              </InputRoot>
             </Popover.Content>
           </Popover.Root>
           <Popover.Root>
@@ -510,77 +544,89 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
               className="mr-0 w-96 space-y-6 p-8 pt-7"
               side="top"
             >
-              <Controller
-                control={form.control}
-                name="includeEventsFrom"
-                render={({ field }) => {
-                  let value;
+              <InputRoot>
+                <Label.Root htmlFor="react-select-includeEventsFrom-input">
+                  Events from
+                </Label.Root>
+                <Controller
+                  control={form.control}
+                  name="includeEventsFrom"
+                  render={({ field }) => {
+                    let value;
 
-                  if (field.value) {
-                    for (const group of inputOptions.eventTypeOrTrainingPlanOptions) {
-                      value = group.options.find((o) => o.id === field.value);
-                      if (value) break;
+                    if (field.value) {
+                      for (const group of inputOptions.eventTypeOrTrainingPlanOptions) {
+                        value = group.options.find((o) => o.id === field.value);
+                        if (value) break;
+                      }
                     }
-                  }
 
-                  return (
+                    return (
+                      <Select
+                        isSearchable={false}
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        onChange={(value) =>
+                          field.onChange((value as IOption)?.id ?? null)
+                        }
+                        options={inputOptions.eventTypeOrTrainingPlanOptions}
+                        placeholder="All event types/training plans…"
+                        value={value}
+                      />
+                    );
+                  }}
+                />
+              </InputRoot>
+              <InputRoot>
+                <Label.Root htmlFor="react-select-includeEventsSince-input">
+                  Events since
+                </Label.Root>
+                <Controller
+                  control={form.control}
+                  name="includeEventsSince"
+                  render={({ field }) => (
                     <Select
                       isSearchable={false}
-                      label="Events from"
                       name={field.name}
                       onBlur={field.onBlur}
                       onChange={(value) =>
                         field.onChange((value as IOption)?.id ?? null)
                       }
-                      options={inputOptions.eventTypeOrTrainingPlanOptions}
-                      placeholder="All event types/training plans…"
-                      value={value}
-                    />
-                  );
-                }}
-              />
-              <Controller
-                control={form.control}
-                name="includeEventsSince"
-                render={({ field }) => (
-                  <Select
-                    isSearchable={false}
-                    label="Events since"
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    onChange={(value) =>
-                      field.onChange((value as IOption)?.id ?? null)
-                    }
-                    options={INCLUDE_EVENTS_SINCE_OPTIONS}
-                    placeholder="The beginning of time…"
-                    value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
-                      (o) => field.value === o.id,
-                    )}
-                  />
-                )}
-              />
-              {inputOptions.inputOptionsOptions[inputId] && (
-                <Controller
-                  control={form.control}
-                  name="inputOptions"
-                  render={({ field }) => (
-                    <Select
-                      isMulti
-                      label="Input options"
-                      name={field.name}
-                      noOptionsMessage={() => 'No options.'}
-                      onBlur={field.onBlur}
-                      onChange={(values) =>
-                        field.onChange((values as IOption[]).map((v) => v.id))
-                      }
-                      options={inputOptions.inputOptionsOptions[inputId]}
-                      placeholder="All input options…"
-                      value={inputOptions.inputOptionsOptions[inputId]?.filter(
-                        (o) => field.value.includes(o.id),
+                      options={INCLUDE_EVENTS_SINCE_OPTIONS}
+                      placeholder="The beginning of time…"
+                      value={INCLUDE_EVENTS_SINCE_OPTIONS.find(
+                        (o) => field.value === o.id,
                       )}
                     />
                   )}
                 />
+              </InputRoot>
+              {inputOptions.inputOptionsOptions[inputId] && (
+                <InputRoot>
+                  <Label.Root htmlFor="react-select-inputOptions-input">
+                    Input options
+                  </Label.Root>
+                  <Controller
+                    control={form.control}
+                    name="inputOptions"
+                    render={({ field }) => (
+                      <Select
+                        isMulti
+                        name={field.name}
+                        noOptionsMessage={() => 'No options.'}
+                        onBlur={field.onBlur}
+                        onChange={(values) =>
+                          field.onChange((values as IOption[]).map((v) => v.id))
+                        }
+                        options={inputOptions.inputOptionsOptions[inputId]}
+                        placeholder="All input options…"
+                        value={inputOptions.inputOptionsOptions[
+                          inputId
+                        ]?.filter((o) => field.value.includes(o.id))}
+                      />
+                    )}
+                  />
+                </InputRoot>
               )}
             </Popover.Content>
           </Popover.Root>

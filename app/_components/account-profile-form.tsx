@@ -3,6 +3,8 @@
 import AvatarDropzone from '@/_components/avatar-dropzone';
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import updateUser from '@/_mutations/update-user';
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
@@ -69,28 +71,27 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
       )}
     >
       <div className="flex gap-6">
-        <Input label="First name" required {...form.register('firstName')} />
-        <Input label="Last name" required {...form.register('lastName')} />
+        <InputRoot>
+          <Label.Root htmlFor="firstName">First name</Label.Root>
+          <Input required {...form.register('firstName')} />
+        </InputRoot>
+        <InputRoot>
+          <Label.Root htmlFor="lastName">Last name</Label.Root>
+          <Input required {...form.register('lastName')} />
+        </InputRoot>
       </div>
-      <div className="relative">
-        <label className="group">
-          <span className="label">Profile image</span>
-          <AvatarDropzone
-            file={form.watch('avatar')}
-            id={user.id}
-            onDrop={(files) => form.setValue('avatar', files[0])}
-          />
-        </label>
-        {form.watch('avatar') && (
-          <Button
-            className="absolute right-4 top-0"
-            onClick={() => form.setValue('avatar', null)}
-            variant="link"
-          >
-            Remove image
-          </Button>
-        )}
-      </div>
+      <InputRoot>
+        <Label.Root htmlFor="avatar">Profile image</Label.Root>
+        <Label.Button onClick={() => form.setValue('avatar', null)}>
+          Remove image
+        </Label.Button>
+        <AvatarDropzone
+          avatarId={user.id}
+          file={form.watch('avatar')}
+          id="avatar"
+          onDrop={(files) => form.setValue('avatar', files[0])}
+        />
+      </InputRoot>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import upsertTrainingPlan from '@/_mutations/upsert-training-plan';
 import { GetTrainingPlanData } from '@/_queries/get-training-plan';
@@ -55,13 +57,13 @@ const TrainingPlanForm = ({
         }),
       )}
     >
-      <Input
-        label="Name"
-        maxLength={49}
-        required
-        tooltip="Succinctly describe the goal or purpose of the training plan."
-        {...form.register('name')}
-      />
+      <InputRoot>
+        <Label.Root htmlFor="name">Name</Label.Root>
+        <Label.Tip>
+          Succinctly describe the goal or purpose of the training plan.
+        </Label.Tip>
+        <Input maxLength={49} required {...form.register('name')} />
+      </InputRoot>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

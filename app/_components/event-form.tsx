@@ -5,6 +5,8 @@ import Checkbox from '@/_components/checkbox';
 import EventSelect from '@/_components/event-select';
 import EventStopwatch from '@/_components/event-stopwatch';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -163,22 +165,26 @@ const EventForm = ({
         }),
       )}
     >
-      <Input
-        id={`${eventType.id}-completionTime`}
-        label={isMission ? 'Completion time' : 'Event time'}
-        max={formatDatetimeLocal(
-          (() => {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            return tomorrow;
-          })(),
-        )}
-        required
-        step="any"
-        type="datetime-local"
-        {...form.register('completionTime')}
-      />
+      <InputRoot>
+        <Label.Root htmlFor={`${eventType.id}-completion-time`}>
+          {isMission ? 'Completion time' : 'Event time'}
+        </Label.Root>
+        <Input
+          id={`${eventType.id}-completion-time`}
+          max={formatDatetimeLocal(
+            (() => {
+              const today = new Date();
+              const tomorrow = new Date(today);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              return tomorrow;
+            })(),
+          )}
+          required
+          step="any"
+          type="datetime-local"
+          {...form.register('completionTime')}
+        />
+      </InputRoot>
       {eventType.inputs.map(({ input }, i) => {
         const id = `${eventType.id}-inputs-${i}`;
 
@@ -196,7 +202,7 @@ const EventForm = ({
                     name={`inputs.${i}.0`}
                     render={({ field }) => (
                       <Select
-                        controlClassName="rounded-r-none border-r-0"
+                        className="rounded-r-none border-r-0"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}
@@ -215,7 +221,7 @@ const EventForm = ({
                     name={`inputs.${i}.1`}
                     render={({ field }) => (
                       <Select
-                        controlClassName="rounded-none"
+                        className="rounded-none"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}
@@ -234,7 +240,7 @@ const EventForm = ({
                     name={`inputs.${i}.2`}
                     render={({ field }) => (
                       <Select
-                        controlClassName="rounded-l-none border-l-0"
+                        className="rounded-l-none border-l-0"
                         inputType="number"
                         name={field.name}
                         onBlur={field.onBlur}
@@ -252,14 +258,16 @@ const EventForm = ({
               </fieldset>
             )}
             {input?.type === InputType.Number && (
-              <Input
-                label={input.label}
-                max={(input.settings as InputSettingsJson)?.max}
-                min={(input.settings as InputSettingsJson)?.min}
-                step={(input.settings as InputSettingsJson)?.step}
-                type="number"
-                {...form.register(`inputs.${i}`)}
-              />
+              <InputRoot>
+                <Label.Root htmlFor={`inputs.${i}`}>{input.label}</Label.Root>
+                <Input
+                  max={(input.settings as InputSettingsJson)?.max}
+                  min={(input.settings as InputSettingsJson)?.min}
+                  step={(input.settings as InputSettingsJson)?.step}
+                  type="number"
+                  {...form.register(`inputs.${i}`)}
+                />
+              </InputRoot>
             )}
             {(input?.type === InputType.MultiSelect ||
               input?.type === InputType.Select) && (
@@ -267,7 +275,11 @@ const EventForm = ({
                 control={form.control}
                 name={`inputs.${i}`}
                 render={({ field }) => (
-                  <EventSelect field={field} input={input} />
+                  <EventSelect
+                    field={field}
+                    id={`${eventType.id}-inputs-${i}`}
+                    input={input}
+                  />
                 )}
               />
             )}
@@ -282,11 +294,16 @@ const EventForm = ({
         );
       })}
       {!event && (
-        <Controller
-          control={form.control}
-          name="comment"
-          render={({ field }) => <RichTextarea label="Comment" {...field} />}
-        />
+        <InputRoot>
+          <Label.Root htmlFor={`${eventType.id}-comment`}>Comment</Label.Root>
+          <Controller
+            control={form.control}
+            name="comment"
+            render={({ field }) => (
+              <RichTextarea id={`${eventType.id}-comment`} {...field} />
+            )}
+          />
+        </InputRoot>
       )}
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>

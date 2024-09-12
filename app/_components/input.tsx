@@ -1,59 +1,26 @@
-import Tip from '@/_components/tip';
-import { forwardRef, InputHTMLAttributes, ReactNode, Ref } from 'react';
+import { forwardRef, InputHTMLAttributes } from 'react';
 import { useFormStatus } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  inputClassName?: string;
-  label?: ReactNode;
-  tooltip?: ReactNode;
-}
+const Input = forwardRef<
+  HTMLInputElement,
+  InputHTMLAttributes<HTMLInputElement>
+>(({ className, disabled, id, name, type, ...rest }, ref) => {
+  const { pending } = useFormStatus();
 
-const Input = forwardRef(
-  (
-    {
-      className,
-      disabled,
-      id,
-      inputClassName,
-      label,
-      name,
-      tooltip,
-      type,
-      ...rest
-    }: InputProps,
-    ref: Ref<HTMLInputElement>,
-  ) => {
-    const { pending } = useFormStatus();
-
-    return (
-      <div className={twMerge('group relative w-full', className)}>
-        <div className="flex justify-between">
-          {label && (
-            <label className="label" htmlFor={id ?? name}>
-              {label}
-            </label>
-          )}
-          {tooltip && (
-            <Tip className="relative -top-1 -mr-1" side="left">
-              {tooltip}
-            </Tip>
-          )}
-        </div>
-        <input
-          autoComplete="off"
-          className={twMerge('input', inputClassName)}
-          disabled={disabled || pending}
-          id={id ?? name}
-          name={name}
-          ref={ref}
-          type={type ?? 'text'}
-          {...rest}
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <input
+      autoComplete="off"
+      className={twMerge('input', className)}
+      disabled={disabled || pending}
+      id={id ?? name}
+      name={name}
+      ref={ref}
+      type={type ?? 'text'}
+      {...rest}
+    />
+  );
+});
 
 Input.displayName = 'Input';
 

@@ -49,7 +49,7 @@ const EventTypeUseTemplateModal = <T extends Form.FieldValues>({
               values.
             </Modal.Description>
             <Select
-              controlClassName="pt-16 text-left"
+              className="pt-16 text-left"
               isLoading={isTransitioning}
               noOptionsMessage={() => 'No templates.'}
               onChange={(t) =>

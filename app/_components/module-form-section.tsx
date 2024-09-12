@@ -212,7 +212,7 @@ const ModuleFormSection = <
         </DropdownMenu.Root>
       </div>
       <Input
-        inputClassName="rounded-none border-t-0"
+        className="rounded-none border-t-0"
         maxLength={49}
         placeholder="Title"
         {...form.register(`${fieldPath}.name` as Form.Path<T>)}
@@ -238,7 +238,7 @@ const ModuleFormSection = <
           name={`${fieldPath}.inputs` as T[string]}
           render={({ field }) => (
             <Select
-              controlClassName="rounded-t-none border-t-0"
+              className="rounded-t-none border-t-0"
               formatCreateLabel={(value) => `Create "${value}" input`}
               isCreatable
               isMulti

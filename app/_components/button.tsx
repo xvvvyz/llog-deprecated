@@ -10,8 +10,7 @@ import { twMerge } from 'tailwind-merge';
 const colorSchemes = {
   accent:
     'ring-accent-2 bg-accent-1 text-bg-1 font-bold hover:bg-accent-2 ring-offset-bg-2 ring-offset-4',
-  transparent:
-    'ring-accent-2 hover:bg-alpha-1 font-normal text-fg-3 hover:text-fg-2',
+  transparent: 'ring-accent-2 hover:bg-alpha-1 text-fg-3 hover:text-fg-2',
 };
 
 const spinnerColorSchemes = {
@@ -34,7 +33,7 @@ const disabledVariants = {
   primary: 'disabled ring-transparent',
 };
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   activeClassName?: string;
   colorScheme?: keyof typeof colorSchemes;
   href?: string;

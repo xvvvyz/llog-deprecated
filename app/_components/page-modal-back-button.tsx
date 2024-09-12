@@ -1,10 +1,14 @@
 'use client';
 
-import Button, { ButtonProps } from '@/_components/button';
+import Button from '@/_components/button';
 import * as Modal from '@/_components/modal';
 import { useRouter } from 'next/navigation';
+import { ComponentProps } from 'react';
 
-const PageModalBackButton = ({ onClick, ...rest }: ButtonProps) => {
+const PageModalBackButton = ({
+  onClick,
+  ...rest
+}: ComponentProps<typeof Button>) => {
   const router = useRouter();
 
   return (

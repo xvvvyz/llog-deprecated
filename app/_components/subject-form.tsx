@@ -4,6 +4,8 @@ import AvatarDropzone from '@/_components/avatar-dropzone';
 import Button from '@/_components/button';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import RichTextarea from '@/_components/rich-textarea';
 import Tip from '@/_components/tip';
@@ -84,48 +86,36 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         }),
       )}
     >
-      <Input
-        label="Name"
-        maxLength={49}
-        required
-        tooltip="Who or what are you tracking?"
-        {...form.register('name')}
-      />
-      <div className="relative">
-        <label className="group">
-          <span className="label">Profile image</span>
-          <AvatarDropzone
-            file={form.watch('avatar')}
-            id={subject?.id}
-            onDrop={(files) => form.setValue('avatar', files[0])}
-          />
-        </label>
+      <InputRoot>
+        <Label.Root htmlFor="name">Name</Label.Root>
+        <Label.Tip>Who or what are you tracking?</Label.Tip>
+        <Input maxLength={49} required {...form.register('name')} />
+      </InputRoot>
+      <InputRoot>
+        <Label.Root htmlFor="avatar">Profile image</Label.Root>
         {form.watch('avatar') && (
-          <Button
-            className="absolute right-4 top-0"
-            onClick={() => form.setValue('avatar', null)}
-            variant="link"
-          >
+          <Label.Button onClick={() => form.setValue('avatar', null)}>
             Remove image
-          </Button>
+          </Label.Button>
         )}
-      </div>
-      <Controller
-        control={form.control}
-        name="data.banner"
-        render={({ field }) => (
-          <RichTextarea
-            label="Note"
-            tooltip={
-              <>
-                An optional note displayed at the top of the subject&rsquo;s
-                profile.
-              </>
-            }
-            {...field}
-          />
-        )}
-      />
+        <AvatarDropzone
+          avatarId={subject?.id}
+          file={form.watch('avatar')}
+          id="avatar"
+          onDrop={(files) => form.setValue('avatar', files[0])}
+        />
+      </InputRoot>
+      <InputRoot>
+        <Label.Root htmlFor="data.banner">Name</Label.Root>
+        <Label.Tip>
+          An optional note displayed at the top of the subject&rsquo;s profile.
+        </Label.Tip>
+        <Controller
+          control={form.control}
+          name="data.banner"
+          render={({ field }) => <RichTextarea {...field} />}
+        />
+      </InputRoot>
       <fieldset className="group">
         <div className="flex justify-between">
           <span className="label">Links</span>
@@ -138,30 +128,18 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
             <ul className="flex flex-col gap-2">
               {linkArray.fields.map((link, linkIndex) => (
                 <li className="relative" key={link.id}>
-                  <Controller
-                    control={form.control}
-                    name={`data.links.${linkIndex}.label`}
-                    render={({ field }) => (
-                      <Input
-                        inputClassName="rounded-b-none border-b-0 pr-[2.4rem]"
-                        placeholder="Label…"
-                        required
-                        {...field}
-                      />
-                    )}
+                  <Input
+                    className="rounded-b-none border-b-0 pr-[2.4rem]"
+                    placeholder="Label…"
+                    required
+                    {...form.register(`data.links.${linkIndex}.label`)}
                   />
-                  <Controller
-                    control={form.control}
-                    name={`data.links.${linkIndex}.url`}
-                    render={({ field }) => (
-                      <Input
-                        inputClassName="rounded-t-none"
-                        placeholder="https://…"
-                        required
-                        type="url"
-                        {...field}
-                      />
-                    )}
+                  <Input
+                    className="rounded-t-none"
+                    placeholder="https://…"
+                    required
+                    type="url"
+                    {...form.register(`data.links.${linkIndex}.url`)}
                   />
                   <div className="absolute right-0 top-0 flex h-[2.625rem] w-[2.4rem] items-center justify-center">
                     <IconButton

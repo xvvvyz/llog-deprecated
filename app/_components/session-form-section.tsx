@@ -3,6 +3,8 @@
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import ModuleFormSection from '@/_components/module-form-section';
 import Tip from '@/_components/tip';
@@ -89,11 +91,10 @@ const SessionFormSection = <T extends Form.FieldValues>({
       {(includeTitle || includeScheduledFor) && (
         <div>
           {includeTitle && (
-            <Input
-              label="Title"
-              maxLength={49}
-              {...form.register(titleFieldPath)}
-            />
+            <InputRoot>
+              <Label.Root htmlFor={titleFieldPath}>Title</Label.Root>
+              <Input maxLength={49} {...form.register(titleFieldPath)} />
+            </InputRoot>
           )}
           {includeScheduledFor && (
             <Modal.Root onOpenChange={cancelScheduleModal} open={scheduleModal}>

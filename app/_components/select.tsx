@@ -2,33 +2,14 @@
 
 import Avatar from '@/_components/avatar';
 import Spinner from '@/_components/spinner';
-import Tip from '@/_components/tip';
 import forceArray from '@/_utilities/force-array';
 import ChevronUpDownIcon from '@heroicons/react/24/outline/ChevronUpDownIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
-import { forwardRef, ReactNode, Ref } from 'react';
-import Creatable, { CreatableProps } from 'react-select/creatable';
+import * as React from 'react';
+import ReactSelect, * as RS from 'react-select';
+import Creatable, * as RCS from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
-
-import ReactSelect, {
-  ClearIndicatorProps,
-  components,
-  ControlProps,
-  GroupBase,
-  GroupHeadingProps,
-  InputProps,
-  MenuProps,
-  MultiValueGenericProps,
-  MultiValueRemoveProps,
-  OptionProps,
-  PlaceholderProps,
-  Props,
-  Props as ReactSelectProps,
-  SelectInstance,
-  SingleValueProps,
-  ValueContainerProps,
-} from 'react-select';
 
 export type IOption = {
   id: string;
@@ -38,25 +19,15 @@ export type IOption = {
   subjects?: { id: string; image_uri: string; name: string }[] | null;
 };
 
-type SelectProps<TOption> = ReactSelectProps<TOption> &
-  CreatableProps<IOption, boolean, GroupBase<IOption>> & {
-    controlClassName?: string;
-    hasAvatar?: boolean;
-    inputType?: 'text' | 'number';
-    isCreatable?: boolean;
-    label?: string;
-    right?: ReactNode;
-    tooltip?: ReactNode;
-  };
-
 const ClearIndicator = <TOption extends IOption>(
-  props: ClearIndicatorProps<TOption>,
+  props: RS.ClearIndicatorProps<TOption>,
 ) => (
-  <components.ClearIndicator {...props}>
-    <div className="cursor-pointer p-1 text-fg-3 transition-colors hover:text-fg-2">
-      <XMarkIcon className="w-5" />
-    </div>
-  </components.ClearIndicator>
+  <RS.components.ClearIndicator
+    className="cursor-pointer p-1 text-fg-3 transition-colors hover:text-fg-2"
+    {...props}
+  >
+    <XMarkIcon className="w-5" />
+  </RS.components.ClearIndicator>
 );
 
 const Control = <TOption extends IOption>({
@@ -64,9 +35,8 @@ const Control = <TOption extends IOption>({
   menuIsOpen,
   selectProps,
   ...props
-}: ControlProps<TOption> & {
-  selectProps: Props<TOption, boolean, GroupBase<TOption>> &
-    Pick<SelectProps<TOption>, 'controlClassName'>;
+}: RS.ControlProps<TOption> & {
+  selectProps: RS.Props<TOption, boolean, RS.GroupBase<TOption>>;
 }) => {
   const hasNoOptionsMessage = !!selectProps.noOptionsMessage({
     inputValue: selectProps.inputValue,
@@ -77,21 +47,21 @@ const Control = <TOption extends IOption>({
     forceArray(selectProps.value as TOption | TOption[]).length;
 
   return (
-    <components.Control
+    <RS.components.Control
       className={twMerge(
-        'input p-1 group-hover:bg-alpha-2',
+        'input p-1',
         menuIsOpen &&
           !(!hasNoOptionsMessage && !hasOptions) &&
           'rounded-b-none focus-within:ring-0',
         selectProps.isDisabled && 'disabled group-hover:bg-alpha-1',
-        selectProps.controlClassName,
+        selectProps.className,
       )}
       menuIsOpen={menuIsOpen}
       selectProps={selectProps}
       {...props}
     >
       {children}
-    </components.Control>
+    </RS.components.Control>
   );
 };
 
@@ -100,15 +70,17 @@ const DropdownIndicator = () => (
 );
 
 const GroupHeading = <TOption extends IOption>(
-  props: GroupHeadingProps<TOption>,
-) => <components.GroupHeading className="smallcaps p-4 text-fg-4" {...props} />;
+  props: RS.GroupHeadingProps<TOption>,
+) => (
+  <RS.components.GroupHeading className="smallcaps p-4 text-fg-4" {...props} />
+);
 
 const Input = <TOption extends IOption>({
   children,
   selectProps,
   ...props
-}: InputProps<TOption>) => (
-  <components.Input
+}: RS.InputProps<TOption>) => (
+  <RS.components.Input
     {...props}
     className="m-1 pl-2"
     formNoValidate={true}
@@ -126,7 +98,7 @@ const Input = <TOption extends IOption>({
     spellCheck={true}
   >
     {children}
-  </components.Input>
+  </RS.components.Input>
 );
 
 const LoadingIndicator = () => <Spinner className="mr-1" />;
@@ -136,35 +108,35 @@ const LoadingMessage = () => null;
 const Menu = <TOption extends IOption>({
   children,
   ...props
-}: MenuProps<TOption>) => (
-  <components.Menu
+}: RS.MenuProps<TOption>) => (
+  <RS.components.Menu
     className="overflow-hidden rounded-b bg-bg-2 drop-shadow"
     {...props}
   >
     <div className="rounded-b border border-t-0 border-alpha-1 bg-alpha-2">
       {children}
     </div>
-  </components.Menu>
+  </RS.components.Menu>
 );
 
 const MultiValueContainer = ({
   children,
   ...props
-}: MultiValueGenericProps) => (
+}: RS.MultiValueGenericProps) => (
   <div className="-m-px max-w-[calc(100%-2em)]">
-    <components.MultiValueContainer {...props}>
-      <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded-sm border border-alpha-1 bg-alpha-2 text-sm leading-6">
+    <div className="m-1 inline-flex max-w-full items-center gap-1.5 rounded-sm border border-alpha-1 bg-alpha-2 text-sm leading-6">
+      <RS.components.MultiValueContainer {...props}>
         {children}
-      </div>
-    </components.MultiValueContainer>
+      </RS.components.MultiValueContainer>
+    </div>
   </div>
 );
 
 const MultiValueLabel = <TOption extends IOption>({
   children,
   ...props
-}: MultiValueGenericProps) => (
-  <components.MultiValueLabel {...props}>
+}: RS.MultiValueGenericProps) => (
+  <RS.components.MultiValueLabel {...props}>
     <div className="flex items-center gap-2 overflow-visible">
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
@@ -200,26 +172,26 @@ const MultiValueLabel = <TOption extends IOption>({
         </div>
       )}
     </div>
-  </components.MultiValueLabel>
+  </RS.components.MultiValueLabel>
 );
 
-const MultiValueRemove = (props: MultiValueRemoveProps) => (
-  <components.MultiValueRemove {...props}>
+const MultiValueRemove = (props: RS.MultiValueRemoveProps) => (
+  <RS.components.MultiValueRemove {...props}>
     <div className="-m-1 p-1 pr-1.5 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
-  </components.MultiValueRemove>
+  </RS.components.MultiValueRemove>
 );
 
-const NoOptionsMessage = ({ children }: { children: ReactNode }) => (
+const NoOptionsMessage = ({ children }: { children: React.ReactNode }) => (
   <div className="p-2 text-center text-fg-3">{children}</div>
 );
 
 const Option = <TOption extends IOption>({
   children,
   ...props
-}: OptionProps<TOption>) => (
-  <components.Option {...props}>
+}: RS.OptionProps<TOption>) => (
+  <RS.components.Option {...props}>
     <div
       className={twMerge(
         'flex items-center gap-4 px-4 py-2 leading-snug text-fg-3 transition-colors hover:cursor-pointer',
@@ -255,23 +227,23 @@ const Option = <TOption extends IOption>({
         <PlusIcon className="-mr-2 ml-auto w-5 shrink-0 transition-colors" />
       )}
     </div>
-  </components.Option>
+  </RS.components.Option>
 );
 
 const Placeholder = <TOption extends IOption>({
   children,
   ...props
-}: PlaceholderProps<TOption>) => (
-  <components.Placeholder className="m-1 pl-2 text-fg-4" {...props}>
+}: RS.PlaceholderProps<TOption>) => (
+  <RS.components.Placeholder className="m-1 pl-2 text-fg-4" {...props}>
     {children}
-  </components.Placeholder>
+  </RS.components.Placeholder>
 );
 
 const SingleValue = <TOption extends IOption>({
   children,
   ...props
-}: SingleValueProps<TOption>) => (
-  <components.SingleValue
+}: RS.SingleValueProps<TOption>) => (
+  <RS.components.SingleValue
     className="m-1 flex items-center gap-4 !whitespace-normal px-2"
     {...props}
   >
@@ -283,113 +255,89 @@ const SingleValue = <TOption extends IOption>({
       />
     )}
     {children}
-  </components.SingleValue>
+  </RS.components.SingleValue>
 );
 
 const ValueContainer = <TOption extends IOption>({
   children,
   ...props
-}: ValueContainerProps<TOption>) => (
-  <components.ValueContainer
+}: RS.ValueContainerProps<TOption>) => (
+  <RS.components.ValueContainer
     // hack to fix select values not showing up on ios
     className="!overflow-visible"
     {...props}
   >
     {children}
-  </components.ValueContainer>
+  </RS.components.ValueContainer>
 );
 
-const Select = <TOption extends IOption>(
-  {
-    className,
-    instanceId,
-    isCreatable,
-    isDisabled,
-    isLoading,
-    label,
-    name,
-    options,
-    placeholder,
-    right,
-    tooltip,
-    value,
-    ...props
-  }: SelectProps<TOption>,
-  ref: Ref<SelectInstance<IOption, boolean, GroupBase<IOption>>>,
-) => {
-  const commonProps = {
-    closeMenuOnSelect: !props.isMulti,
-    components: {
-      ClearIndicator,
-      Control,
-      DropdownIndicator,
-      GroupHeading,
-      Input,
-      LoadingIndicator,
-      LoadingMessage,
-      Menu,
-      MultiValueContainer,
-      MultiValueLabel,
-      MultiValueRemove,
-      NoOptionsMessage,
-      Option,
-      Placeholder,
-      SingleValue,
-      ValueContainer,
-    },
-    formatCreateLabel: (value: string) => `Save "${value}" option`,
-    getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
-    getOptionValue: (option: IOption) => option.id,
-    instanceId: instanceId ?? name,
-    isClearable: true,
-    isDisabled: isDisabled || isLoading,
-    isLoading,
-    name,
-    noOptionsMessage: () =>
-      isCreatable ? 'Type to create an option.' : 'No options.',
-    options,
-    placeholder: placeholder ?? <>&nbsp;</>,
-    unstyled: true,
-    value: value ?? [],
-    ...props,
+type SelectProps<TOption> = RS.Props<TOption> &
+  RCS.CreatableProps<IOption, boolean, RS.GroupBase<IOption>> & {
+    hasAvatar?: boolean;
+    inputType?: 'text' | 'number';
+    isCreatable?: boolean;
   };
 
-  return (
-    <div className={twMerge('group', className)}>
-      <div className="flex justify-between">
-        {label && (
-          <label className="label" htmlFor={`react-select-${name}-input`}>
-            {label}
-          </label>
-        )}
-        {tooltip && (
-          <Tip className="relative -top-1 -mr-1" side="left">
-            {tooltip}
-          </Tip>
-        )}
-      </div>
-      <div className="hidden px-4 print:block">
-        {options?.map((option, i) => (
-          <span key={`${i}-${option.label}-label`}>
-            {option.label}
-            {i < options.length - 1 && ', '}
-          </span>
-        ))}
-      </div>
-      <div className="flex print:hidden">
-        <div className="w-full [&>*]:w-full">
-          {isCreatable ? (
-            <Creatable ref={ref} {...commonProps} />
-          ) : (
-            <ReactSelect ref={ref} {...commonProps} />
-          )}
-        </div>
-        {right}
-      </div>
-    </div>
-  );
-};
+const Select = React.forwardRef<
+  RS.SelectInstance<IOption, boolean, RS.GroupBase<IOption>>,
+  SelectProps<IOption>
+>(
+  (
+    {
+      instanceId,
+      isCreatable,
+      isDisabled,
+      isLoading,
+      name,
+      options,
+      placeholder,
+      value,
+      ...props
+    },
+    ref,
+  ) => {
+    const commonProps = {
+      closeMenuOnSelect: !props.isMulti,
+      components: {
+        ClearIndicator,
+        Control,
+        DropdownIndicator,
+        GroupHeading,
+        Input,
+        LoadingIndicator,
+        LoadingMessage,
+        Menu,
+        MultiValueContainer,
+        MultiValueLabel,
+        MultiValueRemove,
+        NoOptionsMessage,
+        Option,
+        Placeholder,
+        SingleValue,
+        ValueContainer,
+      },
+      formatCreateLabel: (value: string) => `Save "${value}" option`,
+      getOptionLabel: (option: IOption) => option.label ?? option.name ?? '',
+      getOptionValue: (option: IOption) => option.id,
+      instanceId: instanceId ?? name,
+      isClearable: true,
+      isDisabled: isDisabled || isLoading,
+      isLoading,
+      name,
+      noOptionsMessage: () =>
+        isCreatable ? 'Type to create an option.' : 'No options.',
+      options,
+      placeholder: placeholder ?? <>&nbsp;</>,
+      unstyled: true,
+      value: value ?? [],
+      ...props,
+    };
+
+    if (isCreatable) return <Creatable ref={ref} {...commonProps} />;
+    return <ReactSelect ref={ref} {...commonProps} />;
+  },
+);
 
 Select.displayName = 'Select';
 
-export default forwardRef(Select);
+export default Select;

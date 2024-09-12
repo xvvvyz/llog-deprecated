@@ -2,6 +2,8 @@
 
 import Button from '@/_components/button';
 import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import signIn from '@/_mutations/sign-in';
 import { useActionState } from 'react';
 
@@ -17,30 +19,26 @@ const SignInForm = ({ next }: SignInFormProps) => {
 
   return (
     <form action={action} className="flex flex-col gap-8">
-      <Input
-        defaultValue={state.defaultValues.email}
-        label="Email address"
-        name="email"
-        required
-        type="email"
-      />
-      <div className="relative">
+      <InputRoot>
+        <Label.Root htmlFor="email">Email address</Label.Root>
+        <Input
+          defaultValue={state.defaultValues.email}
+          name="email"
+          required
+          type="email"
+        />
+      </InputRoot>
+      <InputRoot>
+        <Label.Root htmlFor="password">Password</Label.Root>
+        <Label.Button href="/forgot-password">Forgot password?</Label.Button>
         <Input
           defaultValue={state.defaultValues.password}
-          label="Password"
           minLength={6}
           name="password"
           required
           type="password"
         />
-        <Button
-          className="absolute right-4 top-0"
-          href="/forgot-password"
-          variant="link"
-        >
-          Forgot password?
-        </Button>
-      </div>
+      </InputRoot>
       {state.error && <p className="text-center">{state.error}</p>}
       <Button className="mt-8 w-full" loadingText="Signing in…" type="submit">
         Sign in

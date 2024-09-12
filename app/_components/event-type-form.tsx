@@ -4,6 +4,8 @@ import Button from '@/_components/button';
 import EventTypeUseTemplateModal from '@/_components/event-type-use-template-modal';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
@@ -92,58 +94,53 @@ const EventTypeForm = ({
           }),
         )}
       >
-        <Input
-          label="Name"
-          maxLength={49}
-          required
-          {...form.register('name')}
-        />
-        <Controller
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <RichTextarea
-              key={field.name}
-              label="Description or instructions"
-              {...field}
-            />
-          )}
-        />
+        <InputRoot>
+          <Label.Root htmlFor="name">Name</Label.Root>
+          <Input maxLength={49} required {...form.register('name')} />
+        </InputRoot>
+        <InputRoot>
+          <Label.Root htmlFor="content">Description or instructions</Label.Root>
+          <Controller
+            control={form.control}
+            name="content"
+            render={({ field }) => <RichTextarea key={field.name} {...field} />}
+          />
+        </InputRoot>
         <Modal.Root
           onOpenChange={() => setCreateInputModal(null)}
           open={!!createInputModal}
         >
-          <Controller
-            control={form.control}
-            name="inputs"
-            render={({ field }) => (
-              <Select
-                formatCreateLabel={(value) => `Create "${value}" input`}
-                isCreatable
-                isMulti
-                label="Inputs"
-                name={field.name}
-                noOptionsMessage={() => 'Type to create a new input.'}
-                onBlur={field.onBlur}
-                onChange={field.onChange}
-                onCreateOption={(value) =>
-                  setCreateInputModal({
-                    label: value,
-                    subjects: [{ id: subjectId }],
-                  })
-                }
-                options={availableInputs as IOption[]}
-                placeholder="Select inputs or type to create…"
-                tooltip={
-                  <>
-                    Define the specific data points you are interested in
-                    tracking and creating insights for.
-                  </>
-                }
-                value={field.value as IOption[]}
-              />
-            )}
-          />
+          <InputRoot>
+            <Label.Root htmlFor="react-select-inputs-input">Inputs</Label.Root>
+            <Label.Tip>
+              Define the specific data points you are interested in tracking and
+              creating insights for.
+            </Label.Tip>
+            <Controller
+              control={form.control}
+              name="inputs"
+              render={({ field }) => (
+                <Select
+                  formatCreateLabel={(value) => `Create "${value}" input`}
+                  isCreatable
+                  isMulti
+                  name={field.name}
+                  noOptionsMessage={() => 'Type to create a new input.'}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  onCreateOption={(value) =>
+                    setCreateInputModal({
+                      label: value,
+                      subjects: [{ id: subjectId }],
+                    })
+                  }
+                  options={availableInputs as IOption[]}
+                  placeholder="Select inputs or type to create…"
+                  value={field.value as IOption[]}
+                />
+              )}
+            />
+          </InputRoot>
           <Modal.Portal>
             <Modal.Overlay>
               <Modal.Content>
