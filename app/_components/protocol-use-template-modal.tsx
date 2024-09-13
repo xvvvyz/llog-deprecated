@@ -35,7 +35,7 @@ const ProtocolUseTemplateModal = ({
           <Modal.Content className="max-w-sm p-8 text-center">
             <Modal.Title className="text-2xl">Use template</Modal.Title>
             <Modal.Description className="mt-4 px-4 text-fg-4">
-              It is easier than typing.
+              It&rsquo;s easier than typing.
             </Modal.Description>
             <div className="pt-16 text-left">
               <Select

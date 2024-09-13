@@ -99,7 +99,7 @@ const EventTypeForm = ({
           <Input maxLength={49} required {...form.register('name')} />
         </InputRoot>
         <InputRoot>
-          <Label.Root htmlFor="content">Description or instructions</Label.Root>
+          <Label.Root htmlFor="content">Description</Label.Root>
           <Controller
             control={form.control}
             name="content"

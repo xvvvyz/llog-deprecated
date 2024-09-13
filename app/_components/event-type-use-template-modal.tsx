@@ -48,54 +48,56 @@ const EventTypeUseTemplateModal = <T extends Form.FieldValues>({
               Selecting a template will overwrite any existing event type
               values.
             </Modal.Description>
-            <Select
-              className="pt-16 text-left"
-              isLoading={isTransitioning}
-              noOptionsMessage={() => 'No templates.'}
-              onChange={(t) =>
-                startTransition(async () => {
-                  const template = t as NonNullable<
-                    ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
-                  >[0];
+            <div className="pt-16 text-left">
+              <Select
+                isLoading={isTransitioning}
+                noOptionsMessage={() => 'No templates.'}
+                onChange={(t) =>
+                  startTransition(async () => {
+                    const template = t as NonNullable<
+                      ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
+                    >[0];
 
-                  const { data: templateData } = await getTemplateData(
-                    template.id,
-                  );
+                    const { data: templateData } = await getTemplateData(
+                      template.id,
+                    );
 
-                  const data = templateData?.data as EventTypeTemplateDataJson;
+                    const data =
+                      templateData?.data as EventTypeTemplateDataJson;
 
-                  const inputs = availableInputs.filter(({ id }) =>
-                    forceArray(data?.inputIds).includes(id),
-                  );
+                    const inputs = availableInputs.filter(({ id }) =>
+                      forceArray(data?.inputIds).includes(id),
+                    );
 
-                  form.setValue(
-                    'name' as Form.FieldPath<T>,
-                    template.name as Form.PathValue<T, Form.FieldPath<T>>,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      'name' as Form.FieldPath<T>,
+                      template.name as Form.PathValue<T, Form.FieldPath<T>>,
+                      { shouldDirty: true },
+                    );
 
-                  form.setValue(
-                    'content' as Form.FieldPath<T>,
-                    (data?.content ?? '') as Form.PathValue<
-                      T,
-                      Form.FieldPath<T>
-                    >,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      'content' as Form.FieldPath<T>,
+                      (data?.content ?? '') as Form.PathValue<
+                        T,
+                        Form.FieldPath<T>
+                      >,
+                      { shouldDirty: true },
+                    );
 
-                  form.setValue(
-                    'inputs' as Form.FieldPath<T>,
-                    inputs as Form.PathValue<T, Form.FieldPath<T>>,
-                    { shouldDirty: true },
-                  );
+                    form.setValue(
+                      'inputs' as Form.FieldPath<T>,
+                      inputs as Form.PathValue<T, Form.FieldPath<T>>,
+                      { shouldDirty: true },
+                    );
 
-                  toggleOpen();
-                })
-              }
-              options={availableEventTypeTemplates as IOption[]}
-              placeholder="Select a template…"
-              value={null}
-            />
+                    toggleOpen();
+                  })
+                }
+                options={availableEventTypeTemplates as IOption[]}
+                placeholder="Select a template…"
+                value={null}
+              />
+            </div>
             <Modal.Close asChild onClick={(e) => e.preventDefault()}>
               <Button
                 className="-mb-3 mt-14 w-full justify-center p-0 py-3"
