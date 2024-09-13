@@ -32,7 +32,7 @@ const DropdownMenuDeleteItem = ({ confirmText, onConfirm }: AlertProps) => {
                   className="m-0 -mb-3 w-full justify-center p-0 py-3"
                   variant="link"
                 >
-                  Close
+                  Cancel
                 </Button>
               </Modal.Close>
               <Button

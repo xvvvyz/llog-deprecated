@@ -94,12 +94,13 @@ const SessionPage = async ({
             <SessionMenu
               highestPublishedOrder={highestPublishedOrder}
               isDraft={session.draft}
+              isStarted={!!completedModules.length}
               isView
               nextSessionOrder={highestOrder + 1}
               order={session.order}
+              protocolId={protocolId}
               sessionId={sessionId}
               subjectId={subjectId}
-              protocolId={protocolId}
             />
           )
         }

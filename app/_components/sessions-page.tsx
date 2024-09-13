@@ -165,9 +165,10 @@ const SessionsPage = async ({
                     highestPublishedOrder={highestPublishedOrder}
                     isDraft={session.draft}
                     isList
-                    protocolId={protocolId}
+                    isStarted={!!completedModules.length}
                     nextSessionOrder={nextSessionOrder}
                     order={session.order}
+                    protocolId={protocolId}
                     sessionId={session.id}
                     subjectId={subjectId}
                   />

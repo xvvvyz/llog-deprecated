@@ -1,8 +1,10 @@
 'use client';
 
+import Button from '@/_components/button';
 import * as DropdownMenu from '@/_components/dropdown-menu';
 import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
 import IconButton from '@/_components/icon-button';
+import * as Modal from '@/_components/modal';
 import deleteSession from '@/_mutations/delete-session';
 import moveSession from '@/_mutations/move-session';
 import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
@@ -18,6 +20,7 @@ interface SessionMenuProps {
   highestPublishedOrder: number;
   isDraft: boolean;
   isList?: boolean;
+  isStarted: boolean;
   isView?: boolean;
   nextSessionOrder: number;
   order: number;
@@ -30,6 +33,7 @@ const SessionMenu = ({
   highestPublishedOrder,
   isDraft,
   isList,
+  isStarted,
   isView,
   nextSessionOrder,
   order,
@@ -56,13 +60,53 @@ const SessionMenu = ({
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content>
-          <DropdownMenu.Button
-            href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
-            scroll={false}
-          >
-            <PencilIcon className="w-5 text-fg-4" />
-            Edit
-          </DropdownMenu.Button>
+          {isStarted ? (
+            <Modal.Root>
+              <Modal.Trigger asChild>
+                <DropdownMenu.Button>
+                  <PencilIcon className="w-5 text-fg-4" />
+                  Edit
+                </DropdownMenu.Button>
+              </Modal.Trigger>
+              <Modal.Portal>
+                <Modal.Overlay>
+                  <Modal.Content className="max-w-sm p-8 text-center">
+                    <Modal.Title className="text-2xl">
+                      Are you sure?
+                    </Modal.Title>
+                    <Modal.Description className="mt-4 px-4 text-fg-4">
+                      This session has completed modules. Are you sure you want
+                      to edit it?
+                    </Modal.Description>
+                    <div className="mt-16 flex flex-col-reverse gap-4">
+                      <Modal.Close asChild>
+                        <Button
+                          className="m-0 -mb-3 w-full justify-center p-0 py-3"
+                          variant="link"
+                        >
+                          Cancel
+                        </Button>
+                      </Modal.Close>
+                      <Button
+                        href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
+                        scroll={false}
+                      >
+                        Edit session
+                      </Button>
+                    </div>
+                  </Modal.Content>
+                </Modal.Overlay>
+              </Modal.Portal>
+            </Modal.Root>
+          ) : (
+            <DropdownMenu.Button
+              href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
+              scroll={false}
+            >
+              <PencilIcon className="w-5 text-fg-4" />
+              Edit
+            </DropdownMenu.Button>
+          )}
           <DropdownMenu.Button
             href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
             scroll={false}
