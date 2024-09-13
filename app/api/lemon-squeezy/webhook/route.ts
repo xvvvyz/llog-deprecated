@@ -8,8 +8,10 @@ const POST = async (request: Request) => {
   const digest = Buffer.from(hmac.update(body).digest('hex'), 'utf8');
   const rawSignature = request.headers.get('X-Signature') ?? '';
   const signature = Buffer.from(rawSignature, 'utf8');
+  const digestUint8 = new Uint8Array(digest);
+  const signatureUint8 = new Uint8Array(signature);
 
-  if (!crypto.timingSafeEqual(digest, signature)) {
+  if (!crypto.timingSafeEqual(digestUint8, signatureUint8)) {
     return new Response('Invalid signature', { status: 400 });
   }
 
