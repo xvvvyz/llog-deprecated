@@ -24,7 +24,7 @@ Generate types and start the dev server:
 
 ```shell
 bun db:types
-bun start
+bun dev
 ```
 
 If you modify the database schema:
