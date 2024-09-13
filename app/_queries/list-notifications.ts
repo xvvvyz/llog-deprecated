@@ -15,7 +15,7 @@ const listNotifications = async ({ archived = false } = {}) =>
             order,
             session:sessions(
               id,
-              training_plan:training_plans(id, name),
+              protocol:protocols(id, name),
               order
             )
           )
@@ -29,7 +29,7 @@ const listNotifications = async ({ archived = false } = {}) =>
           order,
           session:sessions(
             id,
-            training_plan:training_plans(id, name),
+            protocol:protocols(id, name),
             order
           )
         )

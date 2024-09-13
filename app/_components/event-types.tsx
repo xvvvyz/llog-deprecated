@@ -1,6 +1,6 @@
 import Button from '@/_components/button';
 import EventTypeMenu from '@/_components/event-type-menu';
-import listSubjectEventTypes from '@/_queries/list-subject-event-types';
+import listEventTypes from '@/_queries/list-event-types';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { twMerge } from 'tailwind-merge';
 
@@ -10,7 +10,7 @@ interface EventTypesProps {
 }
 
 const EventTypes = async ({ isTeamMember, subjectId }: EventTypesProps) => {
-  const { data: eventTypes } = await listSubjectEventTypes(subjectId);
+  const { data: eventTypes } = await listEventTypes(subjectId);
   if (!eventTypes?.length) return null;
 
   return (

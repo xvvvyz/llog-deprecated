@@ -32,7 +32,7 @@ const formatTabularEvents = (
           )) ||
       (options?.includeEventsFrom &&
         event.type?.id !== options.includeEventsFrom &&
-        event.type?.session?.training_plan?.id !== options.includeEventsFrom)
+        event.type?.session?.protocol?.id !== options.includeEventsFrom)
     ) {
       continue;
     }

@@ -75,7 +75,7 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                           ? 'completed a'
                           : 'recorded')}{' '}
                       <span className="text-fg-2">
-                        {sourceEvent?.type?.session?.training_plan?.name ??
+                        {sourceEvent?.type?.session?.protocol?.name ??
                           sourceEvent?.type?.name}
                       </span>
                       {sourceEvent?.type?.session && (

@@ -10,7 +10,7 @@ const mono = Inconsolata({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata = {
   description:
-    'Achieve lasting behavior changes with your clients. Streamline data collection, create data-driven training plans and easily monitor progress.',
+    'Achieve lasting behavior changes with your clients. Streamline data collection, create data-driven protocols and easily monitor progress.',
   title: {
     default: 'llog - collaborative behavior modification',
     template: '%s - llog',

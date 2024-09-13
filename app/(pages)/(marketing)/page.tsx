@@ -8,8 +8,8 @@ const Page = () => (
       changes with your&nbsp;clients.
     </h1>
     <p className="mx-auto mt-6 max-w-sm">
-      Streamline <b>data collection</b>, create{' '}
-      <b>data-driven training plans</b> and easily <b>monitor&nbsp;progress</b>.
+      Streamline <b>data collection</b>, create <b>data-driven protocols</b> and
+      easily <b>monitor&nbsp;progress</b>.
     </p>
     <div className="mt-9 w-full max-w-lg rounded border border-alpha-1 bg-bg-2 p-8 text-left sm:rounded-[4rem] sm:p-16">
       <ContactForm />

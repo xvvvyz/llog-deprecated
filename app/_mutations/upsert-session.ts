@@ -12,7 +12,7 @@ const upsertSession = async (
     publishedOrder: number;
     sessionId?: string;
     subjectId: string;
-    trainingPlanId: string;
+    protocolId: string;
   },
   data: SessionFormValues,
 ) => {
@@ -34,7 +34,7 @@ const upsertSession = async (
     const { data: shiftSessions } = await supabase
       .from('sessions')
       .select('id, order')
-      .eq('training_plan_id', context.trainingPlanId)
+      .eq('protocol_id', context.protocolId)
       .gte('"order"', finalOrder)
       .eq('draft', false);
 
@@ -43,7 +43,7 @@ const upsertSession = async (
         shiftSessions.map((session) => ({
           id: session.id,
           order: session.order + 1,
-          training_plan_id: context.trainingPlanId,
+          protocol_id: context.protocolId,
         })),
       );
     }
@@ -55,9 +55,9 @@ const upsertSession = async (
       draft: data.draft,
       id: context.sessionId,
       order: finalOrder,
+      protocol_id: context.protocolId,
       scheduled_for: data.scheduledFor || null,
       title: data.title?.trim() || null,
-      training_plan_id: context.trainingPlanId,
     })
     .select('id')
     .single();

@@ -23,7 +23,7 @@ const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
   ] = await Promise.all([
     listTemplatesBySubjectIdAndType({
       subjectId,
-      type: TemplateType.TrainingPlan,
+      type: TemplateType.Protocol,
     }),
     listInputsBySubjectId(subjectId),
     getEventTypeWithInputs(eventTypeId),

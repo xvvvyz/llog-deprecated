@@ -4,13 +4,13 @@ import Empty from '@/_components/empty';
 import * as Modal from '@/_components/modal';
 import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
+import ProtocolMenu from '@/_components/protocol-menu';
 import SessionMenu from '@/_components/session-menu';
-import TrainingPlanMenu from '@/_components/training-plan-menu';
 import getCurrentUser from '@/_queries/get-current-user';
+import getProtocolWithSessionsAndEvents from '@/_queries/get-protocol-with-sessions-and-events';
+import getPublicProtocolWithSessionsAndEvents from '@/_queries/get-public-protocol-with-sessions-and-events';
 import getPublicSubject from '@/_queries/get-public-subject';
-import getPublicTrainingPlanWithSessionsAndEvents from '@/_queries/get-public-training-plan-with-sessions-and-events';
 import getSubject from '@/_queries/get-subject';
-import getTrainingPlanWithSessionsAndEvents from '@/_queries/get-training-plan-with-sessions-and-events';
 import firstIfArray from '@/_utilities/first-if-array';
 import getDurationFromTimestamps from '@/_utilities/get-duration-from-timestamps';
 import parseSessions from '@/_utilities/parse-sessions';
@@ -21,13 +21,13 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 interface SessionsPageProps {
   isPublic?: boolean;
   subjectId: string;
-  trainingPlanId: string;
+  protocolId: string;
 }
 
 const SessionsPage = async ({
   isPublic,
   subjectId,
-  trainingPlanId,
+  protocolId,
 }: SessionsPageProps) => {
   const [{ data: subject }, user] = await Promise.all([
     isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
@@ -37,16 +37,16 @@ const SessionsPage = async ({
   if (!subject) return null;
   const isTeamMember = !!user && subject.team_id === user.id;
 
-  const { data: trainingPlan } = isPublic
-    ? await getPublicTrainingPlanWithSessionsAndEvents(trainingPlanId)
-    : await getTrainingPlanWithSessionsAndEvents(trainingPlanId, {
+  const { data: protocol } = isPublic
+    ? await getPublicProtocolWithSessionsAndEvents(protocolId)
+    : await getProtocolWithSessionsAndEvents(protocolId, {
         draft: isTeamMember,
       });
 
-  if (!trainingPlan) return null;
+  if (!protocol) return null;
 
   const { highestOrder, highestPublishedOrder, sessionsReversed } =
-    parseSessions({ sessions: trainingPlan.sessions });
+    parseSessions({ sessions: protocol.sessions });
 
   const nextSessionOrder = highestOrder + 1;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
@@ -56,21 +56,21 @@ const SessionsPage = async ({
       <PageModalHeader
         right={
           isTeamMember && (
-            <TrainingPlanMenu
+            <ProtocolMenu
               isModal
               subjectId={subjectId}
-              trainingPlanId={trainingPlan.id}
+              protocolId={protocol.id}
             />
           )
         }
-        title={trainingPlan.name}
+        title={protocol.name}
       />
       {!isPublic && !subject.archived && isTeamMember && (
         <div className="px-4 pb-8 sm:px-8">
           <Button
             colorScheme="transparent"
             className="w-full"
-            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/create/${nextSessionOrder}`}
+            href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/create/${nextSessionOrder}`}
             scroll={false}
           >
             <PlusIcon className="w-5" />
@@ -81,15 +81,7 @@ const SessionsPage = async ({
       {!sessionsReversed.length && (
         <Empty className="border-0">
           <InformationCircleIcon className="w-7" />
-          {isPublic || subject.archived ? (
-            'No training sessions.'
-          ) : (
-            <>
-              Schedule detailed training sessions
-              <br />
-              to be completed over time.
-            </>
-          )}
+          No sessions.
         </Empty>
       )}
       {!!sessionsReversed.length && (
@@ -114,7 +106,7 @@ const SessionsPage = async ({
               >
                 <Button
                   className="m-0 w-full min-w-0 justify-between gap-6 py-3 pl-4 pr-0 sm:pl-8"
-                  href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
+                  href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
                   scroll={false}
                   variant="link"
                 >
@@ -173,7 +165,7 @@ const SessionsPage = async ({
                     highestPublishedOrder={highestPublishedOrder}
                     isDraft={session.draft}
                     isList
-                    trainingPlanId={trainingPlanId}
+                    protocolId={protocolId}
                     nextSessionOrder={nextSessionOrder}
                     order={session.order}
                     sessionId={session.id}

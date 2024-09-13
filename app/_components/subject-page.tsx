@@ -5,11 +5,11 @@ import * as DropdownMenu from '@/_components/dropdown-menu';
 import Empty from '@/_components/empty';
 import EventTypes from '@/_components/event-types';
 import IconButton from '@/_components/icon-button';
+import Protocols from '@/_components/protocols';
 import SubjectEventsDateFilter from '@/_components/subject-events-date-filter';
 import SubjectMenu from '@/_components/subject-menu';
 import TimelineEvents from '@/_components/timeline-events';
 import Tip from '@/_components/tip';
-import TrainingPlans from '@/_components/training-plans';
 import SubscriptionStatus from '@/_constants/enum-subscription-status';
 import countUnarchivedTeamSubjects from '@/_queries/count-unarchived-team-subjects';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -121,26 +121,23 @@ const SubjectPage = async ({
                     className="absolute right-4 top-2.5"
                     tipClassName="mr-0.5"
                   >
-                    Use event types to track individual behaviors, activities
-                    etc. For example: &ldquo;Barking&rdquo; or
-                    &ldquo;Medication&rdquo;.
+                    Event types allow you to record events as they occur.
                   </Tip>
                 </div>
                 <div className="relative">
                   <DropdownMenu.Button
-                    href={`/subjects/${subjectId}/training-plans/create`}
+                    href={`/subjects/${subjectId}/protocols/create`}
                     scroll={false}
                   >
                     <PlusIcon className="w-5 text-fg-4" />
-                    Training plan
+                    Protocol
                   </DropdownMenu.Button>
                   <Tip
                     align="end"
                     className="absolute right-4 top-2.5"
                     tipClassName="mr-0.5"
                   >
-                    Use training plans to teach new behaviors, skills etc. For
-                    example: &ldquo;Reduce separation anxiety&rdquo;.
+                    Protocols are structured plans to be completed over time.
                   </Tip>
                 </div>
               </DropdownMenu.Content>
@@ -195,10 +192,7 @@ const SubjectPage = async ({
           )}
           {!subject.archived && (
             <>
-              <TrainingPlans
-                isTeamMember={isTeamMember}
-                subjectId={subjectId}
-              />
+              <Protocols isTeamMember={isTeamMember} subjectId={subjectId} />
               <EventTypes isTeamMember={isTeamMember} subjectId={subjectId} />
             </>
           )}

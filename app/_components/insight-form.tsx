@@ -95,9 +95,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
       inputOptions: config?.inputOptions ?? [],
       lineCurveFunction: config?.lineCurveFunction ?? LineCurveFunction.Linear,
       marginBottom: config?.marginBottom ?? '60',
-      marginLeft: config?.marginLeft ?? '60',
-      marginRight: config?.marginRight ?? '40',
-      marginTop: config?.marginTop ?? '30',
+      marginLeft: config?.marginLeft ?? '80',
+      marginRight: config?.marginRight ?? '60',
+      marginTop: config?.marginTop ?? '60',
       name: insight?.name ?? '',
       order: insight?.order,
       showBars: config?.showBars ?? false,
@@ -462,7 +462,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                             let value;
 
                             if (field.value) {
-                              for (const group of annotationInputOptions.eventTypeOrTrainingPlanOptions) {
+                              for (const group of annotationInputOptions.eventTypeOrProtocolOptions) {
                                 value = group.options.find(
                                   (o) => o.id === field.value,
                                 );
@@ -479,9 +479,9 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                                   field.onChange((value as IOption)?.id ?? null)
                                 }
                                 options={
-                                  annotationInputOptions.eventTypeOrTrainingPlanOptions
+                                  annotationInputOptions.eventTypeOrProtocolOptions
                                 }
-                                placeholder="All event types/training plans…"
+                                placeholder="All event types/protocols…"
                                 value={value}
                               />
                             );
@@ -555,7 +555,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                     let value;
 
                     if (field.value) {
-                      for (const group of inputOptions.eventTypeOrTrainingPlanOptions) {
+                      for (const group of inputOptions.eventTypeOrProtocolOptions) {
                         value = group.options.find((o) => o.id === field.value);
                         if (value) break;
                       }
@@ -569,8 +569,8 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                         onChange={(value) =>
                           field.onChange((value as IOption)?.id ?? null)
                         }
-                        options={inputOptions.eventTypeOrTrainingPlanOptions}
-                        placeholder="All event types/training plans…"
+                        options={inputOptions.eventTypeOrProtocolOptions}
+                        placeholder="All event types/protocols…"
                         value={value}
                       />
                     );

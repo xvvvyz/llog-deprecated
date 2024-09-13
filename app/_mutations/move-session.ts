@@ -8,24 +8,22 @@ const moveSession = async ({
   isDraft,
   newOrder,
   sessionId,
-  trainingPlanId,
+  protocolId,
 }: {
   currentOrder: number;
   isDraft: boolean;
   newOrder: number;
   sessionId: string;
-  trainingPlanId: string;
+  protocolId: string;
 }) => {
   const supabase = createServerSupabaseClient();
-  const update = [
-    { id: sessionId, order: newOrder, training_plan_id: trainingPlanId },
-  ];
+  const update = [{ id: sessionId, order: newOrder, protocol_id: protocolId }];
 
   if (!isDraft) {
     const { data: swapWith } = await supabase
       .from('sessions')
       .select('id')
-      .eq('training_plan_id', trainingPlanId)
+      .eq('protocol_id', protocolId)
       .eq('"order"', newOrder)
       .eq('draft', false)
       .single();
@@ -34,7 +32,7 @@ const moveSession = async ({
       update.push({
         id: swapWith.id,
         order: currentOrder,
-        training_plan_id: trainingPlanId,
+        protocol_id: protocolId,
       });
     }
   }

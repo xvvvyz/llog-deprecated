@@ -145,8 +145,7 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
               className="absolute right-4 top-2.5"
               tipClassName="mr-0.5"
             >
-              Clients can complete training plans, record events
-              and&nbsp;comment.
+              Clients can complete protocols, record events and&nbsp;comment.
             </Tip>
           </div>
           <Modal.Root>

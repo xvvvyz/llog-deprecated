@@ -7,9 +7,9 @@ import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
+import { ProtocolTemplateFormValues } from '@/_components/protocol-template-form';
 import SessionTemplateForm from '@/_components/session-template-form';
 import SessionUseTemplateModal from '@/_components/session-use-template-modal';
-import { TrainingPlanTemplateFormValues } from '@/_components/training-plan-template-form';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListTemplatesData } from '@/_queries/list-templates';
 import { useSortable } from '@dnd-kit/sortable';
@@ -180,7 +180,7 @@ const SortableSessionFormSection = <
                       onClick={() => {
                         const { modules, title } = rest.form.getValues(
                           rest.fieldPath as Form.Path<T>,
-                        ) as TrainingPlanTemplateFormValues['sessions'][0];
+                        ) as ProtocolTemplateFormValues['sessions'][0];
 
                         setCreateTemplateModal({
                           data: {

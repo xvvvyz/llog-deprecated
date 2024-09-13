@@ -21,9 +21,9 @@ interface SessionMenuProps {
   isView?: boolean;
   nextSessionOrder: number;
   order: number;
+  protocolId: string;
   sessionId: string;
   subjectId: string;
-  trainingPlanId: string;
 }
 
 const SessionMenu = ({
@@ -33,9 +33,9 @@ const SessionMenu = ({
   isView,
   nextSessionOrder,
   order,
+  protocolId,
   sessionId,
   subjectId,
-  trainingPlanId,
 }: SessionMenuProps) => {
   const [isMoveLeftTransitioning, startMoveLeftTransition] = useTransition();
   const [isMoveRightTransitioning, startMoveRightTransition] = useTransition();
@@ -57,14 +57,14 @@ const SessionMenu = ({
       <DropdownMenu.Portal>
         <DropdownMenu.Content>
           <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/${sessionId}/edit`}
+            href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
             scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit
           </DropdownMenu.Button>
           <DropdownMenu.Button
-            href={`/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
+            href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
             scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
@@ -83,8 +83,8 @@ const SessionMenu = ({
                       currentOrder: order,
                       isDraft,
                       newOrder: order + 1,
+                      protocolId: protocolId,
                       sessionId,
-                      trainingPlanId: trainingPlanId,
                     }),
                   )
                 }
@@ -102,8 +102,8 @@ const SessionMenu = ({
                       currentOrder: order,
                       isDraft,
                       newOrder: order - 1,
+                      protocolId: protocolId,
                       sessionId,
-                      trainingPlanId: trainingPlanId,
                     }),
                   );
                 }}
@@ -127,13 +127,13 @@ const SessionMenu = ({
             onConfirm={async () => {
               await deleteSession({
                 currentOrder: order,
+                protocolId: protocolId,
                 sessionId,
-                trainingPlanId: trainingPlanId,
               });
 
               if (!isList) {
                 router.replace(
-                  `/subjects/${subjectId}/training-plans/${trainingPlanId}/sessions`,
+                  `/subjects/${subjectId}/protocols/${protocolId}/sessions`,
                 );
               }
             }}

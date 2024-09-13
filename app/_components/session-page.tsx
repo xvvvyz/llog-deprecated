@@ -8,12 +8,12 @@ import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionMenu from '@/_components/session-menu';
 import getCurrentUser from '@/_queries/get-current-user';
+import getProtocolWithSessions from '@/_queries/get-protocol-with-sessions';
+import getPublicProtocolWithSessions from '@/_queries/get-public-protocol-with-sessions';
 import getPublicSessionWithDetails from '@/_queries/get-public-session-with-details';
 import getPublicSubject from '@/_queries/get-public-subject';
-import getPublicTrainingPlanWithSessions from '@/_queries/get-public-training-plan-with-sessions';
 import getSessionWithDetails from '@/_queries/get-session-with-details';
 import getSubject from '@/_queries/get-subject';
-import getTrainingPlanWithSessions from '@/_queries/get-training-plan-with-sessions';
 import firstIfArray from '@/_utilities/first-if-array';
 import getDurationFromTimestamps from '@/_utilities/get-duration-from-timestamps';
 import parseSessions from '@/_utilities/parse-sessions';
@@ -26,29 +26,29 @@ interface SessionPageProps {
   isPublic?: boolean;
   sessionId: string;
   subjectId: string;
-  trainingPlanId: string;
+  protocolId: string;
 }
 
 const SessionPage = async ({
   isPublic,
   sessionId,
   subjectId,
-  trainingPlanId,
+  protocolId,
 }: SessionPageProps) => {
-  const [{ data: subject }, { data: trainingPlan }, { data: session }, user] =
+  const [{ data: subject }, { data: protocol }, { data: session }, user] =
     await Promise.all([
       isPublic ? getPublicSubject(subjectId) : getSubject(subjectId),
       isPublic
-        ? getPublicTrainingPlanWithSessions(trainingPlanId)
-        : getTrainingPlanWithSessions(trainingPlanId),
+        ? getPublicProtocolWithSessions(protocolId)
+        : getProtocolWithSessions(protocolId),
       isPublic
         ? getPublicSessionWithDetails(sessionId)
         : getSessionWithDetails(sessionId),
       getCurrentUser(),
     ]);
 
-  if (!subject || !trainingPlan || !session) return null;
-  const currentSession = trainingPlan.sessions.find((s) => s.id === sessionId);
+  if (!subject || !protocol || !session) return null;
+  const currentSession = protocol.sessions.find((s) => s.id === sessionId);
   if (!currentSession) return null;
 
   const isTeamMember = !!user && subject.team_id === user.id;
@@ -64,15 +64,11 @@ const SessionPage = async ({
   } = parseSessions({
     currentSession: session,
     sessionOrder: session.order,
-    sessions: trainingPlan.sessions,
+    sessions: protocol.sessions,
   });
 
-  if (
-    trainingPlan.sessions.length > 0 &&
-    !previousSessionId &&
-    !nextSessionId
-  ) {
-    trainingPlan.sessions.some((session) => {
+  if (protocol.sessions.length > 0 && !previousSessionId && !nextSessionId) {
+    protocol.sessions.some((session) => {
       if (session.order < currentSession.order) {
         previousSessionId = session.id;
       } else if (session.order > currentSession.order) {
@@ -103,14 +99,14 @@ const SessionPage = async ({
               order={session.order}
               sessionId={sessionId}
               subjectId={subjectId}
-              trainingPlanId={trainingPlanId}
+              protocolId={protocolId}
             />
           )
         }
         subtitle={
           <Button
             className="pt-4"
-            href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions`}
+            href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions`}
             scroll={false}
             variant="link"
           >
@@ -118,12 +114,12 @@ const SessionPage = async ({
             <ArrowUpRightIcon className="w-5" />
           </Button>
         }
-        title={trainingPlan.name}
+        title={protocol.name}
       />
       <nav className="flex w-full items-center justify-between px-4 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${previousSessionId}`}
+          href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions/${previousSessionId}`}
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
@@ -139,7 +135,7 @@ const SessionPage = async ({
         </div>
         <IconButton
           disabled={!nextSessionId}
-          href={`/${shareOrSubjects}/${subjectId}/training-plans/${trainingPlanId}/sessions/${nextSessionId}`}
+          href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions/${nextSessionId}`}
           icon={<ChevronRightIcon className="relative right-1 w-7" />}
           label="Next session"
           replace
@@ -204,7 +200,7 @@ const SessionPage = async ({
                     isPublic={isPublic}
                     isTeamMember={isTeamMember}
                     subjectId={subjectId}
-                    trainingPlan={trainingPlan}
+                    protocol={protocol}
                     user={user}
                   />
                 </li>

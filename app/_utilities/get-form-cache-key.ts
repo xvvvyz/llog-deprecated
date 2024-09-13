@@ -15,28 +15,28 @@ const getFormCacheKey = {
     isDuplicate,
   }: { id?: string; isDuplicate?: boolean } = {}) =>
     `module-template-${id ?? 'create'}}${isDuplicate ? '-duplicate' : ''}`,
+  protocolTemplate: ({
+    id,
+    isDuplicate,
+  }: { id?: string; isDuplicate?: boolean } = {}) =>
+    `protocol-template-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
   session: ({
     id,
     isDuplicate,
-    trainingPlanId,
+    protocolId,
     subjectId,
   }: {
     id?: string;
     isDuplicate?: boolean;
     subjectId: string;
-    trainingPlanId: string;
+    protocolId: string;
   }) =>
-    `subject-${subjectId}-training-plan-${trainingPlanId}-session-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
+    `subject-${subjectId}-protocol-${protocolId}-session-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
   sessionTemplate: ({
     id,
     isDuplicate,
   }: { id?: string; isDuplicate?: boolean } = {}) =>
     `session-template-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
-  trainingPlanTemplate: ({
-    id,
-    isDuplicate,
-  }: { id?: string; isDuplicate?: boolean } = {}) =>
-    `training-plan-template-${id ?? 'create'}${isDuplicate ? '-duplicate' : ''}`,
 };
 
 export default getFormCacheKey;

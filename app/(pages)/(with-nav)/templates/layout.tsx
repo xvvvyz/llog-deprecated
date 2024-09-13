@@ -27,10 +27,10 @@ const Layout = ({ children }: LayoutProps) => (
                 Event type <span className="text-fg-4">template</span>
               </div>
             </DropdownMenu.Button>
-            <DropdownMenu.Button href="/templates/training-plans/create">
+            <DropdownMenu.Button href="/templates/protocols/create">
               <PlusIcon className="w-5 text-fg-4" />
               <div>
-                Training plan <span className="text-fg-4">template</span>
+                Protocol <span className="text-fg-4">template</span>
               </div>
             </DropdownMenu.Button>
             <DropdownMenu.Button href="/templates/sessions/create">

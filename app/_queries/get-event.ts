@@ -31,7 +31,7 @@ const getEvent = (eventId: string) =>
         order,
         session:sessions(
           id,
-          training_plan:training_plans(id, name),
+          protocol:protocols(id, name),
           order
         )
       )`,

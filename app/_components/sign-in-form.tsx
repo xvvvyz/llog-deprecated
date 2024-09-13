@@ -30,7 +30,9 @@ const SignInForm = ({ next }: SignInFormProps) => {
       </InputRoot>
       <InputRoot>
         <Label.Root htmlFor="password">Password</Label.Root>
-        <Label.Button href="/forgot-password">Forgot password?</Label.Button>
+        <Label.Button href="/forgot-password" tabIndex={-1}>
+          Forgot password?
+        </Label.Button>
         <Input
           defaultValue={state.defaultValues.password}
           minLength={6}

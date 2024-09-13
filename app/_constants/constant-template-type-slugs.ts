@@ -4,7 +4,7 @@ const TEMPLATE_TYPE_SLUGS = {
   [TemplateType.EventType]: 'event-types',
   [TemplateType.Module]: 'modules',
   [TemplateType.Session]: 'sessions',
-  [TemplateType.TrainingPlan]: 'training-plans',
+  [TemplateType.Protocol]: 'protocols',
 };
 
 export default TEMPLATE_TYPE_SLUGS;

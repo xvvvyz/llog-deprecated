@@ -9,8 +9,8 @@ import SessionUseTemplateModal from '@/_components/session-use-template-modal';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
+import { GetProtocolWithSessionsData } from '@/_queries/get-protocol-with-sessions';
 import { GetSessionData } from '@/_queries/get-session';
-import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesData } from '@/_queries/list-templates';
@@ -33,10 +33,10 @@ interface SessionFormProps {
   >;
   isDuplicate?: boolean;
   order?: string;
+  protocol: NonNullable<GetProtocolWithSessionsData>;
   session?: NonNullable<GetSessionData>;
   subjectId: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
-  trainingPlan: NonNullable<GetTrainingPlanWithSessionsData>;
 }
 
 export type SessionFormValues = {
@@ -57,10 +57,10 @@ const SessionForm = ({
   availableSessionTemplates,
   isDuplicate,
   order,
+  protocol,
   session,
   subjectId,
   subjects,
-  trainingPlan,
 }: SessionFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const modules = forceArray(session?.modules);
@@ -73,8 +73,8 @@ const SessionForm = ({
   const cacheKey = getFormCacheKey.session({
     id: session?.id,
     isDuplicate,
+    protocolId: protocol.id,
     subjectId,
-    trainingPlanId: trainingPlan.id,
   });
 
   const form = useCachedForm<SessionFormValues>(
@@ -109,7 +109,7 @@ const SessionForm = ({
   const { highestPublishedOrder } = parseSessions({
     currentSession: session,
     sessionOrder: currentOrder,
-    sessions: trainingPlan.sessions,
+    sessions: protocol.sessions,
   });
 
   return (
@@ -143,13 +143,13 @@ const SessionForm = ({
             const res = await upsertSession(
               {
                 currentOrder,
+                protocolId: protocol.id,
                 publishedOrder: Math.min(
                   currentOrder,
                   highestPublishedOrder + 1,
                 ),
                 sessionId: isDuplicate ? undefined : session?.id,
                 subjectId,
-                trainingPlanId: trainingPlan.id,
               },
               values,
             );

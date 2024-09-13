@@ -14,7 +14,7 @@ const getInsightOptionsFromEvents = ({
   const eventTypeOptions: Array<IOption> = [];
   const inputOptions: Array<IOption> = [];
   const inputOptionsOptions: Record<string, Array<IOption>> = {};
-  const trainingPlanOptions: Array<IOption> = [];
+  const protocolOptions: Array<IOption> = [];
 
   for (const event of events) {
     const et = firstIfArray(event.type);
@@ -52,22 +52,22 @@ const getInsightOptionsFromEvents = ({
     }
 
     if (!inputIdMatch) continue;
-    const tp = et.session?.training_plan;
+    const tp = et.session?.protocol;
 
     if (!et.session && !eventTypeOptions.some((o) => o.id === et.id)) {
       eventTypeOptions.push({ id: et.id, label: et.name as string });
-    } else if (tp?.name && !trainingPlanOptions.some((o) => o.id === tp?.id)) {
-      trainingPlanOptions.push({ id: tp.id, label: tp.name });
+    } else if (tp?.name && !protocolOptions.some((o) => o.id === tp?.id)) {
+      protocolOptions.push({ id: tp.id, label: tp.name });
     }
   }
   const sortedEventTypeOptions = sortBy(eventTypeOptions, 'label');
-  const sortedTrainingPlanOptions = sortBy(trainingPlanOptions, 'label');
+  const sortedProtocolOptions = sortBy(protocolOptions, 'label');
 
   return {
     eventTypeOptions: sortedEventTypeOptions,
-    eventTypeOrTrainingPlanOptions: [
+    eventTypeOrProtocolOptions: [
       { label: 'Event types', options: sortedEventTypeOptions },
-      { label: 'Training plans', options: sortedTrainingPlanOptions },
+      { label: 'Protocols', options: sortedProtocolOptions },
     ],
     inputOptions: sortBy(inputOptions, 'label'),
     inputOptionsOptions: Object.fromEntries(
@@ -76,7 +76,7 @@ const getInsightOptionsFromEvents = ({
         sortBy(value, 'label'),
       ]),
     ),
-    trainingPlanOptions: sortedTrainingPlanOptions,
+    protocolOptions: sortedProtocolOptions,
   };
 };
 

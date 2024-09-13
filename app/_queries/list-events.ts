@@ -29,7 +29,7 @@ const listEvents = (
         id,
         session:sessions(
           id,
-          training_plan:training_plans(id, name),
+          protocol:protocols(id, name),
           order,
           title
         ),

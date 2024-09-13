@@ -13,7 +13,7 @@ const Page = async () => {
         <InformationCircleIcon className="w-7" />
         Templates define reusable content for
         <br />
-        event types and training plans.
+        event types and protocols.
       </Empty>
     );
   }

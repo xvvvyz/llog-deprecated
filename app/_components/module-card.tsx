@@ -6,8 +6,8 @@ import * as Collapsible from '@/_components/collapsible';
 import DirtyHtml from '@/_components/dirty-html';
 import EventCommentForm from '@/_components/event-comment-form';
 import EventForm from '@/_components/event-form';
+import { GetProtocolWithSessionsData } from '@/_queries/get-protocol-with-sessions';
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
-import { GetTrainingPlanWithSessionsData } from '@/_queries/get-training-plan-with-sessions';
 import forceArray from '@/_utilities/force-array';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon';
@@ -27,7 +27,7 @@ interface ModuleCardProps {
   isPreviousModulePending?: boolean;
   isPublic?: boolean;
   isTeamMember?: boolean;
-  trainingPlan: NonNullable<GetTrainingPlanWithSessionsData>;
+  protocol: NonNullable<GetProtocolWithSessionsData>;
   subjectId: string;
   user?: User | null;
 }
@@ -39,7 +39,7 @@ const ModuleCard = ({
   isPreviousModulePending,
   isPublic,
   isTeamMember,
-  trainingPlan,
+  protocol,
   subjectId,
   user,
 }: ModuleCardProps) => {
@@ -109,7 +109,7 @@ const ModuleCard = ({
             event={event}
             eventType={eventType}
             isArchived={isArchived}
-            isMission={!!trainingPlan}
+            isMission={!!protocol}
             isPreviousModulePending={isPreviousModulePending}
             isPublic={isPublic}
             subjectId={subjectId}
