@@ -191,7 +191,10 @@ const EventForm = ({
         return (
           <div key={id}>
             {input?.type === InputType.Checkbox && (
-              <Checkbox label={input.label} {...form.register(`inputs.${i}`)} />
+              <InputRoot>
+                <Label.Root htmlFor={`inputs.${i}`}>{input.label}</Label.Root>
+                <Checkbox {...form.register(`inputs.${i}`)} />
+              </InputRoot>
             )}
             {input?.type === InputType.Duration && (
               <fieldset>
