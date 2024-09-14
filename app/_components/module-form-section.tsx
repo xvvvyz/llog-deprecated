@@ -223,7 +223,6 @@ const ModuleFormSection = <
         render={({ field }) => (
           <RichTextarea
             className="rounded-none border-t-0"
-            key={field.name}
             placeholder="Instructions"
             {...field}
           />

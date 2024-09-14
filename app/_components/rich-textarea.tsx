@@ -147,10 +147,9 @@ const RichTextarea = React.forwardRef<{ focus: () => void }, RichTextareaProps>(
       if (!name) return;
       const label = document.querySelector(`[for="${id ?? name}"]`);
       if (!label) return;
-
-      label.addEventListener('click', () =>
-        editorRef.current?.commands.focus('end'),
-      );
+      const listener = () => editorRef.current?.commands.focus('end');
+      label.addEventListener('click', listener);
+      return () => label.removeEventListener('click', listener);
     }, [id, name]);
 
     React.useImperativeHandle(ref, () => ({
