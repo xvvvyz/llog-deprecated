@@ -160,7 +160,7 @@ const SessionPage = async ({
         </Empty>
       ) : (
         <>
-          <div className="smallcaps mt-1 flex justify-center gap-2 text-fg-4">
+          <div className="smallcaps mt-1.5 flex justify-center gap-2 text-fg-4">
             {completedModules.length ? (
               <>
                 <div>
