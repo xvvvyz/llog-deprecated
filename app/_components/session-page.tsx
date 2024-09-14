@@ -117,7 +117,7 @@ const SessionPage = async ({
         }
         title={protocol.name}
       />
-      <nav className="flex w-full items-center justify-between px-4 sm:px-8">
+      <nav className="flex w-full items-center justify-between gap-4 px-4 sm:px-8">
         <IconButton
           disabled={!previousSessionId}
           href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions/${previousSessionId}`}
@@ -126,10 +126,13 @@ const SessionPage = async ({
           replace
           scroll={false}
         />
-        <div className="flex items-baseline gap-4">
-          <span className="smallcaps text-fg-4">
-            Session {currentSession.order + 1} of {highestOrder + 1}
-          </span>
+        <div className="flex min-w-0 items-baseline gap-4">
+          <div className="min-w-0">
+            <div className="truncate">
+              Session {currentSession.order + 1}
+              {session.title ? `: ${session.title}` : ''}
+            </div>
+          </div>
           {currentSession.draft && (
             <span className="smallcaps text-fg-4">Draft</span>
           )}
@@ -157,10 +160,7 @@ const SessionPage = async ({
         </Empty>
       ) : (
         <>
-          {session.title && (
-            <p className="mx-auto max-w-xs px-4 text-center">{session.title}</p>
-          )}
-          <div className="smallcaps flex justify-center gap-2 pt-2 text-fg-4">
+          <div className="smallcaps mt-1 flex justify-center gap-2 text-fg-4">
             {completedModules.length ? (
               <>
                 <div>
