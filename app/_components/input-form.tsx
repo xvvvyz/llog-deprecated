@@ -49,13 +49,13 @@ interface InputFormProps {
   subjects?: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-export type InputFormValues = {
+export interface InputFormValues {
   label: string;
   options: Array<Database['public']['Tables']['input_options']['Insert']>;
   settings?: InputSettingsJson;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   type: { id: Database['public']['Enums']['input_type'] };
-};
+}
 
 const InputForm = ({
   disableCache,

@@ -17,7 +17,7 @@ interface SessionUseTemplateModalProps<T extends Form.FieldValues> {
   availableSessionTemplates: NonNullable<
     ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
   >;
-  fieldPath?: Form.FieldPath<T>;
+  fieldPath?: string;
   form: Form.UseFormReturn<T>;
   trigger: ReactNode;
 }

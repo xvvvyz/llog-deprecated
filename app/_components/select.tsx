@@ -11,13 +11,13 @@ import ReactSelect, * as RS from 'react-select';
 import Creatable, * as RCS from 'react-select/creatable';
 import { twMerge } from 'tailwind-merge';
 
-export type IOption = {
+export interface IOption {
   id: string;
   image_uri?: string;
   label?: string;
   name?: string;
   subjects?: { id: string; image_uri: string; name: string }[] | null;
-};
+}
 
 const ClearIndicator = <TOption extends IOption>(
   props: RS.ClearIndicatorProps<TOption>,

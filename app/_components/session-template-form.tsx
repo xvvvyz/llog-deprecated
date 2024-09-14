@@ -33,7 +33,7 @@ interface SessionTemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-export type SessionTemplateFormValues = {
+export interface SessionTemplateFormValues {
   description: string;
   modules: Array<{
     content: string;
@@ -42,7 +42,7 @@ export type SessionTemplateFormValues = {
   }>;
   name: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
-};
+}
 
 const SessionTemplateForm = ({
   availableInputs,

@@ -34,13 +34,13 @@ interface EventTypeTemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-export type EventTypeTemplateFormValues = {
+export interface EventTypeTemplateFormValues {
   content: string;
   description: string;
   inputs: NonNullable<ListInputsData>;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   name: string;
-};
+}
 
 const EventTypeTemplateForm = ({
   availableInputs,

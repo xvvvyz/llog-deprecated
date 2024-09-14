@@ -37,13 +37,13 @@ interface ModuleTemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-export type ModuleTemplateFormValues = {
+export interface ModuleTemplateFormValues {
   content: string;
   description: string;
   inputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   name: string;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
-};
+}
 
 const ModuleTemplateForm = ({
   availableInputs,

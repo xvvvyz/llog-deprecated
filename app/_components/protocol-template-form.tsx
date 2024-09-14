@@ -34,7 +34,7 @@ interface ProtocolTemplateFormProps {
   template?: Partial<GetTemplateData>;
 }
 
-export type ProtocolTemplateFormValues = {
+export interface ProtocolTemplateFormValues {
   description: string;
   name: string;
   sessions: Array<{
@@ -46,7 +46,7 @@ export type ProtocolTemplateFormValues = {
     title: string;
   }>;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
-};
+}
 
 const ProtocolTemplateForm = ({
   availableInputs,

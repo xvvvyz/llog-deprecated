@@ -23,12 +23,12 @@ import { useToggle } from '@uidotdev/usehooks';
 import { useState } from 'react';
 import * as Form from 'react-hook-form';
 
-export interface SessionFormSectionProps<T extends Form.FieldValues> {
+interface SessionFormSectionProps<T extends Form.FieldValues> {
   availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   availableModuleTemplates: NonNullable<
     ListTemplatesBySubjectIdAndTypeData | ListTemplatesData
   >;
-  fieldPath?: Form.FieldPath<T>;
+  fieldPath?: string;
   form: Form.UseFormReturn<T>;
   includeScheduledFor?: boolean;
   includeTitle?: boolean;

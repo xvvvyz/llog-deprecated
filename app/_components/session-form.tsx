@@ -39,7 +39,7 @@ interface SessionFormProps {
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-export type SessionFormValues = {
+export interface SessionFormValues {
   draft: boolean;
   modules: Array<{
     content: string;
@@ -49,7 +49,7 @@ export type SessionFormValues = {
   }>;
   scheduledFor: string | null;
   title?: string | null;
-};
+}
 
 const SessionForm = ({
   availableInputs,

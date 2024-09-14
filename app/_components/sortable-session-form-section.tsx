@@ -8,6 +8,7 @@ import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import { ProtocolTemplateFormValues } from '@/_components/protocol-template-form';
+import SessionFormSection from '@/_components/session-form-section';
 import SessionTemplateForm from '@/_components/session-template-form';
 import SessionUseTemplateModal from '@/_components/session-use-template-modal';
 import { GetTemplateData } from '@/_queries/get-template';
@@ -23,18 +24,14 @@ import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 import * as Form from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
-
-import SessionFormSection, {
-  SessionFormSectionProps,
-} from '@/_components/session-form-section';
 
 interface SortableSessionFormSectionProps<
   T extends Form.FieldValues,
   U extends Form.ArrayPath<T>,
-> extends SessionFormSectionProps<T> {
+> extends ComponentProps<typeof SessionFormSection<T>> {
   availableSessionTemplates: NonNullable<ListTemplatesData>;
   sessionArray: Form.UseFieldArrayReturn<T, U, 'key'>;
   sessionIndex: number;

@@ -1,14 +1,12 @@
 import DirtyHtml from '@/_components/dirty-html';
 import EventCommentForm from '@/_components/event-comment-form';
+import EventComments from '@/_components/event-comments';
 import EventForm from '@/_components/event-form';
 import { GetEventData } from '@/_queries/get-event';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
 import forceArray from '@/_utilities/force-array';
 import { User } from '@supabase/supabase-js';
-
-import EventComments, {
-  EventCommentsProps,
-} from '@/_components/event-comments';
+import { ComponentProps } from 'react';
 
 interface EventCardProps {
   event?: NonNullable<GetEventData>;
@@ -50,7 +48,9 @@ const EventCard = ({
       {event && (!!comments.length || (!isPublic && !isArchived)) && (
         <div className="flex flex-col gap-8 px-4 sm:px-8">
           <EventComments
-            comments={comments as EventCommentsProps['comments']}
+            comments={
+              comments as ComponentProps<typeof EventComments>['comments']
+            }
             isArchived={isArchived}
             isPublic={isPublic}
             isTeamMember={isTeamMember}

@@ -32,11 +32,11 @@ interface EventTypeFormProps {
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
-export type EventTypeFormValues = {
+export interface EventTypeFormValues {
   content: string;
   inputs: NonNullable<ListInputsBySubjectIdData>;
   name: string;
-};
+}
 
 const EventTypeForm = ({
   availableEventTypeTemplates,

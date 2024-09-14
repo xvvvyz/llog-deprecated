@@ -14,9 +14,9 @@ interface SubjectNotesFormProps {
   subjectNotes?: GetSubjectNotesData;
 }
 
-export type SubjectNotesFormValues = {
+export interface SubjectNotesFormValues {
   content: string;
-};
+}
 
 const SubjectNotesForm = ({
   subjectId,

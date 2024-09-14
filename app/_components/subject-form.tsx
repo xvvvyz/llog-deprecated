@@ -23,11 +23,11 @@ interface SubjectFormProps {
   subject?: NonNullable<GetSubjectData>;
 }
 
-export type SubjectFormValues = {
+export interface SubjectFormValues {
   avatar: File | string | null;
   data: SubjectDataJson;
   name: string;
-};
+}
 
 const SubjectForm = ({ subject }: SubjectFormProps) => {
   const [isTransitioning, startTransition] = useTransition();

@@ -4,7 +4,7 @@ import EventComment from '@/_components/event-comment';
 import { Database } from '@/_types/database';
 import { twMerge } from 'tailwind-merge';
 
-export interface EventCommentsProps {
+interface EventCommentsProps {
   className?: string;
   comments: Array<{
     content: string;

@@ -3,8 +3,10 @@
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import * as Collapsible from '@/_components/collapsible';
+import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
 import EventCommentForm from '@/_components/event-comment-form';
+import EventComments from '@/_components/event-comments';
 import EventForm from '@/_components/event-form';
 import { GetProtocolWithSessionsData } from '@/_queries/get-protocol-with-sessions';
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
@@ -12,12 +14,7 @@ import forceArray from '@/_utilities/force-array';
 import ChevronDownIcon from '@heroicons/react/24/outline/ChevronDownIcon';
 import ChevronUpIcon from '@heroicons/react/24/outline/ChevronUpIcon';
 import { User } from '@supabase/supabase-js';
-import { useState } from 'react';
-
-import DateTime from '@/_components/date-time';
-import EventComments, {
-  EventCommentsProps,
-} from '@/_components/event-comments';
+import { ComponentProps, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ModuleCardProps {
@@ -118,7 +115,9 @@ const ModuleCard = ({
         {event && (!!comments.length || (!isPublic && !isArchived)) && (
           <div className="flex flex-col gap-8 px-4 sm:px-8">
             <EventComments
-              comments={comments as EventCommentsProps['comments']}
+              comments={
+                comments as ComponentProps<typeof EventComments>['comments']
+              }
               isArchived={isArchived}
               isPublic={isPublic}
               isTeamMember={isTeamMember}
