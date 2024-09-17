@@ -106,7 +106,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         />
       </InputRoot>
       <InputRoot>
-        <Label.Root htmlFor="data.banner">Name</Label.Root>
+        <Label.Root htmlFor="data.banner">Banner</Label.Root>
         <Label.Tip>
           An optional note displayed at the top of the subject&rsquo;s profile.
         </Label.Tip>

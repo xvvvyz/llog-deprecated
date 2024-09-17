@@ -169,8 +169,8 @@ const SubjectPage = async ({
               {!!subjectData?.links?.length && (
                 <nav>
                   <ul>
-                    {subjectData.links.map((link) => (
-                      <li className="group" key={link.url}>
+                    {subjectData.links.map((link, i) => (
+                      <li className="group" key={`${link.url}-${i}`}>
                         <Button
                           className={twMerge(
                             'w-full justify-between rounded-none border-b-0 group-first:rounded-t group-last:rounded-b group-last:border-b',
