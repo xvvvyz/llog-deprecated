@@ -1,12 +1,11 @@
 'use client';
 
-import BarInterval from '@/_constants/enum-bar-interval';
-import BarReducer from '@/_constants/enum-bar-reducer';
 import ChartType from '@/_constants/enum-chart-type';
+import Interval from '@/_constants/enum-interval';
 import LineCurveFunction from '@/_constants/enum-line-curve-function';
+import Reducer from '@/_constants/enum-reducer';
 import TimeSinceMilliseconds from '@/_constants/enum-time-since-milliseconds';
 import { ListEventsData } from '@/_queries/list-events';
-import formatDateTime from '@/_utilities/format-date-time';
 import formatDirtyColumnHeader from '@/_utilities/format-dirty-column-header';
 import formatTabularEvents from '@/_utilities/format-tabular-events';
 import getInputDetailsFromEvents from '@/_utilities/get-input-details-from-events';
@@ -21,27 +20,22 @@ interface InsightPlot {
   annotationIncludeEventsFrom: string | null;
   annotationInputId: string;
   annotationInputOptions: string[];
-  annotationLabel: string;
-  barInterval: BarInterval;
-  barReducer: BarReducer;
-  defaultHeight?: number;
   events: ListEventsData;
   id?: string;
   includeEventsFrom: string | null;
   includeEventsSince: TimeSinceMilliseconds | null;
   inputId: string;
   inputOptions?: string[];
+  interval: Interval | null;
   isPublic?: boolean;
   lineCurveFunction: LineCurveFunction;
   marginBottom: string;
   marginLeft: string;
   marginRight: string;
   marginTop: string;
+  reducer: Reducer;
   setActiveId?: React.Dispatch<React.SetStateAction<string | null>>;
   setSyncDate?: React.Dispatch<React.SetStateAction<Date | null>>;
-  showBars: boolean;
-  showDots: boolean;
-  showLine: boolean;
   showLinearRegression: boolean;
   showLinearRegressionConfidence?: boolean;
   subjectId: string;
@@ -54,27 +48,22 @@ const InsightPlot = ({
   annotationIncludeEventsFrom,
   annotationInputId,
   annotationInputOptions,
-  annotationLabel,
-  barInterval,
-  barReducer,
-  defaultHeight,
   events,
   id,
   includeEventsFrom,
   includeEventsSince,
   inputId,
   inputOptions,
+  interval,
   isPublic,
   lineCurveFunction,
   marginBottom,
   marginLeft,
   marginRight,
   marginTop,
+  reducer,
   setActiveId,
   setSyncDate,
-  showBars,
-  showDots,
-  showLine,
   showLinearRegression,
   showLinearRegressionConfidence,
   subjectId,
@@ -109,67 +98,22 @@ const InsightPlot = ({
           parseTime: true,
         });
 
-        if (showBars || showLine || showLinearRegression || showDots) {
-          marks.push(
-            P.axisX({
-              fill: '#C3C3C2',
-              stroke: 'hsla(0, 0%, 100%, 10%)',
-            }),
-          );
+        marks.push(
+          P.axisX({
+            tickSize: 0,
+          }),
+        );
 
-          marks.push(
-            P.axisY({
-              fill: '#C3C3C2',
-              label: null,
-              stroke: 'hsla(0, 0%, 100%, 10%)',
-              tickFormat: isDuration
+        marks.push(
+          P.axisY({
+            label: null,
+            tickFormat:
+              isDuration && reducer !== Reducer.Count
                 ? (t) => `${humanizeDurationShort(t * 1000)}`
                 : undefined,
-            }),
-          );
-        }
-
-        if (showBars) {
-          marks.push(
-            P.rectY(
-              rows,
-              P.binX<P.RectYOptions>(
-                {
-                  title: isInputNominal
-                    ? (d: typeof rows) => `${d[0][y]}: ${d.length}`
-                    : undefined,
-                  y: barReducer,
-                },
-                {
-                  fill: isInputNominal ? y : 'hsla(0, 0%, 100%, 10%)',
-                  inset: 1,
-                  interval: P.timeInterval(barInterval),
-                  order: isInputNominal ? '-sum' : undefined,
-                  tip: isInputNominal,
-                  x,
-                  y: isInputNominal ? undefined : y,
-                },
-              ),
-            ),
-          );
-        }
-
-        if (showLine) {
-          marks.push(P.line(rows, { curve: lineCurveFunction, x, y }));
-        }
-
-        if (showLinearRegression) {
-          marks.push(
-            P.linearRegressionY(rows, {
-              ci: showLinearRegressionConfidence ? undefined : 0,
-              fill: 'hsla(5, 85%, 50%, 10%)',
-              fillOpacity: 1,
-              stroke: 'hsla(5, 85%, 50%, 75%)',
-              x,
-              y,
-            }),
-          );
-        }
+            tickSize: 0,
+          }),
+        );
 
         if (annotationInputId) {
           const annotationInputDetails = getInputDetailsFromEvents({
@@ -198,17 +142,6 @@ const InsightPlot = ({
           );
 
           marks.push(
-            P.ruleX(
-              annotationRows,
-              P.pointerX({
-                maxRadius: 100,
-                stroke: 'hsl(5, 85%, 50%)',
-                x,
-              }),
-            ),
-          );
-
-          marks.push(
             P.dot(annotationRows, {
               dy: -3,
               fill: 'hsla(5, 85%, 50%, 50%)',
@@ -224,8 +157,8 @@ const InsightPlot = ({
                 dy: -3,
                 fill: 'hsla(5, 85%, 50%, 100%)',
                 frameAnchor: 'top',
-                maxRadius: 100,
-                title: (d) => JSON.stringify(d),
+                r: 4,
+                title: (d) => JSON.stringify({ Id: d.Id }),
                 x,
               }),
             ),
@@ -236,11 +169,8 @@ const InsightPlot = ({
               annotationRows,
               P.pointerX({
                 dy: -22,
-                fill: '#fff',
                 frameAnchor: 'top',
-                maxRadius: 100,
                 text: (d) =>
-                  annotationLabel ||
                   `${columnHeader} - ${
                     annotationInputDetails.isDuration
                       ? humanizeDurationShort(d[columnHeader] * 1000)
@@ -253,16 +183,84 @@ const InsightPlot = ({
           );
         }
 
-        if (showDots) {
-          marks.push(P.dot(rows, { fill: 'hsla(0, 0%, 100%, 50%)', x, y }));
+        if (interval) {
+          if (showLinearRegression) {
+            marks.push(
+              P.linearRegressionY(
+                rows,
+                P.binX<P.LinearRegressionYOptions>(
+                  { y: reducer },
+                  {
+                    ci: showLinearRegressionConfidence ? undefined : 0,
+                    fill: 'hsla(5, 85%, 50%, 10%)',
+                    fillOpacity: 1,
+                    interval: P.timeInterval(interval),
+                    stroke: 'hsla(5, 85%, 50%, 75%)',
+                    x,
+                    y,
+                  },
+                ),
+              ),
+            );
+          }
+
+          marks.push(
+            P.lineY(
+              rows,
+              P.binX<P.LineYOptions>(
+                {
+                  interval: P.timeInterval(interval),
+                  y: reducer,
+                },
+                {
+                  curve: lineCurveFunction,
+                  x,
+                  y,
+                },
+              ),
+            ),
+          );
+        } else {
+          if (showLinearRegression) {
+            marks.push(
+              P.linearRegressionY(rows, {
+                ci: showLinearRegressionConfidence ? undefined : 0,
+                fill: 'hsla(5, 85%, 50%, 10%)',
+                fillOpacity: 1,
+                stroke: 'hsla(5, 85%, 50%, 75%)',
+                x,
+                y,
+              }),
+            );
+          }
+
+          if (!isInputNominal) {
+            marks.push(
+              P.lineY(rows, {
+                curve: lineCurveFunction,
+                x,
+                y,
+              }),
+            );
+          }
+
+          marks.push(
+            P.dot(rows, {
+              fill: '#fff',
+              fillOpacity: 0.5,
+              x,
+              y,
+            }),
+          );
 
           marks.push(
             P.dot(
               rows,
               P.pointer({
                 fill: '#fff',
-                maxRadius: 50,
-                title: (d) => JSON.stringify({ ...d, priority: true }),
+                maxRadius: 20,
+                r: 4,
+                title: (d) => JSON.stringify({ Id: d.Id, Priority: true }),
                 x,
                 y,
               }),
@@ -273,46 +271,11 @@ const InsightPlot = ({
             P.ruleX(
               rows,
               P.pointerX({
-                maxRadius: 100,
-                py: y,
-                stroke: 'hsla(0, 0%, 100%, 25%)',
+                maxRadius: 500,
+                stroke: '#fff',
+                strokeOpacity: 0.25,
+                title: (d) => JSON.stringify({ Time: d.Time }),
                 x,
-              }),
-            ),
-          );
-
-          marks.push(
-            P.text(
-              rows,
-              P.pointerX({
-                dy: 16,
-                fill: '#fff',
-                frameAnchor: 'bottom',
-                maxRadius: 100,
-                stroke: 'hsl(0, 0%, 16%)',
-                strokeWidth: 10,
-                text: (d) => formatDateTime(d[x], { month: 'long' }),
-                textAnchor: 'middle',
-                x,
-              }),
-            ),
-          );
-
-          marks.push(
-            P.text(
-              rows,
-              P.pointerX({
-                dx: -9,
-                fill: '#fff',
-                frameAnchor: 'left',
-                maxRadius: 100,
-                px: x,
-                stroke: 'hsl(0, 0%, 16%)',
-                strokeWidth: 10,
-                text: (d) =>
-                  isDuration ? `${humanizeDurationShort(d[y] * 1000)}` : d[y],
-                textAnchor: 'end',
-                y,
               }),
             ),
           );
@@ -320,50 +283,60 @@ const InsightPlot = ({
 
         if (syncDate) {
           marks.push(
-            P.ruleX([0], { stroke: 'hsla(0, 0%, 100%, 25%)', x: syncDate }),
+            P.ruleX([0], {
+              stroke: '#fff',
+              strokeOpacity: 0.25,
+              x: syncDate,
+            }),
           );
         }
       }
     }
 
     const plot = P.plot({
-      color: { legend: true },
-      height:
-        isInputNominal && (showDots || showLine || showLinearRegression)
-          ? undefined
-          : defaultHeight,
-      inset: 10,
+      color: { legend: !!interval },
+      height: isInputNominal && !interval ? undefined : 220,
+      inset: 8,
       marginBottom: Number(marginBottom),
       marginLeft: Number(marginLeft),
       marginRight: Number(marginRight),
       marginTop: Number(marginTop),
       marks,
-      width,
+      style: { overflow: 'visible' },
+      width: Math.max(width, 500),
       x: marks.length ? { type: 'time' } : undefined,
     });
 
-    const getActiveDatum = () => {
+    const getActiveMarks = () => {
       const data = plot.querySelectorAll('title');
       if (!data.length) return;
-      let final: { Id: string; Time: string } | null = null;
+
+      const marks: Array<{
+        Id?: string;
+        Priority?: string;
+        Time?: string;
+      }> = [];
 
       for (const datum of Array.from(data)) {
         try {
-          const { Id, Time, priority } = JSON.parse(datum.innerHTML ?? '');
-          if ((Id && !final) || priority) final = { Id, Time };
+          marks.push(JSON.parse(datum.innerHTML ?? ''));
         } catch {
           // noop
         }
       }
 
-      return final;
+      return marks;
     };
 
     const onClick = () => {
-      const datum = getActiveDatum();
-      if (!datum) return;
+      const withId = getActiveMarks()?.filter((item) => item?.Id) ?? [];
+
+      const mark =
+        withId.length > 1 ? withId.find((item) => item?.Priority) : withId[0];
+
+      if (!mark) return;
       const shareOrSubjects = isPublic ? 'share' : 'subjects';
-      const href = `/${shareOrSubjects}/${subjectId}/events/${datum.Id}`;
+      const href = `/${shareOrSubjects}/${subjectId}/events/${mark.Id}`;
       router.push(href, { scroll: false });
     };
 
@@ -373,10 +346,10 @@ const InsightPlot = ({
     };
 
     const onMove = throttle(() => {
-      const datum = getActiveDatum();
-      if (!datum) return;
-      setActiveId?.(id ?? null);
-      setSyncDate?.(datum.Time ? new Date(datum.Time) : null);
+      const withTime = getActiveMarks()?.find((item) => item?.Time);
+      if (!id || !withTime?.Time) return;
+      setActiveId?.(id);
+      setSyncDate?.(new Date(withTime.Time));
     }, 50);
 
     plot.addEventListener('click', onClick);
@@ -392,30 +365,25 @@ const InsightPlot = ({
     annotationIncludeEventsFrom,
     annotationInputId,
     annotationInputOptions,
-    annotationLabel,
-    barInterval,
-    barReducer,
-    defaultHeight,
     events,
     id,
     includeEventsFrom,
     includeEventsSince,
     inputId,
     inputOptions,
+    interval,
     isPublic,
     lineCurveFunction,
-    showLinearRegressionConfidence,
     marginBottom,
     marginLeft,
     marginRight,
     marginTop,
+    reducer,
     router,
     setActiveId,
     setSyncDate,
-    showBars,
-    showDots,
-    showLine,
     showLinearRegression,
+    showLinearRegressionConfidence,
     subjectId,
     syncDate,
     type,

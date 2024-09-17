@@ -43,29 +43,25 @@ const InsightPage = async ({
   const config = insight.config as InsightConfigJson;
 
   return (
-    <Modal.Content className="max-w-4xl bg-bg-3">
+    <Modal.Content className="max-w-5xl bg-bg-3">
       <PageModalHeader className="-mb-8" title={insight.name} />
       <InsightPlot
         annotationIncludeEventsFrom={config.annotationIncludeEventsFrom}
         annotationInputId={config.annotationInput}
         annotationInputOptions={config.annotationInputOptions}
-        annotationLabel={config.annotationLabel}
-        barInterval={config.barInterval}
-        barReducer={config.barReducer}
         events={events}
         includeEventsFrom={config.includeEventsFrom}
         includeEventsSince={config.includeEventsSince}
         inputId={config.input}
         inputOptions={config.inputOptions}
+        interval={config.interval}
         isPublic={isPublic}
         lineCurveFunction={config.lineCurveFunction}
         marginBottom={config.marginBottom}
         marginLeft={config.marginLeft}
         marginRight={config.marginRight}
         marginTop={config.marginTop}
-        showBars={config.showBars}
-        showDots={config.showDots}
-        showLine={config.showLine}
+        reducer={config.reducer}
         showLinearRegression={config.showLinearRegression}
         showLinearRegressionConfidence={config.showLinearRegressionConfidence}
         subjectId={subjectId}

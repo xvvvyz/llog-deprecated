@@ -19,7 +19,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
   if (!events) return false;
 
   return (
-    <Modal.Content className="max-w-4xl">
+    <Modal.Content className="max-w-3xl">
       <PageModalHeader title="New insight" />
       <InsightForm events={events} subjectId={subjectId} />
     </Modal.Content>

@@ -49,7 +49,7 @@ const InsightsPage = async ({
   const searchString = searchObject.size ? `?${searchObject.toString()}` : '';
 
   return (
-    <Modal.Content className="max-w-4xl">
+    <Modal.Content className="max-w-5xl">
       <PageModalHeader
         right={
           isTeamMember &&

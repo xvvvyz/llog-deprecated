@@ -16,7 +16,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       )}
     >
       <input
-        className="peer absolute inset-0 z-10 opacity-0"
+        className="peer absolute inset-0 opacity-0"
         id={name}
         name={name}
         ref={ref}
@@ -31,7 +31,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         {label && <label htmlFor={name}>{label}</label>}
       </div>
-      <CheckIcon className="h-5 w-5 shrink-0 stroke-fg-2 opacity-0 transition-opacity peer-checked:opacity-100" />
+      <CheckIcon className="relative -z-10 h-5 w-5 shrink-0 stroke-fg-2 opacity-0 transition-opacity peer-checked:opacity-100" />
     </div>
   ),
 );

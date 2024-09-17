@@ -1,4 +1,4 @@
-enum BarInterval {
+enum Interval {
   Day = 'day',
   Half = 'half',
   Month = 'month',
@@ -7,4 +7,4 @@ enum BarInterval {
   Year = 'year',
 }
 
-export default BarInterval;
+export default Interval;
