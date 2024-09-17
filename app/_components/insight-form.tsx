@@ -343,7 +343,7 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
                         name={field.name}
                         onBlur={field.onBlur}
                         onChange={(value) =>
-                          field.onChange((value as IOption)?.id)
+                          field.onChange((value as IOption)?.id ?? null)
                         }
                         options={INTERVAL_OPTIONS}
                         placeholder="Select an interval…"
