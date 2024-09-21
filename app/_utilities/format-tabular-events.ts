@@ -46,6 +46,7 @@ const formatTabularEvents = (
     if (event?.type?.session) {
       row['Module name'] = strip(event.type?.name ?? '');
       row['Module number'] = (event.type.order ?? 0) + 1;
+      row['Protocol name'] = strip(event.type.session.protocol?.name ?? '');
       row['Session number'] = event.type.session.order + 1;
       row['Session title'] = strip(event.type.session.title ?? '');
     } else {
