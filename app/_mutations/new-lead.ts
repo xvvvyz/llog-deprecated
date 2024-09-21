@@ -10,12 +10,7 @@ const newLead = async (data: ContactFormValues) => {
   await resend.emails.send({
     from: 'system@llog.app',
     html: `<pre>${JSON.stringify(
-      {
-        ...data,
-        comment: sanitizeHtml(data.comment),
-        profession: data.profession?.label,
-        types: data.types.map((type) => type.label),
-      },
+      { ...data, comment: sanitizeHtml(data.comment) },
       null,
       2,
     )}</pre>`,
