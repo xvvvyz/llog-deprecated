@@ -158,7 +158,7 @@ const InsightPlot = ({
                 fill: 'hsla(5, 85%, 50%, 100%)',
                 frameAnchor: 'top',
                 r: 4,
-                title: (d) => JSON.stringify({ Id: d.Id }),
+                title: (d) => JSON.stringify({ Id: d.Id, Time: d.Time }),
                 x,
               }),
             ),
@@ -247,7 +247,7 @@ const InsightPlot = ({
           marks.push(
             P.dot(rows, {
               fill: '#fff',
-              fillOpacity: 0.5,
+              fillOpacity: 0.7,
               x,
               y,
             }),
@@ -271,7 +271,6 @@ const InsightPlot = ({
             P.ruleX(
               rows,
               P.pointerX({
-                maxRadius: 500,
                 stroke: '#fff',
                 strokeOpacity: 0.25,
                 title: (d) => JSON.stringify({ Time: d.Time }),
@@ -279,6 +278,19 @@ const InsightPlot = ({
               }),
             ),
           );
+
+          if (isInputNominal) {
+            marks.push(
+              P.ruleY(
+                rows,
+                P.pointerY({
+                  stroke: '#fff',
+                  strokeOpacity: 0.25,
+                  y,
+                }),
+              ),
+            );
+          }
         }
 
         if (syncDate) {
