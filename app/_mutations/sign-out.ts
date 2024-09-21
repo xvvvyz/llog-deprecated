@@ -4,7 +4,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { redirect } from 'next/navigation';
 
 const signOut = async () => {
-  await createServerSupabaseClient().auth.signOut();
+  await createServerSupabaseClient().auth.signOut({ scope: 'local' });
   redirect('/sign-in');
 };
 
