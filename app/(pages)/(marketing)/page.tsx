@@ -1,5 +1,5 @@
 import Button from '@/_components/button';
-import ContactForm from '@/_components/contact-form';
+import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 
 const Page = () => (
   <div className="mx-auto flex min-h-full max-w-2xl select-text flex-col items-center justify-center px-6 py-16 text-center">
@@ -43,18 +43,22 @@ const Page = () => (
       changes with your&nbsp;clients.
     </h1>
     <p className="mx-auto mt-6 max-w-sm">
-      Streamline <b>data collection</b>, create <b>data-driven protocols</b> and
-      easily <b>monitor&nbsp;progress</b>.
+      Streamline <span className="font-bold text-fg-1">data collection</span>,
+      create <span className="font-bold text-fg-1">data-driven protocols</span>{' '}
+      and easily{' '}
+      <span className="font-bold text-fg-1">monitor&nbsp;progress</span>.
     </p>
-    <div className="mt-9 w-full max-w-lg rounded border border-alpha-1 bg-bg-2 p-8 text-left sm:rounded-[4rem] sm:p-16">
-      <ContactForm />
-    </div>
-    <p className="mt-9 flex justify-center gap-4">
-      <span className="text-fg-4">Have an account?</span>
-      <Button href="/sign-in" variant="link">
-        Sign in
-      </Button>
-    </p>
+    <Button
+      className="mt-8 pl-5"
+      colorScheme="transparent"
+      href="https://cal.com/llogapp/demo"
+    >
+      Schedule a demo
+      <ArrowUpRightIcon className="w-5" />
+    </Button>
+    <Button className="absolute right-8 top-6" href="/sign-in" variant="link">
+      Sign in
+    </Button>
   </div>
 );
 
