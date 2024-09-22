@@ -12,8 +12,8 @@ export const metadata = {
   description:
     'Achieve lasting behavior changes with your clients. Streamline data collection, create data-driven protocols and easily monitor progress.',
   title: {
-    default: 'llog - collaborative behavior modification',
-    template: '%s - llog',
+    default: 'llog • collaborative behavior change',
+    template: '%s • llog',
   },
 };
 
