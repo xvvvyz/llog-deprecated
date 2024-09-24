@@ -20,7 +20,6 @@ const AvatarDropzone = ({
     accept: { 'image/*': ['.png', '.gif', '.jpeg', '.jpg'] },
     maxSize: 10000000,
     multiple: false,
-    noClick: true,
     onDrop,
   });
 
