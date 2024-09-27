@@ -2,7 +2,6 @@ import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
 import Empty from '@/_components/empty';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import ProtocolMenu from '@/_components/protocol-menu';
 import SessionMenu from '@/_components/session-menu';
@@ -71,7 +70,6 @@ const SessionsPage = async ({
             colorScheme="transparent"
             className="w-full"
             href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/create/${nextSessionOrder}`}
-            scroll={false}
           >
             <PlusIcon className="w-5" />
             New session
@@ -85,7 +83,7 @@ const SessionsPage = async ({
         </Empty>
       )}
       {!!sessionsReversed.length && (
-        <ul className="border-y border-alpha-1 py-4">
+        <ul className="border-y border-alpha-0 py-4">
           {sessionsReversed.map((session) => {
             const completedModules = session.modules.filter(
               (m) => m.event.length,
@@ -107,7 +105,6 @@ const SessionsPage = async ({
                 <Button
                   className="m-0 w-full min-w-0 justify-between gap-6 py-3 pl-4 pr-0 sm:pl-8"
                   href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions/${session.id}/${session.draft ? 'edit' : ''}`}
-                  scroll={false}
                   variant="link"
                 >
                   <div className="min-w-0">
@@ -178,12 +175,11 @@ const SessionsPage = async ({
           })}
         </ul>
       )}
-      <PageModalBackButton
-        className="m-0 block w-full py-6 text-center"
-        variant="link"
-      >
-        Close
-      </PageModalBackButton>
+      <Modal.Close asChild>
+        <Button className="m-0 block w-full py-6 text-center" variant="link">
+          Close
+        </Button>
+      </Modal.Close>
     </Modal.Content>
   );
 };

@@ -1,9 +1,8 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const countNotifications = async () =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('notifications')
-    .select('*', { count: 'exact', head: true })
-    .eq('archived', false);
+    .select('*', { count: 'estimated', head: true });
 
 export default countNotifications;

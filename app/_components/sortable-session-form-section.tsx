@@ -2,15 +2,15 @@
 
 import Button from '@/_components/button';
 import * as Collapsible from '@/_components/collapsible';
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import { ProtocolTemplateFormValues } from '@/_components/protocol-template-form';
 import SessionFormSection from '@/_components/session-form-section';
 import SessionTemplateForm from '@/_components/session-template-form';
-import SessionUseTemplateModal from '@/_components/session-use-template-modal';
+import SessionUseTemplateDrawer from '@/_components/session-use-template-drawer';
 import { GetTemplateData } from '@/_queries/get-template';
 import { ListTemplatesData } from '@/_queries/list-templates';
 import { useSortable } from '@dnd-kit/sortable';
@@ -108,92 +108,61 @@ const SortableSessionFormSection = <
               )}
             </Button>
           </Collapsible.Trigger>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
+          <Drawer.Root>
+            <Drawer.Trigger>
               <div className="group -mr-1 flex items-center justify-center p-1 text-fg-3 transition-colors hover:text-fg-2">
                 <div className="rounded-full p-2 transition-colors group-hover:bg-alpha-1">
                   <EllipsisVerticalIcon className="w-5" />
                 </div>
               </div>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content>
-                <DropdownMenu.Button
-                  onClick={() => {
-                    const session = rest.form.getValues(
-                      `${rest.fieldPath}` as Form.Path<T>,
-                    );
-
-                    sessionArray.insert(sessionIndex + 1, session);
-                  }}
-                >
-                  <DocumentDuplicateIcon className="w-5 text-fg-4" />
-                  Duplicate
-                </DropdownMenu.Button>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Button
-                  onClick={() =>
-                    sessionArray.insert(sessionIndex, {
-                      modules: [{ content: '', inputs: [], name: '' }],
-                      title: '',
-                    } as Form.FieldValue<T>)
-                  }
-                >
-                  <ArrowUpIcon className="w-5 text-fg-4" />
-                  Add session above
-                </DropdownMenu.Button>
-                <DropdownMenu.Button
-                  onClick={() =>
-                    sessionArray.insert(sessionIndex + 1, {
-                      modules: [{ content: '', inputs: [], name: '' }],
-                      title: '',
-                    } as Form.FieldValue<T>)
-                  }
-                >
-                  <ArrowDownIcon className="w-5 text-fg-4" />
-                  Add session below
-                </DropdownMenu.Button>
-                <DropdownMenu.Separator />
-                <SessionUseTemplateModal
+            </Drawer.Trigger>
+            <Drawer.Portal>
+              <Drawer.Overlay />
+              <Drawer.Content>
+                <Drawer.Title>Session menu</Drawer.Title>
+                <Drawer.Description />
+                <SessionUseTemplateDrawer
                   availableInputs={rest.availableInputs}
                   availableSessionTemplates={availableSessionTemplates}
                   fieldPath={rest.fieldPath}
                   form={rest.form}
                   trigger={
-                    <Modal.Trigger asChild>
-                      <DropdownMenu.Button>
+                    <Drawer.Trigger asChild>
+                      <Drawer.Button>
                         <DocumentTextIcon className="w-5 text-fg-4" />
                         Use template
-                      </DropdownMenu.Button>
-                    </Modal.Trigger>
+                      </Drawer.Button>
+                    </Drawer.Trigger>
                   }
                 />
                 <Modal.Root
-                  onOpenChange={() => setCreateTemplateModal(null)}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      const { modules, title } = rest.form.getValues(
+                        rest.fieldPath as Form.Path<T>,
+                      ) as ProtocolTemplateFormValues['sessions'][0];
+
+                      setCreateTemplateModal({
+                        data: {
+                          modules: modules.map((module) => ({
+                            content: module.content,
+                            inputIds: module.inputs.map(({ id }) => id),
+                            name: module.name,
+                          })),
+                        },
+                        name: title,
+                      });
+                    } else {
+                      setCreateTemplateModal(null);
+                    }
+                  }}
                   open={!!createTemplateModal}
                 >
-                  <Modal.Trigger asChild onClick={(e) => e.preventDefault()}>
-                    <DropdownMenu.Button
-                      onClick={() => {
-                        const { modules, title } = rest.form.getValues(
-                          rest.fieldPath as Form.Path<T>,
-                        ) as ProtocolTemplateFormValues['sessions'][0];
-
-                        setCreateTemplateModal({
-                          data: {
-                            modules: modules.map((module) => ({
-                              content: module.content,
-                              inputIds: module.inputs.map(({ id }) => id),
-                              name: module.name,
-                            })),
-                          },
-                          name: title,
-                        });
-                      }}
-                    >
+                  <Modal.Trigger asChild>
+                    <Drawer.Button>
                       <PlusIcon className="w-5 text-fg-4" />
                       New template
-                    </DropdownMenu.Button>
+                    </Drawer.Button>
                   </Modal.Trigger>
                   <Modal.Portal>
                     <Modal.Overlay>
@@ -220,14 +189,50 @@ const SortableSessionFormSection = <
                     </Modal.Overlay>
                   </Modal.Portal>
                 </Modal.Root>
-                <DropdownMenu.Separator />
-                <DropdownMenuDeleteItem
+                <Drawer.Separator />
+                <Drawer.Button
+                  onClick={() => {
+                    const session = rest.form.getValues(
+                      `${rest.fieldPath}` as Form.Path<T>,
+                    );
+
+                    sessionArray.insert(sessionIndex + 1, session);
+                  }}
+                >
+                  <DocumentDuplicateIcon className="w-5 text-fg-4" />
+                  Duplicate
+                </Drawer.Button>
+                <Drawer.Separator />
+                <Drawer.Button
+                  onClick={() =>
+                    sessionArray.insert(sessionIndex, {
+                      modules: [{ content: '', inputs: [], name: '' }],
+                      title: '',
+                    } as Form.FieldValue<T>)
+                  }
+                >
+                  <ArrowUpIcon className="w-5 text-fg-4" />
+                  Add session above
+                </Drawer.Button>
+                <Drawer.Button
+                  onClick={() =>
+                    sessionArray.insert(sessionIndex + 1, {
+                      modules: [{ content: '', inputs: [], name: '' }],
+                      title: '',
+                    } as Form.FieldValue<T>)
+                  }
+                >
+                  <ArrowDownIcon className="w-5 text-fg-4" />
+                  Add session below
+                </Drawer.Button>
+                <Drawer.Separator />
+                <DrawerDeleteButton
                   confirmText="Delete session"
                   onConfirm={() => sessionArray.remove(sessionIndex)}
                 />
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
         </div>
         <Collapsible.Content className="space-y-8 px-4 pb-16 pt-10 sm:px-8">
           <SessionFormSection<T> {...rest} />

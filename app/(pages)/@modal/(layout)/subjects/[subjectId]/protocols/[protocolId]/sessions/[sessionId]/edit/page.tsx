@@ -9,17 +9,17 @@ import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     order: string;
     sessionId: string;
     subjectId: string;
     protocolId: string;
-  };
+  }>;
 }
 
-const Page = async ({
-  params: { sessionId, subjectId, protocolId },
-}: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { sessionId, subjectId, protocolId } = await params;
+
   const [
     { data: availableInputs },
     { data: availableModuleTemplates },

@@ -1,14 +1,13 @@
 'use client';
 
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
 import deleteProtocol from '@/_mutations/delete-protocol';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import PencilIcon from '@heroicons/react/24/outline/PencilIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
-import { twMerge } from 'tailwind-merge';
 
 interface ProtocolMenuProps {
   isModal?: boolean;
@@ -24,8 +23,8 @@ const ProtocolMenu = ({
   const router = useRouter();
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <Drawer.Root>
+      <Drawer.Trigger>
         {isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
@@ -35,33 +34,34 @@ const ProtocolMenu = ({
             </div>
           </div>
         )}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content className={twMerge(!isModal && 'mr-1.5')}>
-          <DropdownMenu.Button
+      </Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Drawer.Title>Protocol menu</Drawer.Title>
+          <Drawer.Description />
+          <Drawer.Button
             href={`/subjects/${subjectId}/protocols/${protocolId}/edit`}
-            scroll={false}
           >
             <PencilIcon className="w-5 text-fg-4" />
             Edit name
-          </DropdownMenu.Button>
-          <DropdownMenu.Button
+          </Drawer.Button>
+          <Drawer.Button
             href={`/templates/protocols/create/from-protocol/${protocolId}`}
-            scroll={false}
           >
             <PlusIcon className="w-5 text-fg-4" />
             New template
-          </DropdownMenu.Button>
-          <DropdownMenuDeleteItem
+          </Drawer.Button>
+          <DrawerDeleteButton
             confirmText="Delete protocol"
             onConfirm={async () => {
               await deleteProtocol(protocolId);
               if (isModal) router.back();
             }}
           />
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 };
 

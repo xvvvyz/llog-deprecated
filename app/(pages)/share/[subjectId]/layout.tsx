@@ -6,10 +6,12 @@ import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
-  params: { subjectId: string };
+  params: Promise<{ subjectId: string }>;
 }
 
-const Layout = async ({ children, params: { subjectId } }: LayoutProps) => {
+const Layout = async ({ children, params }: LayoutProps) => {
+  const { subjectId } = await params;
+
   const [{ data: subject }, user] = await Promise.all([
     getSubject(subjectId),
     getCurrentUser(),

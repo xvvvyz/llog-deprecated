@@ -6,12 +6,9 @@ import Empty from '@/_components/empty';
 import IconButton from '@/_components/icon-button';
 import NotificationType from '@/_constants/enum-notification-type';
 import deleteNotification from '@/_mutations/delete-notification';
-import updateNotification from '@/_mutations/update-notification';
 import { ListNotificationsData } from '@/_queries/list-notifications';
 import { Database } from '@/_types/database';
-import ArchiveBoxArrowDownIcon from '@heroicons/react/24/outline/ArchiveBoxArrowDownIcon';
-import ArchiveBoxXMarkIcon from '@heroicons/react/24/outline/ArchiveBoxXMarkIcon';
-import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
+import { SparklesIcon } from '@heroicons/react/24/outline';
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 
 interface NotificationsProps {
@@ -21,15 +18,15 @@ interface NotificationsProps {
 const Notifications = ({ notifications }: NotificationsProps) => {
   if (!notifications?.length) {
     return (
-      <Empty>
-        <InformationCircleIcon className="w-7" />
-        No notifications.
+      <Empty className="mx-4">
+        <SparklesIcon className="w-7" />
+        You&apos;re all caught up.
       </Empty>
     );
   }
 
   return (
-    <ul className="m-0 divide-y divide-alpha-1 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
+    <ul className="mx-4 divide-y divide-alpha-1 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
       {notifications.map((n) => {
         const sourceEvent = n.comment?.event ?? n.event;
 
@@ -102,33 +99,13 @@ const Notifications = ({ notifications }: NotificationsProps) => {
                 )}
               </div>
             </Button>
-            <div className="absolute right-6 top-6 flex gap-6 sm:right-8">
-              <form
-                action={updateNotification.bind(null, {
-                  archived: !n.archived,
-                  id: n.id,
-                })}
-              >
-                <IconButton
-                  className="rounded-full hover:bg-alpha-1"
-                  icon={
-                    n.archived ? (
-                      <ArchiveBoxXMarkIcon className="w-5" />
-                    ) : (
-                      <ArchiveBoxArrowDownIcon className="w-5" />
-                    )
-                  }
-                  type="submit"
-                />
-              </form>
-              <form action={deleteNotification.bind(null, n.id)}>
-                <IconButton
-                  className="rounded-full hover:bg-alpha-1"
-                  icon={<TrashIcon className="w-5" />}
-                  type="submit"
-                />
-              </form>
-            </div>
+            <form action={deleteNotification.bind(null, n.id)}>
+              <IconButton
+                className="absolute right-6 top-6 rounded-full hover:bg-alpha-1 sm:right-8"
+                icon={<TrashIcon className="w-5" />}
+                type="submit"
+              />
+            </form>
           </li>
         );
       })}

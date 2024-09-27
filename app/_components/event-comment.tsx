@@ -3,8 +3,8 @@
 import Avatar from '@/_components/avatar';
 import DateTime from '@/_components/date-time';
 import DirtyHtml from '@/_components/dirty-html';
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import deleteComment from '@/_mutations/delete-comment';
 import { Database } from '@/_types/database';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
@@ -51,21 +51,24 @@ const EventComment = ({
         {!isPublic &&
           !isArchived &&
           (userId === profile.id || isTeamMember) && (
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger className="-mr-4 -mt-[0.7rem]">
+            <Drawer.Root>
+              <Drawer.Trigger className="-mr-4 -mt-[0.7rem]">
                 <div className="rounded-full p-2 text-fg-3 transition-colors hover:text-fg-2">
                   <EllipsisVerticalIcon className="w-5" />
                 </div>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Portal>
-                <DropdownMenu.Content className="mr-1.5">
-                  <DropdownMenuDeleteItem
+              </Drawer.Trigger>
+              <Drawer.Portal>
+                <Drawer.Overlay />
+                <Drawer.Content>
+                  <Drawer.Title>Comment menu</Drawer.Title>
+                  <Drawer.Description />
+                  <DrawerDeleteButton
                     confirmText="Delete comment"
                     onConfirm={() => deleteComment(id)}
                   />
-                </DropdownMenu.Content>
-              </DropdownMenu.Portal>
-            </DropdownMenu.Root>
+                </Drawer.Content>
+              </Drawer.Portal>
+            </Drawer.Root>
           )}
       </div>
       <DirtyHtml>{content}</DirtyHtml>

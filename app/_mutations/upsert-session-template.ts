@@ -10,7 +10,7 @@ const upsertSessionTemplate = async (
   context: { templateId?: string },
   data: SessionTemplateFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: template, error } = await supabase
     .from('templates')

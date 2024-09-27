@@ -6,13 +6,12 @@ import getInsight from '@/_queries/get-insight';
 import listEvents from '@/_queries/list-events';
 
 interface PageProps {
-  params: {
-    insightId: string;
-    subjectId: string;
-  };
+  params: Promise<{ insightId: string; subjectId: string }>;
 }
 
-const Page = async ({ params: { insightId, subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { insightId, subjectId } = await params;
+
   const [{ data: events }, { data: insight }] = await Promise.all([
     listEvents(subjectId, { from: 0, to: Number.FourByteSignedIntMax - 1 }),
     getInsight(insightId),

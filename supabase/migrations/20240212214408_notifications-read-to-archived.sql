@@ -30,8 +30,7 @@ create or replace function public.handle_insert_event ()
           from notifications n
           join events e on n.source_event_id = e.id
           join event_types et on e.event_type_id = et.id
-            where n.archived = false
-            and et.session_id = curr_session_id)
+            where et.session_id = curr_session_id)
         then
           insert into notifications (profile_id, type, source_event_id, source_profile_id, source_subject_id)
             values (profile_id, 'event', new.id, new.profile_id, new.subject_id);

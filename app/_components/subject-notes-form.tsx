@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/_components/button';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import RichTextarea from '@/_components/rich-textarea';
 import upsertSubjectNotes from '@/_mutations/upsert-subject-notes';
 import { GetSubjectNotesData } from '@/_queries/get-subject-notes';
@@ -59,9 +59,11 @@ const SubjectNotesForm = ({
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton className="w-full" colorScheme="transparent">
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button className="w-full" colorScheme="transparent">
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

@@ -7,7 +7,9 @@ const updatePassword = async (
   _state: { error: string } | null,
   date: FormData,
 ) => {
-  const { error } = await createServerSupabaseClient().auth.updateUser({
+  const { error } = await (
+    await createServerSupabaseClient()
+  ).auth.updateUser({
     password: date.get('password') as string,
   });
 

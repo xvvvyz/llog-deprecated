@@ -75,7 +75,6 @@ const Insight = ({
             !isReadOnly && 'px-0',
           )}
           href={`/${shareOrSubjects}/${subjectId}/insights/${insight.id}${searchString}`}
-          scroll={false}
           variant="link"
         >
           <div className="min-w-0">

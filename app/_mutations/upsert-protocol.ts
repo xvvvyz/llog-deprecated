@@ -8,7 +8,7 @@ const upsertProtocol = async (
   context: { subjectId: string; protocolId?: string },
   data: ProtocolFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: protocol, error } = await supabase
     .from('protocols')

@@ -1,19 +1,21 @@
 import Button from '@/_components/button';
 import ProtocolMenu from '@/_components/protocol-menu';
-import listProtocols from '@/_queries/list-protocols';
+import { ListProtocolsData } from '@/_queries/list-protocols';
 import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface MissionsProps {
   isTeamMember: boolean;
+  protocols: NonNullable<ListProtocolsData>;
   subjectId: string;
 }
 
-const Protocols = async ({ isTeamMember, subjectId }: MissionsProps) => {
-  const { data: protocols } = await listProtocols(subjectId);
-  if (!protocols) return null;
-
+const Protocols = async ({
+  isTeamMember,
+  protocols,
+  subjectId,
+}: MissionsProps) => {
   const listItems = protocols.reduce((acc, protocol) => {
     const activeSession = protocol.sessions.find(({ modules }) =>
       modules.find((et) => !et.event.length),
@@ -37,7 +39,6 @@ const Protocols = async ({ isTeamMember, subjectId }: MissionsProps) => {
               ? `/subjects/${subjectId}/protocols/${protocol.id}/sessions`
               : `/subjects/${subjectId}/protocols/${protocol.id}/sessions/${activeSessionId}`
           }
-          scroll={false}
           variant="link"
         >
           <div className="w-full min-w-0">

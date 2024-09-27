@@ -5,12 +5,12 @@ import getInput from '@/_queries/get-input';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 
 interface PageProps {
-  params: {
-    inputId: string;
-  };
+  params: Promise<{ inputId: string }>;
 }
 
-const Page = async ({ params: { inputId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { inputId } = await params;
+
   const [{ data: input }, { data: subjects }] = await Promise.all([
     getInput(inputId),
     listSubjectsByTeamId(),

@@ -15,7 +15,7 @@ const updateUser = async ({
   last_name?: string;
 }) => {
   const user = await getCurrentUser();
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { error } = await supabase.auth.updateUser({
     data: { first_name, last_name },

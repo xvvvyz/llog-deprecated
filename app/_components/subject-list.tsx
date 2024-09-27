@@ -17,7 +17,7 @@ const SubjectList = async ({
 }: SubjectListProps) => (
   <>
     {!!teamSubjects.length && (
-      <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
+      <ul className="overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
         {teamSubjects.map((subject) => (
           <li
             className="flex items-stretch transition-colors hover:bg-alpha-1"
@@ -42,7 +42,7 @@ const SubjectList = async ({
       </ul>
     )}
     {!!clientSubjects.length && (
-      <ul className="mx-4 overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
+      <ul className="overflow-hidden rounded border border-alpha-1 bg-bg-2 py-1">
         {clientSubjects.map((subject) => (
           <li key={subject.id}>
             <Button

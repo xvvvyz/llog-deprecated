@@ -1,10 +1,10 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getProtocolWithSessions = (
+const getProtocolWithSessions = async (
   protocolId: string,
   { draft } = { draft: false },
 ) =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('protocols')
     .select('id, name, sessions(draft, id, order, scheduled_for, title)')
     .eq('id', protocolId)

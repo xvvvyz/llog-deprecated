@@ -1,12 +1,13 @@
 'use client';
 
+import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
 import Checkbox from '@/_components/checkbox';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
@@ -14,6 +15,7 @@ import InputType from '@/_constants/enum-input-type';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertInput from '@/_mutations/upsert-input';
 import { GetInputData } from '@/_queries/get-input';
+import { GetInputWithUsesData } from '@/_queries/get-input-with-uses';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { Database } from '@/_types/database';
@@ -47,6 +49,9 @@ interface InputFormProps {
   onClose?: () => void;
   onSubmit?: (values: NonNullable<ListInputsBySubjectIdData>[0]) => void;
   subjects?: NonNullable<ListSubjectsByTeamIdData>;
+  usedBy?: Array<
+    NonNullable<NonNullable<GetInputWithUsesData>['uses'][0]['subject']>
+  >;
 }
 
 export interface InputFormValues {
@@ -64,6 +69,7 @@ const InputForm = ({
   onClose,
   onSubmit,
   subjects,
+  usedBy,
 }: InputFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
 
@@ -144,6 +150,26 @@ const InputForm = ({
             />
           )}
         />
+        {!!usedBy?.length && (
+          <div className="smallcaps flex flex-wrap items-center gap-3 px-4 pt-3">
+            <div className="text-fg-4">Used by</div>
+            {usedBy.map((subject) => (
+              <Button
+                className="m-0 mr-1 p-0"
+                href={`/subjects/${subject.id}`}
+                key={`used-by-${subject.id}`}
+                variant="link"
+              >
+                <Avatar
+                  className="-my-[0.15rem] size-5"
+                  file={subject.image_uri}
+                  id={subject.id}
+                />
+                {subject.name}
+              </Button>
+            ))}
+          </div>
+        )}
       </InputRoot>
       <InputRoot>
         <Label.Root htmlFor="react-select-type-input">Type</Label.Root>
@@ -327,13 +353,15 @@ const InputForm = ({
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton
-          className="w-full"
-          colorScheme="transparent"
-          onClick={onClose}
-        >
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            onClick={onClose}
+          >
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

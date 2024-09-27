@@ -6,12 +6,12 @@ import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
-  params: {
-    subjectId: string;
-  };
+  params: Promise<{ subjectId: string }>;
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { subjectId } = await params;
+
   const [
     { data: availableEventTypeTemplates },
     { data: availableInputs },

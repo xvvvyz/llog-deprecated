@@ -1,13 +1,12 @@
 'use client';
 
 import Button from '@/_components/button';
-import EventTypeUseTemplateModal from '@/_components/event-type-use-template-modal';
+import EventTypeUseTemplateDrawer from '@/_components/event-type-use-template-drawer';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -68,7 +67,7 @@ const EventTypeForm = ({
     <Modal.Content>
       <PageModalHeader
         right={
-          <EventTypeUseTemplateModal<EventTypeFormValues>
+          <EventTypeUseTemplateDrawer<EventTypeFormValues>
             availableEventTypeTemplates={availableEventTypeTemplates}
             availableInputs={availableInputs}
             form={form}
@@ -96,6 +95,7 @@ const EventTypeForm = ({
       >
         <InputRoot>
           <Label.Root htmlFor="name">Name</Label.Root>
+          <Label.Tip>What will you be recording?</Label.Tip>
           <Input maxLength={49} required {...form.register('name')} />
         </InputRoot>
         <InputRoot>
@@ -113,8 +113,7 @@ const EventTypeForm = ({
           <InputRoot>
             <Label.Root htmlFor="react-select-inputs-input">Inputs</Label.Root>
             <Label.Tip>
-              Define the specific data points you are interested in tracking and
-              creating insights for.
+              What data do you want to collect when this event is recorded?
             </Label.Tip>
             <Controller
               control={form.control}
@@ -169,9 +168,11 @@ const EventTypeForm = ({
           </div>
         )}
         <div className="flex gap-4 pt-8">
-          <PageModalBackButton className="w-full" colorScheme="transparent">
-            Close
-          </PageModalBackButton>
+          <Modal.Close asChild>
+            <Button className="w-full" colorScheme="transparent">
+              Close
+            </Button>
+          </Modal.Close>
           <Button
             className="w-full"
             loading={isTransitioning}

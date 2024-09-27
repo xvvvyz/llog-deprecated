@@ -15,7 +15,7 @@ const Content = React.forwardRef<
       ref={ref}
       align={align}
       className={twMerge(
-        'relative z-10 m-2 rounded border border-alpha-2 bg-bg-3 drop-shadow',
+        'relative z-50 m-2 rounded border border-alpha-2 bg-bg-3 drop-shadow',
         className,
       )}
       onOpenAutoFocus={(e) => e.preventDefault()}

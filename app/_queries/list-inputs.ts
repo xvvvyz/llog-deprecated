@@ -2,7 +2,7 @@ import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listInputs = async () =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('inputs')
     .select('id, label, subjects(id, image_uri, name), type')
     .eq('team_id', (await getCurrentUser())?.id ?? '')

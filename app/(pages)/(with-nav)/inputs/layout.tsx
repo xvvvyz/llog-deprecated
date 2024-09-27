@@ -1,5 +1,3 @@
-import Button from '@/_components/button';
-import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
@@ -8,13 +6,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => (
   <>
-    <div className="my-16 flex h-8 items-center justify-between gap-8 px-4">
-      <h1 className="text-2xl">Inputs</h1>
-      <Button className="pl-3" href="/inputs/create" scroll={false} size="sm">
-        <PlusIcon className="w-5 stroke-2" />
-        New input
-      </Button>
-    </div>
+    <h1 className="px-4 py-16 text-2xl">Inputs</h1>
     {children}
   </>
 );

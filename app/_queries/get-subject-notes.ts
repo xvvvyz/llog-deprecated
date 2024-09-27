@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getSubjectNotes = (subjectId: string) =>
-  createServerSupabaseClient()
+const getSubjectNotes = async (subjectId: string) =>
+  (await createServerSupabaseClient())
     .from('subject_notes')
     .select('content, id')
     .eq('id', subjectId)

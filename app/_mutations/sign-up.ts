@@ -18,15 +18,18 @@ const signUp = async (
   },
   data: FormData,
 ) => {
-  const proto = headers().get('x-forwarded-proto');
-  const host = headers().get('host');
+  const { get } = await headers();
+  const proto = get('x-forwarded-proto');
+  const host = get('host');
   const email = data.get('email') as string;
   const firstName = data.get('firstName') as string;
   const lastName = data.get('lastName') as string;
   const password = data.get('password') as string;
   const isClient = context.next?.includes('/join/');
 
-  const { error } = await createServerSupabaseClient().auth.signUp({
+  const { error } = await (
+    await createServerSupabaseClient()
+  ).auth.signUp({
     email,
     options: {
       data: {
@@ -34,7 +37,7 @@ const signUp = async (
         is_client: isClient,
         last_name: lastName,
       },
-      emailRedirectTo: `${proto}://${host}${context.next ?? '/subjects'}`,
+      emailRedirectTo: `${proto}://${host}${context.next ? context.next : isClient ? '/subjects' : '/hey'}`,
     },
     password,
   });

@@ -12,7 +12,7 @@ const upsertModuleTemplate = async (
   context: { templateId?: string },
   data: ModuleTemplateFormValues,
 ): Promise<State> => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: template, error } = await supabase
     .from('templates')

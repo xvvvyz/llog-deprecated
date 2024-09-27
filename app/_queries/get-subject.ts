@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getSubject = (subjectId: string) =>
-  createServerSupabaseClient()
+const getSubject = async (subjectId: string) =>
+  (await createServerSupabaseClient())
     .from('subjects')
     .select('archived, data, id, image_uri, name, public, share_code, team_id')
     .eq('id', subjectId)

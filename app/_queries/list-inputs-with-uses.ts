@@ -2,7 +2,7 @@ import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listInputsWithUses = async () =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('inputs')
     .select(
       `

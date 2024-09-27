@@ -8,14 +8,16 @@ const forgotPassword = async (
   _state: { defaultValues: { email: string }; error: string },
   data: FormData,
 ) => {
-  const proto = headers().get('x-forwarded-proto');
-  const host = headers().get('host');
+  const { get } = await headers();
+  const proto = get('x-forwarded-proto');
+  const host = get('host');
   const email = data.get('email') as string;
 
-  const { error } =
-    await createServerSupabaseClient().auth.resetPasswordForEmail(email, {
-      redirectTo: `${proto}://${host}/change-password`,
-    });
+  const { error } = await (
+    await createServerSupabaseClient()
+  ).auth.resetPasswordForEmail(email, {
+    redirectTo: `${proto}://${host}/change-password`,
+  });
 
   if (error) return { defaultValues: { email }, error: error.message };
   redirect('/forgot-password/email-sent');

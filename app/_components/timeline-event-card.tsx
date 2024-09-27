@@ -33,7 +33,6 @@ const TimelineEventCard = ({
       <Button
         className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
         href={`/${shareOrSubjects}/${subjectId}/events/${event.id}`}
-        scroll={false}
         variant="link"
       >
         <div>

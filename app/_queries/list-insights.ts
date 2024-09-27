@@ -2,8 +2,8 @@
 
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listInsights = (subjectId: string) =>
-  createServerSupabaseClient()
+const listInsights = async (subjectId: string) =>
+  (await createServerSupabaseClient())
     .from('insights')
     .select('config, id, name, order')
     .eq('subject_id', subjectId)

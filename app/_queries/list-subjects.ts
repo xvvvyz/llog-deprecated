@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listSubjects = async () =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('subjects')
     .select('archived, id, image_uri, name, public, share_code, team_id')
     .not('team_id', 'is', null)

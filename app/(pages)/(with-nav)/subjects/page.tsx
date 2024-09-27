@@ -1,15 +1,15 @@
-import Button from '@/_components/button';
 import CollapsibleArchive from '@/_components/collapsible-archive';
 import Empty from '@/_components/empty';
 import SubjectList from '@/_components/subject-list';
-import SubscriptionStatus from '@/_constants/enum-subscription-status';
+import canInsertSubjectOnCurrentPlan from '@/_queries/can-insert-subject-on-current-plan';
 import getCurrentUser from '@/_queries/get-current-user';
 import listSubjects, { ListSubjectsData } from '@/_queries/list-subjects';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 
 const Page = async () => {
-  const [{ data: subjects }, user] = await Promise.all([
+  const [{ data: canUnarchive }, { data: subjects }, user] = await Promise.all([
+    canInsertSubjectOnCurrentPlan(),
     listSubjects(),
     getCurrentUser(),
   ]);
@@ -43,32 +43,24 @@ const Page = async () => {
 
   return (
     <>
-      {!user.user_metadata.is_client && (
-        <div className="mt-16 flex h-8 items-center justify-between gap-8 px-4">
-          <h1 className="text-2xl">Subjects</h1>
-          <Button
-            className="pl-3"
-            href={
-              user.app_metadata.subscription_status !==
-                SubscriptionStatus.Active && teamSubjects.length >= 2
-                ? '/upgrade'
-                : '/subjects/create'
-            }
-            scroll={false}
-            size="sm"
-          >
-            <PlusIcon className="w-5 stroke-2" />
-            New subject
-          </Button>
-        </div>
-      )}
-      <div className="mt-16 space-y-4">
+      <h1 className="px-4 py-16 text-2xl">Subjects</h1>
+      <div className="mx-4 space-y-4">
         {!clientSubjects.length && !teamSubjects.length && (
-          <Empty className="mx-4">
+          <Empty>
             <InformationCircleIcon className="w-7" />
-            {user.user_metadata.is_client
-              ? 'No active subjects.'
-              : 'Create a subject to get started.'}
+            {user.user_metadata.is_client ? (
+              'No active subjects.'
+            ) : (
+              <div>
+                Create a <span className="text-fg-2">subject</span> using the
+                yellow
+                <br />
+                <div className="mr-1.5 inline-flex size-4 items-center justify-center rounded-full bg-accent-1 text-bg-1">
+                  <PlusIcon className="inline w-3 stroke-2" />
+                </div>
+                button for eternal glory.
+              </div>
+            )}
           </Empty>
         )}
         <SubjectList
@@ -78,10 +70,7 @@ const Page = async () => {
         {(!!archivedTeamSubjects.length || !!archivedClientSubjects.length) && (
           <CollapsibleArchive>
             <SubjectList
-              canUnarchive={
-                user.app_metadata.subscription_status ===
-                  SubscriptionStatus.Active || teamSubjects.length < 2
-              }
+              canUnarchive={canUnarchive}
               clientSubjects={archivedClientSubjects}
               teamSubjects={archivedTeamSubjects}
             />

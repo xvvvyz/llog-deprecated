@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getProtocolForTemplate = (protocolId: string) =>
-  createServerSupabaseClient()
+const getProtocolForTemplate = async (protocolId: string) =>
+  (await createServerSupabaseClient())
     .from('protocols')
     .select(
       `

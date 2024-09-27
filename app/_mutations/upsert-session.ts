@@ -16,7 +16,7 @@ const upsertSession = async (
   },
   data: SessionFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const finalOrder = data.draft ? context.currentOrder : context.publishedOrder;
   let wasDraft = !context.sessionId;
 

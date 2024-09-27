@@ -1,7 +1,9 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.tsx'],
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [typography],
   theme: {
     borderRadius: {
       DEFAULT: 'var(--radius-default)',
@@ -12,6 +14,7 @@ module.exports = {
     colors: {
       'accent-1': 'var(--color-accent-1)',
       'accent-2': 'var(--color-accent-2)',
+      'alpha-0': 'var(--color-alpha-0)',
       'alpha-1': 'var(--color-alpha-1)',
       'alpha-2': 'var(--color-alpha-2)',
       'alpha-3': 'var(--color-alpha-3)',

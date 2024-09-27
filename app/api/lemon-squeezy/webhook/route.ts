@@ -30,9 +30,11 @@ const POST = async (request: Request) => {
   switch (eventName) {
     case 'subscription_created':
     case 'subscription_expired': {
-      await createServerSupabaseClient({
-        apiKey: process.env.SUPABASE_SERVICE_KEY!,
-      }).auth.admin.updateUserById(userId, {
+      await (
+        await createServerSupabaseClient({
+          apiKey: process.env.SUPABASE_SERVICE_KEY!,
+        })
+      ).auth.admin.updateUserById(userId, {
         app_metadata: {
           customer_id: customerId,
           subscription_status: subscriptionStatus,

@@ -3,7 +3,7 @@ import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listTemplates = async ({ type }: { type?: TemplateType } = {}) => {
-  const q = createServerSupabaseClient()
+  const q = (await createServerSupabaseClient())
     .from('templates')
     .select('id, name, subjects(id, image_uri, name), type')
     .eq('team_id', (await getCurrentUser())?.id ?? '');

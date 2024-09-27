@@ -9,7 +9,7 @@ const listTemplatesBySubjectIdAndType = async ({
   subjectId: string;
   type: TemplateType;
 }) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const whitelist = await supabase
     .from('template_subjects')

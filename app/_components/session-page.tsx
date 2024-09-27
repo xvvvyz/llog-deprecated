@@ -4,7 +4,6 @@ import Empty from '@/_components/empty';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
 import ModuleCard from '@/_components/module-card';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionMenu from '@/_components/session-menu';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -108,7 +107,6 @@ const SessionPage = async ({
           <Button
             className="pt-4"
             href={`/${shareOrSubjects}/${subjectId}/protocols/${protocolId}/sessions`}
-            scroll={false}
             variant="link"
           >
             View all sessions
@@ -124,7 +122,6 @@ const SessionPage = async ({
           icon={<ChevronLeftIcon className="relative left-1 w-7" />}
           label="Previous session"
           replace
-          scroll={false}
         />
         <div className="flex min-w-0 items-baseline gap-4">
           <div className="min-w-0">
@@ -143,7 +140,6 @@ const SessionPage = async ({
           icon={<ChevronRightIcon className="relative right-1 w-7" />}
           label="Next session"
           replace
-          scroll={false}
         />
       </nav>
       {session.scheduled_for && new Date(session.scheduled_for) > new Date() ? (
@@ -184,13 +180,13 @@ const SessionPage = async ({
               'Not started'
             )}
           </div>
-          <ul className="mt-8 space-y-4 border-y border-alpha-1 bg-alpha-reverse-2 py-4">
+          <ul className="mt-8 space-y-4 border-y border-alpha-0 bg-alpha-reverse-2 py-4">
             {session.modules.map((module, i) => {
               const event = firstIfArray(module.event);
               const previousModuleEvent = session.modules[i - 1]?.event;
 
               return (
-                <li className="border-y border-alpha-1 bg-bg-2" key={module.id}>
+                <li className="border-y border-alpha-0 bg-bg-2" key={module.id}>
                   <ModuleCard
                     event={event}
                     eventType={module}
@@ -210,12 +206,11 @@ const SessionPage = async ({
           </ul>
         </>
       )}
-      <PageModalBackButton
-        className="m-0 block w-full py-6 text-center"
-        variant="link"
-      >
-        Close
-      </PageModalBackButton>
+      <Modal.Close asChild>
+        <Button className="m-0 block w-full py-6 text-center" variant="link">
+          Close
+        </Button>
+      </Modal.Close>
     </Modal.Content>
   );
 };

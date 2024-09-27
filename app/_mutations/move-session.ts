@@ -16,7 +16,7 @@ const moveSession = async ({
   sessionId: string;
   protocolId: string;
 }) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const update = [{ id: sessionId, order: newOrder, protocol_id: protocolId }];
 
   if (!isDraft) {

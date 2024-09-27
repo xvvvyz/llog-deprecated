@@ -4,12 +4,11 @@ import SubjectNotesForm from '@/_components/subject-notes-form';
 import getSubjectNotes from '@/_queries/get-subject-notes';
 
 interface PageProps {
-  params: {
-    subjectId: string;
-  };
+  params: Promise<{ subjectId: string }>;
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { subjectId } = await params;
   const { data: subjectNotes } = await getSubjectNotes(subjectId);
 
   return (

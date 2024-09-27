@@ -7,7 +7,7 @@ import EventStopwatch from '@/_components/event-stopwatch';
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
 import InputType from '@/_constants/enum-input-type';
@@ -314,9 +314,11 @@ const EventForm = ({
       {!isPublic && !isArchived && (!event || form.formState.isDirty) && (
         <div className="flex gap-4 pt-8">
           {!event && !isMission && (
-            <PageModalBackButton className="w-full" colorScheme="transparent">
-              Close
-            </PageModalBackButton>
+            <Modal.Close asChild>
+              <Button className="w-full" colorScheme="transparent">
+                Close
+              </Button>
+            </Modal.Close>
           )}
           {(!event || form.formState.isDirty) && (
             <Button

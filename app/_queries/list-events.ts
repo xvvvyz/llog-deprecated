@@ -3,11 +3,11 @@
 import EventFilters from '@/_types/event-filters';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listEvents = (
+const listEvents = async (
   subjectId: string,
   filters: Omit<EventFilters, 'pageSize'>,
 ) => {
-  let q = createServerSupabaseClient()
+  let q = (await createServerSupabaseClient())
     .from('events')
     .select(
       `

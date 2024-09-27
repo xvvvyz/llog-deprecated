@@ -11,9 +11,9 @@ const Page = async () => {
     return (
       <Empty className="mx-4">
         <InformationCircleIcon className="w-7" />
-        Templates define reusable content for
+        Templates define reusable content
         <br />
-        event types and protocols.
+        for event types and protocols.
       </Empty>
     );
   }

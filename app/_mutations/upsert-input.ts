@@ -11,7 +11,7 @@ const upsertInput = async (
   context: { inputId?: string },
   data: InputFormValues,
 ): Promise<State> => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   const type = data.type.id;
 
   const { data: input, error } = await supabase

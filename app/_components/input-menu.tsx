@@ -1,7 +1,7 @@
 'use client';
 
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import deleteInput from '@/_mutations/delete-input';
 import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
@@ -11,30 +11,30 @@ interface InputMenuProps {
 }
 
 const InputMenu = ({ inputId }: InputMenuProps) => (
-  <DropdownMenu.Root>
-    <DropdownMenu.Trigger>
+  <Drawer.Root>
+    <Drawer.Trigger>
       <div className="group flex items-center justify-center px-2 text-fg-3 transition-colors hover:text-fg-2">
         <div className="rounded-full p-2 transition-colors group-hover:bg-alpha-1">
           <EllipsisVerticalIcon className="w-5" />
         </div>
       </div>
-    </DropdownMenu.Trigger>
-    <DropdownMenu.Portal>
-      <DropdownMenu.Content className="mr-1.5">
-        <DropdownMenu.Button
-          href={`/inputs/create/from-input/${inputId}`}
-          scroll={false}
-        >
+    </Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Title>Input menu</Drawer.Title>
+        <Drawer.Description />
+        <Drawer.Button href={`/inputs/create/from-input/${inputId}`}>
           <DocumentDuplicateIcon className="w-5 text-fg-4" />
           Duplicate
-        </DropdownMenu.Button>
-        <DropdownMenuDeleteItem
+        </Drawer.Button>
+        <DrawerDeleteButton
           confirmText="Delete input"
           onConfirm={() => deleteInput(inputId)}
         />
-      </DropdownMenu.Content>
-    </DropdownMenu.Portal>
-  </DropdownMenu.Root>
+      </Drawer.Content>
+    </Drawer.Portal>
+  </Drawer.Root>
 );
 
 export default InputMenu;

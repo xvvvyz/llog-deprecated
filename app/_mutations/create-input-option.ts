@@ -9,7 +9,7 @@ const createInputOption = async ({
   inputId: string;
   label: string;
 }) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { count, error: countError } = await supabase
     .from('input_options')

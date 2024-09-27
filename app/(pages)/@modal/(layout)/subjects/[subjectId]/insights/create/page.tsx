@@ -5,12 +5,12 @@ import Number from '@/_constants/enum-number';
 import listEvents from '@/_queries/list-events';
 
 interface PageProps {
-  params: {
-    subjectId: string;
-  };
+  params: Promise<{ subjectId: string }>;
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { subjectId } = await params;
+
   const { data: events } = await listEvents(subjectId, {
     from: 0,
     to: Number.FourByteSignedIntMax - 1,

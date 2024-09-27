@@ -12,7 +12,7 @@ const deleteSession = async ({
   sessionId: string;
   protocolId: string;
 }) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: deleteSession } = await supabase
     .from('sessions')

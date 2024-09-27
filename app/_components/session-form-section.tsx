@@ -2,10 +2,10 @@
 
 import Button from '@/_components/button';
 import DateTime from '@/_components/date-time';
+import * as Drawer from '@/_components/drawer';
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import * as Modal from '@/_components/modal';
 import ModuleFormSection from '@/_components/module-form-section';
 import Tip from '@/_components/tip';
 import { ListInputsData } from '@/_queries/list-inputs';
@@ -97,13 +97,15 @@ const SessionFormSection = <T extends Form.FieldValues>({
             </InputRoot>
           )}
           {includeScheduledFor && (
-            <Modal.Root onOpenChange={cancelScheduleModal} open={scheduleModal}>
-              <Modal.Trigger asChild onClick={(e) => e.preventDefault()}>
-                <Button
-                  className="mt-4 w-full pl-3"
-                  colorScheme="transparent"
-                  onClick={openScheduleModal}
-                >
+            <Drawer.Root
+              onOpenChange={(open) => {
+                if (open) openScheduleModal();
+                else cancelScheduleModal();
+              }}
+              open={scheduleModal}
+            >
+              <Drawer.Trigger asChild>
+                <Button className="mt-4 w-full pl-3" colorScheme="transparent">
                   <ClockIcon className="w-5" />
                   {scheduledFor ? (
                     <span>
@@ -114,72 +116,70 @@ const SessionFormSection = <T extends Form.FieldValues>({
                     'Schedule'
                   )}
                 </Button>
-              </Modal.Trigger>
-              <Modal.Portal>
-                <Modal.Overlay>
-                  <Modal.Content className="max-w-sm p-8 text-center">
-                    <Modal.Title className="text-2xl">
-                      Schedule session
-                    </Modal.Title>
-                    <Modal.Description className="mt-4 px-4 text-fg-4">
-                      Scheduled sessions are not visible to clients until the
-                      specified time.
-                    </Modal.Description>
-                    <div className="mt-16 flex flex-col gap-4">
-                      <Input
-                        // hack to keep height on ios when input is empty
-                        className="h-[2.625em]"
-                        min={formatDatetimeLocal(new Date(), {
-                          seconds: false,
-                        })}
-                        onKeyDown={(e) => {
-                          if (e.key !== 'Enter') return;
-                          e.preventDefault();
+              </Drawer.Trigger>
+              <Drawer.Portal>
+                <Drawer.Overlay />
+                <Drawer.Content>
+                  <Drawer.Title className="not-sr-only text-center text-2xl">
+                    Schedule session
+                  </Drawer.Title>
+                  <Drawer.Description className="mt-4 px-4 text-center text-fg-4">
+                    Scheduled sessions are not visible to clients until the
+                    specified time.
+                  </Drawer.Description>
+                  <div className="mt-16 flex flex-col gap-4">
+                    <Input
+                      // hack to keep height on ios when input is empty
+                      className="h-[2.625em]"
+                      min={formatDatetimeLocal(new Date(), {
+                        seconds: false,
+                      })}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter') return;
+                        e.preventDefault();
+                        toggleScheduleModal(false);
+                      }}
+                      step={60}
+                      type="datetime-local"
+                      {...form.register(scheduledForFieldPath)}
+                    />
+                    <div className="flex gap-4">
+                      <Button
+                        className="w-full"
+                        colorScheme="transparent"
+                        disabled={!scheduledFor}
+                        onClick={() => {
+                          form.setValue(
+                            scheduledForFieldPath,
+                            null as Form.PathValue<T, Form.Path<T>>,
+                            { shouldDirty: true },
+                          );
+
                           toggleScheduleModal(false);
                         }}
-                        step={60}
-                        type="datetime-local"
-                        {...form.register(scheduledForFieldPath)}
-                      />
-                      <div className="flex gap-4">
-                        <Button
-                          className="w-full"
-                          colorScheme="transparent"
-                          disabled={!scheduledFor}
-                          onClick={() => {
-                            form.setValue(
-                              scheduledForFieldPath,
-                              null as Form.PathValue<T, Form.Path<T>>,
-                              { shouldDirty: true },
-                            );
-
-                            toggleScheduleModal(false);
-                          }}
-                        >
-                          Clear
-                        </Button>
-                        <Button
-                          className="w-full"
-                          disabled={!scheduledFor}
-                          onClick={() => toggleScheduleModal(false)}
-                        >
-                          Schedule
-                        </Button>
-                      </div>
-                      <Modal.Close asChild onClick={(e) => e.preventDefault()}>
-                        <Button
-                          className="m-0 -mb-3 w-full justify-center p-0 py-3"
-                          onClick={cancelScheduleModal}
-                          variant="link"
-                        >
-                          Close
-                        </Button>
-                      </Modal.Close>
+                      >
+                        Clear
+                      </Button>
+                      <Button
+                        className="w-full"
+                        disabled={!scheduledFor}
+                        onClick={() => toggleScheduleModal(false)}
+                      >
+                        Schedule
+                      </Button>
                     </div>
-                  </Modal.Content>
-                </Modal.Overlay>
-              </Modal.Portal>
-            </Modal.Root>
+                    <Drawer.Close asChild>
+                      <Button
+                        className="m-0 -mb-3 w-full justify-center p-0 py-3"
+                        variant="link"
+                      >
+                        Close
+                      </Button>
+                    </Drawer.Close>
+                  </div>
+                </Drawer.Content>
+              </Drawer.Portal>
+            </Drawer.Root>
           )}
         </div>
       )}

@@ -74,7 +74,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       variant !== 'link' && colorSchemes[colorScheme],
       variants[variant],
       (disabled || loading || pending) && disabledVariants[variant],
-      href && pathname?.startsWith(href.split('?')[0]) && activeClassName,
+      href && pathname === href && activeClassName,
       className,
     );
 

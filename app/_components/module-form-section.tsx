@@ -1,13 +1,13 @@
 'use client';
 
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import InputForm from '@/_components/input-form';
 import * as Modal from '@/_components/modal';
 import ModuleTemplateForm from '@/_components/module-template-form';
-import ModuleUseTemplateModal from '@/_components/module-use-template-modal';
+import ModuleUseTemplateDrawer from '@/_components/module-use-template-drawer';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -111,70 +111,50 @@ const ModuleFormSection = <
         <div className="smallcaps pr-1.5 text-fg-4">
           Module {moduleIndex + 1}
         </div>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
+        <Drawer.Root>
+          <Drawer.Trigger>
             <div className="group -mr-1 flex items-center justify-center p-1 text-fg-3 transition-colors hover:text-fg-2">
               <div className="rounded-full p-2">
                 <EllipsisVerticalIcon className="w-5" />
               </div>
             </div>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content className="mr-2">
-              <DropdownMenu.Button
-                onClick={() =>
-                  moduleArray.insert(moduleIndex, {
-                    content: '',
-                    inputs: [],
-                    name: '',
-                  } as Form.FieldValue<T>)
-                }
-              >
-                <ArrowUpIcon className="w-5 text-fg-4" />
-                Add module above
-              </DropdownMenu.Button>
-              <DropdownMenu.Button
-                onClick={() =>
-                  moduleArray.insert(moduleIndex + 1, {
-                    content: '',
-                    inputs: [],
-                    name: '',
-                  } as Form.FieldValue<T>)
-                }
-              >
-                <ArrowDownIcon className="w-5 text-fg-4" />
-                Add module below
-              </DropdownMenu.Button>
-              <DropdownMenu.Separator />
-              <ModuleUseTemplateModal<T>
+          </Drawer.Trigger>
+          <Drawer.Portal>
+            <Drawer.Overlay />
+            <Drawer.Content>
+              <Drawer.Title>Module menu</Drawer.Title>
+              <Drawer.Description />
+              <ModuleUseTemplateDrawer<T>
                 availableInputs={availableInputs}
                 availableModuleTemplates={availableTemplates}
                 fieldPath={fieldPath}
                 form={form}
               />
               <Modal.Root
-                onOpenChange={() => setCreateTemplateModal(null)}
+                onOpenChange={(open) => {
+                  if (open) {
+                    const { content, inputs, name } = form.getValues(
+                      fieldPath,
+                    ) as SessionFormValues['modules'][0];
+
+                    setCreateTemplateModal({
+                      data: {
+                        content,
+                        inputIds: inputs.map(({ id }) => id),
+                      },
+                      name: name ?? '',
+                    });
+                  } else {
+                    setCreateTemplateModal(null);
+                  }
+                }}
                 open={!!createTemplateModal}
               >
-                <Modal.Trigger asChild onClick={(e) => e.preventDefault()}>
-                  <DropdownMenu.Button
-                    onClick={() => {
-                      const { content, inputs, name } = form.getValues(
-                        fieldPath,
-                      ) as SessionFormValues['modules'][0];
-
-                      setCreateTemplateModal({
-                        data: {
-                          content,
-                          inputIds: inputs.map(({ id }) => id),
-                        },
-                        name: name ?? '',
-                      });
-                    }}
-                  >
+                <Modal.Trigger asChild>
+                  <Drawer.Button>
                     <PlusIcon className="w-5 text-fg-4" />
                     New template
-                  </DropdownMenu.Button>
+                  </Drawer.Button>
                 </Modal.Trigger>
                 <Modal.Portal>
                   <Modal.Overlay>
@@ -198,18 +178,43 @@ const ModuleFormSection = <
                   </Modal.Overlay>
                 </Modal.Portal>
               </Modal.Root>
+              <Drawer.Separator />
+              <Drawer.Button
+                onClick={() =>
+                  moduleArray.insert(moduleIndex, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <ArrowUpIcon className="w-5 text-fg-4" />
+                Add module above
+              </Drawer.Button>
+              <Drawer.Button
+                onClick={() =>
+                  moduleArray.insert(moduleIndex + 1, {
+                    content: '',
+                    inputs: [],
+                    name: '',
+                  } as Form.FieldValue<T>)
+                }
+              >
+                <ArrowDownIcon className="w-5 text-fg-4" />
+                Add module below
+              </Drawer.Button>
               {!hasOnlyOne && (
                 <>
-                  <DropdownMenu.Separator />
-                  <DropdownMenuDeleteItem
+                  <Drawer.Separator />
+                  <DrawerDeleteButton
                     confirmText="Delete module"
                     onConfirm={() => moduleArray.remove(moduleIndex)}
                   />
                 </>
               )}
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+            </Drawer.Content>
+          </Drawer.Portal>
+        </Drawer.Root>
       </div>
       <Input
         className="rounded-none border-t-0"

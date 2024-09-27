@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listProtocols = (subjectId: string) =>
-  createServerSupabaseClient()
+const listProtocols = async (subjectId: string) =>
+  (await createServerSupabaseClient())
     .from('protocols')
     .select(
       'id, name, sessions(id, modules:event_types(event:events(id)), order, title)',

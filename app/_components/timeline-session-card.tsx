@@ -42,7 +42,6 @@ const TimelineSessionCard = ({
       <Button
         className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
         href={`/${shareOrSubjects}/${subjectId}/protocols/${lastEventType?.session?.protocol?.id}/sessions/${lastEventType?.session?.id}`}
-        scroll={false}
         variant="link"
       >
         <div>
@@ -93,13 +92,12 @@ const TimelineSessionCard = ({
           </Button>
         </Collapsible.Trigger>
         <Collapsible.Content>
-          <ul className="divide-y divide-alpha-1 border-t border-alpha-1">
+          <ul className="divide-y divide-alpha-0 border-t border-alpha-0">
             {group.map((event) => (
               <li className="relative py-1" key={event.id}>
                 <Button
                   className="m-0 block p-0 px-4 py-3 hover:bg-alpha-1"
                   href={`/${shareOrSubjects}/${subjectId}/events/${event.id}`}
-                  scroll={false}
                   variant="link"
                 >
                   <div>

@@ -20,12 +20,12 @@ const CollapsibleArchive = ({ children }: CollapsibleArchiveProps) => {
       </Collapsible.Content>
       <div className="mx-4 flex justify-end">
         <Collapsible.Trigger asChild>
-          <Button className="mr-[0.35rem]" variant="link">
+          <Button variant="link">
             {isOpen ? 'Hide' : 'Show'} archived
             {isOpen ? (
-              <ChevronUpIcon className="w-5" />
+              <ChevronUpIcon className="mr-px w-5" />
             ) : (
-              <ChevronDownIcon className="w-5" />
+              <ChevronDownIcon className="mr-px w-5" />
             )}
           </Button>
         </Collapsible.Trigger>

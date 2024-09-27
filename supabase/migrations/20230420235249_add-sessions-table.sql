@@ -1,5 +1,5 @@
 create table sessions (
-  id uuid not null default uuid_generate_v4 (),
+  id uuid not null default extensions.uuid_generate_v4 (),
   mission_id uuid not null,
   "order" smallint not null,
   scheduled_for timestamp with time zone,

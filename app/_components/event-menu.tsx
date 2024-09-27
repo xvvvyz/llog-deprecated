@@ -1,7 +1,7 @@
 'use client';
 
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
 import deleteEvent from '@/_mutations/delete-event';
 import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
@@ -18,8 +18,8 @@ const EventMenu = ({ className, eventId, isModal }: EventMenuProps) => {
   const router = useRouter();
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <Drawer.Root>
+      <Drawer.Trigger>
         {isModal ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
@@ -34,19 +34,22 @@ const EventMenu = ({ className, eventId, isModal }: EventMenuProps) => {
             </div>
           </div>
         )}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content className={twMerge(!isModal && 'mr-1.5')}>
-          <DropdownMenuDeleteItem
+      </Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Drawer.Title>Event menu</Drawer.Title>
+          <Drawer.Description />
+          <DrawerDeleteButton
             confirmText="Delete event"
             onConfirm={async () => {
               await deleteEvent(eventId);
               if (isModal) router.back();
             }}
           />
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 };
 

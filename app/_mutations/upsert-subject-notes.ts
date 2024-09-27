@@ -8,7 +8,9 @@ const upsertSubjectNotes = async (
   context: { subjectId: string },
   data: SubjectNotesFormValues,
 ) => {
-  const { data: subject, error } = await createServerSupabaseClient()
+  const { data: subject, error } = await (
+    await createServerSupabaseClient()
+  )
     .from('subject_notes')
     .upsert({
       content: sanitizeHtml(data.content) ?? '',

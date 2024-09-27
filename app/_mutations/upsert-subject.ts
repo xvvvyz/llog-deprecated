@@ -9,7 +9,7 @@ const upsertSubject = async (
   context: { subjectId?: string },
   data: Omit<SubjectFormValues, 'avatar'>,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   // get the latest app_metadata for rls validation
   await supabase.auth.refreshSession();

@@ -11,7 +11,9 @@ const signIn = async (
   const email = data.get('email') as string;
   const password = data.get('password') as string;
 
-  const { error } = await createServerSupabaseClient().auth.signInWithPassword({
+  const { error } = await (
+    await createServerSupabaseClient()
+  ).auth.signInWithPassword({
     email,
     password,
   });

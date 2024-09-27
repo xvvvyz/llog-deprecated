@@ -4,7 +4,7 @@ import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-cl
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const Subscriptions = () => {
+const NotificationsSubscription = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const Subscriptions = () => {
   return null;
 };
 
-export default Subscriptions;
+export default NotificationsSubscription;

@@ -5,7 +5,6 @@ import InputForm from '@/_components/input-form';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
 import Select, { IOption } from '@/_components/select';
@@ -177,13 +176,15 @@ const ModuleTemplateForm = ({
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton
-          className="w-full"
-          colorScheme="transparent"
-          onClick={onClose}
-        >
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button
+            className="w-full"
+            colorScheme="transparent"
+            onClick={onClose}
+          >
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

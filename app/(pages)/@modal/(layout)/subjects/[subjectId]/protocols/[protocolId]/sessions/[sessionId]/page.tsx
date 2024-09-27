@@ -1,21 +1,19 @@
 import SessionPage from '@/_components/session-page';
 
 interface PageProps {
-  params: {
-    sessionId: string;
-    subjectId: string;
-    protocolId: string;
-  };
+  params: Promise<{ sessionId: string; subjectId: string; protocolId: string }>;
 }
 
-const Page = async ({
-  params: { sessionId, subjectId, protocolId },
-}: PageProps) => (
-  <SessionPage
-    sessionId={sessionId}
-    subjectId={subjectId}
-    protocolId={protocolId}
-  />
-);
+const Page = async ({ params }: PageProps) => {
+  const { sessionId, subjectId, protocolId } = await params;
+
+  return (
+    <SessionPage
+      sessionId={sessionId}
+      subjectId={subjectId}
+      protocolId={protocolId}
+    />
+  );
+};
 
 export default Page;

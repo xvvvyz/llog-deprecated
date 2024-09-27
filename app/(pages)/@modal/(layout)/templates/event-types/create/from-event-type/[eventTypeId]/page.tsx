@@ -6,12 +6,12 @@ import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 
 interface PageProps {
-  params: {
-    eventTypeId: string;
-  };
+  params: Promise<{ eventTypeId: string }>;
 }
 
-const Page = async ({ params: { eventTypeId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { eventTypeId } = await params;
+
   const [{ data: eventType }, { data: availableInputs }, { data: subjects }] =
     await Promise.all([
       getEventTypeWithInputs(eventTypeId),

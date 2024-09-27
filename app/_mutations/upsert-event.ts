@@ -21,7 +21,7 @@ const upsertEvent = async (
   },
   data: EventFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: event, error } = await supabase
     .from('events')

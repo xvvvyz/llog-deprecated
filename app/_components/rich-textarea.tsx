@@ -313,10 +313,9 @@ const RichTextarea = React.forwardRef<{ focus: () => void }, RichTextareaProps>(
                         Set
                       </Button>
                     </div>
-                    <Modal.Close asChild onClick={(e) => e.preventDefault()}>
+                    <Modal.Close asChild>
                       <Button
                         className="m-0 -mb-3 w-full justify-center p-0 py-3"
-                        onClick={() => setSetLinkModal(null)}
                         variant="link"
                       >
                         Close

@@ -2,7 +2,7 @@ import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listInputsBySubjectId = async (subjectId: string) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const whitelist = await supabase
     .from('input_subjects')

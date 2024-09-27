@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listSubjectManagers = async (subjectId: string) =>
-  createServerSupabaseClient()
+  (await createServerSupabaseClient())
     .from('subject_managers')
     .select('manager:profiles(id, image_uri, first_name)')
     .eq('subject_id', subjectId)

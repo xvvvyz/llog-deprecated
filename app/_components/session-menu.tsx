@@ -1,10 +1,9 @@
 'use client';
 
 import Button from '@/_components/button';
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
-import * as Modal from '@/_components/modal';
 import deleteSession from '@/_mutations/delete-session';
 import moveSession from '@/_mutations/move-session';
 import ArrowDownIcon from '@heroicons/react/24/outline/ArrowDownIcon';
@@ -46,8 +45,8 @@ const SessionMenu = ({
   const router = useRouter();
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <Drawer.Root>
+      <Drawer.Trigger>
         {isView ? (
           <IconButton icon={<EllipsisVerticalIcon className="w-7" />} />
         ) : (
@@ -57,67 +56,73 @@ const SessionMenu = ({
             </div>
           </div>
         )}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
+      </Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Drawer.Title>Session menu</Drawer.Title>
+          <Drawer.Description />
           {isStarted ? (
-            <Modal.Root>
-              <Modal.Trigger asChild>
-                <DropdownMenu.Button>
+            <Drawer.Root>
+              <Drawer.Trigger asChild>
+                <Drawer.Button>
                   <PencilIcon className="w-5 text-fg-4" />
                   Edit
-                </DropdownMenu.Button>
-              </Modal.Trigger>
-              <Modal.Portal>
-                <Modal.Overlay>
-                  <Modal.Content className="max-w-sm p-8 text-center">
-                    <Modal.Title className="text-2xl">
-                      Are you sure?
-                    </Modal.Title>
-                    <Modal.Description className="mt-4 px-4 text-fg-4">
-                      This session has completed modules. Are you sure you want
-                      to edit it?
-                    </Modal.Description>
-                    <div className="mt-16 flex flex-col-reverse gap-4">
-                      <Modal.Close asChild>
-                        <Button
-                          className="m-0 -mb-3 w-full justify-center p-0 py-3"
-                          variant="link"
-                        >
-                          Cancel
-                        </Button>
-                      </Modal.Close>
+                </Drawer.Button>
+              </Drawer.Trigger>
+              <Drawer.Portal>
+                <Drawer.Overlay />
+                <Drawer.Content>
+                  <Drawer.Title className="not-sr-only text-center text-2xl">
+                    Are you sure?
+                  </Drawer.Title>
+                  <Drawer.Description className="not-sr-only mx-auto mt-4 max-w-xs px-4 text-center text-fg-4">
+                    This session has completed modules. Are you sure you want to
+                    edit it?
+                  </Drawer.Description>
+                  <div className="mt-16 flex flex-col-reverse gap-4">
+                    <Drawer.Close asChild>
                       <Button
-                        href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
-                        scroll={false}
+                        className="m-0 -mb-3 w-full justify-center p-0 py-3"
+                        variant="link"
                       >
-                        Edit session
+                        Cancel
                       </Button>
-                    </div>
-                  </Modal.Content>
-                </Modal.Overlay>
-              </Modal.Portal>
-            </Modal.Root>
+                    </Drawer.Close>
+                    <Button
+                      href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
+                    >
+                      Edit session
+                    </Button>
+                  </div>
+                </Drawer.Content>
+              </Drawer.Portal>
+            </Drawer.Root>
           ) : (
-            <DropdownMenu.Button
+            <Drawer.Button
               href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/${sessionId}/edit`}
-              scroll={false}
             >
               <PencilIcon className="w-5 text-fg-4" />
               Edit
-            </DropdownMenu.Button>
+            </Drawer.Button>
           )}
-          <DropdownMenu.Button
+          <Drawer.Button
             href={`/subjects/${subjectId}/protocols/${protocolId}/sessions/create/${nextSessionOrder}/from-session/${sessionId}`}
-            scroll={false}
           >
             <DocumentDuplicateIcon className="w-5 text-fg-4" />
             Duplicate
-          </DropdownMenu.Button>
+          </Drawer.Button>
+          <Drawer.Separator />
+          <Drawer.Button
+            href={`/templates/sessions/create/from-session/${sessionId}`}
+          >
+            <PlusIcon className="w-5 text-fg-4" />
+            New template
+          </Drawer.Button>
           {isList && (
             <>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Button
+              <Drawer.Separator />
+              <Drawer.Button
                 disabled={!isDraft && order >= highestPublishedOrder}
                 loading={isMoveRightTransitioning}
                 loadingText="Moving…"
@@ -135,8 +140,8 @@ const SessionMenu = ({
               >
                 <ArrowUpIcon className="w-5 text-fg-4" />
                 Move up
-              </DropdownMenu.Button>
-              <DropdownMenu.Button
+              </Drawer.Button>
+              <Drawer.Button
                 disabled={order < 1}
                 loading={isMoveLeftTransitioning}
                 loadingText="Moving…"
@@ -154,19 +159,11 @@ const SessionMenu = ({
               >
                 <ArrowDownIcon className="w-5 text-fg-4" />
                 Move down
-              </DropdownMenu.Button>
+              </Drawer.Button>
             </>
           )}
-          <DropdownMenu.Separator />
-          <DropdownMenu.Button
-            href={`/templates/sessions/create/from-session/${sessionId}`}
-            scroll={false}
-          >
-            <PlusIcon className="w-5 text-fg-4" />
-            New template
-          </DropdownMenu.Button>
-          <DropdownMenu.Separator />
-          <DropdownMenuDeleteItem
+          <Drawer.Separator />
+          <DrawerDeleteButton
             confirmText="Delete session"
             onConfirm={async () => {
               await deleteSession({
@@ -182,9 +179,9 @@ const SessionMenu = ({
               }
             }}
           />
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 };
 

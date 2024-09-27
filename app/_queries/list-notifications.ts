@@ -1,11 +1,10 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const listNotifications = async ({ archived = false } = {}) =>
-  createServerSupabaseClient()
+const listNotifications = async () =>
+  (await createServerSupabaseClient())
     .from('notifications')
     .select(
       `
-      archived,
       comment:comments(
         content,
         event:events(
@@ -39,7 +38,6 @@ const listNotifications = async ({ archived = false } = {}) =>
       subject:subjects(id, image_uri, name),
       type`,
     )
-    .eq('archived', archived)
     .order('created_at', { ascending: false })
     .limit(50);
 

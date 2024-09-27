@@ -79,27 +79,11 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
               <Button
                 className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
                 href={`/inputs/${input.id}`}
-                scroll={false}
                 variant="link"
               >
                 <div className="min-w-0">
                   <div className="truncate">{input.label}</div>
                   <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
-                    {!!input.subjects.length && (
-                      <>
-                        <div className="mr-0.5 flex shrink-0 gap-1">
-                          {input.subjects.map(({ id, image_uri }) => (
-                            <Avatar
-                              className="size-4"
-                              file={image_uri}
-                              key={id}
-                              id={id}
-                            />
-                          ))}
-                        </div>
-                        &#8226;
-                      </>
-                    )}
                     <div className="min-w-0">
                       <div className="truncate">
                         {INPUT_TYPE_LABELS[input.type]}
@@ -111,6 +95,21 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
                         {usedBy.size ? `Used by ${usedBy.size}` : 'Not used'}
                       </div>
                     </div>
+                    {!!input.subjects.length && (
+                      <>
+                        &#8226;
+                        <div className="ml-0.5 flex shrink-0 gap-1">
+                          {input.subjects.map(({ id, image_uri }) => (
+                            <Avatar
+                              className="size-4"
+                              file={image_uri}
+                              key={id}
+                              id={id}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </Button>

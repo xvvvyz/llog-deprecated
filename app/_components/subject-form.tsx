@@ -6,7 +6,7 @@ import IconButton from '@/_components/icon-button';
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import RichTextarea from '@/_components/rich-textarea';
 import Tip from '@/_components/tip';
 import upsertSubject from '@/_mutations/upsert-subject';
@@ -168,9 +168,11 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton className="w-full" colorScheme="transparent">
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button className="w-full" colorScheme="transparent">
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

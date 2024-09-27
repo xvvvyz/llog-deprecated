@@ -1,14 +1,12 @@
 import EventPage from '@/_components/event-page';
 
 interface PageProps {
-  params: {
-    eventId: string;
-    subjectId: string;
-  };
+  params: Promise<{ eventId: string; subjectId: string }>;
 }
 
-const Page = async ({ params: { eventId, subjectId } }: PageProps) => (
-  <EventPage eventId={eventId} subjectId={subjectId} />
-);
+const Page = async ({ params }: PageProps) => {
+  const { eventId, subjectId } = await params;
+  return <EventPage eventId={eventId} subjectId={subjectId} />;
+};
 
 export default Page;

@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getEvent = (eventId: string) =>
-  createServerSupabaseClient()
+const getEvent = async (eventId: string) =>
+  (await createServerSupabaseClient())
     .from('events')
     .select(
       `

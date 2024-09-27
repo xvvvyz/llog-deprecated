@@ -9,7 +9,7 @@ const upsertEventType = async (
   context: { eventTypeId?: string; subjectId: string },
   data: EventTypeFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: eventType, error } = await supabase
     .from('event_types')

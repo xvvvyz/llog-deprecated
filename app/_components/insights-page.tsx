@@ -2,7 +2,6 @@ import Button from '@/_components/button';
 import Empty from '@/_components/empty';
 import Insights from '@/_components/insights';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import Number from '@/_constants/enum-number';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -57,7 +56,6 @@ const InsightsPage = async ({
             <Button
               className="pr-2 sm:pr-6"
               href={`/subjects/${subjectId}/insights/create`}
-              scroll={false}
               variant="link"
             >
               <PlusIcon className="w-5" />
@@ -86,12 +84,11 @@ const InsightsPage = async ({
           />
         )}
       </div>
-      <PageModalBackButton
-        className="m-0 block w-full py-6 text-center"
-        variant="link"
-      >
-        Close
-      </PageModalBackButton>
+      <Modal.Close asChild>
+        <Button className="m-0 block w-full py-6 text-center" variant="link">
+          Close
+        </Button>
+      </Modal.Close>
     </Modal.Content>
   );
 };

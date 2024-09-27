@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/_components/button';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import SortableSessionFormSection from '@/_components/sortable-session-form-section';
 import TemplateFormSection from '@/_components/template-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
@@ -192,9 +192,11 @@ const ProtocolTemplateForm = ({
         </div>
       )}
       <div className="flex gap-4 px-4 pt-8 sm:px-8">
-        <PageModalBackButton className="w-full" colorScheme="transparent">
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button className="w-full" colorScheme="transparent">
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

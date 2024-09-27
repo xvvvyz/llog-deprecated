@@ -1,18 +1,18 @@
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import ProtocolForm from '@/_components/protocol-form';
-import ProtocolUseTemplateModal from '@/_components/protocol-use-template-modal';
+import ProtocolUseTemplateDrawer from '@/_components/protocol-use-template-drawer';
 import TemplateType from '@/_constants/enum-template-type';
 import getSubject from '@/_queries/get-subject';
 import listTemplatesBySubjectIdAndType from '@/_queries/list-templates-by-subject-id-and-type';
 
 interface PageProps {
-  params: {
-    subjectId: string;
-  };
+  params: Promise<{ subjectId: string }>;
 }
 
-const Page = async ({ params: { subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { subjectId } = await params;
+
   const [{ data: availableProtocolTemplates }, { data: subject }] =
     await Promise.all([
       listTemplatesBySubjectIdAndType({
@@ -28,7 +28,7 @@ const Page = async ({ params: { subjectId } }: PageProps) => {
     <Modal.Content>
       <PageModalHeader
         right={
-          <ProtocolUseTemplateModal
+          <ProtocolUseTemplateDrawer
             availableProtocolTemplates={availableProtocolTemplates}
             subjectId={subjectId}
           />

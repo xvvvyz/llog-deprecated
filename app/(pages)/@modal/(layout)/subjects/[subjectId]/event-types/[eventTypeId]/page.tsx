@@ -7,13 +7,12 @@ import getEventTypeWithInputsAndOptions from '@/_queries/get-event-type-with-inp
 import getSubject from '@/_queries/get-subject';
 
 interface PageProps {
-  params: {
-    eventTypeId: string;
-    subjectId: string;
-  };
+  params: Promise<{ eventTypeId: string; subjectId: string }>;
 }
 
-const Page = async ({ params: { eventTypeId, subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { eventTypeId, subjectId } = await params;
+
   const [{ data: subject }, { data: eventType }, user] = await Promise.all([
     getSubject(subjectId),
     getEventTypeWithInputsAndOptions(eventTypeId),

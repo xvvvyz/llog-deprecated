@@ -1,11 +1,11 @@
 'use client';
 
 import Button from '@/_components/button';
+import * as Drawer from '@/_components/drawer';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import SessionFormSection from '@/_components/session-form-section';
-import SessionUseTemplateModal from '@/_components/session-use-template-modal';
+import SessionUseTemplateDrawer from '@/_components/session-use-template-drawer';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSession from '@/_mutations/upsert-session';
@@ -116,17 +116,17 @@ const SessionForm = ({
     <Modal.Content>
       <PageModalHeader
         right={
-          <SessionUseTemplateModal<SessionFormValues>
+          <SessionUseTemplateDrawer<SessionFormValues>
             availableInputs={availableInputs}
             availableSessionTemplates={availableSessionTemplates}
             form={form}
             trigger={
-              <Modal.Trigger asChild>
+              <Drawer.Trigger asChild>
                 <Button className="pr-2 sm:pr-6" variant="link">
                   <DocumentTextIcon className="w-5 text-fg-4" />
                   Use template
                 </Button>
-              </Modal.Trigger>
+              </Drawer.Trigger>
             }
           />
         }
@@ -201,12 +201,11 @@ const SessionForm = ({
         </div>
         <UnsavedChangesBanner<SessionFormValues> form={form} />
       </form>
-      <PageModalBackButton
-        className="m-0 block w-full py-6 text-center"
-        variant="link"
-      >
-        Close
-      </PageModalBackButton>
+      <Modal.Close asChild>
+        <Button className="m-0 block w-full py-6 text-center" variant="link">
+          Close
+        </Button>
+      </Modal.Close>
     </Modal.Content>
   );
 };

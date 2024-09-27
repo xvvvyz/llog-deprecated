@@ -4,7 +4,10 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { revalidatePath } from 'next/cache';
 
 const deleteProtocol = async (id: string) => {
-  await createServerSupabaseClient().from('protocols').delete().eq('id', id);
+  await (await createServerSupabaseClient())
+    .from('protocols')
+    .delete()
+    .eq('id', id);
 
   revalidatePath('/', 'layout');
 };

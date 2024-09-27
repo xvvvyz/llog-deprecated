@@ -11,7 +11,7 @@ const reorderInsights = async ({
   insightIds?: string[];
   subjectId: string;
 }) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   // hack because supabase doesn't support bulk updates without all columns
   // this introduces the possibility of a race condition

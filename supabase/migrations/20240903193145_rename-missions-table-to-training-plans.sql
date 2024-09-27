@@ -1,5 +1,5 @@
 create table "public"."training_plans" (
-  "id" uuid not null default uuid_generate_v4 (),
+  "id" uuid not null default extensions.uuid_generate_v4 (),
   "name" text not null,
   "subject_id" uuid not null,
   "archived" boolean not null default false

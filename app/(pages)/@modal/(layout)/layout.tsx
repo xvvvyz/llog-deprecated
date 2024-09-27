@@ -13,9 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <Modal.Root onOpenChange={router.back} open>
-      <Modal.Portal>
-        <Modal.Overlay>{children}</Modal.Overlay>
-      </Modal.Portal>
+      <Modal.Overlay>{children}</Modal.Overlay>
     </Modal.Root>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
-import * as DropdownMenu from '@/_components/dropdown-menu';
-import DropdownMenuDeleteItem from '@/_components/dropdown-menu-delete-item';
+import * as Drawer from '@/_components/drawer';
+import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import TEMPLATE_TYPE_SLUGS from '@/_constants/constant-template-type-slugs';
 import deleteTemplate from '@/_mutations/delete-template';
 import { Database } from '@/_types/database';
@@ -14,30 +14,32 @@ interface TemplateMenuProps {
 }
 
 const TemplateMenu = ({ templateId, type }: TemplateMenuProps) => (
-  <DropdownMenu.Root>
-    <DropdownMenu.Trigger>
+  <Drawer.Root>
+    <Drawer.Trigger>
       <div className="group flex items-center justify-center px-2 text-fg-3 hover:text-fg-2">
         <div className="rounded-full p-2 transition-colors group-hover:bg-alpha-1">
           <EllipsisVerticalIcon className="w-5" />
         </div>
       </div>
-    </DropdownMenu.Trigger>
-    <DropdownMenu.Portal>
-      <DropdownMenu.Content className="mr-1.5">
-        <DropdownMenu.Button
+    </Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Title>Template menu</Drawer.Title>
+        <Drawer.Description />
+        <Drawer.Button
           href={`/templates/${TEMPLATE_TYPE_SLUGS[type]}/create/from-template/${templateId}`}
-          scroll={false}
         >
           <DocumentDuplicateIcon className="w-5 text-fg-4" />
           Duplicate
-        </DropdownMenu.Button>
-        <DropdownMenuDeleteItem
+        </Drawer.Button>
+        <DrawerDeleteButton
           confirmText="Delete template"
           onConfirm={() => deleteTemplate(templateId)}
         />
-      </DropdownMenu.Content>
-    </DropdownMenu.Portal>
-  </DropdownMenu.Root>
+      </Drawer.Content>
+    </Drawer.Portal>
+  </Drawer.Root>
 );
 
 export default TemplateMenu;

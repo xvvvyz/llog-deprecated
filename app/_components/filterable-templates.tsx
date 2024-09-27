@@ -73,15 +73,20 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
             <Button
               className="m-0 w-full min-w-0 gap-6 px-4 py-3 pr-0 leading-snug"
               href={`/templates/${TEMPLATE_TYPE_SLUGS[template.type]}/${template.id}`}
-              scroll={false}
               variant="link"
             >
               <div className="min-w-0">
                 <div className="truncate">{template.name}</div>
                 <div className="smallcaps flex items-center gap-2 pb-0.5 pt-1.5 text-fg-4">
+                  <div className="min-w-0">
+                    <div className="truncate">
+                      {TEMPLATE_TYPE_LABELS[template.type]}
+                    </div>
+                  </div>
                   {!!template.subjects.length && (
                     <>
-                      <div className="mr-0.5 flex shrink-0 gap-1">
+                      &#8226;
+                      <div className="ml-0.5 flex shrink-0 gap-1">
                         {template.subjects.map(({ id, image_uri }) => (
                           <Avatar
                             className="size-4"
@@ -91,14 +96,8 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
                           />
                         ))}
                       </div>
-                      &#8226;
                     </>
                   )}
-                  <div className="min-w-0">
-                    <div className="truncate">
-                      {TEMPLATE_TYPE_LABELS[template.type]}
-                    </div>
-                  </div>
                 </div>
               </div>
             </Button>

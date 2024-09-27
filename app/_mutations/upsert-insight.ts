@@ -9,7 +9,7 @@ const upsertInsight = async (
   context: { insightId?: string; subjectId: string },
   { name, order, ...config }: InsightFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { error } = await supabase.from('insights').upsert({
     config,

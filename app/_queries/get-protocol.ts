@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getProtocol = (protocolId: string) =>
-  createServerSupabaseClient()
+const getProtocol = async (protocolId: string) =>
+  (await createServerSupabaseClient())
     .from('protocols')
     .select('id, name')
     .eq('id', protocolId)

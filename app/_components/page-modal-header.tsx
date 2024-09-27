@@ -1,11 +1,12 @@
+import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
-import PageModalBackIconButton from '@/_components/page-modal-back-icon-button';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface PageModalHeaderProps {
   className?: string;
+  closeHref?: string;
   onClose?: () => void;
   right?: ReactNode;
   subtitle?: ReactNode;
@@ -14,6 +15,7 @@ interface PageModalHeaderProps {
 
 const PageModalHeader = ({
   className,
+  closeHref,
   onClose,
   right,
   subtitle,
@@ -33,10 +35,14 @@ const PageModalHeader = ({
     </div>
     <div className="relative right-1 top-0 flex shrink-0 items-center gap-6">
       {right}
-      <PageModalBackIconButton
-        icon={<XMarkIcon className="w-7" />}
-        onClick={onClose}
-      />
+      <Modal.Close asChild>
+        <IconButton
+          href={closeHref}
+          icon={<XMarkIcon className="w-7" />}
+          label="Close"
+          onClick={onClose}
+        />
+      </Modal.Close>
     </div>
   </div>
 );

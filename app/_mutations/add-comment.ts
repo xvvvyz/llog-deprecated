@@ -8,7 +8,7 @@ const addComment = async (
   context: { eventId: string },
   data: { content: string },
 ) => {
-  const { error } = await createServerSupabaseClient()
+  const { error } = await (await createServerSupabaseClient())
     .from('comments')
     .upsert({
       content: sanitizeHtml(data.content) ?? '',

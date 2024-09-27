@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getInput = (inputId: string) =>
-  createServerSupabaseClient()
+const getInput = async (inputId: string) =>
+  (await createServerSupabaseClient())
     .from('inputs')
     .select(
       `

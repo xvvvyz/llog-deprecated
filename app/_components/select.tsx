@@ -140,7 +140,7 @@ const MultiValueLabel = <TOption extends IOption>({
     <div className="flex items-center gap-2 overflow-visible">
       {(props.selectProps as SelectProps<TOption>).hasAvatar && (
         <Avatar
-          className="ml-0.5 mr-0.5 size-5"
+          className="ml-0.5 size-5"
           file={props.data.image_uri}
           id={props.data.id}
         />
@@ -177,7 +177,7 @@ const MultiValueLabel = <TOption extends IOption>({
 
 const MultiValueRemove = (props: RS.MultiValueRemoveProps) => (
   <RS.components.MultiValueRemove {...props}>
-    <div className="-m-1 p-1 pr-1.5 text-fg-3 transition-colors hover:text-fg-2">
+    <div className="-m-1 py-1 pl-2 pr-1.5 text-fg-3 transition-colors hover:text-fg-2">
       <XMarkIcon className="w-5" />
     </div>
   </RS.components.MultiValueRemove>

@@ -4,7 +4,7 @@ import Button from '@/_components/button';
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import updateUser from '@/_mutations/update-user';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
@@ -53,9 +53,11 @@ const AccountEmailForm = ({ user }: AccountEmailFormProps) => {
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}
       <div className="flex gap-4 pt-8">
-        <PageModalBackButton className="w-full" colorScheme="transparent">
-          Close
-        </PageModalBackButton>
+        <Modal.Close asChild>
+          <Button className="w-full" colorScheme="transparent">
+            Close
+          </Button>
+        </Modal.Close>
         <Button
           className="w-full"
           loading={isTransitioning}

@@ -5,7 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
 
-  await createServerSupabaseClient().auth.verifyOtp({
+  await (
+    await createServerSupabaseClient()
+  ).auth.verifyOtp({
     token_hash: searchParams.get('token_hash') as string,
     type: searchParams.get('type') as EmailOtpType,
   });

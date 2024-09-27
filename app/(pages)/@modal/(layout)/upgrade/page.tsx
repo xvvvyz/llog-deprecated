@@ -1,5 +1,5 @@
+import Button from '@/_components/button';
 import * as Modal from '@/_components/modal';
-import PageModalBackButton from '@/_components/page-modal-back-button';
 import PageModalHeader from '@/_components/page-modal-header';
 import UpgradePlanButton from '@/_components/upgrade-plan-button';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -46,9 +46,11 @@ const Page = async () => {
           </tbody>
         </table>
         <div className="flex gap-4">
-          <PageModalBackButton className="w-full" colorScheme="transparent">
-            Close
-          </PageModalBackButton>
+          <Modal.Close asChild>
+            <Button className="w-full" colorScheme="transparent">
+              Close
+            </Button>
+          </Modal.Close>
           <UpgradePlanButton user={user} />
         </div>
       </div>

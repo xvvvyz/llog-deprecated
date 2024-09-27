@@ -7,7 +7,7 @@ import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import InsightPlot from '@/_components/insight-plot';
 import * as Label from '@/_components/label';
-import PageModalBackButton from '@/_components/page-modal-back-button';
+import * as Modal from '@/_components/modal';
 import * as Popover from '@/_components/popover';
 import Select, { IOption } from '@/_components/select';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
@@ -652,9 +652,11 @@ const InsightForm = ({ events, insight, subjectId }: InsightFormProps) => {
           form={form}
         />
         <div className="mx-auto flex w-full max-w-sm gap-4 md:mx-0">
-          <PageModalBackButton className="w-full" colorScheme="transparent">
-            Close
-          </PageModalBackButton>
+          <Modal.Close asChild>
+            <Button className="w-full" colorScheme="transparent">
+              Close
+            </Button>
+          </Modal.Close>
           <Button
             className="w-full"
             loading={isTransitioning}

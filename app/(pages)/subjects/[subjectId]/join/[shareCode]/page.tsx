@@ -3,17 +3,17 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 import { redirect } from 'next/navigation';
 
 interface PageProps {
-  params: {
-    shareCode: string;
-    subjectId: string;
-  };
+  params: Promise<{ shareCode: string; subjectId: string }>;
 }
 
-const Page = async ({ params: { shareCode, subjectId } }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const { shareCode, subjectId } = await params;
   const { data: subject } = await getSubject(subjectId);
 
   if (!subject) {
-    await createServerSupabaseClient().rpc('join_subject_as_manager', {
+    await (
+      await createServerSupabaseClient()
+    ).rpc('join_subject_as_manager', {
       share_code: shareCode,
     });
   }

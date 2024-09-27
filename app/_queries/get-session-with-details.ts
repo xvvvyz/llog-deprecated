@@ -1,7 +1,7 @@
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
-const getSessionWithDetails = (sessionId: string) =>
-  createServerSupabaseClient()
+const getSessionWithDetails = async (sessionId: string) =>
+  (await createServerSupabaseClient())
     .from('sessions')
     .select(
       `

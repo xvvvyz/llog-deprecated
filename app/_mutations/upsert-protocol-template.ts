@@ -10,7 +10,7 @@ const upsertProtocolTemplate = async (
   context: { templateId?: string },
   data: ProtocolTemplateFormValues,
 ) => {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data: template, error } = await supabase
     .from('templates')
