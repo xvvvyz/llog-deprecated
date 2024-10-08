@@ -24,7 +24,7 @@ const Avatar = ({ className, file, id = '' }: AvatarProps) => {
         alt=""
         className="bg-alpha-2 object-cover object-center"
         fill
-        sizes="80px"
+        sizes="32px"
         src={
           formatImageUrl(file) ??
           `https://api.dicebear.com/7.x/shapes/png?seed=${id}&backgroundColor=ffdfbf,f88c49,c0aede,d1d4f9,f1f4dc,ffd5dc,0a5b83,1c799f,69d2e7,b6e3f4&backgroundType=solid&shape1=ellipseFilled,polygonFilled,rectangleFilled,line,polygon,rectangle,ellipse&shape2[]&shape2Color=f1f4dc,f88c49,0a5b83,1c799f,69d2e7,transparent&shape3[]`
