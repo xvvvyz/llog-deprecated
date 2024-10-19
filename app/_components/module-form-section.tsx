@@ -10,7 +10,7 @@ import ModuleTemplateForm from '@/_components/module-template-form';
 import ModuleUseTemplateDrawer from '@/_components/module-use-template-drawer';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import { SessionFormValues } from '@/_components/session-form';
 import { GetInputData } from '@/_queries/get-input';
 import { GetTemplateData } from '@/_queries/get-template';

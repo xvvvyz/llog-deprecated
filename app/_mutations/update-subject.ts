@@ -8,8 +8,6 @@ const updateSubject = async (
   subject: Database['public']['Tables']['subjects']['Update'] & { id: string },
 ) => {
   const supabase = await createServerSupabaseClient();
-
-  // get the latest app_metadata for rls validation
   await supabase.auth.refreshSession();
 
   await supabase
@@ -21,6 +19,7 @@ const updateSubject = async (
       public: subject.public,
     })
     .eq('id', subject.id);
+
   revalidatePath('/', 'layout');
 };
 

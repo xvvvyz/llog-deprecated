@@ -21,8 +21,8 @@ const listInputsBySubjectId = async (subjectId: string) => {
 
   return supabase
     .from('inputs')
-    .select('id, label, subjects(id, image_uri, name), type')
-    .eq('team_id', (await getCurrentUser())?.id ?? '')
+    .select('id, label, subjects!input_subjects(id, image_uri, name), type')
+    .eq('team_id', (await getCurrentUser())?.app_metadata?.active_team_id ?? '')
     .eq('archived', false)
     .not('id', 'in', `(${blacklist.data.map((is) => is.input_id).join(',')})`)
     .eq('subjects.deleted', false)

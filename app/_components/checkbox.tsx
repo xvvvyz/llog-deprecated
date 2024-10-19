@@ -11,7 +11,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, label, name, ...rest }, ref) => (
     <div
       className={twMerge(
-        'input relative flex items-center justify-between gap-4 pr-2',
+        'input relative flex items-center gap-2.5 pr-2 group-hover:bg-alpha-2',
         className,
       )}
     >
@@ -23,6 +23,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         type="checkbox"
         {...rest}
       />
+      <div className="relative -z-10 -ml-1.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-alpha-1 bg-alpha-1 text-transparent transition-colors peer-checked:bg-accent-1 peer-checked:text-bg-1">
+        <CheckIcon className="w-4 stroke-2" />
+      </div>
       <div
         className={twMerge(
           'text-fg-4 transition-colors peer-checked:text-fg-2',
@@ -31,7 +34,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         {label && <label htmlFor={name}>{label}</label>}
       </div>
-      <CheckIcon className="relative -z-10 h-5 w-5 shrink-0 stroke-fg-2 opacity-0 transition-opacity peer-checked:opacity-100" />
     </div>
   ),
 );

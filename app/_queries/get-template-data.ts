@@ -1,6 +1,6 @@
 import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 
-const getTemplateData = (templateId: string) =>
+const getTemplateData = async (templateId: string) =>
   createBrowserSupabaseClient()
     .from('templates')
     .select('data')

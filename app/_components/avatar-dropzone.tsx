@@ -25,7 +25,7 @@ const AvatarDropzone = ({
 
   return (
     <div
-      className="group flex cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 py-9 text-fg-4 outline-none ring-accent-2 transition-colors focus:ring-1 group-hover:border-alpha-3"
+      className="group flex h-20 cursor-pointer items-center justify-center gap-6 rounded border-2 border-dashed border-alpha-2 px-4 text-fg-4 outline-none ring-accent-2 transition-colors focus:ring-1 group-hover:border-alpha-3"
       {...dropzone.getRootProps()}
     >
       <Avatar file={file} id={avatarId} />

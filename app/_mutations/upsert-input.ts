@@ -2,6 +2,7 @@
 
 import { InputFormValues } from '@/_components/input-form';
 import InputType from '@/_constants/enum-input-type';
+import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import { revalidatePath } from 'next/cache';
 
@@ -12,6 +13,7 @@ const upsertInput = async (
   data: InputFormValues,
 ): Promise<State> => {
   const supabase = await createServerSupabaseClient();
+  const user = await getCurrentUser();
   const type = data.type.id;
 
   const { data: input, error } = await supabase
@@ -20,6 +22,7 @@ const upsertInput = async (
       id: context.inputId,
       label: data.label.trim(),
       settings: data.settings,
+      team_id: user?.app_metadata?.active_team_id,
       type,
     })
     .select('id, label')

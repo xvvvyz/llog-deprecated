@@ -49,7 +49,6 @@ export const middleware = async (req: NextRequest) => {
       '/inputs',
       '/subjects',
       '/templates',
-      '/upgrade',
     ];
 
     if (

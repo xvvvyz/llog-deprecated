@@ -2,6 +2,7 @@
 
 import { ProtocolTemplateFormValues } from '@/_components/protocol-template-form';
 import TemplateType from '@/_constants/enum-template-type';
+import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
 import { revalidatePath } from 'next/cache';
@@ -11,6 +12,7 @@ const upsertProtocolTemplate = async (
   data: ProtocolTemplateFormValues,
 ) => {
   const supabase = await createServerSupabaseClient();
+  const user = await getCurrentUser();
 
   const { data: template, error } = await supabase
     .from('templates')
@@ -29,6 +31,7 @@ const upsertProtocolTemplate = async (
       id: context.templateId,
       name: data.name.trim(),
       public: false,
+      team_id: user?.app_metadata?.active_team_id,
       type: TemplateType.Protocol,
     })
     .select('id')

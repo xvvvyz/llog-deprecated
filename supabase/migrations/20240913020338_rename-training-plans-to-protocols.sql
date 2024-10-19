@@ -189,11 +189,11 @@ create or replace function public.get_public_protocol_with_sessions_and_events(p
           'modules', coalesce((
             select json_agg(json_build_object(
               'id', et.id,
-              'event', (
+              'event', coalesce((
                 select json_agg(json_build_object('created_at', e.created_at, 'id', e.id))
                 from events e
                 where e.event_type_id = et.id
-              )
+              ), '[]'::json)
             ) order by et.order)
             from event_types et
             where et.archived = false and et.session_id = s.id

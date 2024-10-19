@@ -20,7 +20,9 @@ const Page = async ({ params }: PageProps) => {
   ]);
 
   if (!subject || !eventType) return null;
-  const isTeamMember = !!user && subject.team_id === user.id;
+
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
 
   return (
     <Modal.Content>

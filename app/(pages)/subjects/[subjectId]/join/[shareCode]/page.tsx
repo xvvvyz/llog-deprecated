@@ -13,9 +13,7 @@ const Page = async ({ params }: PageProps) => {
   if (!subject) {
     await (
       await createServerSupabaseClient()
-    ).rpc('join_subject_as_manager', {
-      share_code: shareCode,
-    });
+    ).rpc('join_subject_as_client', { share_code: shareCode });
   }
 
   redirect(`/subjects/${subjectId}`);

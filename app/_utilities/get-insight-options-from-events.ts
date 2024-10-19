@@ -1,4 +1,4 @@
-import { IOption } from '@/_components/select';
+import { IOption } from '@/_components/select-v1';
 import InputType from '@/_constants/enum-input-type';
 import { ListEventsData } from '@/_queries/list-events';
 import firstIfArray from '@/_utilities/first-if-array';

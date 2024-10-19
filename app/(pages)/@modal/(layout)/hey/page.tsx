@@ -14,24 +14,22 @@ const Page = async () => {
         title={`Hey, ${user.user_metadata.first_name}!`}
       />
       <div className="px-4 pb-8 sm:px-8">
-        <div className="prose">
+        <div className="prose max-w-[26rem]">
           <p>
             At llog, our mission is to empower behavior professionals and their
-            clients by crafting intuitive and effective software tools that make
-            lasting behavior change more&nbsp;attainable.
-          </p>
-          <p className="max-w-[25rem]">
-            Your feedback is invaluable as we evolve and improve. Whether you
-            have thoughts, ideas, concerns or even dreams, we&rsquo;d love to
-            hear from you. Feel free to drop us a message at{' '}
-            <Button href="mailto:hello@llog.app" variant="link">
-              hello@llog.app
-            </Button>{' '}
-            or{' '}
-            <Button href="https://cal.com/llogapp/chat" variant="link">
-              schedule a call
-            </Button>
-            .
+            clients with tools that make lasting behavior change
+            more&nbsp;attainable. Your feedback is invaluable as we evolve and
+            improve. Whether you have thoughts, ideas, concerns or even dreams:{' '}
+            <span className="whitespace-nowrap">
+              <Button href="mailto:hello@llog.app" variant="link">
+                email us
+              </Button>{' '}
+              or{' '}
+              <Button href="https://cal.com/llogapp/chat" variant="link">
+                book a call
+              </Button>
+              .
+            </span>
           </p>
           <p>Happy behavior hacking!</p>
           <p className="text-fg-4">~ Cade, Founder</p>

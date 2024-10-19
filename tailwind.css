@@ -43,7 +43,7 @@
 
   /* hack to left align ios date inputs */
   input::-webkit-date-and-time-value {
-    text-align: left;
+    @apply text-left;
   }
 
   /* hack to style observable plot titles */
@@ -61,6 +61,7 @@
     @apply fill-bg-1 stroke-0 text-fg-1;
   }
 
+  /* hack to style observable plot swatches */
   figure[class^='plot-'] div[class$='-swatches-wrap'] {
     @apply gap-1 px-4 pt-4;
   }

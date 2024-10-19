@@ -23,7 +23,7 @@ const Page = async () => {
     teamSubjects,
   } = subjects.reduce(
     (acc, subject) => {
-      if (subject.team_id === user.id) {
+      if (subject.team_id === user.app_metadata.active_team_id) {
         if (subject.archived) acc.archivedTeamSubjects.push(subject);
         else acc.teamSubjects.push(subject);
       } else {
@@ -48,17 +48,17 @@ const Page = async () => {
         {!clientSubjects.length && !teamSubjects.length && (
           <Empty>
             <InformationCircleIcon className="w-7" />
-            {user.user_metadata.is_client ? (
+            {user.app_metadata.is_client ? (
               'No active subjects.'
             ) : (
               <div>
-                Create a <span className="text-fg-2">subject</span> using the
-                yellow
+                Create a new <span className="text-fg-2">subject</span> using
+                the yellow
                 <br />
                 <div className="mr-1.5 inline-flex size-4 items-center justify-center rounded-full bg-accent-1 text-bg-1">
                   <PlusIcon className="inline w-3 stroke-2" />
                 </div>
-                button for eternal glory.
+                button. Let&rsquo;s make changes.
               </div>
             )}
           </Empty>

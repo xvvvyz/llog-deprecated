@@ -9,7 +9,7 @@ import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import RichTextarea from '@/_components/rich-textarea';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import InputType from '@/_constants/enum-input-type';
 import upsertEvent from '@/_mutations/upsert-event';
 import { GetEventData } from '@/_queries/get-event';
@@ -17,8 +17,6 @@ import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-
 import { GetSessionWithDetailsData } from '@/_queries/get-session-with-details';
 import DurationInputType from '@/_types/duration-input';
 import { InputSettingsJson } from '@/_types/input-settings-json';
-import MultiSelectInputType from '@/_types/multi-select-input-type';
-import SelectInputType from '@/_types/select-input-type';
 import forceArray from '@/_utilities/force-array';
 import formatDatetimeLocal from '@/_utilities/format-datetime-local';
 import parseSeconds from '@/_utilities/parse-seconds';
@@ -38,7 +36,7 @@ interface EventFormProps {
     | NonNullable<GetEventTypeWithInputsAndOptionsData>
     | NonNullable<GetSessionWithDetailsData>['modules'][0];
   isArchived?: boolean;
-  isMission?: boolean;
+  isProtocol?: boolean;
   isPreviousModulePending?: boolean;
   isPublic?: boolean;
   subjectId: string;
@@ -47,13 +45,7 @@ interface EventFormProps {
 export interface EventFormValues {
   comment: string;
   completionTime: string;
-  inputs: Array<
-    | DurationInputType
-    | MultiSelectInputType
-    | SelectInputType
-    | boolean
-    | string
-  >;
+  inputs: Array<DurationInputType | string[] | string | boolean>;
 }
 
 const EventForm = ({
@@ -61,7 +53,7 @@ const EventForm = ({
   event,
   eventType,
   isArchived,
-  isMission,
+  isProtocol,
   isPreviousModulePending,
   isPublic,
   subjectId,
@@ -103,17 +95,11 @@ const EventForm = ({
           }
 
           case InputType.MultiSelect: {
-            return inputInputs.map(({ input_option_id }) =>
-              input.options.find(({ id }) => input_option_id === id),
-            );
+            return inputInputs.map(({ input_option_id }) => input_option_id);
           }
 
           case InputType.Select: {
-            return (
-              input.options.find(
-                ({ id }) => id === inputInputs[0]?.input_option_id,
-              ) ?? null
-            );
+            return inputInputs[0]?.input_option_id ?? null;
           }
         }
       }) as EventFormValues['inputs'],
@@ -124,7 +110,7 @@ const EventForm = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (!isMission || event) return;
+    if (!isProtocol || event) return;
 
     const interval: NodeJS.Timeout = setInterval(() => {
       if (form.formState.dirtyFields.completionTime) {
@@ -136,7 +122,7 @@ const EventForm = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [event, form, isMission]);
+  }, [event, form, isProtocol]);
 
   return (
     <form
@@ -153,21 +139,26 @@ const EventForm = ({
               eventId: event?.id,
               eventTypeId: eventType.id,
               eventTypeInputs: eventType.inputs,
-              isMission: !!isMission,
+              isProtocol: !!isProtocol,
               subjectId,
             },
             values,
           );
 
-          if (res?.error) form.setValue('comment', pendingComment.current);
-          if (isMission) router.refresh();
+          if (res?.error) {
+            form.setValue('comment', pendingComment.current);
+            form.setError('root', { message: res.error, type: 'custom' });
+            return;
+          }
+
+          if (isProtocol) router.refresh();
           else if (!event) router.back();
         }),
       )}
     >
       <InputRoot>
         <Label.Root htmlFor={`${eventType.id}-completion-time`}>
-          {isMission ? 'Completion time' : 'Event time'}
+          {isProtocol ? 'Completion time' : 'Event time'}
         </Label.Root>
         <Input
           id={`${eventType.id}-completion-time`}
@@ -278,11 +269,7 @@ const EventForm = ({
                 control={form.control}
                 name={`inputs.${i}`}
                 render={({ field }) => (
-                  <EventSelect
-                    field={field}
-                    id={`${eventType.id}-inputs-${i}`}
-                    input={input}
-                  />
+                  <EventSelect field={field} input={input} />
                 )}
               />
             )}
@@ -313,7 +300,7 @@ const EventForm = ({
       )}
       {!isPublic && !isArchived && (!event || form.formState.isDirty) && (
         <div className="flex gap-4 pt-8">
-          {!event && !isMission && (
+          {!event && !isProtocol && (
             <Modal.Close asChild>
               <Button className="w-full" colorScheme="transparent">
                 Close
@@ -335,7 +322,7 @@ const EventForm = ({
                 ? 'Previous module incomplete'
                 : event
                   ? 'Save'
-                  : isMission
+                  : isProtocol
                     ? 'Complete'
                     : 'Record'}
             </Button>

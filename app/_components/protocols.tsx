@@ -5,7 +5,7 @@ import ArrowUpRightIcon from '@heroicons/react/24/outline/ArrowUpRightIcon';
 import { ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-interface MissionsProps {
+interface ProtocolsProps {
   isTeamMember: boolean;
   protocols: NonNullable<ListProtocolsData>;
   subjectId: string;
@@ -15,7 +15,7 @@ const Protocols = async ({
   isTeamMember,
   protocols,
   subjectId,
-}: MissionsProps) => {
+}: ProtocolsProps) => {
   const listItems = protocols.reduce((acc, protocol) => {
     const activeSession = protocol.sessions.find(({ modules }) =>
       modules.find((et) => !et.event.length),

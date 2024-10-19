@@ -7,7 +7,7 @@ import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
 import RichTextarea from '@/_components/rich-textarea';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import TemplateFormSection from '@/_components/template-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';

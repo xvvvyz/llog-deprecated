@@ -5,7 +5,7 @@ const listSubjectsByTeamId = async () =>
   (await createServerSupabaseClient())
     .from('subjects')
     .select('archived, id, image_uri, name, team_id')
-    .eq('team_id', (await getCurrentUser())?.id ?? '')
+    .eq('team_id', (await getCurrentUser())?.app_metadata?.active_team_id ?? '')
     .eq('deleted', false)
     .not('archived', 'is', null)
     .order('name');

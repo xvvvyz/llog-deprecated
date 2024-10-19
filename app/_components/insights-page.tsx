@@ -42,7 +42,8 @@ const InsightsPage = async ({
     ]);
 
   if (!subject) return null;
-  const isTeamMember = !!user && subject.team_id === user.id;
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
   const searchObject = new URLSearchParams(searchParams);
   const searchString = searchObject.size ? `?${searchObject.toString()}` : '';

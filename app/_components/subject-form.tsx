@@ -8,11 +8,14 @@ import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import RichTextarea from '@/_components/rich-textarea';
+import Select from '@/_components/select-v2';
 import Tip from '@/_components/tip';
+import createTag from '@/_mutations/create-tag';
+import upsertAvatar from '@/_mutations/upsert-avatar';
 import upsertSubject from '@/_mutations/upsert-subject';
 import { GetSubjectData } from '@/_queries/get-subject';
+import { ListTagsData } from '@/_queries/list-tags';
 import { SubjectDataJson } from '@/_types/subject-data-json';
-import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { useRouter } from 'next/navigation';
@@ -21,15 +24,17 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
 interface SubjectFormProps {
   subject?: NonNullable<GetSubjectData>;
+  tags: NonNullable<ListTagsData>;
 }
 
 export interface SubjectFormValues {
   avatar: File | string | null;
   data: SubjectDataJson;
   name: string;
+  tags: string[];
 }
 
-const SubjectForm = ({ subject }: SubjectFormProps) => {
+const SubjectForm = ({ subject, tags }: SubjectFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
   const subjectData = subject?.data as SubjectDataJson;
@@ -39,6 +44,7 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
       avatar: subject?.image_uri,
       data: subjectData,
       name: subject?.name,
+      tags: subject?.tags?.map((t) => t.tag_id) ?? [],
     },
   });
 
@@ -47,14 +53,24 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
     name: 'data.links',
   });
 
+  const avatar = form.watch('avatar');
+
   return (
     <form
       className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
+          if (subject) {
+            await upsertAvatar({
+              avatar: values.avatar,
+              bucket: 'subjects',
+              id: subject.id,
+            });
+          }
+
           const res = await upsertSubject(
             { subjectId: subject?.id },
-            { data: values.data, name: values.name },
+            { data: values.data, name: values.name, tags: values.tags },
           );
 
           if (res.error) {
@@ -62,27 +78,18 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
             return;
           }
 
-          const supabase = createBrowserSupabaseClient();
-          const subjectId = res.data!.id;
-
-          if (!values.avatar) {
-            await Promise.all([
-              supabase.storage.from('subjects').remove([`${subjectId}/avatar`]),
-              supabase
-                .from('subjects')
-                .update({ image_uri: null })
-                .eq('id', subjectId),
-            ]);
+          if (subject) {
+            router.back();
+            return;
           }
 
-          if (values.avatar instanceof File) {
-            await supabase.storage
-              .from('subjects')
-              .upload(`${subjectId}/avatar`, values.avatar, { upsert: true });
-          }
+          await upsertAvatar({
+            avatar: values.avatar,
+            bucket: 'subjects',
+            id: res.data!.id,
+          });
 
-          if (!subject?.id) router.replace(`/subjects/${subjectId}`);
-          else router.back();
+          router.replace(`/subjects/${res.data!.id}`);
         }),
       )}
     >
@@ -92,15 +99,15 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
         <Input maxLength={49} required {...form.register('name')} />
       </InputRoot>
       <InputRoot>
-        <Label.Root htmlFor="avatar">Profile image</Label.Root>
-        {form.watch('avatar') && (
+        <Label.Root htmlFor="avatar">Image</Label.Root>
+        {avatar && (
           <Label.Button onClick={() => form.setValue('avatar', null)}>
             Remove image
           </Label.Button>
         )}
         <AvatarDropzone
           avatarId={subject?.id}
-          file={form.watch('avatar')}
+          file={avatar}
           id="avatar"
           onDrop={(files) => form.setValue('avatar', files[0])}
         />
@@ -164,6 +171,33 @@ const SubjectForm = ({ subject }: SubjectFormProps) => {
           </Button>
         </div>
       </fieldset>
+      <InputRoot>
+        <Label.Root>Tags</Label.Root>
+        <Controller
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <Select
+              isCreatable
+              isMulti
+              onCreateOption={async (name: string) => {
+                const { data, error } = await createTag({ name });
+
+                if (error) {
+                  alert(error);
+                  return;
+                }
+
+                field.onChange([...field.value, data.id]);
+                router.refresh();
+              }}
+              optionName="tag"
+              options={tags.map((tag) => ({ id: tag.id, label: tag.name }))}
+              {...field}
+            />
+          )}
+        />
+      </InputRoot>
       {form.formState.errors.root && (
         <div className="text-center">{form.formState.errors.root.message}</div>
       )}

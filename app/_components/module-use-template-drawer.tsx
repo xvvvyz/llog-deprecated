@@ -2,7 +2,7 @@
 
 import Button from '@/_components/button';
 import * as Drawer from '@/_components/drawer';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import getTemplateData from '@/_queries/get-template-data';
 import { ListInputsBySubjectIdData } from '@/_queries/list-inputs-by-subject-id';
 import { ListTemplatesData } from '@/_queries/list-templates';

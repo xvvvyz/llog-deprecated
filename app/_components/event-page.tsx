@@ -25,7 +25,10 @@ const EventPage = async ({ eventId, isPublic, subjectId }: EventPageProps) => {
   ]);
 
   if (!subject || !event || !event.type) return null;
-  const isTeamMember = !!user && subject.team_id === user.id;
+
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
+
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   return (

@@ -16,7 +16,6 @@ import listProtocols from '@/_queries/list-protocols';
 import listPublicEvents from '@/_queries/list-public-events';
 import { SubjectDataJson } from '@/_types/subject-data-json';
 import formatEventFilters from '@/_utilities/format-event-filters';
-import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import ChartBarSquareIcon from '@heroicons/react/24/outline/ChartBarSquareIcon';
 import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import LinkIcon from '@heroicons/react/24/outline/LinkIcon';
@@ -64,7 +63,10 @@ const SubjectPage = async ({
   ]);
 
   if (!subject) return null;
-  const isTeamMember = !!user && subject.team_id === user.id;
+
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
+
   const subjectData = subject.data as SubjectDataJson;
 
   return (
@@ -148,7 +150,7 @@ const SubjectPage = async ({
       ) : (
         <Empty className="mt-16">
           <InformationCircleIcon className="w-7" />
-          {!isPublic && !subject.archived && !user?.user_metadata.is_client ? (
+          {!isPublic && !subject.archived && !user?.app_metadata.is_client ? (
             !protocols?.length && !eventTypes?.length ? (
               <div>
                 You need an <span className="text-fg-2">event type</span> or{' '}
@@ -162,15 +164,9 @@ const SubjectPage = async ({
               </div>
             ) : (
               <div>
-                Feeling lonely? Invite your{' '}
-                <span className="text-fg-2">clients</span>.
+                Without data, you&rsquo;re just another
                 <br />
-                Use the
-                <div className="mx-1.5 inline-flex items-center justify-center gap-1 rounded-[0.2rem] border border-alpha-3 px-1 text-xs text-fg-3">
-                  <Bars3Icon className="inline w-3" />
-                  More
-                </div>
-                menu above.
+                person with an opinion.
               </div>
             )
           ) : (

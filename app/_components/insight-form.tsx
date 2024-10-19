@@ -9,7 +9,7 @@ import InsightPlot from '@/_components/insight-plot';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import * as Popover from '@/_components/popover';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import ChartType from '@/_constants/enum-chart-type';
 import Interval from '@/_constants/enum-interval';

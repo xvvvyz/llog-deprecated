@@ -3,7 +3,7 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const getTemplate = async (templateId: string) =>
   (await createServerSupabaseClient())
     .from('templates')
-    .select('data, description, id, name, subjects(id), type')
+    .select('data, description, id, name, subjects!template_subjects(id), type')
     .eq('id', templateId)
     .single();
 

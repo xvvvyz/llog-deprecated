@@ -1,6 +1,8 @@
 'use client';
 
 import ButtonPrimitive from '@/_components/button';
+import IconButtonPrimitive from '@/_components/icon-button';
+import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon';
 import { usePrevious } from '@uidotdev/usehooks';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
@@ -16,16 +18,30 @@ const DrawerContext = React.createContext<{
 const Button = React.forwardRef<
   React.ElementRef<typeof ButtonPrimitive>,
   React.ComponentPropsWithoutRef<typeof ButtonPrimitive>
->(({ className, ...props }, ref) => (
+>(({ children, className, ...props }, ref) => (
   <ButtonPrimitive
-    className={twMerge('justify-start gap-4 border-0 focus:ring-0', className)}
+    className={twMerge(
+      'w-full min-w-0 justify-start gap-4 border-0 focus:ring-0 group-hover:bg-alpha-1',
+      className,
+    )}
     colorScheme="transparent"
     ref={ref}
     {...props}
-  />
+  >
+    {children}
+  </ButtonPrimitive>
 ));
 
 Button.displayName = ButtonPrimitive.displayName;
+
+const ButtonGroup = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={twMerge('group relative', className)} {...props} />
+));
+
+ButtonGroup.displayName = 'ButtonGroup';
 
 const Close = DrawerPrimitive.Close;
 
@@ -36,7 +52,7 @@ const Content = React.forwardRef<
   <DrawerPrimitive.Content
     ref={ref}
     className={twMerge(
-      'fixed inset-x-0 bottom-0 z-50 mt-24 h-auto w-full rounded-t border border-b-0 border-alpha-1 bg-bg-2',
+      'fixed inset-x-0 bottom-0 z-50 w-full rounded-t border border-b-0 border-alpha-1 bg-bg-2',
       className,
     )}
     {...props}
@@ -62,6 +78,25 @@ const Description = React.forwardRef<
 ));
 
 Description.displayName = DrawerPrimitive.Description.displayName;
+
+const MoreButton = React.forwardRef<
+  React.ElementRef<typeof IconButtonPrimitive>,
+  Omit<React.ComponentPropsWithoutRef<typeof IconButtonPrimitive>, 'icon'>
+>(({ className, ...props }, ref) => (
+  <IconButtonPrimitive
+    className={twMerge(
+      'absolute right-0 border-0 px-2.5 py-2.5 focus:ring-0',
+      className,
+    )}
+    colorScheme="transparent"
+    icon={<EllipsisVerticalIcon className="w-5" />}
+    ref={ref}
+    variant="primary"
+    {...props}
+  />
+));
+
+MoreButton.displayName = 'MoreButton';
 
 const NestedRoot = (
   props: React.ComponentProps<typeof DrawerPrimitive.Root>,
@@ -157,9 +192,11 @@ Trigger.displayName = DrawerPrimitive.Trigger.displayName;
 
 export {
   Button,
+  ButtonGroup,
   Close,
   Content,
   Description,
+  MoreButton,
   NestedRoot,
   Overlay,
   Portal,

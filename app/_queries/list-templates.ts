@@ -5,8 +5,11 @@ import createServerSupabaseClient from '@/_utilities/create-server-supabase-clie
 const listTemplates = async ({ type }: { type?: TemplateType } = {}) => {
   const q = (await createServerSupabaseClient())
     .from('templates')
-    .select('id, name, subjects(id, image_uri, name), type')
-    .eq('team_id', (await getCurrentUser())?.id ?? '');
+    .select('id, name, subjects!template_subjects(id, image_uri, name), type')
+    .eq(
+      'team_id',
+      (await getCurrentUser())?.app_metadata?.active_team_id ?? '',
+    );
 
   if (type) q.eq('type', type);
   else q.not('type', 'is', null);

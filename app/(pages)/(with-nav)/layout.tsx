@@ -7,6 +7,7 @@ import NotificationsSubscription from '@/_components/notifications-subscription'
 import canInsertSubjectOnCurrentPlan from '@/_queries/can-insert-subject-on-current-plan';
 import countNotifications from '@/_queries/count-notifications';
 import getCurrentUser from '@/_queries/get-current-user';
+import listTeams from '@/_queries/list-teams';
 import Bars3Icon from '@heroicons/react/24/outline/Bars3Icon';
 import DocumentTextIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import HomeIcon from '@heroicons/react/24/outline/HomeIcon';
@@ -20,13 +21,19 @@ interface LayoutProps {
 }
 
 const Layout = async ({ children }: LayoutProps) => {
-  const [{ data: canCreateSubject }, { count }, user] = await Promise.all([
-    canInsertSubjectOnCurrentPlan(),
-    countNotifications(),
-    getCurrentUser(),
-  ]);
-
+  const user = await getCurrentUser();
   if (!user) return null;
+
+  const [{ data: canCreateSubject }, { count }, { data: teams }] =
+    await Promise.all([
+      user.app_metadata.is_client
+        ? Promise.resolve({ data: false })
+        : canInsertSubjectOnCurrentPlan(),
+      countNotifications(),
+      user.app_metadata.is_client ? Promise.resolve({ data: [] }) : listTeams(),
+    ]);
+
+  if (!teams) return null;
 
   return (
     <>
@@ -61,7 +68,7 @@ const Layout = async ({ children }: LayoutProps) => {
                 </div>
                 Inbox
               </Button>
-              {!user.user_metadata.is_client && (
+              {!user.app_metadata.is_client && (
                 <>
                   <Drawer.Root>
                     <Drawer.Trigger asChild>
@@ -77,7 +84,10 @@ const Layout = async ({ children }: LayoutProps) => {
                       <Drawer.Content>
                         <Drawer.Title>Add new menu</Drawer.Title>
                         <Drawer.Description />
-                        <AddNewMenuItems canCreateSubject={canCreateSubject} />
+                        <AddNewMenuItems
+                          canCreateSubject={canCreateSubject}
+                          user={user}
+                        />
                       </Drawer.Content>
                     </Drawer.Portal>
                   </Drawer.Root>
@@ -109,7 +119,7 @@ const Layout = async ({ children }: LayoutProps) => {
                   </Drawer.Root>
                 </>
               )}
-              <AccountMenu user={user} />
+              <AccountMenu user={user} teams={teams} />
             </nav>
           </div>
         </div>

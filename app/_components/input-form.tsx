@@ -8,7 +8,7 @@ import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import InputType from '@/_constants/enum-input-type';

@@ -8,11 +8,11 @@ const listInputsWithUses = async () =>
       `
       id,
       label,
-      subjects(id, image_uri, name),
+      subjects!input_subjects(id, image_uri, name),
       type,
       uses:event_types(subject:subjects(id, name))`,
     )
-    .eq('team_id', (await getCurrentUser())?.id ?? '')
+    .eq('team_id', (await getCurrentUser())?.app_metadata?.active_team_id ?? '')
     .eq('archived', false)
     .eq('subjects.deleted', false)
     .not('subjects.archived', 'is', null)

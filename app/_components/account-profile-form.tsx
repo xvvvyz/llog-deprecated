@@ -7,7 +7,7 @@ import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
 import updateUser from '@/_mutations/update-user';
-import createBrowserSupabaseClient from '@/_utilities/create-browser-supabase-client';
+import upsertAvatar from '@/_mutations/upsert-avatar';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -35,26 +35,18 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
   });
 
   const router = useRouter();
+  const avatar = form.watch('avatar');
 
   return (
     <form
       className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
       onSubmit={form.handleSubmit((values) =>
         startTransition(async () => {
-          const supabase = createBrowserSupabaseClient();
-
-          if (!values.avatar) {
-            await Promise.all([
-              supabase.storage.from('profiles').remove([`${user.id}/avatar`]),
-              supabase.auth.updateUser({ data: { image_uri: null } }),
-            ]);
-          }
-
-          if (values.avatar instanceof File) {
-            await supabase.storage
-              .from('profiles')
-              .upload(`${user.id}/avatar`, values.avatar, { upsert: true });
-          }
+          await upsertAvatar({
+            avatar: values.avatar,
+            bucket: 'profiles',
+            id: user.id,
+          });
 
           const res = await updateUser({
             first_name: values.firstName,
@@ -81,13 +73,15 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
         </InputRoot>
       </div>
       <InputRoot>
-        <Label.Root htmlFor="avatar">Profile image</Label.Root>
-        <Label.Button onClick={() => form.setValue('avatar', null)}>
-          Remove image
-        </Label.Button>
+        <Label.Root htmlFor="avatar">Image</Label.Root>
+        {avatar && (
+          <Label.Button onClick={() => form.setValue('avatar', null)}>
+            Remove image
+          </Label.Button>
+        )}
         <AvatarDropzone
           avatarId={user.id}
-          file={form.watch('avatar')}
+          file={avatar}
           id="avatar"
           onDrop={(files) => form.setValue('avatar', files[0])}
         />

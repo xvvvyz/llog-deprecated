@@ -28,8 +28,8 @@ const listTemplatesBySubjectIdAndType = async ({
 
   return supabase
     .from('templates')
-    .select('id, name, subjects(id, image_uri, name), type')
-    .eq('team_id', (await getCurrentUser())?.id ?? '')
+    .select('id, name, subjects!template_subjects(id, image_uri, name), type')
+    .eq('team_id', (await getCurrentUser())?.app_metadata?.active_team_id ?? '')
     .eq('type', type)
     .not(
       'id',

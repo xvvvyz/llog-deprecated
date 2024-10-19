@@ -34,7 +34,8 @@ const SessionsPage = async ({
   ]);
 
   if (!subject) return null;
-  const isTeamMember = !!user && subject.team_id === user.id;
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
 
   const { data: protocol } = isPublic
     ? await getPublicProtocolWithSessionsAndEvents(protocolId)
@@ -85,8 +86,8 @@ const SessionsPage = async ({
       {!!sessionsReversed.length && (
         <ul className="border-y border-alpha-0 py-4">
           {sessionsReversed.map((session) => {
-            const completedModules = session.modules.filter(
-              (m) => m.event.length,
+            const completedModules = session.modules.filter((m) =>
+              firstIfArray(m.event),
             );
 
             const firstCompletedEvent = firstIfArray(

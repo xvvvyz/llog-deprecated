@@ -13,9 +13,17 @@ interface SignUpFormProps {
 
 const SignUpForm = ({ next }: SignUpFormProps) => {
   const [state, action] = useActionState(signUp.bind(null, { next }), {
-    defaultValues: { email: '', firstName: '', lastName: '', password: '' },
+    defaultValues: {
+      email: '',
+      firstName: '',
+      lastName: '',
+      organization: '',
+      password: '',
+    },
     error: '',
   });
+
+  const isClient = !!next?.includes('/join/');
 
   return (
     <form action={action} className="flex flex-col gap-8">
@@ -37,6 +45,17 @@ const SignUpForm = ({ next }: SignUpFormProps) => {
           />
         </InputRoot>
       </div>
+      {!isClient && (
+        <InputRoot>
+          <Label.Root htmlFor="organization">
+            Organization <span className="text-fg-4">(optional)</span>
+          </Label.Root>
+          <Input
+            defaultValue={state.defaultValues.organization}
+            name="organization"
+          />
+        </InputRoot>
+      )}
       <InputRoot>
         <Label.Root htmlFor="email">Email address</Label.Root>
         <Input

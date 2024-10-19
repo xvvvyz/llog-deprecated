@@ -39,8 +39,7 @@ const Page = async ({ params }: PageProps) => {
     !subject ||
     !subjects ||
     !protocol ||
-    !user ||
-    subject.team_id !== user.id
+    !user
   ) {
     return null;
   }

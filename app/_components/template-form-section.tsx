@@ -3,7 +3,7 @@
 import Input from '@/_components/input';
 import InputRoot from '@/_components/input-root';
 import * as Label from '@/_components/label';
-import Select, { IOption } from '@/_components/select';
+import Select, { IOption } from '@/_components/select-v1';
 import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import * as Form from 'react-hook-form';
 import { PropsValue } from 'react-select';

@@ -1,3 +1,4 @@
+import getCurrentUser from '@/_queries/get-current-user';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 
 const listNotifications = async () =>
@@ -38,6 +39,7 @@ const listNotifications = async () =>
       subject:subjects(id, image_uri, name),
       type`,
     )
+    .eq('profile_id', (await getCurrentUser())?.id ?? '')
     .order('created_at', { ascending: false })
     .limit(50);
 

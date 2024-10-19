@@ -1,31 +1,35 @@
 'use client';
 
 import Button from '@/_components/button';
-import SubscriptionStatus from '@/_constants/enum-subscription-status';
+import SubscriptionVariantName from '@/_constants/enum-subscription-variant-name';
 import createCustomerCheckout from '@/_mutations/create-customer-checkout';
-import { User } from '@supabase/supabase-js';
 import { useState } from 'react';
 
-interface UpgradePlanButtonProps {
-  user: User;
+interface CheckoutButtonProps {
+  disabled?: boolean;
+  teamId: string;
+  variant: SubscriptionVariantName;
 }
 
-const UpgradePlanButton = ({ user }: UpgradePlanButtonProps) => {
+const CheckoutButton = ({ disabled, teamId, variant }: CheckoutButtonProps) => {
   const [isBillingRedirectLoading, setIsBillingRedirectLoading] =
     useState(false);
 
   return (
     <Button
       className="w-full"
-      disabled={
-        user.app_metadata.subscription_status === SubscriptionStatus.Active
-      }
+      disabled={disabled}
       loading={isBillingRedirectLoading}
       loadingText="Redirecting…"
       onClick={async (e) => {
         e.preventDefault();
         setIsBillingRedirectLoading(true);
-        const { url } = await createCustomerCheckout();
+
+        const { url } = await createCustomerCheckout({
+          teamId,
+          variant,
+        });
+
         if (url) location.href = url;
         else setIsBillingRedirectLoading(false);
       }}
@@ -35,4 +39,4 @@ const UpgradePlanButton = ({ user }: UpgradePlanButtonProps) => {
   );
 };
 
-export default UpgradePlanButton;
+export default CheckoutButton;

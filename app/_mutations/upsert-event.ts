@@ -5,8 +5,6 @@ import InputType from '@/_constants/enum-input-type';
 import { GetEventTypeWithInputsAndOptionsData } from '@/_queries/get-event-type-with-inputs-and-options';
 import { Database, Json } from '@/_types/database';
 import DurationInputType from '@/_types/duration-input';
-import MultiSelectInputType from '@/_types/multi-select-input-type';
-import SelectInputType from '@/_types/select-input-type';
 import createServerSupabaseClient from '@/_utilities/create-server-supabase-client';
 import sanitizeHtml from '@/_utilities/sanitize-html';
 import { revalidatePath } from 'next/cache';
@@ -16,7 +14,7 @@ const upsertEvent = async (
     eventId?: string;
     eventTypeId: string;
     eventTypeInputs: NonNullable<GetEventTypeWithInputsAndOptionsData>['inputs'];
-    isMission: boolean;
+    isProtocol: boolean;
     subjectId: string;
   },
   data: EventFormValues,
@@ -48,8 +46,9 @@ const upsertEvent = async (
   }>(
     (acc, input, i) => {
       if (
-        input === '' ||
+        input === undefined ||
         input === null ||
+        input === '' ||
         (Array.isArray(input) && !input.some((v) => v))
       ) {
         return acc;
@@ -88,7 +87,7 @@ const upsertEvent = async (
         }
 
         case InputType.MultiSelect: {
-          (input as MultiSelectInputType).forEach(({ id }, order) =>
+          (input as string[]).forEach((id, order) =>
             acc.eventInputs.push({ ...payload, input_option_id: id, order }),
           );
 
@@ -96,7 +95,7 @@ const upsertEvent = async (
         }
 
         case InputType.Select: {
-          payload.input_option_id = (input as SelectInputType)?.id;
+          payload.input_option_id = input as string;
           acc.eventInputs.push(payload);
           return acc;
         }

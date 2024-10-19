@@ -1,12 +1,24 @@
 import Button from '@/_components/button';
+import CheckoutButton from '@/_components/checkout-button';
 import * as Modal from '@/_components/modal';
 import PageModalHeader from '@/_components/page-modal-header';
-import UpgradePlanButton from '@/_components/upgrade-plan-button';
+import SubscriptionVariantName from '@/_constants/enum-subscription-variant-name';
 import getCurrentUser from '@/_queries/get-current-user';
+import getTeam from '@/_queries/get-team';
 
-const Page = async () => {
-  const user = await getCurrentUser();
-  if (!user) return;
+interface PageProps {
+  params: Promise<{ teamId: string }>;
+}
+
+const Page = async ({ params }: PageProps) => {
+  const { teamId } = await params;
+
+  const [{ data: team }, user] = await Promise.all([
+    getTeam(teamId),
+    getCurrentUser(),
+  ]);
+
+  if (!team || !user) return;
 
   return (
     <Modal.Content>
@@ -51,7 +63,11 @@ const Page = async () => {
               Close
             </Button>
           </Modal.Close>
-          <UpgradePlanButton user={user} />
+          <CheckoutButton
+            disabled={!!team.subscriptions.length}
+            teamId={teamId}
+            variant={SubscriptionVariantName.Pro}
+          />
         </div>
       </div>
     </Modal.Content>

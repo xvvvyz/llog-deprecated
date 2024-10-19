@@ -50,7 +50,8 @@ const SessionPage = async ({
   const currentSession = protocol.sessions.find((s) => s.id === sessionId);
   if (!currentSession) return null;
 
-  const isTeamMember = !!user && subject.team_id === user.id;
+  const isTeamMember =
+    !!user && subject.team_id === user.app_metadata.active_team_id;
   const shareOrSubjects = isPublic ? 'share' : 'subjects';
 
   let {

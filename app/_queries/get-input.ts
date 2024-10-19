@@ -9,7 +9,7 @@ const getInput = async (inputId: string) =>
       label,
       options:input_options(id, label),
       settings,
-      subjects(id),
+      subjects!input_subjects(id),
       type`,
     )
     .eq('id', inputId)

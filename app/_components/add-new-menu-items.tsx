@@ -3,13 +3,15 @@
 import * as Drawer from '@/_components/drawer';
 import Tip from '@/_components/tip';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import { User } from '@supabase/supabase-js';
 import { usePathname } from 'next/navigation';
 
 interface AddNewMenuItemsProps {
   canCreateSubject: boolean;
+  user: User;
 }
 
-const AddNewMenuItems = ({ canCreateSubject }: AddNewMenuItemsProps) => {
+const AddNewMenuItems = ({ canCreateSubject, user }: AddNewMenuItemsProps) => {
   const pathname = usePathname();
   const [, type, id] = pathname.split('/');
 
@@ -44,7 +46,13 @@ const AddNewMenuItems = ({ canCreateSubject }: AddNewMenuItemsProps) => {
           <Drawer.Separator />
         </>
       )}
-      <Drawer.Button href={canCreateSubject ? '/subjects/create' : '/upgrade'}>
+      <Drawer.Button
+        href={
+          canCreateSubject
+            ? '/subjects/create'
+            : `/teams/${user.app_metadata.active_team_id}/upgrade`
+        }
+      >
         <PlusIcon className="w-5 text-fg-4" />
         New subject
       </Drawer.Button>
