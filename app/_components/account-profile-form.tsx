@@ -49,8 +49,8 @@ const AccountProfileForm = ({ user }: AccountProfileFormProps) => {
           });
 
           const res = await updateUser({
-            first_name: values.firstName,
-            last_name: values.lastName,
+            firstName: values.firstName,
+            lastName: values.lastName,
           });
 
           if (res?.error) {

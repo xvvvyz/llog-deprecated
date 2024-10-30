@@ -7,18 +7,20 @@ import { revalidatePath } from 'next/cache';
 
 const updateUser = async ({
   email,
-  first_name,
-  last_name,
+  firstName,
+  lastName,
 }: {
   email?: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
 }) => {
   const user = await getCurrentUser();
   const supabase = await createServerSupabaseClient();
+  const firstNameTrimmed = firstName?.trim();
+  const lastNameTrimmed = lastName?.trim();
 
   const { error } = await supabase.auth.updateUser({
-    data: { first_name, last_name },
+    data: { first_name: firstNameTrimmed, last_name: lastNameTrimmed },
     email,
   });
 
@@ -29,7 +31,10 @@ const updateUser = async ({
 
     await ls.updateCustomer(user.app_metadata.customer_id, {
       email,
-      name: first_name && last_name ? `${first_name} ${last_name}` : undefined,
+      name:
+        firstNameTrimmed && lastNameTrimmed
+          ? `${firstNameTrimmed} ${lastNameTrimmed}`
+          : undefined,
     });
   }
 
