@@ -13,7 +13,7 @@ export const metadata = {
   description:
     'Achieve lasting behavior changes with your clients. Streamline data collection, create data-driven protocols and easily monitor progress.',
   robots:
-    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+    process.env.VERCEL_ENV === 'production'
       ? undefined
       : {
           follow: false,
