@@ -20,9 +20,16 @@ interface EventSelectProps {
       Pick<Database['public']['Tables']['input_options']['Row'], 'id' | 'label'>
     >;
   };
+  isArchived?: boolean;
+  isPublic?: boolean;
 }
 
-const EventSelect = ({ field, input }: EventSelectProps) => {
+const EventSelect = ({
+  field,
+  input,
+  isArchived,
+  isPublic,
+}: EventSelectProps) => {
   const inputSettings = input.settings as InputSettingsJson;
   const router = useRouter();
 
@@ -30,7 +37,7 @@ const EventSelect = ({ field, input }: EventSelectProps) => {
     <InputRoot>
       <Label.Root>{input.label}</Label.Root>
       <Select
-        isCreatable={inputSettings?.isCreatable}
+        isCreatable={!isArchived && !isPublic && inputSettings?.isCreatable}
         isMulti={input.type === 'multi_select'}
         onChange={field.onChange}
         onCreateOption={async (label: string) => {

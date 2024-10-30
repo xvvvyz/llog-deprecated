@@ -21,7 +21,7 @@ const Spinner = ({
       aria-busy
       aria-label={loadingText}
       className={twMerge(
-        'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-[1.5px]',
+        'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-2',
         color,
         'border-l-transparent',
       )}

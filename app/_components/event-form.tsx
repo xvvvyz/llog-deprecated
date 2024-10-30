@@ -269,7 +269,12 @@ const EventForm = ({
                 control={form.control}
                 name={`inputs.${i}`}
                 render={({ field }) => (
-                  <EventSelect field={field} input={input} />
+                  <EventSelect
+                    field={field}
+                    input={input}
+                    isArchived={isArchived}
+                    isPublic={isPublic}
+                  />
                 )}
               />
             )}

@@ -52,13 +52,12 @@ const Layout = async ({ children, params }: LayoutProps) => {
           ) : (
             <>
               <span className="text-sm leading-tight text-fg-4">
-                <span className="text-fg-2">llog</span>&mdash;achieve lasting
-                behavior
-                <br />
-                changes with your clients.
+                <span className="text-fg-2">llog</span>&mdash;the app for data
+                collection <br />
+                and real-time progress tracking.
               </span>
-              <Button href="/" size="sm">
-                Request a demo
+              <Button href="/sign-up" size="sm">
+                Sign up
               </Button>
             </>
           )}
