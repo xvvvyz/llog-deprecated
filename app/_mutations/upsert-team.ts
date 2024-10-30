@@ -12,7 +12,7 @@ const upsertTeam = async (
     await createServerSupabaseClient()
   ).rpc('upsert_team', {
     _id: context.teamId,
-    _name: data.name,
+    _name: data.name.trim(),
   });
 
   if (res.error) return { error: res.error.message };
