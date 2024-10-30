@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { Viewport } from 'next';
 import { Figtree, Inconsolata } from 'next/font/google';
+import Script from 'next/script';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 import '../../tailwind.css';
@@ -43,6 +44,8 @@ const Layout = ({ children, modal }: LayoutProps) => (
       {children}
       {modal}
       <Analytics />
+      <Script id="lemon-squeezy-affiliate-config">{`window.lemonSqueezyAffiliateConfig={store:'llog'};`}</Script>
+      <Script src="https://lmsqueezy.com/affiliate.js" defer />
     </body>
   </html>
 );
