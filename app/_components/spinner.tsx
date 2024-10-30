@@ -12,13 +12,16 @@ const Spinner = ({
   loadingText,
 }: SpinnerProps) => (
   <div
-    className={twMerge('flex h-5 w-5 items-center justify-center', className)}
+    className={twMerge(
+      'flex h-5 w-5 shrink-0 items-center justify-center',
+      className,
+    )}
   >
     <div
       aria-busy
       aria-label={loadingText}
       className={twMerge(
-        'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-2',
+        'h-[0.9rem] w-[0.9rem] animate-spin rounded-full border-[1.5px]',
         color,
         'border-l-transparent',
       )}
