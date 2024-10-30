@@ -79,6 +79,7 @@ const AccountMenu = ({ user, teams }: AccountMenuProps) => {
                 return (
                   <Drawer.ButtonGroup key={team.id}>
                     <Drawer.Button
+                      className="pr-14"
                       loading={isLoading}
                       onClick={(e) => {
                         e.preventDefault();
@@ -95,7 +96,7 @@ const AccountMenu = ({ user, teams }: AccountMenuProps) => {
                           id={team.id}
                         />
                       )}
-                      <span className="truncate">{team.name}</span>
+                      <div className="truncate">{team.name}</div>
                       <div
                         className={twMerge(
                           '-ml-2 shrink-0 rounded-sm border border-alpha-1 bg-alpha-1 px-1 text-xs text-fg-4',
@@ -112,7 +113,7 @@ const AccountMenu = ({ user, teams }: AccountMenuProps) => {
                       {((team.id === activeTeam?.id &&
                         !isChangeTeamsTransitioning) ||
                         isLoading) && (
-                        <CheckIcon className="ml-auto mr-9 w-5 shrink-0" />
+                        <CheckIcon className="ml-auto w-5 shrink-0" />
                       )}
                     </Drawer.Button>
                     <Drawer.NestedRoot>
