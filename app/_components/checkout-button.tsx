@@ -34,7 +34,7 @@ const CheckoutButton = ({ disabled, teamId, variant }: CheckoutButtonProps) => {
         else setIsBillingRedirectLoading(false);
       }}
     >
-      Upgrade
+      Continue
     </Button>
   );
 };

@@ -48,6 +48,7 @@ export const middleware = async (req: NextRequest) => {
       '/inbox',
       '/inputs',
       '/subjects',
+      '/teams',
       '/templates',
     ];
 
