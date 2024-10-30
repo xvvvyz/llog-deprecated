@@ -45,7 +45,7 @@ const signUp = async (
         organization,
         team_id: teamId,
       },
-      emailRedirectTo: `${proto}://${host}${context.next ? context.next : isClient ? '/subjects' : '/hey'}`,
+      emailRedirectTo: `${proto}://${host}${context.next || '/subjects'}`,
     },
     password,
   });

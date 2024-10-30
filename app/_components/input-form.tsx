@@ -46,7 +46,6 @@ interface InputFormProps {
   disableCache?: boolean;
   input?: Partial<GetInputData>;
   isDuplicate?: boolean;
-  onClose?: () => void;
   onSubmit?: (values: NonNullable<ListInputsBySubjectIdData>[0]) => void;
   subjects?: NonNullable<ListSubjectsByTeamIdData>;
   usedBy?: Array<
@@ -66,7 +65,6 @@ const InputForm = ({
   disableCache,
   input,
   isDuplicate,
-  onClose,
   onSubmit,
   subjects,
   usedBy,
@@ -110,16 +108,21 @@ const InputForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
-            } else if (res?.data) {
-              onSubmit?.({
+              return;
+            }
+
+            if (res?.data && onSubmit) {
+              onSubmit({
                 id: res.data.id,
                 label: res.data.label,
                 subjects: values.subjects,
                 type: values.type.id,
               });
 
-              if (!onClose) router.back();
+              return;
             }
+
+            router.back();
           }),
         ),
       )}
@@ -354,11 +357,7 @@ const InputForm = ({
       )}
       <div className="flex gap-4 pt-8">
         <Modal.Close asChild>
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={onClose}
-          >
+          <Button className="w-full" colorScheme="transparent">
             Close
           </Button>
         </Modal.Close>

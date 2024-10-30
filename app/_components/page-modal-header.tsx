@@ -6,8 +6,6 @@ import { twMerge } from 'tailwind-merge';
 
 interface PageModalHeaderProps {
   className?: string;
-  closeHref?: string;
-  onClose?: () => void;
   right?: ReactNode;
   subtitle?: ReactNode;
   title?: ReactNode;
@@ -15,8 +13,6 @@ interface PageModalHeaderProps {
 
 const PageModalHeader = ({
   className,
-  closeHref,
-  onClose,
   right,
   subtitle,
   title,
@@ -36,12 +32,7 @@ const PageModalHeader = ({
     <div className="relative right-1 top-0 flex shrink-0 items-center gap-6">
       {right}
       <Modal.Close asChild>
-        <IconButton
-          href={closeHref}
-          icon={<XMarkIcon className="w-7" />}
-          label="Close"
-          onClick={onClose}
-        />
+        <IconButton icon={<XMarkIcon className="w-7" />} label="Close" />
       </Modal.Close>
     </div>
   </div>

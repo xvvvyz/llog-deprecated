@@ -9,10 +9,7 @@ const Page = async () => {
 
   return (
     <Modal.Content className="select-text">
-      <PageModalHeader
-        closeHref="/subjects"
-        title={`Hey, ${user.user_metadata.first_name}!`}
-      />
+      <PageModalHeader title={`Hey, ${user.user_metadata.first_name}!`} />
       <div className="px-4 pb-8 sm:px-8">
         <div className="prose max-w-[26rem]">
           <p>
@@ -35,7 +32,7 @@ const Page = async () => {
           <p className="text-fg-4">~ Cade, Founder</p>
         </div>
         <Modal.Close asChild>
-          <Button className="mt-8 w-full focus:ring-0" href="/subjects">
+          <Button className="mt-8 w-full focus:ring-0">
             I totally read all of that
           </Button>
         </Modal.Close>

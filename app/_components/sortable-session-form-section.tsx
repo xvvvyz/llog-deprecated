@@ -167,17 +167,13 @@ const SortableSessionFormSection = <
                   <Modal.Portal>
                     <Modal.Overlay>
                       <Modal.Content>
-                        <PageModalHeader
-                          onClose={() => setCreateTemplateModal(null)}
-                          title="New session template"
-                        />
+                        <PageModalHeader title="New session template" />
                         <SessionTemplateForm
                           availableInputs={rest.availableInputs}
                           availableModuleTemplates={
                             rest.availableModuleTemplates
                           }
                           disableCache
-                          onClose={() => setCreateTemplateModal(null)}
                           onSubmit={() => {
                             setCreateTemplateModal(null);
                             router.refresh();

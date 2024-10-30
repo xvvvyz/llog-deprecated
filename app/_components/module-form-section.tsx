@@ -159,14 +159,10 @@ const ModuleFormSection = <
                 <Modal.Portal>
                   <Modal.Overlay>
                     <Modal.Content>
-                      <PageModalHeader
-                        onClose={() => setCreateTemplateModal(null)}
-                        title="New module template"
-                      />
+                      <PageModalHeader title="New module template" />
                       <ModuleTemplateForm
                         availableInputs={availableInputs}
                         disableCache
-                        onClose={() => setCreateTemplateModal(null)}
                         onSubmit={() => {
                           setCreateTemplateModal(null);
                           router.refresh();
@@ -265,14 +261,10 @@ const ModuleFormSection = <
         <Modal.Portal>
           <Modal.Overlay>
             <Modal.Content>
-              <PageModalHeader
-                onClose={() => setCreateInputModal(null)}
-                title="New input"
-              />
+              <PageModalHeader title="New input" />
               <InputForm
                 disableCache
                 input={createInputModal}
-                onClose={() => setCreateInputModal(null)}
                 onSubmit={(values) => {
                   inputsArray.append(values as Form.FieldValue<T>);
                   setCreateInputModal(null);

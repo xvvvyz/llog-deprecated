@@ -153,14 +153,10 @@ const ModuleTemplateForm = ({
         <Modal.Portal>
           <Modal.Overlay>
             <Modal.Content>
-              <PageModalHeader
-                onClose={() => setCreateInputModal(null)}
-                title="New input"
-              />
+              <PageModalHeader title="New input" />
               <InputForm
                 disableCache
                 input={createInputModal}
-                onClose={() => setCreateInputModal(null)}
                 onSubmit={(values) => {
                   inputsArray.append(values);
                   setCreateInputModal(null);

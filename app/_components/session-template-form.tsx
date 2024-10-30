@@ -17,7 +17,6 @@ import { SessionTemplateDataJson } from '@/_types/session-template-data-json';
 import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
-import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface SessionTemplateFormProps {
@@ -27,7 +26,6 @@ interface SessionTemplateFormProps {
   >;
   disableCache?: boolean;
   isDuplicate?: boolean;
-  onClose?: () => void;
   onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
@@ -49,13 +47,11 @@ const SessionTemplateForm = ({
   availableModuleTemplates,
   disableCache,
   isDuplicate,
-  onClose,
   onSubmit,
   subjects,
   template,
 }: SessionTemplateFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
-  const router = useRouter();
   const templateData = template?.data as SessionTemplateDataJson;
 
   const cacheKey = getFormCacheKey.sessionTemplate({
@@ -99,9 +95,11 @@ const SessionTemplateForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
-            } else {
-              onSubmit?.();
-              if (!onClose) router.back();
+              return;
+            }
+
+            if (onSubmit) {
+              onSubmit();
             }
           }),
         ),
@@ -122,11 +120,7 @@ const SessionTemplateForm = ({
       )}
       <div className="flex gap-4 pt-8">
         <Modal.Close asChild>
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={onClose}
-          >
+          <Button className="w-full" colorScheme="transparent">
             Close
           </Button>
         </Modal.Close>
