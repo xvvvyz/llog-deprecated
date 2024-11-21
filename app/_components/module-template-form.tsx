@@ -30,7 +30,6 @@ interface ModuleTemplateFormProps {
   availableInputs: NonNullable<ListInputsBySubjectIdData | ListInputsData>;
   disableCache?: boolean;
   isDuplicate?: boolean;
-  onClose?: () => void;
   onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
@@ -48,7 +47,6 @@ const ModuleTemplateForm = ({
   availableInputs,
   disableCache,
   isDuplicate,
-  onClose,
   onSubmit,
   subjects,
   template,
@@ -98,10 +96,15 @@ const ModuleTemplateForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
-            } else if (res?.data) {
-              onSubmit?.();
-              if (!onClose) router.back();
+              return;
             }
+
+            if (onSubmit) {
+              onSubmit();
+              return;
+            }
+
+            router.back();
           }),
         ),
       )}
@@ -173,11 +176,7 @@ const ModuleTemplateForm = ({
       )}
       <div className="flex gap-4 pt-8">
         <Modal.Close asChild>
-          <Button
-            className="w-full"
-            colorScheme="transparent"
-            onClick={onClose}
-          >
+          <Button className="w-full" colorScheme="transparent">
             Close
           </Button>
         </Modal.Close>

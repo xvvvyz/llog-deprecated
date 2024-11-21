@@ -17,6 +17,7 @@ import { SessionTemplateDataJson } from '@/_types/session-template-data-json';
 import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 interface SessionTemplateFormProps {
@@ -52,6 +53,7 @@ const SessionTemplateForm = ({
   template,
 }: SessionTemplateFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
+  const router = useRouter();
   const templateData = template?.data as SessionTemplateDataJson;
 
   const cacheKey = getFormCacheKey.sessionTemplate({
@@ -100,7 +102,10 @@ const SessionTemplateForm = ({
 
             if (onSubmit) {
               onSubmit();
+              return;
             }
+
+            router.back();
           }),
         ),
       )}

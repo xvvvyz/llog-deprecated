@@ -114,9 +114,10 @@ const ProtocolTemplateForm = ({
 
             if (res?.error) {
               form.setError('root', { message: res.error, type: 'custom' });
-            } else {
-              router.back();
+              return;
             }
+
+            router.back();
           }),
         ),
       )}
