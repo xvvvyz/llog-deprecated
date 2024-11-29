@@ -44,24 +44,16 @@ const Insights = ({
       modifiers={[restrictToVerticalAxis]}
       onDragEnd={({ active, over }: DndCore.DragEndEvent) => {
         if (!over || active.id === over?.id) return;
+        const oldIndex = insights.findIndex(({ id }) => id === active.id);
+        const newIndex = insights.findIndex(({ id }) => id === over?.id);
+        const newInsights = DndSortable.arrayMove(insights, oldIndex, newIndex);
 
-        setInsights((insights) => {
-          const oldIndex = insights.findIndex(({ id }) => id === active.id);
-          const newIndex = insights.findIndex(({ id }) => id === over?.id);
-
-          const newInsights = DndSortable.arrayMove(
-            insights,
-            oldIndex,
-            newIndex,
-          );
-
-          void reorderInsights({
-            insightIds: newInsights.map((insight) => insight.id),
-            subjectId,
-          });
-
-          return newInsights;
+        void reorderInsights({
+          insightIds: newInsights.map((insight) => insight.id),
+          subjectId,
         });
+
+        setInsights(newInsights);
       }}
       sensors={sensors}
     >
