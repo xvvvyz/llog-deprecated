@@ -2,11 +2,13 @@
 
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
+import Empty from '@/_components/empty';
 import Input from '@/_components/input';
 import InputMenu from '@/_components/input-menu';
 import INPUT_TYPE_LABELS from '@/_constants/constant-input-type-labels';
 import { ListInputsWithUsesData } from '@/_queries/list-inputs-with-uses';
 import getInputUsedBySubjectMap from '@/_utilities/get-input-used-by-subject-map';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
 import * as React from 'react';
@@ -47,6 +49,17 @@ const FilterableInputs = ({ inputs }: FilterableInputsProps) => {
       if (ref.current?.value) filter(ref.current.value);
     }
   }, [filter, inputs, inputsLen, prevInputsLen]);
+
+  if (!inputs.length) {
+    return (
+      <Empty className="mx-4">
+        <InformationCircleIcon className="w-7" />
+        Inputs define the specific data points
+        <br />
+        you are interested in tracking.
+      </Empty>
+    );
+  }
 
   return (
     <div className="space-y-4">

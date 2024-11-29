@@ -84,6 +84,7 @@ const AccountMenu = ({ user, teams }: AccountMenuProps) => {
                       onClick={(e) => {
                         e.preventDefault();
                         setChangeTeamsId(team.id);
+
                         startChangeTeamsTransition(() =>
                           setActiveTeam(team.id),
                         );

@@ -2,11 +2,13 @@
 
 import Avatar from '@/_components/avatar';
 import Button from '@/_components/button';
+import Empty from '@/_components/empty';
 import Input from '@/_components/input';
 import TemplateMenu from '@/_components/template-menu';
 import TEMPLATE_TYPE_LABELS from '@/_constants/constant-template-type-labels';
 import TEMPLATE_TYPE_SLUGS from '@/_constants/constant-template-type-slugs';
 import { ListTemplatesData } from '@/_queries/list-templates';
+import InformationCircleIcon from '@heroicons/react/24/outline/InformationCircleIcon';
 import { usePrevious } from '@uidotdev/usehooks';
 import Fuse from 'fuse.js';
 import * as React from 'react';
@@ -47,6 +49,17 @@ const FilterableInputs = ({ templates }: FilterableTemplatesProps) => {
       if (ref.current?.value) filter(ref.current.value);
     }
   }, [filter, templates, templatesLen, prevTemplatesLen]);
+
+  if (!templates?.length) {
+    return (
+      <Empty className="mx-4">
+        <InformationCircleIcon className="w-7" />
+        Templates define reusable content
+        <br />
+        for event types and protocols.
+      </Empty>
+    );
+  }
 
   return (
     <div className="space-y-4">

@@ -53,44 +53,8 @@ const Layout = async ({ children }: LayoutProps) => {
                 <HomeIcon className="w-5" />
                 Subjects
               </Button>
-              <Button
-                activeClassName="text-fg-2 before:content-[' '] before:absolute before:size-10 before:left-50% before:top-3 before:-translate-1/2 before:rounded-full before:bg-alpha-1"
-                className="relative m-0 w-20 flex-col gap-1 p-0 py-3 text-xs"
-                href="/inbox"
-                variant="link"
-              >
-                <NotificationsSubscription />
-                <div className="relative">
-                  {!!count && (
-                    <span className="absolute -top-0.5 right-0 size-2 rounded border border-alpha-4 bg-red-1" />
-                  )}
-                  <InboxIcon className="w-5" />
-                </div>
-                Inbox
-              </Button>
               {!user.app_metadata.is_client && (
                 <>
-                  <Drawer.Root>
-                    <Drawer.Trigger asChild>
-                      <IconButton
-                        className="mx-3 size-10 rounded-full p-0"
-                        icon={<PlusIcon className="w-5 stroke-2" />}
-                        label="Add new…"
-                        variant="primary"
-                      />
-                    </Drawer.Trigger>
-                    <Drawer.Portal>
-                      <Drawer.Overlay />
-                      <Drawer.Content>
-                        <Drawer.Title>Add new menu</Drawer.Title>
-                        <Drawer.Description />
-                        <AddNewMenuItems
-                          canCreateSubject={canCreateSubject}
-                          user={user}
-                        />
-                      </Drawer.Content>
-                    </Drawer.Portal>
-                  </Drawer.Root>
                   <Drawer.Root>
                     <Drawer.Trigger asChild>
                       <Button
@@ -117,8 +81,44 @@ const Layout = async ({ children }: LayoutProps) => {
                       </Drawer.Content>
                     </Drawer.Portal>
                   </Drawer.Root>
+                  <Drawer.Root>
+                    <Drawer.Trigger asChild>
+                      <IconButton
+                        className="mx-3 size-10 rounded-full p-0"
+                        icon={<PlusIcon className="w-5 stroke-2" />}
+                        label="Add new…"
+                        variant="primary"
+                      />
+                    </Drawer.Trigger>
+                    <Drawer.Portal>
+                      <Drawer.Overlay />
+                      <Drawer.Content>
+                        <Drawer.Title>Add new menu</Drawer.Title>
+                        <Drawer.Description />
+                        <AddNewMenuItems
+                          canCreateSubject={canCreateSubject}
+                          user={user}
+                        />
+                      </Drawer.Content>
+                    </Drawer.Portal>
+                  </Drawer.Root>
                 </>
               )}
+              <Button
+                activeClassName="text-fg-2 before:content-[' '] before:absolute before:size-10 before:left-50% before:top-3 before:-translate-1/2 before:rounded-full before:bg-alpha-1"
+                className="relative m-0 w-20 flex-col gap-1 p-0 py-3 text-xs"
+                href="/inbox"
+                variant="link"
+              >
+                <NotificationsSubscription />
+                <div className="relative">
+                  {!!count && (
+                    <span className="absolute -top-0.5 right-0 size-2 rounded border border-alpha-4 bg-red-1" />
+                  )}
+                  <InboxIcon className="w-5" />
+                </div>
+                Inbox
+              </Button>
               <AccountMenu user={user} teams={teams} />
             </nav>
           </div>

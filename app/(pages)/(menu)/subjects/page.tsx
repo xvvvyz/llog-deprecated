@@ -1,5 +1,6 @@
 import CollapsibleArchive from '@/_components/collapsible-archive';
 import Empty from '@/_components/empty';
+import PageBreadcrumb from '@/_components/page-breadcrumb';
 import SubjectList from '@/_components/subject-list';
 import canInsertSubjectOnCurrentPlan from '@/_queries/can-insert-subject-on-current-plan';
 import getCurrentUser from '@/_queries/get-current-user';
@@ -43,7 +44,7 @@ const Page = async () => {
 
   return (
     <>
-      <h1 className="px-4 py-16 text-2xl">Subjects</h1>
+      <PageBreadcrumb last="Subjects" />
       <div className="mx-4 space-y-4">
         {!clientSubjects.length && !teamSubjects.length && (
           <Empty>
