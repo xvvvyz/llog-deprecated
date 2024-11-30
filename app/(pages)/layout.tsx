@@ -11,7 +11,7 @@ const mono = Inconsolata({ subsets: ['latin'], variable: '--font-mono' });
 
 export const metadata = {
   description:
-    'Achieve lasting behavior changes with your clients. Streamline data collection, create data-driven protocols and easily monitor progress.',
+    'Collaboratively conquer challenging behavior cases. Streamline data collection, create data-driven protocols and easily monitor progress.',
   robots:
     process.env.VERCEL_ENV === 'production'
       ? undefined
