@@ -22,10 +22,6 @@
           "value": "deny"
         },
         {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        },
-        {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
         }
