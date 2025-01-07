@@ -32,9 +32,7 @@ const Page = async () => {
           <p className="text-fg-4">~ Cade, Founder</p>
         </div>
         <Modal.Close asChild>
-          <Button className="mt-8 w-full focus:ring-0">
-            I totally read all of that
-          </Button>
+          <Button className="mt-8 w-full focus:ring-0">Cool, cool</Button>
         </Modal.Close>
       </div>
     </Modal.Content>

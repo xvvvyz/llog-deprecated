@@ -44,6 +44,7 @@ export const middleware = async (req: NextRequest) => {
   } else {
     const forcePrivateStartsWith = [
       '/account',
+      '/community',
       '/hey',
       '/inbox',
       '/inputs',

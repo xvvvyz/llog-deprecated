@@ -1,5 +1,4 @@
 import * as Modal from '@/_components/modal';
-import PageModalHeader from '@/_components/page-modal-header';
 import ProtocolTemplateForm from '@/_components/protocol-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import listInputs from '@/_queries/list-inputs';
@@ -30,12 +29,12 @@ const Page = async () => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="New protocol template" />
       <ProtocolTemplateForm
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}
         availableSessionTemplates={availableSessionTemplates}
         subjects={subjects}
+        title="New protocol template"
       />
     </Modal.Content>
   );

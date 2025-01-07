@@ -27,9 +27,10 @@ const upsertSessionTemplate = async (
       description: sanitizeHtml(data.description),
       id: context.templateId,
       name: data.name.trim(),
-      public: false,
+      public: data.public,
       team_id: user?.app_metadata?.active_team_id,
       type: TemplateType.Session,
+      updated_at: new Date().toISOString(),
     })
     .select('id')
     .single();

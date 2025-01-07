@@ -116,6 +116,7 @@ const RichTextarea = React.forwardRef<{ focus: () => void }, RichTextareaProps>(
           },
         }),
       ],
+      immediatelyRender: false,
       injectCSS: false,
       onUpdate: ({ editor }) => {
         if (!onChange) return;

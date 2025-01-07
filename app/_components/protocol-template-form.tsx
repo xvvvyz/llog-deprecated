@@ -1,9 +1,13 @@
 'use client';
 
 import Button from '@/_components/button';
+import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
+import PageModalHeader from '@/_components/page-modal-header';
 import SortableSessionFormSection from '@/_components/sortable-session-form-section';
-import TemplateFormSection from '@/_components/template-form-section';
+import TemplateVisibilityFormSection from '@/_components/template-visibility-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertProtocolTemplate from '@/_mutations/upsert-protocol-template';
@@ -13,7 +17,6 @@ import { ListSubjectsByTeamIdData } from '@/_queries/list-subjects-by-team-id';
 import { ListTemplatesData } from '@/_queries/list-templates';
 import { Database } from '@/_types/database';
 import { ProtocolTemplateDataJson } from '@/_types/protocol-template-data-json';
-import forceArray from '@/_utilities/force-array';
 import getFormCacheKey from '@/_utilities/get-form-cache-key';
 import stopPropagation from '@/_utilities/stop-propagation';
 import * as DndCore from '@dnd-kit/core';
@@ -32,11 +35,13 @@ interface ProtocolTemplateFormProps {
   isDuplicate?: boolean;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
+  title: string;
 }
 
 export interface ProtocolTemplateFormValues {
   description: string;
   name: string;
+  public: boolean;
   sessions: Array<{
     modules: Array<{
       content: string;
@@ -45,7 +50,7 @@ export interface ProtocolTemplateFormValues {
     }>;
     title: string;
   }>;
-  subjects: NonNullable<ListSubjectsByTeamIdData>;
+  subjects: string[];
 }
 
 const ProtocolTemplateForm = ({
@@ -56,6 +61,7 @@ const ProtocolTemplateForm = ({
   isDuplicate,
   subjects,
   template,
+  title,
 }: ProtocolTemplateFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
@@ -73,6 +79,7 @@ const ProtocolTemplateForm = ({
       defaultValues: {
         description: template?.description ?? '',
         name: template?.name ?? '',
+        public: template?.public ?? false,
         sessions: templateData?.sessions?.length
           ? templateData.sessions.map((session) => ({
               modules: session.modules?.length
@@ -87,9 +94,7 @@ const ProtocolTemplateForm = ({
               title: session.title ?? '',
             }))
           : [],
-        subjects: forceArray(subjects).filter(({ id }) =>
-          template?.subjects?.some((sf) => sf.id === id),
-        ),
+        subjects: (template?.subjects ?? []).map((subject) => subject.id),
       },
     },
     { disableCache },
@@ -103,7 +108,7 @@ const ProtocolTemplateForm = ({
 
   return (
     <form
-      className="flex flex-col gap-8 pb-8 pt-6"
+      className="flex flex-col gap-8 pb-8"
       onSubmit={stopPropagation(
         form.handleSubmit((values) =>
           startTransition(async () => {
@@ -122,11 +127,17 @@ const ProtocolTemplateForm = ({
         ),
       )}
     >
-      <div className="space-y-8 px-4 sm:px-8">
-        <TemplateFormSection<ProtocolTemplateFormValues>
-          form={form}
-          subjects={subjects}
-        />
+      <PageModalHeader
+        right={
+          <TemplateVisibilityFormSection form={form} subjects={subjects} />
+        }
+        title={title}
+      />
+      <div className="px-4 sm:px-8">
+        <InputRoot>
+          <Label.Root htmlFor="name">Name</Label.Root>
+          <Input maxLength={49} required {...form.register('name')} />
+        </InputRoot>
       </div>
       {!!sessionsArray.fields.length && (
         <ul className="space-y-4 overflow-x-clip border-y border-alpha-1 bg-alpha-reverse-2 py-4">

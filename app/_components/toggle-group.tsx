@@ -6,7 +6,7 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Item = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
+  React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>
 >(({ children, className, ...props }, ref) => (
   <ToggleGroupPrimitive.Item
@@ -27,12 +27,12 @@ const Item = React.forwardRef<
 Item.displayName = ToggleGroupPrimitive.Item.displayName;
 
 const Root = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Root>,
+  React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>
 >(({ children, className, ...props }, ref) => (
   <ToggleGroupPrimitive.Root
     className={twMerge(
-      'divide-y divide-alpha-1 rounded border border-alpha-1 bg-alpha-1 focus-within:ring-1 focus-within:ring-accent-2',
+      'divide-y divide-alpha-1 overflow-hidden rounded border border-alpha-1 bg-alpha-1 focus-within:ring-1 focus-within:ring-accent-2',
       className,
     )}
     ref={ref}

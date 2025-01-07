@@ -178,7 +178,6 @@ const SubjectForm = ({ subject, tags }: SubjectFormProps) => {
           name="tags"
           render={({ field }) => (
             <Select
-              isCreatable
               isMulti
               onCreateOption={async (name: string) => {
                 const { data, error } = await createTag({ name });

@@ -17,7 +17,7 @@ const SelectCreateOptionInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement> & {
     inputClassName?: string;
-    onCreateOption: (value: string) => Promise<void>;
+    onCreateOption?: (value: string) => Promise<void>;
     optionName: string;
   }
 >(({ className, inputClassName, onCreateOption, optionName, ...rest }, ref) => {
@@ -25,6 +25,7 @@ const SelectCreateOptionInput = React.forwardRef<
 
   const onCreate = () =>
     startTransition(async () => {
+      if (!onCreateOption) return;
       if (typeof ref === 'function' || !ref?.current) return;
 
       if (!ref.current.value) {
@@ -73,11 +74,10 @@ export interface Option {
 }
 
 interface SelectProps {
-  isCreatable?: boolean;
   isMulti?: boolean;
   isReorderable?: boolean;
   onChange: (value: string | string[]) => void;
-  onCreateOption: (value: string) => Promise<void>;
+  onCreateOption?: (value: string) => Promise<void>;
   optionName?: string;
   options: Option[];
   placeholder?: string;
@@ -85,7 +85,6 @@ interface SelectProps {
 }
 
 const Select = ({
-  isCreatable,
   isMulti,
   isReorderable,
   onChange,
@@ -145,7 +144,7 @@ const Select = ({
       <>
         {!!options.length && (
           <ToggleGroup.Root
-            className={twMerge(isCreatable && 'rounded-b-none border-b-0')}
+            className={twMerge(onCreateOption && 'rounded-b-none border-b-0')}
             {...toggleGroupProps}
           >
             {options.map((option) => (
@@ -155,7 +154,7 @@ const Select = ({
             ))}
           </ToggleGroup.Root>
         )}
-        {isCreatable && (
+        {onCreateOption && (
           <SelectCreateOptionInput
             inputClassName={twMerge(options.length && 'rounded-t-none')}
             onChange={onFilter}
@@ -228,7 +227,7 @@ const Select = ({
             onCreateOption={onCreateOption}
             optionName={optionName}
             placeholder={
-              isCreatable
+              onCreateOption
                 ? `Filter or add ${optionName}s…`
                 : `Filter ${optionName}s…`
             }

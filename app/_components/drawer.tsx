@@ -16,7 +16,7 @@ const DrawerContext = React.createContext<{
 } | null>(null);
 
 const Button = React.forwardRef<
-  React.ElementRef<typeof ButtonPrimitive>,
+  React.ComponentRef<typeof ButtonPrimitive>,
   React.ComponentPropsWithoutRef<typeof ButtonPrimitive>
 >(({ children, className, ...props }, ref) => (
   <ButtonPrimitive
@@ -46,7 +46,7 @@ ButtonGroup.displayName = 'ButtonGroup';
 const Close = DrawerPrimitive.Close;
 
 const Content = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Content>,
+  React.ComponentRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DrawerPrimitive.Content
@@ -67,7 +67,7 @@ const Content = React.forwardRef<
 Content.displayName = 'Content';
 
 const Description = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Description>,
+  React.ComponentRef<typeof DrawerPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Description
@@ -80,7 +80,7 @@ const Description = React.forwardRef<
 Description.displayName = DrawerPrimitive.Description.displayName;
 
 const MoreButton = React.forwardRef<
-  React.ElementRef<typeof IconButtonPrimitive>,
+  React.ComponentRef<typeof IconButtonPrimitive>,
   Omit<React.ComponentPropsWithoutRef<typeof IconButtonPrimitive>, 'icon'>
 >(({ className, ...props }, ref) => (
   <IconButtonPrimitive
@@ -113,7 +113,7 @@ const NestedRoot = (
 NestedRoot.displayName = 'NestedRoot';
 
 const Overlay = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Overlay>,
+  React.ComponentRef<typeof DrawerPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
@@ -164,7 +164,7 @@ const Separator = React.forwardRef<
 Separator.displayName = 'Separator';
 
 const Title = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Title>,
+  React.ComponentRef<typeof DrawerPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Title
@@ -177,7 +177,7 @@ const Title = React.forwardRef<
 Title.displayName = DrawerPrimitive.Title.displayName;
 
 const Trigger = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Trigger>,
+  React.ComponentRef<typeof DrawerPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Trigger

@@ -78,6 +78,10 @@ const Layout = async ({ children }: LayoutProps) => {
                           <DocumentTextIcon className="w-5 text-fg-4" />
                           Templates
                         </Drawer.Button>
+                        {/*<Drawer.Button href="/community/templates">*/}
+                        {/*  <UserGroupIcon className="w-5 text-fg-4" />*/}
+                        {/*  Community templates*/}
+                        {/*</Drawer.Button>*/}
                       </Drawer.Content>
                     </Drawer.Portal>
                   </Drawer.Root>

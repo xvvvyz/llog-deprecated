@@ -14,7 +14,7 @@ interface IconButtonProps
 }
 
 const IconButton = React.forwardRef<
-  React.ElementRef<typeof Button>,
+  React.ComponentRef<typeof Button>,
   IconButtonProps
 >(
   (

@@ -10,7 +10,7 @@ type SwitchProps = React.ComponentPropsWithoutRef<
 };
 
 const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
+  React.ComponentRef<typeof SwitchPrimitives.Root>,
   SwitchProps
 >(({ className, description, label, ...props }, ref) => (
   <label

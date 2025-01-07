@@ -49,6 +49,7 @@ const Page = async ({ params }: PageProps) => {
           },
           name: session.title ?? '',
         }}
+        title="New session template"
       />
     </Modal.Content>
   );

@@ -37,31 +37,34 @@ const EventSelect = ({
     <InputRoot>
       <Label.Root>{input.label}</Label.Root>
       <Select
-        isCreatable={!isArchived && !isPublic && inputSettings?.isCreatable}
         isMulti={input.type === 'multi_select'}
         onChange={field.onChange}
-        onCreateOption={async (label: string) => {
-          const { data, error } = await createInputOption({
-            inputId: input.id,
-            label,
-          });
+        onCreateOption={
+          !isArchived && !isPublic && inputSettings?.isCreatable
+            ? async (label: string) => {
+                const { data, error } = await createInputOption({
+                  inputId: input.id,
+                  label,
+                });
 
-          if (error) {
-            field.onChange(null);
-            alert(error);
-            return;
-          }
+                if (error) {
+                  field.onChange(null);
+                  alert(error);
+                  return;
+                }
 
-          if (!data) return;
+                if (!data) return;
 
-          if (input.type === 'multi_select') {
-            field.onChange([...(field.value as string[]), data.id]);
-          } else {
-            field.onChange(data.id);
-          }
+                if (input.type === 'multi_select') {
+                  field.onChange([...(field.value as string[]), data.id]);
+                } else {
+                  field.onChange(data.id);
+                }
 
-          router.refresh();
-        }}
+                router.refresh();
+              }
+            : undefined
+        }
         options={input.options}
         value={field.value as string | string[]}
       />

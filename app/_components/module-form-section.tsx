@@ -159,7 +159,6 @@ const ModuleFormSection = <
                 <Modal.Portal>
                   <Modal.Overlay>
                     <Modal.Content>
-                      <PageModalHeader title="New module template" />
                       <ModuleTemplateForm
                         availableInputs={availableInputs}
                         disableCache
@@ -169,6 +168,7 @@ const ModuleFormSection = <
                         }}
                         subjects={subjects}
                         template={createTemplateModal}
+                        title="New module template"
                       />
                     </Modal.Content>
                   </Modal.Overlay>

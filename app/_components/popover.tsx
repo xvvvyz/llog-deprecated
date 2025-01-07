@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 const Close = PopoverPrimitive.Close;
 
 const Content = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = 'center', ...props }, ref) => (
   <PopoverPrimitive.Portal>

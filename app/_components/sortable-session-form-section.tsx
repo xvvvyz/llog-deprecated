@@ -6,7 +6,6 @@ import * as Drawer from '@/_components/drawer';
 import DrawerDeleteButton from '@/_components/drawer-delete-button';
 import IconButton from '@/_components/icon-button';
 import * as Modal from '@/_components/modal';
-import PageModalHeader from '@/_components/page-modal-header';
 import { ProtocolTemplateFormValues } from '@/_components/protocol-template-form';
 import SessionFormSection from '@/_components/session-form-section';
 import SessionTemplateForm from '@/_components/session-template-form';
@@ -167,7 +166,6 @@ const SortableSessionFormSection = <
                   <Modal.Portal>
                     <Modal.Overlay>
                       <Modal.Content>
-                        <PageModalHeader title="New session template" />
                         <SessionTemplateForm
                           availableInputs={rest.availableInputs}
                           availableModuleTemplates={
@@ -180,6 +178,7 @@ const SortableSessionFormSection = <
                           }}
                           subjects={rest.subjects}
                           template={createTemplateModal}
+                          title="New session template"
                         />
                       </Modal.Content>
                     </Modal.Overlay>

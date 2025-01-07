@@ -1,7 +1,6 @@
 import EventTypeTemplateForm from '@/_components/event-type-template-form';
 import * as Modal from '@/_components/modal';
-import getTemplate from '@/_queries/get-template';
-import listInputs from '@/_queries/list-inputs';
+import getCommunityTemplate from '@/_queries/get-community-template';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 
 interface PageProps {
@@ -11,23 +10,21 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const { templateId } = await params;
 
-  const [{ data: template }, { data: availableInputs }, { data: subjects }] =
-    await Promise.all([
-      getTemplate(templateId),
-      listInputs(),
-      listSubjectsByTeamId(),
-    ]);
+  const [{ data }, { data: subjects }] = await Promise.all([
+    getCommunityTemplate(templateId),
+    listSubjectsByTeamId(),
+  ]);
 
-  if (!template || !availableInputs || !subjects) return null;
+  if (!data?.template || !data?.inputs || !subjects) return null;
 
   return (
     <Modal.Content>
       <EventTypeTemplateForm
-        availableInputs={availableInputs}
+        availableInputs={data.inputs}
         isDuplicate
         subjects={subjects}
-        template={template}
-        title="New event type template"
+        template={data.template}
+        title="Edit event type template"
       />
     </Modal.Content>
   );

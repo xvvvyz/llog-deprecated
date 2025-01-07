@@ -1,6 +1,5 @@
 import * as Modal from '@/_components/modal';
 import ModuleTemplateForm from '@/_components/module-template-form';
-import PageModalHeader from '@/_components/page-modal-header';
 import listInputs from '@/_queries/list-inputs';
 import listSubjectsByTeamId from '@/_queries/list-subjects-by-team-id';
 
@@ -14,10 +13,10 @@ const Page = async () => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="New module template" />
       <ModuleTemplateForm
         availableInputs={availableInputs}
         subjects={subjects}
+        title="New module template"
       />
     </Modal.Content>
   );

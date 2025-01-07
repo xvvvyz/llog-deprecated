@@ -41,8 +41,8 @@ const SubjectMenu = ({ canUnarchive, isList, subject }: SubjectMenuProps) => {
   const [isDownloadTransitioning, startIsDownloadTransition] = useTransition();
   const [isGenerateTransitioning, startGenerateTransition] = useTransition();
   const [opPublic, toggleOpPublic] = useOptimistic(subject.public, (s) => !s);
-  const clientLinkTimeoutRef = useRef<NodeJS.Timeout>();
-  const publicLinkTimeoutRef = useRef<NodeJS.Timeout>();
+  const clientLinkTimeoutRef = useRef<NodeJS.Timeout>(undefined);
+  const publicLinkTimeoutRef = useRef<NodeJS.Timeout>(undefined);
   const router = useRouter();
 
   return (

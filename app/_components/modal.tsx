@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 const Close = DialogPrimitive.Close;
 
 const Content = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPrimitive.Content
@@ -27,7 +27,7 @@ Content.displayName = DialogPrimitive.Content.displayName;
 const Description = DialogPrimitive.Description;
 
 const Overlay = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ children, className, ...props }, ref) => (
   <DialogPrimitive.Overlay

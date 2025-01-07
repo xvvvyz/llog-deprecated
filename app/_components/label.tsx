@@ -5,7 +5,7 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const Button = React.forwardRef<
-  React.ElementRef<typeof ButtonPrimitive>,
+  React.ComponentRef<typeof ButtonPrimitive>,
   React.ComponentPropsWithoutRef<typeof ButtonPrimitive>
 >(({ children, className, ...props }, ref) => (
   <ButtonPrimitive
@@ -21,7 +21,7 @@ const Button = React.forwardRef<
 Button.displayName = 'Button';
 
 const Root = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => (
   <LabelPrimitive.Root

@@ -1,5 +1,4 @@
 import * as Modal from '@/_components/modal';
-import PageModalHeader from '@/_components/page-modal-header';
 import ProtocolTemplateForm from '@/_components/protocol-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import getTemplate from '@/_queries/get-template';
@@ -40,7 +39,6 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="New protocol template" />
       <ProtocolTemplateForm
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}
@@ -48,6 +46,7 @@ const Page = async ({ params }: PageProps) => {
         isDuplicate
         subjects={subjects}
         template={template}
+        title="New protocol template"
       />
     </Modal.Content>
   );

@@ -1,5 +1,4 @@
 import * as Modal from '@/_components/modal';
-import PageModalHeader from '@/_components/page-modal-header';
 import SessionTemplateForm from '@/_components/session-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import listInputs from '@/_queries/list-inputs';
@@ -21,11 +20,11 @@ const Page = async () => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="New session template" />
       <SessionTemplateForm
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}
         subjects={subjects}
+        title="New session template"
       />
     </Modal.Content>
   );

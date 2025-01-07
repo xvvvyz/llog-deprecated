@@ -6,7 +6,8 @@ const Page = () => (
   <div className="mx-auto flex min-h-full max-w-2xl select-text flex-col items-center justify-center px-6 py-16 text-center">
     <Logo className="size-16" />
     <h1 className="mt-14 max-w-sm text-2xl font-bold md:max-w-xl md:text-4xl">
-      <span className="text-fg-1">llog</span>&mdash;collaboratively conquer challenging behavior cases.
+      <span className="text-fg-1">llog</span>&mdash;collaboratively conquer
+      challenging behavior cases.
     </h1>
     <p className="mx-auto mt-6 max-w-sm">
       Streamline <span className="font-bold text-fg-1">data collection</span>,

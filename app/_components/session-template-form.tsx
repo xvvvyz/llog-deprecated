@@ -1,9 +1,13 @@
 'use client';
 
 import Button from '@/_components/button';
+import Input from '@/_components/input';
+import InputRoot from '@/_components/input-root';
+import * as Label from '@/_components/label';
 import * as Modal from '@/_components/modal';
+import PageModalHeader from '@/_components/page-modal-header';
 import SessionFormSection from '@/_components/session-form-section';
-import TemplateFormSection from '@/_components/template-form-section';
+import TemplateVisibilityFormSection from '@/_components/template-visibility-form-section';
 import UnsavedChangesBanner from '@/_components/unsaved-changes-banner';
 import useCachedForm from '@/_hooks/use-cached-form';
 import upsertSessionTemplate from '@/_mutations/upsert-session-template';
@@ -30,6 +34,7 @@ interface SessionTemplateFormProps {
   onSubmit?: () => void;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
   template?: Partial<GetTemplateData>;
+  title: string;
 }
 
 export interface SessionTemplateFormValues {
@@ -40,6 +45,7 @@ export interface SessionTemplateFormValues {
     name?: string | null;
   }>;
   name: string;
+  public: boolean;
   subjects: NonNullable<ListSubjectsByTeamIdData>;
 }
 
@@ -51,6 +57,7 @@ const SessionTemplateForm = ({
   onSubmit,
   subjects,
   template,
+  title,
 }: SessionTemplateFormProps) => {
   const [isTransitioning, startTransition] = useTransition();
   const router = useRouter();
@@ -76,6 +83,7 @@ const SessionTemplateForm = ({
             }))
           : [{ content: '', inputs: [], name: '' }],
         name: template?.name ?? '',
+        public: template?.public ?? false,
         subjects: forceArray(subjects).filter(({ id }) =>
           template?.subjects?.some((sf) => sf.id === id),
         ),
@@ -86,7 +94,7 @@ const SessionTemplateForm = ({
 
   return (
     <form
-      className="flex flex-col gap-8 px-4 pb-8 pt-6 sm:px-8"
+      className="flex flex-col gap-8 pb-8"
       onSubmit={stopPropagation(
         form.handleSubmit((values) =>
           startTransition(async () => {
@@ -110,20 +118,30 @@ const SessionTemplateForm = ({
         ),
       )}
     >
-      <TemplateFormSection<SessionTemplateFormValues>
-        form={form}
-        subjects={subjects}
+      <PageModalHeader
+        right={
+          <TemplateVisibilityFormSection form={form} subjects={subjects} />
+        }
+        title={title}
       />
-      <SessionFormSection<SessionTemplateFormValues>
-        availableInputs={availableInputs}
-        availableModuleTemplates={availableModuleTemplates}
-        form={form}
-        subjects={subjects}
-      />
+      <div className="flex flex-col gap-8 px-4 sm:px-8">
+        <InputRoot>
+          <Label.Root htmlFor="name">Name</Label.Root>
+          <Input maxLength={49} required {...form.register('name')} />
+        </InputRoot>
+        <SessionFormSection<SessionTemplateFormValues>
+          availableInputs={availableInputs}
+          availableModuleTemplates={availableModuleTemplates}
+          form={form}
+          subjects={subjects}
+        />
+      </div>
       {form.formState.errors.root && (
-        <div className="text-center">{form.formState.errors.root.message}</div>
+        <div className="px-4 text-center sm:px-8">
+          {form.formState.errors.root.message}
+        </div>
       )}
-      <div className="flex gap-4 pt-8">
+      <div className="flex gap-4 px-4 pt-8 sm:px-8">
         <Modal.Close asChild>
           <Button className="w-full" colorScheme="transparent">
             Close

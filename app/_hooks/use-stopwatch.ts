@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const useStopwatch = (initialTime: string | number) => {
   const [isRunning, toggleIsRunning] = useToggle(false);
   const [time, setTime] = useState(+initialTime || 0);
-  const frameId = useRef<number | undefined>();
+  const frameId = useRef<number | undefined>(undefined);
   const startTime = useRef<number>(0);
 
   const update = useCallback(() => {

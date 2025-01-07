@@ -1,5 +1,4 @@
 import * as Modal from '@/_components/modal';
-import PageModalHeader from '@/_components/page-modal-header';
 import SessionTemplateForm from '@/_components/session-template-form';
 import TemplateType from '@/_constants/enum-template-type';
 import getTemplate from '@/_queries/get-template';
@@ -32,12 +31,12 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <Modal.Content>
-      <PageModalHeader title="Edit session template" />
       <SessionTemplateForm
         availableInputs={availableInputs}
         availableModuleTemplates={availableModuleTemplates}
         subjects={subjects}
         template={template}
+        title="Edit session template"
       />
     </Modal.Content>
   );

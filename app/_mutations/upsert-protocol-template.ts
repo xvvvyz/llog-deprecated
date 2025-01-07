@@ -30,9 +30,10 @@ const upsertProtocolTemplate = async (
       description: sanitizeHtml(data.description),
       id: context.templateId,
       name: data.name.trim(),
-      public: false,
+      public: data.public,
       team_id: user?.app_metadata?.active_team_id,
       type: TemplateType.Protocol,
+      updated_at: new Date().toISOString(),
     })
     .select('id')
     .single();
@@ -46,7 +47,7 @@ const upsertProtocolTemplate = async (
 
   if (data.subjects.length) {
     const { error } = await supabase.from('template_subjects').insert(
-      data.subjects.map(({ id }) => ({
+      data.subjects.map((id) => ({
         subject_id: id,
         template_id: template.id,
       })),
