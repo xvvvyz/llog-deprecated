@@ -25,11 +25,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
       - run: bun i
-      - run: bun vercel pull -y --environment=production --token="$VERCEL_TOKEN"
+      - run: bun vercel pull --debug -y --environment=production --token="$VERCEL_TOKEN"
       - run: bun supabase link --project-ref "$SUPABASE_PROJECT_ID"
       - run: bun db:start
       - run: bun db:types
       - run: bun next telemetry disable
-      - run: bun vercel build --prod
+      - run: bun vercel build --debug --prod
       - run: bun supabase db push --password "$SUPABASE_DB_PASSWORD_INLINE"
-      - run: bun vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - run: bun vercel deploy --debug --prebuilt --prod --token="$VERCEL_TOKEN"
