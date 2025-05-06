@@ -1,3 +1,5 @@
+_This repo has been archived and [replaced](https://github.com/xvvvyz/llog)._
+
 # llog
 
 ## Development Setup
